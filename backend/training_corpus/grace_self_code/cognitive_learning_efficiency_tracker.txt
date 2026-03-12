@@ -1,0 +1,1622 @@
+## learning_efficiency_tracker.py
+'\nLearning Efficiency Tracker - Data-to-Insight Ratio Tracking\n\nTracks how much data (bytes, documents, chunks) is required to gain:\n- New insights\n- New domains of knowledge\n- New intelligence/skills\n- Trust score improvements\n\nKey Metrics:\n- Data-to-Insight Ratio (bytes per insight)\n- Domain Acquisition Efficiency (data per domain)\n- Skill Acquisition Rate (data per skill level)\n- Learning Curve Analysis\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+LearningExample
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+Insight
+'A single insight gained from data.'
+insight_id
+●●●●●● 1mm ○
+insight_type
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+data_consumed
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+trust_score
+●●●●●● 3mm ○
+domain
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_since_last_insight
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+time_to_insight
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+learning_example_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+DomainAcquisition
+'Tracking when a new domain is acquired.'
+domain
+●●●●●● 1mm ○
+first_insight_time
+datetime
+data_consumed_at_acquisition
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+time_to_acquisition
+●●●●●● 1mm ○
+total_insights
+●●●●●● 2mm ○
+0
+current_trust_score
+●●●●●● 3mm ○
+0.0
+skill_level
+●●●●●● 1mm ○
+'NOVICE'
+insights_per_hour
+●●●●●● 3mm ○
+0.0
+last_insight_time
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+LearningEfficiencyMetrics
+'Efficiency metrics for learning.'
+bytes_per_insight
+●●●●●● 3mm ○
+documents_per_insight
+●●●●●● 3mm ○
+chunks_per_insight
+●●●●●● 3mm ○
+seconds_per_insight
+●●●●●● 3mm ○
+hours_per_insight
+●●●●●● 3mm ○
+time_per_insight_trend
+●●●●●● 3mm □△
+Tuple
+datetime
+●●●●●● 3mm ○
+insights_per_hour
+●●●●●● 3mm ○
+insights_per_day
+●●●●●● 3mm ○
+velocity_trend
+●●●●●● 3mm □△
+Tuple
+datetime
+●●●●●● 3mm ○
+bytes_per_domain
+●●●●●● 3mm ○
+documents_per_domain
+●●●●●● 3mm ○
+time_to_domain_acquisition
+●●●●●● 1mm ○
+average_time_to_domain
+●●●●●● 1mm ○
+bytes_per_skill_level
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+time_per_skill_level
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+data_efficiency_trend
+●●●●●● 3mm □△
+Tuple
+datetime
+●●●●●● 3mm ○
+learning_curve
+●●●●●● 3mm □△
+Tuple
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+temporal_learning_curve
+●●●●●● 3mm □△
+Tuple
+datetime
+●●●●●● 3mm ○
+domain_efficiency
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+domain_temporal_efficiency
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+LearningEfficiencyTracker
+'\n    Tracks learning efficiency: how much data is required to gain insights/domains/intelligence.\n    \n    Key Capabilities:\n    1. Track data consumption (bytes, documents, chunks)\n    2. Identify when new insights are gained\n    3. Calculate data-to-insight ratios\n    4. Track domain acquisition efficiency\n    5. Analyze learning curves\n    6. Identify optimal learning paths\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Insight
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+DomainAcquisition
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'bytes'
+'documents'
+'chunks'
+0.0
+0
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'total_seconds'
+'first_insight'
+'last_insight'
+'insights'
+0.0
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_existing_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load existing data consumption from database.'
+total_docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_bytes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+doc
+'file_size'
+0
+●●●●●● 2mm □△
+0
+doc
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+total_docs
+●●●●●● 3mm △
+●●●●●● 1mm □
+total_chunks
+●●●●●● 3mm △
+●●●●●● 1mm □
+total_bytes
+total_chunks
+●●●●●● 2mm □△
+512
+logger
+●●●●●● 1mm □△
+'Loaded existing data: '
+total_bytes
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □△
+1024
+'.2f'
+' MB, '
+total_docs
+' docs, '
+total_chunks
+' chunks'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not load existing data: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_data_consumption
+●●●●●● 1mm □△
+self
+bytes_consumed
+documents_consumed
+chunks_consumed
+domain
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+1
+0
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Record data consumption (when documents are ingested).\n        \n        Args:\n            bytes_consumed: Bytes of data consumed\n            documents_consumed: Number of documents\n            chunks_consumed: Number of chunks\n            domain: Optional domain/category\n            genesis_key_id: Optional Genesis Key tracking\n        '
+●●●●●● 3mm △
+bytes_consumed
+●●●●●● 3mm △
+documents_consumed
+●●●●●● 3mm △
+chunks_consumed
+●●●●●● 2mm □
+domain
+●●●●●● 3mm △
+domain
+'bytes'
+bytes_consumed
+●●●●●● 3mm △
+domain
+'documents'
+documents_consumed
+●●●●●● 3mm △
+domain
+'chunks'
+chunks_consumed
+●●●●●● 1mm □
+record_insight
+●●●●●● 1mm □△
+self
+insight_type
+description
+trust_score
+domain
+learning_example_id
+genesis_key_id
+time_to_insight
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Record a new insight gained.\n        \n        Args:\n            insight_type: Type of insight ("concept", "pattern", "skill", "domain", "procedure")\n            description: Description of the insight\n            trust_score: Trust score of the insight\n            domain: Domain/category\n            learning_example_id: Link to learning example\n            genesis_key_id: Link to Genesis Key\n            \n        Returns:\n            Insight object\n        '
+current_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+current_time
+time_since_last
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+time_since_last
+●●●●●● 1mm □
+current_time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+time_to_insight
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+time_to_insight
+●●●●●● 1mm □
+current_time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □
+time_to_insight
+●●●●●● 1mm □
+●●●●●● 3mm △
+current_time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+time_to_insight
+data_consumed
+●●●●●● 1mm □
+'bytes'
+'documents'
+'chunks'
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+domain
+domain
+●●●●●● 3mm △
+domain_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+domain
+total_domain_insights
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+i
+●●●●●● 3mm △
+i
+domain
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_domain_insights
+0
+data_consumed
+●●●●●● 1mm □
+'bytes'
+'documents'
+'chunks'
+domain_data
+'bytes'
+●●●●●● 3mm □△
+total_domain_insights
+●●●●●● 3mm ○
+1
+domain_data
+'documents'
+●●●●●● 3mm □△
+total_domain_insights
+●●●●●● 3mm ○
+1
+domain_data
+'chunks'
+●●●●●● 3mm □△
+total_domain_insights
+●●●●●● 3mm ○
+1
+domain_time
+●●●●●● 1mm □
+●●●●●● 3mm △
+domain
+●●●●●● 2mm □
+domain_time
+'first_insight'
+●●●●●● 2mm □
+domain_time
+'first_insight'
+●●●●●● 1mm □
+current_time
+domain_time
+'last_insight'
+●●●●●● 1mm □
+current_time
+domain_time
+'total_seconds'
+time_to_insight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain_time
+'insights'
+●●●●●● 1mm □△
+current_time
+●●●●●● 2mm □△
+insight
+●●●●●● 1mm □
+Insight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+insight
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+current_time
+●●●●●● 2mm □
+domain
+domain
+●●●●●● 3mm △
+time_to_acq
+●●●●●● 1mm □
+●●●●●● 3mm △
+current_time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+domain
+●●●●●● 1mm □
+DomainAcquisition
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+domain
+acq
+●●●●●● 1mm □
+●●●●●● 3mm △
+domain
+acq
+1
+acq
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+acq
+trust_score
+●●●●●● 2mm □△
+acq
+●●●●●● 1mm □
+current_time
+●●●●●● 2mm □
+acq
+domain_duration
+●●●●●● 1mm □
+current_time
+●●●●●● 1mm □△
+acq
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+●●●●●● 2mm □
+domain_duration
+0
+acq
+●●●●●● 1mm □
+acq
+●●●●●● 3mm □△
+domain_duration
+logger
+●●●●●● 1mm □△
+'Recorded insight: '
+insight_type
+' - '
+description
+50
+'... (Data: '
+data_consumed
+'bytes'
+●●●●●● 3mm □△
+1024
+'.2f'
+' KB)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+insight
+Insight
+●●●●●● 1mm □
+record_domain_acquisition
+●●●●●● 1mm □△
+self
+domain
+skill_level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'NOVICE'
+'\n        Explicitly record domain acquisition.\n        \n        Args:\n            domain: Domain name\n            skill_level: Initial skill level\n        '
+●●●●●● 2mm □
+domain
+●●●●●● 3mm △
+data_consumed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+domain
+'bytes'
+'documents'
+'chunks'
+0.0
+0
+0
+●●●●●● 2mm □△
+current_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_to_acq
+●●●●●● 1mm □
+●●●●●● 3mm △
+current_time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+domain
+●●●●●● 1mm □
+DomainAcquisition
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_efficiency_metrics
+●●●●●● 1mm □△
+self
+domain
+time_window
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Calculate learning efficiency metrics.\n        \n        Args:\n            domain: Optional domain filter\n            time_window: Optional time window filter\n            \n        Returns:\n            LearningEfficiencyMetrics object\n        '
+filtered_insights
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+domain
+filtered_insights
+●●●●●● 1mm □
+i
+i
+filtered_insights
+i
+domain
+●●●●●● 2mm □
+time_window
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time_window
+filtered_insights
+●●●●●● 1mm □
+i
+i
+filtered_insights
+i
+cutoff
+●●●●●● 2mm □
+filtered_insights
+●●●●●● 3mm ○
+LearningEfficiencyMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_bytes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+i
+●●●●●● 1mm □△
+'bytes'
+0
+●●●●●● 2mm □△
+i
+filtered_insights
+●●●●●● 2mm □△
+total_docs
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+i
+●●●●●● 1mm □△
+'documents'
+0
+●●●●●● 2mm □△
+i
+filtered_insights
+●●●●●● 2mm □△
+total_chunks
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+i
+●●●●●● 1mm □△
+'chunks'
+0
+●●●●●● 2mm □△
+i
+filtered_insights
+●●●●●● 2mm □△
+num_insights
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+bytes_per_insight
+●●●●●● 1mm □
+num_insights
+0
+total_bytes
+●●●●●● 3mm □△
+num_insights
+0.0
+documents_per_insight
+●●●●●● 1mm □
+num_insights
+0
+total_docs
+●●●●●● 3mm □△
+num_insights
+0.0
+chunks_per_insight
+●●●●●● 1mm □
+num_insights
+0
+total_chunks
+●●●●●● 3mm □△
+num_insights
+0.0
+total_time_seconds
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+i
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+i
+filtered_insights
+●●●●●● 2mm □△
+seconds_per_insight
+●●●●●● 1mm □
+num_insights
+0
+total_time_seconds
+●●●●●● 3mm □△
+num_insights
+0.0
+hours_per_insight
+●●●●●● 1mm □
+seconds_per_insight
+●●●●●● 3mm □△
+3600
+●●●●●● 2mm □
+filtered_insights
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+1
+first_insight_time
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+i
+i
+filtered_insights
+●●●●●● 2mm □△
+last_insight_time
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+i
+i
+filtered_insights
+●●●●●● 2mm □△
+total_duration_hours
+●●●●●● 1mm □
+last_insight_time
+●●●●●● 1mm □△
+first_insight_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+insights_per_hour
+●●●●●● 1mm □
+total_duration_hours
+0
+num_insights
+●●●●●● 3mm □△
+total_duration_hours
+0.0
+insights_per_day
+●●●●●● 1mm □
+insights_per_hour
+●●●●●● 2mm □△
+24
+●●●●●● 3mm □
+insights_per_hour
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm □
+insights_per_day
+●●●●●● 1mm □
+0.0
+time_per_insight_trend
+●●●●●● 1mm □
+insight
+filtered_insights
+●●●●●● 2mm □
+insight
+time_per_insight_trend
+●●●●●● 1mm □△
+insight
+insight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+velocity_trend
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+1
+window_hours
+●●●●●● 1mm □
+1.0
+i
+insight
+●●●●●● 2mm □
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+window_start
+●●●●●● 1mm □
+insight
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+window_insights
+●●●●●● 1mm □
+ins
+ins
+filtered_insights
+ins
+window_start
+ins
+insight
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+window_insights
+●●●●●● 2mm □△
+1
+window_duration
+●●●●●● 1mm □
+window_insights
+1
+●●●●●● 1mm □△
+window_insights
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+window_velocity
+●●●●●● 1mm □
+window_duration
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+window_insights
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+window_duration
+0.0
+velocity_trend
+●●●●●● 1mm □△
+insight
+window_velocity
+●●●●●● 2mm □△
+bytes_per_domain
+●●●●●● 1mm □
+0.0
+documents_per_domain
+●●●●●● 1mm □
+0.0
+time_to_domain
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+average_time_to_domain
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+total_domain_bytes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+'bytes'
+0
+●●●●●● 2mm □△
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_domain_docs
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+'documents'
+0
+●●●●●● 2mm □△
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+num_domains
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+bytes_per_domain
+●●●●●● 1mm □
+num_domains
+0
+total_domain_bytes
+●●●●●● 3mm □△
+num_domains
+0.0
+documents_per_domain
+●●●●●● 1mm □
+num_domains
+0
+total_domain_docs
+●●●●●● 3mm □△
+num_domains
+0.0
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1
+times
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+d
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+times
+●●●●●● 2mm □△
+2
+time_to_domain
+●●●●●● 1mm □
+times
+1
+●●●●●● 1mm □△
+times
+0
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+times
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+total_time_to_domain
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+average_time_to_domain
+●●●●●● 1mm □
+num_domains
+0
+total_time_to_domain
+●●●●●● 3mm □△
+num_domains
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+bytes_per_skill_level
+●●●●●● 1mm □
+time_per_skill_level
+●●●●●● 1mm □
+skill_levels
+●●●●●● 1mm □
+'NOVICE'
+'BEGINNER'
+'INTERMEDIATE'
+'ADVANCED'
+'EXPERT'
+level
+skill_levels
+level_domains
+●●●●●● 1mm □
+d
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+level
+●●●●●● 2mm □
+level_domains
+total_level_bytes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+'bytes'
+0
+●●●●●● 2mm □△
+d
+level_domains
+●●●●●● 2mm □△
+bytes_per_skill_level
+level
+●●●●●● 1mm □
+total_level_bytes
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+level_domains
+●●●●●● 2mm □△
+total_level_time
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+d
+level_domains
+●●●●●● 2mm □△
+time_per_skill_level
+level
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+level_domains
+●●●●●● 2mm □△
+0
+total_level_time
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+level_domains
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+data_efficiency_trend
+●●●●●● 1mm □
+cumulative_bytes
+●●●●●● 1mm □
+0.0
+i
+insight
+●●●●●● 2mm □
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+cumulative_bytes
+insight
+●●●●●● 1mm □△
+'bytes'
+0
+●●●●●● 2mm □△
+efficiency
+●●●●●● 1mm □
+i
+0
+cumulative_bytes
+●●●●●● 3mm □△
+i
+●●●●●● 3mm ○
+1
+0.0
+data_efficiency_trend
+●●●●●● 1mm □△
+insight
+efficiency
+●●●●●● 2mm □△
+learning_curve
+●●●●●● 1mm □
+cumulative_bytes
+●●●●●● 1mm □
+0.0
+i
+insight
+●●●●●● 2mm □
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+cumulative_bytes
+insight
+●●●●●● 1mm □△
+'bytes'
+0
+●●●●●● 2mm □△
+efficiency
+●●●●●● 1mm □
+i
+0
+cumulative_bytes
+●●●●●● 3mm □△
+i
+●●●●●● 3mm ○
+1
+0.0
+learning_curve
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+efficiency
+●●●●●● 2mm □△
+temporal_learning_curve
+●●●●●● 1mm □
+cumulative_bytes
+●●●●●● 1mm □
+0.0
+i
+insight
+●●●●●● 2mm □
+●●●●●● 1mm □△
+filtered_insights
+●●●●●● 2mm □△
+cumulative_bytes
+insight
+●●●●●● 1mm □△
+'bytes'
+0
+●●●●●● 2mm □△
+efficiency
+●●●●●● 1mm □
+i
+0
+cumulative_bytes
+●●●●●● 3mm □△
+i
+●●●●●● 3mm ○
+1
+0.0
+temporal_learning_curve
+●●●●●● 1mm □△
+insight
+efficiency
+●●●●●● 2mm □△
+domain_efficiency
+●●●●●● 1mm □
+domain_temporal_efficiency
+●●●●●● 1mm □
+domain_name
+data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain_insights
+●●●●●● 1mm □
+i
+i
+filtered_insights
+i
+domain_name
+●●●●●● 2mm □
+domain_insights
+domain_efficiency
+domain_name
+●●●●●● 1mm □
+'bytes_per_insight'
+'documents_per_insight'
+'chunks_per_insight'
+'total_insights'
+data
+'bytes'
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0
+data
+'documents'
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0
+data
+'chunks'
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+domain_time_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+domain_name
+●●●●●● 2mm □△
+domain_total_seconds
+●●●●●● 1mm □
+domain_time_data
+●●●●●● 1mm □△
+'total_seconds'
+0.0
+●●●●●● 2mm □△
+domain_acq
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+domain_name
+●●●●●● 2mm □△
+domain_temporal_efficiency
+domain_name
+●●●●●● 1mm □
+'seconds_per_insight'
+'hours_per_insight'
+'insights_per_hour'
+'time_to_acquisition'
+'first_insight'
+'last_insight'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0
+domain_total_seconds
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+0
+domain_total_seconds
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+domain_insights
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+0.0
+domain_acq
+domain_acq
+0.0
+domain_acq
+domain_acq
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+0.0
+domain_time_data
+●●●●●● 1mm □△
+'first_insight'
+●●●●●● 2mm □△
+domain_time_data
+●●●●●● 1mm □△
+'first_insight'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+domain_time_data
+●●●●●● 1mm □△
+'last_insight'
+●●●●●● 2mm □△
+domain_time_data
+●●●●●● 1mm □△
+'last_insight'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+LearningEfficiencyMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LearningEfficiencyMetrics
+●●●●●● 1mm □
+get_optimal_learning_paths
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Identify optimal learning paths based on efficiency data.\n        \n        Returns:\n            Dict with recommended learning paths\n        '
+domain_eff
+●●●●●● 1mm □
+domain
+metrics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain_eff
+domain
+●●●●●● 1mm □
+metrics
+●●●●●● 1mm □△
+'bytes_per_insight'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sorted_domains
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+domain_eff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □
+'most_efficient_domains'
+'learning_path'
+'efficiency_insights'
+'domain'
+'bytes_per_insight'
+domain
+eff
+domain
+eff
+sorted_domains
+5
+domain
+domain
+_
+sorted_domains
+10
+'average_bytes_per_insight'
+'most_efficient_domain'
+'least_efficient_domain'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sorted_domains
+sorted_domains
+0
+0
+●●●●●● 2mm □
+sorted_domains
+sorted_domains
+1
+0
+●●●●●● 2mm □
+●●●●●● 3mm ○
+recommendations
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+export_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Export all metrics as JSON-serializable dict.'
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'summary'
+'efficiency'
+'domains'
+'domain_efficiency'
+'domain_temporal_efficiency'
+'learning_curve'
+'temporal_learning_curve'
+'velocity_trend'
+'time_per_insight_trend'
+'optimal_paths'
+'total_bytes_consumed'
+'total_documents_consumed'
+'total_chunks_consumed'
+'total_insights'
+'total_domains'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'bytes_per_insight'
+'documents_per_insight'
+'chunks_per_insight'
+'seconds_per_insight'
+'hours_per_insight'
+'insights_per_hour'
+'insights_per_day'
+'bytes_per_domain'
+'documents_per_domain'
+'average_time_to_domain_hours'
+metrics
+metrics
+metrics
+metrics
+metrics
+metrics
+metrics
+metrics
+metrics
+metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+domain
+'insights'
+'trust_score'
+'skill_level'
+'data_at_acquisition'
+acq
+acq
+acq
+acq
+domain
+acq
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+metrics
+'insight_count'
+'efficiency'
+count
+eff
+count
+eff
+metrics
+'timestamp'
+'efficiency'
+ts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eff
+ts
+eff
+metrics
+'timestamp'
+'insights_per_hour'
+ts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vel
+ts
+vel
+metrics
+'timestamp'
+'seconds_per_insight'
+ts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+secs
+ts
+secs
+metrics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

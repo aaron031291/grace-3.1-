@@ -1,0 +1,252 @@
+## event_bus.py
+'\nEvent Bus — In-process async event system for Grace.\n\nReplaces the need for external message queues (Redis/RabbitMQ) for\nintra-system communication. Components publish events, subscribers react.\n\nEvents:\n  file.uploaded, file.organized, file.deleted\n  llm.called, llm.failed\n  healing.started, healing.completed, healing.failed\n  learning.new_pattern, learning.feedback\n  consensus.started, consensus.completed\n  trust.updated, trust.threshold_crossed\n  genesis.key_created\n  system.health_changed\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+Event
+topic
+●●●●●● 1mm ○
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm ○
+'system'
+dataclass
+EventHandler
+●●●●●● 1mm □
+●●●●●● 1mm △○
+Event
+●●●●●● 2mm □
+_subscribers
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+EventHandler
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_event_log
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MAX_LOG
+●●●●●● 1mm □
+500
+●●●●●● 1mm □
+subscribe
+●●●●●● 1mm □△
+topic
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+EventHandler
+"Subscribe to events on a topic. Supports wildcards: 'llm.*' matches 'llm.called'."
+_lock
+_subscribers
+topic
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm □
+publish
+●●●●●● 1mm □△
+topic
+data
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'system'
+"\n    Publish an event. Handlers run synchronously in the caller's thread.\n    For non-blocking, wrap the publish call in a thread.\n    "
+event
+●●●●●● 1mm □
+Event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_lock
+_event_log
+●●●●●● 1mm □△
+'topic'
+'source'
+'ts'
+topic
+source
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_event_log
+●●●●●● 2mm □△
+MAX_LOG
+_event_log
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+handlers
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_subscribers
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+topic
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+1
+wildcard
+●●●●●● 1mm □
+parts
+0
+●●●●●● 3mm ○
+'.*'
+handlers
+●●●●●● 1mm □△
+_subscribers
+●●●●●● 1mm □△
+wildcard
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+handlers
+●●●●●● 1mm □△
+_subscribers
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+handler
+handlers
+handler
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+"Event handler error for '"
+topic
+"': "
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+publish_async
+●●●●●● 1mm □△
+topic
+data
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'system'
+'Non-blocking event publish.'
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_recent_events
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+_lock
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_event_log
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_subscriber_count
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_lock
+●●●●●● 3mm ○
+topic
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+handlers
+●●●●●● 2mm □△
+topic
+handlers
+_subscribers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○

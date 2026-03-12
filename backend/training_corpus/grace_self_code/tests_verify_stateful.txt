@@ -1,0 +1,226 @@
+## verify_stateful.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 2mm □△○
+httpx
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=== Phase 3 Verification: Stateful MCP API ==='
+●●●●●● 2mm □△
+BASE_URL
+●●●●●● 1mm □
+'http://localhost:8000'
+httpx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n1. Creating a new test chat...'
+●●●●●● 2mm □△
+chat_req
+●●●●●● 1mm □
+'title'
+'model'
+'temperature'
+'Stateful MCP Verification'
+'gpt-4o'
+0.5
+res
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+BASE_URL
+'/chats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+res
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED to create chat: '
+res
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chat_data
+●●●●●● 1mm □
+res
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_id
+●●●●●● 1mm □
+chat_data
+'id'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: Created chat with ID '
+chat_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n2. Sending MCP prompt for Chat ID '
+chat_id
+'...'
+●●●●●● 2mm □△
+mcp_req
+●●●●●● 1mm □
+'chat_id'
+'messages'
+'use_rag'
+chat_id
+'role'
+'content'
+'user'
+'What is the project Grace about? Use rag_search.'
+●●●●●● 3mm □△○
+res
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+BASE_URL
+'/api/mcp/chat'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+res
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED MCP chat: '
+res
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mcp_data
+●●●●●● 1mm □
+res
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: Received response from MCP Agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Content length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mcp_data
+'content'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Turns: '
+mcp_data
+'turns'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Sources found: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mcp_data
+●●●●●● 1mm □△
+'sources'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n3. Verifying persistence for Chat ID '
+chat_id
+'...'
+●●●●●● 2mm □△
+res
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+BASE_URL
+'/chats/'
+chat_id
+'/messages'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+res
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED to get history: '
+res
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+history
+●●●●●● 1mm □
+res
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+history
+'messages'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Messages in DB: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+messages
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+roles
+●●●●●● 1mm □
+m
+'role'
+m
+messages
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Message Roles: '
+roles
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'user'
+roles
+'assistant'
+roles
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ VERIFICATION SUCCESS: Data persisted to DB and sources extracted!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ VERIFICATION FAILED: Messages not found in DB.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+verify_stateful_mcp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

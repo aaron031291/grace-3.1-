@@ -1,0 +1,1429 @@
+## error_pipeline.py
+"\nself_healing/error_pipeline.py\n───────────────────────────────────────────────────────────────────────────\nGrace's Error → Self-Healing → Learning Pipeline\n───────────────────────────────────────────────────────────────────────────\nThis module is the BRAIN of Grace's self-healing capability. It:\n\n1. Classifies every runtime error by type (schema, import, attribute, logic)\n2. Routes each error class to the right healer:\n   - Schema drift    → database.auto_migrate (automatic, transparent)\n   - AttributeError  → coding agent task (Grace writes the fix)\n   - ImportError     → coding agent task + environment check\n   - Logic errors    → escalation + human review queue\n3. Records every error + resolution into Genesis KB and learning memory\n4. Tracks MTTR (Mean Time To Repair) per error class\n5. Surfaces patterns to memory_mesh_learner so Grace improves over time\n\nStarted as a background thread from app.py lifespan.\n"
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+inspect
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+queue
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+traceback
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+deque
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_SCHEMA_PATTERNS
+●●●●●● 1mm □
+'UndefinedColumn'
+'UndefinedTable'
+'does not exist'
+'no such column'
+'no such table'
+_ATTRIBUTE_PATTERNS
+●●●●●● 1mm □
+'AttributeError'
+'has no attribute'
+'object has no attribute'
+_IMPORT_PATTERNS
+●●●●●● 1mm □
+'ImportError'
+'ModuleNotFoundError'
+'cannot import name'
+_NAME_PATTERNS
+●●●●●● 1mm □
+'NameError'
+"name '"
+'is not defined'
+_TYPE_PATTERNS
+●●●●●● 1mm □
+'TypeError'
+'takes'
+'argument'
+_VALUE_PATTERNS
+●●●●●● 1mm □
+'ValueError'
+_NETWORK_PATTERNS
+●●●●●● 1mm □
+'ConnectionError'
+'ConnectionRefusedError'
+'ConnectionResetError'
+'ConnectionAbortedError'
+'BrokenPipeError'
+'Connection refused'
+'Connection reset'
+'Connection aborted'
+'TimeoutError'
+'ConnectTimeout'
+'ReadTimeout'
+'WriteTimeout'
+'timed out'
+'timeout'
+'Name or service not known'
+'nodename nor servname provided'
+'getaddrinfo failed'
+'DNS'
+'503'
+'502'
+'504'
+'Service Unavailable'
+'Bad Gateway'
+'Gateway Timeout'
+'429'
+'Too Many Requests'
+'rate limit'
+'RateLimitError'
+'SSL'
+'certificate verify failed'
+'SSLError'
+'Qdrant'
+'qdrant'
+'psycopg2.OperationalError'
+'could not connect to server'
+'ollama'
+'Ollama'
+'redis'
+'Redis'
+_SEEN_ERRORS
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_SEEN_LOCK
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_error_key
+●●●●●● 1mm □△
+error_type
+location
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+error_type
+'::'
+location
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_already_seen
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+_SEEN_LOCK
+●●●●●● 2mm □
+key
+_SEEN_ERRORS
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+_SEEN_ERRORS
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+classify_error
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+Exception
+'Classify an exception into a broad healing category.'
+err_str
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+exc_type
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+exc_type
+p
+err_str
+p
+_NETWORK_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'network'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exc
+ConnectionError
+TimeoutError
+OSError
+●●●●●● 2mm □△
+'connect'
+err_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'network'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exc
+AttributeError
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+exc_type
+p
+err_str
+p
+_ATTRIBUTE_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'attribute'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exc
+ImportError
+ModuleNotFoundError
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+exc_type
+p
+err_str
+p
+_IMPORT_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'import'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exc
+NameError
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+exc_type
+p
+err_str
+p
+_NAME_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exc
+TypeError
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+err_str
+p
+_TYPE_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'type'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exc
+ValueError
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+err_str
+p
+_VALUE_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'value'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+err_str
+p
+_SCHEMA_PATTERNS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'schema'
+●●●●●● 3mm ○
+'unknown'
+●●●●●● 1mm ○
+_mttr_data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_mttr_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_heal_time
+●●●●●● 1mm □△
+error_class
+seconds
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+_mttr_lock
+_mttr_data
+error_class
+●●●●●● 1mm □△
+seconds
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_mttr_data
+error_class
+●●●●●● 2mm □△
+100
+_mttr_data
+error_class
+●●●●●● 1mm □
+_mttr_data
+error_class
+100
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_mttr
+●●●●●● 1mm □△
+error_class
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+_mttr_lock
+vals
+●●●●●● 1mm □
+_mttr_data
+●●●●●● 1mm □△
+error_class
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+vals
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+vals
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vals
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm △
+ErrorPipeline
+'\n    Central error handling and self-healing pipeline.\n\n    Call `ErrorPipeline.handle(exc, context)` from any exception handler.\n    The pipeline classifies, routes, and learns from every error autonomously.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+queue
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Started — ready to classify and heal errors'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+handle
+●●●●●● 1mm □△
+self
+exc
+context
+module
+function
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+''
+''
+'\n        Submit an exception to the pipeline for classification, healing,\n        and learning. Non-blocking — puts to queue and returns immediately.\n        '
+tb
+●●●●●● 1mm □
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+location
+●●●●●● 1mm □
+module
+function
+module
+'.'
+function
+module
+function
+'unknown'
+error_class
+●●●●●● 1mm □
+classify_error
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+_error_key
+●●●●●● 1mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+location
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_already_seen
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+payload
+●●●●●● 1mm □
+'exc'
+'exc_type'
+'exc_str'
+'tb'
+'error_class'
+'location'
+'module'
+'function'
+'context'
+'timestamp'
+exc
+●●●●●● 3mm □
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+800
+tb
+error_class
+location
+module
+function
+context
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+queue
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Queue full — dropping error event for %s'
+location
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_worker_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+payload
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+Exception
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Worker crash: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_process
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+t0
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_class
+●●●●●● 1mm □
+payload
+'error_class'
+exc_str
+●●●●●● 1mm □
+payload
+'exc_str'
+location
+●●●●●● 1mm □
+payload
+'location'
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] 🔧 Healing %s error at %s: %s'
+error_class
+location
+exc_str
+120
+●●●●●● 2mm □△
+playbook_name
+●●●●●● 1mm □
+'auto_heal_'
+error_class
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Analyzing '
+location
+'...'
+healed
+●●●●●● 1mm □
+●●●●●● 1mm □
+fix_description
+●●●●●● 1mm □
+'No automatic fix available'
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Querying Episodic Memory for previous '
+error_class
+' error at '
+location
+'...'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+historical_episodes
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+historical_episodes
+best_episode
+●●●●●● 1mm □
+historical_episodes
+0
+outcome
+●●●●●● 1mm □
+best_episode
+●●●●●● 1mm □△
+'outcome'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'healed:'
+outcome
+'success'
+outcome
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Found historical fix in Episodic Memory: %s'
+outcome
+●●●●●● 2mm □△
+payload
+'context'
+'historical_fix'
+●●●●●● 1mm □
+outcome
+Exception
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Episodic memory fast-path lookup failed: %s'
+mem_err
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error_class
+'schema'
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Running auto-migrate for '
+location
+'...'
+healed
+fix_description
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm △
+error_class
+'network'
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Probing network connection for '
+location
+'...'
+healed
+fix_description
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error_class
+'attribute'
+'name'
+'type'
+'import'
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Running deterministic rules against '
+location
+'...'
+●●●●●● 3mm □△○
+self_healing.deterministic_healer
+●●●●●● 2mm □△○
+get_deterministic_healer
+det_result
+●●●●●● 1mm □
+get_deterministic_healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+det_result
+healed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+fix_description
+●●●●●● 1mm □
+'[deterministic:'
+det_result
+'] '
+det_result
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Deterministic fix applied (%s) — skipping LLM'
+det_result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Deterministic: no pattern match (%s) → escalating to LLM'
+det_result
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Deterministic rules failed. Escalating '
+location
+' to Coding Agent...'
+●●●●●● 3mm □
+healed
+fix_description
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Deterministic healer error: %s → fallback to LLM'
+det_err
+●●●●●● 2mm □△
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Escalating '
+location
+' to Coding Agent...'
+healed
+fix_description
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+playbook_name
+●●●●●● 1mm □
+'Unknown error class. Escaping '
+location
+' to human review...'
+●●●●●● 3mm □
+healed
+fix_description
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+playbook_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+playbook_name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'playbook_id'
+'location'
+'status'
+'timestamp'
+playbook_name
+location
+healed
+'success'
+'failed'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+50
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+50
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+t0
+record_heal_time
+●●●●●● 1mm □△
+error_class
+elapsed
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+healed
+fix_description
+elapsed
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_heal_schema
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Auto-fix schema drift via auto_migrate.'
+●●●●●● 3mm □△○
+database.auto_migrate
+●●●●●● 2mm □△○
+run_auto_migrate
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □
+run_auto_migrate
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+changes
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Schema auto-migrate applied: '
+changes
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Auto-migrate ran but found nothing to fix — may need manual migration'
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Schema heal failed: '
+e
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_heal_network
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'\n        Network self-healer. Identifies the failing service from the error\n        message and applies the appropriate fix.\n\n        Services known: Qdrant, PostgreSQL, Ollama, Redis, external HTTP APIs.\n        Strategies: reconnect, wait-and-retry, circuit-break, escalate.\n        '
+err_str
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'exc_str'
+''
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+err_str
+s
+'psycopg2'
+'could not connect to server'
+'PostgreSQL'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConnection
+●●●●●● 1mm □
+●●●●●● 2mm □
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □△
+'PostgreSQL reconnected'
+●●●●●● 2mm □△
+Exception
+fixes
+●●●●●● 1mm □△
+'PostgreSQL reconnect failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+err_str
+s
+'Qdrant'
+'qdrant'
+'6333'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+reset_client
+reset_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □△
+'Qdrant client reset'
+●●●●●● 2mm □△
+Exception
+fixes
+●●●●●● 1mm □△
+'Qdrant: reset requested, will retry on next access'
+●●●●●● 2mm □△
+Exception
+fixes
+●●●●●● 1mm □△
+'Qdrant reconnect failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+err_str
+s
+'ollama'
+'Ollama'
+'11434'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+reset_llm_clients
+reset_llm_clients
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □△
+'Ollama LLM clients reset'
+●●●●●● 2mm □△
+Exception
+fixes
+●●●●●● 1mm □△
+'Ollama: reset requested (clients will reconnect on next call)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+err_str
+s
+'redis'
+'Redis'
+'6379'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+redis
+●●●●●● 1mm □
+_redis
+fixes
+●●●●●● 1mm □△
+'Redis: connection pool flush requested'
+●●●●●● 2mm □△
+Exception
+fixes
+●●●●●● 1mm □△
+'Redis reset: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+err_str
+s
+'429'
+'Too Many Requests'
+'rate limit'
+'RateLimitError'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'network.rate_limited'
+'service'
+'error'
+payload
+●●●●●● 1mm □△
+'location'
+'unknown'
+●●●●●● 2mm □△
+err_str
+100
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □△
+'Rate limit detected — published network.rate_limited for circuit breaker'
+●●●●●● 2mm □△
+Exception
+fixes
+●●●●●● 1mm □△
+'Rate limit: circuit breaker event publish failed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+err_str
+s
+'SSL'
+'certificate verify failed'
+'SSLError'
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □△
+'SSL error — check certificate chain; no auto-fix possible'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fixes
+fixes
+●●●●●● 1mm □△
+'Network error ('
+●●●●●● 3mm □
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+'exc'
+Exception
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+') — no specific service identified; monitoring resumed'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'network.healed'
+'fixes'
+'location'
+'error'
+fixes
+payload
+●●●●●● 1mm □△
+'location'
+''
+●●●●●● 2mm □△
+err_str
+100
+●●●●●● 2mm □△
+Exception
+success
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'reconnected'
+f
+'reset'
+f
+'requested'
+f
+f
+fixes
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+' | '
+●●●●●● 1mm □△
+fixes
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_coding_agent_task
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+"\n        Submit a task to Grace's coding agent to fix the error autonomously.\n        The coding agent receives the full traceback and context,\n        plus target_file so fix_applier knows where to write the fix.\n        "
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+target_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+'location'
+●●●●●● 2mm □△
+instructions
+●●●●●● 1mm □
+'Fix the '
+payload
+'exc_type'
+' error in '
+payload
+'location'
+'.\nError: '
+payload
+'exc_str'
+'\nTraceback:\n'
+payload
+'tb'
+1000
+'\nApply a minimal, targeted fix. Do not refactor unrelated code.'
+context
+●●●●●● 1mm □
+'error_type'
+'error_message'
+'location'
+'traceback'
+'target_file'
+'file'
+'submitted_at'
+payload
+'exc_type'
+payload
+'exc_str'
+payload
+'location'
+payload
+'tb'
+2000
+target_file
+target_file
+payload
+'timestamp'
+payload
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+'Coding agent task '
+task_id
+' submitted for '
+payload
+'exc_type'
+' in '
+payload
+'location'
+●●●●●● 2mm □
+target_file
+msg
+' → will patch '
+target_file
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+msg
+ImportError
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Coding agent not available. Error stored for manual review: %s at %s'
+payload
+'exc_type'
+payload
+'location'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Coding agent unavailable — error logged for review'
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Failed to submit coding agent task: '
+e
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_location_to_file
+●●●●●● 1mm □△
+self
+location
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Convert a module.function location string to an absolute file path.\n        e.g. 'cognitive.mirror_self_modeling.detect_behavioral_patterns'\n             → '/backend/cognitive/mirror_self_modeling.py'\n        Returns empty string if file cannot be found.\n        "
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+parts
+●●●●●● 1mm □
+location
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+length
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+0
+1
+●●●●●● 2mm □△
+module_path
+●●●●●● 1mm □
+'.'
+●●●●●● 1mm □△
+parts
+length
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_path
+sys
+mod
+●●●●●● 1mm □
+sys
+module_path
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mod
+'__file__'
+●●●●●● 2mm □△
+mod
+●●●●●● 3mm ○
+mod
+backend_root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+length
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+0
+1
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+backend_root
+●●●●●● 3mm □△
+Path
+●●●●●● 1mm □△
+parts
+length
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_queue_for_human_review
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Queue unknown errors for human escalation.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Queued for human review: '
+payload
+'exc_type'
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_record_learning
+●●●●●● 1mm □△
+self
+payload
+healed
+fix_description
+elapsed
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Record error + outcome into Genesis KB and learning system.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[ERROR-PIPELINE] Unified memory write skipped: %s'
+ue
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 1mm □
+magma
+magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healed
+magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+payload
+'error_class'
+' error ('
+payload
+'exc_type'
+'): '
+healed
+'healed'
+'unresolved'
+'. Fix: '
+fix_description
+150
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+_pipeline_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_error_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_pipeline_instance
+●●●●●● 2mm □
+_pipeline_instance
+●●●●●● 1mm □
+ErrorPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_pipeline_instance
+ErrorPipeline

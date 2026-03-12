@@ -1,0 +1,2002 @@
+## adaptive_cicd.py
+'\nAdaptive CI/CD Pipeline System\n==============================\nIntelligent, self-improving CI/CD with:\n- Trust scores for pipeline reliability\n- KPI tracking and performance metrics\n- LLM orchestration for intelligent decisions\n- Sandbox testing before production\n- Governance integration for human oversight\n\nGRACE can autonomously trigger pipelines based on her needs,\ntest in sandbox, and request human approval via governance.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+statistics
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PipelineTrustLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Trust levels for pipelines.'
+UNTRUSTED
+●●●●●● 1mm □
+'untrusted'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+VERIFIED
+●●●●●● 1mm □
+'verified'
+●●●●●● 2mm △
+AdaptiveTriggerReason
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Reasons for adaptive pipeline triggers.'
+CODE_CHANGE
+●●●●●● 1mm □
+'code_change'
+SCHEDULED
+●●●●●● 1mm □
+'scheduled'
+ANOMALY_DETECTED
+●●●●●● 1mm □
+'anomaly_detected'
+PERFORMANCE_DEGRADATION
+●●●●●● 1mm □
+'performance_degradation'
+SECURITY_CONCERN
+●●●●●● 1mm □
+'security_concern'
+LEARNING_OPPORTUNITY
+●●●●●● 1mm □
+'learning_opportunity'
+SELF_IMPROVEMENT
+●●●●●● 1mm □
+'self_improvement'
+DEPENDENCY_UPDATE
+●●●●●● 1mm □
+'dependency_update'
+HUMAN_REQUEST
+●●●●●● 1mm □
+'human_request'
+AUTONOMOUS_DECISION
+●●●●●● 1mm □
+'autonomous_decision'
+●●●●●● 2mm △
+GovernanceAction
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Actions requiring governance approval.'
+PRODUCTION_DEPLOY
+●●●●●● 1mm □
+'production_deploy'
+SECURITY_CHANGE
+●●●●●● 1mm □
+'security_change'
+TRUST_ELEVATION
+●●●●●● 1mm □
+'trust_elevation'
+AUTONOMOUS_MODIFICATION
+●●●●●● 1mm □
+'autonomous_modification'
+ROLLBACK
+●●●●●● 1mm □
+'rollback'
+NEW_PIPELINE
+●●●●●● 1mm □
+'new_pipeline'
+●●●●●● 2mm △
+PipelineTrustScore
+'Trust score for a pipeline.'
+pipeline_id
+●●●●●● 1mm ○
+trust_level
+PipelineTrustLevel
+score
+●●●●●● 3mm ○
+total_runs
+●●●●●● 2mm ○
+0
+successful_runs
+●●●●●● 2mm ○
+0
+failed_runs
+●●●●●● 2mm ○
+0
+avg_duration
+●●●●●● 3mm ○
+0
+reliability_trend
+●●●●●● 1mm ○
+'stable'
+last_success
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+last_failure
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+human_verified
+●●●●●● 3mm △
+●●●●●● 1mm □
+verification_date
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+PipelineKPIs
+'KPI metrics for a pipeline.'
+pipeline_id
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+success_rate
+●●●●●● 3mm ○
+0.0
+avg_duration_seconds
+●●●●●● 3mm ○
+0.0
+p95_duration_seconds
+●●●●●● 3mm ○
+0.0
+throughput_per_hour
+●●●●●● 3mm ○
+0.0
+test_pass_rate
+●●●●●● 3mm ○
+0.0
+code_coverage
+●●●●●● 3mm ○
+0.0
+security_score
+●●●●●● 3mm ○
+0.0
+lint_score
+●●●●●● 3mm ○
+0.0
+resource_utilization
+●●●●●● 3mm ○
+0.0
+queue_wait_time
+●●●●●● 3mm ○
+0.0
+retry_rate
+●●●●●● 3mm ○
+0.0
+performance_trend
+●●●●●● 1mm ○
+'stable'
+quality_trend
+●●●●●● 1mm ○
+'stable'
+overall_health
+●●●●●● 3mm ○
+0.0
+confidence
+●●●●●● 3mm ○
+0.0
+dataclass
+●●●●●● 2mm △
+AdaptiveTrigger
+'An adaptive pipeline trigger decision.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+pipeline_id
+●●●●●● 1mm ○
+reason
+AdaptiveTriggerReason
+confidence
+●●●●●● 3mm ○
+trust_score
+●●●●●● 3mm ○
+requires_approval
+●●●●●● 3mm △
+governance_action
+●●●●●● 2mm □○
+GovernanceAction
+llm_recommendation
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+sandbox_required
+●●●●●● 3mm △
+timestamp
+●●●●●● 1mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GovernanceRequest
+'Request for human oversight.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+action
+GovernanceAction
+pipeline_id
+●●●●●● 1mm ○
+trigger_id
+●●●●●● 1mm ○
+reason
+●●●●●● 1mm ○
+risk_level
+●●●●●● 1mm ○
+llm_analysis
+●●●●●● 1mm ○
+recommended_action
+●●●●●● 1mm ○
+requires_response
+●●●●●● 3mm △
+deadline
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+'pending'
+reviewer
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+response_time
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+AdaptiveCICD
+'\n    Adaptive CI/CD system with trust, KPIs, and governance.\n\n    GRACE can:\n    1. Monitor pipeline health and trust scores\n    2. Make intelligent decisions using LLM orchestration\n    3. Test changes in sandbox before production\n    4. Request human approval via governance\n    5. Learn and improve from outcomes\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PipelineTrustScore
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+PipelineKPIs
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+AdaptiveTrigger
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GovernanceRequest
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+logger
+●●●●●● 1mm □△
+'[Adaptive CICD] Initialized adaptive CI/CD system'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+calculate_trust_score
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Calculate trust score for a pipeline based on history.\n        '
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+history
+●●●●●● 3mm ○
+PipelineTrustScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+history
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+total
+●●●●●● 1mm □△
+successful
+success_rate
+●●●●●● 1mm □
+total
+0
+successful
+●●●●●● 3mm □△
+total
+0
+durations
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'duration'
+0
+●●●●●● 2mm □△
+r
+history
+r
+●●●●●● 1mm □△
+'duration'
+●●●●●● 2mm □△
+avg_duration
+●●●●●● 1mm □
+durations
+statistics
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+success_rate
+0.95
+total
+20
+trust_level
+●●●●●● 1mm □
+PipelineTrustLevel
+●●●●●● 1mm △
+success_rate
+0.8
+trust_level
+●●●●●● 1mm □
+PipelineTrustLevel
+●●●●●● 2mm □
+success_rate
+0.5
+trust_level
+●●●●●● 1mm □
+PipelineTrustLevel
+●●●●●● 1mm △
+success_rate
+0
+trust_level
+●●●●●● 1mm □
+PipelineTrustLevel
+trust_level
+●●●●●● 1mm □
+PipelineTrustLevel
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+20
+recent
+●●●●●● 1mm □
+history
+10
+previous
+●●●●●● 1mm □
+history
+20
+10
+recent_rate
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+recent
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10
+previous_rate
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+previous
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10
+●●●●●● 2mm □
+recent_rate
+previous_rate
+●●●●●● 3mm ○
+0.1
+trend
+●●●●●● 1mm □
+'improving'
+●●●●●● 1mm △
+recent_rate
+previous_rate
+●●●●●● 1mm □△
+0.1
+trend
+●●●●●● 1mm □
+'degrading'
+trend
+●●●●●● 1mm □
+'stable'
+●●●●●● 3mm □
+trend
+●●●●●● 1mm □
+'stable'
+last_success
+●●●●●● 1mm □
+●●●●●● 2mm □
+last_failure
+●●●●●● 1mm □
+●●●●●● 2mm □
+r
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+last_success
+last_success
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'failed'
+last_failure
+last_failure
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+last_success
+last_failure
+trust_score
+●●●●●● 1mm □
+PipelineTrustScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+trust_score
+●●●●●● 3mm ○
+trust_score
+PipelineTrustScore
+●●●●●● 1mm □
+record_run_result
+●●●●●● 1mm □△
+self
+pipeline_id
+status
+duration
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Record a pipeline run result for trust calculation.'
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □△
+'status'
+'duration'
+'timestamp'
+'metadata'
+status
+duration
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+100
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+calculate_kpis
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Calculate KPI metrics for a pipeline.'
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+history
+●●●●●● 3mm ○
+PipelineKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+history
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+success_rate
+●●●●●● 1mm □
+total
+0
+successful
+●●●●●● 3mm □△
+total
+0
+durations
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'duration'
+0
+●●●●●● 2mm □△
+r
+history
+r
+●●●●●● 1mm □△
+'duration'
+●●●●●● 2mm □△
+avg_duration
+●●●●●● 1mm □
+durations
+statistics
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+0
+p95_duration
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+avg_duration
+recent_cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_runs
+●●●●●● 1mm □
+r
+r
+history
+datetime
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'timestamp'
+'2000-01-01'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_cutoff
+throughput
+●●●●●● 1mm □
+recent_runs
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_runs
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+24
+0
+test_scores
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'test_pass_rate'
+0
+●●●●●● 2mm □△
+r
+history
+r
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'test_pass_rate'
+●●●●●● 2mm □△
+test_pass_rate
+●●●●●● 1mm □
+test_scores
+statistics
+●●●●●● 1mm □△
+test_scores
+●●●●●● 2mm □△
+0
+coverage_scores
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'coverage'
+0
+●●●●●● 2mm □△
+r
+history
+r
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'coverage'
+●●●●●● 2mm □△
+code_coverage
+●●●●●● 1mm □
+coverage_scores
+statistics
+●●●●●● 1mm □△
+coverage_scores
+●●●●●● 2mm □△
+0
+retries
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+history
+r
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'is_retry'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+retry_rate
+●●●●●● 1mm □
+total
+0
+retries
+●●●●●● 3mm □△
+total
+0
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+20
+recent
+●●●●●● 1mm □
+history
+10
+previous
+●●●●●● 1mm □
+history
+20
+10
+recent_success
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+recent
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10
+previous_success
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+previous
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10
+●●●●●● 2mm □
+recent_success
+previous_success
+●●●●●● 3mm ○
+0.05
+perf_trend
+●●●●●● 1mm □
+'improving'
+●●●●●● 1mm △
+recent_success
+previous_success
+●●●●●● 1mm □△
+0.05
+perf_trend
+●●●●●● 1mm □
+'degrading'
+perf_trend
+●●●●●● 1mm □
+'stable'
+●●●●●● 3mm □
+perf_trend
+●●●●●● 1mm □
+'stable'
+health
+●●●●●● 1mm □
+success_rate
+●●●●●● 2mm □△
+0.4
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△
+retry_rate
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+test_pass_rate
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+code_coverage
+code_coverage
+●●●●●● 3mm □△
+100
+0.5
+●●●●●● 2mm □△
+0.2
+confidence
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+total
+●●●●●● 3mm □△
+50
+●●●●●● 2mm □△
+kpis
+●●●●●● 1mm □
+PipelineKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □△
+kpis
+●●●●●● 2mm □△
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+100
+●●●●●● 3mm ○
+kpis
+PipelineKPIs
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Get LLM recommendation for pipeline decision.\n\n        Integrates with LLM orchestration for intelligent analysis.\n        '
+●●●●●● 3mm □△○
+api.llm_orchestration
+●●●●●● 2mm □△○
+get_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+kpis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Analyze this CI/CD pipeline situation and provide a recommendation:\n\nPipeline: '
+pipeline_id
+'\nTrust Level: '
+trust
+trust
+'unknown'
+'\nTrust Score: '
+trust
+trust
+0
+'.2%'
+'\nSuccess Rate: '
+kpis
+'.2%'
+'\nOverall Health: '
+kpis
+'.2%'
+'\nPerformance Trend: '
+kpis
+'\n\nContext:\n'
+json
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+'\n\nRecent History:\n- Total Runs: '
+trust
+trust
+0
+'\n- Last Success: '
+trust
+trust
+'Never'
+'\n- Last Failure: '
+trust
+trust
+'Never'
+'\n- Trend: '
+trust
+trust
+'Unknown'
+'\n\nProvide:\n1. Risk assessment (low/medium/high/critical)\n2. Recommended action (proceed/sandbox/defer/reject)\n3. Confidence level (0-100%)\n4. Reasoning (brief)\n5. Whether human approval is needed (yes/no)\n\nFormat as JSON.'
+response
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+json_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\{[\\s\\S]*\\}'
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_match
+recommendation
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+json_match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+recommendation
+●●●●●● 1mm □
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'medium'
+'proceed'
+50
+response
+500
+●●●●●● 3mm □△○
+json
+recommendation
+●●●●●● 1mm □
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'medium'
+'proceed'
+50
+response
+500
+●●●●●● 3mm □△○
+cache_key
+●●●●●● 1mm □
+pipeline_id
+':'
+hashlib
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm △
+cache_key
+●●●●●● 1mm □
+'recommendation'
+'timestamp'
+'prompt'
+recommendation
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt
+500
+logger
+●●●●●● 1mm □△
+'[Adaptive] LLM recommendation for '
+pipeline_id
+': '
+recommendation
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+recommendation
+Exception
+logger
+●●●●●● 1mm □△
+'[Adaptive] LLM recommendation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_rule_based_recommendation
+●●●●●● 1mm □△
+self
+pipeline_id
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Fallback rule-based recommendation.'
+trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+kpis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust
+trust
+PipelineTrustLevel
+●●●●●● 3mm ○
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'high'
+'sandbox'
+70
+'Pipeline has no trust history - sandbox testing required'
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+trust
+PipelineTrustLevel
+●●●●●● 3mm ○
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'high'
+'sandbox'
+60
+'Low trust score ('
+trust
+'.0%'
+') - sandbox recommended'
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+trust
+'degrading'
+●●●●●● 3mm ○
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'medium'
+'sandbox'
+65
+'Performance degrading - sandbox verification recommended'
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+trust
+PipelineTrustLevel
+PipelineTrustLevel
+●●●●●● 3mm ○
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'low'
+'proceed'
+85
+'High trust ('
+trust
+'.0%'
+') and stable performance'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'risk'
+'action'
+'confidence'
+'reasoning'
+'needs_approval'
+'medium'
+'proceed'
+70
+'Medium trust - proceed with monitoring'
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+AdaptiveTriggerReason
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Determine if a pipeline should be triggered and how.\n\n        Returns an AdaptiveTrigger with decision details.\n        '
+context
+●●●●●● 1mm □
+context
+trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+llm_rec
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+'reason'
+reason
+context
+●●●●●● 2mm □△
+requires_approval
+●●●●●● 1mm □
+●●●●●● 1mm □
+governance_action
+●●●●●● 1mm □
+●●●●●● 2mm □
+sandbox_required
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+reason
+AdaptiveTriggerReason
+AdaptiveTriggerReason
+requires_approval
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+governance_action
+●●●●●● 1mm □
+GovernanceAction
+●●●●●● 2mm □
+trust
+PipelineTrustLevel
+PipelineTrustLevel
+sandbox_required
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+requires_approval
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+governance_action
+●●●●●● 1mm □
+GovernanceAction
+●●●●●● 2mm □
+llm_rec
+●●●●●● 1mm □△
+'needs_approval'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+requires_approval
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+llm_rec
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'sandbox'
+sandbox_required
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+trigger
+●●●●●● 1mm □
+AdaptiveTrigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+trigger
+●●●●●● 1mm □
+trigger
+logger
+●●●●●● 1mm □△
+'[Adaptive] Trigger decision for '
+pipeline_id
+': sandbox='
+sandbox_required
+', approval='
+requires_approval
+', confidence='
+trigger
+'.0%'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trigger
+AdaptiveTrigger
+●●●●●● 1mm ○
+AdaptiveTriggerReason
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Autonomously trigger a pipeline with full adaptive logic.\n\n        1. Evaluate if trigger is appropriate\n        2. Run in sandbox if needed\n        3. Request governance approval if required\n        4. Execute and track results\n        '
+trigger
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+reason
+context
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'trigger_id'
+'pipeline_id'
+'status'
+'sandbox_run'
+'governance_request'
+'production_run'
+trigger
+pipeline_id
+'pending'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+trigger
+sandbox_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+trigger
+context
+●●●●●● 2mm □△
+result
+'sandbox_run'
+●●●●●● 1mm □
+sandbox_result
+●●●●●● 2mm □
+sandbox_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'failed'
+result
+'status'
+●●●●●● 1mm □
+'sandbox_failed'
+logger
+●●●●●● 1mm □△
+'[Adaptive] Sandbox failed for '
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □
+trigger
+gov_request
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger
+●●●●●● 2mm □△
+result
+'governance_request'
+●●●●●● 1mm □
+'id'
+'status'
+'action'
+gov_request
+gov_request
+gov_request
+●●●●●● 2mm □
+gov_request
+'approved'
+result
+'status'
+●●●●●● 1mm □
+'awaiting_approval'
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+get_cicd
+cicd
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'production_run'
+●●●●●● 1mm □
+'run_id'
+'genesis_key'
+'status'
+run
+run
+run
+result
+'status'
+●●●●●● 1mm □
+'triggered'
+logger
+●●●●●● 1mm □△
+'[Adaptive] Triggered pipeline '
+pipeline_id
+' (run: '
+run
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Run a pipeline in sandbox mode for testing.\n\n        Isolates execution and validates before production.\n        '
+sandbox_id
+●●●●●● 1mm □
+'sandbox-'
+trigger_id
+8
+logger
+●●●●●● 1mm □△
+'[Adaptive] Starting sandbox run for '
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+get_cicd
+cicd
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pipeline
+●●●●●● 3mm ○
+'sandbox_id'
+'status'
+'error'
+sandbox_id
+'failed'
+"Pipeline '"
+pipeline_id
+"' not found"
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeout
+●●●●●● 1mm □
+300
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+timeout
+current_run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_run
+'success'
+'failed'
+'cancelled'
+asyncio
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+final_run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+sandbox_result
+●●●●●● 1mm □
+'sandbox_id'
+'run_id'
+'status'
+'duration'
+'stages_passed'
+'stages_total'
+'timestamp'
+sandbox_id
+run
+final_run
+final_run
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+final_run
+s
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+final_run
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+sandbox_id
+●●●●●● 1mm □
+sandbox_result
+logger
+●●●●●● 1mm □△
+'[Adaptive] Sandbox '
+sandbox_id
+' completed: '
+final_run
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sandbox_result
+Exception
+logger
+●●●●●● 1mm □△
+'[Adaptive] Sandbox failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sandbox_id'
+'status'
+'error'
+sandbox_id
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+AdaptiveTrigger
+'\n        Request human oversight via governance system.\n\n        Integrates with Three-Pillar Governance framework.\n        '
+llm_rec
+●●●●●● 1mm □
+trigger
+json
+●●●●●● 1mm □△
+trigger
+●●●●●● 2mm □△
+risk_level
+●●●●●● 1mm □
+llm_rec
+●●●●●● 1mm □△
+'risk'
+'medium'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+risk_level
+'critical'
+deadline
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+risk_level
+'high'
+deadline
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+deadline
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+GovernanceRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+api.governance_api
+●●●●●● 2mm □△○
+submit_governance_request
+submit_governance_request
+●●●●●● 1mm □△
+'type'
+'resource'
+'risk_level'
+'description'
+'analysis'
+'deadline'
+'metadata'
+●●●●●● 3mm □△
+'pipeline:'
+trigger
+risk_level
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+deadline
+'trigger_id'
+'trust_score'
+'confidence'
+trigger
+trigger
+trigger
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[Adaptive] Could not submit to governance system: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[Adaptive] Governance request '
+●●●●●● 3mm □△
+' created for '
+trigger
+' (risk: '
+risk_level
+', deadline: '
+deadline
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+GovernanceRequest
+●●●●●● 1mm □
+approve_governance_request
+●●●●●● 1mm □△
+self
+request_id
+reviewer
+approved
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Process governance approval response.'
+●●●●●● 3mm □△
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+request_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+ValueError
+●●●●●● 1mm □△
+"Governance request '"
+request_id
+"' not found"
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+approved
+'approved'
+'rejected'
+●●●●●● 3mm □△
+●●●●●● 1mm □
+reviewer
+●●●●●● 3mm □△
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[Adaptive] Governance request '
+request_id
+' '
+●●●●●● 3mm □△
+' by '
+reviewer
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+GovernanceRequest
+'\n        GRACE analyzes pipeline performance and suggests improvements.\n\n        This is called periodically for self-improvement.\n        '
+improvements
+●●●●●● 1mm □
+pipeline_id
+trust
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust
+'degrading'
+improvements
+●●●●●● 1mm □△
+'pipeline_id'
+'issue'
+'recommendation'
+'priority'
+pipeline_id
+'degrading_performance'
+'Investigate recent failures'
+'high'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kpis
+600
+improvements
+●●●●●● 1mm □△
+'pipeline_id'
+'issue'
+'recommendation'
+'priority'
+'avg_duration'
+pipeline_id
+'slow_execution'
+'Optimize pipeline stages'
+'medium'
+kpis
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kpis
+0.2
+improvements
+●●●●●● 1mm □△
+'pipeline_id'
+'issue'
+'recommendation'
+'priority'
+'retry_rate'
+pipeline_id
+'high_retry_rate'
+'Investigate flaky tests or unstable stages'
+'high'
+kpis
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'pipelines_analyzed'
+'improvements_found'
+'improvements'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+improvements
+●●●●●● 2mm □△
+improvements
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+action
+resource
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate Genesis Key for adaptive operations.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_data
+●●●●●● 1mm □
+'adaptive:'
+action
+':'
+resource
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'gk-adapt-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_trigger_id
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Generate unique trigger ID.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_data
+●●●●●● 1mm □
+'trigger:'
+pipeline_id
+':'
+timestamp
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_dashboard_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get comprehensive dashboard data.'
+●●●●●● 3mm ○
+'timestamp'
+'trust_scores'
+'kpis'
+'pending_governance'
+'recent_triggers'
+'sandbox_runs'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pid
+asdict
+●●●●●● 1mm □△
+ts
+●●●●●● 2mm □△
+pid
+ts
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pid
+asdict
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pid
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pid
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+gr
+●●●●●● 2mm □△
+gr
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gr
+'pending'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_adaptive_cicd
+●●●●●● 2mm □○
+AdaptiveCICD
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_adaptive_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global adaptive CI/CD instance.'
+●●●●●● 2mm □
+_adaptive_cicd
+●●●●●● 2mm □
+_adaptive_cicd
+●●●●●● 1mm □
+AdaptiveCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_adaptive_cicd
+AdaptiveCICD

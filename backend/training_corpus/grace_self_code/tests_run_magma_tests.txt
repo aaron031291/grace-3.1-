@@ -1,0 +1,3526 @@
+## run_magma_tests.py
+'\nMagma Memory System - Full Test Suite (No pytest required)\n\nComprehensive tests for all Magma components:\n1. Relation Graphs (Semantic, Temporal, Causal, Entity)\n2. Intent Router\n3. RRF Fusion\n4. Topological Retrieval\n5. Synaptic Ingestion\n6. Async Consolidation\n7. Causal Inference\n8. MagmaMemory Integration\n\nRun: python run_magma_tests.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+traceback
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestResult
+'Stores test result.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+passed
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+passed
+●●●●●● 3mm △
+●●●●●● 1mm □
+error
+●●●●●● 2mm △
+TestRunner
+'Simple test runner without pytest.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+TestResult
+●●●●●● 3mm △
+●●●●●● 1mm □
+''
+●●●●●● 1mm □
+run_test
+●●●●●● 1mm □△
+self
+name
+test_fn
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Run a single test.'
+test_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TestResult
+●●●●●● 1mm □△
+name
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ '
+name
+●●●●●● 2mm □△
+AssertionError
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TestResult
+●●●●●● 1mm □△
+name
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗ '
+name
+': '
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TestResult
+●●●●●● 1mm □△
+name
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗ '
+name
+': '
+●●●●●● 3mm □
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Print test summary.'
+passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+●●●●●● 3mm △
+r
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+●●●●●● 3mm △
+r
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST RESULTS: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFailed tests:'
+●●●●●● 2mm □△
+r
+●●●●●● 3mm △
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+r
+': '
+r
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+runner
+●●●●●● 1mm □
+TestRunner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_equal
+●●●●●● 1mm □△
+a
+b
+msg
+●●●●●● 2mm □△
+''
+'Assert two values are equal.'
+●●●●●● 2mm □
+a
+b
+AssertionError
+●●●●●● 1mm □△
+msg
+msg
+': Expected '
+b
+', got '
+a
+'Expected '
+b
+', got '
+a
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_true
+●●●●●● 1mm □△
+condition
+msg
+●●●●●● 2mm □△
+'Condition should be true'
+'Assert condition is true.'
+●●●●●● 2mm □
+condition
+AssertionError
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_false
+●●●●●● 1mm □△
+condition
+msg
+●●●●●● 2mm □△
+'Condition should be false'
+'Assert condition is false.'
+●●●●●● 2mm □
+condition
+AssertionError
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_in
+●●●●●● 1mm □△
+item
+container
+msg
+●●●●●● 2mm □△
+''
+'Assert item is in container.'
+●●●●●● 2mm □
+item
+container
+AssertionError
+●●●●●● 1mm □△
+msg
+msg
+': '
+item
+' not in '
+container
+item
+' not in container'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_raises
+●●●●●● 1mm □△
+exception_type
+fn
+●●●●●● 2mm □△
+'Assert function raises exception.'
+fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AssertionError
+●●●●●● 1mm □△
+'Expected '
+exception_type
+' to be raised'
+●●●●●● 2mm □△
+exception_type
+●●●●●● 1mm □
+assert_greater
+●●●●●● 1mm □△
+a
+b
+msg
+●●●●●● 2mm □△
+''
+'Assert a > b.'
+●●●●●● 2mm □
+a
+b
+AssertionError
+●●●●●● 1mm □△
+msg
+msg
+': '
+a
+' not greater than '
+b
+a
+' not greater than '
+b
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_is_not_none
+●●●●●● 1mm □△
+val
+msg
+●●●●●● 2mm □△
+'Value should not be None'
+'Assert value is not None.'
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+AssertionError
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_is_none
+●●●●●● 1mm □△
+val
+msg
+●●●●●● 2mm □△
+'Value should be None'
+'Assert value is None.'
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+AssertionError
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_relation_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test all relation graph components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] Relation Graphs'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+SemanticGraph
+TemporalGraph
+CausalGraph
+EntityGraph
+GraphNode
+GraphEdge
+RelationType
+sample_embedding
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+384
+similar_embedding
+●●●●●● 1mm □
+0.11
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+test_graph_node_creation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+node
+'n1'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+node
+'concept'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+node
+'test'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+node
+0.5
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphNode creation'
+test_graph_node_creation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_graph_node_with_embedding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphNode with embedding'
+test_graph_node_with_embedding
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_graph_node_equality
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n1
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n2
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+n1
+n2
+'Nodes with same ID should be equal'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphNode equality'
+test_graph_node_equality
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_graph_edge_creation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+edge
+'e1'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+edge
+1.0
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+edge
+0.5
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphEdge creation'
+test_graph_edge_creation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_semantic_graph_add_concept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+SemanticGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'test concept'
+sample_embedding
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □△
+'sem-'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+node_id
+graph
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'SemanticGraph add_concept'
+test_semantic_graph_add_concept
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_semantic_graph_auto_linking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+SemanticGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+0.5
+n1
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'concept 1'
+sample_embedding
+●●●●●● 2mm □△
+n2
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'concept 2'
+similar_embedding
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graph
+●●●●●● 2mm □△
+1
+'Should auto-link similar concepts'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'SemanticGraph auto-linking'
+test_semantic_graph_auto_linking
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_cosine_similarity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+SemanticGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sim
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+1
+0
+0
+1
+0
+0
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+sim
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+0.01
+'Identical vectors should have similarity 1.0'
+●●●●●● 2mm □△
+sim2
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+1
+0
+0
+0
+1
+0
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+sim2
+●●●●●● 2mm □△
+0.01
+'Orthogonal vectors should have similarity 0.0'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'Cosine similarity'
+test_cosine_similarity
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_temporal_graph_add_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+TemporalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'test event'
+now
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □△
+'temp-'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+node_id
+graph
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'TemporalGraph add_event'
+test_temporal_graph_add_event
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_temporal_graph_auto_linking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+TemporalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n1
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'event 1'
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+n2
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'event 2'
+now
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graph
+●●●●●● 2mm □△
+1
+'Should auto-link temporal events'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'TemporalGraph auto-linking'
+test_temporal_graph_auto_linking
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_temporal_graph_range_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+TemporalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+'event '
+i
+base
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+base
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+events
+●●●●●● 2mm □△
+5
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'TemporalGraph range query'
+test_temporal_graph_range_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_causal_graph_add_link
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+CausalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cause
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+effect
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+cause
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+effect
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'cause'
+'effect'
+RelationType
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+edge_id
+●●●●●● 1mm □△
+'causal-edge-'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalGraph add_causal_link'
+test_causal_graph_add_link
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_causal_graph_invalid_relation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+CausalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cause
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+effect
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+cause
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+effect
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+'a'
+'b'
+RelationType
+●●●●●● 2mm □△
+AssertionError
+●●●●●● 1mm □△
+'Should have raised ValueError'
+●●●●●● 2mm □△
+ValueError
+runner
+●●●●●● 1mm □△
+'CausalGraph invalid relation'
+test_causal_graph_invalid_relation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_causal_graph_trace_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+CausalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nid
+'A'
+'B'
+'C'
+'D'
+graph
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+'A'
+'B'
+RelationType
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+'B'
+'C'
+RelationType
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+'C'
+'D'
+RelationType
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'A'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+1
+'Should find causal chain'
+●●●●●● 2mm □△
+longest
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+longest
+●●●●●● 2mm □△
+4
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalGraph trace chain'
+test_causal_graph_trace_chain
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_entity_graph_add_entity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+EntityGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entity_id
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'John Doe'
+'person'
+'age'
+30
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+entity_id
+●●●●●● 1mm □△
+'ent-'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+entity_id
+graph
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'EntityGraph add_entity'
+test_entity_graph_add_entity
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_entity_graph_link_entities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+EntityGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p1
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'Alice'
+'person'
+●●●●●● 2mm □△
+c1
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'Acme'
+'company'
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+p1
+c1
+RelationType
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+edge_id
+●●●●●● 1mm □△
+'ent-edge-'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'EntityGraph link_entities'
+test_entity_graph_link_entities
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_entity_graph_co_occurrence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □
+EntityGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e1
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'Python'
+'tech'
+●●●●●● 2mm □△
+e2
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+'ML'
+'concept'
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+e1
+e2
+'article 1'
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+e1
+e2
+'article 2'
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+e1
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+1
+'Should have co-occurrence edge'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'EntityGraph co-occurrence'
+test_entity_graph_co_occurrence
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_graphs_init
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaRelationGraphs init'
+test_magma_graphs_init
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_graphs_unified_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □△
+'c1'
+sample_embedding
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □△
+'e1'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'semantic'
+stats
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'total_nodes'
+stats
+●●●●●● 2mm □△
+assert_greater
+●●●●●● 1mm □△
+stats
+'total_nodes'
+0
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaRelationGraphs unified stats'
+test_magma_graphs_unified_stats
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_intent_router
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test intent router components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] Intent Router'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.intent_router
+●●●●●● 2mm □△○
+IntentAwareRouter
+IntentClassifier
+AnchorIdentifier
+GraphSelector
+QueryIntent
+AnchorType
+●●●●●● 1mm □
+test_intent_classifier_factual
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classifier
+●●●●●● 1mm □
+IntentClassifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+primary_intent
+secondary_intents
+conf
+●●●●●● 1mm □
+classifier
+●●●●●● 1mm □△
+'What is Python?'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+primary_intent
+QueryIntent
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'IntentClassifier factual query'
+test_intent_classifier_factual
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_intent_classifier_temporal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classifier
+●●●●●● 1mm □
+IntentClassifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+primary_intent
+secondary_intents
+conf
+●●●●●● 1mm □
+classifier
+●●●●●● 1mm □△
+'What happened after the meeting?'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+primary_intent
+QueryIntent
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'IntentClassifier temporal query'
+test_intent_classifier_temporal
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_intent_classifier_causal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classifier
+●●●●●● 1mm □
+IntentClassifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+primary_intent
+secondary_intents
+conf
+●●●●●● 1mm □
+classifier
+●●●●●● 1mm □△
+'What causes this?'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+primary_intent
+QueryIntent
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'IntentClassifier causal query'
+test_intent_classifier_causal
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_intent_classifier_exploratory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classifier
+●●●●●● 1mm □
+IntentClassifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+primary_intent
+secondary_intents
+conf
+●●●●●● 1mm □
+classifier
+●●●●●● 1mm □△
+'Tell me something'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+primary_intent
+QueryIntent
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'IntentClassifier exploratory query'
+test_intent_classifier_exploratory
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_anchor_identifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+identifier
+●●●●●● 1mm □
+AnchorIdentifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □
+identifier
+●●●●●● 1mm □△
+'Find information about machine learning and Python programming'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anchors
+●●●●●● 2mm □△
+1
+'Should identify anchors'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'AnchorIdentifier basic'
+test_anchor_identifier
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_graph_selector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selector
+●●●●●● 1mm □
+GraphSelector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+selector
+●●●●●● 1mm □△
+QueryIntent
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'semantic'
+graphs
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphSelector factual'
+test_graph_selector
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_graph_selector_temporal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selector
+●●●●●● 1mm □
+GraphSelector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+selector
+●●●●●● 1mm □△
+QueryIntent
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'temporal'
+graphs
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphSelector temporal'
+test_graph_selector_temporal
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_router_analyze_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+IntentAwareRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+router
+●●●●●● 1mm □△
+'What causes climate change?'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'IntentAwareRouter analyze_query'
+test_router_analyze_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_router_causal_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+IntentAwareRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+router
+●●●●●● 1mm □△
+'What causes rain to flood?'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+analysis
+QueryIntent
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'causal'
+analysis
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'IntentAwareRouter causal query'
+test_router_causal_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rrf_fusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test RRF fusion components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] RRF Fusion'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.rrf_fusion
+●●●●●● 2mm □△○
+MagmaFusion
+RRFFusion
+WeightedRRFFusion
+CombSUMFusion
+CombMNZFusion
+RetrievalResult
+FusionMethod
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'semantic'
+'temporal'
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rrf_fusion_basic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+RRFFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused
+●●●●●● 2mm □△
+1
+'Should produce fused results'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+fused
+0
+0
+'Fused results should have positive scores'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'RRFFusion basic'
+test_rrf_fusion_basic
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rrf_fusion_ranking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+RRFFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+ids
+●●●●●● 1mm □
+r
+r
+fused
+3
+assert_in
+●●●●●● 1mm □△
+'r1'
+ids
+'r1 in both lists should rank high'
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'r2'
+ids
+'r2 in both lists should rank high'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'RRFFusion ranking'
+test_rrf_fusion_ranking
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_weighted_rrf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+WeightedRRFFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+weights
+●●●●●● 1mm □
+'semantic'
+'temporal'
+2.0
+1.0
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused
+●●●●●● 2mm □△
+1
+'Should produce weighted fused results'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'WeightedRRFFusion'
+test_weighted_rrf
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_combsum_fusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+CombSUMFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused
+●●●●●● 2mm □△
+1
+'CombSUM should produce results'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CombSUMFusion'
+test_combsum_fusion
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_combmnz_fusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+CombMNZFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused
+●●●●●● 2mm □△
+1
+'CombMNZ should produce results'
+●●●●●● 2mm □△
+multi_list_item
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+r
+r
+fused
+r
+'r1'
+'r2'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+multi_list_item
+'Should have items from multiple lists'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CombMNZFusion'
+test_combmnz_fusion
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_fusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+MagmaFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+make_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused
+●●●●●● 2mm □△
+1
+'MagmaFusion should work with RRF'
+●●●●●● 2mm □△
+fused2
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused2
+●●●●●● 2mm □△
+1
+'MagmaFusion should work with WeightedRRF'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaFusion methods'
+test_magma_fusion
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_empty_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fusion
+●●●●●● 1mm □
+RRFFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused
+●●●●●● 1mm □
+fusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused
+●●●●●● 2mm □△
+0
+'Empty input should produce empty output'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'RRFFusion empty input'
+test_empty_results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_topological_retrieval
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test topological retrieval components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] Topological Retrieval'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+GraphNode
+RelationType
+●●●●●● 3mm □△○
+cognitive.magma.topological_retrieval
+●●●●●● 2mm □△○
+AdaptiveTopologicalRetriever
+GraphTraverser
+TraversalPolicy
+TraversalConfig
+●●●●●● 3mm □△○
+cognitive.magma.intent_router
+●●●●●● 2mm □△○
+IntentAwareRouter
+sample_embedding
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+test_graph_traverser_bfs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n1
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'center'
+sample_embedding
+●●●●●● 2mm □△
+n2
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'neighbor1'
+0.11
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+n3
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'neighbor2'
+0.12
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+traverser
+●●●●●● 1mm □
+GraphTraverser
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+TraversalConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+traverser
+●●●●●● 1mm □△
+n1
+graphs
+config
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'BFS should visit nodes'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphTraverser BFS'
+test_graph_traverser_bfs
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_traverser_best_first
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n1
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'start'
+sample_embedding
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □△
+'node'
+i
+0.1
+●●●●●● 3mm ○
+i
+●●●●●● 2mm □△
+0.01
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+traverser
+●●●●●● 1mm □
+GraphTraverser
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+TraversalConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+traverser
+●●●●●● 1mm □△
+n1
+graphs
+config
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'Best-first should visit nodes'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'GraphTraverser best_first'
+test_traverser_best_first
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_adaptive_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n1
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'query concept'
+sample_embedding
+●●●●●● 2mm □△
+retriever
+●●●●●● 1mm □
+AdaptiveTopologicalRetriever
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+IntentAwareRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+router
+●●●●●● 1mm □△
+'What is this concept?'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'AdaptiveTopologicalRetriever'
+test_adaptive_retriever
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_traversal_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+TraversalConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+config
+5
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+config
+100
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'TraversalConfig'
+test_traversal_config
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_synaptic_ingestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test synaptic ingestion components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] Synaptic Ingestion'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+●●●●●● 3mm □△○
+cognitive.magma.synaptic_ingestion
+●●●●●● 2mm □△○
+SynapticIngestionPipeline
+EventSegmenter
+SemanticLinker
+TemporalLinker
+EntityLinker
+CausalLinker
+SegmentType
+Segment
+sample_embedding
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+mock_embed
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.1
+●●●●●● 3mm ○
+●●●●●● 2mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+100
+●●●●●● 3mm □△
+1000
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+test_event_segmenter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+segmenter
+●●●●●● 1mm □
+EventSegmenter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+segmenter
+●●●●●● 1mm □△
+'First sentence. Second sentence. Third sentence.'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segments
+●●●●●● 2mm □△
+1
+'Should produce segments'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'EventSegmenter basic'
+test_event_segmenter
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_segmenter_paragraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+segmenter
+●●●●●● 1mm □
+EventSegmenter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'Paragraph one.\n\nParagraph two.\n\nParagraph three.'
+segments
+●●●●●● 1mm □
+segmenter
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segments
+●●●●●● 2mm □△
+2
+'Should segment by paragraph'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'EventSegmenter paragraphs'
+test_segmenter_paragraph
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_semantic_linker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+linker
+●●●●●● 1mm □
+SemanticLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □△
+'existing concept'
+sample_embedding
+●●●●●● 2mm □△
+segment
+●●●●●● 1mm □
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+linker
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'SemanticLinker'
+test_semantic_linker
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_temporal_linker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+linker
+●●●●●● 1mm □
+TemporalLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+segment
+●●●●●● 1mm □
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+linker
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'TemporalLinker'
+test_temporal_linker
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_entity_linker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+linker
+●●●●●● 1mm □
+EntityLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+segment
+●●●●●● 1mm □
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+linker
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'EntityLinker'
+test_entity_linker
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_causal_linker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+linker
+●●●●●● 1mm □
+CausalLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+segment
+●●●●●● 1mm □
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+linker
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edges
+●●●●●● 2mm □△
+1
+'Should detect causal pattern'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalLinker basic'
+test_causal_linker
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_causal_linker_leads_to
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+linker
+●●●●●● 1mm □
+CausalLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+segment
+●●●●●● 1mm □
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+linker
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edges
+●●●●●● 2mm □△
+1
+"Should detect 'leads to' pattern"
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalLinker leads_to'
+test_causal_linker_leads_to
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pipeline_ingest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+SynapticIngestionPipeline
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'Machine learning causes better predictions. This enables automation.'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'Should create segments'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'SynapticIngestionPipeline'
+test_pipeline_ingest
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pipeline_with_genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+SynapticIngestionPipeline
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'Test content'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+result
+'GK-TEST123'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'Pipeline with genesis key'
+test_pipeline_with_genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_async_consolidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test async consolidation components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] Async Consolidation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+●●●●●● 3mm □△○
+cognitive.magma.async_consolidation
+●●●●●● 2mm □△○
+AsyncOperationQueue
+NeighborRetriever
+ContextSynthesizer
+ConsolidationWorker
+OperationType
+OperationPriority
+●●●●●● 3mm □△○
+cognitive.magma.rrf_fusion
+●●●●●● 2mm □△○
+RetrievalResult
+sample_embedding
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+test_operation_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □
+AsyncOperationQueue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □△
+OperationType
+'content'
+'test'
+OperationPriority
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □△
+OperationType
+'content'
+'test2'
+OperationPriority
+●●●●●● 2mm □△
+sizes
+●●●●●● 1mm □
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+sizes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+total
+2
+'Should have 2 operations queued'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'AsyncOperationQueue enqueue'
+test_operation_queue
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_queue_dequeue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □
+AsyncOperationQueue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □△
+OperationType
+'id'
+1
+OperationPriority
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □△
+OperationType
+'id'
+2
+OperationPriority
+●●●●●● 2mm □△
+op
+●●●●●● 1mm □
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+op
+OperationPriority
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'AsyncOperationQueue priority'
+test_queue_dequeue
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_neighbor_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n1
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'center'
+sample_embedding
+●●●●●● 2mm □△
+n2
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+'neighbor'
+0.11
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+retriever
+●●●●●● 1mm □
+NeighborRetriever
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+n1
+'semantic'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'NeighborRetriever'
+test_neighbor_retriever
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_context_synthesizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+synthesizer
+●●●●●● 1mm □
+ContextSynthesizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+synthesizer
+●●●●●● 1mm □△
+results
+'test query'
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'First piece'
+context
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'Second piece'
+context
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'ContextSynthesizer basic'
+test_context_synthesizer
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_context_synthesizer_with_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+synthesizer
+●●●●●● 1mm □
+ContextSynthesizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+synthesizer
+●●●●●● 1mm □△
+results
+'What is Python?'
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'Query:'
+context
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'Python'
+context
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'ContextSynthesizer with query'
+test_context_synthesizer_with_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_consolidation_worker_init
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □
+AsyncOperationQueue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+worker
+●●●●●● 1mm □
+ConsolidationWorker
+●●●●●● 1mm □△
+graphs
+queue
+●●●●●● 2mm □△
+assert_false
+●●●●●● 1mm □△
+worker
+'Worker should not start automatically'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'ConsolidationWorker init'
+test_consolidation_worker_init
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_causal_inference
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test causal inference components.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] Causal Inference'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+GraphNode
+RelationType
+●●●●●● 3mm □△○
+cognitive.magma.causal_inference
+●●●●●● 2mm □△○
+LLMCausalInferencer
+CausalPatternDetector
+CausalRelationStrength
+●●●●●● 1mm □
+test_pattern_detector_causes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detector
+●●●●●● 1mm □
+CausalPatternDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+'Rain causes flooding'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+1
+"Should detect 'causes' pattern"
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+claims
+0
+RelationType
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalPatternDetector causes'
+test_pattern_detector_causes
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pattern_detector_leads_to
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detector
+●●●●●● 1mm □
+CausalPatternDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+'Smoking leads to cancer'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+1
+"Should detect 'leads to' pattern"
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalPatternDetector leads_to'
+test_pattern_detector_leads_to
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pattern_detector_prevents
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detector
+●●●●●● 1mm □
+CausalPatternDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+'Vaccination prevents disease'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+1
+"Should detect 'prevents' pattern"
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+claims
+0
+RelationType
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalPatternDetector prevents'
+test_pattern_detector_prevents
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pattern_detector_enables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detector
+●●●●●● 1mm □
+CausalPatternDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+'Education enables success'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+1
+"Should detect 'enables' pattern"
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalPatternDetector enables'
+test_pattern_detector_enables
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pattern_detector_strength
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detector
+●●●●●● 1mm □
+CausalPatternDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+strong
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+'Gravity directly causes objects to fall'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+strong
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+strong
+0
+CausalRelationStrength
+●●●●●● 2mm □△
+weak
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+'Stress is associated with headaches'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+weak
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+weak
+0
+CausalRelationStrength
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'CausalPatternDetector strength'
+test_pattern_detector_strength
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_llm_inferencer_init
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+inferencer
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'LLMCausalInferencer init'
+test_llm_inferencer_init
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_llm_inferencer_infer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+inferencer
+●●●●●● 1mm □△
+'Exercise causes better health'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+1
+'Should infer causal claims'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'LLMCausalInferencer infer'
+test_llm_inferencer_infer
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_llm_inferencer_store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+inferencer
+●●●●●● 1mm □△
+'Rain causes flooding'
+●●●●●● 2mm □△
+edge_ids
+●●●●●● 1mm □
+inferencer
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edge_ids
+●●●●●● 2mm □△
+1
+'Should store claims in graph'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+1
+'Graph should have edges'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'LLMCausalInferencer store'
+test_llm_inferencer_store
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_llm_inferencer_trace_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □△
+inferencer
+●●●●●● 1mm □△
+'Rain causes flooding'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □△
+inferencer
+●●●●●● 1mm □△
+'Flooding causes damage'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □
+inferencer
+●●●●●● 1mm □△
+'rain'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'LLMCausalInferencer trace'
+test_llm_inferencer_trace_chain
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_llm_inferencer_explain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+inferencer
+●●●●●● 1mm □△
+inferencer
+●●●●●● 1mm □△
+'Study causes learning'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+explanation
+●●●●●● 1mm □
+inferencer
+●●●●●● 1mm □△
+'study'
+'learning'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+explanation
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+explanation
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'LLMCausalInferencer explain'
+test_llm_inferencer_explain
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test MagmaMemory unified interface.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST SUITE] MagmaMemory Integration'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma
+●●●●●● 2mm □△○
+MagmaMemory
+●●●●●● 1mm □
+mock_embed
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.1
+●●●●●● 3mm ○
+●●●●●● 2mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+100
+●●●●●● 3mm □△
+1000
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+mock_llm
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'[LLM Response to: '
+prompt
+30
+'...]'
+●●●●●● 1mm □
+test_magma_init
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+magma
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+magma
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+magma
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+magma
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+magma
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory init'
+test_magma_init
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_ingest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'Machine learning causes better predictions'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'Should create segments'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory ingest'
+test_magma_ingest
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_ingest_with_genesis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'Test content'
+●●●●●● 2mm □△
+assert_equal
+●●●●●● 1mm □△
+result
+'GK-TEST123'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory ingest with genesis'
+test_magma_ingest_with_genesis
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Python is a programming language'
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Machine learning uses algorithms'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'What is Python?'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory query'
+test_magma_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_get_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Python programming language'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'Python'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+results
+'What is Python?'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+context
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory get_context'
+test_magma_get_context
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_infer_causation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'Rain causes flooding'
+●●●●●● 2mm □△
+assert_true
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+1
+'Should find causal claims'
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory infer_causation'
+test_magma_infer_causation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_explain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Rain causes wet ground'
+●●●●●● 2mm □△
+explanation
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'rain'
+'wet ground'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+explanation
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory explain'
+test_magma_explain
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_get_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Test content for stats'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'graphs'
+stats
+●●●●●● 2mm □△
+assert_in
+●●●●●● 1mm □△
+'queue'
+stats
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory get_stats'
+test_magma_get_stats
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_magma_full_workflow
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test complete workflow: ingest -> query -> context.'
+magma
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Python is a versatile programming language'
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Machine learning enables intelligent systems'
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Deep learning causes breakthrough in AI'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'What enables AI?'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+results
+'What enables AI?'
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'Training causes model improvement'
+●●●●●● 2mm □△
+assert_is_not_none
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □△
+'MagmaMemory full workflow'
+test_magma_full_workflow
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'MAGMA MEMORY SYSTEM - FULL TEST SUITE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_relation_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_intent_router
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_rrf_fusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_topological_retrieval
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_synaptic_ingestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_async_consolidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_causal_inference
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_magma_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[IMPORT ERROR] '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"Make sure you're running from the backend directory"
+●●●●●● 2mm □△
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[UNEXPECTED ERROR] '
+e
+●●●●●● 2mm □△
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nCompleted in '
+elapsed
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

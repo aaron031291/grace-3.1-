@@ -1,0 +1,831 @@
+## validators.py
+'\nInput Validation and Sanitization for GRACE\n\nProvides secure input handling to prevent:\n- XSS attacks\n- SQL injection\n- Path traversal\n- Command injection\n'
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+html
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Optional
+List
+Union
+●●●●●● 3mm □△○
+config
+●●●●●● 2mm □△○
+get_security_config
+●●●●●● 2mm △
+InputValidator
+'\n    Validates and sanitizes user input.\n\n    Use this for all user-provided data before processing.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'<script[^>]*>.*?</script>'
+re
+●●●●●● 1mm ○
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'javascript:'
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'on\\w+\\s*='
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'<iframe'
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'<object'
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'<embed'
+re
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER|CREATE|EXEC)\\b.*\\b(FROM|INTO|TABLE|DATABASE)\\b'
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+';\\s*(SELECT|INSERT|UPDATE|DELETE|DROP)'
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+"'\\s*(OR|AND)\\s*'?\\s*\\d*\\s*=\\s*\\d*"
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'--\\s*$'
+re
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\.\\./'
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'\\.\\.\\\\'
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'%2e%2e[/\\\\]'
+re
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'%252e%252e[/\\\\]'
+re
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[;&|`$]'
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'\\$\\('
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'`[^`]+`'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+validate_string
+●●●●●● 1mm □△
+self
+value
+max_length
+allow_html
+field_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+'input'
+'\n        Validate a string input.\n\n        Args:\n            value: The string to validate\n            max_length: Maximum allowed length\n            allow_html: Whether to allow HTML tags\n            allow_special_chars: Whether to allow special characters\n            field_name: Name of the field for error messages\n\n        Returns:\n            (is_valid, sanitized_value, error_message)\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be a string'
+max_len
+●●●●●● 1mm □
+max_length
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+max_len
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' exceeds maximum length of '
+max_len
+●●●●●● 2mm □
+allow_html
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' contains potentially dangerous content'
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' contains invalid characters'
+sanitized
+●●●●●● 1mm □
+value
+●●●●●● 2mm □
+allow_html
+sanitized
+●●●●●● 1mm □
+html
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sanitized
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □
+validate_path
+●●●●●● 1mm □△
+self
+value
+base_path
+allow_absolute
+field_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+'path'
+'\n        Validate a file path to prevent path traversal.\n\n        Args:\n            value: The path to validate\n            base_path: If provided, ensure path is within this directory\n            allow_absolute: Whether to allow absolute paths\n            field_name: Name of the field for error messages\n\n        Returns:\n            (is_valid, normalized_path, error_message)\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be a string'
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' contains invalid path sequence'
+●●●●●● 2mm □
+'\x00'
+value
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' contains invalid characters'
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □
+allow_absolute
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be a relative path'
+●●●●●● 2mm □
+base_path
+base
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+base
+●●●●●● 3mm □△
+value
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □△
+base
+●●●●●● 2mm □△
+ValueError
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be within the allowed directory'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Invalid '
+field_name
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+validate_filename
+●●●●●● 1mm □△
+self
+value
+allowed_extensions
+field_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'filename'
+'\n        Validate a filename.\n\n        Args:\n            value: The filename to validate\n            allowed_extensions: List of allowed file extensions\n            field_name: Name of the field for error messages\n\n        Returns:\n            (is_valid, sanitized_filename, error_message)\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be a string'
+filename
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+dangerous_chars
+●●●●●● 1mm □
+'/'
+'\\'
+'\x00'
+':'
+'*'
+'?'
+'"'
+'<'
+'>'
+'|'
+char
+dangerous_chars
+●●●●●● 2mm □
+char
+filename
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' contains invalid character: '
+char
+●●●●●● 2mm □
+allowed_extensions
+●●●●●● 2mm □
+allowed_extensions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+allowed_extensions
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+allowed_extensions
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+"File type '"
+ext
+"' not allowed. Allowed: "
+', '
+●●●●●● 1mm □△
+allowed_extensions
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+filename
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+2
+suspicious_exts
+●●●●●● 1mm □
+'.exe'
+'.bat'
+'.cmd'
+'.sh'
+'.ps1'
+'.vbs'
+part
+parts
+1
+1
+●●●●●● 2mm □
+'.'
+part
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suspicious_exts
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' contains suspicious extension'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+filename
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □
+validate_email
+●●●●●● 1mm □△
+self
+value
+field_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'email'
+'\n        Validate an email address.\n\n        Returns:\n            (is_valid, sanitized_email, error_message)\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be a string'
+email_pattern
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+email_pattern
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Invalid '
+field_name
+' format'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+254
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' is too long'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+value
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □
+validate_url
+●●●●●● 1mm □△
+self
+value
+allowed_schemes
+field_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'url'
+'\n        Validate a URL.\n\n        Returns:\n            (is_valid, sanitized_url, error_message)\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must be a string'
+allowed_schemes
+●●●●●● 1mm □
+allowed_schemes
+'http'
+'https'
+●●●●●● 3mm □△○
+urllib.parse
+●●●●●● 2mm □△○
+urlparse
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parsed
+allowed_schemes
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+field_name
+' must use '
+' or '
+●●●●●● 1mm □△
+allowed_schemes
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parsed
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Invalid '
+field_name
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+value
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Invalid '
+field_name
+●●●●●● 3mm □△
+●●●●●● 1mm □
+validate_json_input
+●●●●●● 1mm □△
+self
+data
+max_depth
+current_depth
+●●●●●● 2mm □△
+Any
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+10
+0
+'\n        Recursively validate JSON data structure.\n\n        Returns:\n            (is_valid, sanitized_data, error_message)\n        '
+●●●●●● 2mm □
+current_depth
+max_depth
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'JSON structure too deeply nested'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Object has too many keys (max: '
+●●●●●● 3mm △
+')'
+sanitized
+●●●●●● 1mm □
+key
+value
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_valid
+sanitized_key
+error
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key_valid
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Invalid key: '
+error
+value_valid
+sanitized_value
+error
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+value
+max_depth
+current_depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value_valid
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+error
+sanitized
+sanitized_key
+●●●●●● 1mm □
+sanitized_value
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sanitized
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Array too long (max: '
+●●●●●● 3mm △
+')'
+sanitized
+●●●●●● 1mm □
+item
+data
+valid
+sanitized_item
+error
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item
+max_depth
+current_depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+valid
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+error
+sanitized
+●●●●●● 1mm □△
+sanitized_item
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sanitized
+●●●●●● 2mm □
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+data
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Unsupported data type: '
+●●●●●● 3mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+_validator
+●●●●●● 2mm □○
+InputValidator
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the input validator singleton.'
+●●●●●● 2mm □
+_validator
+●●●●●● 2mm □
+_validator
+●●●●●● 1mm □
+InputValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_validator
+InputValidator
+●●●●●● 1mm □
+sanitize_input
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Convenience function to sanitize a string input.\n\n    Args:\n        value: The string to sanitize\n        **kwargs: Additional arguments passed to validate_string\n\n    Returns:\n        Sanitized string\n\n    Raises:\n        ValueError: If input is invalid\n    '
+validator
+●●●●●● 1mm □
+get_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_valid
+sanitized
+error
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid
+ValueError
+●●●●●● 1mm □△
+error
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sanitized
+●●●●●● 1mm ○
+●●●●●● 1mm □
+validate_file_path
+●●●●●● 1mm □△
+path
+base_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Convenience function to validate a file path.\n\n    Args:\n        path: The path to validate\n        base_path: The base directory path must be within\n\n    Returns:\n        Normalized absolute path\n\n    Raises:\n        ValueError: If path is invalid or escapes base_path\n    '
+validator
+●●●●●● 1mm □
+get_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_valid
+normalized
+error
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid
+ValueError
+●●●●●● 1mm □△
+error
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+normalized
+●●●●●● 1mm ○

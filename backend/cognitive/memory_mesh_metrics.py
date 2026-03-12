@@ -340,7 +340,6 @@ class TimedOperation:
         self.start_time = time.time()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
         """End timing and record"""
         self.end_time = time.time()
         latency_ms = (self.end_time - self.start_time) * 1000

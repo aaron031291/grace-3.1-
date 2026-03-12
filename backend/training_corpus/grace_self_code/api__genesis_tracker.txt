@@ -1,0 +1,1575 @@
+## _genesis_tracker.py
+'\nThin Genesis Key tracking helper — ASYNC, NON-BLOCKING.\n\nFire-and-forget: genesis key creation never slows down the caller.\nQdrant embeddings batched and pushed when batch size reached (default 5) or timeout.\nMemory Mesh feed removed (was crashing and blocking).\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+queue
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BATCH_SIZE
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GENESIS_BATCH_SIZE'
+'5'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+BATCH_TIMEOUT_SEC
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GENESIS_BATCH_TIMEOUT'
+'30'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+GENESIS_VECTOR_SIZE
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GENESIS_VECTOR_SIZE'
+'384'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_qdrant_queue
+●●●●●● 1mm □
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_qdrant_thread_started
+●●●●●● 1mm □
+●●●●●● 1mm □
+_qdrant_backoff_until
+●●●●●● 1mm □
+0.0
+_qdrant_backoff_logged
+●●●●●● 1mm □
+●●●●●● 1mm □
+QDRANT_BACKOFF_SEC
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GENESIS_QDRANT_BACKOFF_SEC'
+'300'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_collection_vector_size
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+'Extract vector size from Qdrant collection info. Handles config.params.vectors.size (Qdrant Cloud) and legacy config.params.size.'
+config
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+info
+'config'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+config
+'params'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+params
+●●●●●● 1mm □
+config
+vectors
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+params
+'vectors'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vectors
+●●●●●● 2mm □
+size
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+vectors
+'size'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+size
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+size
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+vectors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+vectors
+first
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+iter
+●●●●●● 1mm □△
+vectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+first
+'size'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+params
+'size'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_get_genesis_vector_size
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Effective vector size: GENESIS_VECTOR_SIZE env if set, else embedder dimension, else 384.'
+env_val
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'GENESIS_VECTOR_SIZE'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+env_val
+env_val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+env_val
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+model
+'get_embedding_dimension'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+384
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_vector_to_fixed_size
+●●●●●● 1mm □△
+vec
+size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Return a list of length `size`: slice if longer, pad with zeros if shorter.'
+●●●●●● 2mm □
+vec
+●●●●●● 2mm □
+●●●●●● 3mm ○
+0.0
+●●●●●● 2mm □△
+size
+lst
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+vec
+'tolist'
+●●●●●● 2mm □△
+vec
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+vec
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lst
+●●●●●● 2mm □△
+size
+●●●●●● 3mm ○
+lst
+size
+●●●●●● 3mm ○
+lst
+●●●●●● 3mm ○
+0.0
+●●●●●● 2mm □△
+size
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lst
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_qdrant_safe_payload
+●●●●●● 1mm □△
+item
+gk_id
+key_type
+what
+where
+tags
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+'Build a payload with only types Qdrant accepts (str, int, float, bool, list of str).'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+safe_tags
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+tags
+t
+●●●●●● 2mm □
+100
+●●●●●● 3mm ○
+'gk_id'
+'genesis_key_id'
+'key_type'
+'type'
+'what'
+'where'
+'tags'
+'timestamp'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+gk_id
+●●●●●● 2mm □△
+64
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+gk_id
+●●●●●● 2mm □△
+64
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+key_type
+●●●●●● 2mm □△
+64
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+key_type
+●●●●●● 2mm □△
+64
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+what
+''
+●●●●●● 2mm □△
+500
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+where
+''
+●●●●●● 2mm □△
+200
+safe_tags
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_is_valid_point
+●●●●●● 1mm □△
+vector
+vec_size
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+'Return True if point is safe to send to Qdrant (vector length and payload types).'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+vector
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vector
+●●●●●● 2mm □△
+vec_size
+●●●●●● 3mm ○
+●●●●●● 1mm □
+v
+vector
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+TypeError
+ValueError
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+k
+v
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+v
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+x
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+x
+v
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+key_type
+what
+who
+where
+why
+how
+file_path
+input_data
+output_data
+context
+tags
+parent_key_id
+is_error
+error_type
+error_message
+code_before
+code_after
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'system'
+''
+''
+''
+''
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+''
+''
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Create a Genesis Key for any system output.\n    Returns the genesis key id (GK-...) or None if tracking fails.\n\n    This is fire-and-forget — tracking failures never break the caller.\n    Also fires the real-time event engine for instant notification.\n    '
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+get_genesis_storage
+storage
+●●●●●● 1mm □
+get_genesis_storage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+storage
+●●●●●● 1mm □△
+key_type
+what
+who
+is_error
+tags
+●●●●●● 2mm □△
+●●●●●● 2mm □
+storage
+●●●●●● 1mm □△
+key_type
+what
+who
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+event_data
+●●●●●● 1mm □
+'key_type'
+'what'
+'who'
+'is_error'
+'tags'
+key_type
+what
+who
+is_error
+tags
+event_topic
+●●●●●● 1mm □
+is_error
+'genesis.'
+key_type
+'genesis.error'
+publish_async
+●●●●●● 1mm □△
+event_topic
+event_data
+●●●●●● 2mm □△
+publish_async
+●●●●●● 1mm □△
+'genesis.key_created'
+event_data
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+initialize_session_factory
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+type_map
+●●●●●● 1mm □
+'upload'
+'file_op'
+'file_ingestion'
+'librarian'
+'ai_response'
+'ai_code_generation'
+'coding_agent_action'
+'api_request'
+'system'
+'db_change'
+'code_change'
+'web_fetch'
+'error'
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+GenesisKeyType
+gk_type
+●●●●●● 1mm □
+type_map
+●●●●●● 1mm □△
+key_type
+GenesisKeyType
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gk_id
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+key
+'key_id'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+key
+'id'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gk_id
+●●●●●● 2mm □△○
+hashlib
+payload
+●●●●●● 1mm □
+key_type
+'|'
+what
+'|'
+who
+'|'
+where
+''
+gk_id
+●●●●●● 1mm □
+'GK-'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+32
+_qdrant_queue
+●●●●●● 1mm □△
+'gk_id'
+'key_type'
+'what'
+'where'
+'tags'
+gk_id
+key_type
+what
+where
+''
+tags
+●●●●●● 2mm □△
+_ensure_qdrant_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+gk_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Genesis tracking skipped: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_ensure_qdrant_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the background Qdrant batch pusher if not already running.'
+●●●●●● 2mm □
+_qdrant_thread_started
+●●●●●● 3mm ○
+_qdrant_thread_started
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_batch_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Background thread: batch-uploads genesis keys to Qdrant when batch size (default 5) or timeout.\n        Never raises: all failures are caught and logged; backoff after 400 to avoid log spam.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+'DISABLE_GENESIS_QDRANT_PUSH'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'1'
+'true'
+'yes'
+●●●●●● 3mm ○
+qdrant_url
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+qdrant_key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant_url
+●●●●●● 3mm ○
+client
+●●●●●● 1mm □
+●●●●●● 2mm □
+effective_size
+●●●●●● 1mm □
+384
+_collection_vector_size
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+qdrant_client
+●●●●●● 2mm □△○
+QdrantClient
+●●●●●● 3mm □△○
+qdrant_client.models
+●●●●●● 2mm □△○
+PointStruct
+VectorParams
+Distance
+client
+●●●●●● 1mm □
+QdrantClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+effective_size
+●●●●●● 1mm □
+_get_genesis_vector_size
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+c
+c
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_keys'
+collections
+client
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+_collection_vector_size
+●●●●●● 1mm □
+effective_size
+●●●●●● 3mm □
+info
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+_collection_vector_size
+●●●●●● 1mm □
+_get_collection_vector_size
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+●●●●●● 1mm △
+_collection_vector_size
+●●●●●● 2mm □
+_collection_vector_size
+effective_size
+logger
+●●●●●● 1mm □△
+"[GENESIS] Qdrant 'genesis_keys' vector size is %s but backend is using %s. Set GENESIS_VECTOR_SIZE=%s in backend/.env (or drop the collection in Qdrant Cloud to let backend recreate it)."
+_collection_vector_size
+effective_size
+_collection_vector_size
+●●●●●● 2mm □△
+Exception
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Qdrant batch worker could not init client: %s. Genesis keys will not be pushed to Qdrant.'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+buf
+●●●●●● 1mm □
+last_flush_at
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+item
+●●●●●● 1mm □
+_qdrant_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+Exception
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+now
+_qdrant_backoff_until
+●●●●●● 2mm □
+buf
+_qdrant_backoff_logged
+_qdrant_backoff_logged
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[GENESIS] Genesis keys Qdrant push in backoff until %s (set GENESIS_VECTOR_SIZE or DISABLE_GENESIS_QDRANT_PUSH=1 to fix).'
+time
+●●●●●● 1mm □△
+_qdrant_backoff_until
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+buf
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_flush_at
+●●●●●● 1mm □
+now
+should_flush
+●●●●●● 1mm □
+buf
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+buf
+●●●●●● 2mm □△
+BATCH_SIZE
+now
+●●●●●● 1mm □△
+last_flush_at
+BATCH_TIMEOUT_SEC
+●●●●●● 2mm □
+should_flush
+●●●●●● 2mm □△○
+hashlib
+points
+●●●●●● 1mm □
+texts
+●●●●●● 1mm □
+item
+buf
+tags
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+tag_str
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+tags
+t
+●●●●●● 2mm □
+●●●●●● 2mm □△
+texts
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+'key_type'
+''
+●●●●●● 2mm □△
+' '
+item
+●●●●●● 1mm □△
+'what'
+''
+●●●●●● 2mm □△
+' '
+item
+●●●●●● 1mm □△
+'where'
+''
+●●●●●● 2mm □△
+' '
+tag_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+vectors_raw
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+model
+'embed_text'
+●●●●●● 2mm □△
+emb
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+emb
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+emb
+'shape'
+●●●●●● 2mm □△
+emb
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+emb
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+buf
+●●●●●● 2mm □△
+vectors_raw
+●●●●●● 1mm □
+emb
+i
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+buf
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+vec_size
+●●●●●● 1mm □
+_collection_vector_size
+●●●●●● 2mm □
+_collection_vector_size
+_get_genesis_vector_size
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+item
+●●●●●● 2mm □
+●●●●●● 1mm □△
+buf
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vectors_raw
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vectors_raw
+●●●●●● 2mm □△
+vectors_raw
+i
+●●●●●● 2mm □
+vector
+●●●●●● 1mm □
+_vector_to_fixed_size
+●●●●●● 1mm □△
+vectors_raw
+i
+vec_size
+●●●●●● 2mm □△
+●●●●●● 3mm □
+raw
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+texts
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+vec48
+●●●●●● 1mm □
+b
+●●●●●● 3mm □△
+255.0
+b
+raw
+●●●●●● 3mm □
+vector
+●●●●●● 1mm □
+vec48
+●●●●●● 2mm □△
+vec_size
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec48
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+vec_size
+vector
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x
+vector
+pid
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+hashlib
+●●●●●● 1mm □△
+item
+'gk_id'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+16
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+2
+●●●●●● 3mm □○
+63
+payload
+●●●●●● 1mm □
+_qdrant_safe_payload
+●●●●●● 1mm □△
+item
+item
+'gk_id'
+item
+'key_type'
+item
+'what'
+item
+●●●●●● 1mm □△
+'where'
+●●●●●● 2mm □△
+''
+item
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_is_valid_point
+●●●●●● 1mm □△
+vector
+vec_size
+payload
+●●●●●● 2mm □△
+points
+●●●●●● 1mm □△
+PointStruct
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+points
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_flush_at
+●●●●●● 1mm □
+now
+client
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+_qdrant_backoff_logged
+●●●●●● 1mm □
+●●●●●● 1mm □
+Exception
+err_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'400'
+err_msg
+'Bad Request'
+err_msg
+_qdrant_backoff_until
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QDRANT_BACKOFF_SEC
+_qdrant_backoff_logged
+●●●●●● 1mm □
+●●●●●● 1mm □
+hint
+●●●●●● 1mm □
+''
+info
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+actual
+●●●●●● 1mm □
+_get_collection_vector_size
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+●●●●●● 2mm □
+actual
+●●●●●● 2mm □
+hint
+●●●●●● 1mm □
+' Collection vector size is %s — set GENESIS_VECTOR_SIZE=%s in backend/.env. '
+●●●●●● 2mm □○
+actual
+actual
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Qdrant upsert (genesis_keys) returns 400.%s Backoff %ss. Set GENESIS_VECTOR_SIZE or DISABLE_GENESIS_QDRANT_PUSH=1. Error: %s'
+hint
+QDRANT_BACKOFF_SEC
+err_msg
+300
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[GENESIS] Qdrant upsert genesis_keys FAILED: %s'
+e
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_flush_at
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+'HOT_RELOAD_ON_DATA_BATCH'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'1'
+'true'
+'yes'
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Qdrant batch worker loop error (non-fatal): %s'
+e
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+last_flush_at
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Could not start Qdrant batch thread: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_push_to_qdrant
+●●●●●● 1mm □△
+gk_id
+key_type
+what
+where
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+'Push genesis key as embedding to Qdrant Cloud for vector search.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+'DISABLE_GENESIS_QDRANT_PUSH'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'1'
+'true'
+'yes'
+●●●●●● 3mm ○
+qdrant_url
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+qdrant_key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant_url
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+qdrant_client
+●●●●●● 2mm □△○
+QdrantClient
+●●●●●● 3mm □△○
+qdrant_client.models
+●●●●●● 2mm □△○
+PointStruct
+VectorParams
+Distance
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+client
+●●●●●● 1mm □
+QdrantClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+effective_size
+●●●●●● 1mm □
+_get_genesis_vector_size
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+c
+c
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_keys'
+collections
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tag_str
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+tags
+t
+●●●●●● 2mm □
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+key_type
+''
+' '
+what
+''
+' '
+where
+''
+' '
+tag_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+model
+'embed_text'
+●●●●●● 2mm □△
+emb
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+emb
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+emb
+'shape'
+●●●●●● 2mm □△
+emb
+0
+vec
+●●●●●● 1mm □
+emb
+1
+emb
+0
+emb
+vector
+●●●●●● 1mm □
+_vector_to_fixed_size
+●●●●●● 1mm □△
+vec
+effective_size
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+vector
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vector
+●●●●●● 2mm □△
+effective_size
+raw
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vec48
+●●●●●● 1mm □
+b
+●●●●●● 3mm □△
+255.0
+b
+raw
+vector
+●●●●●● 1mm □
+vec48
+●●●●●● 2mm □△
+effective_size
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec48
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+effective_size
+point_id
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+hashlib
+●●●●●● 1mm □△
+gk_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+16
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+2
+●●●●●● 3mm □○
+63
+payload
+●●●●●● 1mm □
+_qdrant_safe_payload
+●●●●●● 1mm □△
+'gk_id'
+'key_type'
+'what'
+'where'
+'tags'
+gk_id
+key_type
+what
+where
+''
+tags
+gk_id
+key_type
+what
+where
+''
+tags
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+err_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'400'
+err_msg
+'Bad Request'
+err_msg
+hint
+●●●●●● 1mm □
+''
+●●●●●● 3mm □△○
+qdrant_client
+●●●●●● 2mm □△○
+QdrantClient
+●●●●●● 1mm □
+_QC
+_client
+●●●●●● 1mm □
+_QC
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □
+_client
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+actual
+●●●●●● 1mm □
+_get_collection_vector_size
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+●●●●●● 2mm □
+actual
+●●●●●● 2mm □
+hint
+●●●●●● 1mm □
+' Collection size is %s — set GENESIS_VECTOR_SIZE=%s in backend/.env. '
+●●●●●● 2mm □○
+actual
+actual
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Qdrant push genesis_keys 400 - backend vector size: %s.%s Or set DISABLE_GENESIS_QDRANT_PUSH=1. %s'
+_get_genesis_vector_size
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hint
+err_msg
+200
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[GENESIS] Qdrant push genesis_keys FAILED: %s'
+e
+●●●●●● 2mm □△

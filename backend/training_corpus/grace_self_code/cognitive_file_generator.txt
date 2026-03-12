@@ -1,0 +1,436 @@
+## file_generator.py
+'\nFile Generator — Grace creates documents, PDFs, code files, any format.\n\nWhen user says "generate me a report", "create a PDF", "build a document",\nGrace writes the content and saves it as the requested format.\n\nSupports: PDF, TXT, MD, JSON, CSV, HTML, PY, JS, TS, YAML, any text format.\nConnected to: Kimi/Opus for content, Librarian for placement, Genesis for tracking.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileGenerator
+'Generate any file type from a prompt. Grace creates documents.'
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+filename
+folder
+file_type
+use_kimi
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+''
+'auto'
+●●●●●● 3mm □△○
+'\n        Generate a file from a prompt.\n        Grace writes the content and saves it.\n        '
+●●●●●● 2mm □
+file_type
+'auto'
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+type_map
+●●●●●● 1mm □
+'.pdf'
+'.txt'
+'.md'
+'.json'
+'.csv'
+'.html'
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.yaml'
+'.yml'
+'.css'
+'.sql'
+'.sh'
+'.xml'
+'pdf'
+'txt'
+'markdown'
+'json'
+'csv'
+'html'
+'python'
+'javascript'
+'typescript'
+'react'
+'react'
+'yaml'
+'yaml'
+'css'
+'sql'
+'bash'
+'xml'
+file_type
+●●●●●● 1mm □
+type_map
+●●●●●● 1mm □△
+ext
+'txt'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+filename
+file_type
+use_kimi
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Failed to generate content'
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+folder
+kb
+●●●●●● 3mm □△
+folder
+kb
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □
+file_type
+'pdf'
+pdf_content
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+filename
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+'.pdf.txt'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+pdf_content
+●●●●●● 2mm □△
+●●●●●● 3mm □
+file_path
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'success'
+'filename'
+'path'
+'folder'
+'file_type'
+'size'
+'content_preview'
+●●●●●● 3mm □△○
+file_path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+folder
+file_type
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+500
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+register_document
+register_document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.librarian_autonomous
+●●●●●● 2mm □△○
+get_autonomous_librarian
+get_autonomous_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+ingest
+ingest
+●●●●●● 1mm □△
+'Generated '
+file_type
+': '
+filename
+'\n'
+content
+1000
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_content
+●●●●●● 1mm □△
+self
+prompt
+filename
+file_type
+use_kimi
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Generate the file content using LLM.'
+format_instructions
+●●●●●● 1mm □
+'pdf'
+'txt'
+'markdown'
+'json'
+'csv'
+'html'
+'python'
+'javascript'
+'typescript'
+'react'
+'yaml'
+'css'
+'sql'
+'bash'
+'xml'
+'Generate a well-structured document with clear sections, headings, and professional formatting. Use markdown-style headers (# ## ###).'
+'Generate plain text content. Clear, readable, well-organized.'
+'Generate well-formatted markdown with headers, lists, code blocks where appropriate.'
+'Generate valid JSON. Use proper indentation and structure.'
+'Generate CSV with header row and data rows. Use commas as delimiters.'
+'Generate complete, valid HTML with proper structure, head, body, and styling.'
+'Generate clean, production-quality Python code with docstrings and type hints.'
+'Generate clean JavaScript/Node.js code with proper error handling.'
+'Generate TypeScript code with proper types and interfaces.'
+'Generate a React component with proper hooks and JSX.'
+'Generate valid YAML configuration.'
+'Generate clean CSS with proper selectors and responsive design.'
+'Generate SQL with proper syntax and comments.'
+'Generate a bash script with proper error handling and comments.'
+'Generate well-formed XML with proper nesting.'
+instruction
+●●●●●● 1mm □
+format_instructions
+●●●●●● 1mm □△
+file_type
+'Generate the requested content.'
+●●●●●● 2mm □△
+full_prompt
+●●●●●● 1mm □
+"Create a file called '"
+filename
+"' with the following requirements:\n\n"
+prompt
+'\n\nFormat: '
+instruction
+'\nOutput ONLY the file content — no explanations, no markdown code fences.'
+●●●●●● 2mm □
+use_kimi
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+client
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+●●●●●● 3mm □
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+file_type
+'python'
+'javascript'
+'typescript'
+'react'
+'css'
+'html'
+'sql'
+'bash'
+'code'
+'reason'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Content generation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_format_as_pdf_text
+●●●●●● 1mm □△
+self
+content
+title
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Format content as a structured text document (PDF-style).'
+lines
+●●●●●● 1mm □
+'='
+●●●●●● 2mm □△
+60
+'  '
+title
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'  Generated by Grace AI — '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%B %d, %Y'
+●●●●●● 2mm □△
+'='
+●●●●●● 2mm □△
+60
+''
+content
+''
+'='
+●●●●●● 2mm □△
+60
+'  Document generated autonomously by Grace AI'
+'  Timestamp: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+_generator
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_file_generator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_generator
+●●●●●● 2mm □
+_generator
+●●●●●● 1mm □
+FileGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_generator
+FileGenerator

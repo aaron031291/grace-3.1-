@@ -1,0 +1,686 @@
+## loop_output.py
+'\nGrace Loop Output - Standardized Loop Output Format\n\nAddresses Clarity Class 3 (Loop Identity Ambiguity):\n- Standard output format for all cognitive loops\n- Reasoning chain tracking\n- Metadata for audit and learning\n\nAll cognitive loops should return GraceLoopOutput.\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 2mm △
+LoopType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of cognitive loops in Grace.'
+OODA
+●●●●●● 1mm □
+'ooda'
+REFLECTION
+●●●●●● 1mm □
+'reflection'
+LEARNING
+●●●●●● 1mm □
+'learning'
+PLANNING
+●●●●●● 1mm □
+'planning'
+EXECUTION
+●●●●●● 1mm □
+'execution'
+GOVERNANCE
+●●●●●● 1mm □
+'governance'
+MEMORY
+●●●●●● 1mm □
+'memory'
+REASONING
+●●●●●● 1mm □
+'reasoning'
+●●●●●● 2mm △
+LoopStatus
+●●●●●● 3mm □△
+Enum
+Enum
+'Status of a loop execution.'
+PENDING
+●●●●●● 1mm □
+'pending'
+RUNNING
+●●●●●● 1mm □
+'running'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+INTERRUPTED
+●●●●●● 1mm □
+'interrupted'
+TIMEOUT
+●●●●●● 1mm □
+'timeout'
+●●●●●● 2mm △
+ReasoningStep
+'A single step in a reasoning chain.'
+step_id
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+step_number
+●●●●●● 2mm ○
+0
+description
+●●●●●● 1mm ○
+''
+input_context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm ○
+''
+confidence
+●●●●●● 3mm ○
+0.5
+duration_ms
+●●●●●● 3mm ○
+0.0
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step_id'
+'step_number'
+'description'
+'input_context'
+'output'
+'confidence'
+'duration_ms'
+'metadata'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+LoopMetadata
+'Metadata for loop execution.'
+triggered_by
+●●●●●● 1mm ○
+'system'
+parent_loop_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+governance_decision_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+governance_approved
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+autonomy_tier
+●●●●●● 1mm ○
+'tier_0_supervised'
+learnable
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+patterns_extracted
+●●●●●● 2mm ○
+0
+tokens_used
+●●●●●● 2mm ○
+0
+memory_queries
+●●●●●● 2mm ○
+0
+external_calls
+●●●●●● 2mm ○
+0
+tags
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'triggered_by'
+'parent_loop_id'
+'governance_decision_id'
+'governance_approved'
+'autonomy_tier'
+'learnable'
+'patterns_extracted'
+'tokens_used'
+'memory_queries'
+'external_calls'
+'tags'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+GraceLoopOutput
+'\n    Standardized output from any Grace cognitive loop.\n\n    Provides:\n    - Unique loop identification\n    - Reasoning chain with steps\n    - Results with confidence\n    - Full metadata for audit\n    - Learning integration hooks\n\n    Usage:\n        output = GraceLoopOutput(\n            loop_type=LoopType.OODA,\n            input_context={"query": "What is the status?"},\n        )\n\n        output.add_reasoning_step(\n            description="Observing current state",\n            output="System is healthy",\n            confidence=0.9,\n        )\n\n        output.complete(\n            result={"status": "healthy"},\n            confidence=0.85,\n            summary="Determined system is healthy",\n        )\n    '
+loop_id
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reasoning_chain_id
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop_type
+LoopType
+LoopType
+input_context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+LoopStatus
+LoopStatus
+reasoning_steps
+●●●●●● 3mm □△
+ReasoningStep
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_summary
+●●●●●● 1mm ○
+''
+confidence
+●●●●●● 3mm ○
+0.0
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+error_details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+started_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+completed_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+duration_ms
+●●●●●● 3mm ○
+0.0
+metadata
+LoopMetadata
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_reasoning_step
+●●●●●● 1mm □△
+self
+description
+output
+confidence
+input_context
+duration_ms
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+''
+0.5
+●●●●●● 2mm □
+0.0
+'Add a reasoning step to the chain.'
+step
+●●●●●● 1mm □
+ReasoningStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+step
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+step
+ReasoningStep
+●●●●●● 1mm □
+get_reasoning_trace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get human-readable reasoning trace.'
+lines
+●●●●●● 1mm □
+'Loop '
+●●●●●● 3mm △
+' ('
+●●●●●● 3mm △
+'):'
+step
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'  '
+step
+'. '
+step
+' [confidence='
+step
+'.2f'
+']'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step
+lines
+●●●●●● 1mm □△
+'     → '
+step
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Mark loop as started.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+LoopStatus
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+complete
+●●●●●● 1mm □△
+self
+result
+confidence
+summary
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+0.5
+''
+'Mark loop as completed with result.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+LoopStatus
+●●●●●● 3mm △
+●●●●●● 1mm □
+result
+●●●●●● 3mm △
+●●●●●● 1mm □
+confidence
+●●●●●● 3mm △
+●●●●●● 1mm □
+summary
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 1mm □
+fail
+●●●●●● 1mm □△
+self
+error
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Mark loop as failed.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+LoopStatus
+●●●●●● 3mm △
+●●●●●● 1mm □
+error
+●●●●●● 3mm △
+●●●●●● 1mm □
+details
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 1mm □
+interrupt
+●●●●●● 1mm □△
+self
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Mark loop as interrupted.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+LoopStatus
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Interrupted: '
+reason
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 1mm □
+success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Whether loop completed successfully.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+LoopStatus
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+failed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Whether loop failed.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+LoopStatus
+LoopStatus
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+step_count
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Number of reasoning steps.'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+average_step_confidence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Average confidence across reasoning steps.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert to dictionary for storage/transmission.'
+●●●●●● 3mm ○
+'loop_id'
+'reasoning_chain_id'
+'loop_type'
+'input_context'
+'status'
+'reasoning_steps'
+'result'
+'result_summary'
+'confidence'
+'error'
+'error_details'
+'started_at'
+'completed_at'
+'duration_ms'
+'metadata'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+from_dict
+●●●●●● 1mm □△
+cls
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Create from dictionary.'
+output
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'started_at'
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+data
+'started_at'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'completed_at'
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+data
+'completed_at'
+●●●●●● 2mm □△
+step_data
+data
+●●●●●● 1mm □△
+'reasoning_steps'
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+ReasoningStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+data
+'metadata'
+output
+●●●●●● 1mm □
+LoopMetadata
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+output
+●●●●●● 2mm □△
+'GraceLoopOutput'
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<GraceLoopOutput('
+●●●●●● 3mm △
+', status='
+●●●●●● 3mm △
+', steps='
+●●●●●● 3mm △
+', confidence='
+●●●●●● 3mm △
+'.2f'
+')>'
+●●●●●● 1mm ○
+dataclass

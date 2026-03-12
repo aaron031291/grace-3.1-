@@ -1,0 +1,360 @@
+## bitmask_geometry.py
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+z3
+●●●●●● 2mm □△○
+*
+●●●●●● 2mm △
+HierarchicalZ3Geometry
+'\n    Spindle Next-Gen: 256-bit Hierarchical Hyperdimensional Computing (HDC)\n    Backed by a Z3 SMT Solver for Formal Verification.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Solver
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+BitVec
+●●●●●● 1mm □△
+'domain_mask'
+64
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+BitVec
+●●●●●● 1mm □△
+'intent_mask'
+64
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+BitVec
+●●●●●● 1mm □△
+'state_mask'
+64
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+BitVec
+●●●●●● 1mm □△
+'ctx_mask'
+64
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_physics_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Translates Spindle JSON Physics Rules into Z3 SMT Constraints.\n        Instead of manual XOR checking, Z3 will formally prove satisfiability.\n        '
+DOMAIN_DATABASE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+0
+DOMAIN_NETWORK
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+3
+DOMAIN_SYS_CONF
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+4
+INTENT_START
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+8
+INTENT_STOP
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+9
+INTENT_DELETE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+10
+INTENT_REPAIR
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+13
+STATE_FAILED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+16
+STATE_IMMUTABLE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+17
+STATE_STOPPED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+20
+PRIV_USER
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+25
+CTX_MAINTENANCE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+32
+CTX_EMERGENCY
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+33
+CTX_ELEVATED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+34
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+INTENT_DELETE
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+STATE_IMMUTABLE
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+INTENT_START
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+STATE_FAILED
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+INTENT_STOP
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+STATE_STOPPED
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+core_infra
+●●●●●● 1mm □
+DOMAIN_NETWORK
+●●●●●● 1mm ○
+DOMAIN_SYS_CONF
+mutate_actions
+●●●●●● 1mm □
+INTENT_START
+●●●●●● 1mm ○
+INTENT_STOP
+●●●●●● 1mm ○
+INTENT_DELETE
+●●●●●● 1mm ○
+INTENT_REPAIR
+safe_contexts
+●●●●●● 1mm □
+CTX_MAINTENANCE
+●●●●●● 1mm ○
+CTX_EMERGENCY
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+core_infra
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+mutate_actions
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+safe_contexts
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+PRIV_USER
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+DOMAIN_DATABASE
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+mutate_actions
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+CTX_ELEVATED
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+CTX_RATE_LIMITED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+35
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+INTENT_START
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+CTX_RATE_LIMITED
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Implies
+●●●●●● 1mm □△
+And
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+DOMAIN_NETWORK
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+INTENT_STOP
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+STATE_FAILED
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+verify_action
+●●●●●● 1mm □△
+self
+d_val
+i_val
+s_val
+c_val
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'\n        Pushes the current proposal to the Z3 Solver and validates it formally.\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+d_val
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+i_val
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+s_val
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+c_val
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+sat
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Z3_SAT: Valid Topology'
+●●●●●● 1mm △
+result
+unsat
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Z3_UNSAT: Formal Verification Failed. Physics rules violated.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Z3_UNKNOWN: Solver timeout or irreducible constraints.'
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○

@@ -1,0 +1,22 @@
+## __init__.py
+●●●●●● 3mm □△○
+message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+●●●●●● 3mm □△○
+message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+trust_scorekeeper
+●●●●●● 2mm □△○
+TrustScorekeeper
+●●●●●● 3mm □△○
+event_system
+●●●●●● 2mm □△○
+EventSystem

@@ -1,0 +1,8 @@
+remote: warning: File b7d6719957eecbfa7cebe05b16da66187904e17c is 69.96 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB        
+remote: error: Trace: 46c4feb8429f37c9a55f0b54fbef40cf024a77cb5c8043ef07b1478d6aa6dd42        
+remote: error: See https://gh.io/lfs for more information.        
+remote: error: File learning memory-ai reaseach/acedmia/new data/683466448-System-Design-Interview-Vol2.pdf is 120.46 MB; this exceeds GitHub's file size limit of 100.00 MB        
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.        
+To https://github.com/aaron031291/grace-3.1-.git
+ ! [remote rejected]   1cab2cd1 -> master (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/aaron031291/grace-3.1-.git'

@@ -1,0 +1,1542 @@
+## intelligence_layer.py
+"\nUnified Intelligence Layer — ML/DL/Neuro-Symbolic Integration\n\nThe top of Grace's cognitive stack. Below Genesis Keys (provenance),\nabove the cognitive pipeline (reasoning). This layer synthesises data\nfrom ALL 12 named system loops into structured learning signals.\n\nArchitecture (bottom to top):\n  ┌─────────────────────────────────────────────────────────────┐\n  │  ML/DL Intelligence Layer (THIS MODULE)                     │\n  │  ├── Pattern Recognition Engine (ML)                        │\n  │  ├── Deep Representation Learning (DL)                      │\n  │  ├── Neuro-Symbolic Reasoning (hybrid)                      │\n  │  └── Loop Data Synthesiser (feeds from all 12 loops)        │\n  ├─────────────────────────────────────────────────────────────┤\n  │  Cognitive Pipeline (9-stage reasoning)                      │\n  ├─────────────────────────────────────────────────────────────┤\n  │  Consensus Engine (multi-model roundtable)                   │\n  ├─────────────────────────────────────────────────────────────┤\n  │  Trust Engine + Immune System (verification)                 │\n  ├─────────────────────────────────────────────────────────────┤\n  │  Unified Memory (episodic + procedural + flash + magma)      │\n  ├─────────────────────────────────────────────────────────────┤\n  │  Genesis Keys (provenance tracking)                          │\n  └─────────────────────────────────────────────────────────────┘\n\nThe 12 named loops feed data continuously:\n  - Homeostasis loops → system stability patterns\n  - Learning loops → knowledge acquisition patterns\n  - Healing loops → failure/recovery patterns\n  - Trust loops → reliability patterns\n  - Knowledge loops → information flow patterns\n\nThree sub-systems at the same hierarchical level:\n  1. ML (Pattern Recognition): Statistical patterns from loop metrics\n  2. DL (Deep Representations): Embeddings and feature learning\n  3. Neuro-Symbolic (Hybrid Reasoning): Rules + learned patterns\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+math
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'intelligence_layer'
+●●●●●● 2mm △
+PatternRecognitionEngine
+'\n    Statistical pattern recognition from loop execution data.\n    Learns: what works, what fails, what improves, what degrades.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+observe
+●●●●●● 1mm □△
+self
+loop_name
+metrics
+outcome
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+'Record an observation from a loop execution.'
+observation
+●●●●●● 1mm □
+'timestamp'
+'loop'
+'metrics'
+'outcome'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop_name
+metrics
+outcome
+●●●●●● 3mm △
+loop_name
+●●●●●● 1mm □△
+observation
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+loop_name
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+loop_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+loop_name
+500
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+detect_patterns
+●●●●●● 1mm □△
+self
+loop_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Detect statistical patterns from observations.'
+detected
+●●●●●● 1mm □
+loops
+●●●●●● 1mm □
+loop_name
+loop_name
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ln
+loops
+obs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ln
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+obs
+●●●●●● 2mm □△
+3
+outcomes
+●●●●●● 1mm □
+o
+'outcome'
+o
+obs
+success_rate
+●●●●●● 1mm □
+outcomes
+outcomes
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+outcomes
+●●●●●● 2mm □△
+0
+improvement_rate
+●●●●●● 1mm □
+outcomes
+outcomes
+●●●●●● 1mm □△
+'improvement'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+outcomes
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+obs
+●●●●●● 2mm □△
+20
+recent
+●●●●●● 1mm □
+obs
+10
+previous
+●●●●●● 1mm □
+obs
+20
+10
+recent_success
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+o
+recent
+o
+'outcome'
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10
+prev_success
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+o
+previous
+o
+'outcome'
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10
+trend
+●●●●●● 1mm □
+recent_success
+prev_success
+'improving'
+recent_success
+prev_success
+'degrading'
+'stable'
+●●●●●● 3mm □
+trend
+●●●●●● 1mm □
+'insufficient_data'
+metric_trends
+●●●●●● 1mm □
+●●●●●● 2mm □
+obs
+latest
+●●●●●● 1mm □
+obs
+1
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+earliest
+●●●●●● 1mm □
+obs
+0
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+key
+latest
+●●●●●● 2mm □
+key
+earliest
+earliest
+key
+0
+delta
+●●●●●● 1mm □
+latest
+key
+●●●●●● 1mm □△
+earliest
+key
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+earliest
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+metric_trends
+key
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+delta
+2
+●●●●●● 2mm □△
+detected
+●●●●●● 1mm □△
+'loop'
+'observations'
+'success_rate'
+'improvement_rate'
+'trend'
+'metric_trends'
+'pattern_type'
+ln
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+obs
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+success_rate
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+improvement_rate
+3
+●●●●●● 2mm □△
+trend
+metric_trends
+'ml_statistical'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detected
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+predict_outcome
+●●●●●● 1mm □△
+self
+loop_name
+current_metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Predict likely outcome based on historical patterns (simple kNN-style).'
+obs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+obs
+●●●●●● 2mm □△
+5
+●●●●●● 3mm ○
+'prediction'
+'confidence'
+'reason'
+'unknown'
+0
+'insufficient_data'
+similarities
+●●●●●● 1mm □
+o
+obs
+100
+past_metrics
+●●●●●● 1mm □
+o
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+common_keys
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+current_metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+past_metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+common_keys
+distance
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+current_metrics
+k
+●●●●●● 1mm □△
+past_metrics
+●●●●●● 1mm □△
+k
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+2
+k
+common_keys
+●●●●●● 2mm □△
+distance
+●●●●●● 1mm □
+distance
+0
+math
+●●●●●● 1mm □△
+distance
+●●●●●● 2mm □△
+0
+similarities
+●●●●●● 1mm □△
+distance
+o
+'outcome'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+similarities
+●●●●●● 3mm ○
+'prediction'
+'confidence'
+'unknown'
+0
+similarities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+5
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+similarities
+k
+outcome_votes
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+dist
+outcome
+neighbors
+weight
+●●●●●● 1mm □
+1
+●●●●●● 3mm □△
+dist
+●●●●●● 3mm ○
+0.001
+outcome_votes
+outcome
+weight
+predicted
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+outcome_votes
+●●●●●● 2mm □△
+total_weight
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+outcome_votes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+total_weight
+0
+outcome_votes
+predicted
+●●●●●● 3mm □△
+total_weight
+0
+●●●●●● 3mm ○
+'prediction'
+'confidence'
+'neighbors_used'
+'pattern_type'
+predicted
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+confidence
+3
+●●●●●● 2mm □△
+k
+'ml_knn'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_load_patterns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'ml_patterns.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_save_patterns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 3mm □△
+'ml_patterns.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DeepRepresentationEngine
+'\n    Learns dense representations (embeddings) from system behaviour.\n    When a proper embedding model is available, this creates vector\n    representations of:\n      - Loop execution patterns\n      - Component interaction signatures\n      - Failure/success fingerprints\n\n    Without GPU: uses statistical feature vectors as a proxy.\n    With GPU: uses the embedding model for true deep representations.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+compute_features
+●●●●●● 1mm □△
+self
+entity
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Compute a feature vector for an entity (loop, component, action).'
+features
+●●●●●● 1mm □
+key
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+val
+●●●●●● 1mm □
+data
+key
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 3mm △
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+val
+1.0
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+magnitude
+●●●●●● 1mm □
+features
+math
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+f
+features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1.0
+●●●●●● 2mm □
+magnitude
+0
+features
+●●●●●● 1mm □
+f
+●●●●●● 3mm □△
+magnitude
+f
+features
+●●●●●● 3mm △
+entity
+●●●●●● 1mm □
+features
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+features
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+similarity
+●●●●●● 1mm □△
+self
+entity_a
+entity_b
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Cosine similarity between two entity feature vectors.'
+vec_a
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entity_a
+●●●●●● 2mm □△
+vec_b
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entity_b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vec_a
+vec_b
+●●●●●● 3mm ○
+0.0
+min_len
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec_a
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec_b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+vec_a
+●●●●●● 1mm □
+vec_a
+min_len
+vec_b
+●●●●●● 1mm □
+vec_b
+min_len
+dot
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+b
+a
+b
+●●●●●● 3mm □
+●●●●●● 1mm □△
+vec_a
+vec_b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mag_a
+●●●●●● 1mm □
+math
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+a
+a
+vec_a
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mag_b
+●●●●●● 1mm □
+math
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+b
+b
+vec_b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mag_a
+0
+mag_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+dot
+●●●●●● 3mm □△
+mag_a
+●●●●●● 2mm □△
+mag_b
+4
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+find_similar
+●●●●●● 1mm □△
+self
+entity
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Find the most similar entities to the given one.'
+●●●●●● 2mm □
+entity
+●●●●●● 3mm △
+●●●●●● 3mm ○
+similarities
+●●●●●● 1mm □
+other
+●●●●●● 3mm △
+●●●●●● 2mm □
+other
+entity
+sim
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entity
+other
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □△
+other
+sim
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similarities
+top_k
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_load_features
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'dl_features.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_save_features
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 3mm □△
+'dl_features.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+NeuroSymbolicEngine
+'\n    Combines learned patterns (neural/statistical) with explicit rules\n    (symbolic) for robust reasoning. At the same hierarchical level as\n    ML and DL — they interconnect.\n\n    Rules come from:\n      - Governance documents (uploaded laws)\n      - System invariants (coded constraints)\n      - Learned patterns that achieved >90% success rate\n\n    Neural signals come from:\n      - ML pattern recognition engine\n      - DL feature representations\n      - Trust engine scores\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_rule
+●●●●●● 1mm □△
+self
+name
+condition
+action
+source
+confidence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'explicit'
+1.0
+'Add a symbolic rule.'
+rule
+●●●●●● 1mm □
+'name'
+'condition'
+'action'
+'source'
+'confidence'
+'created_at'
+'times_applied'
+'times_correct'
+name
+condition
+action
+source
+confidence
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+promote_pattern_to_rule
+●●●●●● 1mm □△
+self
+pattern
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        When an ML pattern achieves >90% success rate, promote it\n        to a neuro-symbolic rule for deterministic application.\n        '
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+'success_rate'
+0
+●●●●●● 2mm □△
+0.9
+●●●●●● 3mm ○
+●●●●●● 2mm □
+rule
+●●●●●● 1mm □
+'name'
+'condition'
+'action'
+'source'
+'confidence'
+'created_at'
+'original_pattern'
+'times_applied'
+'times_correct'
+'learned_'
+pattern
+'loop'
+'_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'loop='
+pattern
+'loop'
+' AND trend='
+pattern
+●●●●●● 1mm □△
+'trend'
+'stable'
+●●●●●● 2mm □△
+'apply_pattern(success_rate='
+pattern
+'success_rate'
+')'
+'ml_promoted'
+pattern
+'success_rate'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+0
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rule
+●●●●●● 1mm □
+evaluate
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Evaluate all rules against current context.\n        Returns applicable rules ranked by confidence.\n        '
+applicable
+●●●●●● 1mm □
+all_rules
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+rule
+all_rules
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule
+'condition'
+context
+●●●●●● 2mm □△
+applicable
+●●●●●● 1mm □△
+'rule_name'
+'action'
+'confidence'
+'source'
+rule
+'name'
+rule
+'action'
+rule
+'confidence'
+rule
+'source'
+●●●●●● 2mm □△
+applicable
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+applicable
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_condition_matches
+●●●●●● 1mm □△
+self
+condition
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Simple condition matching against context.'
+parts
+●●●●●● 1mm □
+condition
+●●●●●● 1mm □△
+' AND '
+●●●●●● 2mm □△
+part
+parts
+●●●●●● 2mm □
+'='
+part
+key
+val
+●●●●●● 1mm □
+part
+●●●●●● 1mm □△
+'='
+1
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+val
+●●●●●● 1mm □
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx_val
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+context
+●●●●●● 1mm □△
+key
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx_val
+val
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'explicit_rules'
+'learned_rules'
+'total'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_load_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'neuro_symbolic_rules.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'explicit'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'learned'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_save_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 3mm □△
+'neuro_symbolic_rules.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'explicit'
+'learned'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+UnifiedIntelligenceLayer
+'\n    The top-level intelligence synthesiser. Combines ML, DL, and\n    neuro-symbolic reasoning into a single coherent intelligence output.\n\n    Called by:\n      - Central Orchestrator (for decision-making)\n      - Pipeline (for enriched generation)\n      - Consensus Engine (for informed synthesis)\n      - Reporting Engine (for intelligence metrics)\n    '
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+PatternRecognitionEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DeepRepresentationEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+NeuroSymbolicEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'UnifiedIntelligenceLayer'
+●●●●●● 1mm □
+observe_loop
+●●●●●● 1mm □△
+self
+loop_name
+metrics
+outcome
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+'\n        Record a loop execution observation.\n        Feeds ML pattern recognition AND DL feature learning simultaneously.\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+metrics
+outcome
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'loop_'
+loop_name
+metrics
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+p
+patterns
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+'success_rate'
+0
+●●●●●● 2mm □△
+0.9
+p
+●●●●●● 1mm □△
+'observations'
+0
+●●●●●● 2mm □△
+10
+●●●●●● 3mm △
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+predict
+●●●●●● 1mm □△
+self
+loop_name
+metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'\n        Unified prediction combining ML + DL + Neuro-Symbolic.\n        '
+ml_pred
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+metrics
+●●●●●● 2mm □△
+ns_rules
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'loop'
+loop_name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'query_'
+loop_name
+metrics
+●●●●●● 2mm □△
+similar
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'query_'
+loop_name
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+ml_pred
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ns_rules
+confidence
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+confidence
+ns_rules
+0
+'confidence'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ml_prediction'
+'symbolic_rules'
+'similar_entities'
+'unified_confidence'
+'recommendation'
+ml_pred
+ns_rules
+3
+similar
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+confidence
+3
+●●●●●● 2mm □△
+ml_pred
+●●●●●● 1mm □△
+'prediction'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+collect_loop_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Collect current data from all 12 named loops for learning.\n        Called periodically by the reporting engine.\n        '
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+get_loop_status
+loop_status
+●●●●●● 1mm □
+get_loop_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+loop_name
+status
+loop_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+'executions'
+'breaks'
+'current_depth'
+status
+●●●●●● 1mm □△
+'total_executions'
+0
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □△
+'total_breaks'
+0
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □△
+'current_depth'
+0
+●●●●●● 2mm □△
+break_rate
+●●●●●● 1mm □
+metrics
+'breaks'
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+metrics
+'executions'
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+break_rate
+0.1
+outcome
+●●●●●● 1mm □
+'degradation'
+●●●●●● 1mm △
+metrics
+'executions'
+0
+outcome
+●●●●●● 1mm □
+'success'
+outcome
+●●●●●● 1mm □
+'idle'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+metrics
+outcome
+●●●●●● 2mm □△
+data
+loop_name
+●●●●●● 1mm □
+'metrics'
+'outcome'
+metrics
+outcome
+●●●●●● 3mm ○
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_intelligence_summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Full intelligence layer summary for dashboards and reports.'
+ml_patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ns_stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ml'
+'dl'
+'neuro_symbolic'
+'layer_status'
+'patterns_detected'
+'patterns'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ml_patterns
+●●●●●● 2mm □△
+ml_patterns
+'entities_tracked'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+ns_stats
+'active'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+add_governance_rule
+●●●●●● 1mm □△
+self
+name
+condition
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Add an explicit governance rule to the neuro-symbolic layer.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+condition
+action
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+UnifiedIntelligenceLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UnifiedIntelligenceLayer

@@ -1,0 +1,694 @@
+## knowledge_base_manager.py
+'\nKnowledge base file and folder management.\nHandles file storage, directory structure, and metadata.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+KnowledgeBaseManager
+'Manages file storage and directory structure in knowledge_base.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'backend/knowledge_base'
+'\n        Initialize knowledge base manager.\n        \n        Args:\n            base_path: Root directory for knowledge base\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'.metadata.json'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ensure_base_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure base directory exists.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load metadata from file.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error loading metadata: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_save_metadata
+●●●●●● 1mm □△
+self
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Save metadata to file.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+metadata
+f
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error saving metadata: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_file_metadata_key
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get metadata key for a file.'
+●●●●●● 3mm ○
+'files:'
+relative_path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_folder_metadata_key
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get metadata key for a folder.'
+●●●●●● 3mm ○
+'folders:'
+relative_path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_directory_structure
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+''
+'\n        Get directory structure with metadata.\n        \n        Args:\n            relative_path: Path relative to base_path\n            \n        Returns:\n            Dictionary with directory structure\n        '
+target_path
+●●●●●● 1mm □
+relative_path
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 3mm △
+●●●●●● 2mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'path'
+'Path not found'
+relative_path
+●●●●●● 2mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'path'
+'Path is not a directory'
+relative_path
+items
+●●●●●● 1mm □
+item
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+'.metadata.json'
+item_relative
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_dir
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item_info
+●●●●●● 1mm □
+'name'
+'path'
+'type'
+'modified'
+item
+item_relative
+is_dir
+'folder'
+'file'
+datetime
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_dir
+item_info
+'size'
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item_info
+'extension'
+●●●●●● 1mm □
+item
+items
+●●●●●● 1mm □△
+item_info
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'items'
+'total_items'
+relative_path
+'/'
+items
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting directory structure: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'path'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+relative_path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_folder
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Create a new folder.\n        \n        Args:\n            relative_path: Path relative to base_path\n            \n        Returns:\n            Tuple of (success, message)\n        '
+●●●●●● 2mm □
+'..'
+relative_path
+relative_path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Invalid path'
+target_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 2mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Folder already exists'
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created folder: '
+relative_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Folder created: '
+relative_path
+Exception
+logger
+●●●●●● 1mm □△
+'Error creating folder: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Error creating folder: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+save_file
+●●●●●● 1mm □△
+self
+file_content
+relative_path
+filename
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Save a file to the knowledge base.\n        \n        Args:\n            file_content: File content as bytes\n            relative_path: Directory path relative to base_path\n            filename: Name of the file\n            metadata: Optional file metadata\n            \n        Returns:\n            Tuple of (success, message, full_relative_path)\n        '
+●●●●●● 2mm □
+'..'
+relative_path
+'..'
+filename
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Invalid path'
+●●●●●● 2mm □
+target_dir
+●●●●●● 1mm □
+relative_path
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 3mm △
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+filename
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'wb'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+file_content
+●●●●●● 2mm □△
+full_relative_path
+●●●●●● 1mm □
+relative_path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+relative_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □△
+filename
+metadata_dict
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_metadata_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_relative_path
+●●●●●● 2mm □△
+metadata_dict
+file_metadata_key
+●●●●●● 1mm □
+'filename'
+'size'
+'created'
+'user_metadata'
+filename
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_content
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metadata_dict
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Saved file: '
+full_relative_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'File saved: '
+filename
+full_relative_path
+Exception
+logger
+●●●●●● 1mm □△
+'Error saving file: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Error saving file: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+delete_file
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Delete a file from the knowledge base.\n        \n        Args:\n            relative_path: Path relative to base_path\n            \n        Returns:\n            Tuple of (success, message)\n        '
+●●●●●● 2mm □
+'..'
+relative_path
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Invalid path'
+file_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'File not found'
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Path is not a file'
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata_dict
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_metadata_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+relative_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_metadata_key
+metadata_dict
+metadata_dict
+file_metadata_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metadata_dict
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleted file: '
+relative_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'File deleted: '
+relative_path
+Exception
+logger
+●●●●●● 1mm □△
+'Error deleting file: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Error deleting file: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+delete_folder
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Delete a folder and all its contents.\n        \n        Args:\n            relative_path: Path relative to base_path\n            \n        Returns:\n            Tuple of (success, message)\n        '
+●●●●●● 2mm □
+'..'
+relative_path
+relative_path
+''
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Cannot delete base directory'
+folder_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 2mm □
+folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Folder not found'
+●●●●●● 2mm □
+folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Path is not a folder'
+metadata_dict
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys_to_remove
+●●●●●● 1mm □
+k
+k
+metadata_dict
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+●●●●●● 1mm □△
+'files:'
+relative_path
+●●●●●● 2mm □△
+key
+keys_to_remove
+metadata_dict
+key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metadata_dict
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleted folder: '
+relative_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Folder deleted: '
+relative_path
+Exception
+logger
+●●●●●● 1mm □△
+'Error deleting folder: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Error deleting folder: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_file_path
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get absolute file path.\n        \n        Args:\n            relative_path: Path relative to base_path\n            \n        Returns:\n            Absolute path or None if not found\n        '
+file_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting file path: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+file_exists
+●●●●●● 1mm □△
+self
+relative_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if file exists.'
+file_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+relative_path
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OSError
+ValueError
+TypeError
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △

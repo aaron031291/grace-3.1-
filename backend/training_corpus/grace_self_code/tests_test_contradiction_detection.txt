@@ -1,0 +1,637 @@
+## test_contradiction_detection.py
+'\nTest suite for semantic contradiction detection using NLI model.\nTests the SemanticContradictionDetector and its integration with ConfidenceScorer.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+patch
+MagicMock
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+confidence_scorer
+●●●●●● 2mm □△○
+ConfidenceScorer
+SemanticContradictionDetector
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSemanticContradictionDetector
+'Test cases for SemanticContradictionDetector class.'
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create a SemanticContradictionDetector instance for testing.'
+detector
+●●●●●● 1mm □
+SemanticContradictionDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detector
+Exception
+pytest
+●●●●●● 1mm □△
+'Could not initialize detector: '
+e
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_detector_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that detector initializes with NLI model.'
+detector
+●●●●●● 1mm □
+SemanticContradictionDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detector
+●●●●●● 2mm □
+'Model should be loaded'
+detector
+'cpu'
+'cuda'
+'Device should be set'
+logger
+●●●●●● 1mm □△
+'✓ Detector initialized successfully'
+●●●●●● 2mm □△
+Exception
+pytest
+●●●●●● 1mm □△
+'Model download failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_detect_clear_contradiction
+●●●●●● 1mm □△
+self
+detector
+●●●●●● 2mm □△
+'Test detection of clear semantic contradictions.'
+text1
+●●●●●● 1mm □
+'The Earth is round.'
+text2
+●●●●●● 1mm □
+'The Earth is flat.'
+result
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Result should be a tuple'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+'Result should have 3 elements'
+is_contradiction
+score
+message
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'Score should be float'
+logger
+●●●●●● 1mm □△
+'Contradiction score for opposite statements: '
+score
+'.4f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Contradiction detected: '
+is_contradiction
+', message: '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_detect_supporting_statements
+●●●●●● 1mm □△
+self
+detector
+●●●●●● 2mm □△
+'Test that supporting statements are not marked as contradictions.'
+text1
+●●●●●● 1mm □
+'Water freezes at 0 degrees Celsius.'
+text2
+●●●●●● 1mm □
+'Ice forms when water reaches 0 degrees Celsius.'
+result
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Result should be a tuple'
+is_contradiction
+score
+message
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'Score should be float'
+logger
+●●●●●● 1mm □△
+'Contradiction score for supporting statements: '
+score
+'.4f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Contradiction detected: '
+is_contradiction
+', message: '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_detect_neutral_statements
+●●●●●● 1mm □△
+self
+detector
+●●●●●● 2mm □△
+'Test neutral/unrelated statements.'
+text1
+●●●●●● 1mm □
+'Python is a programming language.'
+text2
+●●●●●● 1mm □
+'Bananas are yellow.'
+result
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Result should be a tuple'
+is_contradiction
+score
+message
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'Score should be float'
+logger
+●●●●●● 1mm □△
+'Contradiction score for unrelated statements: '
+score
+'.4f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Contradiction detected: '
+is_contradiction
+', message: '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_batch_detect_contradictions
+●●●●●● 1mm □△
+self
+detector
+●●●●●● 2mm □△
+'Test batch processing of contradictions.'
+text1
+●●●●●● 1mm □
+'Coffee contains caffeine.'
+chunk_pairs
+●●●●●● 1mm □
+'Coffee has no caffeine.'
+●●●●●● 3mm □△○
+'Caffeine is found in coffee.'
+●●●●●● 1mm □
+'Dogs are animals.'
+●●●●●● 1mm □
+similarity_scores
+●●●●●● 1mm □
+0.9
+0.8
+0.3
+results
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+chunk
+0
+chunk
+chunk_pairs
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Results should be a list'
+logger
+●●●●●● 1mm □△
+'Batch contradiction results: '
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_adjust_consensus_for_contradictions
+●●●●●● 1mm □△
+self
+detector
+●●●●●● 2mm □△
+'Test consensus score adjustment when contradictions are found.'
+text1
+●●●●●● 1mm □
+'The sky is blue.'
+similar_chunks
+●●●●●● 1mm □
+'The sky is blue.'
+0.95
+'The sky is red.'
+0.85
+'Clouds are white.'
+0.6
+adjusted_score
+contradictions
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+similar_chunks
+●●●●●● 2mm □△
+simple_mean
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+_
+s
+similar_chunks
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similar_chunks
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Simple mean: '
+simple_mean
+'.4f'
+', Adjusted score: '
+adjusted_score
+'.4f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradictions
+●●●●●● 2mm □△
+' contradictions: '
+contradictions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+contradictions
+adjusted_score
+simple_mean
+'Score should be reduced for contradictions'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradictions
+●●●●●● 2mm □△
+0
+'Should identify contradictory chunks'
+●●●●●● 2mm △
+TestConfidenceScorerIntegration
+'Test integration of SemanticContradictionDetector with ConfidenceScorer.'
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create a ConfidenceScorer instance with mocked dependencies.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'confidence_scorer.confidence_scorer.EmbeddingModel'
+●●●●●● 2mm □△
+mock_emb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'confidence_scorer.confidence_scorer.get_qdrant_client'
+●●●●●● 2mm □△
+mock_qdrant
+mock_emb_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_emb
+●●●●●● 1mm □
+mock_emb_instance
+mock_qdrant_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+mock_qdrant_instance
+scorer
+●●●●●● 1mm □
+ConfidenceScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scorer
+Exception
+pytest
+●●●●●● 1mm □△
+'Could not initialize scorer: '
+e
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_confidence_score_includes_contradictions
+●●●●●● 1mm □△
+self
+scorer
+●●●●●● 2mm □△
+'Test that calculate_confidence_score includes contradiction info.'
+text
+●●●●●● 1mm □
+'This is a test document.'
+result
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'confidence_score'
+result
+'Should have confidence_score'
+'contradictions_detected'
+result
+'Should have contradictions_detected flag'
+'contradiction_count'
+result
+'Should have contradiction_count'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+'contradiction_count'
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+'Count should be integer'
+logger
+●●●●●● 1mm □△
+'Confidence score result: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_consensus_with_contradictory_chunks
+●●●●●● 1mm □△
+self
+scorer
+●●●●●● 2mm □△
+'Test consensus calculation with contradictory chunks.'
+chunk_text
+●●●●●● 1mm □
+'Python is fast.'
+existing_chunks
+●●●●●● 1mm □
+'Python is slow'
+'Python is efficient'
+'Data science uses Python'
+consensus
+similarities
+contradictions
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+chunk_text
+existing_chunks
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+consensus
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'Consensus should be numeric'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+similarities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Similarities should be list'
+logger
+●●●●●● 1mm □△
+'Consensus: '
+consensus
+', Contradictions: '
+contradictions
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not run full consensus test: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestContradictionDetectionAccuracy
+'Test accuracy of contradiction detection with known examples.'
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create detector instance.'
+detector
+●●●●●● 1mm □
+SemanticContradictionDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detector
+Exception
+pytest
+●●●●●● 1mm □△
+'Could not initialize detector: '
+e
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_contradiction_detection_accuracy
+●●●●●● 1mm □△
+self
+detector
+text1
+text2
+expected_contradiction
+●●●●●● 2mm □△
+'Test contradiction detection with various statement pairs.'
+result
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Result should be a tuple'
+is_contradiction_detected
+score
+message
+●●●●●● 1mm □
+result
+match
+●●●●●● 1mm □
+is_contradiction_detected
+expected_contradiction
+'✓'
+'~'
+logger
+●●●●●● 1mm □△
+match
+" '"
+text1
+30
+"...' vs '"
+text2
+30
+"...' → score="
+score
+'.4f'
+', is_contradiction='
+is_contradiction_detected
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'Score should be float'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'Score should be numeric: '
+score
+logger
+●●●●●● 1mm □△
+'Detected: '
+is_contradiction_detected
+', Expected: '
+expected_contradiction
+', Score: '
+score
+', Message: '
+message
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+'text1,text2,expected_contradiction'
+'The earth is round'
+'The earth is flat'
+●●●●●● 3mm □△○
+'It is raining'
+'It is not raining'
+●●●●●● 3mm □△○
+'She is tall'
+'She is short'
+●●●●●● 3mm □△○
+'Water boils at 100C'
+'Boiling point of water is 100C'
+●●●●●● 1mm □
+'Cats are animals'
+'Animals include cats'
+●●●●●● 1mm □
+'Shakespeare wrote Hamlet'
+'Hamlet was written by Shakespeare'
+●●●●●● 1mm □
+'The sky is blue'
+'Pizza is delicious'
+●●●●●● 1mm □
+'Cars have wheels'
+'Mountains are tall'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'-s'
+●●●●●● 2mm □△

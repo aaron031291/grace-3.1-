@@ -1,0 +1,1247 @@
+## test_thread_learning_orchestrator.py
+'\nComprehensive Component Tests for Thread Learning Orchestrator\n\nTests the Windows-compatible thread-based learning orchestrator system\nthat provides autonomous learning capabilities.\n\nCoverage:\n- ThreadStudySubagent initialization and task processing\n- ThreadPracticeSubagent initialization and task processing\n- ThreadMirrorSubagent initialization and reflection\n- ThreadLearningOrchestrator coordination\n- Task queue management\n- Result collection\n- Graceful shutdown\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+queue
+●●●●●● 2mm □△○
+Queue
+Empty
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+PropertyMock
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestLearningTaskAndMessage
+'Test LearningTask and Message dataclasses.'
+●●●●●● 1mm □
+test_learning_task_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LearningTask can be created with required fields.'
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+'test-001'
+task
+TaskType
+task
+'Python basics'
+task
+'pending'
+task
+0
+●●●●●● 1mm □
+test_learning_task_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LearningTask serialization to dict.'
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_dict
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_dict
+'task_id'
+'test-002'
+task_dict
+'task_type'
+'practice'
+task_dict
+'skill_name'
+'API design'
+task_dict
+'complexity'
+0.7
+●●●●●● 1mm □
+test_learning_task_from_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LearningTask deserialization from dict.'
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+task_dict
+●●●●●● 1mm □
+'task_id'
+'task_type'
+'topic'
+'priority'
+'created_at'
+'status'
+'learning_objectives'
+'file_path'
+'skill_name'
+'task_description'
+'complexity'
+'assigned_to'
+'started_at'
+'completed_at'
+'result'
+'error'
+'test-003'
+'study'
+'Machine Learning'
+1
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'pending'
+'Understand basics'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+0.5
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+task_dict
+●●●●●● 2mm □△
+task
+'test-003'
+task
+TaskType
+task
+'Machine Learning'
+task
+'Understand basics'
+●●●●●● 1mm □
+test_message_creation_and_serialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Message creation and serialization.'
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+Message
+MessageType
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg_dict
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg_dict
+'msg_type'
+'task'
+msg_dict
+'sender'
+'orchestrator'
+msg_restored
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+msg_restored
+MessageType
+msg_restored
+'orchestrator'
+●●●●●● 2mm △
+TestBaseThreadSubagent
+'Test BaseThreadSubagent functionality.'
+●●●●●● 1mm □
+test_base_subagent_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test BaseThreadSubagent can be initialized.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+BaseThreadSubagent
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shared_state
+●●●●●● 1mm □
+agent
+●●●●●● 1mm □
+BaseThreadSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+'test-agent'
+agent
+●●●●●● 1mm □
+agent
+0
+agent
+0
+agent
+Path
+●●●●●● 1mm □△
+'/tmp/test_kb'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_base_subagent_heartbeat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test BaseThreadSubagent sends heartbeat.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+BaseThreadSubagent
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+Message
+MessageType
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+BaseThreadSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg_dict
+●●●●●● 1mm □
+result_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+msg
+MessageType
+msg
+'test-heartbeat'
+'tasks_processed'
+msg
+'tasks_failed'
+msg
+●●●●●● 2mm △
+TestThreadStudySubagent
+'Test ThreadStudySubagent functionality.'
+●●●●●● 1mm □
+test_study_subagent_can_be_imported
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadStudySubagent can be imported.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadStudySubagent
+ThreadStudySubagent
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_study_subagent_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadStudySubagent can be created without initialization.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadStudySubagent
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadStudySubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+'study-1'
+agent
+Path
+●●●●●● 1mm □△
+'/tmp/test_kb'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_study_subagent_rejects_non_study_task
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadStudySubagent rejects non-study tasks.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadStudySubagent
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadStudySubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestThreadPracticeSubagent
+'Test ThreadPracticeSubagent functionality.'
+●●●●●● 1mm □
+test_practice_subagent_can_be_imported
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadPracticeSubagent can be imported.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadPracticeSubagent
+ThreadPracticeSubagent
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_practice_subagent_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadPracticeSubagent can be created.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadPracticeSubagent
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadPracticeSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+'practice-1'
+agent
+Path
+●●●●●● 1mm □△
+'/tmp/test_kb'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_practice_subagent_rejects_non_practice_task
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadPracticeSubagent rejects non-practice tasks.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadPracticeSubagent
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadPracticeSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestThreadMirrorSubagent
+'Test ThreadMirrorSubagent functionality.'
+●●●●●● 1mm □
+test_mirror_subagent_can_be_imported
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadMirrorSubagent can be imported.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadMirrorSubagent
+ThreadMirrorSubagent
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_mirror_subagent_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadMirrorSubagent can be created.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadMirrorSubagent
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadMirrorSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+'mirror'
+agent
+Path
+●●●●●● 1mm □△
+'/tmp/test_kb'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_mirror_subagent_processes_reflection
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadMirrorSubagent processes reflection tasks.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadMirrorSubagent
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+Message
+MessageType
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadMirrorSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+'behavioral_patterns'
+'learning_progress'
+'improvement_suggestions'
+'self_awareness_score'
+'operations_observed'
+'total_detected'
+3
+'total_examples'
+50
+'priority'
+'topic'
+'high'
+'error_handling'
+0.75
+100
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+msg_dict
+●●●●●● 1mm □
+result_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+msg
+MessageType
+result_task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+result_task
+'completed'
+'behavioral_patterns'
+result_task
+'self_awareness_score'
+result_task
+result_task
+'self_awareness_score'
+0.75
+●●●●●● 2mm △
+TestThreadLearningOrchestrator
+'Test ThreadLearningOrchestrator coordination.'
+●●●●●● 1mm □
+mock_orchestrator_deps
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Mock all orchestrator dependencies.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadStudySubagent'
+●●●●●● 2mm □△
+mock_study
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadPracticeSubagent'
+●●●●●● 2mm □△
+mock_practice
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadMirrorSubagent'
+●●●●●● 2mm □△
+mock_mirror
+mock_study_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_practice_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mirror_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_study
+●●●●●● 1mm □
+mock_study_instance
+mock_practice
+●●●●●● 1mm □
+mock_practice_instance
+mock_mirror
+●●●●●● 1mm □
+mock_mirror_instance
+'study'
+'practice'
+'mirror'
+'study_instance'
+'practice_instance'
+'mirror_instance'
+mock_study
+mock_practice
+mock_mirror
+mock_study_instance
+mock_practice_instance
+mock_mirror_instance
+pytest
+●●●●●● 1mm □
+test_orchestrator_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadLearningOrchestrator initializes with correct agent counts.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadLearningOrchestrator
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadStudySubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadPracticeSubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadMirrorSubagent'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+ThreadLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+2
+orchestrator
+●●●●●● 2mm □
+orchestrator
+0
+orchestrator
+0
+●●●●●● 1mm □
+test_orchestrator_submit_study_task
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadLearningOrchestrator submits study tasks.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadLearningOrchestrator
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+Message
+MessageType
+LearningTask
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadStudySubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadPracticeSubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadMirrorSubagent'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+ThreadLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □△
+'study-'
+●●●●●● 2mm □△
+orchestrator
+1
+msg_dict
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+msg
+MessageType
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+task
+'Python decorators'
+task
+'Understand syntax'
+'Learn use cases'
+●●●●●● 1mm □
+test_orchestrator_submit_practice_task
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadLearningOrchestrator submits practice tasks.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadLearningOrchestrator
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+Message
+MessageType
+LearningTask
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadStudySubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadPracticeSubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadMirrorSubagent'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+ThreadLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □△
+'practice-'
+●●●●●● 2mm □△
+orchestrator
+1
+msg_dict
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+task
+'REST API design'
+task
+0.7
+●●●●●● 1mm □
+test_orchestrator_get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadLearningOrchestrator returns correct status.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadLearningOrchestrator
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadStudySubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadPracticeSubagent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadMirrorSubagent'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+ThreadLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'total_subagents'
+6
+status
+'study_agents'
+3
+status
+'practice_agents'
+2
+status
+'implementation'
+'thread-based'
+status
+'total_tasks_submitted'
+0
+status
+'total_tasks_completed'
+0
+●●●●●● 2mm △
+TestOrchestratorIntegration
+'Integration tests for the full orchestrator system.'
+●●●●●● 1mm □
+test_orchestrator_start_stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadLearningOrchestrator can start and stop cleanly.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadLearningOrchestrator
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadStudySubagent'
+●●●●●● 2mm □△
+mock_study
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadPracticeSubagent'
+●●●●●● 2mm □△
+mock_practice
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.thread_learning_orchestrator.ThreadMirrorSubagent'
+●●●●●● 2mm □△
+mock_mirror
+study_agents
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+practice_agents
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+mirror_agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_study
+●●●●●● 1mm □
+study_agents
+mock_practice
+●●●●●● 1mm □
+practice_agents
+mock_mirror
+●●●●●● 1mm □
+mirror_agent
+orchestrator
+●●●●●● 1mm □
+ThreadLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+study_agents
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+practice_agents
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror_agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+study_agents
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+practice_agents
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror_agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_task_types_enum_completeness
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all TaskType enum values are defined.'
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+TaskType
+expected_types
+●●●●●● 1mm □
+'INGEST'
+'STUDY'
+'PRACTICE'
+'REFLECT'
+'UPDATE_TRUST'
+'PREFETCH'
+actual_types
+●●●●●● 1mm □
+t
+t
+TaskType
+expected_types
+actual_types
+●●●●●● 1mm □
+test_message_types_enum_completeness
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all MessageType enum values are defined.'
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+MessageType
+expected_types
+●●●●●● 1mm □
+'TASK'
+'RESULT'
+'STATUS'
+'SHUTDOWN'
+'HEARTBEAT'
+actual_types
+●●●●●● 1mm □
+t
+t
+MessageType
+expected_types
+actual_types
+●●●●●● 2mm △
+TestErrorHandling
+'Test error handling in the orchestrator system.'
+●●●●●● 1mm □
+test_study_subagent_handles_exception
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ThreadStudySubagent handles exceptions gracefully.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadStudySubagent
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+Message
+MessageType
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadStudySubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+raise_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Test error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+agent
+'_get_learning_system'
+●●●●●● 2mm □△
+mock_ls
+mock_ls
+●●●●●● 1mm □
+raise_error
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+msg_dict
+●●●●●● 1mm □
+result_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+result_task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+result_task
+'failed'
+'Test error'
+result_task
+agent
+1
+●●●●●● 1mm □
+test_task_with_missing_topic_raises_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that tasks without topic or file_path are rejected.'
+●●●●●● 3mm □△○
+cognitive.thread_learning_orchestrator
+●●●●●● 2mm □△○
+ThreadStudySubagent
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningTask
+TaskType
+Message
+task_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadStudySubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_topic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Task must have file_path or topic'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+agent
+'_get_learning_system'
+●●●●●● 2mm □△
+mock_ls
+mock_ls
+●●●●●● 1mm □
+check_topic
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+msg_dict
+●●●●●● 1mm □
+result_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+result_task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+result_task
+'failed'
+'file_path or topic'
+result_task
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

@@ -1,0 +1,885 @@
+## neural_to_symbolic_rule_generator.py
+'\nNeural-to-Symbolic Rule Generator - Neuro-Symbolic Integration\n\nConverts neural patterns (clusters, embeddings) into symbolic rules\nthat can be used for explicit reasoning.\n\nKey Features:\n- Pattern detection from neural clustering\n- Automatic rule generation from patterns\n- Trust score assignment based on pattern confidence\n- Integration with symbolic knowledge base\n'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+Set
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+get_embedding_model
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+TrustScorer
+ImportError
+TrustScorer
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+NeuralPattern
+'Neural pattern detected from clustering/embedding analysis'
+pattern_id
+●●●●●● 1mm ○
+cluster_center
+np
+members
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+member_indices
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+confidence
+●●●●●● 3mm ○
+support_count
+●●●●●● 2mm ○
+features
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+datetime
+dataclass
+●●●●●● 2mm △
+SymbolicRule
+'Symbolic rule generated from neural pattern'
+rule_id
+●●●●●● 1mm ○
+premise
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+conclusion
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+trust_score
+●●●●●● 3mm ○
+confidence
+●●●●●● 3mm ○
+source
+●●●●●● 1mm ○
+source_pattern_id
+●●●●●● 1mm ○
+support_count
+●●●●●● 2mm ○
+validation_count
+●●●●●● 2mm ○
+0
+invalidation_count
+●●●●●● 2mm ○
+0
+created_at
+datetime
+●●●●●● 2mm □
+●●●●●● 1mm □
+__post_init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+NeuralToSymbolicRuleGenerator
+'\n    Converts neural patterns into symbolic rules.\n    \n    This bridges the neural-symbolic gap by:\n    - Detecting patterns in neural embedding space\n    - Extracting features from patterns\n    - Creating explicit symbolic rules\n    - Assigning trust scores based on pattern confidence\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+embedding_model
+min_confidence
+min_support
+trust_scorer
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+TrustScorer
+●●●●●● 2mm □
+0.7
+3
+●●●●●● 2mm □
+'\n        Initialize neural-to-symbolic rule generator.\n        \n        Args:\n            embedding_model: EmbeddingModel for pattern detection\n            min_confidence: Minimum pattern confidence to create rule\n            min_support: Minimum examples to support a pattern\n            trust_scorer: TrustScorer for rule trust calculation\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+min_confidence
+●●●●●● 3mm △
+●●●●●● 1mm □
+min_support
+●●●●●● 2mm □
+TrustScorer
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_scorer
+TrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_scorer
+logger
+●●●●●● 1mm □△
+'[NEURAL→SYMBOLIC] Initialized with min_confidence='
+min_confidence
+', min_support='
+min_support
+●●●●●● 2mm □△
+●●●●●● 1mm □
+detect_patterns
+●●●●●● 1mm □△
+self
+texts
+num_clusters
+instruction
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+5
+●●●●●● 2mm □
+'\n        Detect patterns in texts using neural clustering.\n        \n        Args:\n            texts: List of texts to analyze\n            num_clusters: Number of clusters to find\n            instruction: Optional instruction for embedding\n            \n        Returns:\n            List of detected neural patterns\n        '
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Not enough texts ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+') for pattern detection'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+clusters
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+cluster_idx
+member_indices
+●●●●●● 2mm □
+●●●●●● 1mm □△
+clusters
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+member_indices
+●●●●●● 2mm □△
+●●●●●● 3mm △
+cluster_embeddings
+●●●●●● 1mm □
+embeddings
+member_indices
+cluster_center
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+cluster_embeddings
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+emb
+●●●●●● 1mm □△
+cluster_center
+●●●●●● 2mm □△
+emb
+cluster_embeddings
+avg_distance
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+distances
+●●●●●● 2mm □△
+max_distance
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+distances
+●●●●●● 2mm □△
+0
+np
+●●●●●● 1mm □△
+distances
+●●●●●● 2mm □△
+0.0
+confidence
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm □△
+1.0
+●●●●●● 3mm ○
+avg_distance
+●●●●●● 2mm □△
+10.0
+confidence
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+confidence
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+member_texts
+●●●●●● 1mm □
+texts
+i
+i
+member_indices
+features
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member_texts
+cluster_embeddings
+●●●●●● 2mm □△
+pattern
+●●●●●● 1mm □
+NeuralPattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[NEURAL→SYMBOLIC] Detected '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+' patterns from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+' texts'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+NeuralPattern
+●●●●●● 1mm □
+_extract_features
+●●●●●● 1mm □△
+self
+texts
+embeddings
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+np
+'Extract features from text cluster.'
+features
+●●●●●● 1mm □
+'text_count'
+'avg_text_length'
+'max_text_length'
+'min_text_length'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+texts
+●●●●●● 2mm □△
+all_words
+●●●●●● 1mm □
+text
+texts
+words
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_words
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+Counter
+word_counts
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+all_words
+●●●●●● 2mm □△
+common_words
+●●●●●● 1mm □
+word
+word
+count
+word_counts
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+count
+2
+features
+'common_keywords'
+●●●●●● 1mm □
+common_words
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+0
+features
+'embedding_variance'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+features
+'embedding_mean_norm'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+e
+embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+features
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+pattern_to_rule
+●●●●●● 1mm □△
+self
+pattern
+rule_type
+●●●●●● 2mm □△
+NeuralPattern
+●●●●●● 1mm ○
+'association'
+'\n        Convert a neural pattern to a symbolic rule.\n        \n        Args:\n            pattern: Neural pattern to convert\n            rule_type: Type of rule ("association", "implication", "classification")\n            \n        Returns:\n            Symbolic rule or None if pattern doesn\'t meet criteria\n        '
+●●●●●● 2mm □
+pattern
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Pattern '
+pattern
+' confidence '
+pattern
+' < '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+pattern
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Pattern '
+pattern
+' support '
+pattern
+' < '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+premise
+conclusion
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+rule_type
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+rule
+●●●●●● 1mm □
+SymbolicRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[NEURAL→SYMBOLIC] Created rule '
+rule
+' with trust='
+trust_score
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rule
+●●●●●● 2mm □○
+SymbolicRule
+●●●●●● 1mm □
+_extract_rule_structure
+●●●●●● 1mm □△
+self
+pattern
+rule_type
+●●●●●● 2mm □△
+NeuralPattern
+●●●●●● 1mm ○
+'\n        Extract rule structure (premise, conclusion) from pattern.\n        \n        This is a simplified extraction - can be enhanced with NLP.\n        '
+features
+●●●●●● 1mm □
+pattern
+●●●●●● 2mm □
+rule_type
+'association'
+premise
+●●●●●● 1mm □
+'keywords'
+'text_length_range'
+features
+●●●●●● 1mm □△
+'common_keywords'
+●●●●●● 2mm □△
+5
+features
+●●●●●● 1mm □△
+'min_text_length'
+0
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+'max_text_length'
+1000
+●●●●●● 2mm □△
+conclusion
+●●●●●● 1mm □
+'cluster_id'
+'pattern_confidence'
+'member_count'
+pattern
+pattern
+pattern
+●●●●●● 1mm △
+rule_type
+'classification'
+premise
+●●●●●● 1mm □
+'features'
+features
+conclusion
+●●●●●● 1mm □
+'category'
+'confidence'
+'pattern_'
+pattern
+8
+pattern
+premise
+●●●●●● 1mm □
+'keywords'
+features
+●●●●●● 1mm □△
+'common_keywords'
+●●●●●● 2mm □△
+3
+conclusion
+●●●●●● 1mm □
+'pattern_match'
+'confidence'
+●●●●●● 3mm □△○
+pattern
+●●●●●● 3mm ○
+premise
+conclusion
+Tuple
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_rule_trust
+●●●●●● 1mm □△
+self
+pattern
+●●●●●● 2mm □△
+NeuralPattern
+'Calculate trust score for rule based on pattern.'
+base_trust
+●●●●●● 1mm □
+pattern
+support_factor
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+pattern
+●●●●●● 3mm □△
+10.0
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+base_trust
+●●●●●● 2mm □△
+0.7
+●●●●●● 3mm ○
+support_factor
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+trust_score
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+generate_rules_from_texts
+●●●●●● 1mm □△
+self
+texts
+num_clusters
+instruction
+rule_type
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+5
+●●●●●● 2mm □
+'association'
+'\n        Complete pipeline: detect patterns → generate rules.\n        \n        Args:\n            texts: Texts to analyze\n            num_clusters: Number of clusters\n            instruction: Optional embedding instruction\n            rule_type: Type of rules to generate\n            \n        Returns:\n            List of generated symbolic rules\n        '
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □
+pattern
+patterns
+rule
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+rules
+●●●●●● 1mm □△
+rule
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[NEURAL→SYMBOLIC] Generated '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 2mm □△
+' rules from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+' patterns'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rules
+●●●●●● 3mm □△
+SymbolicRule
+●●●●●● 1mm □
+validate_rule
+●●●●●● 1mm □△
+self
+rule
+test_cases
+●●●●●● 2mm □△
+SymbolicRule
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Validate a rule against test cases.\n        \n        Returns:\n            (is_valid, updated_trust_score)\n        '
+correct
+●●●●●● 1mm □
+0
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_cases
+●●●●●● 2mm □△
+test_case
+test_cases
+premise_match
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule
+test_case
+●●●●●● 2mm □△
+●●●●●● 2mm □
+premise_match
+conclusion_match
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule
+test_case
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conclusion_match
+correct
+1
+accuracy
+●●●●●● 1mm □
+total
+0
+correct
+●●●●●● 3mm □△
+total
+0.0
+validation_ratio
+●●●●●● 1mm □
+accuracy
+updated_trust
+●●●●●● 1mm □
+rule
+●●●●●● 2mm □△
+0.7
+●●●●●● 3mm ○
+validation_ratio
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+accuracy
+0.7
+updated_trust
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_check_premise_match
+●●●●●● 1mm □△
+self
+premise
+test_case
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Check if test case matches rule premise (simplified).'
+●●●●●● 2mm □
+'keywords'
+premise
+keywords
+●●●●●● 1mm □
+premise
+'keywords'
+test_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+test_case
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+kw
+keywords
+kw
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+matches
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keywords
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_check_conclusion_match
+●●●●●● 1mm □△
+self
+conclusion
+test_case
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Check if test case matches rule conclusion (simplified).'
+●●●●●● 2mm □
+'category'
+conclusion
+expected_category
+●●●●●● 1mm □
+conclusion
+'category'
+actual_category
+●●●●●● 1mm □
+test_case
+●●●●●● 1mm □△
+'category'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+expected_category
+actual_category
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_neural_to_symbolic_generator
+●●●●●● 1mm □△
+embedding_model
+min_confidence
+min_support
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.7
+3
+'\n    Get neural-to-symbolic rule generator instance.\n    \n    Args:\n        embedding_model: EmbeddingModel (uses singleton if None)\n        min_confidence: Minimum pattern confidence\n        min_support: Minimum examples per pattern\n        \n    Returns:\n        NeuralToSymbolicRuleGenerator instance\n    '
+●●●●●● 3mm ○
+NeuralToSymbolicRuleGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NeuralToSymbolicRuleGenerator

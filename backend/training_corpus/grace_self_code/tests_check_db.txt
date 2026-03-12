@@ -1,0 +1,91 @@
+## check_db.py
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 2mm □△○
+sys
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+'data/grace.db'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM chats'
+●●●●●● 2mm □△
+total_chats
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total chats in database: '
+total_chats
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'SELECT id, title, created_at FROM chats ORDER BY created_at DESC LIMIT 5'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRecent chats:'
+●●●●●● 2mm □△
+row
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ID='
+row
+0
+', Title='
+row
+1
+row
+1
+50
+'Untitled'
+', Created='
+row
+2
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM chat_history'
+●●●●●● 2mm □△
+total_messages
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTotal messages in database: '
+total_messages
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Database is accessible and contains data'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error accessing database: '
+e
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△

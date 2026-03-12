@@ -1,0 +1,271 @@
+## test_circuit_breaker.py
+'\nTests for circuit breaker and resilience patterns.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm △
+TestCircuitBreaker
+●●●●●● 1mm □
+test_breaker_starts_closed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_service'
+●●●●●● 2mm □△
+cb
+CircuitBreaker
+●●●●●● 1mm □
+test_breaker_opens_after_threshold
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_fail'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+_
+_
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'fail'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+cb
+CircuitBreaker
+●●●●●● 1mm □
+test_breaker_rejects_when_open
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_reject'
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+_
+_
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'fail'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+cb
+●●●●●● 1mm □△
+'should not run'
+●●●●●● 2mm □△
+result
+'rejected'
+●●●●●● 1mm □
+test_breaker_recovers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_recover'
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+_
+_
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'fail'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+time
+time
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cb
+●●●●●● 1mm □△
+'recovered'
+●●●●●● 2mm □△
+result
+'recovered'
+cb
+CircuitBreaker
+●●●●●● 1mm □
+test_breaker_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_status'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+cb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'name'
+'test_status'
+status
+'state'
+'closed'
+status
+'threshold'
+5
+●●●●●● 2mm △
+TestErrorBoundary
+●●●●●● 1mm □
+test_boundary_contains_exception
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+ErrorBoundary
+ErrorBoundary
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'should be caught'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_boundary_decorator
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+error_boundary
+●●●●●● 1mm □
+risky
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'boom'
+●●●●●● 2mm □△
+error_boundary
+●●●●●● 1mm □△
+'test_dec'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+risky
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'fallback_value'
+●●●●●● 2mm △
+TestGracefulDegradation
+●●●●●● 1mm □
+test_default_level_is_full
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+GracefulDegradation
+GracefulDegradation
+●●●●●● 1mm □△
+'full'
+●●●●●● 2mm □△
+GracefulDegradation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'full'
+●●●●●● 1mm □
+test_set_and_get_level
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+GracefulDegradation
+GracefulDegradation
+●●●●●● 1mm □△
+'reduced'
+●●●●●● 2mm □△
+GracefulDegradation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'reduced'
+GracefulDegradation
+●●●●●● 1mm □△
+'full'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_status_returns_all_levels
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+GracefulDegradation
+status
+●●●●●● 1mm □
+GracefulDegradation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'full'
+status
+'services'
+'emergency'
+status
+'services'

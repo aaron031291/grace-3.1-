@@ -1,0 +1,44 @@
+## ide_bridge.py
+'\nIDE Bridge for Grace\nConnects the IDE to the Grace API endpoints. The IDE only sends text/events,\nand Grace handles the internal Braille encoding, logic mappings, and code processing.\n'
+●●●●●● 2mm □△○
+grace_client
+●●●●●● 1mm □
+on_save
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Triggered by the IDE when a file is saved.\n    Passes context to Grace without requiring the IDE to understand the contents.\n    '
+grace_client
+●●●●●● 1mm □△
+'File changed: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace notified: Received. Analyzing '
+file_path
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_command
+●●●●●● 1mm □△
+user_input
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Triggered by the IDE when the user submits a natural language command.\n    Example: "Build auth system"\n    \n    Grace converts the user_input to deterministic dots internally.\n    Returns: {"files": [...], "code": "..."}\n    '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"Sending to Grace: '"
+user_input
+"' (Building. Here is code.)"
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+grace_client
+●●●●●● 1mm □△
+user_input
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△

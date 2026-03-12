@@ -1,0 +1,402 @@
+## ingestion_connector.py
+'\nIngestion Connector - File Processing Integration\n\nConnects ingestion system to Layer 1 message bus for:\n- Automatic Genesis Key creation on upload\n- Cross-component file processing coordination\n- Automatic RAG indexing\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+ComponentType
+Message
+get_message_bus
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+IngestionConnector
+'\n    Connects Ingestion to Layer 1 message bus.\n\n    Autonomous Actions:\n    1. File uploaded → Auto-create Genesis Key\n    2. File processed → Notify RAG for indexing\n    3. Processing failure → Trigger retry or learning\n    4. Folder sync → Batch process with Genesis Keys\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+ingestion_service
+message_bus
+●●●●●● 2mm □△
+TextIngestionService
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+ingestion_service
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] Registered with message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register all autonomous actions for ingestion.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] ⭐ Registered 3 autonomous actions'
+●●●●●● 2mm □△
+Message
+'Handle file upload - auto-create Genesis Key.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_type'
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] 🤖 File uploaded: '
+file_path
+' (type: '
+file_type
+')'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] ✓ Genesis Key created: '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] Genesis Key creation failed: '
+e
+●●●●●● 2mm □△
+Message
+'Handle file processing completion - notify RAG.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+chunks_created
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'chunks_created'
+0
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] 🤖 File processed: '
+file_path
+' ('
+chunks_created
+' chunks)'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'Handle processing failure - trigger learning.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+error
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_type'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] 🤖 Processing failed: '
+file_path
+' (error: '
+error
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers for other components.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] 🔧 Registered 2 request handlers'
+●●●●●● 2mm □△
+Message
+'Handle file ingestion request.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_type'
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+'doc-'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'document_id'
+'file_path'
+●●●●●● 3mm □△○
+document_id
+file_path
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle ingestion status request.'
+document_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.models
+●●●●●● 2mm □△○
+Document
+db_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'document_id'
+'file_path'
+'status'
+'chunks_count'
+document
+document
+'processed'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+document
+'chunks'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+0
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+_get_status
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+'error'
+'Document not found: '
+document_id
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_ingestion_connector
+●●●●●● 1mm □△
+ingestion_service
+message_bus
+●●●●●● 2mm □△
+TextIngestionService
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+'Create and initialize ingestion connector.'
+connector
+●●●●●● 1mm □
+IngestionConnector
+●●●●●● 1mm □△
+ingestion_service
+message_bus
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-CONNECTOR] ✓ Initialized and connected to message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+connector
+IngestionConnector

@@ -1,0 +1,524 @@
+## semantic_entity_classifier.py
+"\nSemantic Entity Classifier — Translation layer between raw incoming data and\nGrace's canonical domain model.\n\nProblem it solves:\n  Without this, every ingestion pipeline dumps raw text directly into the DB.\n  Tables explode. No relational coherence. Hard to query or trust.\n\nWith this:\n  Raw data → classify entity type → normalize into canonical bucket\n  → only then materialize in the right DB table / collection.\n\nEntity Buckets:\n  CUSTOMER    — user, person, contact, account\n  TRANSACTION — payment, order, event, trade\n  BEHAVIOR    — action, interaction, signal, log\n  KNOWLEDGE   — document, article, fact, Q&A\n  CODE        — function, class, module, snippet\n  TASK        — todo, ticket, milestone, project item\n  SYSTEM      — metric, alert, health signal, configuration\n  UNKNOWN     — could not be classified\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+ENTITY_TYPES
+●●●●●● 1mm □
+'CUSTOMER'
+'TRANSACTION'
+'BEHAVIOR'
+'KNOWLEDGE'
+'CODE'
+'TASK'
+'SYSTEM'
+'user'
+'customer'
+'person'
+'contact'
+'account'
+'client'
+'profile'
+'subscriber'
+'order'
+'payment'
+'invoice'
+'transaction'
+'purchase'
+'trade'
+'checkout'
+'refund'
+'click'
+'action'
+'event'
+'interaction'
+'signal'
+'session'
+'visit'
+'view'
+'log'
+'article'
+'document'
+'fact'
+'definition'
+'explanation'
+'wiki'
+'tutorial'
+'guide'
+'question'
+'answer'
+'function'
+'class'
+'method'
+'module'
+'snippet'
+'import'
+'def '
+'async '
+'return '
+'lambda'
+'todo'
+'task'
+'ticket'
+'issue'
+'milestone'
+'project'
+'sprint'
+'backlog'
+'bug'
+'feature'
+'metric'
+'alert'
+'health'
+'status'
+'config'
+'configuration'
+'monitor'
+'diagnostic'
+'error'
+'exception'
+ENTITY_SCHEMA_MAP
+●●●●●● 1mm □
+'CUSTOMER'
+'TRANSACTION'
+'BEHAVIOR'
+'KNOWLEDGE'
+'CODE'
+'TASK'
+'SYSTEM'
+'UNKNOWN'
+'entity_customers'
+'entities_customers'
+'entity_transactions'
+'entities_transactions'
+'entity_behaviors'
+'entities_behaviors'
+'documents'
+'documents'
+'code_entities'
+'codebase_vectors'
+'entity_tasks'
+'entities_tasks'
+'entity_system'
+'entities_system'
+'documents'
+'documents'
+●●●●●● 2mm △
+ClassifiedEntity
+'Result of semantic entity classification.'
+raw_text
+●●●●●● 1mm ○
+entity_type
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+matched_signals
+●●●●●● 1mm □△
+db_table
+●●●●●● 1mm ○
+vector_collection
+●●●●●● 1mm ○
+canonical_fields
+●●●●●● 2mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+should_deduplicate
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+metadata
+●●●●●● 2mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+SemanticEntityClassifier
+'\n    Classifies incoming raw data into canonical entity buckets.\n\n    Usage:\n        clf = SemanticEntityClassifier()\n        entity = clf.classify(text="User Aaron placed an order for $99")\n        entity.entity_type   # → "CUSTOMER" or "TRANSACTION"\n        entity.db_table      # → the right physical table\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compile_patterns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+entity_type
+signals
+ENTITY_TYPES
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entity_type
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+signals
+●●●●●● 1mm □
+classify
+●●●●●● 1mm □△
+self
+text
+filename
+source_type
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+''
+''
+●●●●●● 2mm □
+'\n        Classify raw text into a semantic entity bucket.\n        Uses keyword signal scoring across all buckets.\n        '
+text_lower
+●●●●●● 1mm □
+text
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fname_lower
+●●●●●● 1mm □
+filename
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+text_lower
+2000
+●●●●●● 3mm ○
+' '
+●●●●●● 3mm ○
+fname_lower
+scores
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+signals_hit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+entity_type
+keywords
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hits
+●●●●●● 1mm □
+kw
+kw
+keywords
+kw
+combined
+score
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hits
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keywords
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+scores
+entity_type
+●●●●●● 1mm □
+score
+signals_hit
+entity_type
+●●●●●● 1mm □
+hits
+●●●●●● 2mm □
+source_type
+'academic_paper'
+'official_docs'
+'verified_tutorial'
+scores
+'KNOWLEDGE'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 1mm □△
+'KNOWLEDGE'
+0
+●●●●●● 2mm □△
+0.7
+●●●●●● 2mm □△
+●●●●●● 1mm △
+source_type
+'user_generated'
+scores
+'CUSTOMER'
+●●●●●● 1mm □
+scores
+●●●●●● 1mm □△
+'CUSTOMER'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.1
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+fname_lower
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+ext
+'.py'
+'.js'
+'.ts'
+'.go'
+'.rs'
+'.java'
+'.cpp'
+●●●●●● 2mm □△
+scores
+'CODE'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 1mm □△
+'CODE'
+0
+●●●●●● 2mm □△
+0.9
+●●●●●● 2mm □△
+best_type
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+best_score
+●●●●●● 1mm □
+scores
+best_type
+●●●●●● 2mm □
+best_score
+0.05
+best_type
+●●●●●● 1mm □
+'UNKNOWN'
+best_score
+●●●●●● 1mm □
+0.0
+db_table
+vector_collection
+●●●●●● 1mm □
+ENTITY_SCHEMA_MAP
+best_type
+canonical
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+best_type
+text
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ClassifiedEntity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ClassifiedEntity
+●●●●●● 1mm □
+_build_canonical
+●●●●●● 1mm □△
+self
+entity_type
+text
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Extract canonical normalized fields from raw text.'
+fields
+●●●●●● 1mm □
+'raw_length'
+'has_metadata'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entity_type
+'CUSTOMER'
+email
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+email
+fields
+'email'
+●●●●●● 1mm □
+email
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm △
+entity_type
+'TRANSACTION'
+amount
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[\\$£€]?\\s*(\\d[\\d,]*(?:\\.\\d{2})?)'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+amount
+fields
+'amount_str'
+●●●●●● 1mm □
+amount
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entity_type
+'CODE'
+defs
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+'\\bdef\\b|\\bfunction\\b|\\basync def\\b'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fields
+'function_count'
+●●●●●● 1mm □
+defs
+●●●●●● 1mm △
+entity_type
+'TASK'
+prio
+●●●●●● 1mm □
+●●●●●● 2mm □
+p
+'urgent'
+'high priority'
+'critical'
+'low priority'
+'medium'
+●●●●●● 2mm □
+p
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prio
+●●●●●● 1mm □
+p
+●●●●●● 2mm □
+prio
+fields
+'priority_hint'
+●●●●●● 1mm □
+prio
+●●●●●● 3mm ○
+fields
+●●●●●● 2mm □△
+_classifier
+●●●●●● 2mm □○
+SemanticEntityClassifier
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_classifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_classifier
+●●●●●● 2mm □
+_classifier
+●●●●●● 1mm □
+SemanticEntityClassifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_classifier
+SemanticEntityClassifier
+●●●●●● 1mm □
+classify_entity
+●●●●●● 1mm □△
+text
+filename
+source_type
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+''
+'user_generated'
+●●●●●● 2mm □
+'\n    Public API: classify raw incoming data into a canonical entity bucket.\n\n    Returns dict with: entity_type, confidence, db_table, vector_collection,\n    canonical_fields, matched_signals.\n    '
+result
+●●●●●● 1mm □
+get_classifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'entity_type'
+'confidence'
+'db_table'
+'vector_collection'
+'canonical_fields'
+'matched_signals'
+'should_deduplicate'
+result
+result
+result
+result
+result
+result
+result
+●●●●●● 2mm □△

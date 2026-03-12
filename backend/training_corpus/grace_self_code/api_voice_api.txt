@@ -1,0 +1,1440 @@
+## voice_api.py
+'\nVoice API - Speech-to-Text (STT) and Text-to-Speech (TTS) endpoints\n\nProvides voice capabilities for GRACE:\n- Speech-to-Text using Whisper (via Ollama or local)\n- Text-to-Speech using edge-tts, pyttsx3, or system TTS\n- Continuous conversation mode\n- NLP preprocessing for natural language understanding\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+io
+●●●●●● 2mm □△○
+base64
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+UploadFile
+File
+Form
+WebSocket
+WebSocketDisconnect
+●●●●●● 3mm □△○
+fastapi.responses
+●●●●●● 2mm □△○
+StreamingResponse
+JSONResponse
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TTSEngine
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Available TTS engines.'
+EDGE_TTS
+●●●●●● 1mm □
+'edge_tts'
+PYTTSX3
+●●●●●● 1mm □
+'pyttsx3'
+SYSTEM
+●●●●●● 1mm □
+'system'
+●●●●●● 2mm △
+STTEngine
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Available STT engines.'
+WHISPER
+●●●●●● 1mm □
+'whisper'
+WEB_SPEECH
+●●●●●● 1mm □
+'web_speech'
+●●●●●● 2mm △
+VoiceSettings
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Voice configuration settings.'
+tts_engine
+TTSEngine
+TTSEngine
+tts_voice
+●●●●●● 1mm ○
+'en-US-AriaNeural'
+tts_rate
+●●●●●● 1mm ○
+'+0%'
+tts_pitch
+●●●●●● 1mm ○
+'+0Hz'
+stt_engine
+STTEngine
+STTEngine
+stt_language
+●●●●●● 1mm ○
+'en-US'
+continuous_mode
+●●●●●● 3mm △
+●●●●●● 1mm □
+auto_send
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+wake_word
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'grace'
+●●●●●● 2mm △
+TTSRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Text-to-Speech request.'
+text
+●●●●●● 1mm ○
+voice
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'en-US-AriaNeural'
+rate
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'+0%'
+pitch
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'+0Hz'
+engine
+●●●●●● 2mm □○
+TTSEngine
+TTSEngine
+●●●●●● 2mm △
+STTResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Speech-to-Text response.'
+text
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+language
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+●●●●●● 2mm △
+NLPProcessedText
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'NLP processed text with intent and entities.'
+original_text
+●●●●●● 1mm ○
+cleaned_text
+●●●●●● 1mm ○
+intent
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+entities
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+sentiment
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+VoiceManager
+'Manages voice operations for STT and TTS.'
+AVAILABLE_VOICES
+●●●●●● 1mm □
+'en-US'
+'en-GB'
+'en-AU'
+'id'
+'name'
+'gender'
+'en-US-AriaNeural'
+'Aria (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-GuyNeural'
+'Guy (Male)'
+'Male'
+'id'
+'name'
+'gender'
+'en-US-JennyNeural'
+'Jenny (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-DavisNeural'
+'Davis (Male)'
+'Male'
+'id'
+'name'
+'gender'
+'en-US-AmberNeural'
+'Amber (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-AnaNeural'
+'Ana (Female, Child)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-BrandonNeural'
+'Brandon (Male)'
+'Male'
+'id'
+'name'
+'gender'
+'en-US-ChristopherNeural'
+'Christopher (Male)'
+'Male'
+'id'
+'name'
+'gender'
+'en-US-CoraNeural'
+'Cora (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-ElizabethNeural'
+'Elizabeth (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-EricNeural'
+'Eric (Male)'
+'Male'
+'id'
+'name'
+'gender'
+'en-US-JacobNeural'
+'Jacob (Male)'
+'Male'
+'id'
+'name'
+'gender'
+'en-US-MichelleNeural'
+'Michelle (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-MonicaNeural'
+'Monica (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-US-SaraNeural'
+'Sara (Female)'
+'Female'
+'id'
+'name'
+'gender'
+'en-GB-SoniaNeural'
+'Sonia (Female, British)'
+'Female'
+'id'
+'name'
+'gender'
+'en-GB-RyanNeural'
+'Ryan (Male, British)'
+'Male'
+'id'
+'name'
+'gender'
+'en-GB-LibbyNeural'
+'Libby (Female, British)'
+'Female'
+'id'
+'name'
+'gender'
+'en-AU-NatashaNeural'
+'Natasha (Female, Australian)'
+'Female'
+'id'
+'name'
+'gender'
+'en-AU-WilliamNeural'
+'William (Male, Australian)'
+'Male'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+VoiceSettings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Check which TTS engines are available.'
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+edge_tts
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+results
+'edge_tts'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+results
+'edge_tts'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+pyttsx3
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+results
+'pyttsx3'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+results
+'pyttsx3'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TTSEngine
+'en-US-AriaNeural'
+'+0%'
+'+0Hz'
+TTSEngine
+'Convert text to speech audio.'
+●●●●●● 2mm □
+engine
+TTSEngine
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+voice
+rate
+pitch
+●●●●●● 2mm □△
+●●●●●● 1mm △
+engine
+TTSEngine
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+rate
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+voice
+rate
+pitch
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate speech using Microsoft Edge TTS.'
+●●●●●● 2mm □△○
+edge_tts
+communicate
+●●●●●● 1mm □
+edge_tts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+audio_data
+●●●●●● 1mm □
+io
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+communicate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+'type'
+'audio'
+audio_data
+●●●●●● 1mm □△
+chunk
+'data'
+●●●●●● 2mm □△
+audio_data
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+audio_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'edge-tts not installed. Install with: pip install edge-tts'
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Edge TTS error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate speech using pyttsx3 (offline).'
+●●●●●● 2mm □△○
+pyttsx3
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+pyttsx3
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rate_adj
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+rate
+●●●●●● 1mm □△
+'%'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'+'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_rate
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'rate'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'rate'
+current_rate
+●●●●●● 3mm ○
+rate_adj
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+temp_path
+●●●●●● 1mm □
+f
+engine
+●●●●●● 1mm □△
+text
+temp_path
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+temp_path
+'rb'
+●●●●●● 2mm □△
+f
+audio_data
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+temp_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+audio_data
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □
+generate
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'pyttsx3 not installed. Install with: pip install pyttsx3'
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'pyttsx3 TTS error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+preprocess_text_nlp
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Preprocess text using NLP for better understanding.\n\n        Handles:\n        - Filler word removal\n        - Command extraction\n        - Intent detection\n        - Entity extraction\n        '
+●●●●●● 2mm □△○
+re
+original
+●●●●●● 1mm □
+text
+cleaned
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filler_words
+●●●●●● 1mm □
+'\\bum+\\b'
+'\\buh+\\b'
+'\\blike\\b'
+'\\byou know\\b'
+'\\bbasically\\b'
+'\\bactually\\b'
+'\\bliterally\\b'
+'\\bi mean\\b'
+'\\bso+\\b(?=\\s|$)'
+'\\bwell\\b(?=\\s|,)'
+filler
+filler_words
+cleaned
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+filler
+''
+cleaned
+●●●●●● 2mm □△
+cleaned
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\s+'
+' '
+cleaned
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+intent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cleaned
+●●●●●● 2mm □△
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cleaned
+●●●●●● 2mm □△
+sentiment
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cleaned
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NLPProcessedText
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NLPProcessedText
+●●●●●● 1mm □
+_detect_intent
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Detect the intent of the text.'
+text_lower
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+text_lower
+●●●●●● 1mm □△
+q
+●●●●●● 2mm □△
+q
+'what'
+'who'
+'where'
+'when'
+'why'
+'how'
+'can'
+'could'
+'would'
+'is'
+'are'
+'do'
+'does'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'question'
+command_words
+●●●●●● 1mm □
+'create'
+'make'
+'build'
+'generate'
+'write'
+'delete'
+'remove'
+'update'
+'change'
+'modify'
+'add'
+'show'
+'display'
+'list'
+'find'
+'search'
+'open'
+'close'
+'start'
+'stop'
+'run'
+'execute'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+text_lower
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+cmd
+command_words
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'command'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+phrase
+text_lower
+phrase
+'please'
+'can you'
+'could you'
+'would you'
+'i need'
+'i want'
+'help me'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'request'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+text_lower
+●●●●●● 1mm □△
+g
+●●●●●● 2mm □△
+g
+'hi'
+'hello'
+'hey'
+'good morning'
+'good afternoon'
+'good evening'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'greeting'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+text_lower
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+'bye'
+'goodbye'
+'see you'
+'talk to you later'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'farewell'
+●●●●●● 3mm ○
+'statement'
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_entities
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract entities from text.'
+●●●●●● 2mm □△○
+re
+entities
+●●●●●● 1mm □
+file_patterns
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[\\w/\\\\]+\\.\\w+'
+text
+●●●●●● 2mm □△
+fp
+file_patterns
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'file_path'
+fp
+●●●●●● 2mm □△
+url_pattern
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'https?://\\S+'
+text
+●●●●●● 2mm □△
+url
+url_pattern
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'url'
+url
+●●●●●● 2mm □△
+numbers
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b\\d+(?:\\.\\d+)?\\b'
+text
+●●●●●● 2mm □△
+num
+numbers
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'number'
+num
+●●●●●● 2mm □△
+code_refs
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b[a-z_][a-z0-9_]*(?:\\(\\))?'
+text
+re
+●●●●●● 2mm □△
+ref
+code_refs
+5
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ref
+●●●●●● 2mm □△
+2
+ref
+'the'
+'and'
+'for'
+'with'
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'code_reference'
+ref
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entities
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_detect_sentiment
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Simple sentiment detection.'
+text_lower
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+positive_words
+●●●●●● 1mm □
+'good'
+'great'
+'excellent'
+'amazing'
+'wonderful'
+'fantastic'
+'love'
+'like'
+'happy'
+'thanks'
+'thank you'
+'perfect'
+'awesome'
+negative_words
+●●●●●● 1mm □
+'bad'
+'terrible'
+'awful'
+'horrible'
+'hate'
+'dislike'
+'wrong'
+'error'
+'bug'
+'broken'
+'failed'
+'issue'
+'problem'
+pos_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+word
+positive_words
+word
+text_lower
+●●●●●● 2mm □△
+neg_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+word
+negative_words
+word
+text_lower
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pos_count
+neg_count
+●●●●●● 3mm ○
+'positive'
+●●●●●● 1mm △
+neg_count
+pos_count
+●●●●●● 3mm ○
+'negative'
+●●●●●● 3mm ○
+'neutral'
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+voice_manager
+●●●●●● 1mm □
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get voice system status and available engines.'
+tts_availability
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'tts_engines'
+'stt_engines'
+'current_settings'
+'timestamp'
+'online'
+tts_availability
+'web_speech'
+'whisper'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'en-US'
+'Get available TTS voices for a locale.'
+voices
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+locale
+●●●●●● 2mm □△
+●●●●●● 2mm □
+voices
+all_voices
+●●●●●● 1mm □
+loc
+voice_list
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+loc
+●●●●●● 1mm □△
+'en'
+●●●●●● 2mm □△
+all_voices
+●●●●●● 1mm □△
+voice_list
+●●●●●● 2mm □△
+voices
+●●●●●● 1mm □
+all_voices
+●●●●●● 3mm ○
+'locale'
+'voices'
+'total'
+locale
+voices
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+voices
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/voices'
+●●●●●● 2mm □△
+TTSRequest
+'Convert text to speech and return audio.'
+audio_data
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StreamingResponse
+●●●●●● 1mm □△
+io
+●●●●●● 1mm □△
+audio_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'TTS error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/tts'
+●●●●●● 2mm □△
+TTSRequest
+'Convert text to speech and return base64 encoded audio.'
+audio_data
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+audio_base64
+●●●●●● 1mm □
+base64
+●●●●●● 1mm □△
+audio_data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'audio'
+'format'
+'text'
+'voice'
+'timestamp'
+audio_base64
+'mp3'
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'TTS error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/tts/base64'
+●●●●●● 2mm □△
+UploadFile
+●●●●●● 1mm ○
+File
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+'en-US'
+●●●●●● 2mm □△
+'\n    Convert speech audio to text using Whisper.\n\n    Note: Primary STT is handled client-side using Web Speech API.\n    This endpoint is for file-based transcription.\n    '
+audio_data
+●●●●●● 1mm □
+audio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+audio_data
+●●●●●● 2mm □△
+temp_path
+●●●●●● 1mm □
+f
+●●●●●● 2mm □△○
+torch
+●●●●●● 3mm □△○
+transformers
+●●●●●● 2mm □△○
+pipeline
+transcriber
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'automatic-speech-recognition'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+transcriber
+●●●●●● 1mm □△
+temp_path
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+result
+'text'
+●●●●●● 3mm ○
+STTResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+temp_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'STT error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/stt'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Form
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+'Process text with NLP for intent and entity extraction.'
+result
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/nlp/process'
+●●●●●● 2mm □△
+VoiceSettings
+'Update voice settings.'
+voice_manager
+●●●●●● 1mm □
+settings
+●●●●●● 3mm ○
+'status'
+'settings'
+'updated'
+settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/settings'
+●●●●●● 2mm □△
+'Get current voice settings.'
+●●●●●● 3mm ○
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/settings'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+VoiceSession
+'Manages a continuous voice conversation session.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+websocket
+●●●●●● 2mm □△
+WebSocket
+●●●●●● 3mm △
+●●●●●● 1mm □
+websocket
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'message'
+'timestamp'
+'session_started'
+"Voice session started. I'm listening..."
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'message'
+'timestamp'
+'session_ended'
+'Voice session ended.'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+WebSocket
+'\n    WebSocket endpoint for continuous voice conversation.\n\n    Client sends:\n    - {"type": "start"} - Start listening\n    - {"type": "stop"} - Stop listening\n    - {"type": "transcript", "text": "..."} - Speech transcript from client\n    - {"type": "audio", "data": "base64..."} - Audio data for server-side STT\n\n    Server sends:\n    - {"type": "session_started"} - Session started confirmation\n    - {"type": "session_ended"} - Session ended confirmation\n    - {"type": "response", "text": "...", "audio": "base64..."} - Response with TTS\n    - {"type": "error", "message": "..."} - Error message\n    '
+websocket
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+VoiceSession
+●●●●●● 1mm □△
+websocket
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+data
+●●●●●● 1mm □
+websocket
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg_type
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg_type
+'start'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg_type
+'stop'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg_type
+'transcript'
+text
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+processed
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+websocket
+●●●●●● 1mm □△
+'type'
+'original'
+'processed'
+'intent'
+'timestamp'
+'transcript_received'
+text
+processed
+processed
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+processed
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg_type
+'speak'
+text
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+voice
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'voice'
+voice_manager
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+audio_data
+●●●●●● 1mm □
+voice_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+audio_base64
+●●●●●● 1mm □
+base64
+●●●●●● 1mm □△
+audio_data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+websocket
+●●●●●● 1mm □△
+'type'
+'text'
+'audio'
+'format'
+'timestamp'
+'audio_response'
+text
+audio_base64
+'mp3'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+websocket
+●●●●●● 1mm □△
+'type'
+'message'
+'error'
+'TTS error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg_type
+'ping'
+websocket
+●●●●●● 1mm □△
+'type'
+'pong'
+●●●●●● 2mm □△
+WebSocketDisconnect
+logger
+●●●●●● 1mm □△
+'Voice WebSocket disconnected'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Voice WebSocket error: '
+e
+●●●●●● 2mm □△
+websocket
+●●●●●● 1mm □△
+'type'
+'message'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+router
+●●●●●● 1mm □△
+'/ws/continuous'
+●●●●●● 2mm □△

@@ -1,0 +1,91 @@
+## qdrant_api.py
+'\nSimple Qdrant API — connection status and health.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Simple Qdrant connection status.\n    Returns connected, url, and collection list.\n    '
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+url
+●●●●●● 1mm □
+settings
+settings
+settings
+':'
+settings
+Exception
+url
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'QDRANT_HOST'
+'localhost'
+●●●●●● 2mm □△
+':'
+os
+●●●●●● 1mm □△
+'QDRANT_PORT'
+'6333'
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+●●●●●● 2mm □
+connected
+collections
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'connected'
+'url'
+'collections'
+connected
+url
+collections
+Exception
+●●●●●● 3mm ○
+'connected'
+'url'
+'collections'
+'error'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△

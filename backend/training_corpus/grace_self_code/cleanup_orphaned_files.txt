@@ -1,0 +1,211 @@
+## cleanup_orphaned_files.py
+'\nDatabase cleanup script for orphaned file records.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 1mm □
+cleanup
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Remove documents whose files no longer exist.'
+session_gen
+●●●●●● 1mm □
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+session_gen
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+●●●●●● 2mm □
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Qdrant connected'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Qdrant not available'
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[INFO] Checking '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+' documents...'
+●●●●●● 2mm □△
+orphaned
+●●●●●● 1mm □
+doc
+docs
+●●●●●● 2mm □
+doc
+fp
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fp
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+doc
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orphaned
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ORPHAN] '
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orphaned
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ No orphaned documents!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ACTION] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned
+●●●●●● 2mm □△
+' orphaned documents'
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'Delete them? (yes/no): '
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'yes'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Cancelled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+doc
+orphaned
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[DELETED] '
+doc
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Deleted '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned
+●●●●●● 2mm □△
+' documents!'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Database Cleanup - Orphaned Files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+cleanup
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,551 @@
+## deterministic_first_loop.py
+"\nDeterministic-First Loop — push determinism right up to the front door of LLMs.\n\nFull scope and full breadth:\n  1. Search Genesis keys (recent errors) → find what broke\n  2. Probe agent (testing) → find broken endpoints / models\n  3. AST + deterministic bridge (parsing, syntax, imports, tests, DB health) → find bugs\n  4. Deterministic coding agent (auto-fix) → fix what can be fixed without LLM\n  5. Hand off to LLM only when we can't finish: reasoning, validation, generation\n\nUsed by the 9-phase coding pipeline: Phase 0 (this loop) then Layers 1–8.\n"
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+search_genesis_errors
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Search Genesis keys for recent errors — deterministic, no LLM.'
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+get_genesis_storage
+keys
+●●●●●● 1mm □
+get_genesis_storage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+k
+k
+keys
+k
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Genesis error search failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_probe_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run probe agent (sweep endpoints + models) — deterministic testing.'
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+probe_sweep
+probe_models
+api_sweep
+●●●●●● 1mm □
+probe_sweep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_sweep
+●●●●●● 1mm □
+probe_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+api_sweep
+●●●●●● 1mm □△
+'broken_endpoints'
+●●●●●● 2mm □△
+broken_models
+●●●●●● 1mm □
+m
+m
+model_sweep
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'broken'
+●●●●●● 3mm ○
+'api_sweep'
+'model_sweep'
+'broken_endpoints'
+'broken_models'
+'total_broken'
+api_sweep
+model_sweep
+broken
+broken_models
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken_models
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+loop
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+loop
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'broken_endpoints'
+'broken_models'
+'total_broken'
+'use run_probe_async from async context'
+0
+●●●●●● 3mm ○
+asyncio
+●●●●●● 1mm □△
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Probe run failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'broken_endpoints'
+'broken_models'
+'total_broken'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Async: run probe agent (sweep + models).'
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+probe_sweep
+probe_models
+api_sweep
+●●●●●● 1mm □
+probe_sweep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_sweep
+●●●●●● 1mm □
+probe_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+api_sweep
+●●●●●● 1mm □△
+'broken_endpoints'
+●●●●●● 2mm □△
+broken_models
+●●●●●● 1mm □
+m
+m
+model_sweep
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'broken'
+●●●●●● 3mm ○
+'api_sweep'
+'model_sweep'
+'broken_endpoints'
+'broken_models'
+'total_broken'
+api_sweep
+model_sweep
+broken
+broken_models
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken_models
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Probe run failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'broken_endpoints'
+'broken_models'
+'total_broken'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_deterministic_scan_and_fix
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'AST + deterministic bridge: scan then auto-fix. No LLM until handoff.'
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+DeterministicAutoFixer
+report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+fixer
+●●●●●● 1mm □
+DeterministicAutoFixer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+auto_fixes
+●●●●●● 1mm □
+problems
+fixer
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+n_fixed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+auto_fixes
+●●●●●● 2mm □△
+remaining
+●●●●●● 1mm □
+n_fixed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+problems
+n_fixed
+●●●●●● 3mm ○
+'total_checks'
+'total_problems'
+'auto_fixed'
+'auto_fixes'
+'remaining_for_llm'
+'remaining_count'
+'ready_for_llm_handoff'
+report
+●●●●●● 1mm □△
+'total_checks'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+auto_fixes
+●●●●●● 2mm □△
+auto_fixes
+remaining
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+remaining
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+remaining
+●●●●●● 2mm □△
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Deterministic scan/fix failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'remaining_for_llm'
+'remaining_count'
+'ready_for_llm_handoff'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_deterministic_first_loop
+●●●●●● 1mm □△
+task
+run_probe
+run_genesis_search
+run_deterministic_scan
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+"\n    Full deterministic-first loop:\n      Genesis keys (errors) → Probe agent (testing) → Deterministic bridge (AST, fix) →\n      hand off to LLM only when can't finish.\n\n    Returns a single result with:\n      - genesis_errors: recent error keys\n      - probe_result: broken endpoints/models\n      - deterministic_result: scan + auto-fix result, remaining_for_llm\n      - handoff_to_llm: True if reasoning/validation/generation needed\n    "
+result
+●●●●●● 1mm □
+'started_at'
+'genesis_errors'
+'probe_result'
+'deterministic_result'
+'handoff_to_llm'
+'handoff_reason'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+run_genesis_search
+result
+'genesis_errors'
+●●●●●● 1mm □
+search_genesis_errors
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_probe
+result
+'probe_result'
+●●●●●● 1mm □
+run_probe_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_broken
+●●●●●● 1mm □
+result
+'probe_result'
+●●●●●● 1mm □△
+'total_broken'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_broken
+0
+result
+'handoff_to_llm'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'handoff_reason'
+●●●●●● 1mm □△
+'probe_failures'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_deterministic_scan
+result
+'deterministic_result'
+●●●●●● 1mm □
+run_deterministic_scan_and_fix
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+det
+●●●●●● 1mm □
+result
+'deterministic_result'
+●●●●●● 2mm □
+det
+●●●●●● 1mm □△
+'ready_for_llm_handoff'
+●●●●●● 2mm □△
+det
+●●●●●● 1mm □△
+'remaining_count'
+0
+●●●●●● 2mm □△
+0
+result
+'handoff_to_llm'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'handoff_reason'
+●●●●●● 1mm □△
+'deterministic_remaining'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'genesis_errors'
+'genesis_errors'
+result
+'handoff_reason'
+result
+'handoff_reason'
+●●●●●● 1mm □△
+'recent_errors'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_handoff_context
+●●●●●● 1mm □△
+loop_result
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Build context for LLM handoff: what reasoning/validation/generation is needed.'
+ctx
+●●●●●● 1mm □
+'reasoning'
+'validation'
+'generation'
+●●●●●● 2mm □
+loop_result
+●●●●●● 1mm □△
+'handoff_to_llm'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ctx
+reasons
+●●●●●● 1mm □
+loop_result
+●●●●●● 1mm □△
+'handoff_reason'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'probe_failures'
+reasons
+ctx
+'validation'
+●●●●●● 1mm □△
+'Re-validate endpoints and models after probe found failures.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'deterministic_remaining'
+reasons
+det
+●●●●●● 1mm □
+loop_result
+●●●●●● 1mm □△
+'deterministic_result'
+●●●●●● 2mm □△
+remaining
+●●●●●● 1mm □
+det
+●●●●●● 1mm □△
+'remaining_for_llm'
+●●●●●● 2mm □△
+ctx
+'reasoning'
+●●●●●● 1mm □△
+'Determine fix for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+remaining
+●●●●●● 2mm □△
+' remaining deterministic problems.'
+●●●●●● 2mm □△
+ctx
+'generation'
+●●●●●● 1mm □△
+'Generate code or config fixes for problems that auto-fix could not resolve.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'recent_errors'
+reasons
+ctx
+'reasoning'
+●●●●●● 1mm □△
+'Review recent Genesis errors for recurring failure patterns.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ctx
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

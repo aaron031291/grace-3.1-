@@ -1,0 +1,336 @@
+## independent_models.py
+'\nIndependent Model Execution — each model works on its own.\n\nIf Kimi is down, Opus/Qwen/DeepSeek still work independently.\nConsensus is optional — models can run solo or together.\n\nFeatures:\n  - Parallel independent execution\n  - Failover: skip failed models, continue with working ones\n  - Individual model results available separately\n  - Consensus only when explicitly requested\n'
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_independent
+●●●●●● 1mm □△
+prompt
+models
+system_prompt
+timeout
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+''
+60
+"\n    Run each model independently in parallel.\n    Failed models don't block others.\n\n    Returns individual results — NOT consensus.\n    "
+●●●●●● 2mm □
+models
+models
+●●●●●● 1mm □
+_get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+threads
+●●●●●● 1mm □
+lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_one
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+_get_client
+_check_model_available
+●●●●●● 2mm □
+_check_model_available
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+lock
+results
+model_id
+●●●●●● 1mm □
+'status'
+'error'
+'latency_ms'
+'unavailable'
+'Model not configured'
+0
+●●●●●● 3mm ○
+client
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+lock
+results
+model_id
+●●●●●● 1mm □
+'status'
+'error'
+'latency_ms'
+'no_client'
+'Client creation failed'
+0
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+lock
+results
+model_id
+●●●●●● 1mm □
+'status'
+'response'
+'latency_ms'
+'success'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+latency
+Exception
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+lock
+results
+model_id
+●●●●●● 1mm □
+'status'
+'error'
+'latency_ms'
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+latency
+mid
+models
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threads
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+threads
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+k
+v
+k
+v
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+'status'
+'success'
+failed
+●●●●●● 1mm □
+k
+v
+k
+v
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+'status'
+'success'
+●●●●●● 3mm ○
+'models_requested'
+'successful'
+'failed'
+'results'
+'any_success'
+models
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successful
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed
+●●●●●● 2mm □△
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successful
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_with_failover
+●●●●●● 1mm □△
+prompt
+preferred_order
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+''
+'\n    Try models in order. First success wins. Others skip.\n    '
+●●●●●● 2mm □
+preferred_order
+preferred_order
+●●●●●● 1mm □
+'kimi'
+'opus'
+'qwen'
+'reasoning'
+model_id
+preferred_order
+result
+●●●●●● 1mm □
+run_independent
+●●●●●● 1mm □△
+prompt
+model_id
+system_prompt
+●●●●●● 2mm □△
+model_result
+●●●●●● 1mm □
+result
+'results'
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 3mm ○
+'model'
+'response'
+'latency_ms'
+'failover_attempts'
+model_id
+model_result
+'response'
+model_result
+'latency_ms'
+preferred_order
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+'model'
+'response'
+'error'
+'failover_attempts'
+●●●●●● 2mm □
+''
+'All models failed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+preferred_order
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get list of models that might be available.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+_check_model_available
+all_models
+●●●●●● 1mm □
+'kimi'
+'opus'
+'qwen'
+'reasoning'
+●●●●●● 3mm ○
+m
+m
+all_models
+_check_model_available
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'kimi'
+'opus'
+●●●●●● 1mm □△

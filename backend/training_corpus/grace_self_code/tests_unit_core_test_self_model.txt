@@ -1,0 +1,157 @@
+## test_self_model.py
+'\nTests for SelfModel (TimeSense + Mirror).\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm △
+TestTimeSense
+●●●●●● 1mm □
+test_now_context_returns_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'timestamp'
+ctx
+'period'
+ctx
+'is_business_hours'
+ctx
+'day_of_week'
+ctx
+●●●●●● 1mm □
+test_get_context_alias
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'timestamp'
+ctx
+●●●●●● 1mm □
+test_period_is_valid
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+valid
+●●●●●● 1mm □
+'late_night'
+'morning'
+'afternoon'
+'evening'
+'night'
+ctx
+'period'
+valid
+●●●●●● 1mm □
+test_urgency_score_returns_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+result
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+'2030-01-01T00:00:00'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'urgency'
+result
+'label'
+result
+●●●●●● 1mm □
+test_activity_patterns_with_empty_list
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+result
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSelfModel
+●●●●●● 1mm □
+test_import_self_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.awareness.self_model
+●●●●●● 2mm □△○
+SelfModel
+SelfModel
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_self_model_now
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.awareness.self_model
+●●●●●● 2mm □△○
+SelfModel
+model
+●●●●●● 1mm □
+SelfModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'timestamp'
+ctx
+'period'
+ctx

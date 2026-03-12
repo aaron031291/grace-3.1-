@@ -1,0 +1,35 @@
+## __init__.py
+'\nGrace Cognitive Engine\n\nImplements the 12-invariant cognitive blueprint for operational problem-solving.\n'
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+invariants
+●●●●●● 2mm □△○
+InvariantValidator
+●●●●●● 3mm □△○
+ooda
+●●●●●● 2mm □△○
+OODALoop
+OODAPhase
+●●●●●● 3mm □△○
+ambiguity
+●●●●●● 2mm □△○
+AmbiguityLedger
+AmbiguityLevel
+●●●●●● 3mm □△○
+decision_log
+●●●●●● 2mm □△○
+DecisionLogger
+__all__
+●●●●●● 1mm □
+'CognitiveEngine'
+'DecisionContext'
+'InvariantValidator'
+'OODALoop'
+'OODAPhase'
+'AmbiguityLedger'
+'AmbiguityLevel'
+'DecisionLogger'

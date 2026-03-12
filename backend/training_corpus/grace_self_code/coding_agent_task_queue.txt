@@ -1,0 +1,1304 @@
+## task_queue.py
+'\ncoding_agent/task_queue.py\n─────────────────────────────────────────────────────────────────────────────\nPersistent DB-backed task queue for the coding agent.\n\nEvery error that needs a code fix, every self-healing request, and every\nautonomous coding task goes through here. Tasks are:\n  - Submitted  (error_pipeline, self_healing, user request)\n  - Polled     (coding agent worker thread)\n  - Completed  (success or failure recorded + learning event)\n  - Retried    (up to MAX_RETRIES, with backoff)\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MAX_RETRIES
+●●●●●● 1mm □
+3
+POLL_INTERVAL
+●●●●●● 1mm □
+5
+_queue
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_queue_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_worker_thread
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+_worker_running
+●●●●●● 1mm □
+●●●●●● 1mm □
+_handlers
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm □
+register_handler
+●●●●●● 1mm □△
+task_type
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'Register a callable to handle a specific task type.'
+_handlers
+task_type
+●●●●●● 1mm □
+handler
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Registered handler for task type: %s'
+task_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+submit
+●●●●●● 1mm □△
+task_type
+instructions
+context
+priority
+origin
+error_class
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+5
+'unknown'
+''
+'\n    Submit a task to the coding agent queue.\n    Returns a task_id string.\n    '
+task_id
+●●●●●● 1mm □
+'task_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+'_'
+task_type
+8
+time_ctx
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+time_ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+period
+●●●●●● 1mm □
+time_ctx
+●●●●●● 1mm □△
+'period'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+period
+'late_night'
+'night'
+priority
+6
+priority
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+priority
+●●●●●● 3mm ○
+2
+10
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] %s period — deferring non-critical task (priority now %d)'
+period
+priority
+●●●●●● 2mm □△
+●●●●●● 1mm △
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 2mm □△
+priority
+3
+priority
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+priority
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+Exception
+task
+●●●●●● 1mm □
+'task_id'
+'task_type'
+'instructions'
+'context'
+'priority'
+'origin'
+'error_class'
+'status'
+'attempts'
+'created_at'
+'updated_at'
+'time_context'
+task_id
+task_type
+instructions
+context
+priority
+origin
+error_class
+'pending'
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_ctx
+_queue_lock
+_queue
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_persist_task
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Task submitted: %s (type=%s priority=%d origin=%s)'
+task_id
+task_type
+priority
+origin
+●●●●●● 2mm □△
+_record_submission
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_persist_task
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Persist task to DB for durability across restarts.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n                INSERT INTO coding_agent_tasks\n                    (task_id, task_type, instructions, context_data, priority,\n                     origin, error_class, status, attempts, created_at, updated_at)\n                VALUES\n                    (:task_id, :task_type, :instructions, :context_data, :priority,\n                     :origin, :error_class, :status, :attempts, :created_at, :updated_at)\n                ON CONFLICT (task_id) DO NOTHING\n            '
+●●●●●● 2mm □△
+'task_id'
+'task_type'
+'instructions'
+'context_data'
+'priority'
+'origin'
+'error_class'
+'status'
+'attempts'
+'created_at'
+'updated_at'
+task
+'task_id'
+task
+'task_type'
+task
+'instructions'
+2000
+json
+●●●●●● 1mm □△
+task
+'context'
+●●●●●● 2mm □△
+4000
+task
+'priority'
+task
+'origin'
+task
+'error_class'
+task
+'status'
+task
+'attempts'
+task
+'created_at'
+task
+'updated_at'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Task persistence skipped (table may not exist yet): %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+poll
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the next pending task. Returns None if queue is empty.'
+_queue_lock
+task
+_queue
+●●●●●● 2mm □
+task
+'status'
+'pending'
+task
+'attempts'
+MAX_RETRIES
+task
+'status'
+●●●●●● 1mm □
+'running'
+task
+'attempts'
+1
+task
+'updated_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+complete
+●●●●●● 1mm □△
+task_id
+success
+result
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □
+''
+'Mark a task as completed or failed.'
+_queue_lock
+task
+_queue
+●●●●●● 2mm □
+task
+'task_id'
+task_id
+task
+'status'
+●●●●●● 1mm □
+success
+'completed'
+'failed'
+task
+'result'
+●●●●●● 1mm □
+result
+task
+'error'
+●●●●●● 1mm □
+error
+task
+'updated_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+task
+'attempts'
+MAX_RETRIES
+task
+'status'
+●●●●●● 1mm □
+'pending'
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Task %s failed, retrying (attempt %d/%d)'
+task_id
+task
+'attempts'
+MAX_RETRIES
+●●●●●● 2mm □△
+_record_completion
+●●●●●● 1mm □△
+task_id
+success
+result
+error
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get queue statistics.'
+_queue_lock
+by_status
+●●●●●● 1mm □
+t
+_queue
+by_status
+t
+'status'
+●●●●●● 1mm □
+by_status
+●●●●●● 1mm □△
+t
+'status'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+'queue_depth'
+'by_status'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_queue
+●●●●●● 2mm □△
+by_status
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_swarm_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get active background tasks for the UI Swarm Swimlane/Task Manager.'
+active
+●●●●●● 1mm □
+_queue_lock
+t
+_queue
+●●●●●● 2mm □
+t
+'status'
+'pending'
+'running'
+active
+●●●●●● 1mm □△
+'id'
+'name'
+'status'
+'progress'
+'layer'
+'time'
+t
+'task_id'
+t
+'instructions'
+40
+●●●●●● 3mm ○
+'...'
+t
+'status'
+t
+'status'
+'running'
+45
+0
+7
+t
+'created_at'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+active
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+start_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the background worker that processes coding tasks.'
+●●●●●● 2mm □
+_worker_running
+●●●●●● 3mm ○
+_worker_running
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+_worker_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_worker_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Async Worker started (polling every %ds)'
+POLL_INTERVAL
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_run_async_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Entry point for the worker thread to initialize the asyncio loop.'
+asyncio
+●●●●●● 1mm □△
+_async_worker_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'True asyncio worker loop utilizing ThreadPoolExecutor for concurrent LLM API calls.'
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pool
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ThreadPoolExecutor online (10 workers). Swarm is ready.'
+●●●●●● 2mm □△
+_worker_running
+task
+●●●●●● 1mm □
+poll
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+loop
+●●●●●● 1mm □△
+pool
+_dispatch
+task
+●●●●●● 2mm □△
+●●●●●● 3mm □
+asyncio
+●●●●●● 1mm □△
+POLL_INTERVAL
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Worker error: %s'
+e
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+POLL_INTERVAL
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_dispatch
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Dispatch a task to its registered handler.'
+handler
+●●●●●● 1mm □
+_handlers
+●●●●●● 1mm □△
+task
+'task_type'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+handler
+●●●●●● 2mm □
+handler
+●●●●●● 1mm □
+_default_handler
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] 🔨 Executing task %s (type=%s attempt=%d)'
+task
+'task_id'
+task
+'task_type'
+task
+'attempts'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+complete
+●●●●●● 1mm □△
+task
+'task_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ✅ Task %s completed successfully'
+task
+'task_id'
+●●●●●● 2mm □△
+Exception
+complete
+●●●●●● 1mm □△
+task
+'task_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ❌ Task %s failed: %s'
+task
+'task_id'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_build_memory_context
+●●●●●● 1mm □△
+instructions
+error_class
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n    Pull context from all 3 memory layers before calling Qwen.\n    Returns a formatted string prepended to the coding instructions.\n    '
+sections
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 1mm □
+magma
+magma_ctx
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+instructions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+magma_ctx
+sections
+●●●●●● 1mm □△
+'[MAGMA CONTEXT — causal/semantic graph memory]\n'
+magma_ctx
+800
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error_class
+causal
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+'Why does '
+error_class
+' error occur in Python?'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+causal
+sections
+●●●●●● 1mm □△
+'[MAGMA CAUSAL — why '
+error_class
+' errors happen]\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+causal
+●●●●●● 2mm □△
+400
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+instructions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+lines
+●●●●●● 1mm □
+r
+results
+4
+src
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'source'
+'?'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'content'
+r
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+150
+trust
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  ['
+src
+'|trust='
+trust
+'.2f'
+'] '
+content
+●●●●●● 2mm □△
+sections
+●●●●●● 1mm □△
+'[UNIFIED MEMORY — past episodes/learnings/procedures]\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost_ctx
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ghost_ctx
+sections
+●●●●●● 1mm □△
+'[GHOST MEMORY — current session context]\n'
+ghost_ctx
+600
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+sections
+●●●●●● 3mm ○
+''
+instruction
+●●●●●● 1mm □
+"═══════════════════════════════════════════════════════════\nMEMORY CONTEXT — READ THIS BEFORE GENERATING ANY CODE\n═══════════════════════════════════════════════════════════\nYou have been given context from Grace's memory systems above:\n  • MAGMA CONTEXT  — semantic + causal graph memory (WHY errors occur)\n  • UNIFIED MEMORY — past episodes, learning examples, proven procedures\n  • GHOST MEMORY   — current session history (avoid repeating mistakes)\n\nRULES:\n  1. If a past fix is relevant, build upon it — do NOT start from scratch\n  2. If MAGMA CAUSAL explains why an error occurs, address that root cause\n  3. If UNIFIED MEMORY shows a similar problem was solved before, use that solution\n  4. Your fix must be more targeted and correct than random generation\n═══════════════════════════════════════════════════════════\n\n"
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+sections
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 3mm ○
+instruction
+●●●●●● 3mm ○
+'[TASK]\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_store_memory_outcome
+●●●●●● 1mm □△
+instructions
+error_class
+success
+result
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Store task outcome into all 3 memory layers. Non-blocking.'
+outcome_label
+●●●●●● 1mm □
+success
+'success'
+'failure'
+apply_result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'apply_result'
+●●●●●● 2mm □△
+fix_info
+●●●●●● 1mm □
+apply_result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+'Applied to '
+apply_result
+●●●●●● 1mm □△
+'file'
+'unknown'
+●●●●●● 2mm □△
+', '
+apply_result
+●●●●●● 1mm □△
+'lines'
+0
+●●●●●● 2mm □△
+' lines'
+'not applied to disk'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 1mm □
+magma
+●●●●●● 2mm □
+success
+apply_result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+'Coding task ('
+outcome_label
+'): '
+instructions
+200
+'. Result: '
+fix_info
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_default_handler
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Default: send to QwenCodingNet for code generation / fixing, then apply to disk.'
+●●●●●● 3mm □△○
+cognitive.qwen_coding_net
+●●●●●● 2mm □△○
+get_qwen_net
+net
+●●●●●● 1mm □
+get_qwen_net
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instructions
+●●●●●● 1mm □
+task
+'instructions'
+ctx
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+error_class
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'error_class'
+''
+●●●●●● 2mm □△
+gate_context
+●●●●●● 1mm □
+''
+●●●●●● 3mm □△○
+coding_agent.deterministic_gate
+●●●●●● 2mm □△○
+get_gate
+gate_report
+●●●●●● 1mm □
+get_gate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gate_report
+0.7
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ⛔ Task blocked by governance gate (risk=%.2f): %s'
+gate_report
+instructions
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'blocked'
+'reason'
+'gate_report'
+●●●●●● 3mm □△○
+'Risk score '
+gate_report
+'.2f'
+' exceeds governance threshold 0.7'
+gate_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gate_context
+●●●●●● 1mm □
+gate_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Gate passed (risk=%.2f)'
+gate_report
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Deterministic gate skipped: %s'
+gate_err
+●●●●●● 2mm □△
+memory_prefix
+●●●●●● 1mm □
+_build_memory_context
+●●●●●● 1mm □△
+instructions
+error_class
+●●●●●● 2mm □△
+enriched_instructions
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+memory_prefix
+enriched_instructions
+memory_prefix
+●●●●●● 2mm □
+gate_context
+enriched_instructions
+'[DETERMINISTIC ANALYSIS]\n'
+gate_context
+'\n\n'
+●●●●●● 2mm □
+error_class
+enriched_instructions
+'[Self-healing task — '
+error_class
+' error from '
+ctx
+●●●●●● 1mm □△
+'location'
+ctx
+●●●●●● 1mm □△
+'file'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+']\nError: '
+ctx
+●●●●●● 1mm □△
+'sql_error'
+ctx
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\n'
+enriched_instructions
+instructions
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+instructions
+200
+●●●●●● 2mm □△
+Exception
+code_result
+●●●●●● 1mm □
+net
+●●●●●● 1mm □△
+enriched_instructions
+●●●●●● 2mm □△
+generated_code
+●●●●●● 1mm □
+code_result
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+verification_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+generated_code
+●●●●●● 3mm □△○
+coding_agent.verification_pass
+●●●●●● 2mm □△○
+get_verification_pass
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost_ctx
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_result
+●●●●●● 1mm □
+get_verification_pass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_result
+'verification'
+●●●●●● 1mm □
+'accepted'
+'trust_score'
+'flags'
+'contradictions'
+'revision_hint'
+verification_result
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+verification_result
+3
+●●●●●● 2mm □△
+verification_result
+verification_result
+verification_result
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'coding_agent.verification'
+verification_result
+'accepted'
+'rejected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verification_result
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ❌ Verification REJECTED (trust=%.2f): %s — %s'
+verification_result
+task
+●●●●●● 1mm □△
+'task_id'
+'?'
+●●●●●● 2mm □△
+verification_result
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+code_result
+'apply_result'
+●●●●●● 1mm □
+'success'
+'reason'
+●●●●●● 1mm □
+'Verification rejected: trust='
+verification_result
+'.2f'
+'. '
+verification_result
+_store_memory_outcome
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+code_result
+Exception
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] Verification pass skipped: %s'
+ve
+●●●●●● 2mm □△
+target_file
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'target_file'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'file'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'location'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+generated_code
+target_file
+target_file
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+coding_agent.fix_applier
+●●●●●● 2mm □△○
+get_fix_applier
+apply_result
+●●●●●● 1mm □
+get_fix_applier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_result
+'apply_result'
+●●●●●● 1mm □
+'success'
+'file'
+'lines'
+'rolled_back'
+'reloaded'
+'error'
+apply_result
+apply_result
+apply_result
+apply_result
+apply_result
+apply_result
+apply_result
+150
+''
+●●●●●● 2mm □
+apply_result
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ✅ Fix applied to disk: %s (%d lines)'
+target_file
+apply_result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] ⚠️ Apply failed for %s: %s'
+target_file
+apply_result
+100
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CODING-AGENT] fix_applier error: %s'
+e
+●●●●●● 2mm □△
+code_result
+'apply_result'
+●●●●●● 1mm □
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm □
+code_result
+'apply_result'
+●●●●●● 1mm □
+'success'
+'reason'
+'code_preview'
+●●●●●● 1mm □
+'no target_file in task context — manual review needed'
+generated_code
+generated_code
+200
+''
+apply_ok
+●●●●●● 1mm □
+code_result
+'apply_result'
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+_store_memory_outcome
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+code_result
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_record_submission
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_record_completion
+●●●●●● 1mm □△
+task_id
+success
+result
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+Any
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □

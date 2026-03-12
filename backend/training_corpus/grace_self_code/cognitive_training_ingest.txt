@@ -1,0 +1,484 @@
+## training_ingest.py
+"\nTraining Corpus Auto-Ingest — Loads training data on startup.\n\nWhen Grace's system starts, this module checks the training_corpus/\ndirectory and ingests any new training data into:\n  1. Oracle (learning_examples table)\n  2. Unified Memory\n  3. FlashCache (keyword index)\n\nThe INDEX.json file tracks what's available.\nFiles are marked as ingested so they're not re-processed.\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+CORPUS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'training_corpus'
+INGESTED_FILE
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'training_ingested.json'
+●●●●●● 1mm □
+_load_ingested
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+INGESTED_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+INGESTED_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_save_ingested
+●●●●●● 1mm □△
+ingested
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+INGESTED_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+INGESTED_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+ingested
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_training_corpus
+●●●●●● 1mm □△
+force
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n    Auto-ingest training corpus into Oracle + Memory + FlashCache.\n    Called on startup or manually via API.\n    \n    Args:\n        force: If True, re-ingest even if already processed.\n    '
+●●●●●● 2mm □
+CORPUS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'no_corpus'
+'training_corpus/ directory not found'
+ingested
+●●●●●● 1mm □
+force
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_load_ingested
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'ingested'
+'skipped'
+'errors'
+'details'
+0
+0
+0
+category_dir
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+CORPUS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+category
+●●●●●● 1mm □
+category_dir
+txt_file
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+category_dir
+●●●●●● 1mm □△
+'*.txt'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+file_key
+●●●●●● 1mm □
+category
+'/'
+txt_file
+●●●●●● 2mm □
+file_key
+ingested
+force
+results
+'skipped'
+1
+content
+●●●●●● 1mm □
+txt_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sections
+●●●●●● 1mm □
+_split_sections
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+stored
+●●●●●● 1mm □
+0
+title
+body
+sections
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+body
+●●●●●● 2mm □△
+30
+_store_section
+●●●●●● 1mm □△
+category
+title
+body
+●●●●●● 2mm □△
+stored
+1
+_register_in_cache
+●●●●●● 1mm □△
+category
+txt_file
+content
+1000
+●●●●●● 2mm □△
+ingested
+●●●●●● 1mm □△
+file_key
+●●●●●● 2mm □△
+results
+'ingested'
+1
+results
+'details'
+●●●●●● 1mm □△
+'file'
+'sections'
+'size_kb'
+file_key
+stored
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+results
+'errors'
+1
+results
+'details'
+●●●●●● 1mm □△
+'file'
+'error'
+file_key
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_save_ingested
+●●●●●● 1mm □△
+ingested
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRAINING] Ingested '
+results
+'ingested'
+' files, skipped '
+results
+'skipped'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_split_sections
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Split content into (title, body) sections.'
+sections
+●●●●●● 1mm □
+parts
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\n## '
+●●●●●● 2mm □△
+part
+parts
+lines
+●●●●●● 1mm □
+part
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lines
+title
+●●●●●● 1mm □
+lines
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+body
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+title
+body
+sections
+●●●●●● 1mm □△
+title
+body
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sections
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+_store_section
+●●●●●● 1mm □△
+category
+title
+body
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Store a section in the Oracle database.'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_register_in_cache
+●●●●●● 1mm □△
+category
+filename
+preview
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Register training file in FlashCache for keyword discovery.'
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+preview
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+get_corpus_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get stats about the training corpus.'
+●●●●●● 2mm □
+CORPUS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'exists'
+●●●●●● 1mm □
+ingested
+●●●●●● 1mm □
+_load_ingested
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+'exists'
+'categories'
+'total_files'
+'total_size_bytes'
+'ingested_count'
+●●●●●● 3mm □△○
+0
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ingested
+●●●●●● 2mm □△
+category_dir
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+CORPUS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+category_dir
+●●●●●● 1mm □△
+'*.txt'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+files
+●●●●●● 2mm □△
+stats
+'categories'
+category_dir
+●●●●●● 1mm □
+'files'
+'size_kb'
+'ingested'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_size
+●●●●●● 3mm □△
+1024
+1
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+f
+files
+category_dir
+'/'
+f
+ingested
+●●●●●● 2mm □△
+stats
+'total_files'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+stats
+'total_size_bytes'
+total_size
+stats
+'total_size_kb'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+stats
+'total_size_bytes'
+●●●●●● 3mm □△
+1024
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

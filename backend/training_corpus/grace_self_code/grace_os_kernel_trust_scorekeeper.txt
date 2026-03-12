@@ -1,0 +1,383 @@
+## trust_scorekeeper.py
+'\nGrace OS — Trust Scorekeeper (Genesis Key System)\n\nGlobal scoring system that tracks confidence at every checkpoint.\nRecords per-layer trust scores, computes aggregates, enforces threshold gates,\nand maintains full audit history with time-based decay.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DEFAULT_THRESHOLDS
+●●●●●● 1mm □
+'deploy'
+'warn'
+'abort'
+85.0
+70.0
+50.0
+DEFAULT_LAYER_WEIGHTS
+●●●●●● 1mm □
+'L1_Runtime'
+'L2_Planning'
+'L3_Proposer'
+'L4_Evaluator'
+'L5_Simulation'
+'L6_Codegen'
+'L7_Testing'
+'L8_Verification'
+'L9_Deployment'
+0.8
+1.0
+0.9
+1.0
+1.1
+1.0
+1.2
+1.2
+1.0
+DECAY_RATE_PER_SECOND
+●●●●●● 1mm □
+0.01
+●●●●●● 2mm △
+ScoreEntry
+'A single trust score record.'
+layer
+●●●●●● 1mm ○
+score
+●●●●●● 3mm ○
+timestamp
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message_type
+●●●●●● 1mm ○
+''
+message_id
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+TrustScorekeeper
+'\n    Tracks trust scores across all Grace OS layers within sessions.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+thresholds
+layer_weights
+decay_rate
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+DECAY_RATE_PER_SECOND
+●●●●●● 3mm △
+●●●●●● 1mm □
+thresholds
+DEFAULT_THRESHOLDS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+layer_weights
+DEFAULT_LAYER_WEIGHTS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+decay_rate
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+ScoreEntry
+●●●●●● 1mm □
+record_score
+●●●●●● 1mm □△
+self
+trace_id
+layer
+score
+message_type
+message_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'Record a trust score from a layer for a given session.'
+●●●●●● 2mm □
+trace_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+trace_id
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □
+ScoreEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+trace_id
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TrustScorekeeper] Recorded: '
+layer
+'='
+score
+'.1f'
+' (session='
+trace_id
+8
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_latest_scores
+●●●●●● 1mm □△
+self
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the most recent score for each layer in a session.'
+entries
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+latest
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+entry
+entries
+latest
+entry
+●●●●●● 1mm □
+entry
+●●●●●● 3mm ○
+latest
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_aggregate
+●●●●●● 1mm □△
+self
+trace_id
+apply_decay
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n        Compute weighted aggregate trust score for a session.\n        Optionally applies time-based decay.\n        '
+latest
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latest
+●●●●●● 3mm ○
+0.0
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_weighted
+●●●●●● 1mm □
+0.0
+total_weight
+●●●●●● 1mm □
+0.0
+layer
+score
+latest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+weight
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer
+1.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+apply_decay
+entries
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+e
+layer
+●●●●●● 2mm □
+entries
+age_seconds
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+entries
+1
+decay
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+1.0
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+age_seconds
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+score
+●●●●●● 2mm □△
+decay
+total_weighted
+score
+●●●●●● 2mm □△
+weight
+total_weight
+weight
+●●●●●● 3mm ○
+total_weight
+0
+total_weighted
+●●●●●● 3mm □△
+total_weight
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+check_threshold
+●●●●●● 1mm □△
+self
+trace_id
+gate_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Check if a session meets a named threshold gate.\n        Returns (passed, current_score).\n        '
+threshold
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+gate_name
+85.0
+●●●●●● 2mm □△
+aggregate
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+aggregate
+threshold
+●●●●●● 3mm ○
+passed
+aggregate
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_history
+●●●●●● 1mm □△
+self
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get full score history for a session.'
+entries
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'layer'
+'score'
+'timestamp'
+'message_type'
+'message_id'
+e
+e
+e
+e
+e
+e
+entries
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all_sessions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all tracked session trace IDs.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+clear_session
+●●●●●● 1mm □△
+self
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove all score data for a session.'
+●●●●●● 2mm □
+trace_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+trace_id

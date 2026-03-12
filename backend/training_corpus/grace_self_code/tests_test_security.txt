@@ -1,0 +1,792 @@
+## test_security.py
+'\n=============================================================================\nGRACE Security Test Suite\n=============================================================================\nComprehensive security tests covering:\n- Authentication and authorization\n- Input validation\n- SQL injection protection\n- XSS protection\n- Security headers\n- Rate limiting\n- CORS validation\n=============================================================================\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+patch
+MagicMock
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+html
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm △
+TestAuthentication
+'Test authentication mechanisms.'
+●●●●●● 1mm □
+test_unauthenticated_access_to_protected_endpoints
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Protected endpoints should require authentication.'
+protected_endpoints
+●●●●●● 1mm □
+'/governance/rules'
+'/agent/task'
+endpoint
+protected_endpoints
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+endpoint
+●●●●●● 2mm □△
+response
+200
+401
+403
+404
+405
+422
+500
+RuntimeError
+●●●●●● 1mm □
+test_invalid_auth_token
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Invalid authentication tokens should be rejected.'
+headers
+●●●●●● 1mm □
+'Authorization'
+'Bearer invalid_token_12345'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+response
+200
+●●●●●● 1mm □
+test_malformed_auth_header
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Malformed authorization headers should be handled gracefully.'
+malformed_headers
+●●●●●● 1mm □
+'Authorization'
+''
+'Authorization'
+'Bearer'
+'Authorization'
+'Basic invalidbase64!!!'
+'Authorization'
+'Bearer '
+●●●●●● 3mm ○
+'x'
+●●●●●● 2mm □△
+10000
+headers
+malformed_headers
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+response
+200
+400
+401
+●●●●●● 2mm △
+TestInputValidation
+'Test input validation and sanitization.'
+●●●●●● 1mm □
+test_empty_request_body
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Empty request bodies should be handled.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+response
+400
+422
+503
+●●●●●● 1mm □
+test_missing_required_fields
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Missing required fields should return validation error.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+response
+400
+422
+503
+●●●●●● 1mm □
+test_invalid_data_types
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Invalid data types should be rejected.'
+invalid_payloads
+●●●●●● 1mm □
+'text'
+12345
+'text'
+●●●●●● 2mm □
+'text'
+'array'
+'not'
+'string'
+payload
+invalid_payloads
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+response
+400
+422
+503
+●●●●●● 1mm □
+test_extremely_long_input
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Extremely long inputs should be handled without crash.'
+long_text
+●●●●●● 1mm □
+'x'
+●●●●●● 2mm □△
+1000000
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+response
+200
+400
+413
+422
+503
+●●●●●● 1mm □
+test_unicode_input
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Unicode characters should be handled properly.'
+unicode_texts
+●●●●●● 1mm □
+'Hello 世界 🌍'
+'مرحبا بالعالم'
+'Привет мир'
+'\x00\x01\x02'
+'Test\x00Null'
+text
+unicode_texts
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+response
+200
+400
+422
+503
+●●●●●● 1mm □
+test_special_characters_in_path
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Special characters in URL paths should be handled.'
+special_paths
+●●●●●● 1mm □
+'/retrieve/search?query=test%00null'
+'/retrieve/search?query=<script>'
+"/retrieve/search?query='; DROP TABLE--"
+path
+special_paths
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+response
+200
+400
+404
+422
+Exception
+●●●●●● 2mm △
+TestSQLInjection
+'Test SQL injection protection.'
+SQL_INJECTION_PAYLOADS
+●●●●●● 1mm □
+"'; DROP TABLE users; --"
+"1' OR '1'='1"
+'1; SELECT * FROM users'
+"' UNION SELECT * FROM users --"
+"admin'--"
+"1' AND '1'='1"
+"'; EXEC xp_cmdshell('dir'); --"
+"1' OR 1=1#"
+"' OR ''='"
+"'; INSERT INTO users VALUES('hacked'); --"
+●●●●●● 1mm □
+test_sql_injection_in_search_query
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Search queries should be protected against SQL injection.'
+payload
+●●●●●● 3mm △
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+response
+200
+400
+422
+500
+●●●●●● 2mm □
+response
+500
+response_text
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'sql'
+response_text
+'syntax'
+response_text
+●●●●●● 1mm □
+test_sql_injection_in_document_source
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Document source field should be protected.'
+payload
+●●●●●● 3mm △
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+response
+200
+400
+422
+503
+●●●●●● 1mm □
+test_sql_injection_in_chat_message
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Chat messages should be protected against SQL injection.'
+payload
+●●●●●● 3mm △
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+response
+200
+400
+422
+500
+●●●●●● 2mm △
+TestXSSProtection
+'Test Cross-Site Scripting (XSS) protection.'
+XSS_PAYLOADS
+●●●●●● 1mm □
+"<script>alert('XSS')</script>"
+"<img src=x onerror=alert('XSS')>"
+"<svg onload=alert('XSS')>"
+"javascript:alert('XSS')"
+"<body onload=alert('XSS')>"
+"<iframe src='javascript:alert(1)'>"
+'\'"><script>alert(\'XSS\')</script>'
+"<div style='background:url(javascript:alert(1))'>"
+"<a href='javascript:alert(1)'>click</a>"
+"{{constructor.constructor('alert(1)')()}}"
+●●●●●● 1mm □
+test_xss_in_text_input
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'XSS payloads in text input should be sanitized.'
+payload
+●●●●●● 3mm △
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+response_text
+●●●●●● 1mm □
+response
+'<script>'
+response_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+html
+●●●●●● 1mm □△
+'<script>'
+●●●●●● 2mm □△
+response_text
+●●●●●● 1mm □
+test_xss_in_chat_response
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Chat responses should not contain executable scripts.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'content-type'
+●●●●●● 2mm □△
+'application/json'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+'<script>'
+response_str
+'\\u003c'
+response_str
+●●●●●● 2mm △
+TestSecurityHeaders
+'Test security headers in responses.'
+●●●●●● 1mm □
+test_content_type_header
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Responses should have proper Content-Type headers.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+'content-type'
+response
+content_type
+●●●●●● 1mm □
+response
+'content-type'
+'application/json'
+content_type
+●●●●●● 1mm □
+test_no_server_version_disclosure
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Server should not disclose version information.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+server_header
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'server'
+''
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+'\\d+\\.\\d+'
+server_header
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_cache_control_for_sensitive_data
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Sensitive endpoints should have no-cache headers.'
+sensitive_endpoints
+●●●●●● 1mm □
+'/health'
+endpoint
+sensitive_endpoints
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+endpoint
+●●●●●● 2mm □△
+cache_control
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'cache-control'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cache_control
+'no-store'
+cache_control
+'private'
+cache_control
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestRateLimiting
+'Test rate limiting protection.'
+●●●●●● 1mm □
+test_rate_limit_headers_present
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Rate limit headers should be present when enabled.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+rate_limit_headers
+●●●●●● 1mm □
+'x-ratelimit-limit'
+'x-ratelimit-remaining'
+'x-ratelimit-reset'
+headers_present
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+h
+response
+h
+rate_limit_headers
+●●●●●● 2mm □△
+response
+200
+429
+●●●●●● 1mm □
+test_rapid_requests_handled
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Rapid requests should be handled (either served or rate limited).'
+responses
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+status
+responses
+status
+200
+429
+503
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+responses
+s
+200
+●●●●●● 2mm □△
+success_count
+10
+●●●●●● 2mm △
+TestCORSValidation
+'Test CORS configuration.'
+●●●●●● 1mm □
+test_cors_preflight_request
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'CORS preflight requests should be handled.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+response
+200
+204
+405
+●●●●●● 1mm □
+test_cors_with_allowed_origin
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Allowed origins should receive proper CORS headers.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+cors_header
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'access-control-allow-origin'
+''
+●●●●●● 2mm □△
+cors_header
+'http://localhost:3000'
+'*'
+''
+'localhost'
+cors_header
+cors_header
+''
+●●●●●● 1mm □
+test_cors_credentials
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'CORS credentials handling should be secure.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+allow_credentials
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'access-control-allow-credentials'
+''
+●●●●●● 2mm □△
+allow_origin
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'access-control-allow-origin'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+allow_credentials
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+allow_origin
+'*'
+●●●●●● 2mm △
+TestPathTraversal
+'Test path traversal protection.'
+PATH_TRAVERSAL_PAYLOADS
+●●●●●● 1mm □
+'../../../etc/passwd'
+'..\\..\\..\\windows\\system32\\config\\sam'
+'....//....//....//etc/passwd'
+'%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd'
+'..%252f..%252f..%252fetc/passwd'
+●●●●●● 1mm □
+test_path_traversal_in_file_operations
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'File operations should prevent path traversal.'
+payload
+●●●●●● 3mm △
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/files/browse?path='
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+response_text
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'root:'
+response_text
+'administrator'
+response_text
+●●●●●● 2mm △
+TestErrorHandling
+'Test secure error handling.'
+●●●●●● 1mm □
+test_no_stack_traces_in_production_errors
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Error responses should not expose stack traces.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+400
+response_text
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'traceback'
+response_text
+'file "'
+response_text
+'line '
+response_text
+'validation'
+response_text
+●●●●●● 1mm □
+test_consistent_error_format
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Errors should return consistent JSON format.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/text'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+400
+error_data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'detail'
+error_data
+'error'
+error_data
+'message'
+error_data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+error_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create test client.'
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 3mm ○
+TestClient
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+ImportError
+pytest
+●●●●●● 1mm □△
+'App not available for testing'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+authenticated_client
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+'Create authenticated test client.'
+●●●●●● 3mm ○
+client
+pytest
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

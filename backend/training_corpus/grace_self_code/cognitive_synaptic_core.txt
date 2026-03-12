@@ -1,0 +1,297 @@
+## synaptic_core.py
+'\nSynaptic Core — The Central Orchestration Bus & Living Memory Thread.\n\nAllows Grace to dynamically invoke specific models, pass intermediate thoughts\nbetween them (cross-model critique), and log the final synthesized\nconclusion directly into UnifiedMemory, creating a continuous thread of learning.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+get_llm_for_task
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SynapticCore
+"\n    Orchestration Bus for Grace's Multi-Model architecture.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+dispatch
+●●●●●● 1mm □△
+self
+model_id
+prompt
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+"\n        Send a one-off prompt to a specific model.\n        \n        Args:\n            model_id: 'opus', 'kimi', 'qwen', 'reasoning', etc.\n            prompt: The text prompt.\n            system_prompt: Optional system persona setup.\n        "
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Dispatching prompt to '
+model_id
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_id
+'qwen'
+'reasoning'
+'fast'
+'code'
+'ollama'
+provider
+●●●●●● 1mm □
+'ollama'
+●●●●●● 3mm □
+provider
+●●●●●● 1mm □
+model_id
+●●●●●● 2mm □
+provider
+'ollama'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+_ollama_with_model
+client
+●●●●●● 1mm □
+_ollama_with_model
+●●●●●● 1mm □△
+'qwen3:14b'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Failed to load provider '
+provider
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Error: Provider '
+provider
+' failed to load.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Generation failed for '
+model_id
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Error: Model '
+model_id
+' failed to generate.'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+orchestrate_chain
+●●●●●● 1mm □△
+self
+chain_definition
+initial_state
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n        Run a multi-model critique loop. Output of step N is prepended/injected into step N+1.\n        \n        Args:\n            chain_definition: list of steps, e.g. [{"model": "opus", "instruction": "Draft the plan", "system_prompt": "..."}]\n            initial_state: The starting context or problem statement.\n        '
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Starting orchestration chain with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chain_definition
+●●●●●● 2mm □△
+' steps.'
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+current_state
+●●●●●● 1mm □
+initial_state
+step_idx
+step
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chain_definition
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+step
+●●●●●● 1mm □△
+'model'
+'qwen'
+●●●●●● 2mm □△
+instruction
+●●●●●● 1mm □
+step
+●●●●●● 1mm □△
+'instruction'
+''
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+step
+●●●●●● 1mm □△
+'system_prompt'
+'You are an expert autonomous component of Grace.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Executing Chain Step '
+step_idx
+●●●●●● 3mm ○
+1
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chain_definition
+●●●●●● 2mm □△
+' with '
+model
+'.'
+●●●●●● 2mm □△
+merged_prompt
+●●●●●● 1mm □
+instruction
+'\n\nCONTEXT FROM PREVIOUS STEP:\n'
+current_state
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current_state
+●●●●●● 1mm □
+response
+history
+●●●●●● 1mm □△
+'step'
+'model'
+'instruction'
+'output'
+step_idx
+●●●●●● 3mm ○
+1
+model
+instruction
+response
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Orchestration chain complete.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'final_output'
+'history'
+current_state
+history
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+log_to_memory
+●●●●●● 1mm □△
+self
+problem
+action
+outcome
+trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.8
+'\n        Persist an episodic result into UnifiedMemory.\n        \n        Args:\n            problem: The initial trigger or question.\n            action: The chain of actions taken (e.g. models queried).\n            outcome: The final result text.\n            trust: The confidence level of this outcome.\n        '
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Attempting to log result to UnifiedMemory.'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Successfully logged to UnifiedMemory.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Failed to log episodic data to UnifiedMemory.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+Exception
+logger
+●●●●●● 1mm □△
+'[SynapticCore] Error logging to memory: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_synaptic_core
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SynapticCore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SynapticCore

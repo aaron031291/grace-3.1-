@@ -1,0 +1,657 @@
+## ask_grace_connector.py
+'\nAsk Grace Connector — Layer 1 integration for unified system introspection.\n\nConnects Ask Grace to the message bus so it can:\n1. Respond to system queries via request-response\n2. React to component health changes via pub-sub\n3. Aggregate data from all three registries + probe agent + Genesis keys\n4. Publish query events so other components can learn from what users ask\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+ComponentType
+Message
+get_message_bus
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AskGraceConnector
+'\n    Layer 1 connector that makes Ask Grace a first-class bus participant.\n\n    Request Handlers:\n      - ask_grace/query: answer natural language questions about the system\n      - ask_grace/components: list components with optional filters\n      - ask_grace/health: aggregated health from all registries\n\n    Subscriptions:\n      - system.health_changed: update cached health state\n      - genesis_keys.*: track recent activity for context\n      - trigger.probe_completed: capture fresh probe results\n\n    Publications:\n      - ask_grace.query_received: emitted on every user query (for analytics)\n      - ask_grace.insight_generated: emitted when a useful pattern is found\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+message_bus
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+200
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE-CONNECTOR] Registered with Layer 1 message bus'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+'ask_grace_query'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+'ask_grace_components'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+'ask_grace_health'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE-CONNECTOR] Registered 3 request handlers'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE-CONNECTOR] Registered 1 autonomous action'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'system.health_changed'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE-CONNECTOR] Subscribed to system.health_changed'
+●●●●●● 2mm □△
+Message
+query
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'context'
+'query'
+context
+query
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+filters
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'filters'
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+filters
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+c
+c
+components
+c
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+filters
+'category'
+●●●●●● 2mm □
+filters
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+c
+c
+components
+c
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+filters
+'status'
+●●●●●● 3mm ○
+'components'
+'total'
+components
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+●●●●●● 3mm △
+●●●●●● 1mm □
+message
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE-CONNECTOR] Cached fresh probe results'
+●●●●●● 2mm □△
+Message
+●●●●●● 3mm △
+●●●●●● 1mm □
+message
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_all_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+sr
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □△
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE] SystemRegistry unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.registry
+●●●●●● 2mm □△○
+get_component_registry
+cr
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+cr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+manifest
+'component_id'
+c
+components
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □△
+'id'
+'name'
+'category'
+'status'
+'description'
+'source'
+manifest
+'component_id'
+manifest
+'name'
+manifest
+'role'
+manifest
+'state'
+manifest
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+'component_registry'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE] ComponentRegistry unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+components
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Aggregate system state from all available sources.'
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'timestamp'
+'sources_queried'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+sr
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_comps
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+by_cat
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'system_registry'
+●●●●●● 1mm □
+'health'
+'total_components'
+'categories'
+'broken'
+'degraded'
+'new'
+health
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_comps
+●●●●●● 2mm □△
+k
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+by_cat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+c
+all_comps
+c
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'red'
+c
+c
+all_comps
+c
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'amber'
+c
+c
+all_comps
+c
+●●●●●● 1mm □△
+'is_new'
+●●●●●● 2mm □△
+context
+'sources_queried'
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+Exception
+context
+'system_registry'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.registry
+●●●●●● 2mm □△○
+get_component_registry
+cr
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys_health
+●●●●●● 1mm □
+cr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'component_registry'
+●●●●●● 1mm □
+'health'
+'stats'
+sys_health
+cr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources_queried'
+●●●●●● 1mm □△
+'component_registry'
+●●●●●● 2mm □△
+Exception
+context
+'component_registry'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+bus_stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'message_bus'
+●●●●●● 1mm □
+'stats'
+'autonomous_actions'
+bus_stats
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources_queried'
+●●●●●● 1mm □△
+'message_bus'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+get_recent_events
+get_subscriber_count
+context
+'event_bus'
+●●●●●● 1mm □
+'recent_events'
+'subscriber_counts'
+get_recent_events
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+get_subscriber_count
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources_queried'
+●●●●●● 1mm □△
+'cognitive_event_bus'
+●●●●●● 2mm □△
+Exception
+context
+'event_bus'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.live_console_api
+●●●●●● 2mm □△○
+live_status
+status
+●●●●●● 1mm □
+live_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'live_status'
+●●●●●● 1mm □
+status
+context
+'sources_queried'
+●●●●●● 1mm □△
+'live_console'
+●●●●●● 2mm □△
+Exception
+context
+'live_status'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+context
+'last_probe'
+●●●●●● 1mm □
+'data'
+'timestamp'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+'sources_queried'
+●●●●●● 1mm □△
+'probe_cache'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_query
+●●●●●● 1mm □△
+self
+query
+response
+intent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'query'
+'response_preview'
+'intent'
+'timestamp'
+query
+response
+response
+200
+''
+intent
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_recent_queries
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_connector
+●●●●●● 2mm □○
+AskGraceConnector
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_ask_grace_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_connector
+●●●●●● 2mm □
+_connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_connector
+AskGraceConnector

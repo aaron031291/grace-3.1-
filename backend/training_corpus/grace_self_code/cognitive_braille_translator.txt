@@ -1,0 +1,538 @@
+## braille_translator.py
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+backend.cognitive.braille_mapper
+●●●●●● 2mm □△○
+BrailleMapper
+mapper
+●●●●●● 1mm □
+default_mapper
+●●●●●● 2mm △
+BrailleTranslator
+●●●●●● 3mm □△
+ast
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+mapper
+●●●●●● 2mm □△
+BrailleMapper
+default_mapper
+●●●●●● 3mm △
+●●●●●● 1mm □
+mapper
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+translate_file
+●●●●●● 1mm □△
+self
+filepath
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filepath
+'r'
+●●●●●● 2mm □△
+f
+source
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+translate_code
+●●●●●● 1mm □△
+self
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_emit
+●●●●●● 1mm □△
+self
+keyword_or_symbol
+default
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Looks up the brille symbol and appends it to output.'
+mapping
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keyword_or_symbol
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mapping
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mapping
+'braille'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+default
+●●●●●● 3mm △
+●●●●●● 1mm □△
+default
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'['
+keyword_or_symbol
+']'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_FunctionDef
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'def'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'●●●●●● 1mm □△'
+●●●●●● 2mm □△
+arg
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+arg
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'●●●●●● 2mm □△'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_ClassDef
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'class'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'inherit'
+●●●●●● 2mm □△
+base
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+base
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+base
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_If
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'if'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+stmt
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+stmt
+●●●●●● 2mm □△
+stmt
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+stmt
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'elif'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+stmt
+●●●●●● 2mm □△
+substmt
+stmt
+●●●●●● 3mm △
+●●●●●● 1mm □△
+substmt
+●●●●●● 2mm □△
+sub_orelse
+stmt
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sub_orelse
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'else'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+stmt
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_Return
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'return'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_Assign
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+target
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'assign'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_Call
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+mapped
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mapped
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'●●●●●● 1mm □△'
+●●●●●● 2mm □△
+arg
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+arg
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'●●●●●● 2mm □△'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_Name
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+mapped
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mapped
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_Constant
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+node
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'None'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_Import
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'import'
+●●●●●● 2mm □△
+alias
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 2mm □
+alias
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'as'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_ImportFrom
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'from'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'import'
+●●●●●● 2mm □△
+alias
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 2mm □
+alias
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'as'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 1mm □
+visit_BinOp
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+op_map
+●●●●●● 1mm □
+ast
+ast
+ast
+ast
+ast
+ast
+ast
+ast
+ast
+ast
+ast
+ast
+'add'
+'subtract'
+'multiply'
+'divide'
+'floor_divide'
+'modulo'
+'power'
+'bitwise_and'
+'bitwise_or'
+'bitwise_xor'
+'left_shift'
+'right_shift'
+op_name
+●●●●●● 1mm □
+op_map
+●●●●●● 1mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+op_name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+op_name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△

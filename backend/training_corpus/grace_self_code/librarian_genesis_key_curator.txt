@@ -1,0 +1,543 @@
+## genesis_key_curator.py
+'\nLibrarian Genesis Key Curator.\n\nThe Librarian automatically organizes Genesis Keys every 24 hours.\nRuns as a background task and creates daily summaries.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+schedule
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+genesis.daily_organizer
+●●●●●● 2mm □△○
+get_daily_organizer
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKeyCurator
+'\n    Librarian curator for Genesis Keys.\n\n    Responsibilities:\n    - Export Genesis Keys to Layer 1 every 24 hours\n    - Organize keys by type and date\n    - Generate daily metadata summaries\n    - Track curation history\n    - Run autonomously in background\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_daily_organizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 1mm □
+curate_today
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Curate Genesis Keys for today.\n\n        This is the main function called every 24 hours.\n        '
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Starting daily Genesis Key curation'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'exported'
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ✅ Curated '
+result
+'total_keys'
+' Genesis Keys for '
+result
+'date'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'curated'
+'keys_count'
+'date'
+'summary'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+result
+'total_keys'
+result
+'date'
+result
+'metadata'
+'summary'
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] No Genesis Keys to curate for '
+result
+'date'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'success'
+'curated'
+'keys_count'
+'date'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+0
+result
+'date'
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ❌ Curation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+curate_yesterday
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Curate Genesis Keys for yesterday (useful for missed days).'
+yesterday
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'exported'
+logger
+●●●●●● 1mm □△
+"[LIBRARIAN-CURATOR] ✅ Curated yesterday's keys: "
+result
+'total_keys'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'curated'
+'keys_count'
+'date'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+result
+'total_keys'
+result
+'date'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'success'
+'curated'
+'keys_count'
+'date'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+0
+result
+'date'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+backfill_missing_days
+●●●●●● 1mm □△
+self
+days_back
+session
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+7
+●●●●●● 2mm □
+'\n        Backfill curation for missing days.\n\n        Useful when the curator was not running for some period.\n        '
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Backfilling '
+days_back
+' days'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_curated
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+'total_keys'
+r
+results
+r
+'exported'
+●●●●●● 2mm □△
+days_curated
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'exported'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ✅ Backfilled '
+days_curated
+' days, '
+total_curated
+' total keys'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'days_backfilled'
+'total_keys_curated'
+'results'
+●●●●●● 3mm □△○
+days_curated
+total_curated
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+schedule_daily_curation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Schedule daily curation to run every 24 hours at midnight.\n\n        This runs in a background thread.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Scheduler already running'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Scheduling daily curation at midnight'
+●●●●●● 2mm □△
+schedule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'00:00'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+schedule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+run_scheduler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Scheduler thread started'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+schedule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Scheduler thread stopped'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ✅ Daily curation scheduler started'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_curation_job
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Internal method to run curation job.'
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Running scheduled curation'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'success'
+result
+●●●●●● 1mm □△
+'curated'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ✅ Scheduled curation complete: '
+result
+'keys_count'
+' keys'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Scheduled curation complete: no keys to curate'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ❌ Scheduled curation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_missed_curation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if we missed a curation and run it if needed.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] First run detected, curating yesterday'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+time_since_last
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+time_since_last
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Missed curation detected, running now'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop_scheduler
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the background scheduler.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] Stopping scheduler'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+schedule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN-CURATOR] ✅ Scheduler stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_curation_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current curation status.'
+organized_days
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'scheduler_running'
+'last_curation'
+'organized_days_count'
+'latest_organized_day'
+'organized_days'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+organized_days
+●●●●●● 2mm □△
+organized_days
+organized_days
+0
+●●●●●● 2mm □
+organized_days
+10
+●●●●●● 2mm □△
+_genesis_key_curator
+●●●●●● 2mm □○
+GenesisKeyCurator
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_genesis_key_curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global Genesis Key curator instance.'
+●●●●●● 2mm □
+_genesis_key_curator
+●●●●●● 2mm □
+_genesis_key_curator
+●●●●●● 1mm □
+GenesisKeyCurator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_genesis_key_curator
+GenesisKeyCurator
+●●●●●● 1mm □
+start_daily_curation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the daily curation scheduler (call this on app startup).'
+curator
+●●●●●● 1mm □
+get_genesis_key_curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Genesis Key daily curation activated'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop_daily_curation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Stop the daily curation scheduler (call this on app shutdown).'
+curator
+●●●●●● 1mm □
+get_genesis_key_curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Genesis Key daily curation deactivated'
+●●●●●● 2mm □△

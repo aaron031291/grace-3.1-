@@ -1,0 +1,254 @@
+## braille_mapper.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Optional
+●●●●●● 2mm △
+BrailleMapper
+'\n    Parses and translates between Python syntax, Braille Encodings, and Genesis Keys.\n    Uses the configuration file `config/braille_python_mapping.txt` as its source of truth.\n    '
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__new__
+●●●●●● 1mm □△
+cls
+mapping_file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+BrailleMapper
+cls
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+cls
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+mapping_file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+mapping_file_path
+●●●●●● 2mm □
+base_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mapping_file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+base_dir
+'config'
+'braille_python_mapping.txt'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+mapping_file_path
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_load_mapping
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+FileNotFoundError
+●●●●●● 1mm □△
+'Mapping file not found at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line
+lines
+line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'|'
+line
+'GRACE-'
+line
+parts
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+line
+●●●●●● 1mm □△
+'|'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+4
+keyword
+●●●●●● 1mm □
+parts
+0
+braille
+●●●●●● 1mm □
+parts
+1
+genesis_key
+●●●●●● 1mm □
+parts
+2
+category
+●●●●●● 1mm □
+parts
+3
+mapping_entry
+●●●●●● 1mm □
+'keyword'
+'braille'
+'genesis_key'
+'category'
+keyword
+braille
+genesis_key
+category
+●●●●●● 3mm △
+keyword
+●●●●●● 1mm □
+mapping_entry
+●●●●●● 2mm □
+braille
+●●●●●● 3mm △
+●●●●●● 3mm △
+braille
+●●●●●● 1mm □
+●●●●●● 3mm △
+braille
+●●●●●● 1mm □△
+mapping_entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+genesis_key
+●●●●●● 1mm □
+mapping_entry
+●●●●●● 1mm □
+python_to_braille
+●●●●●● 1mm □△
+self
+keyword
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Returns the mapping entry for a given Python keyword or function.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keyword
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+braille_to_python
+●●●●●● 1mm □△
+self
+braille_symbol
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Returns a list of mapping entries for a given Braille symbol.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+braille_symbol
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_by_genesis_key
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Returns the mapping entry for a given Genesis Key.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+mapper
+●●●●●● 1mm □
+BrailleMapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△

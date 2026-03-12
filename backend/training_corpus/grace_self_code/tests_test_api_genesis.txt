@@ -1,0 +1,337 @@
+## test_api_genesis.py
+'\nTests for Genesis Keys API endpoints.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestGenesisKeysStatus
+'Test Genesis Keys status endpoints.'
+●●●●●● 1mm □
+test_get_genesis_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting Genesis Keys system status via stats.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/stats'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_genesis_stats
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting Genesis Keys statistics.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/stats'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGenesisKeyCreation
+'Test Genesis Key creation endpoints.'
+●●●●●● 1mm □
+test_create_genesis_key
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a new Genesis Key.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys'
+●●●●●● 2mm □△
+response
+200
+201
+422
+500
+●●●●●● 1mm □
+test_create_genesis_key_missing_fields
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating Genesis Key with missing fields.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys'
+●●●●●● 2mm □△
+response
+422
+400
+500
+●●●●●● 1mm □
+test_create_genesis_key_invalid_type
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating Genesis Key with any entity type.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys'
+●●●●●● 2mm □△
+response
+200
+201
+400
+422
+500
+pytest
+●●●●●● 2mm △
+TestGenesisKeyRetrieval
+'Test Genesis Key retrieval endpoints.'
+●●●●●● 1mm □
+test_get_genesis_key_by_id
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test retrieving a Genesis Key by ID.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys/test-key-id'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_get_genesis_keys_by_entity
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test retrieving Genesis Keys by entity via user endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/users/test-user/keys'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_list_genesis_keys
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test listing all Genesis Keys.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_list_genesis_keys_with_filters
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test listing Genesis Keys with filters.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys?limit=10'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGenesisKeyVerification
+'Test Genesis Key verification endpoints.'
+●●●●●● 1mm □
+test_verify_genesis_key
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting key metadata as verification.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys/test-key-id/metadata'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_verify_chain
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test verifying Genesis Key chain via fixes endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys/test-key-id/fixes'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+pytest
+●●●●●● 2mm △
+TestGenesisKeyHistory
+'Test Genesis Key history endpoints.'
+●●●●●● 1mm □
+test_get_key_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting Genesis Key history via archives.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/archives'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_get_entity_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting entity change history via user keys.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/users/test-user/keys'
+●●●●●● 2mm □△
+response
+200
+404
+500
+pytest
+●●●●●● 2mm △
+TestGenesisKeyOrganizer
+'Test Genesis Key organizer endpoints.'
+●●●●●● 1mm □
+test_organize_keys
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test organizing Genesis Keys via archive trigger.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/archive/trigger'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_get_daily_summary
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting daily Genesis Key summary via stats.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/stats'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGenesisKeyCICD
+'Test Genesis Key CI/CD integration endpoints.'
+●●●●●● 1mm □
+test_get_cicd_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting CI/CD integration status.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/cicd/genesis-keys'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_trigger_cicd_check
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test triggering CI/CD check via analyze-code.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/analyze-code'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest

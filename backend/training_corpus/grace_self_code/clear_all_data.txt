@@ -1,0 +1,336 @@
+## clear_all_data.py
+'\nClear all data from PostgreSQL and Qdrant vector database.\nUse this to reset the system to a clean state.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+clear_postgresql
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear all data from SQLite database.'
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+logger
+●●●●●● 1mm □△
+'Setting up SQLite configuration...'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing database connection...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating session factory...'
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleting all document chunks...'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Deleted '
+count
+' document chunks'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleting all documents...'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Deleted '
+count
+' documents'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ SQLite data cleared successfully'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'no such table'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"✓ Database tables don't exist yet (OK - nothing to clear)"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Error clearing SQLite: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to clear SQLite: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+clear_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear all data from Qdrant.'
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+logger
+●●●●●● 1mm □△
+'Connecting to Qdrant...'
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collection_name
+●●●●●● 1mm □
+'documents'
+logger
+●●●●●● 1mm □△
+'Deleting Qdrant collection: '
+collection_name
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"✓ Qdrant collection '"
+collection_name
+"' deleted"
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'not found'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"Collection '"
+collection_name
+"' doesn't exist (OK)"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✓ Qdrant data cleared successfully'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to clear Qdrant: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear all data.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'CLEARING ALL DATA FROM VECTOR DB AND SQLITE'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[1/2] Clearing SQLite...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clear_postgresql
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Failed to clear SQLite'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'\n[2/2] Clearing Qdrant...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clear_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Failed to clear Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ ALL DATA CLEARED SUCCESSFULLY'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nThe system is now clean. New file uploads will:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  1. Be saved to knowledge_base/ directory'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  2. Have text extracted based on file type'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  3. Be chunked and embedded'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  4. Be stored in PostgreSQL + Qdrant'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  5. Appear in RAG search results'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

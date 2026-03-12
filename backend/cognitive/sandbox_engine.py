@@ -330,7 +330,6 @@ def run_autonomous_experiment(
     title: str,
     hypothesis: str,
     domain: str = "general",
-    research_sources: List[str] = None,
 ) -> Dict[str, Any]:
     """
     Fully autonomous experiment. No permission needed to START.

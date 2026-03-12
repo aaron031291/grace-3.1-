@@ -1,0 +1,1955 @@
+## test_cache_comprehensive.py
+'\nComprehensive Test Suite for Redis Cache Module\n=================================================\nTests for RedisCache, InMemoryFallback, and caching utilities.\n\nCoverage:\n- RedisCache initialization and configuration\n- Cache get/set/delete operations\n- TTL management\n- Tag-based cache invalidation\n- Distributed locking\n- InMemoryFallback operations\n- Cache decorator\n- Global cache instance management\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+AsyncMock
+MagicMock
+patch
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cache.redis_cache
+●●●●●● 2mm □△○
+RedisCache
+InMemoryFallback
+cached
+get_cache
+init_cache
+close_cache
+●●●●●● 2mm △
+TestRedisCacheInit
+'Test RedisCache initialization.'
+●●●●●● 1mm □
+test_default_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default initialization.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+'localhost'
+cache
+6379
+cache
+0
+cache
+●●●●●● 2mm □
+cache
+'grace:'
+cache
+3600
+cache
+10
+cache
+●●●●●● 2mm □
+cache
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_custom_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test custom initialization.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+'redis.example.com'
+cache
+6380
+cache
+2
+cache
+'secret'
+cache
+'myapp:'
+cache
+7200
+cache
+20
+●●●●●● 2mm △
+TestKeyManagement
+'Test cache key management.'
+●●●●●● 1mm □
+test_make_key
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test key prefix creation.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+'test:user:1'
+cache
+●●●●●● 1mm □△
+'session'
+●●●●●● 2mm □△
+'test:session'
+●●●●●● 1mm □
+test_make_key_default_prefix
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default prefix.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+'grace:data'
+●●●●●● 1mm □
+test_make_key_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test empty key.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'key'
+●●●●●● 2mm □△
+'key'
+●●●●●● 2mm △
+TestSerialization
+'Test serialization and deserialization.'
+●●●●●● 1mm □
+test_serialize_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test serializing dictionary.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'name'
+'value'
+'test'
+123
+serialized
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+serialized
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+serialized
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+test_serialize_list
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test serializing list.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+1
+2
+3
+'four'
+serialized
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+serialized
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+test_serialize_nested
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test serializing nested structures.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'users'
+'count'
+'id'
+'name'
+1
+'Alice'
+'id'
+'name'
+2
+'Bob'
+2
+serialized
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+serialized
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+test_serialize_datetime
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test serializing datetime (uses str default).'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'timestamp'
+now
+serialized
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+serialized
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+'timestamp'
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_deserialize_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deserializing dictionary.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'{"name": "test", "value": 123}'
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+result
+'name'
+'value'
+'test'
+123
+●●●●●● 1mm □
+test_deserialize_none
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deserializing None.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_deserialize_list
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deserializing list.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'[1, 2, 3]'
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+result
+1
+2
+3
+●●●●●● 2mm △
+TestInMemoryFallback
+'Test InMemoryFallback implementation.'
+'Test ping always returns True.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pytest
+'Test basic set and get.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key1'
+60
+'value1'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+result
+'value1'
+pytest
+'Test getting nonexistent key.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+pytest
+'Test delete operation.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key1'
+60
+'value1'
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key2'
+60
+'value2'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+'key2'
+●●●●●● 2mm □△
+count
+2
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fallback
+●●●●●● 1mm □△
+'key2'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pytest
+'Test deleting nonexistent key.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+count
+0
+pytest
+'Test exists check.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+0
+fallback
+●●●●●● 1mm □△
+'key1'
+60
+'value1'
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+1
+pytest
+'Test TTL retrieval.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key1'
+100
+'value1'
+●●●●●● 2mm □△
+ttl
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+95
+ttl
+100
+pytest
+'Test TTL for nonexistent key.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ttl
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+ttl
+1
+pytest
+'Test that expired keys are removed on get.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+'key1'
+●●●●●● 1mm □
+'value1'
+fallback
+'key1'
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+pytest
+'Test set add and members.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'set1'
+'member1'
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'set1'
+'member2'
+●●●●●● 2mm □△
+members
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'set1'
+●●●●●● 2mm □△
+'member1'
+members
+'member2'
+members
+pytest
+'Test smembers for nonexistent set.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+members
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+members
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test expire command.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+'key1'
+●●●●●● 1mm □
+'value1'
+fallback
+●●●●●● 1mm □△
+'key1'
+60
+●●●●●● 2mm □△
+'key1'
+fallback
+ttl
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+55
+ttl
+60
+pytest
+'Test set with NX flag.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+'value1'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+'value2'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+fallback
+'key1'
+'value1'
+pytest
+'Test set with expiry.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □△
+'key1'
+'value1'
+●●●●●● 2mm □△
+'key1'
+fallback
+ttl
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+55
+ttl
+60
+pytest
+'Test eval for lock release.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+'lock:test'
+●●●●●● 1mm □
+'token123'
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+''
+1
+'lock:test'
+'token123'
+●●●●●● 2mm □△
+result
+1
+'lock:test'
+fallback
+pytest
+'Test eval lock release with wrong token.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+'lock:test'
+●●●●●● 1mm □
+'token123'
+result
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □△
+''
+1
+'lock:test'
+'wrong_token'
+●●●●●● 2mm □△
+result
+0
+fallback
+'lock:test'
+'token123'
+pytest
+●●●●●● 1mm □
+test_scan_iter
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test scan_iter pattern matching.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □
+'grace:user:1'
+'grace:user:2'
+'grace:session:1'
+'other:key'
+'data1'
+'data2'
+'data3'
+'data4'
+results
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+fallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+'grace:user:1'
+results
+'grace:user:2'
+results
+●●●●●● 1mm □
+test_scan_iter_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test scan_iter with wildcard.'
+fallback
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □
+'key1'
+'key2'
+'key3'
+'v1'
+'v2'
+'v3'
+results
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+fallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+3
+●●●●●● 2mm △
+TestRedisCacheOperations
+'Test RedisCache operations using InMemoryFallback.'
+'Test connection falls back to in-memory.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+'redis.asyncio'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+cache
+InMemoryFallback
+●●●●●● 2mm □△
+pytest
+'Test get auto-connects if needed.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cache
+'connect'
+●●●●●● 2mm □△
+mock_connect
+mock_connect
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+cache
+'_client'
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'test_key'
+●●●●●● 2mm □△
+mock_connect
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test set and get operations.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+'api.metrics'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'user:1'
+'name'
+'age'
+'Alice'
+30
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+result
+'name'
+'age'
+'Alice'
+30
+pytest
+'Test cache miss.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+'api.metrics'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+pytest
+'Test set with custom TTL.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'temp_key'
+'temp_value'
+●●●●●● 2mm □△
+ttl
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+cache
+●●●●●● 1mm □△
+'temp_key'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+25
+ttl
+30
+pytest
+'Test set with tags.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'user:1'
+'name'
+'Alice'
+●●●●●● 2mm □△
+tag_key1
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'tag:users'
+●●●●●● 2mm □△
+tag_key2
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'tag:active'
+●●●●●● 2mm □△
+members1
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+tag_key1
+●●●●●● 2mm □△
+members2
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+tag_key2
+●●●●●● 2mm □△
+full_key
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+full_key
+members1
+full_key
+members2
+pytest
+'Test delete operation.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+'api.metrics'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'to_delete'
+'value'
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'to_delete'
+●●●●●● 2mm □△
+'value'
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'to_delete'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+cache
+●●●●●● 1mm □△
+'to_delete'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pytest
+'Test delete nonexistent key.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test tag invalidation.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+'api.metrics'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'user:1'
+'name'
+'Alice'
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'user:2'
+'name'
+'Bob'
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'session:1'
+'token'
+'abc'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'users'
+●●●●●● 2mm □△
+count
+2
+cache
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cache
+●●●●●● 1mm □△
+'user:2'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cache
+●●●●●● 1mm □△
+'session:1'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pytest
+'Test exists check.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key1'
+'value1'
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pytest
+'Test TTL retrieval.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'key1'
+'value1'
+●●●●●● 2mm □△
+ttl
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key1'
+●●●●●● 2mm □△
+115
+ttl
+120
+pytest
+'Test clear with pattern.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'user:2'
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+'session:1'
+●●●●●● 2mm □△
+'{"v": 1}'
+'{"v": 2}'
+'{"v": 3}'
+count
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'user:*'
+●●●●●● 2mm □△
+count
+0
+pytest
+●●●●●● 2mm △
+TestDistributedLocking
+'Test distributed locking functionality.'
+'Test acquiring a lock.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+●●●●●● 2mm □△
+token
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+token
+●●●●●● 2mm □△
+36
+pytest
+'Test non-blocking lock acquisition.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token1
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+●●●●●● 2mm □△
+token1
+●●●●●● 2mm □
+token2
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+●●●●●● 2mm □△
+token2
+●●●●●● 2mm □
+pytest
+'Test releasing a lock.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+●●●●●● 2mm □△
+token
+●●●●●● 2mm □
+released
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+token
+●●●●●● 2mm □△
+released
+●●●●●● 3mm □△○
+token2
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+●●●●●● 2mm □△
+token2
+●●●●●● 2mm □
+pytest
+'Test releasing lock with wrong token.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+●●●●●● 2mm □△
+token
+●●●●●● 2mm □
+released
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+'wrong_token'
+●●●●●● 2mm □△
+released
+●●●●●● 1mm □
+pytest
+'Test releasing lock when client not initialized.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+●●●●●● 2mm □
+released
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test_lock'
+'token'
+●●●●●● 2mm □△
+released
+●●●●●● 1mm □
+pytest
+●●●●●● 2mm △
+TestCacheDecorator
+'Test cached decorator.'
+'Test basic cached decorator.'
+call_count
+●●●●●● 1mm □
+0
+●●●●●● 2mm ○
+call_count
+1
+●●●●●● 3mm ○
+'user_id'
+'name'
+user_id
+'Test'
+cached
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cache.redis_cache.get_cache'
+●●●●●● 2mm □△
+result1
+●●●●●● 1mm □
+get_data
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+result1
+'user_id'
+'name'
+1
+'Test'
+call_count
+1
+pytest
+'Test cache hit returns cached value.'
+call_count
+●●●●●● 1mm □
+0
+●●●●●● 2mm ○
+call_count
+1
+●●●●●● 3mm ○
+'user_id'
+'name'
+user_id
+'Test'
+cached
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cache.redis_cache.get_cache'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+get_data
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+result
+'user_id'
+'name'
+1
+'Cached'
+call_count
+0
+pytest
+'Test None results are not cached by default.'
+call_count
+●●●●●● 1mm □
+0
+call_count
+1
+●●●●●● 3mm ○
+●●●●●● 2mm □
+cached
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cache.redis_cache.get_cache'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+get_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+mock_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test None results are cached when cache_none=True.'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+cached
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cache.redis_cache.get_cache'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+get_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+mock_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test cached decorator with tags.'
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'user_id'
+user_id
+cached
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cache.redis_cache.get_cache'
+●●●●●● 2mm □△
+get_user
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_cache
+call_args
+1
+'tags'
+'users'
+'active'
+pytest
+●●●●●● 2mm △
+TestGlobalCache
+'Test global cache instance management.'
+●●●●●● 1mm □
+test_get_cache_creates_instance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_cache creates instance if needed.'
+●●●●●● 2mm □△○
+cache.redis_cache
+●●●●●● 1mm □
+cache_module
+cache_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'os.environ'
+'REDIS_HOST'
+'REDIS_PORT'
+'REDIS_PASSWORD'
+'REDIS_PREFIX'
+'REDIS_DEFAULT_TTL'
+'test_host'
+'6380'
+'secret'
+'test:'
+'7200'
+●●●●●● 2mm □△
+instance
+●●●●●● 1mm □
+get_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+instance
+RedisCache
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_cache_returns_same_instance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_cache returns same instance.'
+●●●●●● 2mm □△○
+cache.redis_cache
+●●●●●● 1mm □
+cache_module
+cache_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+instance1
+●●●●●● 1mm □
+get_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance2
+●●●●●● 1mm □
+get_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance1
+instance2
+'Test init_cache calls connect.'
+●●●●●● 2mm □△○
+cache.redis_cache
+●●●●●● 1mm □
+cache_module
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache_module
+●●●●●● 1mm □
+mock_cache
+init_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test close_cache disconnects and clears.'
+●●●●●● 2mm □△○
+cache.redis_cache
+●●●●●● 1mm □
+cache_module
+mock_cache
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache_module
+●●●●●● 1mm □
+mock_cache
+close_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache_module
+●●●●●● 2mm □
+pytest
+'Test close_cache with no instance.'
+●●●●●● 2mm □△○
+cache.redis_cache
+●●●●●● 1mm □
+cache_module
+cache_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+close_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestErrorHandling
+'Test error handling in cache operations.'
+'Test get handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+pytest
+'Test set handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key'
+'value'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test delete handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test invalidate_tag handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+result
+0
+pytest
+'Test clear handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+error_iter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+'Connection error'
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+error_iter
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+result
+0
+pytest
+'Test exists handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test ttl handles errors gracefully.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_client
+result
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'key'
+●●●●●● 2mm □△
+result
+1
+pytest
+●●●●●● 2mm △
+TestConnection
+'Test connection management.'
+'Test successful connection (or fallback).'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 2mm □
+pytest
+'Test fallback when Redis unavailable.'
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+cache
+InMemoryFallback
+●●●●●● 2mm □△
+pytest
+'Test disconnect.'
+mock_pool
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_pool
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+mock_pool
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

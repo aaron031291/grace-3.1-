@@ -1,0 +1,2596 @@
+## deterministic_e2e_validator.py
+'\nDeterministic End-to-End LLM Pipeline Validator\n=================================================\nValidates the ENTIRE LLM pipeline from Genesis key input to final output\nusing ONLY deterministic checks — no LLM reasoning at any validation step.\n\nPipeline stages validated (in order):\n\n  1. GENESIS INPUT     — Genesis key schema, tracking, provenance chain\n  2. GOVERNANCE GATE   — Rules loaded, persona active, autonomy tier correct\n  3. MEMORY SYSTEMS    — Magma, episodic, procedural, flash cache reachable\n  4. RETRIEVAL (RAG)   — Embedding model, Qdrant, ingestion, retriever wired\n  5. LLM PROVIDERS     — Ollama running, models exist, factory routing works\n  6. COGNITIVE PIPELINE — 9-stage pipeline wiring (TimeSense → Genesis out)\n  7. CODING CONTRACTS  — Contract enforcement operational, all checks pass\n  8. BRAIN API         — All 10 brains respond, cross-brain calls work\n  9. AGENT POOL        — 3 Qwen agents started, queues functional\n 10. OUTPUT INTEGRITY  — Response structure valid, governance applied, genesis tracked\n\nEach stage returns a deterministic verdict: PASS / FAIL / WARN / SKIP.\nNo LLM is called. Every check is verifiable, reproducible, and fast.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+StageVerdict
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+PASS
+●●●●●● 1mm □
+'pass'
+FAIL
+●●●●●● 1mm □
+'fail'
+WARN
+●●●●●● 1mm □
+'warn'
+SKIP
+●●●●●● 1mm □
+'skip'
+●●●●●● 2mm △
+StageCheck
+name
+●●●●●● 1mm ○
+verdict
+StageVerdict
+message
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+0
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+StageResult
+stage
+●●●●●● 2mm ○
+name
+●●●●●● 1mm ○
+verdict
+StageVerdict
+StageVerdict
+checks
+●●●●●● 3mm □△
+StageCheck
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 3mm ○
+0
+●●●●●● 1mm □
+passed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+●●●●●● 3mm △
+c
+StageVerdict
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+failed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+●●●●●● 3mm △
+c
+StageVerdict
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+dataclass
+●●●●●● 2mm △
+E2EReport
+started_at
+●●●●●● 1mm ○
+''
+completed_at
+●●●●●● 1mm ○
+''
+verdict
+StageVerdict
+StageVerdict
+stages
+●●●●●● 3mm □△
+StageResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_checks
+●●●●●● 2mm ○
+0
+total_passed
+●●●●●● 2mm ○
+0
+total_failed
+●●●●●● 2mm ○
+0
+total_warnings
+●●●●●● 2mm ○
+0
+duration_ms
+●●●●●● 3mm ○
+0
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+asdict
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+d
+'stages'
+●●●●●● 1mm □
+asdict
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+s
+●●●●●● 3mm △
+●●●●●● 3mm ○
+d
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+_check
+●●●●●● 1mm □△
+name
+fn
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Run a single deterministic check, catch exceptions.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_genesis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'genesis_models_import'
+_verify_import
+●●●●●● 1mm □△
+'models.genesis_key_models'
+'GenesisKey'
+'FixSuggestion'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'genesis_tracker_import'
+_verify_import
+●●●●●● 1mm □△
+'api._genesis_tracker'
+'track'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'genesis_table_exists'
+_check_genesis_table
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'genesis_tracker_callable'
+_check_genesis_tracker
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'genesis_validator_import'
+_verify_import
+●●●●●● 1mm □△
+'genesis.deterministic_genesis_validator'
+'run_genesis_validation'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_genesis_table
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+inspect
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_keys'
+tables
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'genesis_table_exists'
+StageVerdict
+'genesis_keys table exists ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+' tables total)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'genesis_table_exists'
+StageVerdict
+'genesis_keys table not found ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+' tables exist)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'genesis_table_exists'
+StageVerdict
+'DB: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_genesis_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+track
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'genesis_tracker_callable'
+StageVerdict
+'track() is callable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'genesis_tracker_callable'
+StageVerdict
+'track is not callable'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'genesis_tracker_callable'
+StageVerdict
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_governance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'governance_engine_import'
+_verify_import
+●●●●●● 1mm □△
+'security.governance'
+'GovernanceEngine'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'governance_wrapper_import'
+_verify_import
+●●●●●● 1mm □△
+'llm_orchestrator.governance_wrapper'
+'GovernanceAwareLLM'
+'build_governance_prefix'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'govern_service_import'
+_verify_import
+●●●●●● 1mm □△
+'core.services.govern_service'
+'dashboard'
+'get_scores'
+'list_rules'
+'get_persona'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'governance_prefix_builds'
+_check_governance_prefix
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'governance_tier_check'
+_check_governance_tier
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+build_governance_prefix
+prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'governance_prefix_builds'
+StageVerdict
+'Prefix built ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+prefix
+●●●●●● 2mm □△
+' chars)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'governance_prefix_builds'
+StageVerdict
+'Prefix build skipped: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_governance_tier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+security.governance
+●●●●●● 2mm □△○
+GovernanceEngine
+engine
+●●●●●● 1mm □
+GovernanceEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tier
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+engine
+'current_tier'
+'TIER_0_SUPERVISED'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'governance_tier_check'
+StageVerdict
+'Autonomy tier: '
+tier
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'governance_tier_check'
+StageVerdict
+'Governance engine: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'magma_bridge_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.magma_bridge'
+'query_context'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'unified_memory_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.unified_memory'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'flash_cache_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.flash_cache'
+'get_flash_cache'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'time_sense_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.time_sense'
+'TimeSense'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'mirror_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling'
+'MirrorSelfModelingSystem'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_stage_retrieval
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'embedding_model_import'
+_check_embedding_import
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'retriever_import'
+_verify_import
+●●●●●● 1mm □△
+'retrieval.retriever'
+'DocumentRetriever'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'multi_tier_import'
+_verify_import
+●●●●●● 1mm □△
+'retrieval.multi_tier_integration'
+'create_multi_tier_handler'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'qdrant_connectivity'
+_check_qdrant
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'rag_validator'
+_check_rag_validation
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_embedding_import
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check embedding module — torch is a heavy runtime dep, WARN if missing instead of FAIL.'
+mod
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+'embedding.embedder'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mod
+'get_embedding_model'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'embedding_model_import'
+StageVerdict
+'embedding.embedder: get_embedding_model found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'embedding_model_import'
+StageVerdict
+'embedding.embedder: get_embedding_model not found'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 2mm □
+'torch'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'embedding_model_import'
+StageVerdict
+'torch not installed (GPU runtime dependency) — embeddings unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'embedding_model_import'
+StageVerdict
+'ImportError: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □△○
+urllib.request
+url
+●●●●●● 1mm □
+'http://'
+settings
+':'
+settings
+'/collections'
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □△
+'Content-Type'
+'application/json'
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+resp
+●●●●●● 2mm □
+resp
+200
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'qdrant_connectivity'
+StageVerdict
+'Qdrant reachable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'qdrant_connectivity'
+StageVerdict
+'Qdrant HTTP '
+resp
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'qdrant_connectivity'
+StageVerdict
+'Qdrant not reachable: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_rag_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.deterministic_rag_validator
+●●●●●● 2mm □△○
+run_rag_validation
+report
+●●●●●● 1mm □
+run_rag_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+crit
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+report
+'critical_count'
+●●●●●● 2mm □△
+report
+0
+total
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+report
+'total_issues'
+●●●●●● 2mm □△
+report
+0
+●●●●●● 2mm □
+crit
+0
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'rag_validator'
+StageVerdict
+'RAG validation: '
+crit
+' critical, '
+total
+' total issues'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total
+0
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'rag_validator'
+StageVerdict
+'RAG validation: '
+total
+' issues (no critical)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'rag_validator'
+StageVerdict
+'RAG validation clean'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'rag_validator'
+StageVerdict
+'RAG validator: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_llm_providers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'factory_import'
+_verify_import
+●●●●●● 1mm □△
+'llm_orchestrator.factory'
+'get_llm_client'
+'get_llm_for_task'
+'get_ai_mode_client'
+'get_qwen_client'
+'get_qwen_coder'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'ollama_adapter_import'
+_verify_import
+●●●●●● 1mm □△
+'llm_orchestrator.ollama_adapter'
+'OllamaLLMClient'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'qwen_client_import'
+_verify_import
+●●●●●● 1mm □△
+'llm_orchestrator.qwen_client'
+'QwenLLMClient'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'ollama_connectivity'
+_check_ollama
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'model_config'
+_check_model_config
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'task_routing'
+_check_task_routing
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_ollama
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □△○
+urllib.request
+url
+●●●●●● 1mm □
+settings
+'/api/tags'
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+resp
+●●●●●● 2mm □
+resp
+200
+●●●●●● 2mm □△○
+json
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+m
+data
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'ollama_connectivity'
+StageVerdict
+'Ollama reachable, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+' models'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'ollama_connectivity'
+StageVerdict
+'Ollama not responding'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'ollama_connectivity'
+StageVerdict
+'Ollama: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_model_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+models
+●●●●●● 1mm □
+'code'
+'reason'
+'fast'
+settings
+settings
+settings
+missing
+●●●●●● 1mm □
+k
+k
+v
+models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 2mm □
+missing
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'model_config'
+StageVerdict
+'Missing model config: '
+missing
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'model_config'
+StageVerdict
+'All 3 Qwen models configured'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'model_config'
+StageVerdict
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_task_routing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+task
+'code'
+'reason'
+'fast'
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 2mm □
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'task_routing'
+StageVerdict
+"get_llm_for_task('"
+task
+"') returned None"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'task_routing'
+StageVerdict
+'Task routing works for code/reason/fast'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'task_routing'
+StageVerdict
+'Task routing: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_cognitive_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'pipeline_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.pipeline'
+'CognitivePipeline'
+'PipelineContext'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'coding_pipeline_import'
+_verify_import
+●●●●●● 1mm □△
+'core.coding_pipeline'
+'CodingPipeline'
+'get_coding_pipeline'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'consensus_engine_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.consensus_engine'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'triad_orchestrator_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.qwen_triad_orchestrator'
+'QwenTriadOrchestrator'
+'get_triad_orchestrator'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'grace_protocol_import'
+_verify_import
+●●●●●● 1mm □△
+'core.grace_protocol'
+'GraceMessage'
+'GraceResponse'
+'route_message'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'pipeline_stages_wired'
+_check_pipeline_stages
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_pipeline_stages
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+pipeline
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □
+'_stage_timesense'
+'_stage_ooda'
+'_stage_ambiguity'
+'_stage_invariants'
+'_stage_trust_pre'
+'_stage_generate'
+'_stage_contradiction'
+'_stage_hallucination'
+'_stage_trust_post'
+'_stage_genesis'
+missing
+●●●●●● 1mm □
+s
+s
+stages
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+pipeline
+s
+●●●●●● 2mm □△
+●●●●●● 2mm □
+missing
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'pipeline_stages_wired'
+StageVerdict
+'Missing stages: '
+missing
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'pipeline_stages_wired'
+StageVerdict
+'All '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stages
+●●●●●● 2mm □△
+' cognitive pipeline stages wired'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'pipeline_stages_wired'
+StageVerdict
+'Pipeline: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_coding_contracts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'contracts_import'
+_verify_import
+●●●●●● 1mm □△
+'core.deterministic_coding_contracts'
+'execute_code_generation_contract'
+'execute_code_fix_contract'
+'execute_component_creation_contract'
+'execute_healing_contract'
+'get_available_contracts'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'contract_smoke_test'
+_check_contract_smoke
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'contract_rejects_bad_code'
+_check_contract_rejects
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'contract_passes_good_code'
+_check_contract_passes
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_contract_smoke
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_coding_contracts
+●●●●●● 2mm □△○
+get_available_contracts
+contracts
+●●●●●● 1mm □
+get_available_contracts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expected
+●●●●●● 1mm □
+'code_generation'
+'code_fix'
+'component_creation'
+'healing'
+found
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+contracts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+missing
+●●●●●● 1mm □
+expected
+●●●●●● 1mm □△
+found
+●●●●●● 2mm □
+missing
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'contract_smoke_test'
+StageVerdict
+'Missing contracts: '
+missing
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'contract_smoke_test'
+StageVerdict
+'All '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+expected
+●●●●●● 2mm □△
+' contracts available'
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_contract_rejects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_coding_contracts
+●●●●●● 2mm □△○
+execute_code_generation_contract
+bad_code
+●●●●●● 1mm □
+'def broken(\nthis is not valid python'
+result
+●●●●●● 1mm □
+execute_code_generation_contract
+●●●●●● 1mm □△
+'test_bad'
+bad_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'contract_rejects_bad_code'
+StageVerdict
+'Contract correctly rejects invalid code'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'contract_rejects_bad_code'
+StageVerdict
+'Contract accepted invalid code — enforcement broken'
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_contract_passes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_coding_contracts
+●●●●●● 2mm □△○
+execute_code_generation_contract
+good_code
+●●●●●● 1mm □
+'"""Valid module."""\n\ndef hello():\n    return "world"\n'
+result
+●●●●●● 1mm □
+execute_code_generation_contract
+●●●●●● 1mm □△
+'test_good'
+good_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'contract_passes_good_code'
+StageVerdict
+'Contract correctly accepts valid code'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'contract_passes_good_code'
+StageVerdict
+'Contract rejected valid code: '
+result
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_brain_api
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'brain_api_import'
+_verify_import
+●●●●●● 1mm □△
+'api.brain_api_v2'
+'call_brain'
+'router'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+brains
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+'deterministic'
+'workspace'
+brain
+brains
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'brain_'
+brain
+'_responds'
+brain
+_check_brain_responds
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'cross_brain_call'
+_check_cross_brain
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_brain_responds
+●●●●●● 1mm □△
+brain
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+safe_actions
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+'deterministic'
+'workspace'
+'list'
+'stats'
+'dashboard'
+'models'
+'runtime'
+'stats'
+'live'
+'projects'
+'contracts'
+'list'
+action
+●●●●●● 1mm □
+safe_actions
+●●●●●● 1mm □△
+brain
+'list'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+brain
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'brain_'
+brain
+'_responds'
+StageVerdict
+'brain/'
+brain
+'/'
+action
+' responded OK'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'brain_'
+brain
+'_responds'
+StageVerdict
+'brain/'
+brain
+'/'
+action
+': '
+result
+●●●●●● 1mm □△
+'error'
+'unknown'
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'brain_'
+brain
+'_responds'
+StageVerdict
+'brain/'
+brain
+': '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_cross_brain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'deterministic'
+'contracts'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'cross_brain_call'
+StageVerdict
+'Cross-brain call works (deterministic → contracts)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'cross_brain_call'
+StageVerdict
+'Cross-brain returned: '
+r
+●●●●●● 1mm □△
+'error'
+'no data'
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'cross_brain_call'
+StageVerdict
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_agent_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'agent_pool_import'
+_verify_import
+●●●●●● 1mm □△
+'cognitive.qwen_agents'
+'QwenAgentPool'
+'get_agent_pool'
+'QwenAgent'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'agent_pool_status'
+_check_agent_pool
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_agent_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.qwen_agents
+●●●●●● 2mm □△○
+get_agent_pool
+pool
+●●●●●● 1mm □
+get_agent_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agents
+●●●●●● 1mm □
+status
+●●●●●● 1mm □△
+'agents'
+●●●●●● 2mm □△
+running
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+agents
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+a
+●●●●●● 1mm □△
+'running'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'agent_pool_status'
+StageVerdict
+running
+'/3 agents running'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'agent_pool_status'
+StageVerdict
+'Agent pool: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_stage_output_integrity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'response_models_exist'
+_check_response_models
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'hallucination_guard_import'
+_verify_import
+●●●●●● 1mm □△
+'llm_orchestrator.governance_wrapper'
+'GovernanceAwareLLM'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'cognitive_enforcer_import'
+_verify_import
+●●●●●● 1mm □△
+'llm_orchestrator.cognitive_enforcer'
+'CognitiveEnforcer'
+'get_cognitive_enforcer'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □△
+_check
+●●●●●● 1mm □△
+'deterministic_bridge_scan'
+_check_bridge_scan
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+stage
+●●●●●● 1mm □
+stage
+0
+StageVerdict
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+StageVerdict
+c
+stage
+●●●●●● 2mm □△
+StageVerdict
+StageVerdict
+●●●●●● 3mm ○
+stage
+StageResult
+●●●●●● 1mm □
+_check_response_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+src
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'app.py'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+'RawChatResponse'
+'TriadChatResponse'
+found
+●●●●●● 1mm □
+m
+m
+models
+m
+src
+missing
+●●●●●● 1mm □
+m
+m
+models
+m
+src
+●●●●●● 2mm □
+missing
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'response_models_exist'
+StageVerdict
+'Missing response models: '
+missing
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'response_models_exist'
+StageVerdict
+'Response models found: '
+found
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'response_models_exist'
+StageVerdict
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_check_bridge_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Run deterministic bridge and count problems BY SEVERITY — low-severity issues don't cause FAIL."
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_problems
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+checks
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'total_checks'
+0
+●●●●●● 2mm □△
+critical
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+all_problems
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+●●●●●● 2mm □△
+warning
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+all_problems
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'warning'
+●●●●●● 2mm □△
+low
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+all_problems
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'low'
+●●●●●● 2mm □△
+details
+●●●●●● 1mm □
+'checks'
+'critical'
+'warning'
+'low'
+checks
+critical
+warning
+low
+●●●●●● 2mm □
+critical
+0
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'deterministic_bridge_scan'
+StageVerdict
+critical
+' critical, '
+warning
+' warning, '
+low
+' low across '
+checks
+' checks'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+warning
+0
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'deterministic_bridge_scan'
+StageVerdict
+warning
+' warning, '
+low
+' low across '
+checks
+' checks'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'deterministic_bridge_scan'
+StageVerdict
+'Clean: '
+checks
+' checks, '
+low
+' low-severity only'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'deterministic_bridge_scan'
+StageVerdict
+'Bridge: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+_verify_import
+●●●●●● 1mm □△
+module_path
+expected_names
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Deterministic import verification — does the module load and expose expected names?'
+mod
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+module_path
+●●●●●● 2mm □△
+missing
+●●●●●● 1mm □
+n
+n
+expected_names
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mod
+n
+●●●●●● 2mm □△
+●●●●●● 2mm □
+missing
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'import_'
+module_path
+StageVerdict
+module_path
+': missing '
+missing
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'import_'
+module_path
+StageVerdict
+module_path
+': all '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+expected_names
+●●●●●● 2mm □△
+' names found'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'import_'
+module_path
+StageVerdict
+'ImportError: '
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageCheck
+●●●●●● 1mm □△
+'import_'
+module_path
+StageVerdict
+'Import issue: '
+e
+●●●●●● 2mm □△
+StageCheck
+●●●●●● 1mm □
+run_e2e_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Run the full deterministic end-to-end LLM pipeline validation.\n    Genesis input → Governance → Memory → RAG → LLM → Pipeline →\n    Contracts → Brains → Agents → Output.\n\n    No LLM called. Every check is deterministic.\n    Every broken check and every fix is logged to Genesis individually.\n    '
+report
+●●●●●● 1mm □
+E2EReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □
+_stage_genesis
+_stage_governance
+_stage_memory
+_stage_retrieval
+_stage_llm_providers
+_stage_cognitive_pipeline
+_stage_coding_contracts
+_stage_brain_api
+_stage_agent_pool
+_stage_output_integrity
+stage_fn
+stages
+stage_result
+●●●●●● 1mm □
+stage_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+stage_result
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage_result
+●●●●●● 1mm □△
+StageCheck
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_log_stage_to_genesis
+●●●●●● 1mm □△
+stage_result
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+stage_result
+●●●●●● 2mm □△
+stage
+report
+report
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stage
+●●●●●● 2mm □△
+report
+stage
+report
+stage
+report
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+stage
+c
+StageVerdict
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+0
+report
+●●●●●● 1mm □
+StageVerdict
+●●●●●● 1mm △
+report
+0
+report
+●●●●●● 1mm □
+StageVerdict
+report
+●●●●●● 1mm □
+StageVerdict
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+_log_report_to_genesis
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[E2E] '
+report
+': '
+report
+' passed, '
+report
+' failed, '
+report
+' warnings in '
+report
+'ms'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+E2EReport
+●●●●●● 1mm □
+_log_stage_to_genesis
+●●●●●● 1mm □△
+stage
+●●●●●● 2mm □△
+StageResult
+'Log every check in a stage to Genesis — broken checks as errors, passes as events.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+Exception
+●●●●●● 3mm ○
+check
+stage
+is_broken
+●●●●●● 1mm □
+check
+StageVerdict
+is_warning
+●●●●●● 1mm □
+check
+StageVerdict
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_log_report_to_genesis
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+E2EReport
+'Log the overall e2e report summary to Genesis.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+stage_summary
+●●●●●● 1mm □
+stage
+report
+stage_summary
+●●●●●● 1mm □△
+'stage'
+'name'
+'verdict'
+'passed'
+'failed'
+'checks'
+stage
+stage
+stage
+stage
+stage
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stage
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception

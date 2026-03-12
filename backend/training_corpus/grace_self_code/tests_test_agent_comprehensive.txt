@@ -1,0 +1,1717 @@
+## test_agent_comprehensive.py
+'\nComprehensive Test Suite for Grace Agent Module\n================================================\nTests for the GraceAgent class and related components.\n\nCoverage:\n- TaskStatus enum\n- AgentConfig dataclass\n- TaskResult dataclass\n- GraceAgent class methods\n- Task classification\n- Entity extraction\n- Plan creation\n- Action decision making\n- Failure handling\n- Convenience methods\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+AsyncMock
+MagicMock
+patch
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+agent.grace_agent
+●●●●●● 2mm □△○
+TaskStatus
+AgentConfig
+TaskResult
+GraceAgent
+●●●●●● 2mm △
+TestTaskStatus
+'Test TaskStatus enum.'
+●●●●●● 1mm □
+test_all_statuses_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected statuses are defined.'
+expected
+●●●●●● 1mm □
+'PENDING'
+'PLANNING'
+'EXECUTING'
+'BLOCKED'
+'COMPLETED'
+'FAILED'
+'CANCELLED'
+status
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TaskStatus
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_status_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test status string values.'
+TaskStatus
+'pending'
+TaskStatus
+'planning'
+TaskStatus
+'executing'
+TaskStatus
+'blocked'
+TaskStatus
+'completed'
+TaskStatus
+'failed'
+TaskStatus
+'cancelled'
+●●●●●● 1mm □
+test_status_comparison
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test status equality comparison.'
+TaskStatus
+TaskStatus
+TaskStatus
+TaskStatus
+●●●●●● 1mm □
+test_status_iteration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test iterating over statuses.'
+statuses
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+TaskStatus
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+statuses
+●●●●●● 2mm □△
+7
+●●●●●● 2mm △
+TestAgentConfig
+'Test AgentConfig dataclass.'
+●●●●●● 1mm □
+test_default_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default configuration values.'
+config
+●●●●●● 1mm □
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+50
+config
+300
+config
+●●●●●● 2mm □
+config
+0.5
+config
+●●●●●● 3mm □△○
+config
+●●●●●● 3mm □△○
+config
+●●●●●● 3mm □△○
+config
+●●●●●● 3mm □△○
+config
+●●●●●● 1mm □
+config
+●●●●●● 3mm □△○
+config
+●●●●●● 3mm □△○
+config
+0.6
+●●●●●● 1mm □
+test_custom_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test custom configuration values.'
+config
+●●●●●● 1mm □
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+100
+config
+600
+config
+'/custom/path'
+config
+0.8
+config
+●●●●●● 1mm □
+config
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_safety_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test safety configuration settings.'
+config
+●●●●●● 1mm □
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 3mm □△○
+config
+●●●●●● 3mm □△○
+unsafe_config
+●●●●●● 1mm □
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unsafe_config
+●●●●●● 1mm □
+unsafe_config
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_learning_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test learning configuration settings.'
+config
+●●●●●● 1mm □
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+config
+0.9
+●●●●●● 2mm △
+TestTaskResult
+'Test TaskResult dataclass.'
+●●●●●● 1mm □
+test_default_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default TaskResult values.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'TEST-001'
+result
+TaskStatus
+result
+''
+result
+''
+result
+●●●●●● 2mm □
+result
+0
+result
+0
+result
+0
+result
+result
+result
+result
+0
+result
+0.0
+result
+0.0
+●●●●●● 1mm □
+test_task_result_with_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TaskResult with file tracking.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'new_file.py'
+result
+'existing.py'
+result
+'old_file.py'
+●●●●●● 1mm □
+test_task_result_with_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TaskResult with action counts.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+10
+result
+8
+result
+2
+●●●●●● 1mm □
+test_task_result_with_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TaskResult with error.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+TaskStatus
+result
+'Something went wrong'
+●●●●●● 1mm □
+test_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TaskResult serialization.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'task_id'
+'TEST-005'
+data
+'status'
+'completed'
+data
+'summary'
+'Task completed successfully'
+data
+'actions_executed'
+5
+data
+'actions_succeeded'
+5
+data
+'patterns_learned'
+3
+data
+'trust_delta'
+0.1
+'started_at'
+data
+data
+'completed_at'
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_to_dict_with_timestamps
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TaskResult serialization with timestamps.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'started_at'
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'completed_at'
+now
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'duration_seconds'
+10.0
+●●●●●● 2mm △
+TestGraceAgentInit
+'Test GraceAgent initialization.'
+●●●●●● 1mm □
+test_default_init
+●●●●●● 1mm □△
+self
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+'Test default agent initialization.'
+mock_bridge
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_feedback
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+agent
+AgentConfig
+●●●●●● 2mm □△
+agent
+●●●●●● 2mm □
+agent
+●●●●●● 2mm □
+agent
+●●●●●● 2mm □
+agent
+●●●●●● 2mm □
+agent
+agent
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_custom_config_init
+●●●●●● 1mm □△
+self
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+'Test agent with custom config.'
+mock_bridge
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_feedback
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+10
+agent
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_init_with_components
+●●●●●● 1mm □△
+self
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+'Test agent with external components.'
+mock_bridge
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_feedback
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_retriever
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_llm
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_genesis
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+mock_retriever
+agent
+mock_llm
+agent
+mock_genesis
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestTaskClassification
+'Test task type classification.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+method
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set up test agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+mb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+mf
+mb
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mf
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_classify_bug_fix_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of bug fix tasks.'
+bug_tasks
+●●●●●● 1mm □
+'Fix the bug in authentication'
+"There's an error in the login page"
+'The upload feature is broken'
+'Fix this issue with the API'
+task
+bug_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+'bug_fix'
+●●●●●● 1mm □
+test_classify_feature_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of feature tasks.'
+feature_tasks
+●●●●●● 1mm □
+'Add a new dashboard component'
+'Create a user profile page'
+'Implement the search functionality'
+'Build a new notification system'
+task
+feature_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+'feature'
+●●●●●● 1mm □
+test_classify_refactor_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of refactor tasks.'
+refactor_tasks
+●●●●●● 1mm □
+'Refactor the database module'
+'Clean up the utility functions'
+'Improve the code structure'
+'Optimize the query performance'
+task
+refactor_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+'refactor'
+●●●●●● 1mm □
+test_classify_testing_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of testing tasks.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Run all tests'
+●●●●●● 2mm □△
+'testing'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Testing the module'
+●●●●●● 2mm □△
+'testing'
+●●●●●● 1mm □
+test_classify_documentation_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of documentation tasks.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Document the API'
+●●●●●● 2mm □△
+'documentation'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Update readme file'
+●●●●●● 2mm □△
+'documentation'
+●●●●●● 1mm □
+test_classify_review_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of review tasks.'
+review_tasks
+●●●●●● 1mm □
+'Review the PR changes'
+'Check the code quality'
+'Analyze the performance metrics'
+task
+review_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+'review'
+●●●●●● 1mm □
+test_classify_general_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test classification of general tasks.'
+general_tasks
+●●●●●● 1mm □
+'Update the configuration'
+'Deploy to staging'
+'Run the migration'
+task
+general_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+'general'
+●●●●●● 2mm △
+TestEntityExtraction
+'Test entity extraction from task descriptions.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+method
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set up test agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+mb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+mf
+mb
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mf
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_extract_file_paths
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction of file paths.'
+task
+●●●●●● 1mm □
+'Fix the bug in auth.py and utils/helpers.py'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+file_entities
+●●●●●● 1mm □
+e
+e
+entities
+e
+'type'
+'file'
+file_values
+●●●●●● 1mm □
+e
+'value'
+e
+file_entities
+'auth.py'
+file_values
+'utils/helpers.py'
+file_values
+●●●●●● 1mm □
+test_extract_function_names
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction of function names.'
+task
+●●●●●● 1mm □
+'The calculate_total() function has a bug'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+func_entities
+●●●●●● 1mm □
+e
+e
+entities
+e
+'type'
+'function'
+func_values
+●●●●●● 1mm □
+e
+'value'
+e
+func_entities
+'calculate_total'
+func_values
+●●●●●● 1mm □
+test_extract_class_names
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction of class names.'
+task
+●●●●●● 1mm □
+'Refactor the UserService and AuthManager classes'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+class_entities
+●●●●●● 1mm □
+e
+e
+entities
+e
+'type'
+'class'
+class_values
+●●●●●● 1mm □
+e
+'value'
+e
+class_entities
+'UserService'
+class_values
+'AuthManager'
+class_values
+●●●●●● 1mm □
+test_extract_mixed_entities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction of mixed entity types.'
+task
+●●●●●● 1mm □
+'Fix the process_data() method in DataProcessor class in processor.py'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+e
+'type'
+'file'
+'processor.py'
+e
+'value'
+e
+entities
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+e
+'type'
+'function'
+'process_data'
+e
+'value'
+e
+entities
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+e
+'type'
+'class'
+'DataProcessor'
+e
+'value'
+e
+entities
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_extract_no_entities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction when no entities present.'
+task
+●●●●●● 1mm □
+'improve the system'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+file_entities
+●●●●●● 1mm □
+e
+e
+entities
+e
+'type'
+'file'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_entities
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_filter_keywords
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that Python keywords are filtered out.'
+task
+●●●●●● 1mm □
+'if the for loop while iterating with clause'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+func_entities
+●●●●●● 1mm □
+e
+e
+entities
+e
+'type'
+'function'
+func_values
+●●●●●● 1mm □
+e
+'value'
+e
+func_entities
+'if'
+func_values
+'for'
+func_values
+'while'
+func_values
+'with'
+func_values
+●●●●●● 2mm △
+TestPlanCreation
+'Test plan creation for different task types.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+method
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set up test agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+mb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+mf
+mb
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mf
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+'Test plan creation for bug fix tasks.'
+understanding
+●●●●●● 1mm □
+'task_type'
+'bug_fix'
+plan
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Fix the bug'
+understanding
+●●●●●● 2mm □△
+plan
+'task_type'
+'bug_fix'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+'steps'
+●●●●●● 2mm □△
+5
+plan
+'current_step'
+0
+step_actions
+●●●●●● 1mm □
+s
+'action'
+s
+plan
+'steps'
+'read_relevant_files'
+step_actions
+'understand_bug'
+step_actions
+'write_fix'
+step_actions
+'run_tests'
+step_actions
+'finish'
+step_actions
+pytest
+'Test plan creation for feature tasks.'
+understanding
+●●●●●● 1mm □
+'task_type'
+'feature'
+plan
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Add new feature'
+understanding
+●●●●●● 2mm □△
+plan
+'task_type'
+'feature'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+'steps'
+●●●●●● 2mm □△
+6
+step_actions
+●●●●●● 1mm □
+s
+'action'
+s
+plan
+'steps'
+'understand_requirements'
+step_actions
+'read_existing_code'
+step_actions
+'write_code'
+step_actions
+'write_tests'
+step_actions
+pytest
+'Test plan creation for refactor tasks.'
+understanding
+●●●●●● 1mm □
+'task_type'
+'refactor'
+plan
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Refactor code'
+understanding
+●●●●●● 2mm □△
+plan
+'task_type'
+'refactor'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+'steps'
+●●●●●● 2mm □△
+5
+step_actions
+●●●●●● 1mm □
+s
+'action'
+s
+plan
+'steps'
+step_actions
+●●●●●● 1mm □△
+'run_tests'
+●●●●●● 2mm □△
+2
+pytest
+'Test plan creation for general tasks.'
+understanding
+●●●●●● 1mm □
+'task_type'
+'general'
+plan
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Do something'
+understanding
+●●●●●● 2mm □△
+plan
+'task_type'
+'general'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+'steps'
+●●●●●● 2mm □△
+4
+step_actions
+●●●●●● 1mm □
+s
+'action'
+s
+plan
+'steps'
+'analyze'
+step_actions
+'execute'
+step_actions
+'verify'
+step_actions
+'finish'
+step_actions
+pytest
+●●●●●● 2mm △
+TestFailureHandling
+'Test failure handling in agent.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+method
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set up test agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+mb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+mf
+mb
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mf
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+"Test handling of 'not found' errors - should continue."
+mock_result
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+'File not found: test.py'
+should_continue
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mock_result
+●●●●●● 2mm □△
+should_continue
+●●●●●● 3mm □△○
+pytest
+'Test handling of permission errors - should stop.'
+mock_result
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+'Permission denied: /root/secret'
+should_continue
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mock_result
+●●●●●● 2mm □△
+should_continue
+●●●●●● 1mm □
+pytest
+'Test handling of timeout errors - should continue.'
+mock_result
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+'Operation timeout after 30s'
+should_continue
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mock_result
+●●●●●● 2mm □△
+should_continue
+●●●●●● 3mm □△○
+pytest
+'Test handling of repeated failures - should stop after 3.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.ActionStatus'
+●●●●●● 2mm □△
+MockStatus
+MockStatus
+●●●●●● 1mm □
+'FAILURE'
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+'FAILURE'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+'Generic error'
+should_continue
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mock_result
+●●●●●● 2mm □△
+should_continue
+●●●●●● 1mm □
+pytest
+●●●●●● 2mm △
+TestConvenienceMethods
+'Test convenience methods.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+method
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set up test agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+mb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+mf
+mb
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mf
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+'Test write_code convenience method.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'solve_task'
+●●●●●● 2mm □△
+mock_solve
+mock_solve
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_solve
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_solve
+'new_module.py'
+call_args
+0
+0
+call_args
+1
+'context'
+'target_file'
+'new_module.py'
+pytest
+'Test fix_bug convenience method.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'solve_task'
+●●●●●● 2mm □△
+mock_solve
+mock_solve
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_solve
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_solve
+'Login not working'
+call_args
+0
+0
+'auth.py'
+call_args
+0
+0
+pytest
+'Test run_tests convenience method.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'solve_task'
+●●●●●● 2mm □△
+mock_solve
+mock_solve
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_solve
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_solve
+'./tests'
+call_args
+0
+0
+pytest
+'Test refactor convenience method.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'solve_task'
+●●●●●● 2mm □△
+mock_solve
+mock_solve
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_solve
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_solve
+'legacy.py'
+call_args
+0
+0
+'Extract common patterns'
+call_args
+0
+0
+pytest
+●●●●●● 2mm △
+TestSummaryCreation
+'Test summary creation.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+method
+mock_feedback
+mock_bridge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set up test agent.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+mb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+mf
+mb
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mf
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+'Test basic summary creation.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Fix the bug'
+result
+●●●●●● 2mm □△
+'Fix the bug'
+summary
+'completed'
+summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'5'
+summary
+'4'
+summary
+'succeeded'
+summary
+pytest
+'Test summary with file changes.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Add feature'
+result
+●●●●●● 2mm □△
+'new.py'
+summary
+'existing.py'
+summary
+pytest
+'Test summary with error.'
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Build project'
+result
+●●●●●● 2mm □△
+'Compilation failed'
+summary
+pytest
+●●●●●● 2mm △
+TestAgentIntegration
+'Integration tests for GraceAgent.'
+'Test complete solve_task flow.'
+mock_execution
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_bridge
+●●●●●● 1mm □
+mock_execution
+mock_feedback
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.ActionStatus'
+●●●●●● 2mm □△
+MockStatus
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.GraceAction'
+●●●●●● 2mm □△
+MockAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.create_action'
+●●●●●● 2mm □△
+mock_create
+MockStatus
+●●●●●● 1mm □
+'FAILURE'
+MockAction
+●●●●●● 1mm □
+'FINISH'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_count
+●●●●●● 1mm □
+0
+call_count
+1
+●●●●●● 2mm □
+call_count
+1
+mock_finish
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_finish
+●●●●●● 1mm □
+'FINISH'
+●●●●●● 3mm ○
+mock_finish
+●●●●●● 3mm ○
+●●●●●● 2mm □
+agent
+●●●●●● 1mm □
+decide_action
+result
+●●●●●● 1mm □
+agent
+●●●●●● 1mm □△
+'Do something'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'TASK-'
+●●●●●● 2mm □△
+result
+TaskStatus
+TaskStatus
+pytest
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+'Test solve_task with error handling.'
+mock_execution
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_bridge
+●●●●●● 1mm □
+mock_execution
+mock_feedback
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+agent
+●●●●●● 1mm □△
+'Fail task'
+●●●●●● 2mm □△
+result
+TaskStatus
+'Test error'
+result
+result
+●●●●●● 2mm □
+pytest
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_execution_bridge'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'agent.grace_agent.get_feedback_processor'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

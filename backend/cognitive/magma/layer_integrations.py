@@ -604,7 +604,6 @@ class InterpreterPatternMemory:
     def get_pattern_evolution(
         self,
         pattern_type: str,
-        lookback_hours: int = 24
     ) -> List[PatternMemoryEntry]:
         """Get pattern evolution over time."""
         cutoff = datetime.now(timezone.utc)

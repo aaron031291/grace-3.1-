@@ -1,0 +1,78 @@
+## test_url_simple.py
+test_url
+●●●●●● 1mm □
+'https://disk.sample.cat/samples/pptx/sample1.pptx'
+document_extensions
+●●●●●● 1mm □
+'.pdf'
+'.doc'
+'.docx'
+'.txt'
+'.rtf'
+'.ppt'
+'.pptx'
+'.odp'
+'.xls'
+'.xlsx'
+'.csv'
+'.ods'
+'.epub'
+'.mobi'
+url_lower
+●●●●●● 1mm □
+test_url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing: '
+test_url
+'\n'
+●●●●●● 2mm □△
+ext
+document_extensions
+●●●●●● 2mm □
+ext
+url_lower
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Found extension: '
+ext
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Result: is_downloadable_document = True'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ No extension found'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Result: is_downloadable_document = False'
+●●●●●● 2mm □△
+download_patterns
+●●●●●● 1mm □
+'/download/'
+'/get/'
+'/file/'
+'/attachment/'
+'download?'
+'file?'
+'attachment?'
+'/api/download'
+'/api/file'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking download patterns:'
+●●●●●● 2mm □△
+pattern
+download_patterns
+●●●●●● 2mm □
+pattern
+url_lower
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Matches pattern: '
+pattern
+●●●●●● 2mm □△

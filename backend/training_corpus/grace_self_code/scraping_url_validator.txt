@@ -1,0 +1,471 @@
+## url_validator.py
+'\nURL validation and sanitization for web scraping.\n'
+●●●●●● 3mm □△○
+urllib.parse
+●●●●●● 2mm □△○
+urlparse
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Tuple
+Optional
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm △
+URLValidator
+'Validate and sanitize URLs for web scraping.'
+BLOCKED_SCHEMES
+●●●●●● 1mm □
+'file'
+'ftp'
+'data'
+'javascript'
+'mailto'
+DRIVE_DOMAINS
+●●●●●● 1mm □
+'drive.google.com'
+'docs.google.com'
+'sheets.google.com'
+'slides.google.com'
+'dropbox.com'
+'onedrive.live.com'
+'1drv.ms'
+'box.com'
+'icloud.com'
+INTERNAL_PATTERNS
+●●●●●● 1mm □
+'localhost'
+'127.0.0.1'
+'0.0.0.0'
+'::1'
+'10.'
+'172.16.'
+'192.168.'
+●●●●●● 1mm □
+validate
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Validate URL and return (is_valid, error_message).\n        \n        Args:\n            url: The URL to validate\n            \n        Returns:\n            Tuple of (is_valid, error_message)\n            If valid, error_message is None\n            If invalid, error_message contains the reason\n        '
+●●●●●● 2mm □
+url
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'URL cannot be empty'
+url
+●●●●●● 1mm □
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parsed
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'URL must include a scheme (http:// or https://)'
+●●●●●● 2mm □
+parsed
+'http'
+'https'
+●●●●●● 2mm □
+parsed
+URLValidator
+●●●●●● 3mm ○
+●●●●●● 1mm □
+"Scheme '"
+parsed
+"' is not allowed for security reasons"
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'URL must use http or https protocol'
+●●●●●● 2mm □
+parsed
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'URL must include a domain name'
+domain
+URLValidator
+●●●●●● 2mm □
+domain
+parsed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Cloud storage links ('
+domain
+') are not supported. Please use direct website URLs instead. If you need to scrape content from cloud storage, download the files first and upload them directly.'
+pattern
+URLValidator
+●●●●●● 2mm □
+pattern
+parsed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Localhost and internal network URLs are not allowed'
+●●●●●● 2mm □
+'..'
+parsed
+'//'
+parsed
+1
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'URL appears to be malformed'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Invalid URL format: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+normalize
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Normalize URL by removing fragments and adding trailing slash if needed.\n        \n        Args:\n            url: The URL to normalize\n            \n        Returns:\n            Normalized URL\n        '
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+normalized
+●●●●●● 1mm □
+parsed
+'://'
+parsed
+parsed
+●●●●●● 2mm □
+parsed
+normalized
+'?'
+parsed
+●●●●●● 3mm ○
+normalized
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+is_same_domain
+●●●●●● 1mm □△
+url1
+url2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Check if two URLs are from the same domain.\n        \n        Args:\n            url1: First URL\n            url2: Second URL\n            \n        Returns:\n            True if same domain, False otherwise\n        '
+domain1
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain2
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain1
+●●●●●● 1mm □
+domain1
+●●●●●● 1mm □△
+'www.'
+''
+●●●●●● 2mm □△
+domain2
+●●●●●● 1mm □
+domain2
+●●●●●● 1mm □△
+'www.'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+domain1
+domain2
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+domain1
+●●●●●● 1mm □△
+'.'
+●●●●●● 3mm ○
+domain2
+●●●●●● 2mm □△
+domain2
+●●●●●● 1mm □△
+'.'
+●●●●●● 3mm ○
+domain1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+is_downloadable_document
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if URL points to a downloadable document for RAG.\n        \n        These documents will be downloaded and stored in the knowledge base\n        instead of being skipped as binary files.\n        \n        Args:\n            url: The URL to check\n            \n        Returns:\n            True if downloadable document, False otherwise\n        '
+document_extensions
+●●●●●● 1mm □
+'.pdf'
+'.doc'
+'.docx'
+'.txt'
+'.rtf'
+'.ppt'
+'.pptx'
+'.odp'
+'.xls'
+'.xlsx'
+'.csv'
+'.ods'
+'.epub'
+'.mobi'
+url_lower
+●●●●●● 1mm □
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+document_extensions
+●●●●●● 2mm □
+ext
+url_lower
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+download_patterns
+●●●●●● 1mm □
+'/download/'
+'/get/'
+'/file/'
+'/attachment/'
+'download?'
+'file?'
+'attachment?'
+'/api/download'
+'/api/file'
+pattern
+download_patterns
+●●●●●● 2mm □
+pattern
+url_lower
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+is_google_drive_url
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if URL is a Google Drive document link.\n        \n        Args:\n            url: The URL to check\n            \n        Returns:\n            True if Google Drive document URL, False otherwise\n        '
+drive_patterns
+●●●●●● 1mm □
+'drive.google.com/file'
+'drive.google.com/uc'
+'docs.google.com/document'
+'docs.google.com/spreadsheets'
+'docs.google.com/presentation'
+url_lower
+●●●●●● 1mm □
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+pattern
+url_lower
+pattern
+drive_patterns
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+extract_drive_file_id
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Extract Google Drive file ID from URL.\n        \n        Args:\n            url: Google Drive URL\n            \n        Returns:\n            File ID if found, None otherwise\n        '
+patterns
+●●●●●● 1mm □
+'/file/d/([a-zA-Z0-9_-]+)'
+'[?&]id=([a-zA-Z0-9_-]+)'
+'/document/d/([a-zA-Z0-9_-]+)'
+'/spreadsheets/d/([a-zA-Z0-9_-]+)'
+'/presentation/d/([a-zA-Z0-9_-]+)'
+pattern
+patterns
+match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+●●●●●● 3mm ○
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_drive_download_url
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Convert Google Drive sharing URL to direct download URL.\n        \n        Args:\n            url: Google Drive sharing URL\n            \n        Returns:\n            Direct download URL if successful, None otherwise\n        '
+file_id
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_id
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'docs.google.com/document'
+url
+●●●●●● 3mm ○
+'https://docs.google.com/document/d/'
+file_id
+'/export?format=docx'
+●●●●●● 1mm △
+'docs.google.com/spreadsheets'
+url
+●●●●●● 3mm ○
+'https://docs.google.com/spreadsheets/d/'
+file_id
+'/export?format=xlsx'
+●●●●●● 2mm □
+'docs.google.com/presentation'
+url
+●●●●●● 3mm ○
+'https://docs.google.com/presentation/d/'
+file_id
+'/export?format=pptx'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'https://drive.google.com/uc?id='
+file_id
+'&export=download'
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+is_binary_file
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if URL points to a binary file based on extension.\n        \n        Args:\n            url: The URL to check\n            \n        Returns:\n            True if binary file, False otherwise\n        '
+binary_extensions
+●●●●●● 1mm □
+'.pdf'
+'.zip'
+'.tar'
+'.gz'
+'.rar'
+'.7z'
+'.exe'
+'.dmg'
+'.pkg'
+'.deb'
+'.rpm'
+'.jpg'
+'.jpeg'
+'.png'
+'.gif'
+'.bmp'
+'.svg'
+'.webp'
+'.mp4'
+'.avi'
+'.mov'
+'.wmv'
+'.flv'
+'.mkv'
+'.mp3'
+'.wav'
+'.flac'
+'.aac'
+'.ogg'
+'.doc'
+'.docx'
+'.xls'
+'.xlsx'
+'.ppt'
+'.pptx'
+'.iso'
+'.bin'
+'.apk'
+url_lower
+●●●●●● 1mm □
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+url_lower
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+ext
+binary_extensions
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △

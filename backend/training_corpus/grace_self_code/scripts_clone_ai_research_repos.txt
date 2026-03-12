@@ -1,0 +1,727 @@
+## clone_ai_research_repos.py
+"\nScript to clone AI research repositories for Grace's training data.\n\nAccepts any git clone URL (e.g. from GitHub, GitLab, or other hosts). Repository\ndefinitions can be (owner/repo, name) for legacy GitHub.com or full URLs.\n\nUsage:\n    python backend/scripts/clone_ai_research_repos.py\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Tuple
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+REPOSITORIES
+●●●●●● 1mm □
+'frameworks'
+'enterprise'
+'infrastructure'
+'references'
+'education'
+'ai_ml_advanced'
+'web_development'
+'databases'
+'languages'
+'devops'
+'scientific'
+'security'
+'awesome_lists'
+'web_frontend'
+'web_backend'
+'mobile'
+'cloud_infrastructure'
+'data_analytics'
+'ml_ai_frameworks'
+'databases_enterprise'
+'devops_cicd'
+'monitoring_observability'
+'security_enterprise'
+'testing_enterprise'
+'cms_ecommerce'
+'blockchain_distributed'
+'messaging'
+'vllm-project/aibrix'
+'aibrix'
+'infiniflow/ragflow'
+'ragflow'
+'langchain-ai/langgraph'
+'langgraph'
+'langgenius/dify'
+'dify'
+'TransformerOptimus/SuperAGI'
+'SuperAGI'
+'OpenDevin/OpenDevin'
+'OpenDevin'
+'deepset-ai/haystack'
+'haystack'
+'neuro-symbolic-ai/peirce'
+'peirce'
+'odoo/odoo'
+'odoo'
+'frappe/erpnext'
+'erpnext'
+'kubernetes/kubernetes'
+'kubernetes'
+'apache/kafka'
+'kafka'
+'apache/cassandra'
+'cassandra'
+'binhnguyennus/awesome-scalability'
+'awesome-scalability'
+'freeCodeCamp/freeCodeCamp'
+'freeCodeCamp'
+'microsoft/generative-ai-for-beginners'
+'generative-ai-for-beginners'
+'run-llama/llama_index'
+'llama_index'
+'huggingface/transformers'
+'transformers'
+'pytorch/pytorch'
+'pytorch'
+'microsoft/autogen'
+'autogen'
+'vercel/next.js'
+'next.js'
+'django/django'
+'django'
+'fastapi/fastapi'
+'fastapi'
+'postgres/postgres'
+'postgres'
+'redis/redis'
+'redis'
+'duckdb/duckdb'
+'duckdb'
+'python/cpython'
+'cpython'
+'rust-lang/rust'
+'rust'
+'golang/go'
+'go'
+'hashicorp/terraform'
+'terraform'
+'grafana/grafana'
+'grafana'
+'numpy/numpy'
+'numpy'
+'pandas-dev/pandas'
+'pandas'
+'scikit-learn/scikit-learn'
+'scikit-learn'
+'matplotlib/matplotlib'
+'matplotlib'
+'OWASP/CheatSheetSeries'
+'CheatSheetSeries'
+'sindresorhus/awesome'
+'awesome'
+'awesome-selfhosted/awesome-selfhosted'
+'awesome-selfhosted'
+'avelino/awesome-go'
+'awesome-go'
+'vinta/awesome-python'
+'awesome-python'
+'enaqx/awesome-react'
+'awesome-react'
+'facebook/react'
+'react'
+'vuejs/vue'
+'vue'
+'angular/angular'
+'angular'
+'sveltejs/svelte'
+'svelte'
+'microsoft/TypeScript'
+'TypeScript'
+'spring-projects/spring-boot'
+'spring-boot'
+'expressjs/express'
+'express'
+'gin-gonic/gin'
+'gin'
+'actix/actix-web'
+'actix-web'
+'ruby-on-rails/rails'
+'rails'
+'facebook/react-native'
+'react-native'
+'flutter/flutter'
+'flutter'
+'apple/swift'
+'swift'
+'hashicorp/consul'
+'consul'
+'etcd-io/etcd'
+'etcd'
+'envoyproxy/envoy'
+'envoy'
+'traefik/traefik'
+'traefik'
+'istio/istio'
+'istio'
+'apache/spark'
+'spark'
+'apache/flink'
+'flink'
+'apache/airflow'
+'airflow'
+'prestodb/presto'
+'presto'
+'apache/druid'
+'druid'
+'tensorflow/tensorflow'
+'tensorflow'
+'apache/mxnet'
+'mxnet'
+'ray-project/ray'
+'ray'
+'wandb/client'
+'wandb'
+'mongodb/mongo'
+'mongo'
+'cockroachdb/cockroach'
+'cockroach'
+'ClickHouse/ClickHouse'
+'ClickHouse'
+'tikv/tikv'
+'tikv'
+'jenkinsci/jenkins'
+'jenkins'
+'gitlabhq/gitlab-ce'
+'gitlab-ce'
+'harness/drone'
+'drone'
+'argoproj/argo-cd'
+'argo-cd'
+'prometheus/prometheus'
+'prometheus'
+'jaegertracing/jaeger'
+'jaeger'
+'elastic/elasticsearch'
+'elasticsearch'
+'hashicorp/vault'
+'vault'
+'aquasecurity/trivy'
+'trivy'
+'falcosecurity/falco'
+'falco'
+'SeleniumHQ/selenium'
+'selenium'
+'locustio/locust'
+'locust'
+'facebook/jest'
+'jest'
+'strapi/strapi'
+'strapi'
+'magento/magento2'
+'magento2'
+'ethereum/go-ethereum'
+'go-ethereum'
+'ipfs/go-ipfs'
+'go-ipfs'
+'apache/pulsar'
+'pulsar'
+●●●●●● 1mm □
+clone_repository
+●●●●●● 1mm □△
+repo_url
+target_path
+repo_name
+depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Path
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+1
+'\n    Clone a repository from any git host.\n\n    Args:\n        repo_url: Full git URL (https://... or git@...) or owner/repo for legacy GitHub.com\n        target_path: Path where repository should be cloned\n        repo_name: Local directory name for the repository\n        depth: Git clone depth (1 = shallow clone, None = full clone)\n\n    Returns:\n        (success, message)\n    '
+●●●●●● 2mm □
+'://'
+repo_url
+repo_url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'git@'
+●●●●●● 2mm □△
+full_url
+●●●●●● 1mm □
+repo_url
+●●●●●● 1mm □△
+'.git'
+●●●●●● 2mm □△
+repo_url
+repo_url
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+'.git'
+●●●●●● 3mm □
+full_url
+●●●●●● 1mm □
+'https://github.com/'
+repo_url
+'.git'
+clone_path
+●●●●●● 1mm □
+target_path
+●●●●●● 3mm □△
+repo_name
+●●●●●● 2mm □
+clone_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Repository already exists: '
+repo_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Already exists'
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+'git'
+'clone'
+●●●●●● 2mm □
+depth
+cmd
+●●●●●● 1mm □△
+'--depth'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+depth
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □△
+full_url
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+clone_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cloning '
+repo_url
+' to '
+clone_path
+'...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+0
+logger
+●●●●●● 1mm □△
+'✓ Successfully cloned '
+repo_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Success'
+●●●●●● 3mm □
+error_msg
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✗ Failed to clone '
+repo_name
+': '
+error_msg
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+error_msg
+subprocess
+error_msg
+●●●●●● 1mm □
+'Timeout cloning '
+repo_name
+logger
+●●●●●● 1mm □△
+'✗ '
+error_msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+error_msg
+Exception
+error_msg
+●●●●●● 1mm □
+'Error cloning '
+repo_name
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✗ '
+error_msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+error_msg
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+clone_all_repositories
+●●●●●● 1mm □△
+base_path
+depth
+categories
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+1
+●●●●●● 2mm □
+'\n    Clone all repositories.\n    \n    Args:\n        base_path: Base path for ai_research directory\n        depth: Git clone depth (1 = shallow clone)\n        categories: List of categories to clone (None = all)\n    \n    Returns:\n        Statistics dictionary\n    '
+base_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+ai_research_path
+●●●●●● 1mm □
+base_path
+●●●●●● 3mm □△
+'ai_research'
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cloning AI Research Repositories'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Base path: '
+ai_research_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Clone depth: '
+depth
+' ('
+depth
+'shallow'
+'full'
+')'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+'total_repos'
+'cloned'
+'already_exists'
+'failed'
+'by_category'
+0
+0
+0
+0
+categories_to_process
+●●●●●● 1mm □
+categories
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+REPOSITORIES
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+category
+categories_to_process
+●●●●●● 2mm □
+category
+REPOSITORIES
+logger
+●●●●●● 1mm □△
+'Unknown category: '
+category
+●●●●●● 2mm □△
+category_path
+●●●●●● 1mm □
+ai_research_path
+●●●●●● 3mm □△
+category
+category_stats
+●●●●●● 1mm □
+'total'
+'cloned'
+'already_exists'
+'failed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+REPOSITORIES
+category
+●●●●●● 2mm □△
+0
+0
+0
+logger
+●●●●●● 1mm □△
+'\n'
+'*'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Category: '
+category
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+repo_url
+repo_name
+REPOSITORIES
+category
+stats
+'total_repos'
+1
+success
+message
+●●●●●● 1mm □
+clone_repository
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 2mm □
+message
+'Already exists'
+category_stats
+'already_exists'
+1
+stats
+'already_exists'
+1
+●●●●●● 3mm □
+category_stats
+'cloned'
+1
+●●●●●● 3mm □
+stats
+'cloned'
+1
+●●●●●● 3mm □
+category_stats
+'failed'
+1
+●●●●●● 3mm □
+stats
+'failed'
+1
+stats
+'by_category'
+category
+●●●●●● 1mm □
+category_stats
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'CLONING SUMMARY'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total repositories: '
+stats
+'total_repos'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Successfully cloned: '
+stats
+'cloned'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Already existed: '
+stats
+'already_exists'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Failed: '
+stats
+'failed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+category
+cat_stats
+stats
+'by_category'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+category
+': '
+cat_stats
+'cloned'
+' cloned, '
+cat_stats
+'already_exists'
+' existed, '
+cat_stats
+'failed'
+' failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point.'
+script_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_root
+●●●●●● 1mm □
+script_path
+base_path
+●●●●●● 1mm □
+project_root
+●●●●●● 3mm □△
+'data'
+subprocess
+●●●●●● 1mm □△
+'git'
+'--version'
+●●●●●● 2mm □△
+subprocess
+FileNotFoundError
+logger
+●●●●●● 1mm □△
+'Git is not installed or not in PATH'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+clone_all_repositories
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'failed'
+0
+logger
+●●●●●● 1mm □△
+'\n⚠️  '
+stats
+'failed'
+' repositories failed to clone'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Check the logs above for error messages'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'\n✓ All repositories cloned successfully!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'\nNext step: Run ingestion script:'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'  python backend/scripts/ingest_ai_research_repos.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

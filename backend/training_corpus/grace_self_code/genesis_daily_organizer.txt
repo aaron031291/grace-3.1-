@@ -1,0 +1,1128 @@
+## daily_organizer.py
+'\nGenesis Key Daily Organizer.\n\nExports Genesis Keys to Layer 1 folder and creates daily summaries.\nLibrarian organizes keys every 24 hours with metadata.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKeyDailyOrganizer
+'\n    Organizes Genesis Keys daily into Layer 1 folder structure.\n\n    Structure:\n    layer_1/\n        genesis_keys/\n            2026-01-11/\n                metadata.json (summary of the day)\n                api_requests.json (all API request keys)\n                user_inputs.json (all user input keys)\n                file_operations.json (all file operation keys)\n                errors.json (all error keys)\n                all_keys.json (complete export)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+layer1_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+layer1_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+layer1_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'layer_1'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'genesis_keys'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ensure_directories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure all necessary directories exist.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+export_daily_keys
+●●●●●● 1mm □△
+self
+target_date
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Export all Genesis Keys for a specific day to Layer 1.\n\n        Args:\n            target_date: Date to export (defaults to today)\n            session: Database session\n\n        Returns:\n            Export summary with statistics\n        '
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 2mm □
+target_date
+●●●●●● 2mm □
+target_date
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+date_str
+●●●●●● 1mm □
+target_date
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+day_folder
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+date_str
+day_folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Exporting Genesis Keys for '
+date_str
+●●●●●● 2mm □△
+start_of_day
+●●●●●● 1mm □
+target_date
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_of_day
+●●●●●● 1mm □
+start_of_day
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+start_of_day
+GenesisKey
+end_of_day
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+logger
+●●●●●● 1mm □△
+'No Genesis Keys found for '
+date_str
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'date'
+'total_keys'
+'exported'
+date_str
+0
+●●●●●● 1mm □
+organized_keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+date_str
+organized_keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+day_folder
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+day_folder
+organized_keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+day_folder
+metadata
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✅ Exported '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+' Genesis Keys to '
+day_folder
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'date'
+'folder'
+'total_keys'
+'by_type'
+'metadata'
+'exported'
+date_str
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+day_folder
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+k
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+organized_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_organize_keys_by_type
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+'Organize keys by type.'
+organized
+●●●●●● 1mm □
+'api_requests'
+'user_inputs'
+'file_operations'
+'code_changes'
+'errors'
+'fixes'
+'other'
+key
+keys
+●●●●●● 2mm □
+key
+GenesisKeyType
+organized
+'api_requests'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm △
+key
+GenesisKeyType
+organized
+'user_inputs'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+GenesisKeyType
+organized
+'file_operations'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm △
+key
+GenesisKeyType
+organized
+'code_changes'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+organized
+'errors'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm △
+key
+GenesisKeyType
+organized
+'fixes'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+organized
+'other'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+organized
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm □
+_generate_daily_metadata
+●●●●●● 1mm □△
+self
+keys
+date_str
+organized_keys
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GenesisKey
+'\n        Generate metadata summary for the day.\n\n        Includes:\n        - What happened today (high-level summary)\n        - Key statistics\n        - Top activities\n        - Errors and fixes\n        - Most active users\n        '
+type_counts
+●●●●●● 1mm □
+k
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+organized_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+error_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+k
+k
+keys
+k
+●●●●●● 2mm □△
+fix_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+k
+k
+keys
+k
+GenesisKeyType
+●●●●●● 2mm □△
+users
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+k
+k
+keys
+k
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+k
+k
+keys
+k
+●●●●●● 2mm □△
+activities
+●●●●●● 1mm □
+key
+keys
+desc
+●●●●●● 1mm □
+key
+100
+activities
+desc
+●●●●●● 1mm □
+activities
+●●●●●● 1mm □△
+desc
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+top_activities
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+activities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+date_str
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+type_counts
+error_count
+fix_count
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+users
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+top_activities
+●●●●●● 2mm □△
+earliest
+●●●●●● 1mm □
+keys
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+k
+k
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latest
+●●●●●● 1mm □
+keys
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+k
+k
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'date'
+'generated_at'
+'summary'
+'statistics'
+'top_activities'
+'users'
+'files_touched'
+date_str
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+'total_keys'
+'by_type'
+'errors'
+'fixes'
+'unique_users'
+'unique_files'
+'time_range'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+type_counts
+error_count
+fix_count
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+users
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+'earliest'
+'latest'
+earliest
+earliest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latest
+latest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'description'
+'count'
+desc
+count
+desc
+count
+top_activities
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+users
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+50
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_summary_text
+●●●●●● 1mm □△
+self
+date_str
+total_keys
+type_counts
+error_count
+fix_count
+user_count
+file_count
+top_activities
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+'Generate natural language summary.'
+summary_parts
+●●●●●● 1mm □
+'On '
+date_str
+', GRACE tracked '
+total_keys
+' activities.'
+●●●●●● 2mm □
+type_counts
+activity_desc
+●●●●●● 1mm □
+●●●●●● 2mm □
+type_counts
+●●●●●● 1mm □△
+'api_requests'
+●●●●●● 2mm □△
+activity_desc
+●●●●●● 1mm □△
+type_counts
+'api_requests'
+' API requests'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+type_counts
+●●●●●● 1mm □△
+'user_inputs'
+●●●●●● 2mm □△
+activity_desc
+●●●●●● 1mm □△
+type_counts
+'user_inputs'
+' user interactions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+type_counts
+●●●●●● 1mm □△
+'file_operations'
+●●●●●● 2mm □△
+activity_desc
+●●●●●● 1mm □△
+type_counts
+'file_operations'
+' file operations'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+activity_desc
+summary_parts
+●●●●●● 1mm □△
+'This included '
+', '
+●●●●●● 1mm □△
+activity_desc
+●●●●●● 2mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_count
+0
+summary_parts
+●●●●●● 1mm □△
+user_count
+' unique user(s) interacted with the system.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_count
+0
+summary_parts
+●●●●●● 1mm □△
+file_count
+' different file(s) were accessed or modified.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error_count
+0
+summary_parts
+●●●●●● 1mm □△
+error_count
+' error(s) occurred.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fix_count
+0
+summary_parts
+●●●●●● 1mm □△
+fix_count
+' fix(es) were applied.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+top_activities
+top_desc
+top_count
+●●●●●● 1mm □
+top_activities
+0
+summary_parts
+●●●●●● 1mm □△
+"The most common activity was: '"
+top_desc
+"' ("
+top_count
+' times).'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+' '
+●●●●●● 1mm □△
+summary_parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_export_all_keys
+●●●●●● 1mm □△
+self
+day_folder
+keys
+●●●●●● 2mm □△
+Path
+●●●●●● 3mm □△
+GenesisKey
+'Export all keys to all_keys.json.'
+all_keys_file
+●●●●●● 1mm □
+day_folder
+●●●●●● 3mm □△
+'all_keys.json'
+keys_data
+●●●●●● 1mm □
+'key_id'
+'key_type'
+'status'
+'what'
+'who'
+'when'
+'where'
+'why'
+'how'
+'file_path'
+'is_error'
+'error_message'
+'metadata_human'
+key
+key
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+key
+key
+key
+key
+key
+key
+●●●●●● 2mm □
+key
+key
+keys
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_keys_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+keys_data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_export_by_type
+●●●●●● 1mm □△
+self
+day_folder
+organized_keys
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GenesisKey
+'Export keys organized by type.'
+type_name
+type_keys
+organized_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+type_keys
+file_name
+●●●●●● 1mm □
+type_name
+'.json'
+file_path
+●●●●●● 1mm □
+day_folder
+●●●●●● 3mm □△
+file_name
+keys_data
+●●●●●● 1mm □
+'key_id'
+'what'
+'who'
+'when'
+'where'
+'file_path'
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+key
+key
+type_keys
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+keys_data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_metadata
+●●●●●● 1mm □△
+self
+day_folder
+metadata
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Save metadata summary.'
+metadata_file
+●●●●●● 1mm □
+day_folder
+●●●●●● 3mm □△
+'metadata.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+metadata
+f
+●●●●●● 2mm □△
+summary_file
+●●●●●● 1mm □
+day_folder
+●●●●●● 3mm □△
+'DAILY_SUMMARY.md'
+summary_md
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+summary_file
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+summary_md
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_generate_markdown_summary
+●●●●●● 1mm □△
+self
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Generate Markdown summary.'
+md
+●●●●●● 1mm □
+'# Daily Genesis Key Summary\n\n**Date:** '
+metadata
+'date'
+'\n**Generated:** '
+metadata
+'generated_at'
+'\n\n---\n\n## Summary\n\n'
+metadata
+'summary'
+'\n\n---\n\n## Statistics\n\n- **Total Activities:** '
+metadata
+'statistics'
+'total_keys'
+'\n- **Errors:** '
+metadata
+'statistics'
+'errors'
+'\n- **Fixes Applied:** '
+metadata
+'statistics'
+'fixes'
+'\n- **Unique Users:** '
+metadata
+'statistics'
+'unique_users'
+'\n- **Files Touched:** '
+metadata
+'statistics'
+'unique_files'
+'\n\n### Activity Breakdown\n\n'
+type_name
+count
+metadata
+'statistics'
+'by_type'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+md
+'- **'
+type_name
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+':** '
+count
+'\n'
+md
+'\n---\n\n## Top Activities\n\n'
+activity
+metadata
+'top_activities'
+5
+md
+'- '
+activity
+'description'
+' ('
+activity
+'count'
+' times)\n'
+md
+'\n---\n\n## Files\n\n'
+md
+'The following files were accessed or modified:\n\n'
+file_path
+metadata
+'files_touched'
+20
+md
+'- `'
+file_path
+'`\n'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata
+'files_touched'
+●●●●●● 2mm □△
+20
+md
+'\n...and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata
+'files_touched'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+20
+' more files.\n'
+md
+'\n---\n\n## Users\n\n'
+user
+metadata
+'users'
+md
+'- '
+user
+'\n'
+md
+'\n---\n\n*This summary was automatically generated by the Genesis Key Daily Organizer.*\n'
+●●●●●● 3mm ○
+md
+●●●●●● 1mm ○
+●●●●●● 1mm □
+organize_past_days
+●●●●●● 1mm □△
+self
+days_back
+session
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+7
+●●●●●● 2mm □
+'\n        Organize Genesis Keys for the past N days.\n\n        Args:\n            days_back: Number of days to go back\n            session: Database session\n\n        Returns:\n            List of export summaries\n        '
+results
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+days_back
+●●●●●● 2mm □△
+target_date
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target_date
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'exported'
+logger
+●●●●●● 1mm □△
+'✅ Organized '
+result
+'total_keys'
+' keys for '
+result
+'date'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_daily_summary
+●●●●●● 1mm □△
+self
+date_str
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get metadata summary for a specific day.'
+day_folder
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+date_str
+metadata_file
+●●●●●● 1mm □
+day_folder
+●●●●●● 3mm □△
+'metadata.json'
+●●●●●● 2mm □
+metadata_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata_file
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_organized_days
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all days that have been organized.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+days
+●●●●●● 1mm □
+item
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+2
+days
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+days
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+_daily_organizer
+●●●●●● 2mm □○
+GenesisKeyDailyOrganizer
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_daily_organizer
+●●●●●● 1mm □△
+layer1_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get or create the global daily organizer instance.'
+●●●●●● 2mm □
+_daily_organizer
+●●●●●● 2mm □
+layer1_path
+●●●●●● 2mm □
+_daily_organizer
+●●●●●● 1mm □
+GenesisKeyDailyOrganizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_daily_organizer
+GenesisKeyDailyOrganizer

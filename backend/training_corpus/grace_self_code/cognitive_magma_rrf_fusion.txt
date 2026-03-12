@@ -1,0 +1,1047 @@
+## rrf_fusion.py
+'\nMagma Memory - RRF Fusion (Reciprocal Rank Fusion)\n\nCombines results from multiple retrieval sources:\n1. Multiple relation graphs (semantic, temporal, causal, entity)\n2. Vector similarity search\n3. Keyword/BM25 search\n4. Graph traversal results\n\nRRF formula: score(d) = Σ 1 / (k + rank_i(d))\nwhere k is a constant (typically 60) and rank_i(d) is the rank of document d in result list i.\n\nThis provides a robust way to merge rankings without requiring score normalization.\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Set
+Tuple
+Callable
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RetrievalResult
+'A single result from a retrieval source.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+score
+●●●●●● 3mm ○
+rank
+●●●●●● 2mm ○
+source
+●●●●●● 1mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+FusedResult
+'A result after RRF fusion.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+rrf_score
+●●●●●● 3mm ○
+source_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+source_ranks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+sources
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+FusionMethod
+●●●●●● 3mm □△
+Enum
+Enum
+'Available fusion methods.'
+RRF
+●●●●●● 1mm □
+'rrf'
+WEIGHTED_RRF
+●●●●●● 1mm □
+'weighted_rrf'
+COMBSUM
+●●●●●● 1mm □
+'combsum'
+COMBMNZ
+●●●●●● 1mm □
+'combmnz'
+BORDA
+●●●●●● 1mm □
+'borda'
+INTERLEAVING
+●●●●●● 1mm □
+'interleaving'
+●●●●●● 2mm △
+RRFFusion
+'\n    Reciprocal Rank Fusion implementation.\n\n    Combines multiple ranked result lists into a single ranking.\n    Robust to score scale differences between sources.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+k
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+60
+'\n        Initialize RRF Fusion.\n\n        Args:\n            k: RRF constant (default 60, as per original paper)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+k
+logger
+●●●●●● 1mm □△
+'[MAGMA-RRF] Initialized with k='
+k
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuse
+●●●●●● 1mm □△
+self
+result_lists
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+'\n        Fuse multiple result lists using RRF.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n\n        Returns:\n            List of FusedResult sorted by RRF score (descending)\n        '
+doc_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+doc_source_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_source_ranks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_content
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+doc_metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_sources
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_name
+results
+result_lists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+results
+rrf_contribution
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+result
+doc_scores
+result
+rrf_contribution
+doc_source_scores
+result
+source_name
+●●●●●● 1mm □
+result
+doc_source_ranks
+result
+source_name
+●●●●●● 1mm □
+result
+doc_content
+result
+●●●●●● 1mm □
+result
+doc_metadata
+result
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+doc_sources
+result
+●●●●●● 1mm □△
+source_name
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □
+doc_id
+rrf_score
+doc_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+FusedResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-RRF] Fused '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+result_lists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' results from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result_lists
+●●●●●● 2mm □△
+' sources into '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused_results
+●●●●●● 2mm □△
+' unique results'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fused_results
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 2mm △
+WeightedRRFFusion
+'\n    Weighted RRF Fusion.\n\n    Extends RRF by allowing different weights for different sources.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+k
+default_weight
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+60
+1.0
+'\n        Initialize Weighted RRF Fusion.\n\n        Args:\n            k: RRF constant\n            default_weight: Default weight for sources without explicit weight\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+k
+●●●●●● 3mm △
+●●●●●● 1mm □
+default_weight
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[MAGMA-WRRF] Initialized with k='
+k
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_source_weight
+●●●●●● 1mm □△
+self
+source
+weight
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Set weight for a specific source.'
+●●●●●● 3mm △
+source
+●●●●●● 1mm □
+weight
+●●●●●● 1mm □
+set_source_weights
+●●●●●● 1mm □△
+self
+weights
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Set weights for multiple sources.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+weights
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuse
+●●●●●● 1mm □△
+self
+result_lists
+weights
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Fuse multiple result lists using weighted RRF.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n            weights: Optional per-query weights (overrides instance weights)\n\n        Returns:\n            List of FusedResult sorted by weighted RRF score (descending)\n        '
+active_weights
+●●●●●● 1mm □
+weights
+weights
+●●●●●● 3mm △
+doc_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+doc_source_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_source_ranks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_content
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+doc_metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_sources
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_name
+results
+result_lists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+weight
+●●●●●● 1mm □
+active_weights
+●●●●●● 1mm □△
+source_name
+●●●●●● 3mm △
+●●●●●● 2mm □△
+result
+results
+rrf_contribution
+●●●●●● 1mm □
+weight
+●●●●●● 2mm □△
+1.0
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+result
+doc_scores
+result
+rrf_contribution
+doc_source_scores
+result
+source_name
+●●●●●● 1mm □
+result
+doc_source_ranks
+result
+source_name
+●●●●●● 1mm □
+result
+doc_content
+result
+●●●●●● 1mm □
+result
+doc_metadata
+result
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+doc_sources
+result
+●●●●●● 1mm □△
+source_name
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □
+doc_id
+rrf_score
+doc_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+FusedResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fused_results
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 2mm △
+CombSUMFusion
+'\n    CombSUM fusion method.\n\n    Combines results by summing normalized scores.\n    Requires score normalization (min-max by default).\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+normalize
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Initialize CombSUM Fusion.\n\n        Args:\n            normalize: Whether to normalize scores before combining\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+normalize
+logger
+●●●●●● 1mm □△
+'[MAGMA-COMBSUM] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuse
+●●●●●● 1mm □△
+self
+result_lists
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+'\n        Fuse using CombSUM.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n\n        Returns:\n            List of FusedResult sorted by combined score (descending)\n        '
+normalized_lists
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+source
+results
+result_lists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+normalized_lists
+source
+●●●●●● 1mm □
+scores
+●●●●●● 1mm □
+r
+r
+results
+min_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+max_score
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+score_range
+●●●●●● 1mm □
+max_score
+min_score
+max_score
+●●●●●● 1mm □△
+min_score
+1.0
+normalized
+●●●●●● 1mm □
+r
+results
+norm_score
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+min_score
+●●●●●● 3mm □△
+score_range
+normalized
+●●●●●● 1mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+normalized_lists
+source
+●●●●●● 1mm □
+normalized
+●●●●●● 3mm □
+normalized_lists
+●●●●●● 1mm □
+result_lists
+doc_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+doc_source_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_source_ranks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_content
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+doc_metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_sources
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_name
+results
+normalized_lists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+results
+doc_scores
+result
+result
+doc_source_scores
+result
+source_name
+●●●●●● 1mm □
+result
+doc_source_ranks
+result
+source_name
+●●●●●● 1mm □
+result
+doc_content
+result
+●●●●●● 1mm □
+result
+doc_metadata
+result
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+doc_sources
+result
+●●●●●● 1mm □△
+source_name
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □
+doc_id
+combined_score
+doc_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+FusedResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fused_results
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 2mm △
+CombMNZFusion
+'\n    CombMNZ fusion method.\n\n    CombSUM multiplied by number of sources that returned the document.\n    Rewards documents found by multiple sources.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+normalize
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Initialize CombMNZ Fusion.\n\n        Args:\n            normalize: Whether to normalize scores before combining\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+CombSUMFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-COMBMNZ] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuse
+●●●●●● 1mm □△
+self
+result_lists
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+'\n        Fuse using CombMNZ.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n\n        Returns:\n            List of FusedResult sorted by CombMNZ score (descending)\n        '
+combsum_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result_lists
+●●●●●● 2mm □△
+result
+combsum_results
+num_sources
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+●●●●●● 2mm □△
+num_sources
+combsum_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+combsum_results
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 2mm △
+InterleavingFusion
+'\n    Interleaving fusion method.\n\n    Round-robin interleaving of results from different sources.\n    Good for diversity and fair representation.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-INTERLEAVE] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuse
+●●●●●● 1mm □△
+self
+result_lists
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+'\n        Fuse using interleaving.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n\n        Returns:\n            List of FusedResult in interleaved order\n        '
+seen
+Set
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □
+sources
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+result_lists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+iterators
+●●●●●● 1mm □
+s
+iter
+●●●●●● 1mm □△
+result_lists
+s
+●●●●●● 2mm □△
+s
+sources
+exhausted
+●●●●●● 1mm □
+s
+●●●●●● 1mm □
+s
+sources
+rank
+●●●●●● 1mm □
+1
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+exhausted
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source
+sources
+●●●●●● 2mm □
+exhausted
+source
+result
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+iterators
+source
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+seen
+seen
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+FusedResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rank
+1
+StopIteration
+exhausted
+source
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+fused_results
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 2mm △
+MagmaFusion
+'\n    Unified fusion interface for Magma retrieval.\n\n    Supports multiple fusion methods and provides utilities for\n    combining results from different Magma retrieval sources.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+method
+rrf_k
+source_weights
+●●●●●● 2mm □△
+FusionMethod
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+FusionMethod
+60
+●●●●●● 2mm □
+'\n        Initialize Magma Fusion.\n\n        Args:\n            method: Fusion method to use\n            rrf_k: K constant for RRF methods\n            source_weights: Optional weights for weighted methods\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+method
+●●●●●● 3mm △
+●●●●●● 1mm □
+rrf_k
+●●●●●● 3mm △
+●●●●●● 1mm □
+source_weights
+●●●●●● 3mm △
+●●●●●● 1mm □
+FusionMethod
+FusionMethod
+FusionMethod
+FusionMethod
+FusionMethod
+RRFFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+WeightedRRFFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CombSUMFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CombMNZFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+InterleavingFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source_weights
+●●●●●● 3mm △
+FusionMethod
+●●●●●● 1mm □△
+source_weights
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-FUSION] Initialized with method='
+method
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuse
+●●●●●● 1mm □△
+self
+result_lists
+method
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+●●●●●● 2mm □○
+FusionMethod
+●●●●●● 2mm □
+'\n        Fuse result lists.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n            method: Override fusion method for this call\n\n        Returns:\n            List of FusedResult\n        '
+active_method
+●●●●●● 1mm □
+method
+●●●●●● 3mm △
+fuser
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+active_method
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fuser
+ValueError
+●●●●●● 1mm □△
+'Unknown fusion method: '
+active_method
+●●●●●● 2mm □△
+●●●●●● 2mm □
+active_method
+FusionMethod
+●●●●●● 3mm △
+●●●●●● 3mm ○
+fuser
+●●●●●● 1mm □△
+result_lists
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fuser
+●●●●●● 1mm □△
+result_lists
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 1mm □
+fuse_with_limit
+●●●●●● 1mm □△
+self
+result_lists
+limit
+method
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+FusionMethod
+10
+●●●●●● 2mm □
+'\n        Fuse and return top N results.\n\n        Args:\n            result_lists: Dict mapping source name to list of results\n            limit: Maximum number of results to return\n            method: Override fusion method\n\n        Returns:\n            List of top FusedResult\n        '
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result_lists
+method
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+limit
+●●●●●● 3mm □△
+FusedResult
+●●●●●● 1mm □
+set_method
+●●●●●● 1mm □△
+self
+method
+●●●●●● 2mm □△
+FusionMethod
+'Change the fusion method.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+method
+●●●●●● 1mm □
+set_source_weight
+●●●●●● 1mm □△
+self
+source
+weight
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Set weight for a source.'
+●●●●●● 3mm △
+source
+●●●●●● 1mm □
+weight
+●●●●●● 3mm △
+FusionMethod
+●●●●●● 1mm □△
+source
+weight
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_retrieval_results
+●●●●●● 1mm □△
+items
+source
+id_key
+content_key
+score_key
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'id'
+'content'
+'score'
+'\n        Helper to convert raw results to RetrievalResult objects.\n\n        Args:\n            items: List of result dicts\n            source: Source name\n            id_key: Key for document ID\n            content_key: Key for content\n            score_key: Key for score\n\n        Returns:\n            List of RetrievalResult\n        '
+results
+●●●●●● 1mm □
+rank
+item
+●●●●●● 2mm □
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+RetrievalResult

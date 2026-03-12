@@ -1,0 +1,21 @@
+## __init__.py
+'\nWeb scraping module for Grace.\n\nThis module provides functionality for scraping web content with depth control\nusing the trafilatura library.\n'
+●●●●●● 3mm □△○
+service
+●●●●●● 2mm □△○
+WebScrapingService
+●●●●●● 3mm □△○
+url_validator
+●●●●●● 2mm □△○
+URLValidator
+●●●●●● 3mm □△○
+models
+●●●●●● 2mm □△○
+ScrapingJob
+ScrapedPage
+__all__
+●●●●●● 1mm □
+'WebScrapingService'
+'URLValidator'
+'ScrapingJob'
+'ScrapedPage'

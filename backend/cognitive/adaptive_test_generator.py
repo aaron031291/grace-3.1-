@@ -218,7 +218,6 @@ def _consensus_reason_about_module(source: str, module_path: str) -> str:
         return ""
 
 
-def _generate_test_for_function(func: Dict, module_source: str, module_path: str,
                                 module_purpose: str = "") -> Optional[str]:
     """
     Generate a test for a specific function.
@@ -286,7 +285,6 @@ def _generate_basic_test(func: Dict, module_path: str) -> str:
 """
 
 
-def _run_generated_test(test_code: str, module_source: str) -> Dict[str, Any]:
     """Run a generated test in the sandbox."""
     try:
         from cognitive.code_sandbox import execute_sandboxed

@@ -1,0 +1,47 @@
+## test_actuation_tools.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+grace_mcp.builtin_tools
+●●●●●● 2mm □△○
+_handle_execute_shell_command
+res
+●●●●●● 1mm □
+_handle_execute_shell_command
+●●●●●● 1mm □△
+'command'
+'rationale'
+os
+●●●●●● 1mm □△
+'../backend/agent/test_agent.py'
+●●●●●● 2mm □△
+'python ../backend/agent/test_agent.py'
+"echo 'No test_agent.py found, please create an agent launcher'"
+'Verify execution of shell command tool'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Test Execute Result:'
+res
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+run_hunt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

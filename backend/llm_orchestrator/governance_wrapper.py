@@ -316,26 +316,15 @@ class GovernanceAwareLLM(BaseLLMClient):
         if len(result) > 200 and len(flags) == 0:
             try:
                 from ml_intelligence.neuro_symbolic_reasoner import get_neuro_symbolic_reasoner
-                from cognitive.learning_memory import LearningMemoryManager
-                from database.session import SessionLocal
-                import os
-                from pathlib import Path
-                
-                db = SessionLocal() if SessionLocal else None
-                if db:
-                    try:
-                        lm = LearningMemoryManager(db, Path(os.environ.get("GRACE_KNOWLEDGE_BASE_PATH", ".")))
-                        reasoner = get_neuro_symbolic_reasoner(learning_memory=lm)
-                        reasoning = reasoner.reason(prompt[:200], limit=2)
-                        # If KB has high-confidence content but response is suspiciously different
-                        if (reasoning.fusion_confidence > 0.8 and
-                                len(reasoning.fused_results) > 0):
-                            kb_text = str(reasoning.fused_results[0].get("text", "")).lower()
-                            # Flag if the response completely ignores the KB top result topic
-                            if kb_text[:30] and kb_text[:30] not in lower:
-                                flags.append("possible_kb_divergence")
-                    finally:
-                        db.close()
+                reasoner = get_neuro_symbolic_reasoner()
+                reasoning = reasoner.reason(prompt[:200], limit=2)
+                # If KB has high-confidence content but response is suspiciously different
+                if (reasoning.fusion_confidence > 0.8 and
+                        len(reasoning.fused_results) > 0):
+                    kb_text = str(reasoning.fused_results[0].get("text", "")).lower()
+                    # Flag if the response completely ignores the KB top result topic
+                    if kb_text[:30] and kb_text[:30] not in lower:
+                        flags.append("possible_kb_divergence")
             except Exception:
                 pass
 

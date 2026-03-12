@@ -1,0 +1,495 @@
+## brain_orchestrator.py
+'\nBrain Orchestrator — intelligent multi-brain coordination.\n\nKnows when to call which brains simultaneously.\nManages parallel execution across domains.\nSelf-aware of system state and task requirements.\n'
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+as_completed
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BrainOrchestrator
+'\n    Coordinates multiple brain calls simultaneously.\n    Decides which brains a task needs based on task analysis.\n    '
+TASK_BRAIN_MAP
+●●●●●● 1mm □
+'build'
+'fix'
+'test'
+'deploy'
+'analyze'
+'review'
+'learn'
+'remember'
+'search'
+'heal'
+'plan'
+'chat'
+'upload'
+'filing'
+'document'
+'recall'
+'store'
+'code'
+'ai'
+'system'
+'govern'
+'ai'
+'code'
+'system'
+'ai'
+'system'
+'code'
+'system'
+'govern'
+'code'
+'ai'
+'system'
+'files'
+'ai'
+'code'
+'govern'
+'learn'
+'memory'
+'ai'
+'memory'
+'learn'
+'ai'
+'files'
+'code'
+'data'
+'system'
+'ai'
+'govern'
+'tasks'
+'ai'
+'govern'
+'chat'
+'ai'
+'files'
+'data'
+'govern'
+'files'
+'data'
+'data'
+'files'
+'memory'
+'ai'
+'memory'
+'data'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+orchestrate
+●●●●●● 1mm □△
+self
+task_type
+payload
+brains
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Execute a task across multiple brains simultaneously.\n        Auto-detects which brains to call if not specified.\n        '
+●●●●●● 2mm □
+brains
+brains
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+payload
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+futures
+●●●●●● 1mm □
+brain_name
+brains
+action
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+brain_name
+task_type
+payload
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+brain_name
+action
+payload
+●●●●●● 2mm □△
+futures
+future
+●●●●●● 1mm □
+brain_name
+future
+as_completed
+●●●●●● 1mm □△
+futures
+●●●●●● 2mm □△
+brain_name
+●●●●●● 1mm □
+futures
+future
+results
+brain_name
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+results
+brain_name
+●●●●●● 1mm □
+'ok'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+record_kpi
+brain
+result
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record_kpi
+●●●●●● 1mm □△
+'brain_orchestrator'
+brain
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+brain
+result
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'orchestrate'
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'task_type'
+'brains_called'
+'results'
+'successful'
+'failed'
+'latency_ms'
+task_type
+brains
+results
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_detect_brains
+●●●●●● 1mm □△
+self
+task_type
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Auto-detect which brains to involve.'
+detected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+'ai'
+'system'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'file'
+text
+'folder'
+text
+●●●●●● 2mm □
+'files'
+detected
+detected
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'code'
+text
+'function'
+text
+●●●●●● 2mm □
+'code'
+detected
+detected
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'rule'
+text
+'approve'
+text
+●●●●●● 2mm □
+'govern'
+detected
+detected
+●●●●●● 1mm □△
+'govern'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detected
+5
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_best_action
+●●●●●● 1mm □△
+self
+brain
+task_type
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Pick the best action for a brain given the task type.'
+action_map
+●●●●●● 1mm □
+'ai'
+'build'
+'ai'
+'fix'
+'ai'
+'test'
+'ai'
+'analyze'
+'ai'
+'review'
+'ai'
+'learn'
+'code'
+'build'
+'code'
+'fix'
+'code'
+'review'
+'system'
+'build'
+'system'
+'fix'
+'system'
+'heal'
+'system'
+'test'
+'system'
+'deploy'
+'system'
+'analyze'
+'govern'
+'build'
+'govern'
+'deploy'
+'govern'
+'review'
+'files'
+'search'
+'files'
+'analyze'
+'files'
+'filing'
+'files'
+'document'
+'data'
+'search'
+'data'
+'filing'
+'data'
+'document'
+'chat'
+'chat'
+'tasks'
+'plan'
+'pipeline'
+'deterministic_fix'
+'logic_tests'
+'cognitive_report'
+'cognitive_report'
+'dl_train'
+'generate'
+'generate'
+'projects'
+'runtime'
+'auto_cycle'
+'scan_heal'
+'probe'
+'hot_reload_all'
+'intelligence'
+'rules'
+'approvals'
+'scores'
+'search'
+'stats'
+'filing'
+'create_doc'
+'api_sources'
+'librarian_organise_file'
+'librarian_process'
+'send'
+'submit'
+●●●●●● 3mm ○
+action_map
+●●●●●● 1mm □△
+brain
+task_type
+brain
+'system'
+'runtime'
+brain
+'ai'
+'fast'
+'stats'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_call_brain
+●●●●●● 1mm □△
+self
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_orchestrator
+●●●●●● 2mm □○
+BrainOrchestrator
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_orchestrator
+●●●●●● 2mm □
+_orchestrator
+●●●●●● 1mm □
+BrainOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_orchestrator
+BrainOrchestrator

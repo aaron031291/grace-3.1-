@@ -1,0 +1,327 @@
+## verify_unified.py
+'\nVerify the Unified Orchestrator — confirms builtin + MCP tools merge correctly.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Grace OS — Unified Orchestrator Verification'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1/5] Testing builtin tools import...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+grace_mcp.builtin_tools
+●●●●●● 2mm □△○
+get_builtin_tools
+tools
+●●●●●● 1mm □
+get_builtin_tools
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tools
+●●●●●● 2mm □△
+' builtin tools defined:'
+●●●●●● 2mm □△
+t
+tools
+avail
+●●●●●● 1mm □
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'✅'
+'⚠️ (env missing)'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - '
+t
+': '
+avail
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Import failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2/5] Initializing unified orchestrator...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+grace_mcp.orchestrator
+●●●●●● 2mm □△○
+MCPOrchestrator
+orch
+●●●●●● 1mm □
+MCPOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+orch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+status
+●●●●●● 1mm □
+orch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Orchestrator ready!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Total tools: '
+status
+'tools_total'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     MCP tools:   '
+status
+'tools_mcp'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Builtin:     '
+status
+'tools_builtin'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Initialization failed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3/5] Checking OpenAI function format includes builtins...'
+●●●●●● 2mm □△
+tool_names
+●●●●●● 1mm □
+t
+'function'
+'name'
+t
+orch
+builtin_names
+●●●●●● 1mm □
+'rag_search'
+'web_search'
+'web_fetch'
+name
+builtin_names
+●●●●●● 2mm □
+name
+tool_names
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ '
+name
+' found in tool list'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+name
+'web_search'
+name
+orch
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ⚠️ '
+name
+' skipped (SERPAPI_KEY not set)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ '
+name
+' MISSING from tool list'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4/5] Testing rag_search builtin tool...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'rag_search'
+orch
+result
+●●●●●● 1mm □
+orch
+'rag_search'
+●●●●●● 1mm □△
+'query'
+'limit'
+'file ingestion'
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ rag_search succeeded: '
+result
+'success'
+●●●●●● 2mm □△
+preview
+●●●●●● 1mm □
+result
+'content'
+150
+●●●●●● 1mm □△
+'\n'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Preview: '
+preview
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ⚠️ rag_search not registered'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ rag_search error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[5/5] Testing MCP tool (list_directory) through orchestrator...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orch
+●●●●●● 1mm □△
+'list_directory'
+'path'
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'success'
+lines
+●●●●●● 1mm □
+result
+'content'
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ list_directory succeeded ('
+result
+●●●●●● 1mm □△
+'duration_ms'
+0
+●●●●●● 2mm □△
+'.0f'
+'ms)'
+●●●●●● 2mm □△
+line
+lines
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     '
+line
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ list_directory failed: '
+result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Error: '
+e
+●●●●●● 2mm □△
+orch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Unified Orchestrator verification complete!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

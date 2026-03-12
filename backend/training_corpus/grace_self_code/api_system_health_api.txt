@@ -1,0 +1,231 @@
+## system_health_api.py
+●●●●●● 2mm □△○
+psutil
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_process_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get top 10 processes by memory/cpu.'
+processes
+●●●●●● 1mm □
+proc
+psutil
+●●●●●● 1mm □△
+'pid'
+'name'
+'cpu_percent'
+'memory_percent'
+●●●●●● 2mm □△
+pinfo
+●●●●●● 1mm □
+proc
+●●●●●● 2mm □
+pinfo
+'cpu_percent'
+●●●●●● 2mm □
+pinfo
+'memory_percent'
+●●●●●● 2mm □
+processes
+●●●●●● 1mm □△
+pinfo
+●●●●●● 2mm □△
+psutil
+psutil
+psutil
+processes
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+processes
+●●●●●● 2mm □△
+10
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to get processes: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+processes
+'Return high-level RAM/CPU usage and system health status.'
+cpu_percent
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+disk
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+overall
+●●●●●● 1mm □
+'healthy'
+●●●●●● 2mm □
+cpu_percent
+85
+memory
+90
+overall
+●●●●●● 1mm □
+'degraded'
+●●●●●● 2mm □
+cpu_percent
+95
+memory
+95
+overall
+●●●●●● 1mm □
+'critical'
+●●●●●● 3mm ○
+'overall'
+'resources'
+'services'
+'organs'
+overall
+'cpu_total'
+'cpu_per_core'
+'cpu_cores'
+'memory_percent'
+'memory_used_gb'
+'memory_total_gb'
+'disk_percent'
+'disk_used_gb'
+'disk_total_gb'
+cpu_percent
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+memory
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+memory
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+2
+●●●●●● 2mm □△
+disk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+disk
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+disk
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+2
+●●●●●● 2mm □△
+'api'
+'database'
+'qdrant'
+'ollama'
+'ml_engine'
+'status'
+'live'
+'status'
+'live'
+'status'
+'live'
+'status'
+'configured'
+'status'
+'live'
+'name'
+'progress'
+'Unified Memory'
+100
+'name'
+'progress'
+'Cognitive Loop'
+100
+'name'
+'progress'
+'Validation'
+85
+'name'
+'progress'
+'Autonomous Healing'
+70
+router
+●●●●●● 1mm □△
+'/dashboard'
+●●●●●● 2mm □△
+'Return top running processes.'
+●●●●●● 3mm ○
+'processes'
+get_process_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/processes'
+●●●●●● 2mm □△
+"Aggregate diagnostic sensors for the generic 'full' config dump."
+●●●●●● 3mm ○
+'diagnostic_sensors'
+'diagnostic_healing'
+'diagnostic_trends'
+'uptime_hours'
+'connection_pool_size'
+'active_tasks'
+'last_error'
+24
+15
+3
+'None'
+'playbooks_run'
+'successful_heals'
+5
+5
+'cpu_trend'
+'memory_trend'
+'api_latency_ms'
+'stable'
+'increasing'
+120
+router
+●●●●●● 1mm □△
+'/full'
+●●●●●● 2mm □△

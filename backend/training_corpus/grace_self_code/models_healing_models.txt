@@ -1,0 +1,53 @@
+## healing_models.py
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm △
+HealingAction
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Contract required by the Constitutional Stack for all automated self-healing.\n    See: Grace Blueprint (Deep-Dive) Pillar 3.\n    '
+action_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+playbook_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+risk
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+mttr_goal
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_escalation_required
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Returns True if this action's risk score exceeds constitutional thresholds."
+●●●●●● 3mm ○
+●●●●●● 3mm △
+0.7
+●●●●●● 3mm △

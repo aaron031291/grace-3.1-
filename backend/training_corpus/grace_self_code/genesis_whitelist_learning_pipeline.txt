@@ -1,0 +1,2546 @@
+## whitelist_learning_pipeline.py
+"\nWhitelist Learning Pipeline\n===========================\nComplete pipeline for human-approved data to flow through GRACE's learning systems.\n\nFlow:\nWhitelist Entry → Trust Verification → Genesis Key → Data Processing →\nLearning Memory → Cognitive Framework → ML Intelligence → Knowledge Application\n\nIntegrations:\n- Genesis Key Service: Every input tracked\n- Trust Score System: Verify source reliability\n- Librarian: File organization and naming\n- Cognitive Engine: Understanding and reasoning\n- Clarity Framework: Clear explanations\n- Mirror Self-Modeling: Self-observation\n- Active Learning: Proactive learning triggers\n- Memory Mesh: Connected memory storage\n- ML Intelligence: Pattern recognition\n- Knowledge Base: Stored knowledge\n- RAG/Retrieval: Finding relevant info\n- Embedder: Vector embeddings\n"
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PipelineStage
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Stages of the whitelist learning pipeline.'
+WHITELIST_ENTRY
+●●●●●● 1mm □
+'whitelist_entry'
+TRUST_VERIFICATION
+●●●●●● 1mm □
+'trust_verification'
+GENESIS_KEY_ASSIGNMENT
+●●●●●● 1mm □
+'genesis_key_assignment'
+DATA_EXTRACTION
+●●●●●● 1mm □
+'data_extraction'
+CONTENT_ANALYSIS
+●●●●●● 1mm □
+'content_analysis'
+LIBRARIAN_FILING
+●●●●●● 1mm □
+'librarian_filing'
+FILE_NAMING
+●●●●●● 1mm □
+'file_naming'
+EMBEDDING_GENERATION
+●●●●●● 1mm □
+'embedding_generation'
+MEMORY_STORAGE
+●●●●●● 1mm □
+'memory_storage'
+MEMORY_MESH_LINKING
+●●●●●● 1mm □
+'memory_mesh_linking'
+COGNITIVE_PROCESSING
+●●●●●● 1mm □
+'cognitive_processing'
+CLARITY_ANALYSIS
+●●●●●● 1mm □
+'clarity_analysis'
+CONTRADICTION_CHECK
+●●●●●● 1mm □
+'contradiction_check'
+PATTERN_EXTRACTION
+●●●●●● 1mm □
+'pattern_extraction'
+ML_TRAINING
+●●●●●● 1mm □
+'ml_training'
+KNOWLEDGE_BASE_UPDATE
+●●●●●● 1mm □
+'knowledge_base_update'
+PROACTIVE_LEARNING
+●●●●●● 1mm □
+'proactive_learning'
+MIRROR_OBSERVATION
+●●●●●● 1mm □
+'mirror_observation'
+COMPLETE
+●●●●●● 1mm □
+'complete'
+FAILED
+●●●●●● 1mm □
+'failed'
+●●●●●● 2mm △
+DataCategory
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Categories of whitelisted data.'
+HUMAN_REQUEST
+●●●●●● 1mm □
+'human_request'
+RESEARCH_DATA
+●●●●●● 1mm □
+'research_data'
+CODE_SNIPPET
+●●●●●● 1mm □
+'code_snippet'
+DOCUMENTATION
+●●●●●● 1mm □
+'documentation'
+CONVERSATION
+●●●●●● 1mm □
+'conversation'
+FEEDBACK
+●●●●●● 1mm □
+'feedback'
+CORRECTION
+●●●●●● 1mm □
+'correction'
+PREFERENCE
+●●●●●● 1mm □
+'preference'
+TRAINING_EXAMPLE
+●●●●●● 1mm □
+'training_example'
+KNOWLEDGE_FACT
+●●●●●● 1mm □
+'knowledge_fact'
+●●●●●● 2mm △
+TrustLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Trust levels for data sources.'
+UNTRUSTED
+●●●●●● 1mm □
+'untrusted'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+VERIFIED
+●●●●●● 1mm □
+'verified'
+OWNER
+●●●●●● 1mm □
+'owner'
+●●●●●● 2mm △
+WhitelistEntry
+'An entry in the whitelist for processing.'
+entry_id
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+category
+DataCategory
+content
+●●●●●● 1mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+trust_level
+TrustLevel
+created_at
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+user_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+session_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+parent_entry_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+PipelineResult
+'Result of pipeline processing.'
+entry_id
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+stage
+PipelineStage
+stages_completed
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+file_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+memory_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+embedding_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+knowledge_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+patterns_found
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contradictions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+insights
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 3mm ○
+0.0
+confidence
+●●●●●● 3mm ○
+0.0
+duration_ms
+●●●●●● 2mm ○
+0
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+message
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+StageResult
+'Result of a single pipeline stage.'
+stage
+PipelineStage
+success
+●●●●●● 3mm △
+output
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+duration_ms
+●●●●●● 2mm ○
+0
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 1mm □
+get_genesis_key_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Genesis Key Service.'
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+GenesisKeyService
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GenesisKeyService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Genesis Key Service not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cognitive_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Cognitive Engine.'
+●●●●●● 3mm □△○
+cognitive.engine
+●●●●●● 2mm □△○
+get_cognitive_engine
+●●●●●● 3mm ○
+get_cognitive_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Cognitive Engine not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Mirror Self-Modeling System.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Mirror System not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_active_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Active Learning System.'
+●●●●●● 3mm □△○
+cognitive.active_learning_system
+●●●●●● 2mm □△○
+GraceActiveLearningSystem
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GraceActiveLearningSystem
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Active Learning not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_memory_mesh_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Memory Mesh Learner.'
+●●●●●● 3mm □△○
+cognitive.memory_mesh_learner
+●●●●●● 2mm □△○
+get_memory_mesh_learner
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_memory_mesh_learner
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Memory Mesh Learner not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_contradiction_detector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Contradiction Detector.'
+●●●●●● 3mm □△○
+cognitive.contradiction_detector
+●●●●●● 2mm □△○
+ContradictionDetector
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContradictionDetector
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Contradiction Detector not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_proactive_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Proactive Learner.'
+●●●●●● 3mm □△○
+cognitive.proactive_learner
+●●●●●● 2mm □△○
+ProactiveLearner
+●●●●●● 3mm ○
+ProactiveLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Proactive Learner not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Embedder for vector generation.'
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedder
+●●●●●● 3mm ○
+get_embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Embedder not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Librarian Pipeline.'
+●●●●●● 3mm □△○
+genesis.librarian_pipeline
+●●●●●● 2mm □△○
+get_librarian_pipeline
+●●●●●● 3mm ○
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Librarian Pipeline not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_learning_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Learning Memory.'
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemory
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+LearningMemory
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Learning Memory not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get ML Intelligence system.'
+●●●●●● 3mm □△○
+llm_orchestrator.ml_intelligence
+●●●●●● 2mm □△○
+get_ml_intelligence
+●●●●●● 3mm ○
+get_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] ML Intelligence not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+WhitelistLearningPipeline
+"\n    Complete pipeline for processing whitelisted human input through\n    GRACE's learning systems.\n\n    The pipeline:\n    1. VERIFY - Check trust level and source validity\n    2. TRACK - Assign Genesis Key for full audit trail\n    3. PROCESS - Extract and analyze content\n    4. FILE - Organize with Librarian, name files properly\n    5. EMBED - Generate vector embeddings\n    6. MEMORIZE - Store in learning memory and mesh\n    7. COGNIZE - Process through cognitive framework\n    8. CLARIFY - Apply clarity framework for understanding\n    9. CHECK - Detect contradictions with existing knowledge\n    10. LEARN - Extract patterns, trigger ML training\n    11. APPLY - Update knowledge base\n    12. OBSERVE - Mirror self-modeling records the learning\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+storage_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+storage_dir
+'/tmp/grace/whitelist'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+WhitelistEntry
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PipelineResult
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+0.0
+0.25
+0.5
+0.75
+0.9
+1.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_key_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_cognitive_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_active_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_memory_mesh_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_contradiction_detector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_proactive_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_learning_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Whitelist Learning Pipeline initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_log_integrations
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Log which integrations are available.'
+integrations
+●●●●●● 1mm □
+'Genesis Key Service'
+●●●●●● 3mm △
+'Cognitive Engine'
+●●●●●● 3mm △
+'Mirror Self-Modeling'
+●●●●●● 3mm △
+'Active Learning'
+●●●●●● 3mm △
+'Memory Mesh Learner'
+●●●●●● 3mm △
+'Contradiction Detector'
+●●●●●● 3mm △
+'Proactive Learner'
+●●●●●● 3mm △
+'Embedder'
+●●●●●● 3mm △
+'Librarian Pipeline'
+●●●●●● 3mm △
+'Learning Memory'
+●●●●●● 3mm △
+'ML Intelligence'
+●●●●●● 3mm △
+name
+integration
+integrations
+status
+●●●●●● 1mm □
+integration
+'connected'
+'not available'
+symbol
+●●●●●● 1mm □
+integration
+'✓'
+'✗'
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline]   '
+symbol
+' '
+name
+': '
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_entries
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load existing whitelist entries.'
+entries_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'entries.json'
+●●●●●● 2mm □
+entries_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries_file
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+entry_data
+data
+●●●●●● 1mm □△
+'entries'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+WhitelistEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entry
+●●●●●● 1mm □
+entry
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Loaded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' whitelist entries'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Failed to load entries: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_entries
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save whitelist entries to disk.'
+entries_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'entries.json'
+data
+●●●●●● 1mm □
+'entries'
+'updated_at'
+asdict
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_generate_entry_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate unique entry ID.'
+●●●●●● 3mm ○
+'wl-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+category
+source
+content_hash
+metadata
+●●●●●● 2mm □△
+DataCategory
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Generate Genesis Key for whitelist entry.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_key
+Exception
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Genesis Key Service error: '
+e
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_data
+●●●●●● 1mm □
+'whitelist:'
+category
+':'
+source
+':'
+content_hash
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'gk-wl-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_track_version
+●●●●●● 1mm □△
+self
+entry_id
+stage
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+PipelineStage
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Track pipeline version/mutation.'
+●●●●●● 2mm □
+entry_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+version_entry
+●●●●●● 1mm □
+'version'
+'stage'
+'timestamp'
+'data'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+entry_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+stage
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □△
+version_entry
+●●●●●● 2mm □△
+WhitelistEntry
+'Stage 1: Verify trust level of the source.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 2mm □
+trust_score
+0.25
+entry
+TrustLevel
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+'Stage 2: Assign Genesis Key for tracking.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+entry
+content_hash
+entry
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+genesis_key
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+'Stage 3: Extract and analyze content.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+extracted
+●●●●●● 1mm □
+'content_length'
+'word_count'
+'category'
+'has_code'
+'has_urls'
+'language'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+entry
+'```'
+entry
+'def '
+entry
+'http'
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'en'
+●●●●●● 2mm □
+entry
+DataCategory
+extracted
+'code_lines'
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+extracted
+'has_functions'
+●●●●●● 1mm □
+'def '
+entry
+'function '
+entry
+●●●●●● 1mm △
+entry
+DataCategory
+extracted
+'turns'
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'Human:'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entry
+●●●●●● 1mm □△
+'User:'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+DataCategory
+extracted
+'has_input'
+●●●●●● 1mm □
+'input'
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+extracted
+'has_output'
+●●●●●● 1mm □
+'output'
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 1mm □○
+'Stage 4: File with Librarian, organize and name.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+category_prefixes
+●●●●●● 1mm □
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+DataCategory
+'request'
+'research'
+'code'
+'doc'
+'conv'
+'feedback'
+'correction'
+'pref'
+'train'
+'fact'
+prefix
+●●●●●● 1mm □
+category_prefixes
+●●●●●● 1mm □△
+entry
+'data'
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+gk_suffix
+●●●●●● 1mm □
+entry
+entry
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+1
+6
+'unknown'
+filename
+●●●●●● 1mm □
+prefix
+'_'
+timestamp
+'_'
+gk_suffix
+'.md'
+file_content
+●●●●●● 1mm □
+'---\nentry_id: '
+entry
+'\ngenesis_key: '
+entry
+'\ncategory: '
+entry
+'\nsource: '
+entry
+'\ntrust_level: '
+entry
+'\ncreated_at: '
+entry
+'\n---\n\n# '
+entry
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n\n'
+entry
+'\n'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+result
+result
+●●●●●● 2mm □
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+'Stage 5: Generate vector embeddings.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+embedding_id
+●●●●●● 1mm □
+'emb_'
+entry
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 1mm □○
+'Stage 6: Store in learning memory.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+memory_entry
+●●●●●● 1mm □
+'type'
+'entry_id'
+'genesis_key'
+'category'
+'content'
+'source'
+'trust_level'
+'extracted'
+'metadata'
+'whitelist_learning'
+entry
+entry
+entry
+entry
+entry
+entry
+extracted
+entry
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+memory_entry
+●●●●●● 2mm □△
+memory_id
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'memory_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 1mm ○
+'Stage 7: Link in memory mesh.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+links
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+links
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+'Stage 8: Process through cognitive framework.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cognitive_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+cognitive_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'input'
+'context'
+'task'
+entry
+'category'
+'source'
+'genesis_key'
+entry
+entry
+entry
+'understand_and_learn'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+Any
+'Stage 9: Apply clarity framework.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+clarity_analysis
+●●●●●● 1mm □
+'is_clear'
+'ambiguities'
+'clarifications_needed'
+'confidence'
+●●●●●● 3mm □△○
+0.8
+ambiguous_terms
+●●●●●● 1mm □
+'it'
+'they'
+'this'
+'that'
+'those'
+content_lower
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+term
+ambiguous_terms
+●●●●●● 2mm □
+' '
+term
+' '
+content_lower
+clarity_analysis
+'ambiguities'
+●●●●●● 1mm □△
+'term'
+'context'
+term
+'Potential ambiguous reference'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clarity_analysis
+'ambiguities'
+clarity_analysis
+'is_clear'
+●●●●●● 1mm □
+●●●●●● 1mm □
+clarity_analysis
+'confidence'
+0.9
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+'Stage 10: Check for contradictions with existing knowledge.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+detected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □
+detected
+detected
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 1mm □○
+'Stage 11: Extract patterns for ML training.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+●●●●●● 2mm □
+entry
+DataCategory
+patterns
+●●●●●● 1mm □△
+'type'
+'content'
+'genesis_key'
+'training_example'
+entry
+entry
+●●●●●● 2mm □△
+●●●●●● 1mm △
+entry
+DataCategory
+patterns
+●●●●●● 1mm □△
+'type'
+'content'
+'genesis_key'
+'correction'
+entry
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+DataCategory
+patterns
+●●●●●● 1mm □△
+'type'
+'content'
+'genesis_key'
+'preference'
+entry
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 3mm □△
+'Stage 12: Trigger ML training if applicable.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+training_triggered
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+patterns
+pattern
+patterns
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+training_triggered
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 1mm □○
+'Stage 13: Update knowledge base.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knowledge_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+entry
+DataCategory
+knowledge_id
+●●●●●● 1mm □
+'kb_'
+entry
+knowledge_entry
+●●●●●● 1mm □
+'knowledge_id'
+'genesis_key'
+'content'
+'source'
+'trust_level'
+'verified'
+knowledge_id
+entry
+entry
+entry
+entry
+entry
+TrustLevel
+TrustLevel
+kb_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'knowledge'
+kb_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_file
+●●●●●● 1mm □
+kb_dir
+●●●●●● 3mm □△
+knowledge_id
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+kb_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+knowledge_entry
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+'Stage 14: Trigger proactive learning.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proactive_actions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proactive_actions
+●●●●●● 1mm □
+actions
+actions
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'entry_id'
+'genesis_key'
+'content'
+'category'
+entry
+entry
+entry
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+WhitelistEntry
+●●●●●● 1mm □○
+'Stage 15: Mirror self-modeling observes the learning.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Mirror observing entry '
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+StageResult
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+DataCategory
+TrustLevel
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TrustLevel
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process a whitelist entry through the complete learning pipeline.\n\n        Args:\n            content: The data content to process\n            source: Who/what provided this data\n            category: Category of the data\n            trust_level: Trust level of the source\n            metadata: Additional metadata\n            user_id: User ID if from a user\n            session_id: Session ID for tracking\n            parent_entry_id: Parent entry if this is linked\n\n        Returns:\n            PipelineResult with all processing results\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □
+stage_outputs
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □
+WhitelistEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+entry
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Starting pipeline for entry '
+entry_id
+': '
+category
+' from '
+source
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+ValueError
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'trust'
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+ValueError
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'genesis'
+●●●●●● 1mm □
+result
+genesis_key
+●●●●●● 1mm □
+entry
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'extraction'
+●●●●●● 1mm □
+result
+extracted
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+extracted
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'filing'
+●●●●●● 1mm □
+result
+file_path
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'embedding'
+●●●●●● 1mm □
+result
+embedding_id
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'embedding_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+extracted
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'memory'
+●●●●●● 1mm □
+result
+memory_id
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'memory_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+memory_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'mesh'
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'cognitive'
+●●●●●● 1mm □
+result
+cognitive_result
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'cognitive_result'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+cognitive_result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'clarity'
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'contradictions'
+●●●●●● 1mm □
+result
+contradictions
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'contradictions'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+extracted
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'patterns'
+●●●●●● 1mm □
+result
+patterns
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'patterns'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'ml'
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+stage_outputs
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'knowledge'
+●●●●●● 1mm □
+result
+knowledge_id
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □△
+'knowledge_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+stage_outputs
+'proactive'
+●●●●●● 1mm □
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+stage_outputs
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+result
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages_completed
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+pipeline_result
+●●●●●● 1mm □
+PipelineResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+pipeline_result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Completed entry '
+entry_id
+' in '
+duration_ms
+'ms'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pipeline_result
+Exception
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[WL-Pipeline] Pipeline failed for entry '
+entry_id
+': '
+e
+●●●●●● 2mm □△
+pipeline_result
+●●●●●● 1mm □
+PipelineResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+pipeline_result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pipeline_result
+PipelineResult
+●●●●●● 1mm □
+get_entry
+●●●●●● 1mm □△
+self
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a whitelist entry by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+WhitelistEntry
+●●●●●● 1mm □
+get_result
+●●●●●● 1mm □△
+self
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get pipeline result for an entry.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+PipelineResult
+●●●●●● 1mm □
+list_entries
+●●●●●● 1mm □△
+self
+category
+trust_level
+limit
+●●●●●● 2mm □△
+DataCategory
+TrustLevel
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+100
+'List whitelist entries with optional filters.'
+entries
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category
+entries
+●●●●●● 1mm □
+e
+e
+entries
+e
+category
+●●●●●● 2mm □
+trust_level
+entries
+●●●●●● 1mm □
+e
+e
+entries
+e
+trust_level
+entries
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entries
+limit
+●●●●●● 3mm □△
+WhitelistEntry
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get pipeline statistics.'
+entries
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+by_category
+●●●●●● 1mm □
+cat
+DataCategory
+by_category
+cat
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+e
+e
+entries
+e
+cat
+●●●●●● 2mm □△
+by_trust
+●●●●●● 1mm □
+trust
+TrustLevel
+by_trust
+trust
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+e
+e
+entries
+e
+trust
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+r
+results
+r
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_entries'
+'total_processed'
+'successful'
+'failed'
+'success_rate'
+'by_category'
+'by_trust_level'
+'integrations'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries
+●●●●●● 2mm □△
+total
+successful
+total
+●●●●●● 1mm □△
+successful
+total
+0
+successful
+●●●●●● 3mm □△
+total
+0.0
+by_category
+by_trust
+'genesis_key_service'
+'cognitive_engine'
+'mirror_system'
+'active_learning'
+'memory_mesh'
+'contradiction_detector'
+'proactive_learner'
+'embedder'
+'librarian'
+'learning_memory'
+'ml_intelligence'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_whitelist_pipeline
+●●●●●● 2mm □○
+WhitelistLearningPipeline
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_whitelist_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global whitelist learning pipeline instance.'
+●●●●●● 2mm □
+_whitelist_pipeline
+●●●●●● 2mm □
+_whitelist_pipeline
+●●●●●● 1mm □
+WhitelistLearningPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_whitelist_pipeline
+WhitelistLearningPipeline
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+DataCategory
+TrustLevel
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+TrustLevel
+●●●●●● 2mm □
+'Convenience function to process a whitelist entry.'
+pipeline
+●●●●●● 1mm □
+get_whitelist_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PipelineResult

@@ -1,0 +1,104 @@
+## test_sample_cat_url.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+test_url
+●●●●●● 1mm □
+'https://disk.sample.cat/samples/pptx/sample1.pptx'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing URL: '
+test_url
+'\n'
+●●●●●● 2mm □△
+is_doc
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+test_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'is_downloadable_document: '
+is_doc
+●●●●●● 2mm □△
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+test_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'validate: '
+is_valid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Error: '
+error
+●●●●●● 2mm □△
+is_binary
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+test_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'is_binary_file: '
+is_binary
+●●●●●● 2mm □△
+is_drive
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+test_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'is_google_drive_url: '
+is_drive
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Expected: is_downloadable_document=True, validate=True'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△

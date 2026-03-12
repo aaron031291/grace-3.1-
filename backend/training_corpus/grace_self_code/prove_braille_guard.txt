@@ -1,0 +1,202 @@
+## prove_braille_guard.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementResult
+HealthStatus
+ConfidenceScore
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpretedData
+●●●●●● 2mm △
+MockLLMResult
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+content
+●●●●●● 2mm △
+MockLLMOrchestrator
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[MOCK LLM] Evaluated the frozen UI issue.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"[MOCK LLM] Hallucinated Output: 'The system is stuck. You must delete the immutable database to proceed.'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MockLLMResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+prove_deterministic_guard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' PROVING DETERMINISTIC BRAILLE INTEGRATION'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'==================================================\n'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+MockLLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+InterpretedData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_confidence
+●●●●●● 1mm □
+ConfidenceScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DummyHealth
+status
+●●●●●● 1mm □
+HealthStatus
+critical_components
+●●●●●● 1mm □
+'ui_frontend'
+degraded_components
+●●●●●● 1mm □
+overall_score
+●●●●●● 1mm □
+0.5
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- INITIATING ACTION ROUTER CYCLE ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'System Health: '
+judgement
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Confidence: '
+judgement
+' -> Triggering Multi-LLM Consensus (Step 6)\n'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+router
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- ACTION ROUTER FINAL DECISION ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Selected Action Type: '
+decision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Final Confidence: '
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+'alert_human'
+decision
+0.1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SUCCESS] The Braille Engine mathematically detected the hallucination.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SUCCESS] The Action Router downgraded the dangerous intent to an Alert.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SUCCESS] The immutable database was protected by deterministic physics.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAILED] The Braille Engine let the hallucination slip through!'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Action Router crashed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+prove_deterministic_guard
+●●●●●● 1mm □△
+●●●●●● 2mm □△

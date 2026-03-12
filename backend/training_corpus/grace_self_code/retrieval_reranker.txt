@@ -1,0 +1,439 @@
+## reranker.py
+'\nReranker module for improving retrieval results using cross-encoders.\nUses sentence-transformers/msmarco-bert-base-dot-v5 for relevance scoring.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+threading
+●●●●●● 2mm □△○
+Lock
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_torch
+●●●●●● 1mm □
+●●●●●● 2mm □
+_CrossEncoder
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Lazily import torch only when needed.'
+●●●●●● 2mm □
+_torch
+●●●●●● 2mm □
+●●●●●● 2mm □△○
+torch
+_torch
+●●●●●● 1mm □
+torch
+ImportError
+logger
+●●●●●● 1mm □△
+'torch not available - reranker will be disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+_torch
+●●●●●● 1mm □
+_get_cross_encoder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Lazily import CrossEncoder only when needed.'
+●●●●●● 2mm □
+_CrossEncoder
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+sentence_transformers
+●●●●●● 2mm □△○
+CrossEncoder
+_CrossEncoder
+●●●●●● 1mm □
+CrossEncoder
+ImportError
+logger
+●●●●●● 1mm □△
+'sentence_transformers not available - reranker will be disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+_CrossEncoder
+_reranker
+●●●●●● 1mm □
+●●●●●● 2mm □
+_reranker_lock
+●●●●●● 1mm □
+Lock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DocumentReranker
+'Reranks retrieved chunks using cross-encoder models.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model_name
+device
+use_half_precision
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'sentence-transformers/msmarco-bert-base-dot-v5'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+"\n        Initialize the reranker model.\n\n        Args:\n            model_name: Hugging Face model identifier\n            device: Device to run model on ('cuda', 'cpu'). Auto-detected if None\n            use_half_precision: Use FP16 (half precision) for faster inference and lower VRAM\n        "
+torch
+●●●●●● 1mm □
+_get_torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CrossEncoder
+●●●●●● 1mm □
+_get_cross_encoder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 2mm □
+CrossEncoder
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Required dependencies not available - reranker disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_name
+●●●●●● 3mm ○
+●●●●●● 2mm □
+device
+●●●●●● 2mm □
+device
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_half_precision
+device
+'cuda'
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_name
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Loading reranker model: '
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Using device: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Using half precision (FP16) for inference'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CrossEncoder
+●●●●●● 1mm □△
+model_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Model converted to FP16'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Reranker model loaded successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+rerank
+●●●●●● 1mm □△
+self
+query
+chunks
+top_k
+score_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+0.0
+"\n        Rerank chunks based on relevance to query using cross-encoder.\n\n        Args:\n            query: Query text\n            chunks: List of chunk dictionaries with 'text' field\n            top_k: Return only top k chunks. If None, return all\n            score_threshold: Minimum rerank score (0-1)\n\n        Returns:\n            Reranked list of chunks, sorted by relevance score\n        "
+●●●●●● 2mm □
+chunks
+logger
+●●●●●● 1mm □△
+'No chunks to rerank'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Reranker model not available - returning chunks unchanged'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+torch
+●●●●●● 1mm □
+_get_torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'torch not available - returning chunks unchanged'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+query_chunk_pairs
+●●●●●● 1mm □
+query
+chunk
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+chunk
+chunks
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query_chunk_pairs
+●●●●●● 2mm □△
+reranked_chunks
+●●●●●● 1mm □
+chunk
+score
+●●●●●● 3mm □
+●●●●●● 1mm □△
+chunks
+scores
+●●●●●● 2mm □△
+chunk_copy
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_copy
+'rerank_score'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+score
+●●●●●● 2mm □△
+reranked_chunks
+●●●●●● 1mm □△
+chunk_copy
+●●●●●● 2mm □△
+reranked_chunks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filtered_chunks
+●●●●●● 1mm □
+chunk
+chunk
+reranked_chunks
+chunk
+'rerank_score'
+score_threshold
+●●●●●● 2mm □
+top_k
+filtered_chunks
+●●●●●● 1mm □
+filtered_chunks
+top_k
+logger
+●●●●●● 1mm □△
+'Reranked '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks, kept '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered_chunks
+●●●●●● 2mm □△
+' (threshold='
+score_threshold
+', top_k='
+top_k
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filtered_chunks
+Exception
+logger
+●●●●●● 1mm □△
+'Reranking error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+unload_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Unload the model from VRAM and clear cache.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'model'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'cpu'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □
+_get_torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cuda'
+torch
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Reranker model unloaded from VRAM'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Warning while unloading reranker model: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__del__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Destructor to unload model.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_reranker
+●●●●●● 1mm □△
+model_name
+device
+use_half_precision
+reset
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+'sentence-transformers/msmarco-bert-base-dot-v5'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+'\n    Get or create the global reranker instance (thread-safe singleton).\n    \n    This function ensures the reranker model is loaded only once into VRAM,\n    even if called multiple times from different threads.\n    \n    Args:\n        model_name: Hugging Face model identifier\n        device: Device to use (only used on first initialization)\n        use_half_precision: Use FP16 for lower memory usage (only used on first initialization)\n        reset: Force reload the model (clears singleton)\n        \n    Returns:\n        DocumentReranker instance (same instance across all calls)\n    '
+●●●●●● 2mm □
+_reranker
+●●●●●● 2mm □
+reset
+_reranker_lock
+●●●●●● 2mm □
+_reranker
+●●●●●● 2mm □
+reset
+logger
+●●●●●● 1mm □△
+'Initializing reranker singleton with model: '
+model_name
+●●●●●● 2mm □△
+_reranker
+●●●●●● 1mm □
+DocumentReranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_reranker
+DocumentReranker

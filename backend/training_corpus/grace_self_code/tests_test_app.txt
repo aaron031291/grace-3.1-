@@ -1,0 +1,332 @@
+## test_app.py
+'\nTests for the Grace FastAPI application.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+ChatRequest
+ChatResponse
+Message
+HealthResponse
+client
+●●●●●● 1mm □
+TestClient
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestRootEndpoint
+'Test the root endpoint.'
+●●●●●● 1mm □
+test_root_endpoint
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GET / returns API info.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'name'
+'Grace API'
+'version'
+data
+data
+'docs'
+'/docs'
+●●●●●● 2mm △
+TestHealthEndpoint
+'Test the health check endpoint.'
+●●●●●● 1mm □
+test_health_endpoint
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GET /health returns simple health (status, llm_running, models_available) for frontend.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+data
+'llm_running'
+data
+'models_available'
+data
+data
+'status'
+'healthy'
+'unhealthy'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'llm_running'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'models_available'
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_health_full_endpoint
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GET /health/full returns comprehensive health (services, timestamp).'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health/full'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+data
+'services'
+data
+'timestamp'
+data
+data
+'status'
+'healthy'
+'degraded'
+'unhealthy'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'services'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+data
+'services'
+'name'
+service
+●●●●●● 2mm △
+TestChatEndpoint
+'Test the chat endpoint.'
+●●●●●● 1mm □
+test_chat_endpoint_with_valid_request
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test POST /chat with valid request.'
+request_data
+●●●●●● 1mm □
+'messages'
+'temperature'
+'top_p'
+'top_k'
+'role'
+'content'
+'user'
+'What is Python?'
+0.7
+0.9
+40
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+response
+200
+400
+503
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'message'
+data
+'model'
+data
+'generation_time'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'generation_time'
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+data
+'generation_time'
+0
+●●●●●● 1mm □
+test_chat_endpoint_with_multiple_messages
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test POST /chat with multi-turn conversation.'
+request_data
+●●●●●● 1mm □
+'messages'
+'temperature'
+'role'
+'content'
+'system'
+'You are a helpful assistant.'
+'role'
+'content'
+'user'
+'Hello'
+'role'
+'content'
+'assistant'
+'Hi! How can I help?'
+'role'
+'content'
+'user'
+'Tell me a joke'
+0.8
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+response
+200
+400
+503
+●●●●●● 1mm □
+test_chat_endpoint_without_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test POST /chat without specifying model uses default.'
+request_data
+●●●●●● 1mm □
+'messages'
+'role'
+'content'
+'user'
+'What is AI?'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+response
+200
+400
+503
+●●●●●● 1mm □
+test_chat_endpoint_with_invalid_temperature
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test POST /chat with invalid temperature.'
+request_data
+●●●●●● 1mm □
+'messages'
+'temperature'
+'role'
+'content'
+'user'
+'Hello'
+5.0
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+response
+422
+400
+●●●●●● 2mm △
+TestDocumentation
+'Test the API documentation endpoints.'
+●●●●●● 1mm □
+test_swagger_docs_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that Swagger documentation is available.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/docs'
+●●●●●● 2mm □△
+response
+200
+'swagger'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'openapi'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_redoc_docs_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that ReDoc documentation is available.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/redoc'
+●●●●●● 2mm □△
+response
+200
+'redoc'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'openapi'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'-s'
+●●●●●● 2mm □△

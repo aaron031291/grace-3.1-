@@ -1,0 +1,432 @@
+## auth.py
+'\nAuthentication API with Genesis Key integration.\n\nProvides login/session management using Genesis IDs.\nIncludes secure session management and security logging.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Depends
+Response
+Cookie
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+genesis.kb_integration
+●●●●●● 2mm □△○
+get_kb_integration
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+●●●●●● 3mm □△○
+security.config
+●●●●●● 2mm □△○
+get_security_config
+●●●●●● 3mm □△○
+security.auth
+●●●●●● 2mm □△○
+get_session_manager
+●●●●●● 3mm □△○
+security.logging
+●●●●●● 2mm □△○
+get_security_logger
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LoginRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request to login or get Genesis ID.'
+username
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+email
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+existing_genesis_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LoginResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response with Genesis ID and session info.'
+genesis_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+username
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+is_new_user
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+message
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SessionInfoResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Current session information.'
+genesis_id
+●●●●●● 1mm ○
+session_id
+●●●●●● 1mm ○
+username
+●●●●●● 1mm ○
+total_actions
+●●●●●● 2mm ○
+total_errors
+●●●●●● 2mm ○
+total_fixes
+●●●●●● 2mm ○
+first_seen
+datetime
+last_seen
+datetime
+LoginRequest
+Response
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Login or create a Genesis ID.\n\n    This is the entry point for all users. On first access:\n    - Creates a Genesis ID (GU-prefix)\n    - Creates user profile\n    - Starts tracking session\n    - Saves to knowledge base\n\n    Returns Genesis ID to be used for all subsequent requests.\n    '
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+kb_integration
+●●●●●● 1mm □
+get_kb_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_new_user
+●●●●●● 1mm □
+●●●●●● 1mm □
+user
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+user
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+security_logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user
+is_new_user
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+identifier
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+user
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_config
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_manager
+●●●●●● 1mm □
+get_session_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+session_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+is_new_user
+'Welcome '
+user
+"! You've been assigned Genesis ID: "
+user
+'Welcome back '
+user
+'!'
+●●●●●● 3mm ○
+LoginResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/login'
+●●●●●● 2mm □△
+Response
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'Logout and create logout Genesis Key.'
+security_logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_manager
+●●●●●● 1mm □
+get_session_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_id
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id
+session_manager
+●●●●●● 1mm □△
+session_id
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'message'
+'Logged out successfully'
+router
+●●●●●● 1mm □△
+'/logout'
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'Get current session information.'
+●●●●●● 2mm □
+genesis_id
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SessionInfoResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+security_logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/session'
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'Quick endpoint to get current Genesis ID.'
+●●●●●● 2mm □
+genesis_id
+●●●●●● 3mm ○
+'genesis_id'
+'message'
+●●●●●● 2mm □
+'No Genesis ID found. Call /auth/login to get one.'
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_id'
+'username'
+'total_actions'
+'message'
+user
+user
+user
+'You are '
+user
+Exception
+security_logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_id'
+'message'
+genesis_id
+genesis_id
+20
+●●●●●● 2mm □
+'Genesis ID found but user profile not loaded'
+router
+●●●●●● 1mm □△
+'/whoami'
+●●●●●● 2mm □△

@@ -1,0 +1,1896 @@
+## autonomous_sandbox_lab.py
+"\nAutonomous Sandbox Lab\n\nGrace's self-improvement laboratory where she can:\n1. Practice and experiment autonomously\n2. Build new algorithms and improvements\n3. Test against live data in isolated sandbox\n4. Track trust scores and performance metrics\n5. Graduate experiments to production after 90-day trial\n6. Request user approval for significant changes\n\nArchitecture:\n- Sandbox Isolation: Experiments run in isolated environment\n- Trust Scoring: Every experiment tracked with neural trust scorer\n- Performance Monitoring: Continuous metrics collection\n- Trial Period: 90-day validation with live data\n- Promotion Workflow: Automated promotion with user approval gates\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+uuid
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ExperimentStatus
+●●●●●● 3mm □△
+Enum
+Enum
+'Experiment lifecycle stages'
+PROPOSED
+●●●●●● 1mm □
+'proposed'
+SANDBOX
+●●●●●● 1mm □
+'sandbox'
+TRIAL
+●●●●●● 1mm □
+'trial'
+VALIDATED
+●●●●●● 1mm □
+'validated'
+APPROVED
+●●●●●● 1mm □
+'approved'
+PRODUCTION
+●●●●●● 1mm □
+'production'
+REJECTED
+●●●●●● 1mm □
+'rejected'
+ARCHIVED
+●●●●●● 1mm □
+'archived'
+●●●●●● 2mm △
+ExperimentType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of experiments Grace can run'
+ALGORITHM_IMPROVEMENT
+●●●●●● 1mm □
+'algorithm_improvement'
+NEW_CAPABILITY
+●●●●●● 1mm □
+'new_capability'
+PERFORMANCE_OPTIMIZATION
+●●●●●● 1mm □
+'performance_optimization'
+ERROR_REDUCTION
+●●●●●● 1mm □
+'error_reduction'
+LEARNING_ENHANCEMENT
+●●●●●● 1mm □
+'learning_enhancement'
+SELF_MODELING
+●●●●●● 1mm □
+'self_modeling'
+●●●●●● 2mm △
+TrustThreshold
+'Trust score thresholds for promotion'
+SANDBOX_ENTRY
+●●●●●● 1mm □
+0.3
+TRIAL_ENTRY
+●●●●●● 1mm □
+0.6
+PRODUCTION_READY
+●●●●●● 1mm □
+0.85
+AUTO_APPROVE
+●●●●●● 1mm □
+0.95
+TRIAL_DAYS_GOVERNANCE
+●●●●●● 1mm □
+60
+IMPROVEMENT_THRESHOLD_PROMOTION
+●●●●●● 1mm □
+0.3
+●●●●●● 2mm △
+Experiment
+"\n    Single autonomous experiment\n\n    Tracks Grace's self-improvement attempts from idea to production\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+experiment_id
+name
+description
+experiment_type
+proposed_by
+motivation
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+ExperimentType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+''
+''
+ExperimentType
+'grace_mirror'
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+experiment_id
+'EXP-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+description
+●●●●●● 3mm △
+●●●●●● 1mm □
+experiment_type
+●●●●●● 3mm △
+●●●●●● 1mm □
+proposed_by
+●●●●●● 3mm △
+●●●●●● 1mm □
+motivation
+●●●●●● 3mm △
+●●●●●● 1mm □
+ExperimentStatus
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+TRIAL_DAYS_GOVERNANCE
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+calculate_trust_score
+●●●●●● 1mm □△
+self
+ml_trust_scorer
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Calculate current trust score for experiment'
+factors
+●●●●●● 1mm □
+'trial_success_rate'
+'improvement_magnitude'
+'trial_duration_days'
+'data_points_tested'
+'error_rate'
+'experiment_type_risk'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+1000
+1.0
+●●●●●● 2mm □△
+1.0
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ml_trust_scorer
+trust_score
+uncertainty
+●●●●●● 1mm □
+ml_trust_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_score
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'trust_score'
+'uncertainty'
+'factors'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+uncertainty
+factors
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trust_score
+Exception
+logger
+●●●●●● 1mm □△
+'Neural trust scoring failed: '
+e
+', using rule-based'
+●●●●●● 2mm □△
+weights
+●●●●●● 1mm □
+'trial_success_rate'
+'improvement_magnitude'
+'trial_duration_days'
+'data_points_tested'
+'error_rate'
+'experiment_type_risk'
+0.35
+0.25
+0.15
+0.1
+0.1
+0.05
+trust_score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+factors
+k
+●●●●●● 2mm □△
+weights
+k
+k
+weights
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+trust_score
+0.0
+●●●●●● 2mm □△
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'trust_score'
+'factors'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+factors
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_success_rate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get trial success rate'
+●●●●●● 2mm □
+●●●●●● 3mm △
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_trial_days_elapsed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get days elapsed in trial'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0
+●●●●●● 3mm ○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_trial_days_remaining
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get days remaining in trial'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+elapsed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+elapsed
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+is_trial_complete
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if trial period is complete'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+_get_type_risk_factor
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get risk factor based on experiment type'
+risk_map
+●●●●●● 1mm □
+ExperimentType
+ExperimentType
+ExperimentType
+ExperimentType
+ExperimentType
+ExperimentType
+0.9
+0.85
+0.7
+0.6
+0.5
+0.4
+●●●●●● 3mm ○
+risk_map
+●●●●●● 1mm □△
+●●●●●● 3mm △
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+can_enter_sandbox
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if experiment can enter sandbox'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ExperimentStatus
+●●●●●● 3mm △
+TrustThreshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+can_enter_trial
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if experiment can enter trial (60-day governance default)'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ExperimentStatus
+●●●●●● 3mm △
+TrustThreshold
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+can_promote_to_production
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if experiment can be promoted to production (governance: +30% improvement).'
+improvement_ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+0
+IMPROVEMENT_THRESHOLD_PROMOTION
+●●●●●● 2mm □△
+100
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ExperimentStatus
+●●●●●● 3mm △
+TrustThreshold
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+improvement_ok
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.9
+●●●●●● 3mm △
+●●●●●● 1mm □
+can_auto_approve
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if experiment can be auto-approved (governance: +30% improvement).'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+TrustThreshold
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+IMPROVEMENT_THRESHOLD_PROMOTION
+●●●●●● 2mm □△
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Serialize to dictionary'
+●●●●●● 3mm ○
+'experiment_id'
+'name'
+'description'
+'experiment_type'
+'status'
+'proposed_by'
+'motivation'
+'created_at'
+'sandbox_started_at'
+'trial_started_at'
+'production_at'
+'trust_scores'
+'metrics'
+'trial'
+'approval'
+'gates'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'initial'
+'current'
+'history'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+'baseline'
+'experiment'
+'improvement_percentage'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+'duration_days'
+'days_elapsed'
+'days_remaining'
+'data_points'
+'successes'
+'failures'
+'success_rate'
+'is_complete'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'requires_user_approval'
+'approval_requested_at'
+'approved_by'
+'approval_notes'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'can_enter_sandbox'
+'can_enter_trial'
+'can_promote_to_production'
+'can_auto_approve'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+AutonomousSandboxLab
+"\n    Grace's autonomous experimentation laboratory\n\n    Manages the complete lifecycle of self-improvement experiments:\n    - Idea generation (from Mirror observations)\n    - Sandbox testing\n    - 90-day trials with live data\n    - Trust-based promotion to production\n    - User approval workflows\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+storage_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+storage_path
+Path
+●●●●●● 1mm □△
+'backend/data/sandbox_lab'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Experiment
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_experiments'
+'sandbox_experiments'
+'trial_experiments'
+'production_experiments'
+'rejected_experiments'
+'average_trust_score'
+'average_improvement'
+'auto_approved'
+'user_approved'
+0
+0
+0
+0
+0
+0.0
+0.0
+0
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+initialize_ml_intelligence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize ML Intelligence for trust scoring'
+●●●●●● 3mm □△○
+ml_intelligence.integration_orchestrator
+●●●●●● 2mm □△○
+MLIntelligenceOrchestrator
+orchestrator
+●●●●●● 1mm □
+MLIntelligenceOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+orchestrator
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] ML Intelligence initialized for trust scoring'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] ML Intelligence unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+propose_experiment
+●●●●●● 1mm □△
+self
+name
+description
+experiment_type
+motivation
+proposed_by
+initial_trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+ExperimentType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'grace_mirror'
+0.5
+'\n        Propose a new experiment\n\n        This is typically called by Mirror when it detects improvement opportunities\n        '
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+initial_trust_score
+exp
+●●●●●● 1mm □
+initial_trust_score
+●●●●●● 3mm △
+exp
+●●●●●● 1mm □
+exp
+●●●●●● 3mm △
+'total_experiments'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] New experiment proposed: '
+exp
+' - '
+name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Initial trust score: '
+initial_trust_score
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+exp
+Experiment
+●●●●●● 1mm □
+enter_sandbox
+●●●●●● 1mm □△
+self
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Move experiment to sandbox for testing'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'sandbox_experiments'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Experiment '
+experiment_id
+' entered sandbox'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+record_sandbox_implementation
+●●●●●● 1mm □△
+self
+experiment_id
+implementation_code
+files_modified
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Record the implementation code for sandbox experiment'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+ExperimentStatus
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □
+implementation_code
+exp
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+implementation_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+files_modified
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Implementation recorded for '
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+start_trial
+●●●●●● 1mm □△
+self
+experiment_id
+baseline_metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Start 90-day trial with live data'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+baseline_metrics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'trial_experiments'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Trial started for '
+experiment_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] 90-day trial period begins - will complete on '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+record_trial_result
+●●●●●● 1mm □△
+self
+experiment_id
+success
+metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Record a single trial data point'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+ExperimentStatus
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+1
+●●●●●● 2mm □
+success
+exp
+1
+●●●●●● 3mm □
+exp
+1
+●●●●●● 2mm □
+metrics
+exp
+●●●●●● 1mm □
+metrics
+●●●●●● 2mm □
+exp
+improvements
+●●●●●● 1mm □
+key
+exp
+●●●●●● 2mm □
+key
+metrics
+baseline
+●●●●●● 1mm □
+exp
+key
+current
+●●●●●● 1mm □
+metrics
+key
+●●●●●● 2mm □
+baseline
+0
+improvement
+●●●●●● 1mm □
+current
+●●●●●● 1mm □△
+baseline
+●●●●●● 3mm □△
+baseline
+●●●●●● 2mm □△
+100
+improvements
+●●●●●● 1mm □△
+improvement
+●●●●●● 2mm □△
+●●●●●● 2mm □
+improvements
+exp
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+improvements
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+improvements
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+improvement_ok
+●●●●●● 1mm □
+exp
+0
+IMPROVEMENT_THRESHOLD_PROMOTION
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.9
+exp
+TrustThreshold
+improvement_ok
+exp
+●●●●●● 1mm □
+ExperimentStatus
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Trial VALIDATED for '
+experiment_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Success rate: '
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'.1%'
+', Trust: '
+exp
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Experiment meets auto-approval criteria!'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Trust score: '
+exp
+'.2f'
+' >= '
+TrustThreshold
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Improvement: '
+exp
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 3mm □
+exp
+●●●●●● 1mm □
+ExperimentStatus
+●●●●●● 3mm □
+●●●●●● 3mm △
+'rejected_experiments'
+1
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Trial REJECTED for '
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Success rate: '
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'.1%'
+', Trust: '
+exp
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+request_user_approval
+●●●●●● 1mm □△
+self
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Request user approval for production promotion'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+ExperimentStatus
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+approval_msg
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+approval_msg
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+approve_for_production
+●●●●●● 1mm □△
+self
+experiment_id
+approved_by
+notes
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'user'
+●●●●●● 2mm □
+'Approve experiment for production'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+approved_by
+exp
+●●●●●● 1mm □
+notes
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+approved_by
+'auto'
+●●●●●● 3mm △
+'auto_approved'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+'user_approved'
+1
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Experiment '
+experiment_id
+' APPROVED for production by '
+approved_by
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+promote_to_production
+●●●●●● 1mm □△
+self
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Promote approved experiment to production'
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+exp
+ExperimentStatus
+●●●●●● 3mm ○
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'production_experiments'
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+experiment_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Experiment '
+experiment_id
+' promoted to PRODUCTION!'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Final trust score: '
+exp
+'.2f'
+●●●●●● 2mm □△
+improvement_str
+●●●●●● 1mm □
+exp
+●●●●●● 2mm □
+exp
+'.1f'
+'%'
+'N/A'
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Improvement: '
+improvement_str
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_generate_approval_request
+●●●●●● 1mm □△
+self
+exp
+●●●●●● 2mm □△
+Experiment
+'Generate user-friendly approval request message'
+msg
+●●●●●● 1mm □
+'='
+●●●●●● 2mm □△
+70
+'🔬 EXPERIMENT READY FOR APPROVAL'
+'='
+●●●●●● 2mm □△
+70
+''
+'Experiment ID: '
+exp
+'Name: '
+exp
+'Type: '
+exp
+''
+'MOTIVATION:'
+'  '
+exp
+''
+'TRIAL RESULTS ('
+exp
+' days):'
+'  Data Points: '
+exp
+','
+'  Success Rate: '
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'.1%'
+'  Failures: '
+exp
+'  Trust Score: '
+exp
+'.2f'
+'/1.00'
+''
+'PERFORMANCE:'
+exp
+'  Improvement: '
+exp
+'.1f'
+'%'
+'  Improvement: N/A'
+●●●●●● 2mm □
+exp
+exp
+msg
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+'METRICS COMPARISON:'
+●●●●●● 2mm □△
+key
+exp
+●●●●●● 2mm □
+key
+exp
+baseline
+●●●●●● 1mm □
+exp
+key
+current
+●●●●●● 1mm □
+exp
+key
+diff
+●●●●●● 1mm □
+current
+●●●●●● 1mm □△
+baseline
+msg
+●●●●●● 1mm □△
+'  '
+key
+': '
+baseline
+'.3f'
+' -> '
+current
+'.3f'
+' ('
+diff
+'+.3f'
+')'
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+''
+'RECOMMENDATION:'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+'  ✅ AUTO-APPROVE: Trust score '
+exp
+'.2f'
+' >= '
+TrustThreshold
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+'  ✅ Improvement '
+exp
+'.1f'
+'% >= 30%'
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+'  ✅ Grace recommends immediate production deployment'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+msg
+●●●●●● 1mm □△
+'  ⚠️  MANUAL REVIEW: Trust score '
+exp
+'.2f'
+' < '
+TrustThreshold
+●●●●●● 2mm □△
+●●●●●● 3mm □
+msg
+●●●●●● 1mm □△
+'  ⚠️  User approval required before production'
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+''
+'TO APPROVE:'
+'  curl -X POST http://localhost:8000/sandbox-lab/experiments/'
+exp
+'/approve'
+''
+'TO REJECT:'
+'  curl -X POST http://localhost:8000/sandbox-lab/experiments/'
+exp
+'/reject'
+''
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_experiment
+●●●●●● 1mm □△
+self
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get experiment by ID'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Experiment
+●●●●●● 1mm □
+list_experiments
+●●●●●● 1mm □△
+self
+status
+experiment_type
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+ExperimentStatus
+●●●●●● 2mm □○
+ExperimentType
+●●●●●● 2mm □
+●●●●●● 2mm □
+'List experiments with optional filters'
+experiments
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+experiments
+●●●●●● 1mm □
+e
+e
+experiments
+e
+status
+●●●●●● 2mm □
+experiment_type
+experiments
+●●●●●● 1mm □
+e
+e
+experiments
+e
+experiment_type
+●●●●●● 3mm ○
+experiments
+●●●●●● 3mm □△
+Experiment
+●●●●●● 1mm □
+get_active_trials
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all active trial experiments'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+eid
+eid
+●●●●●● 3mm △
+eid
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Experiment
+●●●●●● 1mm □
+get_awaiting_approval
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get experiments awaiting user approval'
+●●●●●● 3mm ○
+e
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+ExperimentStatus
+e
+●●●●●● 3mm □△
+Experiment
+●●●●●● 1mm □
+_save_experiment
+●●●●●● 1mm □△
+self
+exp
+●●●●●● 2mm □△
+Experiment
+'Save experiment to disk'
+exp_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+exp
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+exp_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_experiments
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load all experiments from disk'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+exp_file
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'EXP-*.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+exp_file
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+exp_id
+●●●●●● 1mm □
+data
+'experiment_id'
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Loaded experiment: '
+exp_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Failed to load '
+exp_file
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+seed_initial_experiments
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Seed the sandbox lab with initial experiments for cold start.\n\n        This ensures there are always experiments running for continuous learning.\n        Only seeds if no experiments exist.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Already have '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' experiments, skipping seed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Seeding initial experiments for cold start...'
+●●●●●● 2mm □△
+seed_experiments
+●●●●●● 1mm □
+'name'
+'description'
+'experiment_type'
+'motivation'
+'initial_trust_score'
+'Retrieval Quality Optimization'
+'Improve semantic search accuracy by optimizing embedding similarity thresholds and re-ranking strategies'
+ExperimentType
+'Core capability that affects all RAG operations'
+0.5
+'name'
+'description'
+'experiment_type'
+'motivation'
+'initial_trust_score'
+'Adaptive Chunking Strategy'
+'Implement dynamic chunk sizing based on content type and semantic boundaries'
+ExperimentType
+'Better chunking leads to better context preservation and retrieval'
+0.5
+'name'
+'description'
+'experiment_type'
+'motivation'
+'initial_trust_score'
+'Learning Retention Enhancement'
+'Improve knowledge consolidation through spaced repetition and active recall patterns'
+ExperimentType
+'Continuous learning requires effective long-term retention'
+0.5
+'name'
+'description'
+'experiment_type'
+'motivation'
+'initial_trust_score'
+'Trust Score Calibration'
+'Calibrate trust scoring weights based on actual prediction accuracy'
+ExperimentType
+'Accurate trust scores are essential for autonomous decision making'
+0.5
+'name'
+'description'
+'experiment_type'
+'motivation'
+'initial_trust_score'
+'Response Quality Improvement'
+'Optimize context assembly and prompt engineering for better response quality'
+ExperimentType
+'Higher quality responses increase user trust and system value'
+0.5
+seed
+seed_experiments
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+seed
+'initial_trust_score'
+exp
+●●●●●● 1mm □
+'# Seed experiment: '
+seed
+'name'
+'\n# Implementation pending'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Seeded experiment: '
+exp
+' - '
+exp
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Failed to seed experiment '
+seed
+'name'
+': '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SANDBOX_LAB] Seeded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' initial experiments'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get lab statistics'
+experiments
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+experiments
+●●●●●● 3mm △
+'average_trust_score'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+e
+experiments
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+experiments
+●●●●●● 2mm □△
+improvements
+●●●●●● 1mm □
+e
+e
+experiments
+e
+●●●●●● 2mm □
+●●●●●● 2mm □
+improvements
+●●●●●● 3mm △
+'average_improvement'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+improvements
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+improvements
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'active_trials_count'
+'awaiting_approval_count'
+'production_experiments'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'production_experiments'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_sandbox_lab
+●●●●●● 2mm □○
+AutonomousSandboxLab
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create sandbox lab instance'
+●●●●●● 2mm □
+_sandbox_lab
+●●●●●● 2mm □
+_sandbox_lab
+●●●●●● 1mm □
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_sandbox_lab
+AutonomousSandboxLab

@@ -1,0 +1,624 @@
+## cognitive_mesh.py
+'\nCognitive Mesh — wires ALL orphaned cognitive modules into the brain.\n\nConnects:\n  - OODA loop (observe-orient-decide-act) into brain action routing\n  - Ambiguity resolver into trust calculations\n  - Procedural memory into action execution\n  - Reverse KNN into memory retrieval\n  - Invariant checker into state validation\n  - ML bandits into action selection\n  - Meta-learning into learning rate adaptation\n\nEach module is lazy-loaded and wrapped with error boundaries\nso a failure in one never breaks the others.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+func
+fallback
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Call a function safely — never crash the caller.'
+●●●●●● 3mm ○
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Cognitive mesh: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fallback
+●●●●●● 2mm △
+CognitiveMesh
+'\n    Unified interface to ALL cognitive modules.\n    The brain calls this instead of importing 8 different modules.\n    '
+●●●●●● 1mm □
+ooda_cycle
+●●●●●● 1mm □△
+observation
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Run an OODA (Observe-Orient-Decide-Act) cycle.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.ooda
+●●●●●● 2mm □△○
+OODALoop
+loop
+●●●●●● 1mm □
+OODALoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+observation
+context
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+_run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+'observe'
+'orient'
+'decide'
+'act'
+observation
+'context'
+context
+'action'
+'confidence'
+'proceed'
+0.5
+'recommendation'
+'continue with default behavior'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+resolve_ambiguity
+●●●●●● 1mm □△
+text
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Detect and resolve ambiguity in input.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.ambiguity
+●●●●●● 2mm □△○
+AmbiguityTracker
+tracker
+●●●●●● 1mm □
+AmbiguityTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tracker
+●●●●●● 1mm □△
+text
+context
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+_run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+ambiguous
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'maybe'
+'might'
+'could'
+'perhaps'
+'unclear'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+'is_ambiguous'
+'confidence'
+'suggestions'
+text
+ambiguous
+ambiguous
+0.4
+0.8
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+find_procedure
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Find a proven procedure for a goal.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegration
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+●●●●●● 3mm □△○
+cognitive.memory_mesh_cache
+●●●●●● 2mm □△○
+MemoryMeshCache
+cache
+●●●●●● 1mm □
+MemoryMeshCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+s
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+proc
+●●●●●● 3mm ○
+'found'
+'procedure'
+'success_rate'
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+proc
+'pattern_name'
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+proc
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+proc
+'success_rate'
+●●●●●● 2mm □△
+proc
+0
+●●●●●● 3mm ○
+'found'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+_safe
+●●●●●● 1mm □△
+_run
+'found'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+find_similar_patterns
+●●●●●● 1mm □△
+query
+k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Find similar patterns using reverse KNN.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+scan_knowledge_gaps
+●●●●●● 3mm ○
+scan_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_safe
+●●●●●● 1mm □△
+_run
+'patterns'
+'gaps'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_invariants
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check system invariants — are all constraints satisfied?'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.invariants
+●●●●●● 2mm □△○
+check_all_invariants
+●●●●●● 3mm ○
+check_all_invariants
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+_run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+checks
+●●●●●● 1mm □
+'data_integrity'
+'trust_bounds'
+'memory_consistency'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+score
+trust
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+0.0
+score
+1.0
+checks
+'trust_bounds'
+●●●●●● 1mm □
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+'passed'
+'checks'
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+checks
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+bandit_select
+●●●●●● 1mm □△
+options
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Use multi-armed bandit to select the best option.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.online_learning_pipeline
+●●●●●● 2mm □△○
+get_orchestrator
+orch
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+orch
+'bandit_select'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+orch
+●●●●●● 1mm □△
+options
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+_run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+options
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_choice
+seed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+context
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'|'
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+o
+●●●●●● 2mm □△
+o
+options
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'selected'
+'method'
+deterministic_choice
+●●●●●● 1mm □△
+options
+seed
+●●●●●● 2mm □△
+'deterministic_fallback'
+●●●●●● 3mm ○
+result
+'selected'
+'method'
+options
+options
+0
+●●●●●● 2mm □
+'default'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+adapt_learning_rate
+●●●●●● 1mm □△
+current_rate
+recent_performance
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'Use meta-learning to adapt the Hebbian learning rate.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.online_learning_pipeline
+●●●●●● 2mm □△○
+get_orchestrator
+orch
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+orch
+'meta_adapt'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+orch
+●●●●●● 1mm □△
+current_rate
+recent_performance
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+_run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+recent_performance
+●●●●●● 3mm ○
+current_rate
+avg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+recent_performance
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_performance
+●●●●●● 2mm □△
+●●●●●● 2mm □
+avg
+0.8
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.2
+current_rate
+●●●●●● 2mm □△
+1.1
+●●●●●● 2mm □△
+●●●●●● 1mm △
+avg
+0.3
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.01
+current_rate
+●●●●●● 2mm □△
+0.9
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+current_rate
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+analyze_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Use memory mesh learner to find knowledge gaps.'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.memory_mesh_learner
+●●●●●● 2mm □△○
+get_memory_mesh_learner
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+learner
+●●●●●● 1mm □
+get_memory_mesh_learner
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_safe
+●●●●●● 1mm □△
+_run
+'knowledge_gaps'
+'top_priorities'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+full_cognitive_report
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+''
+'Run ALL cognitive modules and return unified report.'
+mesh
+●●●●●● 1mm □
+CognitiveMesh
+●●●●●● 3mm ○
+'ooda'
+'ambiguity'
+'invariants'
+'knowledge_gaps'
+'procedural'
+mesh
+●●●●●● 1mm □△
+query
+'system status check'
+●●●●●● 2mm □△
+query
+mesh
+●●●●●● 1mm □△
+query
+'test'
+●●●●●● 2mm □△
+'skipped'
+●●●●●● 3mm □△○
+mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mesh
+●●●●●● 1mm □△
+query
+'default'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_cognitive_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CognitiveMesh

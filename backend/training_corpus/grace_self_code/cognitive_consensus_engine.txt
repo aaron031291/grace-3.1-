@@ -1,0 +1,1785 @@
+## consensus_engine.py
+"\nMulti-Model Consensus Engine — Knights of the Roundtable\n\nA 4-layer deliberation protocol where multiple LLMs independently tackle the\nsame problem, then converge through consensus, alignment, and verification.\n\nLayer 1 — Independent Deliberation:\n  Each selected model receives the same prompt/problem/context independently.\n  No model sees another's output.\n\nLayer 2 — Consensus Formation:\n  All responses are collected, compared, and synthesised into a unified position.\n  Areas of agreement strengthen; disagreements are flagged for deeper analysis.\n\nLayer 3 — Alignment:\n  The consensus is aligned to Grace's internal world, user context, and the\n  specific problem domain. If Grace initiated the query autonomously, alignment\n  is to her own needs and the system's integrity.\n\nLayer 4 — Verification:\n  The aligned output passes through the existing verification pipeline:\n  trust scoring, hallucination guard, contradiction detection, and\n  deterministic checks.\n\nAutonomous Mode:\n  Grace can invoke the roundtable when she's stuck — needs deterministic\n  answers or faces ambiguity. Autonomous queries are batched to control\n  token costs (daily/weekly configurable).\n\nAvailable Models:\n  - Opus 4.6   (Anthropic Claude) — deep reasoning, audit, architecture\n  - Kimi 2.5   (Moonshot AI)      — long-context, document analysis\n  - Qwen 2.5   (via Ollama)       — local, fast, code-oriented\n  - Reasoning   (via Ollama)       — local reasoning model (configurable)\n"
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BATCH_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'consensus_batches'
+●●●●●● 1mm □
+_build_model_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Build model registry using the actual configured model names (resolved to existing Ollama models).'
+●●●●●● 3mm □△○
+llm_orchestrator.ollama_resolver
+●●●●●● 2mm □△○
+resolve_ollama_model
+reason_model
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+code_model
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+Exception
+reason_model
+●●●●●● 1mm □
+'qwen3:32b'
+code_model
+●●●●●● 1mm □
+'qwen3:32b'
+●●●●●● 3mm ○
+'opus'
+'kimi'
+'qwen'
+'reasoning'
+'name'
+'provider'
+'strengths'
+'cost_tier'
+'Opus 4.6 (Claude)'
+'opus'
+'deep reasoning'
+'architecture'
+'audit'
+'code review'
+'cloud'
+'name'
+'provider'
+'strengths'
+'cost_tier'
+'Kimi K2.5 (Moonshot)'
+'kimi'
+'long context (262K)'
+'document analysis'
+'system reasoning'
+'cloud'
+'name'
+'provider'
+'task'
+'strengths'
+'cost_tier'
+'Qwen 3 — '
+code_model
+' (Local)'
+'ollama'
+'code'
+'code generation'
+'fast iteration'
+'local/private'
+'free'
+'free'
+'name'
+'provider'
+'task'
+'strengths'
+'cost_tier'
+'Qwen 3 — '
+reason_model
+' (Local)'
+'ollama'
+'reason'
+'chain-of-thought'
+'mathematical reasoning'
+'problem decomposition'
+'free'
+●●●●●● 2mm □△
+MODEL_REGISTRY
+●●●●●● 1mm □
+_build_model_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ModelResponse
+model_id
+●●●●●● 1mm ○
+model_name
+●●●●●● 1mm ○
+response
+●●●●●● 1mm ○
+latency_ms
+●●●●●● 3mm ○
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+token_estimate
+●●●●●● 2mm ○
+0
+dataclass
+●●●●●● 2mm △
+ConsensusResult
+query
+●●●●●● 1mm ○
+models_used
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+individual_responses
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+consensus_text
+●●●●●● 1mm ○
+alignment_text
+●●●●●● 1mm ○
+verification
+●●●●●● 2mm □△
+confidence
+●●●●●● 3mm ○
+agreements
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+disagreements
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+final_output
+●●●●●● 1mm ○
+total_latency_ms
+●●●●●● 3mm ○
+timestamp
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm ○
+'user'
+dataclass
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the appropriate LLM client for a model.'
+info
+●●●●●● 1mm □
+MODEL_REGISTRY
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+get_llm_for_task
+get_qwen_coder
+get_deepseek_reasoner
+provider
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'provider'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+provider
+'opus'
+●●●●●● 3mm ○
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+provider
+'kimi'
+●●●●●● 3mm ○
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'code'
+●●●●●● 3mm ○
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+task
+'reason'
+●●●●●● 3mm ○
+get_deepseek_reasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+●●●●●● 3mm ○
+get_llm_for_task
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_model_available
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if a model is available and configured.\n\n    For cloud models (Opus, Kimi) this checks API keys.\n    For local Ollama models this uses the resolved model (with fallbacks)\n    and confirms that model exists in Ollama.\n    '
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+llm_orchestrator.ollama_resolver
+●●●●●● 2mm □△○
+resolve_ollama_model
+ollama_model_exists
+info
+●●●●●● 1mm □
+MODEL_REGISTRY
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+info
+'provider'
+'opus'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+info
+'provider'
+'kimi'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+'provider'
+'ollama'
+task
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+'fast'
+resolved
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+resolved
+●●●●●● 2mm □△
+ollama_model_exists
+●●●●●● 1mm □△
+resolved
+settings
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return list of available models with their status.'
+MODEL_REGISTRY
+●●●●●● 1mm □
+_build_model_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+mid
+info
+MODEL_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+available
+●●●●●● 1mm □
+_check_model_available
+●●●●●● 1mm □△
+mid
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'id'
+'name'
+'strengths'
+'cost_tier'
+'available'
+mid
+info
+'name'
+info
+'strengths'
+info
+'cost_tier'
+available
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_model
+●●●●●● 1mm □△
+model_id
+prompt
+system_prompt
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Run a single model independently.'
+info
+●●●●●● 1mm □
+MODEL_REGISTRY
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+●●●●●● 3mm ○
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 3mm ○
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_prompt
+●●●●●● 1mm □
+prompt
+●●●●●● 2mm □
+context
+full_prompt
+●●●●●● 1mm □
+'Context:\n'
+context
+'\n\n'
+prompt
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+token_est
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+logger
+●●●●●● 1mm □△
+'Model '
+model_id
+' failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ModelResponse
+●●●●●● 1mm □
+layer1_deliberate
+●●●●●● 1mm □△
+prompt
+models
+system_prompt
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'\n    Layer 1: Run all selected models independently on the same problem.\n    Uses threading for parallel execution.\n    '
+●●●●●● 2mm □
+system_prompt
+system_prompt
+●●●●●● 1mm □
+'You are a member of a multi-model deliberation panel. Analyze the problem thoroughly and provide your independent assessment. Be specific, cite reasoning, and highlight any uncertainties.'
+responses
+●●●●●● 1mm □
+threads
+●●●●●● 1mm □
+results_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_and_collect
+●●●●●● 1mm □△
+mid
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+_run_model
+●●●●●● 1mm □△
+mid
+prompt
+system_prompt
+context
+●●●●●● 2mm □△
+results_lock
+responses
+●●●●●● 1mm □△
+resp
+●●●●●● 2mm □△
+mid
+models
+●●●●●● 2mm □
+_check_model_available
+●●●●●● 1mm □△
+mid
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threads
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+threads
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+responses
+●●●●●● 3mm □△
+ModelResponse
+●●●●●● 1mm □
+layer2_consensus
+●●●●●● 1mm □△
+prompt
+responses
+synthesizer_model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+ModelResponse
+●●●●●● 1mm ○
+'kimi'
+'\n    Layer 2: Synthesise individual responses into a consensus.\n    Returns (consensus_text, agreements, disagreements).\n    '
+valid_responses
+●●●●●● 1mm □
+r
+r
+responses
+r
+r
+●●●●●● 2mm □
+valid_responses
+●●●●●● 3mm ○
+'No valid responses to synthesise.'
+'All models failed'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+valid_responses
+●●●●●● 2mm □△
+1
+●●●●●● 3mm ○
+valid_responses
+0
+'Single model — no consensus needed'
+response_block
+●●●●●● 1mm □
+''
+i
+r
+●●●●●● 2mm □
+●●●●●● 1mm □△
+valid_responses
+1
+●●●●●● 2mm □△
+response_block
+'\n--- Model '
+i
+': '
+r
+' ---\n'
+r
+3000
+'\n'
+synthesis_prompt
+●●●●●● 1mm □
+'You are the consensus synthesiser. Multiple AI models have independently analyzed the same problem. Your job is to:\n\n1. Identify AGREEMENTS — points where models converge\n2. Identify DISAGREEMENTS — points of divergence\n3. Produce a CONSENSUS — the strongest, most reliable unified answer\n4. Note UNCERTAINTIES — areas where confidence is low\n\nOriginal problem:\n'
+prompt
+2000
+'\n\nModel responses:'
+response_block
+'\n\nProduce your response in this structure:\n## Agreements\n- ...\n\n## Disagreements\n- ...\n\n## Consensus\n...\n\n## Confidence Level\nHigh/Medium/Low with reasoning'
+client
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+synthesizer_model
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+client
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+'qwen'
+●●●●●● 2mm □△
+_get_client
+●●●●●● 1mm □△
+'reasoning'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+combined
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+r
+1500
+r
+valid_responses
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+combined
+'Fallback: combined responses'
+'No synthesiser available'
+result
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agreements
+●●●●●● 1mm □
+disagreements
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+section
+●●●●●● 1mm □
+''
+line
+lines
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'agreement'
+stripped
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+section
+●●●●●● 1mm □
+'agree'
+●●●●●● 1mm △
+'disagreement'
+stripped
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+section
+●●●●●● 1mm □
+'disagree'
+●●●●●● 2mm □
+'consensus'
+stripped
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+section
+●●●●●● 1mm □
+'consensus'
+●●●●●● 1mm △
+stripped
+●●●●●● 1mm □△
+'- '
+●●●●●● 2mm □△
+section
+'agree'
+agreements
+●●●●●● 1mm □△
+stripped
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stripped
+●●●●●● 1mm □△
+'- '
+●●●●●● 2mm □△
+section
+'disagree'
+disagreements
+●●●●●● 1mm □△
+stripped
+2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+agreements
+disagreements
+Exception
+logger
+●●●●●● 1mm □△
+'Consensus synthesis failed: '
+e
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+'\n\n---\n\n'
+●●●●●● 1mm □△
+r
+2000
+r
+valid_responses
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+combined
+'Synthesis error: '
+e
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+layer3_align
+●●●●●● 1mm □△
+prompt
+consensus
+source
+user_context
+system_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'user'
+''
+''
+'\n    Layer 3: Align the consensus to Grace/user/system needs.\n    '
+●●●●●● 2mm □
+source
+'autonomous'
+alignment_prompt
+●●●●●● 1mm □
+"You are Grace's alignment engine. The consensus below was produced by a multi-model roundtable. Grace initiated this query autonomously because she needs a deterministic answer.\n\nAlign this consensus to Grace's internal needs:\n- Is it actionable for Grace's self-improvement?\n- Does it align with Grace's governance rules?\n- What specific system actions should result from this?\n- How should this knowledge be stored (learning, memory, rules)?\n\n"
+●●●●●● 3mm □
+alignment_prompt
+●●●●●● 1mm □
+"You are Grace's alignment engine. The consensus below was produced by a multi-model roundtable for a user query.\n\nAlign this consensus to the user's needs:\n- Is it directly answering what the user asked?\n- Is it practical and actionable?\n- Does it account for the user's context?\n- Is the language appropriate for the user?\n\n"
+●●●●●● 2mm □
+user_context
+alignment_prompt
+'User context: '
+user_context
+'\n\n'
+●●●●●● 2mm □
+system_context
+alignment_prompt
+'System context: '
+system_context
+'\n\n'
+alignment_prompt
+'Original query: '
+prompt
+1000
+'\n\nConsensus:\n'
+consensus
+4000
+'\n\nProduce the final aligned response.'
+client
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+_get_client
+●●●●●● 1mm □△
+'opus'
+●●●●●● 2mm □△
+_get_client
+●●●●●● 1mm □△
+'qwen'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 3mm ○
+consensus
+result
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Alignment failed, returning raw consensus: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+consensus
+●●●●●● 1mm ○
+●●●●●● 1mm □
+layer4_verify
+●●●●●● 1mm □△
+aligned_output
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Layer 4: Pass through existing verification pipeline.\n    Trust scoring, contradiction detection, hallucination guard.\n    '
+verification
+●●●●●● 1mm □
+'trust_score'
+'hallucination_flags'
+'contradiction_flags'
+'passed'
+0.0
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+'consensus_engine'
+'Consensus Roundtable'
+aligned_output
+1000
+●●●●●● 2mm □△
+verification
+'trust_score'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+score
+0.7
+Exception
+verification
+'trust_score'
+●●●●●● 1mm □
+0.7
+suspicious
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+"I don't have"
+aligned_output
+'I cannot'
+aligned_output
+suspicious
+1
+●●●●●● 2mm □
+'as an AI'
+aligned_output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suspicious
+1
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+aligned_output
+●●●●●● 2mm □△
+50
+suspicious
+1
+verification
+'hallucination_flags'
+●●●●●● 1mm □△
+'Response too short'
+●●●●●● 2mm □△
+verification
+'hallucination_score'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+1.0
+●●●●●● 1mm □△
+suspicious
+●●●●●● 2mm □△
+0.2
+●●●●●● 2mm □△
+Exception
+verification
+'hallucination_score'
+●●●●●● 1mm □
+0.7
+trust
+●●●●●● 1mm □
+verification
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □△
+'score'
+0.7
+●●●●●● 2mm □△
+verification
+'passed'
+●●●●●● 1mm □
+trust
+0.4
+verification
+●●●●●● 1mm □△
+'hallucination_score'
+0
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+verification
+●●●●●● 1mm □△
+'contradiction_flags'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+verification
+●●●●●● 2mm □△
+●●●●●● 1mm □
+query_braille_sandbox
+●●●●●● 1mm □△
+intent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Query the new deterministic Braille Sandbox nodes to provide raw AST code \n    to Spindle exactly as requested via the new genesis keys.\n    '
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+database.models.braille_node
+●●●●●● 2mm □△○
+BrailleSandboxNode
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keywords
+●●●●●● 1mm □
+intent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nodes
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+BrailleSandboxNode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+BrailleSandboxNode
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+n
+nodes
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+k
+n
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+n
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+keywords
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matches
+●●●●●● 3mm ○
+''
+ctx
+●●●●●● 1mm □
+'[Braille Sandbox Deterministic Code Context]\n'
+m
+matches
+3
+ctx
+'--- '
+m
+' ('
+m
+') | '
+m
+' ---\n'
+m
+1500
+'\n\n'
+●●●●●● 3mm ○
+ctx
+Exception
+logger
+●●●●●● 1mm □△
+'Braille Sandbox offline: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+prompt
+models
+system_prompt
+context
+source
+user_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+''
+''
+'user'
+''
+'\n    Execute the full 4-layer consensus pipeline.\n    '
+MODEL_REGISTRY
+●●●●●● 1mm □
+_build_model_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models
+models
+●●●●●● 1mm □
+m
+m
+MODEL_REGISTRY
+_check_model_available
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models
+models
+●●●●●● 1mm □
+'qwen'
+logger
+●●●●●● 1mm □△
+'Consensus roundtable starting — models: %s'
+', '
+●●●●●● 1mm □△
+m
+' ('
+MODEL_REGISTRY
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'name'
+'?'
+●●●●●● 2mm □△
+')'
+m
+models
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_context
+●●●●●● 1mm □
+''
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpis
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_context
+●●●●●● 1mm □
+'System trust: '
+kpis
+●●●●●● 1mm □△
+'overall_trust'
+'unknown'
+●●●●●● 2mm □△
+'\n'
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+um_results
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+um_results
+system_context
+'\n[Unified Memory]\n'
+res
+um_results
+system_context
+'- '
+res
+●●●●●● 1mm □△
+'memory_type'
+'unknown'
+●●●●●● 2mm □△
+': '
+res
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+'\n'
+Exception
+sandbox_context
+●●●●●● 1mm □
+query_braille_sandbox
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sandbox_context
+system_context
+'\n'
+●●●●●● 3mm ○
+sandbox_context
+●●●●●● 3mm □△○
+core.dynamic_dictionary
+●●●●●● 2mm □△○
+get_dynamic_dictionary
+semantic_dict
+●●●●●● 1mm □
+get_dynamic_dictionary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+semantic_dict
+system_context
+'\n[Semantic Braille Dictionary Mapping]\n'
+item
+semantic_dict
+system_context
+"- Word: '"
+item
+'word'
+"' = Braille: '"
+item
+'encoding'
+"' | Meaning: "
+item
+'meaning'
+'\n'
+Exception
+logger
+●●●●●● 1mm □△
+'Semantic Dictionary offline Context injection failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+workspace_root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+p
+workspace_root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'node_modules'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+workspace_root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tree
+system_context
+'\n[Workspace Topology Tracker (Native Sandbox)]\n'
+system_context
+'Active Scripts:\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+tree
+50
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+50
+'\n...truncated'
+''
+Exception
+logger
+●●●●●● 1mm □△
+'Workspace Topology Context injection failed: '
+e
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □
+layer1_deliberate
+●●●●●● 1mm □△
+prompt
+models
+system_prompt
+context
+●●●●●● 2mm □△
+consensus_text
+agreements
+disagreements
+●●●●●● 1mm □
+layer2_consensus
+●●●●●● 1mm □△
+prompt
+responses
+●●●●●● 2mm □△
+aligned_text
+●●●●●● 1mm □
+layer3_align
+●●●●●● 1mm □△
+prompt
+consensus_text
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □
+layer4_verify
+●●●●●● 1mm □△
+aligned_text
+prompt
+●●●●●● 2mm □△
+total_latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+final_output
+●●●●●● 1mm □
+verification
+'passed'
+aligned_text
+consensus_text
+result
+●●●●●● 1mm □
+ConsensusResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+disagreements
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'consensus.disagreement'
+'models'
+'disagreements'
+'prompt_preview'
+'requires_governance'
+models
+disagreements
+prompt
+200
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ml_trainer
+●●●●●● 2mm □△○
+get_ml_trainer
+get_ml_trainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'consensus_refinement'
+'agreement_count'
+'disagreement_count'
+'confidence'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreements
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+disagreements
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+disagreements
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreements
+●●●●●● 2mm □△
+'degradation'
+'success'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+ConsensusTrustBridge
+ConsensusTrustBridge
+●●●●●● 1mm □△
+'models_used'
+'agreements'
+'disagreements'
+'confidence'
+'individual_responses'
+models
+agreements
+disagreements
+result
+result
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'consensus.completed'
+'models'
+'agreements'
+'disagreements'
+'confidence'
+'latency_ms'
+'passed'
+models
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreements
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+disagreements
+●●●●●● 2mm □△
+result
+result
+verification
+'passed'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+source
+'autonomous'
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+ConsensusResult
+_batch_queue
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_batch_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+queue_autonomous_query
+●●●●●● 1mm □△
+prompt
+context
+priority
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'normal'
+"\n    Queue a query for the next autonomous batch run.\n    Grace calls this when she needs multi-model help but it's not urgent.\n    "
+BATCH_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+'prompt'
+'context'
+'priority'
+'queued_at'
+'status'
+prompt
+context
+priority
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'queued'
+_batch_lock
+_batch_queue
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+_save_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entry
+●●●●●● 1mm □
+get_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the current autonomous batch queue.'
+_load_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_batch_lock
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_batch_queue
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_batch
+●●●●●● 1mm □△
+max_queries
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+5
+'\n    Process queued autonomous queries. Called on schedule (daily/weekly).\n    Limits to max_queries per batch to control costs.\n    '
+_load_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+_batch_lock
+to_process
+●●●●●● 1mm □
+q
+q
+_batch_queue
+q
+'status'
+'queued'
+max_queries
+query
+to_process
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+'status'
+●●●●●● 1mm □
+'completed'
+query
+'completed_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+'result_confidence'
+●●●●●● 1mm □
+result
+query
+'result_summary'
+●●●●●● 1mm □
+result
+500
+results
+●●●●●● 1mm □△
+'prompt'
+'status'
+'confidence'
+query
+'prompt'
+200
+'completed'
+result
+●●●●●● 2mm □△
+Exception
+query
+'status'
+●●●●●● 1mm □
+'failed'
+query
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'prompt'
+'status'
+'error'
+query
+'prompt'
+200
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_save_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BATCH_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+BATCH_DIR
+●●●●●● 3mm □△
+'queue.json'
+_batch_lock
+path
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+_batch_queue
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+BATCH_DIR
+●●●●●● 3mm □△
+'queue.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_batch_lock
+_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_batch_queue
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Exception

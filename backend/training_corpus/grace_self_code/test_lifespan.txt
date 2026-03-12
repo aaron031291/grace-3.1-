@@ -1,0 +1,26 @@
+## test_lifespan.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+app
+app
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Lifespan running successfully'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,93 @@
+## message_protocol.py
+'\nGrace OS — Layer Messaging Protocol\n\nDefines the core data structures for asynchronous, mesh-based inter-layer \ncommunication within Grace OS.\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 2mm △
+LayerMessage
+'\n    Represents a structured request sent from one Grace OS layer to another.\n    '
+from_layer
+●●●●●● 1mm ○
+to_layer
+●●●●●● 1mm ○
+message_type
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm △
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trace_id
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parent_message_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+priority
+●●●●●● 2mm ○
+0
+max_depth
+●●●●●● 2mm ○
+10
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+LayerResponse
+'\n    Represents the result returned by a layer after processing a LayerMessage.\n    '
+message_id
+●●●●●● 1mm ○
+from_layer
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+trust_score
+●●●●●● 3mm ○
+0.0
+duration_ms
+●●●●●● 2mm ○
+0
+tool_calls_made
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+child_messages
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass

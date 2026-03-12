@@ -1,0 +1,1017 @@
+## example_usage.py
+'\nML Intelligence Module - Example Usage\n\nDemonstrates how to use each component of the ML Intelligence module.\n'
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 1mm □
+example_neural_trust_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Using neural trust scorer for learning examples'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+get_neural_trust_scorer
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 1: Neural Trust Scorer'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+scorer
+●●●●●● 1mm □
+get_neural_trust_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_example
+●●●●●● 1mm □
+'input_context'
+'expected_output'
+'actual_output'
+'source_reliability'
+'outcome_quality'
+'consistency_score'
+'times_validated'
+'times_invalidated'
+'times_referenced'
+'created_at'
+'How to implement async/await in Python'
+'Use async def and await keywords'
+'Use async def and await keywords'
+0.9
+0.85
+0.8
+5
+1
+10
+datetime
+●●●●●● 1mm □△
+2024
+1
+1
+●●●●●● 2mm □△
+trust_score
+uncertainty
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTrust Score: '
+trust_score
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Uncertainty: '
+uncertainty
+'.3f'
+●●●●●● 2mm □△
+scorer
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nUpdated model with positive outcome'
+●●●●●● 2mm □△
+robustness
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRobustness Score: '
+robustness
+'robustness_score'
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Max Deviation: '
+robustness
+'max_deviation'
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Topic selection using multi-armed bandit'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+get_bandit
+BanditAlgorithm
+BanditContext
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 2: Multi-Armed Bandit for Topic Selection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+bandit
+●●●●●● 1mm □
+get_bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topics
+●●●●●● 1mm □
+'python_async'
+'Python Async Programming'
+'difficulty'
+0.7
+'rust_ownership'
+'Rust Ownership Model'
+'difficulty'
+0.9
+'react_hooks'
+'React Hooks'
+'difficulty'
+0.5
+'kubernetes'
+'Kubernetes Basics'
+'difficulty'
+0.8
+'graphql'
+'GraphQL API Design'
+'difficulty'
+0.6
+topic_id
+topic_name
+features
+topics
+bandit
+●●●●●● 1mm □△
+topic_id
+topic_name
+features
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+BanditContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSelecting next 5 learning topics:'
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+topic_id
+●●●●●● 1mm □
+bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+i
+●●●●●● 3mm ○
+1
+'. '
+topic_id
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.3
+reward
+●●●●●● 1mm □
+success
+1.0
+0.0
+bandit
+●●●●●● 1mm □△
+topic_id
+reward
+context
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □
+bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTop 3 recommended topics:'
+●●●●●● 2mm □△
+topic_id
+score
+recommendations
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+topic_id
+': '
+score
+'.3f'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTotal pulls: '
+stats
+'total_pulls'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Number of topics: '
+stats
+'num_arms'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_meta_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Getting hyperparameter recommendations'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+get_meta_learner
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 3: Meta-Learning for Hyperparameter Optimization'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+meta_learner
+●●●●●● 1mm □
+get_meta_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □
+meta_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSuggested Hyperparameters:'
+●●●●●● 2mm □△
+param
+value
+recommendations
+'suggested_hyperparams'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+param
+': '
+value
+●●●●●● 2mm □△
+hyperparams
+●●●●●● 1mm □
+recommendations
+'suggested_hyperparams'
+performance
+●●●●●● 1mm □
+0.92
+meta_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nUpdated meta-learner with performance: '
+performance
+'.2%'
+●●●●●● 2mm □△
+best_configs
+●●●●●● 1mm □
+meta_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+best_configs
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTop 3 best known configurations:'
+●●●●●● 2mm □△
+i
+config
+perf
+●●●●●● 2mm □
+●●●●●● 1mm □△
+best_configs
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+i
+'. Performance: '
+perf
+'.2%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Learning rate: '
+config
+●●●●●● 1mm □△
+'learning_rate'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Batch size: '
+config
+●●●●●● 1mm □△
+'batch_size'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_uncertainty
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Uncertainty estimation for predictions'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+MCDropoutNetwork
+UncertaintyQuantifier
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 4: Uncertainty Quantification'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+MCDropoutNetwork
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quantifier
+●●●●●● 1mm □
+UncertaintyQuantifier
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+x_test
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+5
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nPredictions with Uncertainty:'
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+estimate
+●●●●●● 1mm □
+quantifier
+●●●●●● 1mm □△
+x_test
+i
+i
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSample '
+i
+●●●●●● 3mm ○
+1
+':'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Prediction: '
+estimate
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Epistemic Uncertainty: '
+estimate
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total Uncertainty: '
+estimate
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  95% CI: ['
+estimate
+0
+'.3f'
+', '
+estimate
+1
+'.3f'
+']'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Reliable: '
+estimate
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_active_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Selecting most valuable training examples'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+get_active_sampler
+SamplingStrategy
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 5: Active Learning Sample Selection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SimpleModel
+●●●●●● 3mm □△
+torch
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+100
+64
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+64
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+SimpleModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sampler
+●●●●●● 1mm □
+get_active_sampler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unlabeled_pool
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+1000
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSelecting 10 most valuable samples using different strategies:'
+●●●●●● 2mm □△
+strategies
+●●●●●● 1mm □
+SamplingStrategy
+SamplingStrategy
+SamplingStrategy
+SamplingStrategy
+strategy
+strategies
+sampler
+●●●●●● 1mm □
+strategy
+selected
+●●●●●● 1mm □
+sampler
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  '
+strategy
+': Selected indices '
+selected
+5
+'... (showing first 5)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nHybrid selection (60% uncertainty, 40% diversity):'
+●●●●●● 2mm □△
+selected
+●●●●●● 1mm □
+sampler
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Selected indices: '
+selected
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_contrastive_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Learning better representations'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+ContrastiveLearner
+ContrastiveBatch
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 6: Contrastive Learning'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SimpleEncoder
+●●●●●● 3mm □△
+torch
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+100
+256
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+256
+128
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+128
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+encoder
+●●●●●● 1mm □
+SimpleEncoder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+ContrastiveLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+batch_size
+●●●●●● 1mm □
+32
+anchors
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+batch_size
+100
+●●●●●● 2mm □△
+positives
+●●●●●● 1mm □
+anchors
+●●●●●● 3mm ○
+torch
+●●●●●● 1mm □△
+batch_size
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.1
+batch
+●●●●●● 1mm □
+ContrastiveBatch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTraining contrastive learner:'
+●●●●●● 2mm □△
+epoch
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+learner
+●●●●●● 1mm □△
+batch
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Epoch '
+epoch
+●●●●●● 3mm ○
+1
+': Loss = '
+metrics
+'loss'
+'.4f'
+●●●●●● 2mm □△
+test_samples
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+5
+100
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+learner
+●●●●●● 1mm □△
+test_samples
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nEncoded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_samples
+●●●●●● 2mm □△
+' samples to '
+embeddings
+1
+'-dim embeddings'
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+learner
+●●●●●● 1mm □△
+test_samples
+2
+test_samples
+2
+4
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSimilarity between samples: '
+similarity
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_full_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Using the integration orchestrator'
+●●●●●● 3mm □△○
+ml_intelligence.integration_orchestrator
+●●●●●● 2mm □△○
+get_ml_orchestrator
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example 7: Full Integration Orchestrator'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+get_ml_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_example
+●●●●●● 1mm □
+'input_context'
+'expected_output'
+'source_reliability'
+'outcome_quality'
+'consistency_score'
+'times_validated'
+'times_invalidated'
+'created_at'
+'Python list comprehension'
+'[x**2 for x in range(10)]'
+0.9
+0.85
+0.8
+3
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+uncertainty
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n1. Trust Score: '
+trust_score
+'.3f'
+' (±'
+uncertainty
+'.3f'
+')'
+●●●●●● 2mm □△
+topics
+●●●●●● 1mm □
+'topic_id'
+'topic_name'
+'python_generators'
+'Python Generators'
+'topic_id'
+'topic_name'
+'python_decorators'
+'Python Decorators'
+'topic_id'
+'topic_name'
+'python_metaclasses'
+'Python Metaclasses'
+context
+●●●●●● 1mm □
+'knowledge_gaps'
+'learning_velocity'
+'python_generators'
+0.7
+1.0
+selected_topic
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+topics
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n2. Selected Topic: '
+selected_topic
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n3. Recommended Learning Rate: '
+recommendations
+'suggested_hyperparams'
+'learning_rate'
+'.5f'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n4. System Statistics:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Neural trust predictions: '
+stats
+'usage_stats'
+'neural_trust_predictions'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Bandit selections: '
+stats
+'usage_stats'
+'bandit_selections'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n5. All models saved successfully'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'ML INTELLIGENCE MODULE - COMPREHENSIVE EXAMPLES'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+example_neural_trust_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_meta_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_uncertainty
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_active_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_contrastive_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_full_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'ALL EXAMPLES COMPLETED SUCCESSFULLY!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△

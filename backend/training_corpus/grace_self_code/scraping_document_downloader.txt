@@ -1,0 +1,649 @@
+## document_downloader.py
+'\nDocument downloader service for web scraping.\n\nThis service handles downloading documents (PDFs, DOCXs, PPTs, etc.)\nfound during web scraping and storing them in the knowledge base.\n'
+●●●●●● 2mm □△○
+aiohttp
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Tuple
+●●●●●● 3mm □△○
+urllib.parse
+●●●●●● 2mm □△○
+urlparse
+unquote
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DocumentDownloader
+'\n    Service for downloading documents from URLs.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize the document downloader.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+180
+●●●●●● 3mm △
+●●●●●● 1mm □
+50
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+"\n        Download a document from URL and save to knowledge base.\n        \n        Args:\n            url: URL of the document to download\n            folder_path: Folder path within knowledge_base to save to\n            \n        Returns:\n            Tuple of (success, metadata_dict)\n            If successful, metadata contains:\n                - file_path: Path to saved file\n                - file_size: Size in bytes\n                - file_type: File extension (e.g., 'pdf')\n                - content_type: HTTP content type\n            If failed, metadata is None\n        "
+●●●●●● 3mm □△○
+url_validator
+●●●●●● 2mm □△○
+URLValidator
+original_url
+●●●●●● 1mm □
+url
+●●●●●● 2mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+download_url
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+download_url
+logger
+●●●●●● 1mm □△
+'Failed to extract Drive file ID from '
+url
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'🔄 Converting Drive URL to direct download'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'   Original: '
+url
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'   Download: '
+download_url
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+download_url
+logger
+●●●●●● 1mm □△
+'📥 Downloading document: '
+url
+●●●●●● 2mm □△
+timeout_config
+●●●●●● 1mm □
+aiohttp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+aiohttp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+response
+●●●●●● 2mm □
+response
+200
+logger
+●●●●●● 1mm □△
+'Failed to download '
+url
+': HTTP '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+content_type
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'Content-Type'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content_type
+url
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Invalid content type for '
+url
+': '
+content_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+content_length
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'Content-Length'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content_length
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+content_length
+●●●●●● 2mm □△
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Document too large: '
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+content_length
+●●●●●● 2mm □△
+' bytes (max: '
+●●●●●● 3mm △
+' bytes)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+response
+●●●●●● 1mm □△
+8192
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Document exceeded size limit during download: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+' bytes (max: '
+●●●●●● 3mm △
+' bytes)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+file_path
+file_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+'file_path'
+'file_size'
+'file_type'
+'content_type'
+'url'
+'original_url'
+'downloaded_at'
+file_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+file_type
+content_type
+url
+original_url
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+metadata
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Downloaded document: '
+file_path
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+' bytes, type: '
+file_type
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+metadata
+asyncio
+logger
+●●●●●● 1mm □△
+'Timeout downloading '
+url
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error downloading '
+url
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+Tuple
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_validate_content_type
+●●●●●● 1mm □△
+self
+content_type
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Validate that content type is appropriate for a document.\n        \n        Args:\n            content_type: HTTP Content-Type header\n            url: URL being downloaded (for fallback validation)\n            \n        Returns:\n            True if valid document content type\n        '
+valid_types
+●●●●●● 1mm □
+'application/pdf'
+'application/msword'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'application/vnd.ms-powerpoint'
+'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+'application/vnd.ms-excel'
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+'text/plain'
+'text/csv'
+'text/html'
+'application/xhtml+xml'
+'application/json'
+'application/rtf'
+'application/epub+zip'
+'application/x-mobipocket-ebook'
+'application/vnd.oasis.opendocument'
+'application/octet-stream'
+valid_type
+valid_types
+●●●●●● 2mm □
+valid_type
+content_type
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+content_type
+'octet-stream'
+content_type
+●●●●●● 3mm □△○
+url_validator
+●●●●●● 2mm □△○
+URLValidator
+●●●●●● 3mm ○
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_save_document
+●●●●●● 1mm □△
+self
+content
+url
+folder_path
+content_type
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Save document content to file.\n        \n        Args:\n            content: Document content bytes\n            url: Source URL\n            folder_path: Folder path within knowledge_base\n            content_type: HTTP content type\n            \n        Returns:\n            Tuple of (file_path, file_type)\n        '
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+knowledge_base_dir
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+knowledge_base_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+knowledge_base_dir
+●●●●●● 3mm □△
+folder_path
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filename
+file_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+url
+content_type
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+filename
+counter
+●●●●●● 1mm □
+1
+base_name
+●●●●●● 1mm □
+'.'
+filename
+filename
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+0
+filename
+extension
+●●●●●● 1mm □
+'.'
+filename
+filename
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+1
+''
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+extension
+filename
+●●●●●● 1mm □
+base_name
+'_'
+counter
+'.'
+extension
+●●●●●● 3mm □
+filename
+●●●●●● 1mm □
+base_name
+'_'
+counter
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+filename
+counter
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'wb'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+file_type
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_filename
+●●●●●● 1mm □△
+self
+url
+content_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Generate filename from URL and content type.\n        \n        Args:\n            url: Source URL\n            content_type: HTTP content type\n            \n        Returns:\n            Tuple of (filename, file_type)\n        '
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+unquote
+●●●●●● 1mm □△
+parsed
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+parts
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parts
+parts
+1
+potential_filename
+●●●●●● 1mm □
+parts
+1
+●●●●●● 2mm □
+'.'
+potential_filename
+name
+ext
+●●●●●● 1mm □
+potential_filename
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+ext_lower
+●●●●●● 1mm □
+ext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+clean_name
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[^\\w\\s-]'
+''
+name
+●●●●●● 2mm □△
+clean_name
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[-\\s]+'
+'_'
+clean_name
+●●●●●● 2mm □△
+clean_name
+●●●●●● 1mm □
+clean_name
+100
+●●●●●● 2mm □
+clean_name
+●●●●●● 3mm ○
+clean_name
+'.'
+ext_lower
+ext_lower
+extension_map
+●●●●●● 1mm □
+'application/pdf'
+'application/msword'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'application/vnd.ms-powerpoint'
+'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+'application/vnd.ms-excel'
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+'text/plain'
+'text/csv'
+'application/rtf'
+'application/epub+zip'
+'pdf'
+'doc'
+'docx'
+'ppt'
+'pptx'
+'xls'
+'xlsx'
+'txt'
+'csv'
+'rtf'
+'epub'
+mime_type
+ext
+extension_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mime_type
+content_type
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'document_'
+timestamp
+'.'
+ext
+ext
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'document_'
+timestamp
+'.bin'
+'bin'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_save_metadata
+●●●●●● 1mm □△
+self
+file_path
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'\n        Save metadata to companion JSON file.\n        \n        Args:\n            file_path: Path to the document file\n            metadata: Metadata dictionary\n        '
+meta_path
+●●●●●● 1mm □
+file_path
+'.meta.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+meta_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+metadata
+f
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to save metadata for '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □

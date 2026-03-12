@@ -1,0 +1,723 @@
+## project_container.py
+'\nProject Container — each project is an isolated environment.\n\nManages: governance rules (3-tier), resource bridges, knowledge,\nwhitelist, and the full project lifecycle.\n\nRule hierarchy: GLOBAL (immutable) → PROJECT (per-project) → EXECUTION (per-task)\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+PROJECTS_DIR
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'projects'
+GLOBAL_RULES
+●●●●●● 1mm □
+'All code must pass syntax validation before deployment'
+'All generated code must go through security scanning'
+'Every action must create a Genesis key for audit'
+'Trust score must be above 0.5 for autonomous execution'
+'Consensus mechanism must agree before deployment'
+'Anti-hallucination checks must pass at every pipeline layer'
+'Human approval required for destructive operations'
+'All data must be tracked with provenance'
+●●●●●● 2mm △
+ProjectContainer
+'An isolated environment for a project — everything self-contained.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+project_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ensure_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create the full project structure.'
+dirs
+●●●●●● 1mm □
+'frontend'
+'backend'
+'docs'
+'tests'
+'governance'
+'knowledge'
+'whitelist'
+'reports'
+'data'
+d
+dirs
+●●●●●● 3mm △
+●●●●●● 3mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+global_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'governance'
+●●●●●● 3mm □△
+'_global_rules.md'
+●●●●●● 2mm □
+global_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+global_file
+●●●●●● 1mm □△
+'# Global Rules (Immutable)\n\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'- '
+r
+r
+GLOBAL_RULES
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all rules: global + project + execution.'
+gov_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'governance'
+project_rules
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+gov_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_rules
+●●●●●● 1mm □△
+'name'
+'content'
+'size'
+f
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+500
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'global_rules'
+'project_rules'
+'total'
+GLOBAL_RULES
+project_rules
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+GLOBAL_RULES
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+project_rules
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_rule
+●●●●●● 1mm □△
+self
+name
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Add a project-level rule.'
+filepath
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'governance'
+●●●●●● 3mm □△
+name
+filepath
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'added'
+'name'
+●●●●●● 3mm □△○
+name
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_knowledge
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get project knowledge sources.'
+kb_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'knowledge'
+sources
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+kb_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □△
+'name'
+'path'
+'size'
+'type'
+f
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sources'
+'total'
+sources
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sources
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_knowledge
+●●●●●● 1mm □△
+self
+name
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Add a knowledge source.'
+filepath
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'knowledge'
+●●●●●● 3mm □△
+name
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filepath
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'added'
+'name'
+'path'
+●●●●●● 3mm □△○
+name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_whitelist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get project whitelist (approved sources).'
+wl_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'whitelist'
+●●●●●● 3mm □△
+'sources.json'
+●●●●●● 2mm □
+wl_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+wl_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'api_sources'
+'web_sources'
+'rules'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_whitelist
+●●●●●● 1mm □△
+self
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Update project whitelist.'
+wl_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'whitelist'
+●●●●●● 3mm □△
+'sources.json'
+wl_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'updated_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+wl_file
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'updated'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+self
+max_chars
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10000
+'Build full project context for LLM injection.'
+parts
+●●●●●● 1mm □
+'Project: '
+●●●●●● 3mm △
+total
+●●●●●● 1mm □
+0
+rules
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'\nRules: '
+rules
+'total'
+' active'
+●●●●●● 2mm □△
+knowledge
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Knowledge sources: '
+knowledge
+'total'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+'.py'
+'.js'
+'.ts'
+'.md'
+'.json'
+'.txt'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+skip
+'__pycache__'
+'.git'
+'node_modules'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+300
+rel
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+'\n--- '
+rel
+' ---\n'
+content
+●●●●●● 2mm □
+total
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snippet
+●●●●●● 2mm □△
+max_chars
+parts
+●●●●●● 1mm □△
+snippet
+●●●●●● 2mm □△
+total
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snippet
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get project container stats.'
+file_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'project_id'
+'file_count'
+'size_mb'
+'rules'
+'knowledge_sources'
+'path'
+●●●●●● 3mm △
+file_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+size
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'project_rules'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_containers
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ProjectContainer
+●●●●●● 1mm □
+get_container
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get or create a project container.'
+●●●●●● 2mm □
+project_id
+_containers
+_containers
+project_id
+●●●●●● 1mm □
+ProjectContainer
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_containers
+project_id
+ProjectContainer
+●●●●●● 1mm □
+list_containers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all project containers.'
+PROJECTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+containers
+●●●●●● 1mm □
+d
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+PROJECTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+get_container
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+containers
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+containers
+●●●●●● 1mm □△
+●●●●●● 1mm □
+clone_grace_environment
+●●●●●● 1mm □△
+target_project
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n    Clone Grace's own infrastructure into a new project.\n    This lets Grace build OTHER AI systems using her own architecture.\n    "
+source
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+target_project
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Project '
+target_project
+' already exists'
+dirs_to_copy
+●●●●●● 1mm □
+'core'
+'api'
+'database'
+'models'
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+dirs_to_copy
+src
+●●●●●● 1mm □
+source
+●●●●●● 3mm □△
+d
+dst
+●●●●●● 1mm □
+target
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+d
+●●●●●● 2mm □
+src
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+src
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dst
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 3mm □△
+'frontend'
+●●●●●● 3mm □△
+'src'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 3mm □△
+'docs'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 3mm □△
+'tests'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 3mm □△
+'governance'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'cloned'
+'project'
+'dirs_copied'
+'path'
+●●●●●● 3mm □△○
+target_project
+dirs_to_copy
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 2mm □△

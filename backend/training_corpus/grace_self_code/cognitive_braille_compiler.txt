@@ -1,0 +1,523 @@
+## braille_compiler.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+Tuple
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BrailleDictionary
+DOMAIN_DATABASE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+0
+DOMAIN_API
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+1
+DOMAIN_MEMORY
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+2
+DOMAIN_NETWORK
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+3
+DOMAIN_SYS_CONF
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+4
+INTENT_START
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+8
+INTENT_STOP
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+9
+INTENT_DELETE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+10
+INTENT_QUERY
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+11
+INTENT_GRANT
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+12
+INTENT_REPAIR
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+13
+STATE_FAILED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+16
+STATE_IMMUTABLE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+17
+STATE_ACTIVE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+18
+STATE_UNKNOWN
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+19
+STATE_STOPPED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+20
+PRIV_ADMIN
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+24
+PRIV_USER
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+25
+PRIV_SYSTEM
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+26
+PRIV_GUEST
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+27
+CTX_MAINTENANCE
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+32
+CTX_EMERGENCY
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+33
+CTX_ELEVATED
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+34
+CTX_NORMAL
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+35
+●●●●●● 1mm □
+compile_schema
+●●●●●● 1mm □△
+cls
+json_intent
+session_context
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n        Takes structured JSON and current environment context and compiles into a 64-bit mask.\n        '
+domain_mask
+●●●●●● 1mm □
+0
+intent_mask
+●●●●●● 1mm □
+0
+state_mask
+●●●●●● 1mm □
+0
+priv_mask
+●●●●●● 1mm □
+0
+domain
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'domain'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+domain
+'database'
+domain_mask
+cls
+●●●●●● 1mm △
+domain
+'api'
+domain_mask
+cls
+●●●●●● 2mm □
+domain
+'memory'
+domain_mask
+cls
+●●●●●● 1mm △
+domain
+'network'
+domain_mask
+cls
+●●●●●● 2mm □
+domain
+'sys_conf'
+domain_mask
+cls
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown domain hallucinated: '
+domain
+●●●●●● 2mm □△
+intent
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'intent'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'start'
+intent_mask
+cls
+●●●●●● 1mm △
+intent
+'stop'
+intent_mask
+cls
+●●●●●● 2mm □
+intent
+'delete'
+intent_mask
+cls
+●●●●●● 1mm △
+intent
+'query'
+intent_mask
+cls
+●●●●●● 2mm □
+intent
+'grant'
+intent_mask
+cls
+●●●●●● 1mm △
+intent
+'repair'
+intent_mask
+cls
+ValueError
+●●●●●● 1mm □△
+'Unknown intent hallucinated: '
+intent
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'target_state'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+state
+'failed'
+state_mask
+cls
+●●●●●● 1mm △
+state
+'immutable'
+state_mask
+cls
+●●●●●● 2mm □
+state
+'active'
+state_mask
+cls
+●●●●●● 1mm △
+state
+'unknown'
+state_mask
+cls
+●●●●●● 2mm □
+state
+'stopped'
+state_mask
+cls
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown state hallucinated: '
+state
+●●●●●● 2mm □△
+priv
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'privilege'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+priv
+'admin'
+priv_mask
+cls
+●●●●●● 1mm △
+priv
+'user'
+priv_mask
+cls
+●●●●●● 2mm □
+priv
+'system'
+priv_mask
+cls
+●●●●●● 1mm △
+priv
+'guest'
+priv_mask
+cls
+ValueError
+●●●●●● 1mm □△
+'Unknown privilege hallucinated: '
+priv
+●●●●●● 2mm □△
+is_maintenance
+●●●●●● 1mm □
+session_context
+●●●●●● 1mm □△
+'is_maintenance_window'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+is_emergency
+●●●●●● 1mm □
+session_context
+●●●●●● 1mm □△
+'is_emergency'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+is_elevated
+●●●●●● 1mm □
+session_context
+●●●●●● 1mm □△
+'has_elevation_token'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+ctx_mask
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+is_maintenance
+ctx_mask
+cls
+●●●●●● 2mm □
+is_emergency
+ctx_mask
+cls
+●●●●●● 2mm □
+is_elevated
+ctx_mask
+cls
+ctx_mask
+priv_mask
+●●●●●● 3mm ○
+domain_mask
+intent_mask
+state_mask
+ctx_mask
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm □△○
+cognitive.physics.bitmask_geometry
+●●●●●● 2mm □△○
+HierarchicalZ3Geometry
+●●●●●● 2mm △
+NLPCompilerEdge
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+HierarchicalZ3Geometry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+translate_to_json
+●●●●●● 1mm □△
+self
+natural_language
+privilege
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'user'
+prompt
+●●●●●● 1mm □
+'\n        Translate the user command into a STRICT JSON schema. \n        Focus on semantic intent for the deterministic engine.\n        \n        Allowed values:\n        - domain: ["database", "api", "memory", "network", "sys_conf"]\n        - intent: ["start", "stop", "delete", "query", "grant", "repair"]\n        - target_state: ["failed", "immutable", "active", "unknown", "stopped"] (What is the CURRENT state of the resource before the action?)\n        - privilege: ["admin", "user", "system", "guest"]\n        \n        User Privilege: '
+privilege
+'\n        User Command: "'
+natural_language
+'"\n        \n        Output format:\n        {\n            "domain": "...",\n            "intent": "...",\n            "target_state": "...",\n            "privilege": "'
+privilege
+'"\n        }\n        '
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+content
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'{'
+content
+'}'
+content
+json_str
+●●●●●● 1mm □
+content
+content
+●●●●●● 1mm □△
+'{'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+json_str
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_command
+●●●●●● 1mm □△
+self
+natural_language
+privilege
+session_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json_schema
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+natural_language
+privilege
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_schema
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'COMPILE_ERROR_NLP'
+d_val
+i_val
+s_val
+c_val
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm □△
+json_schema
+session_context
+●●●●●● 2mm □△
+ValueError
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'COMPILE_ERROR_HALLUCINATION: '
+e
+is_valid
+msg
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+d_val
+i_val
+s_val
+c_val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid
+●●●●●● 3mm ○
+d_val
+i_val
+s_val
+c_val
+msg
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+msg
+Tuple
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○

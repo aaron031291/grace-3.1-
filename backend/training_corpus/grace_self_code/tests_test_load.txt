@@ -1,0 +1,1189 @@
+## test_load.py
+'\nLoad and Stress Tests for GRACE API\n====================================\nTests for performance under load and stress conditions.\n\nUsage:\n    pytest tests/test_load.py -v\n    pytest tests/test_load.py -v -k "test_concurrent"\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+as_completed
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm □△○
+statistics
+●●●●●● 2mm △
+TestLoadBasic
+'Basic load tests for API endpoints.'
+●●●●●● 1mm □
+test_health_endpoint_load
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test health endpoint under load.'
+num_requests
+●●●●●● 1mm □
+100
+results
+●●●●●● 1mm □
+start_total
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_requests
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+results
+●●●●●● 1mm □△
+'status'
+'latency_ms'
+response
+elapsed
+●●●●●● 2mm □△
+total_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_total
+latencies
+●●●●●● 1mm □
+r
+'latency_ms'
+r
+results
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+200
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+'total_requests'
+'successful'
+'failed'
+'total_time_s'
+'requests_per_second'
+'avg_latency_ms'
+'p50_latency_ms'
+'p95_latency_ms'
+'p99_latency_ms'
+'max_latency_ms'
+'min_latency_ms'
+num_requests
+success_count
+num_requests
+●●●●●● 1mm □△
+success_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_time
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+num_requests
+●●●●●● 3mm □△
+total_time
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+statistics
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+statistics
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.99
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Health Endpoint Load Test ==='
+●●●●●● 2mm □△
+key
+value
+metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+key
+': '
+value
+●●●●●● 2mm □△
+success_count
+num_requests
+●●●●●● 2mm □△
+0.99
+metrics
+'avg_latency_ms'
+100
+metrics
+'p95_latency_ms'
+200
+●●●●●● 1mm □
+test_search_endpoint_load
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test search endpoint under moderate load.'
+num_requests
+●●●●●● 1mm □
+50
+results
+●●●●●● 1mm □
+queries
+●●●●●● 1mm □
+'machine learning'
+'artificial intelligence'
+'neural networks'
+'deep learning'
+'natural language processing'
+start_total
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_requests
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+queries
+i
+●●●●●● 2mm □○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+queries
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+results
+●●●●●● 1mm □△
+'status'
+'latency_ms'
+response
+elapsed
+●●●●●● 2mm □△
+total_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_total
+latencies
+●●●●●● 1mm □
+r
+'latency_ms'
+r
+results
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+200
+404
+500
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+'total_requests'
+'successful'
+'total_time_s'
+'requests_per_second'
+'avg_latency_ms'
+'p95_latency_ms'
+num_requests
+success_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_time
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+num_requests
+●●●●●● 3mm □△
+total_time
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+statistics
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Search Endpoint Load Test ==='
+●●●●●● 2mm □△
+key
+value
+metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+key
+': '
+value
+●●●●●● 2mm □△
+success_count
+num_requests
+●●●●●● 2mm □△
+0.95
+metrics
+'avg_latency_ms'
+2000
+●●●●●● 2mm △
+TestConcurrentLoad
+'Concurrent load tests using threading.'
+●●●●●● 1mm □
+test_concurrent_health_requests
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test concurrent health check requests.'
+num_requests
+●●●●●● 1mm □
+100
+num_workers
+●●●●●● 1mm □
+10
+results
+●●●●●● 1mm □
+errors
+●●●●●● 1mm □
+●●●●●● 1mm □
+make_request
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+'status'
+'latency_ms'
+response
+elapsed
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+start_total
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+executor
+futures
+●●●●●● 1mm □
+executor
+●●●●●● 1mm □△
+make_request
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_requests
+●●●●●● 2mm □△
+future
+as_completed
+●●●●●● 1mm □△
+futures
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+result
+errors
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+total_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_total
+latencies
+●●●●●● 1mm □
+r
+'latency_ms'
+r
+results
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+200
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Concurrent Health Requests ('
+num_workers
+' workers) ==='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total requests: '
+num_requests
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Successful: '
+success_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Errors: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total time: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_time
+2
+●●●●●● 2mm □△
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Throughput: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+num_requests
+●●●●●● 3mm □△
+total_time
+2
+●●●●●● 2mm □△
+' req/s'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latencies
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Avg latency: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+statistics
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+'ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  P95 latency: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+'ms'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+num_requests
+●●●●●● 2mm □△
+0.05
+success_count
+num_requests
+●●●●●● 2mm □△
+0.9
+●●●●●● 1mm □
+test_concurrent_mixed_endpoints
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test concurrent requests to different endpoints.'
+num_requests
+●●●●●● 1mm □
+60
+num_workers
+●●●●●● 1mm □
+6
+results
+●●●●●● 1mm □
+'health'
+'search'
+'chats'
+errors
+●●●●●● 1mm □
+●●●●●● 1mm □
+make_health_request
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'type'
+'status'
+'latency_ms'
+'health'
+response
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+Exception
+●●●●●● 3mm ○
+'type'
+'error'
+'health'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+make_search_request
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'type'
+'status'
+'latency_ms'
+'search'
+response
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+Exception
+●●●●●● 3mm ○
+'type'
+'error'
+'search'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+make_chats_request
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/chats'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'type'
+'status'
+'latency_ms'
+'chats'
+response
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+Exception
+●●●●●● 3mm ○
+'type'
+'error'
+'chats'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+request_funcs
+●●●●●● 1mm □
+make_health_request
+make_search_request
+make_chats_request
+●●●●●● 2mm □△
+num_requests
+●●●●●● 1mm □○
+3
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+executor
+futures
+●●●●●● 1mm □
+executor
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+func
+request_funcs
+future
+as_completed
+●●●●●● 1mm □△
+futures
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+result
+errors
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+result
+'type'
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Concurrent Mixed Endpoints ('
+num_workers
+' workers) ==='
+●●●●●● 2mm □△
+endpoint
+data
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+latencies
+●●●●●● 1mm □
+r
+'latency_ms'
+r
+data
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+endpoint
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+' requests, avg '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+statistics
+●●●●●● 1mm □△
+latencies
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+'ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Errors: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_success
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_success
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+request_funcs
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.85
+●●●●●● 2mm △
+TestStress
+'Stress tests for high load scenarios.'
+●●●●●● 1mm □
+test_burst_traffic
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test handling of burst traffic.'
+burst_size
+●●●●●● 1mm □
+50
+results
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+burst_size
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+results
+s
+200
+●●●●●● 2mm □△
+rate_limited
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+results
+s
+429
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Burst Traffic Test ==='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Burst size: '
+burst_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Time: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+elapsed
+2
+●●●●●● 2mm □△
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success: '
+success_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Rate limited: '
+rate_limited
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Throughput: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+burst_size
+●●●●●● 3mm □△
+elapsed
+2
+●●●●●● 2mm □△
+' req/s'
+●●●●●● 2mm □△
+success_count
+●●●●●● 3mm ○
+rate_limited
+burst_size
+●●●●●● 1mm □
+test_sustained_load
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test sustained load over time.'
+duration_seconds
+●●●●●● 1mm □
+10
+results
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_count
+●●●●●● 1mm □
+0
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+duration_seconds
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'status'
+'time'
+response
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+request_count
+1
+time
+●●●●●● 1mm □△
+0.05
+●●●●●● 2mm □△
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+200
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Sustained Load Test ('
+duration_seconds
+'s) ==='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total requests: '
+request_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success: '
+success_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success rate: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+success_count
+●●●●●● 3mm □△
+request_count
+●●●●●● 2mm □△
+100
+2
+●●●●●● 2mm □△
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Avg rate: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+request_count
+●●●●●● 3mm □△
+duration_seconds
+2
+●●●●●● 2mm □△
+' req/s'
+●●●●●● 2mm □△
+success_count
+●●●●●● 3mm □△
+request_count
+0.95
+●●●●●● 2mm △
+TestMemoryLeak
+'Tests for memory leak detection.'
+●●●●●● 1mm □
+test_repeated_requests_memory
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Check for memory growth during repeated requests.'
+●●●●●● 2mm □△○
+psutil
+process
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+pytest
+●●●●●● 1mm □△
+'psutil not installed'
+●●●●●● 2mm □△
+num_requests
+●●●●●● 1mm □
+200
+initial_memory
+●●●●●● 1mm □
+process
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_requests
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+final_memory
+●●●●●● 1mm □
+process
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+memory_growth
+●●●●●● 1mm □
+final_memory
+●●●●●● 1mm □△
+initial_memory
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Memory Leak Test ==='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Initial memory: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+initial_memory
+2
+●●●●●● 2mm □△
+' MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Final memory: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+final_memory
+2
+●●●●●● 2mm □△
+' MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Growth: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+memory_growth
+2
+●●●●●● 2mm □△
+' MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Growth per request: '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+memory_growth
+●●●●●● 3mm □△
+num_requests
+●●●●●● 2mm □△
+1000
+2
+●●●●●● 2mm □△
+' KB'
+●●●●●● 2mm □△
+memory_growth
+100
+'Excessive memory growth: '
+memory_growth
+'MB'
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create test client.'
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 3mm ○
+TestClient
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+ImportError
+pytest
+●●●●●● 1mm □△
+'App not available for testing'
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

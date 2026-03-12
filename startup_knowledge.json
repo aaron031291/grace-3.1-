@@ -1,0 +1,45 @@
+{
+  "description": "Startup knowledge: when last_run error matches 'when', apply 'do'. Updated from past errors.",
+  "fixes": [
+    {
+      "when": "Address already in use",
+      "do": "kill_ports"
+    },
+    {
+      "when": "port 8000",
+      "do": "kill_ports"
+    },
+    {
+      "when": "No module named",
+      "do": "fix_env"
+    },
+    {
+      "when": "ModuleNotFoundError",
+      "do": "fix_env"
+    },
+    {
+      "when": "ENOENT.*node_modules",
+      "do": "fix_frontend"
+    },
+    {
+      "when": "Cannot find module",
+      "do": "fix_frontend"
+    },
+    {
+      "when": "Connection refused",
+      "do": "kill_ports"
+    },
+    {
+      "when": "ECONNREFUSED",
+      "do": "kill_ports"
+    },
+    {
+      "when": "Backend did not become healthy",
+      "do": "kill_ports"
+    },
+    {
+      "when": "unexpected at this time",
+      "do": "kill_ports"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+## migrate_add_memory_mesh.py
+'\nMigration: Add Memory Mesh Tables\n\nCreates tables for:\n- Learning examples (with trust scores)\n- Learning patterns\n- Episodes (episodic memory)\n- Procedures (procedural memory)\n'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm □
+migrate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run migration to add memory mesh tables.'
+db_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Migrating database at: '
+db_path
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating learning_examples table...'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS learning_examples (\n                id TEXT PRIMARY KEY,\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n                -- What was learned\n                example_type TEXT NOT NULL,\n                input_context TEXT NOT NULL,  -- JSON\n                expected_output TEXT NOT NULL,  -- JSON\n                actual_output TEXT,  -- JSON\n\n                -- Trust scoring\n                trust_score REAL DEFAULT 0.5 NOT NULL,\n                source_reliability REAL DEFAULT 0.5 NOT NULL,\n                outcome_quality REAL DEFAULT 0.5 NOT NULL,\n                consistency_score REAL DEFAULT 0.5 NOT NULL,\n                recency_weight REAL DEFAULT 1.0 NOT NULL,\n\n                -- Provenance\n                source TEXT NOT NULL,\n                source_user_id TEXT,\n                genesis_key_id TEXT,\n\n                -- Learning metadata\n                times_referenced INTEGER DEFAULT 0,\n                times_validated INTEGER DEFAULT 0,\n                times_invalidated INTEGER DEFAULT 0,\n                last_used TIMESTAMP,\n\n                -- Storage location\n                file_path TEXT,\n\n                -- Connections to memory mesh\n                episodic_episode_id TEXT,\n                procedure_id TEXT,\n\n                -- Metadata\n                metadata TEXT  -- JSON\n            )\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_learning_type\n            ON learning_examples(example_type)\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_learning_trust\n            ON learning_examples(trust_score)\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_learning_source\n            ON learning_examples(source)\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating learning_patterns table...'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS learning_patterns (\n                id TEXT PRIMARY KEY,\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n                pattern_name TEXT NOT NULL UNIQUE,\n                pattern_type TEXT NOT NULL,\n\n                -- Pattern definition\n                preconditions TEXT NOT NULL,  -- JSON\n                actions TEXT NOT NULL,  -- JSON\n                expected_outcomes TEXT NOT NULL,  -- JSON\n\n                -- Trust and quality\n                trust_score REAL DEFAULT 0.5 NOT NULL,\n                success_rate REAL DEFAULT 0.0 NOT NULL,\n                sample_size INTEGER DEFAULT 0,\n\n                -- Supporting evidence\n                supporting_examples TEXT NOT NULL,  -- JSON array\n\n                -- Usage tracking\n                times_applied INTEGER DEFAULT 0,\n                times_succeeded INTEGER DEFAULT 0,\n                times_failed INTEGER DEFAULT 0,\n\n                -- Connection to memory mesh\n                linked_procedures TEXT  -- JSON array\n            )\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating episodes table...'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS episodes (\n                id TEXT PRIMARY KEY,\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n                -- What happened\n                problem TEXT NOT NULL,\n                action TEXT NOT NULL,  -- JSON\n                outcome TEXT NOT NULL,  -- JSON\n                predicted_outcome TEXT,  -- JSON\n\n                -- How accurate was prediction\n                prediction_error REAL DEFAULT 0.0,\n\n                -- Trust and quality\n                trust_score REAL DEFAULT 0.5 NOT NULL,\n                source TEXT NOT NULL,\n\n                -- Provenance\n                genesis_key_id TEXT,\n                decision_id TEXT,\n\n                -- Temporal\n                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n                -- Embedding for similarity search\n                embedding TEXT,  -- JSON array\n\n                -- Metadata\n                metadata TEXT  -- JSON\n            )\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_episode_timestamp\n            ON episodes(timestamp)\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_episode_trust\n            ON episodes(trust_score)\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating procedures table...'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS procedures (\n                id TEXT PRIMARY KEY,\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n                -- Identification\n                name TEXT NOT NULL UNIQUE,\n                goal TEXT NOT NULL,\n                procedure_type TEXT NOT NULL,\n\n                -- How to execute\n                steps TEXT NOT NULL,  -- JSON array\n                preconditions TEXT NOT NULL,  -- JSON\n\n                -- Quality metrics\n                trust_score REAL DEFAULT 0.5 NOT NULL,\n                success_rate REAL DEFAULT 0.0 NOT NULL,\n                usage_count INTEGER DEFAULT 0,\n                success_count INTEGER DEFAULT 0,\n\n                -- Evidence\n                supporting_examples TEXT,  -- JSON array\n                learned_from_episode_id TEXT,\n\n                -- Embedding for similarity\n                embedding TEXT,  -- JSON array\n\n                -- Metadata\n                metadata TEXT  -- JSON\n            )\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_procedure_type\n            ON procedures(procedure_type)\n        '
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_procedure_success\n            ON procedures(success_rate)\n        '
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Memory mesh tables created successfully'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Migration failed: '
+e
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△

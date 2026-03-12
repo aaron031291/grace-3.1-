@@ -1,0 +1,1002 @@
+## ingestion_self_healing_integration.py
+'\nIngestion + Self-Healing + Autonomous Learning Integration\n\nThis connects:\n1. File ingestion → Genesis Keys track what/where/when/who/how/why\n2. Autonomous learning learns from ingested content\n3. Self-healing monitors and fixes ingestion/learning issues\n4. Mirror observes patterns and improves the process\n5. Complete iteration cycle in sandbox\n\nEvery ingestion creates Genesis Keys that trigger:\n- Autonomous study of the content\n- Health monitoring of ingestion process\n- Mirror observation of learning patterns\n- Self-healing if issues occur\n- Continuous improvement loop\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningOrchestrator
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+IngestionSelfHealingIntegration
+'\n    Unified system connecting ingestion, learning, and self-healing.\n\n    Complete Flow:\n    1. File ingested → Genesis Key created (tracks what/where/when/who/how/why)\n    2. Genesis Key triggers autonomous learning (study the content)\n    3. Learning outcome → Genesis Key created (success/failure)\n    4. Self-healing monitors for issues → Heals if needed\n    5. Mirror observes patterns → Suggests improvements\n    6. Iterate and improve continuously\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+learning_orchestrator
+enable_healing
+enable_mirror
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm □○
+LearningOrchestrator
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_orchestrator
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_healing
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_mirror
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_healing
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_autonomous_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+enable_mirror
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] System initialized with complete autonomous loop'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_file_with_tracking
+●●●●●● 1mm □△
+self
+file_path
+user_id
+metadata
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+'system'
+●●●●●● 2mm □
+'\n        Ingest file with complete Genesis Key tracking.\n\n        This is the main entry point that starts the complete cycle:\n        1. Create FILE_INGESTION Genesis Key (what/where/when/who/how/why)\n        2. Actually ingest the file\n        3. Trigger autonomous learning\n        4. Monitor for issues\n        5. Heal if needed\n        6. Learn from outcome\n\n        Returns complete tracking of the entire process.\n        '
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Starting tracked ingestion: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+ingestion_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Genesis Key created: '
+ingestion_key
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'ingestion_key_id'
+'file_path'
+'timestamp'
+'steps'
+ingestion_key
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+'step'
+'status'
+'details'
+'ingestion'
+ingestion_result
+'success'
+'success'
+'failed'
+ingestion_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ingestion_result
+'success'
+error_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'error_key_id'
+●●●●●● 1mm □
+error_key
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+error_key
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+'step'
+'status'
+'details'
+'self_healing'
+'triggered'
+healing_result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □
+●●●●●● 3mm △
+learning_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+'step'
+'status'
+'details'
+'autonomous_learning'
+'triggered'
+learning_result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+health_check
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+'step'
+'status'
+'anomalies'
+'health_check'
+health_check
+'health_status'
+health_check
+'anomalies_detected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+health_check
+'health_status'
+'healthy'
+cycle_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+'step'
+'status'
+'actions'
+'healing_cycle'
+'executed'
+cycle_result
+'actions_executed'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+cycle_result
+'actions_executed'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □○
+10
+0
+mirror_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+'step'
+'status'
+'details'
+'mirror_observation'
+'analyzed'
+mirror_result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mirror_result
+●●●●●● 1mm □△
+'improvements_triggered'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'success'
+result
+'complete_cycle'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Complete cycle finished: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'steps'
+●●●●●● 2mm □△
+' steps'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Error in ingestion cycle: '
+e
+●●●●●● 2mm □△
+error_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'error_key_id'
+●●●●●● 1mm □
+error_key
+result
+'status'
+●●●●●● 1mm □
+'failed'
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_perform_ingestion
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'\n        Actually ingest the file using the ingestion service.\n\n        This would call your existing ingestion code.\n        '
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+ingest_file
+result
+●●●●●● 1mm □
+ingest_file
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'chunks'
+'vectors'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'chunks'
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'vectors'
+0
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Ingestion failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_trigger_autonomous_learning
+●●●●●● 1mm □△
+self
+ingestion_key
+file_path
+ingestion_data
+●●●●●● 2mm □△
+GenesisKey
+Path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Trigger autonomous learning after successful ingestion.\n\n        Creates LEARNING_COMPLETE Genesis Key and triggers study task.\n        '
+topic
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Learning triggered: task_id='
+task_id
+', genesis_key='
+learning_key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task_id'
+'learning_key_id'
+'topic'
+task_id
+learning_key
+topic
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_create_error_key
+●●●●●● 1mm □△
+self
+parent_key
+error_type
+error_message
+file_path
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+Path
+'Create ERROR Genesis Key for tracking failures.'
+error_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Error tracked: '
+error_key
+' (type='
+error_type
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+error_key
+GenesisKey
+●●●●●● 1mm □
+_trigger_healing_for_error
+●●●●●● 1mm □△
+self
+error_key
+●●●●●● 2mm □△
+GenesisKey
+'Trigger self-healing for an error.'
+trigger_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+error_key
+●●●●●● 2mm □△
+cycle_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'triggers_fired'
+'healing_actions'
+'health_status'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trigger_result
+●●●●●● 1mm □△
+'actions_triggered'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cycle_result
+'actions_executed'
+cycle_result
+'health_status'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_trigger_mirror_observation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Trigger mirror self-modeling observation.'
+self_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+improvements
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □
+improvements
+●●●●●● 1mm □
+'actions_triggered'
+0
+●●●●●● 3mm ○
+'patterns_detected'
+'self_awareness_score'
+'improvements_triggered'
+'suggestions'
+self_model
+'behavioral_patterns'
+'total_detected'
+self_model
+'self_awareness_score'
+improvements
+●●●●●● 1mm □△
+'actions_triggered'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+self_model
+'improvement_suggestions'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_infer_topic_from_path
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Infer learning topic from file path.'
+●●●●●● 2mm □
+file_path
+file_path
+'knowledge_base'
+●●●●●● 3mm ○
+file_path
+●●●●●● 3mm □
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+ingest_directory_with_tracking
+●●●●●● 1mm □△
+self
+directory_path
+user_id
+recursive
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'system'
+●●●●●● 3mm □△○
+'\n        Ingest entire directory with complete tracking.\n\n        Each file gets its own Genesis Key and complete cycle.\n        '
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Batch ingestion started: '
+directory_path
+' (recursive='
+recursive
+')'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'directory'
+'total_files'
+'successful'
+'failed'
+'file_results'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+directory_path
+●●●●●● 2mm □△
+0
+0
+0
+●●●●●● 2mm □
+recursive
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+directory_path
+●●●●●● 1mm □△
+'*.*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+directory_path
+●●●●●● 1mm □△
+'*.*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+supported_extensions
+●●●●●● 1mm □
+'.txt'
+'.md'
+'.pdf'
+'.py'
+'.js'
+'.json'
+'.csv'
+files
+●●●●●● 1mm □
+f
+f
+files
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+supported_extensions
+results
+'total_files'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+' files to ingest'
+●●●●●● 2mm □△
+file_path
+files
+file_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+results
+'successful'
+1
+●●●●●● 3mm □
+results
+'failed'
+1
+results
+'file_results'
+●●●●●● 1mm □△
+file_result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Failed to ingest '
+file_path
+': '
+e
+●●●●●● 2mm □△
+results
+'failed'
+1
+results
+'file_results'
+●●●●●● 1mm □△
+'file_path'
+'status'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Batch complete: '
+results
+'successful'
+'/'
+results
+'total_files'
+' successful'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_improvement_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"\n        Run one complete improvement cycle.\n\n        This is what you'd run periodically in the sandbox to iterate and improve:\n        1. Observe recent Genesis Keys\n        2. Detect patterns (what's failing? what's succeeding?)\n        3. Generate improvements\n        4. Apply improvements (trigger learning/healing)\n        5. Measure results\n        "
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Running improvement cycle...'
+●●●●●● 2mm □△
+cycle_results
+●●●●●● 1mm □
+'timestamp'
+'observations'
+'improvements'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+self_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_results
+'observations'
+'mirror'
+●●●●●● 1mm □
+'patterns'
+'self_awareness'
+'suggestions'
+self_model
+'behavioral_patterns'
+'total_detected'
+self_model
+'self_awareness_score'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+self_model
+'improvement_suggestions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+improvements
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+cycle_results
+'improvements'
+●●●●●● 1mm □△
+improvements
+●●●●●● 1mm □△
+'details'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_results
+'observations'
+'health'
+●●●●●● 1mm □
+'status'
+'anomalies'
+'issues'
+health
+'health_status'
+health
+'anomalies_detected'
+health
+'code_issues'
+●●●●●● 2mm □
+health
+'health_status'
+'healthy'
+healing_cycle
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_results
+'improvements'
+●●●●●● 1mm □△
+'type'
+'actions'
+'healing'
+healing_cycle
+'actions_executed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+learning_status
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_results
+'observations'
+'learning'
+●●●●●● 1mm □
+'total_subagents'
+'study_queue'
+'practice_queue'
+'completed'
+learning_status
+'total_subagents'
+learning_status
+'study_queue_size'
+learning_status
+'practice_queue_size'
+learning_status
+'total_tasks_completed'
+logger
+●●●●●● 1mm □△
+'[INGESTION-INTEGRATION] Improvement cycle complete: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycle_results
+'improvements'
+●●●●●● 2mm □△
+' improvements triggered'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cycle_results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_complete_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get complete status of the integrated system.'
+status
+●●●●●● 1mm □
+'statistics'
+'components'
+'total_ingestions'
+'total_learning_tasks'
+'total_healings'
+'total_improvements'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+status
+'components'
+'healing'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+status
+'components'
+'mirror'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+status
+'components'
+'learning'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'components'
+'triggers'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+status
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_ingestion_integration
+●●●●●● 2mm □○
+IngestionSelfHealingIntegration
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_ingestion_integration
+●●●●●● 1mm □△
+session
+knowledge_base_path
+learning_orchestrator
+enable_healing
+enable_mirror
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm □○
+LearningOrchestrator
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'Get or create global ingestion integration instance.'
+●●●●●● 2mm □
+_ingestion_integration
+●●●●●● 2mm □
+_ingestion_integration
+●●●●●● 1mm □
+IngestionSelfHealingIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_ingestion_integration
+IngestionSelfHealingIntegration

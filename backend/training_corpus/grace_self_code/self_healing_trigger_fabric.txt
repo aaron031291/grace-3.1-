@@ -1,0 +1,1050 @@
+## trigger_fabric.py
+'\nself_healing/trigger_fabric.py\n─────────────────────────────────────────────────────────────────────────────\nMulti-Trigger Fabric — Grace\'s event nervous system.\n\nConnects ALL signal sources to the right system (self-healing, learning,\nor coding agent) so no failure goes unnoticed and no learning opportunity\nis missed.\n\nTrigger sources wired here:\n  SELF-HEALING:\n    1. DB session exceptions        (already in session.py)\n    2. FastAPI request exceptions   [NEW via middleware]\n    3. LLM call failures            [NEW via event bus]\n    4. Component health drops       [NEW via Ouroboros hook]\n    5. Background loop crashes      [NEW via exception hook]\n\n  LEARNING:\n    6. After fix applied to disk    [NEW via fix_applier hook]\n    7. KB / RAG search miss         [NEW via event bus]\n    8. LLM low-confidence response  [NEW via hallucination guard]\n    9. Repeated error pattern       [NEW via MTTR analysis]\n\n  CODING AGENT:\n   10. Ouroboros "code" actions     [NEW: routes to task_queue]\n   11. Knowledge gap detected       [NEW via event bus]\n   12. Test failure on generated code [NEW via verification pass]\n\nAll routes are non-blocking (fire-and-forget via event bus or thread).\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+socket
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_started
+●●●●●● 1mm □
+●●●●●● 1mm □
+_started_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_SERVICE_MAP
+●●●●●● 1mm □
+'localhost'
+5432
+'PostgreSQL'
+'localhost'
+6333
+'Qdrant'
+'localhost'
+11434
+'Ollama'
+'localhost'
+6379
+'Redis'
+'localhost'
+8000
+'GraceAPI'
+_PROBE_INTERVAL_S
+●●●●●● 1mm □
+60
+_PROBE_TIMEOUT_S
+●●●●●● 1mm □
+3
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Wire all triggers. Call once at startup with the FastAPI app instance.'
+_started_lock
+●●●●●● 2mm □
+_started
+●●●●●● 3mm ○
+_started
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Starting — wiring all trigger sources'
+●●●●●● 2mm □△
+_wire_event_bus_triggers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+app
+●●●●●● 2mm □
+_wire_fastapi_middleware
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+_wire_ouroboros_code_action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] ✅ All trigger sources wired (network probe + mirror observer active)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_wire_event_bus_triggers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Subscribe to event bus topics that should trigger healing/learning/coding.'
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+subscribe
+●●●●●● 1mm □△
+'llm.error'
+_on_llm_error
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'hallucination.detected'
+_on_hallucination
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'knowledge.gap'
+_on_knowledge_gap
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'error.repeated'
+_on_repeated_error
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'fix.applied'
+_on_fix_applied
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'verification.rejected'
+_on_verification_rejected
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'network.rate_limited'
+_on_rate_limited
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'network.healed'
+_on_network_healed
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'probe.light.result'
+_on_probe_result
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'probe.deep.result'
+_on_probe_result
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Event bus subscriptions active (10 topics)'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Event bus wiring skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_probe_tcp
+●●●●●● 1mm □△
+host
+port
+timeout
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+_PROBE_TIMEOUT_S
+'Return True if TCP connection to host:port succeeds within timeout.'
+socket
+●●●●●● 1mm □△
+host
+port
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+OSError
+ConnectionRefusedError
+TimeoutError
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_network_probe_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Background thread: probe all Grace services every 60s.\n    On failure, fire into error pipeline so _heal_network() acts immediately —\n    BEFORE cascading request failures reach user-visible endpoints.\n    '
+time
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+_failures
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+t
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+t
+●●●●●● 1mm □△
+'period'
+●●●●●● 2mm □△
+'late_night'
+interval
+●●●●●● 1mm □
+180
+●●●●●● 1mm △
+t
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 2mm □△
+interval
+●●●●●● 1mm □
+30
+interval
+●●●●●● 1mm □
+_PROBE_INTERVAL_S
+Exception
+interval
+●●●●●● 1mm □
+_PROBE_INTERVAL_S
+host
+port
+service
+_SERVICE_MAP
+reachable
+●●●●●● 1mm □
+_probe_tcp
+●●●●●● 1mm □△
+host
+port
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+service
+':'
+port
+●●●●●● 2mm □
+reachable
+_failures
+key
+●●●●●● 1mm □
+_failures
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+consecutive
+●●●●●● 1mm □
+_failures
+key
+●●●●●● 2mm □
+consecutive
+2
+logger
+●●●●●● 1mm □△
+'[NETWORK-PROBE] ⚠️ %s (%s:%d) unreachable (%dx consecutive)'
+service
+host
+port
+consecutive
+●●●●●● 2mm □△
+_route_exception
+●●●●●● 1mm □△
+ConnectionRefusedError
+●●●●●● 1mm □△
+service
+' unreachable at '
+host
+':'
+port
+' (consecutive failures: '
+consecutive
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+_failures
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+2
+logger
+●●●●●● 1mm □△
+'[NETWORK-PROBE] ✅ %s (%s:%d) recovered after %d failures'
+service
+host
+port
+_failures
+key
+●●●●●● 2mm □△
+●●●●●● 3mm □
+_failures
+key
+●●●●●● 1mm □
+0
+time
+●●●●●● 1mm □△
+interval
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_MIRROR_INTERVAL_S
+●●●●●● 1mm □
+600
+●●●●●● 1mm □
+_mirror_observation_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Background thread: run MirrorSelfModelingSystem.detect_behavioral_patterns()\n    every 10 minutes and route each pattern type to the correct system.\n\n    Pattern → Action mapping:\n      REPEATED_FAILURE     → self-healing (error pipeline)\n      LEARNING_PLATEAU     → learning brain (submit to coding agent for curriculum)\n      EFFICIENCY_DROP      → coding agent (performance fix task)\n      ANOMALOUS_BEHAVIOR   → escalate to human review\n      IMPROVEMENT_OPPORT.  → coding agent (proactive improvement task)\n      SUCCESS_SEQUENCE     → episodic memory reward signal\n    '
+time
+●●●●●● 1mm □△
+30
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+patterns
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] No behavioral patterns detected this cycle'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] 🪞 Detected %d behavioral patterns — routing actions'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+pattern
+patterns
+_route_mirror_pattern
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] Cycle error (non-fatal): %s'
+e
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+_MIRROR_INTERVAL_S
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_route_mirror_pattern
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n    Route a single mirror pattern to the appropriate action system.\n    Each pattern has: type, description, frequency, suggestions.\n    '
+pattern_type
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+suggestions
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'suggestions'
+●●●●●● 2mm □△
+frequency
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'frequency'
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+'repeated_failure'
+_route_exception
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'[Mirror] Repeated failure pattern: '
+description
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] 🔴 Repeated failure → self-heal: %s'
+description
+60
+●●●●●● 2mm □△
+●●●●●● 1mm △
+pattern_type
+'learning_plateau'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] 🟡 Learning plateau → coding agent: %s'
+description
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+'efficiency_drop'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] 🟠 Efficiency drop → coding agent: %s'
+description
+60
+●●●●●● 2mm □△
+●●●●●● 1mm △
+pattern_type
+'anomalous_behavior'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] 🚨 Anomalous behavior escalated: %s'
+description
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+'improvement_opportunity'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] 🟢 Improvement opportunity → coding agent: %s'
+description
+60
+●●●●●● 2mm □△
+●●●●●● 1mm △
+pattern_type
+'success_sequence'
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] ✅ Success sequence reinforced in episodic memory'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MIRROR-OBSERVER] Pattern routing error (%s): %s'
+pattern_type
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_rate_limited
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Rate limit hit — log for ops visibility, future circuit breaker.'
+service
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'service'
+'unknown'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] ⏸ Rate limited on %s — backing off 60s'
+service
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_network_healed
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Network heal completed — log for ops.'
+fixes
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'fixes'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] 🌐 Network healed: %s'
+' | '
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+fixes
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_probe_result
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'\n    Probe sweep result arrived (probe.light.result / probe.deep.result).\n    Route any FAIL checks into the error pipeline for self-healing.\n    '
+failed
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+0
+●●●●●● 3mm ○
+r
+results
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'FAIL'
+check
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'check'
+'unknown'
+●●●●●● 2mm □△
+detail
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'detail'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] 🔍 Probe failure → self-heal: [%s] %s'
+check
+detail
+80
+●●●●●● 2mm □△
+_route_exception
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'[Probe] '
+check
+': '
+detail
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_wire_fastapi_middleware
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+'Add exception middleware so all API errors reach the error pipeline.'
+●●●●●● 3mm □△○
+starlette.middleware.base
+●●●●●● 2mm □△○
+BaseHTTPMiddleware
+●●●●●● 3mm □△○
+starlette.requests
+●●●●●● 2mm □△○
+Request
+●●●●●● 3mm □△○
+starlette.responses
+●●●●●● 2mm □△○
+Response
+●●●●●● 2mm △
+ErrorCaptureMiddleware
+●●●●●● 3mm □△
+BaseHTTPMiddleware
+BaseHTTPMiddleware
+Request
+●●●●●● 3mm ○
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Exception
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+ErrorCaptureMiddleware
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] FastAPI error capture middleware added'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] FastAPI middleware wiring skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_wire_ouroboros_code_action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"\n    Patch the Ouroboros _decide_and_act so when it decides action_type='code'\n    it routes to the coding agent task queue instead of a generic brain call.\n    "
+●●●●●● 2mm □△○
+api.autonomous_loop_api
+●●●●●● 1mm □
+loop_api
+_original_decide
+●●●●●● 1mm □
+loop_api
+●●●●●● 1mm □
+_patched_decide_and_act
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_original_decide
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'code'
+result
+●●●●●● 1mm □△
+'trust_blocked'
+●●●●●● 2mm □△
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+loop_api
+●●●●●● 1mm □
+_patched_decide_and_act
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Ouroboros code action → coding agent patched'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Ouroboros patch skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_submit_code_action
+●●●●●● 1mm □△
+problem
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Submit Ouroboros code decision to the coding agent task queue.'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Ouroboros code submit: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_llm_error
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'LLM call failed → report to error pipeline for healing.'
+_route_exception
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'LLM error from '
+data
+●●●●●● 1mm □△
+'provider'
+'unknown'
+●●●●●● 2mm □△
+': '
+data
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_hallucination
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Hallucination detected → learning trigger: record as negative example.'
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+flags
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'flags'
+●●●●●● 2mm □△
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Hallucination → learning negative example recorded via UnifiedMemory'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Hallucination error: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_knowledge_gap
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Knowledge gap detected → submit coding task to generate missing knowledge.'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+gap
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'gap'
+data
+●●●●●● 1mm □△
+'topic'
+'unknown knowledge gap'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[TRIGGER-FABRIC] Knowledge gap '%s' → coding agent"
+gap
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_repeated_error
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Same error pattern repeated — escalate priority.'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+submit_coding_task
+pattern
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'pattern'
+'unknown'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'count'
+1
+●●●●●● 2mm □△
+submit_coding_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Repeated error x%d → high-priority coding task'
+count
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_fix_applied
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Fix successfully applied → immediately reward in learning system.'
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Fix applied error: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_on_verification_rejected
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Verification pass rejected code → record as training signal.'
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[TRIGGER-FABRIC] Verification rejected error: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_route_exception
+●●●●●● 1mm □△
+exc
+context
+module
+function
+●●●●●● 2mm □△
+●●●●●● 2mm □
+''
+''
+'Fire exception into the error pipeline. Non-blocking from callers.'
+●●●●●● 3mm □△○
+self_healing.error_pipeline
+●●●●●● 2mm □△○
+get_error_pipeline
+get_error_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_watch_mttr_patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Background thread: check MTTR data every 5 minutes.\n    If any error class repeats > 3x with MTTR < 30s, fire error.repeated.\n    '
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+time
+●●●●●● 1mm □△
+300
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+self_healing.error_pipeline
+●●●●●● 2mm □△○
+get_mttr
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+error_class
+'attribute'
+'import'
+'name'
+'type'
+'value'
+mttr
+●●●●●● 1mm □
+get_mttr
+●●●●●● 1mm □△
+error_class
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mttr
+●●●●●● 2mm □
+mttr
+30
+publish_async
+●●●●●● 1mm □△
+'error.repeated'
+'pattern'
+'count'
+'mttr_s'
+error_class
+'multiple'
+mttr
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □

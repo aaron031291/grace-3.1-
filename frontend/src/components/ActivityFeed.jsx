@@ -28,7 +28,7 @@ function timeAgo(ts) {
   return `${Math.floor(diff / 3600)}h ago`;
 }
 
-export default function ActivityFeed() {
+export default function ActivityFeed({ docked = false }) {
   const [events, setEvents] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [unread, setUnread] = useState(0);
@@ -41,6 +41,7 @@ export default function ActivityFeed() {
   const hasDragged = useRef(false);
 
   const handlePointerDown = (e) => {
+    if (docked) return;
     // Prevent dragging from internal panel scroll/text
     if (expanded && e.target.closest('.activity-feed-panel')) return;
     isDragging.current = true;
@@ -98,30 +99,57 @@ export default function ActivityFeed() {
     if (!expanded) setUnread(0);
   };
 
-  const [activeTab, setActiveTab] = useState('activity');
-  const [valRuns, setValRuns] = useState([]);
+  const feedContent = (
+    <div className="activity-feed-panel" style={{
+      width: docked ? '100%' : 340, height: docked ? '100%' : undefined,
+      maxHeight: docked ? '100%' : 400, background: docked ? 'transparent' : '#1a1a2e', 
+      border: docked ? 'none' : '1px solid #333',
+      borderRadius: docked ? 0 : 10, boxShadow: docked ? 'none' : '0 8px 32px rgba(0,0,0,.5)', 
+      overflow: 'hidden',
+      marginBottom: docked ? 0 : 8, display: 'flex', flexDirection: 'column',
+      cursor: 'default'
+    }}>
+      {!docked && (
+        <div style={{
+          padding: '10px 14px', borderBottom: '1px solid #333', background: '#16213e',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#eee' }}>Grace Activity</span>
+          <span style={{ fontSize: 11, color: '#888' }}>{events.length} events</span>
+        </div>
+      )}
+      <div style={{ flex: 1, overflow: 'auto', maxHeight: docked ? '100%' : 340 }}>
+        {events.length === 0 && (
+          <div style={{ padding: 20, textAlign: 'center', color: '#666', fontSize: 12 }}>
+            No recent activity
+          </div>
+        )}
+        {events.map(e => (
+          <div key={e.id} style={{
+            padding: '8px 12px', borderBottom: '1px solid #222',
+            display: 'flex', gap: 8, alignItems: 'flex-start',
+          }}>
+            <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{e.icon}</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{
+                fontSize: 11, color: '#ddd', overflow: 'hidden',
+                textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {e.topic.replace(/\./g, ' → ')}
+              </div>
+              <div style={{ fontSize: 10, color: '#666' }}>
+                {e.source} · {timeAgo(e.ts)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
-  useEffect(() => {
-    if (activeTab === 'agent_mesh' && expanded) {
-      const fetchRuns = async () => {
-        try {
-          const res = await fetch(`${API_BASE_URL}/api/autonomous/validation/runs`);
-          if (res.ok) {
-            const data = await res.json();
-            setValRuns(data.runs || []);
-          }
-        } catch { /* skip */ }
-      };
-      fetchRuns();
-      const ival = setInterval(fetchRuns, 10000);
-      return () => clearInterval(ival);
-    }
-  }, [activeTab, expanded]);
-
-  const handleAction = async (action) => {
-    alert(`Performing ${action} (mock)`);
-    // Example: fetch(`${API_BASE_URL}/api/autonomous/${action}`, { method: 'POST' });
-  };
+  if (docked) {
+    return feedContent;
+  }
 
   return (
     <div
@@ -135,91 +163,7 @@ export default function ActivityFeed() {
         touchAction: 'none' // Prevent scrolling while dragging
       }}
     >
-      {expanded && (
-        <div className="activity-feed-panel" style={{
-          width: 360, maxHeight: 420, background: '#1a1a2e', border: '1px solid #333',
-          borderRadius: 10, boxShadow: '0 8px 32px rgba(0,0,0,.5)', overflow: 'hidden',
-          marginBottom: 8, display: 'flex', flexDirection: 'column',
-          cursor: 'default'
-        }}>
-          <div style={{
-            padding: '10px 14px', borderBottom: '1px solid #333', background: '#16213e',
-            display: 'flex', gap: 16, alignItems: 'center',
-          }}>
-            <button
-              onClick={() => setActiveTab('activity')}
-              style={{
-                background: 'transparent', border: 'none', color: activeTab === 'activity' ? '#eee' : '#888',
-                fontSize: 13, fontWeight: 700, cursor: 'pointer', padding: 0
-              }}
-            >Grace Activity</button>
-            <button
-              onClick={() => setActiveTab('agent_mesh')}
-              style={{
-                background: 'transparent', border: 'none', color: activeTab === 'agent_mesh' ? '#e94560' : '#888',
-                fontSize: 13, fontWeight: 700, cursor: 'pointer', padding: 0
-              }}
-            >Agent Mesh</button>
-            <div style={{ flex: 1 }} />
-            <span style={{ fontSize: 11, color: '#888' }}>{events.length} events</span>
-          </div>
-          <div style={{ flex: 1, overflow: 'auto', maxHeight: 360 }}>
-            {activeTab === 'activity' && events.length === 0 && (
-              <div style={{ padding: 20, textAlign: 'center', color: '#666', fontSize: 12 }}>
-                No recent activity
-              </div>
-            )}
-            {activeTab === 'activity' && events.map(e => (
-              <div key={e.id} style={{
-                padding: '8px 12px', borderBottom: '1px solid #222',
-                display: 'flex', gap: 8, alignItems: 'flex-start',
-              }}>
-                <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{e.icon}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontSize: 11, color: '#ddd', overflow: 'hidden',
-                    textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                  }}>
-                    {e.topic.replace(/\./g, ' → ')}
-                  </div>
-                  <div style={{ fontSize: 10, color: '#666' }}>
-                    {e.source} · {timeAgo(e.ts)}
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {activeTab === 'agent_mesh' && (
-              <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button onClick={() => handleAction('pause')} style={{ flex: 1, padding: '6px', background: '#333', border: 'none', color: '#fff', borderRadius: 4, cursor: 'pointer', fontSize: 11 }}>⏸ Pause</button>
-                  <button onClick={() => handleAction('resume')} style={{ flex: 1, padding: '6px', background: '#e94560', border: 'none', color: '#fff', borderRadius: 4, cursor: 'pointer', fontSize: 11 }}>▶ Resume</button>
-                  <button onClick={() => handleAction('rollback')} style={{ flex: 1, padding: '6px', background: '#16213e', border: '1px solid #333', color: '#ccc', borderRadius: 4, cursor: 'pointer', fontSize: 11 }}>↺ Rollback (Manual)</button>
-                </div>
-
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#eee', marginTop: 8 }}>Validation Runs</div>
-                {valRuns.length === 0 ? (
-                  <div style={{ fontSize: 11, color: '#666' }}>No validation runs recorded.</div>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {valRuns.map(run => (
-                      <div key={run.task_id} style={{ padding: '8px', background: '#12122a', border: '1px solid #333', borderRadius: 6 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                          <span style={{ fontSize: 11, fontWeight: 600, color: run.status === 'success' ? '#4caf50' : '#f44336' }}>
-                            {run.target || 'Unknown'} - {run.status.toUpperCase()}
-                          </span>
-                          <span style={{ fontSize: 10, color: '#666' }}>{Math.round(run.duration_sec || 0)}s</span>
-                        </div>
-                        <div style={{ fontSize: 10, color: '#888' }}>Task: {run.task_id}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {expanded && feedContent}
 
       <button onClick={toggle} style={{
         width: 40, height: 40, borderRadius: '50%', border: 'none',

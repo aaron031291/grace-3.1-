@@ -1,0 +1,1178 @@
+## interpreters.py
+'\nLayer 2 - Interpreters: Pattern Analysis Layer\n\nAnalyzes raw sensor data to detect:\n- Patterns (recurring issues, success patterns)\n- Anomalies (unusual behavior, outliers)\n- Invariant checks (rule violations)\n- Clarity classification (clear vs ambiguous states)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+MetricsData
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PatternType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of patterns detected.'
+TEST_FAILURE_PATTERN
+●●●●●● 1mm □
+'test_failure_pattern'
+TEST_SUCCESS_PATTERN
+●●●●●● 1mm □
+'test_success_pattern'
+ERROR_CLUSTER
+●●●●●● 1mm □
+'error_cluster'
+PERFORMANCE_DEGRADATION
+●●●●●● 1mm □
+'performance_degradation'
+RECOVERY_PATTERN
+●●●●●● 1mm □
+'recovery_pattern'
+LEARNING_OPPORTUNITY
+●●●●●● 1mm □
+'learning_opportunity'
+INFRASTRUCTURE_ISSUE
+●●●●●● 1mm □
+'infrastructure_issue'
+CODE_QUALITY_ISSUE
+●●●●●● 1mm □
+'code_quality_issue'
+●●●●●● 2mm △
+AnomalyType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of anomalies detected.'
+TEST_PASS_RATE_DROP
+●●●●●● 1mm □
+'test_pass_rate_drop'
+ERROR_SPIKE
+●●●●●● 1mm □
+'error_spike'
+RESOURCE_EXHAUSTION
+●●●●●● 1mm □
+'resource_exhaustion'
+SERVICE_DEGRADATION
+●●●●●● 1mm □
+'service_degradation'
+UNUSUAL_ACTIVITY
+●●●●●● 1mm □
+'unusual_activity'
+INVARIANT_VIOLATION
+●●●●●● 1mm □
+'invariant_violation'
+GENESIS_KEY_ANOMALY
+●●●●●● 1mm □
+'genesis_key_anomaly'
+COGNITIVE_ANOMALY
+●●●●●● 1mm □
+'cognitive_anomaly'
+●●●●●● 2mm △
+ClarityLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Clarity classification of system state.'
+CLEAR
+●●●●●● 1mm □
+'clear'
+PARTIALLY_CLEAR
+●●●●●● 1mm □
+'partially_clear'
+AMBIGUOUS
+●●●●●● 1mm □
+'ambiguous'
+OPAQUE
+●●●●●● 1mm □
+'opaque'
+●●●●●● 2mm △
+Pattern
+'A detected pattern in the system.'
+pattern_type
+PatternType
+description
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+frequency
+●●●●●● 2mm ○
+affected_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+evidence
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggested_action
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+Anomaly
+'A detected anomaly in the system.'
+anomaly_type
+AnomalyType
+severity
+●●●●●● 3mm ○
+description
+●●●●●● 1mm ○
+expected_value
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+actual_value
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+deviation_percent
+●●●●●● 3mm ○
+0.0
+affected_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+InvariantCheck
+'Result of an invariant check.'
+invariant_id
+●●●●●● 1mm ○
+invariant_name
+●●●●●● 1mm ○
+passed
+●●●●●● 3mm △
+description
+●●●●●● 1mm ○
+violation_details
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+severity
+●●●●●● 3mm ○
+0.0
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+InterpretedData
+'Aggregated interpreted data from analysis.'
+patterns
+●●●●●● 3mm □△
+Pattern
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anomalies
+●●●●●● 3mm □△
+Anomaly
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+invariant_checks
+●●●●●● 3mm □△
+InvariantCheck
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+clarity_level
+ClarityLevel
+ClarityLevel
+clarity_score
+●●●●●● 3mm ○
+1.0
+interpretation_timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpretation_duration_ms
+●●●●●● 3mm ○
+0.0
+dataclass
+●●●●●● 2mm △
+InterpreterLayer
+'\n    Layer 2 - Interpreters: Analyzes sensor data to detect patterns and anomalies.\n\n    This layer transforms raw sensor data into actionable insights by:\n    - Detecting patterns in test results, logs, and metrics\n    - Identifying anomalies that deviate from expected behavior\n    - Checking system invariants (the 12 GRACE invariants)\n    - Classifying system clarity (how well we understand the state)\n    '
+INVARIANTS
+●●●●●● 1mm □
+'INV-1'
+'Never Harm, Always Help'
+'System should not cause harm'
+'INV-2'
+'Preserve Human Override'
+'Human control must be available'
+'INV-3'
+'Maintain Transparency'
+'Actions must be explainable'
+'INV-4'
+'Ensure Reversibility'
+'Critical actions must be reversible'
+'INV-5'
+'Bound Resource Usage'
+'Resources must stay within limits'
+'INV-6'
+'Observability Is Mandatory'
+'All actions must be logged'
+'INV-7'
+'Fail Gracefully'
+'Errors should not cascade'
+'INV-8'
+'Respect Privacy'
+'Personal data must be protected'
+'INV-9'
+'Maintain Consistency'
+'State must remain consistent'
+'INV-10'
+'Bound Recursion'
+'Self-improvement must be bounded'
+'INV-11'
+'Preserve Provenance'
+'Origin of data must be tracked'
+'INV-12'
+'Enable Learning'
+'System must be able to improve'
+THRESHOLDS
+●●●●●● 1mm □
+'test_pass_rate_critical'
+'test_pass_rate_warning'
+'cpu_critical'
+'cpu_warning'
+'memory_critical'
+'memory_warning'
+'disk_critical'
+'disk_warning'
+'error_rate_critical'
+'error_rate_warning'
+'invariant_violation_threshold'
+0.5
+0.8
+90.0
+70.0
+90.0
+80.0
+95.0
+85.0
+0.1
+0.05
+0
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+thresholds
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Initialize the interpreter layer.'
+●●●●●● 2mm □
+thresholds
+●●●●●● 3mm △
+●●●●●● 1mm □△
+thresholds
+●●●●●● 2mm □△
+●●●●●● 1mm □
+interpret
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Interpret sensor data to extract patterns, anomalies, and clarity.'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+InterpretedData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+result
+result
+result
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+end_time
+result
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+result
+InterpretedData
+●●●●●● 1mm □
+_detect_patterns
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Detect patterns in the sensor data.'
+patterns
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+patterns
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+patterns
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+patterns
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+Pattern
+●●●●●● 1mm □
+_detect_test_patterns
+●●●●●● 1mm □△
+self
+test_results
+●●●●●● 2mm □△
+TestResultData
+'Detect patterns in test results.'
+patterns
+●●●●●● 1mm □
+●●●●●● 2mm □
+test_results
+0
+ratio
+●●●●●● 1mm □
+test_results
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+test_results
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ratio
+0.5
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+test_results
+5
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_type
+count
+test_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+3
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+test_results
+0.9
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+Pattern
+●●●●●● 1mm □
+_detect_log_patterns
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Detect patterns in log data.'
+patterns
+●●●●●● 1mm □
+logs
+●●●●●● 1mm □
+sensor_data
+●●●●●● 2mm □
+logs
+●●●●●● 3mm ○
+patterns
+error_count
+●●●●●● 1mm □
+logs
+●●●●●● 1mm □△
+'ERROR'
+0
+●●●●●● 2mm □△
+total_logs
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+logs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_logs
+0
+error_count
+10
+error_rate
+●●●●●● 1mm □
+error_count
+●●●●●● 3mm □△
+total_logs
+●●●●●● 2mm □
+error_rate
+●●●●●● 3mm △
+'error_rate_warning'
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+Pattern
+●●●●●● 1mm □
+_detect_genesis_patterns
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Detect patterns in Genesis Key data.'
+patterns
+●●●●●● 1mm □
+genesis
+●●●●●● 1mm □
+sensor_data
+●●●●●● 2mm □
+genesis
+●●●●●● 3mm ○
+patterns
+●●●●●● 2mm □
+genesis
+0
+error_ratio
+●●●●●● 1mm □
+genesis
+●●●●●● 3mm □△
+genesis
+●●●●●● 2mm □
+error_ratio
+0.1
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis
+0
+fix_rate
+●●●●●● 1mm □
+genesis
+●●●●●● 3mm □△
+genesis
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+Pattern
+●●●●●● 1mm □
+_detect_learning_opportunities
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Detect learning opportunities from sensor data.'
+patterns
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+sensor_data
+learned
+sensor_data
+5
+patterns
+●●●●●● 1mm □△
+Pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+Pattern
+●●●●●● 1mm □
+_detect_anomalies
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Detect anomalies in the sensor data.'
+anomalies
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+anomalies
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+anomalies
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+anomalies
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 1mm □
+_detect_test_anomalies
+●●●●●● 1mm □△
+self
+test_results
+●●●●●● 2mm □△
+TestResultData
+'Detect anomalies in test results.'
+anomalies
+●●●●●● 1mm □
+●●●●●● 2mm □
+test_results
+●●●●●● 3mm △
+'test_pass_rate_critical'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+test_results
+●●●●●● 3mm △
+'test_pass_rate_warning'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 1mm □
+_detect_metric_anomalies
+●●●●●● 1mm □△
+self
+metrics
+●●●●●● 2mm □△
+MetricsData
+'Detect anomalies in system metrics.'
+anomalies
+●●●●●● 1mm □
+●●●●●● 2mm □
+metrics
+●●●●●● 3mm △
+'cpu_critical'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+metrics
+●●●●●● 3mm △
+'cpu_warning'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+●●●●●● 3mm △
+'memory_critical'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+unhealthy_services
+●●●●●● 1mm □
+●●●●●● 2mm □
+metrics
+unhealthy_services
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+unhealthy_services
+●●●●●● 1mm □△
+'vector_db'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+unhealthy_services
+●●●●●● 1mm □△
+'llm'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+unhealthy_services
+●●●●●● 1mm □△
+'embedding'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+unhealthy_services
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 1mm □
+_detect_agent_anomalies
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Detect anomalies in agent outputs.'
+anomalies
+●●●●●● 1mm □
+agent
+●●●●●● 1mm □
+sensor_data
+●●●●●● 2mm □
+agent
+●●●●●● 3mm ○
+anomalies
+●●●●●● 2mm □
+agent
+●●●●●● 3mm △
+'invariant_violation_threshold'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent
+0
+agent
+0.5
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 1mm □
+_check_invariants
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+"Check GRACE's 12 invariants against sensor data."
+checks
+●●●●●● 1mm □
+inv_id
+inv_name
+inv_desc
+●●●●●● 3mm △
+check
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+inv_id
+inv_name
+inv_desc
+sensor_data
+●●●●●● 2mm □△
+checks
+●●●●●● 1mm □△
+check
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+checks
+●●●●●● 3mm □△
+InvariantCheck
+●●●●●● 1mm □
+_check_single_invariant
+●●●●●● 1mm □△
+self
+inv_id
+inv_name
+inv_desc
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+SensorData
+'Check a single invariant.'
+passed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+violation_details
+●●●●●● 1mm □
+●●●●●● 2mm □
+severity
+●●●●●● 1mm □
+0.0
+●●●●●● 2mm □
+inv_id
+'INV-5'
+sensor_data
+●●●●●● 2mm □
+sensor_data
+95
+sensor_data
+95
+passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+violation_details
+●●●●●● 1mm □
+'Resource usage exceeds safe bounds'
+severity
+●●●●●● 1mm □
+0.8
+●●●●●● 2mm □
+inv_id
+'INV-6'
+●●●●●● 2mm □
+sensor_data
+sensor_data
+0
+passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+violation_details
+●●●●●● 1mm □
+'Genesis key tracking may be disabled'
+severity
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+inv_id
+'INV-7'
+sensor_data
+●●●●●● 2mm □
+sensor_data
+sensor_data
+passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+violation_details
+●●●●●● 1mm □
+'More errors than failures suggests ungraceful failure handling'
+severity
+●●●●●● 1mm □
+0.6
+●●●●●● 2mm □
+inv_id
+'INV-9'
+sensor_data
+●●●●●● 2mm □
+sensor_data
+passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+violation_details
+●●●●●● 1mm □
+'Database health issue may affect consistency'
+severity
+●●●●●● 1mm □
+0.7
+●●●●●● 2mm □
+inv_id
+'INV-11'
+sensor_data
+●●●●●● 2mm □
+sensor_data
+sensor_data
+passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+violation_details
+●●●●●● 1mm □
+'High error rate in provenance tracking'
+severity
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+inv_id
+'INV-12'
+sensor_data
+●●●●●● 2mm □
+sensor_data
+passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+violation_details
+●●●●●● 1mm □
+'No learning patterns detected from recent tests'
+severity
+●●●●●● 1mm □
+0.3
+●●●●●● 3mm ○
+InvariantCheck
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+InvariantCheck
+●●●●●● 1mm □
+_classify_clarity
+●●●●●● 1mm □△
+self
+sensor_data
+patterns
+anomalies
+invariant_checks
+●●●●●● 2mm □△
+SensorData
+●●●●●● 3mm □△
+Pattern
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 3mm □△
+InvariantCheck
+'Classify the clarity of the system state.'
+clarity_score
+●●●●●● 1mm □
+1.0
+●●●●●● 2mm □
+sensor_data
+clarity_score
+0.1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+anomaly
+anomalies
+clarity_score
+0.05
+●●●●●● 2mm □△
+anomaly
+check
+invariant_checks
+●●●●●● 2mm □
+check
+clarity_score
+0.05
+●●●●●● 2mm □△
+check
+pattern_types
+●●●●●● 1mm □
+p
+p
+patterns
+●●●●●● 2mm □
+PatternType
+pattern_types
+PatternType
+pattern_types
+clarity_score
+0.1
+clarity_score
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+clarity_score
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clarity_score
+0.8
+●●●●●● 3mm ○
+ClarityLevel
+clarity_score
+●●●●●● 1mm △
+clarity_score
+0.6
+●●●●●● 3mm ○
+ClarityLevel
+clarity_score
+●●●●●● 2mm □
+clarity_score
+0.3
+●●●●●● 3mm ○
+ClarityLevel
+clarity_score
+●●●●●● 3mm □
+●●●●●● 3mm ○
+ClarityLevel
+clarity_score
+Tuple
+ClarityLevel
+●●●●●● 3mm ○
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+interpreted_data
+●●●●●● 2mm □△
+InterpretedData
+'Convert interpreted data to dictionary for serialization.'
+●●●●●● 3mm ○
+'interpretation_timestamp'
+'interpretation_duration_ms'
+'clarity_level'
+'clarity_score'
+'patterns'
+'anomalies'
+'invariant_checks'
+'summary'
+interpreted_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+interpreted_data
+interpreted_data
+'type'
+'description'
+'confidence'
+'frequency'
+'affected_components'
+'suggested_action'
+p
+p
+p
+p
+p
+p
+p
+interpreted_data
+'type'
+'severity'
+'description'
+'expected'
+'actual'
+'deviation_percent'
+'affected_components'
+a
+a
+a
+a
+a
+a
+a
+a
+interpreted_data
+'id'
+'name'
+'passed'
+'violation_details'
+'severity'
+c
+c
+c
+c
+c
+c
+interpreted_data
+'total_patterns'
+'total_anomalies'
+'invariants_passed'
+'invariants_failed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+interpreted_data
+c
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+interpreted_data
+c
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

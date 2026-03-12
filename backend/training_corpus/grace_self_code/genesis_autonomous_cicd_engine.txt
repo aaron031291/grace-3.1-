@@ -1,0 +1,1269 @@
+## autonomous_cicd_engine.py
+"\nAutonomous CI/CD Engine\n========================\nThe autonomous brain for GRACE's CI/CD system.\n\nThis engine:\n1. Monitors system health and code changes\n2. Makes intelligent decisions about when/what to test and deploy\n3. Triggers pipelines autonomously based on trust scores\n4. Integrates with the healing system for failure response\n5. Learns from CI/CD outcomes to improve decisions\n\nNO EXTERNAL DEPENDENCIES - Fully GRACE-native using Genesis Keys.\n\nArchitecture:\n    ┌─────────────────────────────────────────────────────────────────┐\n    │              AUTONOMOUS CI/CD ENGINE                            │\n    ├─────────────────────────────────────────────────────────────────┤\n    │                                                                 │\n    │   ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐   │\n    │   │   Event     │  │  Intelligent │  │    Genesis Key     │   │\n    │   │   Monitor   │→ │   Decision   │→ │    CI/CD System    │   │\n    │   └─────────────┘  └─────────────┘  └─────────────────────┘   │\n    │          ↑                ↑                    ↓                │\n    │          │                │                    │                │\n    │   ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐   │\n    │   │   File      │  │   Healing   │  │   Learning Memory  │   │\n    │   │   Watcher   │  │   System    │← │   (Feedback Loop)  │   │\n    │   └─────────────┘  └─────────────┘  └─────────────────────┘   │\n    │                                                                 │\n    └─────────────────────────────────────────────────────────────────┘\n"
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+os
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AutonomousTriggerType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of autonomous triggers.'
+FILE_CHANGE
+●●●●●● 1mm □
+'file_change'
+HEALTH_CHECK
+●●●●●● 1mm □
+'health_check'
+SCHEDULED
+●●●●●● 1mm □
+'scheduled'
+LEARNING_OPPORTUNITY
+●●●●●● 1mm □
+'learning_opportunity'
+ANOMALY_RESPONSE
+●●●●●● 1mm □
+'anomaly_response'
+HEALING_ACTION
+●●●●●● 1mm □
+'healing_action'
+USER_REQUEST
+●●●●●● 1mm □
+'user_request'
+DEPENDENCY_UPDATE
+●●●●●● 1mm □
+'dependency_update'
+SECURITY_SCAN
+●●●●●● 1mm □
+'security_scan'
+●●●●●● 2mm △
+AutonomyLevel
+●●●●●● 3mm □△
+int
+Enum
+●●●●●● 2mm ○
+Enum
+'Autonomy levels for CI/CD actions.'
+MANUAL_ONLY
+●●●●●● 1mm □
+0
+SUGGEST
+●●●●●● 1mm □
+1
+LOW_AUTONOMY
+●●●●●● 1mm □
+2
+MEDIUM_AUTONOMY
+●●●●●● 1mm □
+3
+HIGH_AUTONOMY
+●●●●●● 1mm □
+4
+FULL_AUTONOMY
+●●●●●● 1mm □
+5
+●●●●●● 2mm △
+ActionRisk
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Risk levels for CI/CD actions.'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+AutonomousEvent
+'An event that may trigger autonomous CI/CD.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+event_type
+AutonomousTriggerType
+timestamp
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+processed
+●●●●●● 3mm △
+●●●●●● 1mm □
+action_taken
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+AutonomousDecision
+'A decision made by the autonomous engine.'
+decision_id
+●●●●●● 1mm ○
+event_id
+●●●●●● 1mm ○
+action
+●●●●●● 1mm ○
+risk_level
+ActionRisk
+confidence
+●●●●●● 3mm ○
+reasoning
+●●●●●● 1mm ○
+approved
+●●●●●● 3mm △
+execution_mode
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+pipeline_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+pipeline_config
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+AutonomousCICDEngine
+"\n    Autonomous CI/CD Engine - The brain of GRACE's CI/CD system.\n\n    Makes intelligent decisions about:\n    - When to run CI pipelines\n    - Which tests to prioritize\n    - When to deploy\n    - How to respond to failures\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+autonomy_level
+project_root
+●●●●●● 2mm □△
+AutonomyLevel
+●●●●●● 2mm □○
+Path
+AutonomyLevel
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+autonomy_level
+●●●●●● 3mm △
+●●●●●● 1mm □
+project_root
+Path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+AutonomousEvent
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+AutonomousDecision
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'run_tests'
+'run_linting'
+'run_security_scan'
+'build_artifacts'
+'deploy_staging'
+'deploy_production'
+'rollback'
+'infrastructure_change'
+0.9
+0.95
+0.85
+0.75
+0.6
+0.4
+0.5
+0.3
+●●●●●● 3mm △
+●●●●●● 1mm □○
+AutonomousTriggerType
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+asyncio
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+asyncio
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+300
+●●●●●● 3mm △
+●●●●●● 1mm □
+3600
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Initialized with autonomy_level='
+autonomy_level
+●●●●●● 2mm □△
+'Start the autonomous engine.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Engine started'
+●●●●●● 2mm □△
+'Stop the autonomous engine.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Engine stopped'
+●●●●●● 2mm □△
+'Background loop for health monitoring.'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+asyncio
+Exception
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Health monitor error: '
+e
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+60
+●●●●●● 2mm □△
+'Background loop for scheduled CI runs.'
+●●●●●● 3mm △
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+Exception
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Scheduled CI error: '
+e
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+300
+●●●●●● 2mm □△
+'Check system health and trigger CI if needed.'
+event
+●●●●●● 1mm □
+AutonomousEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+'Run scheduled CI pipeline.'
+event
+●●●●●● 1mm □
+AutonomousEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'modified'
+'\n        Handle file change event.\n\n        Called when a file is created/modified/deleted.\n        '
+event
+●●●●●● 1mm □
+AutonomousEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+AutonomousDecision
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'code_change'
+'\n        Handle learning opportunity event.\n\n        Triggers CI when GRACE has learned something new.\n        '
+event
+●●●●●● 1mm □
+AutonomousEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+AutonomousDecision
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Handle anomaly detection event.\n\n        Triggers investigation/healing CI when anomalies are detected.\n        '
+event
+●●●●●● 1mm □
+AutonomousEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+AutonomousDecision
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Handle healing request event.\n\n        Triggers CI/CD to verify healing actions.\n        '
+event
+●●●●●● 1mm □
+AutonomousEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+AutonomousDecision
+AutonomousEvent
+'\n        Process an autonomous event and make decision.\n\n        This is the central decision-making function.\n        '
+●●●●●● 3mm △
+event
+●●●●●● 1mm □
+event
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Processing event '
+event
+' from '
+event
+●●●●●● 2mm □△
+action
+risk
+confidence
+reasoning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] No action needed for event '
+event
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+can_auto
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+risk
+confidence
+●●●●●● 2mm □△
+execution_mode
+●●●●●● 1mm □
+can_auto
+'auto'
+'manual'
+●●●●●● 2mm □
+risk
+ActionRisk
+can_auto
+execution_mode
+●●●●●● 1mm □
+'sandbox'
+decision
+●●●●●● 1mm □
+AutonomousDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision
+●●●●●● 1mm □
+decision
+event
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Decision: '
+action
+' (risk='
+risk
+', mode='
+execution_mode
+', confidence='
+confidence
+'.0%'
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+●●●●●● 2mm □○
+AutonomousDecision
+AutonomousEvent
+'\n        Analyze an event and determine the appropriate action.\n\n        Returns: (action, risk_level, confidence, reasoning)\n        '
+event_type
+●●●●●● 1mm □
+event
+payload
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+event_type
+AutonomousTriggerType
+file_path
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'test'
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.95
+'Test file changed: '
+file_path
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.9
+'Python file changed: '
+file_path
+●●●●●● 1mm △
+file_path
+●●●●●● 1mm □△
+'.js'
+'.ts'
+'.tsx'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_linting'
+ActionRisk
+0.85
+'Frontend file changed: '
+file_path
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+'requirements.txt'
+'package.json'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_security_scan'
+ActionRisk
+0.8
+'Dependency file changed: '
+file_path
+●●●●●● 1mm △
+file_path
+●●●●●● 1mm □△
+'.yml'
+'.yaml'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'deploy'
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'k8s'
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'build_artifacts'
+ActionRisk
+0.7
+'Deployment config changed: '
+file_path
+●●●●●● 1mm △
+event_type
+AutonomousTriggerType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event_type
+AutonomousTriggerType
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.85
+'Scheduled periodic CI run'
+●●●●●● 1mm △
+event_type
+AutonomousTriggerType
+severity
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'severity'
+'medium'
+●●●●●● 2mm □△
+anomaly_type
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'anomaly_type'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+severity
+'critical'
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.9
+'Critical anomaly detected: '
+anomaly_type
+●●●●●● 1mm △
+severity
+'high'
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.85
+'High severity anomaly: '
+anomaly_type
+●●●●●● 2mm □
+event_type
+AutonomousTriggerType
+healing_action
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'healing_action'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.8
+'Validating healing action: '
+healing_action
+●●●●●● 1mm △
+event_type
+AutonomousTriggerType
+topic
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'topic'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.75
+'Learning opportunity CI: '
+topic
+●●●●●● 3mm ○
+●●●●●● 2mm □
+ActionRisk
+0.0
+'No action required'
+●●●●●● 3mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+ActionRisk
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+'Analyze system health and recommend action.'
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.7
+'Periodic health validation'
+Exception
+●●●●●● 3mm ○
+'run_tests'
+ActionRisk
+0.7
+'Periodic health check (healing system unavailable)'
+●●●●●● 3mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+ActionRisk
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_can_execute_autonomously
+●●●●●● 1mm □△
+self
+risk
+confidence
+●●●●●● 2mm □△
+ActionRisk
+●●●●●● 3mm ○
+'Determine if action can be executed autonomously.'
+risk_to_autonomy
+●●●●●● 1mm □
+ActionRisk
+ActionRisk
+ActionRisk
+ActionRisk
+AutonomyLevel
+AutonomyLevel
+AutonomyLevel
+AutonomyLevel
+required_level
+●●●●●● 1mm □
+risk_to_autonomy
+risk
+●●●●●● 2mm □
+●●●●●● 3mm △
+required_level
+●●●●●● 3mm ○
+●●●●●● 1mm □
+confidence_thresholds
+●●●●●● 1mm □
+ActionRisk
+ActionRisk
+ActionRisk
+ActionRisk
+0.6
+0.75
+0.85
+0.95
+●●●●●● 3mm ○
+confidence
+confidence_thresholds
+risk
+●●●●●● 3mm △
+●●●●●● 1mm □
+_build_pipeline_config
+●●●●●● 1mm □△
+self
+event
+action
+●●●●●● 2mm □△
+AutonomousEvent
+●●●●●● 1mm ○
+'Build pipeline configuration based on event and action.'
+config
+●●●●●● 1mm □
+'pipeline_id'
+'trigger'
+'triggered_by'
+'variables'
+'grace-ci'
+event
+'autonomous_engine'
+●●●●●● 2mm □
+action
+'run_tests'
+config
+'pipeline_id'
+●●●●●● 1mm □
+'grace-ci'
+config
+'variables'
+'TEST_FOCUS'
+●●●●●● 1mm □
+'all'
+●●●●●● 1mm △
+action
+'run_linting'
+config
+'pipeline_id'
+●●●●●● 1mm □
+'grace-quick'
+●●●●●● 2mm □
+action
+'run_security_scan'
+config
+'pipeline_id'
+●●●●●● 1mm □
+'grace-ci'
+config
+'variables'
+'SECURITY_SCAN'
+●●●●●● 1mm □
+'true'
+●●●●●● 1mm △
+action
+'build_artifacts'
+config
+'pipeline_id'
+●●●●●● 1mm □
+'grace-ci'
+config
+'variables'
+'BUILD_ONLY'
+●●●●●● 1mm □
+'true'
+config
+'variables'
+'EVENT_ID'
+●●●●●● 1mm □
+event
+config
+'variables'
+'EVENT_TYPE'
+●●●●●● 1mm □
+event
+●●●●●● 3mm ○
+config
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+AutonomousDecision
+'Execute an approved decision.'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+get_cicd
+cicd
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+decision
+pipeline_id
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+'pipeline_id'
+'grace-ci'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Executing: '
+decision
+' via pipeline '
+pipeline_id
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+run
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Pipeline triggered: '
+run
+' (status: '
+run
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'decision_id'
+'action'
+'pipeline_id'
+'risk'
+'confidence'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+decision
+run
+decision
+decision
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Execution failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_outcome
+●●●●●● 1mm □△
+self
+decision_id
+success
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Record outcome for learning.'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 3mm ○
+action
+●●●●●● 1mm □
+decision
+●●●●●● 2mm □
+action
+●●●●●● 3mm △
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+action
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.99
+●●●●●● 3mm △
+action
+●●●●●● 3mm ○
+0.02
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+action
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+●●●●●● 3mm △
+action
+●●●●●● 1mm □△
+0.05
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'decision_id'
+'success'
+'details'
+'trust_after'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_id
+success
+details
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Recorded outcome for '
+decision_id
+': '
+success
+'SUCCESS'
+'FAILURE'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'user'
+'Manually approve a pending decision.'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+decision
+●●●●●● 3mm ○
+decision
+decision
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+decision
+●●●●●● 1mm □
+'manual_approved'
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Decision '
+decision_id
+' approved by '
+approver
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+●●●●●● 2mm □○
+AutonomousDecision
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'User rejected'
+'Reject a pending decision.'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 3mm ○
+●●●●●● 2mm □
+decision
+●●●●●● 1mm □
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+'rejected'
+decision
+' | Rejected: '
+reason
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Decision '
+decision_id
+' rejected: '
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+●●●●●● 2mm □○
+AutonomousDecision
+●●●●●● 1mm □
+_generate_id
+●●●●●● 1mm □△
+self
+prefix
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Generate unique ID.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+prefix
+':'
+timestamp
+':'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Generate Genesis Key.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'autonomous_cicd:'
+action
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'GK-acicd-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get engine status.'
+pending_decisions
+●●●●●● 1mm □
+d
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+d
+'manual'
+●●●●●● 3mm ○
+'running'
+'autonomy_level'
+'events_processed'
+'total_events'
+'decisions_made'
+'pending_approvals'
+'action_trust_scores'
+'learning_examples'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+e
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+pending_decisions
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_pending_decisions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get decisions pending approval.'
+●●●●●● 3mm ○
+d
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+d
+'manual'
+●●●●●● 3mm □△
+AutonomousDecision
+_autonomous_engine
+●●●●●● 2mm □○
+AutonomousCICDEngine
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_autonomous_cicd_engine
+●●●●●● 1mm □△
+autonomy_level
+●●●●●● 2mm □△
+AutonomyLevel
+AutonomyLevel
+'Get or create global autonomous CI/CD engine.'
+●●●●●● 2mm □
+_autonomous_engine
+●●●●●● 2mm □
+_autonomous_engine
+●●●●●● 1mm □
+AutonomousCICDEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_autonomous_engine
+AutonomousCICDEngine
+'Start the autonomous CI/CD engine.'
+engine
+●●●●●● 1mm □
+get_autonomous_cicd_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Autonomous engine started'
+●●●●●● 2mm □△
+'Stop the autonomous CI/CD engine.'
+●●●●●● 2mm □
+_autonomous_engine
+_autonomous_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AutonomousCICD] Autonomous engine stopped'
+●●●●●● 2mm □△

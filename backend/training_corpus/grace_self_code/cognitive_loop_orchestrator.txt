@@ -1,0 +1,637 @@
+## loop_orchestrator.py
+"\nLoop Orchestrator — Cross-Referencing Loop Composition\n\nLoops don't operate in isolation. Real operations trigger MULTIPLE loops\nsimultaneously. The orchestrator composes loops together:\n\nExample: Code generation triggers:\n  1. code_generation_safety (coding)\n  2. llm_hallucination_detection (verification)\n  3. trust_homeostasis (homeostasis)\n  4. data_ingestion_validation (data — for the generated code)\n  5. librarian_file_integrity (data — for file writes)\n\nThese run as a COMPOSITE LOOP — cross-referencing each other's outputs\nso intelligence flows between them.\n\nComposite Loops (pre-defined):\n  - CODE_WRITE: coding + verification + data + trust\n  - DATA_INGEST: data + verification + trust + learning\n  - HEAL_AND_LEARN: healing + learning + trust + homeostasis\n  - DEPLOY_SAFE: coding + verification + safety + homeostasis\n  - USER_REQUEST: safety + verification + learning + trust\n  - SYSTEM_MAINTENANCE: homeostasis + data + safety + healing\n  - KNOWLEDGE_EXPAND: knowledge + learning + data + verification\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+Set
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LoopResult
+loop_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+output
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+duration_ms
+●●●●●● 3mm ○
+0
+dataclass
+●●●●●● 2mm △
+CompositeResult
+composite_id
+●●●●●● 1mm ○
+loops_executed
+●●●●●● 2mm ○
+loops_passed
+●●●●●● 2mm ○
+loops_failed
+●●●●●● 2mm ○
+results
+●●●●●● 3mm □△
+LoopResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cross_references
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_duration_ms
+●●●●●● 3mm ○
+0
+verdict
+●●●●●● 1mm ○
+'unknown'
+dataclass
+COMPOSITE_LOOPS
+●●●●●● 1mm □
+'code_write'
+'data_ingest'
+'heal_and_learn'
+'deploy_safe'
+'user_request'
+'system_maintenance'
+'knowledge_expand'
+'emergency_response'
+'name'
+'description'
+'loops'
+'cross_refs'
+'Code Write Composite'
+'Full code generation with verification, trust, and file integrity'
+'code_generation_safety'
+'llm_hallucination_detection'
+'trust_homeostasis'
+'librarian_file_integrity'
+'code_generation_safety → llm_hallucination_detection'
+'llm_hallucination_detection → trust_homeostasis'
+'trust_homeostasis → librarian_file_integrity'
+'generated code feeds into hallucination check'
+'hallucination score feeds trust update'
+'trust score determines write permission'
+'name'
+'description'
+'loops'
+'cross_refs'
+'Data Ingestion Composite'
+'Full data ingestion with validation, trust scoring, and learning'
+'data_ingestion_validation'
+'api_response_verification'
+'trust_homeostasis'
+'memory_consistency_maintenance'
+'data_ingestion_validation → api_response_verification'
+'api_response_verification → trust_homeostasis'
+'trust_homeostasis → memory_consistency_maintenance'
+'ingested data verified for accuracy'
+'verification result updates trust'
+'trust-scored data stored in memory'
+'name'
+'description'
+'loops'
+'cross_refs'
+'Heal and Learn Composite'
+'Autonomous healing with learning from outcomes'
+'autonomous_healing'
+'feedback_loop_optimization'
+'trust_homeostasis'
+'system_health_monitoring'
+'autonomous_healing → feedback_loop_optimization'
+'feedback_loop_optimization → trust_homeostasis'
+'trust_homeostasis → system_health_monitoring'
+'healing outcome feeds learning'
+'learning success updates trust'
+'trust change triggers health check'
+'name'
+'description'
+'loops'
+'cross_refs'
+'Safe Deployment Composite'
+'Code deployment with full safety chain'
+'code_deployment_verification'
+'live_integration_safety'
+'security_compliance_enforcement'
+'system_health_monitoring'
+'code_deployment_verification → live_integration_safety'
+'live_integration_safety → security_compliance_enforcement'
+'security_compliance_enforcement → system_health_monitoring'
+'verified code enters integration'
+'integration checked for compliance'
+'compliance result triggers health update'
+'name'
+'description'
+'loops'
+'cross_refs'
+'User Request Composite'
+'Full user request handling with safety, verification, and adaptation'
+'api_request_validation'
+'user_intent_adaptation'
+'llm_hallucination_detection'
+'trust_homeostasis'
+'api_request_validation → user_intent_adaptation'
+'user_intent_adaptation → llm_hallucination_detection'
+'llm_hallucination_detection → trust_homeostasis'
+'validated request parsed for intent'
+'adapted response verified for hallucinations'
+'response quality feeds trust'
+'name'
+'description'
+'loops'
+'cross_refs'
+'System Maintenance Composite'
+'Periodic system health, memory cleanup, and performance tuning'
+'system_health_monitoring'
+'memory_consistency_maintenance'
+'performance_optimization_feedback'
+'cross_system_synchronization'
+'system_health_monitoring → memory_consistency_maintenance'
+'memory_consistency_maintenance → performance_optimization_feedback'
+'performance_optimization_feedback → cross_system_synchronization'
+'health issues trigger memory check'
+'memory state informs optimization'
+'optimizations synced across systems'
+'name'
+'description'
+'loops'
+'cross_refs'
+'Knowledge Expansion Composite'
+'Full knowledge discovery, validation, and integration'
+'knowledge_integration'
+'knowledge_graph_maintenance'
+'data_ingestion_validation'
+'report_generation_verification'
+'knowledge_integration → knowledge_graph_maintenance'
+'knowledge_graph_maintenance → data_ingestion_validation'
+'data_ingestion_validation → report_generation_verification'
+'new knowledge updates graph'
+'graph changes validated as data'
+'ingestion report generated'
+'name'
+'description'
+'loops'
+'cross_refs'
+'Emergency Response Composite'
+'Full emergency handling with healing, safety, and notification'
+'emergency_response_coordination'
+'autonomous_healing'
+'security_compliance_enforcement'
+'system_health_monitoring'
+'emergency_response_coordination → autonomous_healing'
+'autonomous_healing → security_compliance_enforcement'
+'security_compliance_enforcement → system_health_monitoring'
+'emergency triggers healing'
+'healing checked for compliance'
+'compliance result feeds health'
+●●●●●● 2mm △
+LoopOrchestrator
+'Orchestrates composite loops — multiple loops firing in concert.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'LoopOrchestrator'
+●●●●●● 1mm □
+execute_composite
+●●●●●● 1mm □△
+self
+composite_id
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+"\n        Execute a composite loop — multiple loops with cross-referencing.\n        Each loop's output feeds into the next loop's input.\n        "
+composite
+●●●●●● 1mm □
+COMPOSITE_LOOPS
+●●●●●● 1mm □△
+composite_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+composite
+●●●●●● 3mm ○
+CompositeResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+shared_context
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+cross_refs
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+loop_id
+composite
+'loops'
+loop_start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enter_loop
+●●●●●● 1mm □△
+loop_id
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+LoopResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_id
+shared_context
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loop_start
+●●●●●● 2mm □△
+1000
+result
+●●●●●● 1mm □
+LoopResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+shared_context
+'loop_'
+loop_id
+'_output'
+●●●●●● 1mm □
+output
+shared_context
+'loop_'
+loop_id
+'_success'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loop_start
+●●●●●● 2mm □△
+1000
+results
+●●●●●● 1mm □△
+LoopResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+shared_context
+'loop_'
+loop_id
+'_success'
+●●●●●● 1mm □
+●●●●●● 1mm □
+exit_loop
+●●●●●● 1mm □△
+loop_id
+●●●●●● 2mm □△
+total_duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+verdict
+●●●●●● 1mm □
+failed
+0
+'pass'
+passed
+0
+'partial'
+'fail'
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'composite.'
+composite_id
+'.completed'
+'composite'
+'passed'
+'failed'
+'verdict'
+'duration_ms'
+composite_id
+passed
+failed
+verdict
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_duration
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+CompositeResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CompositeResult
+●●●●●● 1mm □
+_execute_single_loop
+●●●●●● 1mm □△
+self
+loop_id
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Execute a single loop with the shared context.'
+output
+●●●●●● 1mm □
+'loop'
+'status'
+'timestamp'
+loop_id
+'executed'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'trust'
+loop_id
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+'trust_score'
+●●●●●● 1mm □
+d
+●●●●●● 1mm □△
+'overall_trust'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'health'
+loop_id
+'immune'
+loop_id
+●●●●●● 3mm □△○
+cognitive.central_orchestrator
+●●●●●● 2mm □△○
+get_orchestrator
+health
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+'health_percent'
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'health_percent'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'memory'
+loop_id
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+stats
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+'memory_entries'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+v
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'hallucination'
+loop_id
+output
+'hallucination_check'
+●●●●●● 1mm □
+'active'
+●●●●●● 2mm □
+'ingestion'
+loop_id
+'librarian'
+loop_id
+output
+'data_validated'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+output
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_composite_definitions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all composite loop definitions.'
+●●●●●● 3mm ○
+COMPOSITE_LOOPS
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_available_composites
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all available composite loops.'
+●●●●●● 3mm ○
+'id'
+'name'
+'description'
+'loop_count'
+'loops'
+'cross_references'
+cid
+comp
+'name'
+comp
+'description'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp
+'loops'
+●●●●●● 2mm □△
+comp
+'loops'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp
+●●●●●● 1mm □△
+'cross_refs'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cid
+comp
+COMPOSITE_LOOPS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_loop_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+LoopOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LoopOrchestrator

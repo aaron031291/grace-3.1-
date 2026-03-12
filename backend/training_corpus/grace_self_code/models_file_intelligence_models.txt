@@ -1,0 +1,230 @@
+## file_intelligence_models.py
+'\nFile intelligence models for Grace-aligned file management.\n\nTables: file_intelligence, file_relationships, processing_strategies, file_health_checks.\nRegistered in database/migration.py so create_tables() creates them with all other app tables.\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+Integer
+String
+Text
+Float
+DateTime
+JSON
+ForeignKey
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm △
+FileIntelligence
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'File intelligence metadata - deep content understanding.'
+__tablename__
+●●●●●● 1mm □
+'file_intelligence'
+document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content_summary
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+extracted_entities
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+detected_topics
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+quality_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+complexity_level
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recommended_strategy
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+extra_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'metadata'
+JSON
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileRelationship
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Relationships between files - semantic connections.'
+__tablename__
+●●●●●● 1mm □
+'file_relationships'
+file_a_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+file_b_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+relationship_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+strength
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+detected_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+extra_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'metadata'
+JSON
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProcessingStrategy
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Learned processing strategies for file types.'
+__tablename__
+●●●●●● 1mm □
+'processing_strategies'
+file_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+success_rate
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+avg_quality_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+times_used
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+last_used
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileHealthCheck
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'File system health check history.'
+__tablename__
+●●●●●● 1mm □
+'file_health_checks'
+health_status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+anomalies_detected
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+healing_actions
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'genesis_key.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△

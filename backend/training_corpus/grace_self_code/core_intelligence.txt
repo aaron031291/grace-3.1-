@@ -1,0 +1,1034 @@
+## intelligence.py
+'\nIntelligence Deepening Engine — mines existing data for patterns,\ntightens feedback loops, makes trust adaptive.\n\nNo new features. Just makes existing components smarter:\n  1. Genesis Key Pattern Mining — extract knowledge graph from 58K+ keys\n  2. Real-time Trust Adaptation — trust scores update from action outcomes\n  3. Consensus→Trust Feedback — disagreements adjust model trust weights\n  4. Episodic Memory Mining — cluster past episodes, extract decision patterns\n  5. ML Signal Strengthening — use consensus disagreement as training signal\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+Counter
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKeyMiner
+'\n    Mines 58K+ Genesis keys for patterns, clusters, and knowledge triples.\n    Turns write-only audit log into actionable intelligence.\n    '
+●●●●●● 1mm □
+mine_patterns
+●●●●●● 1mm □△
+self
+hours
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+24
+5000
+'Extract patterns from recent Genesis keys.'
+keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+hours
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+●●●●●● 3mm ○
+'status'
+'keys_analyzed'
+'no_data'
+0
+●●●●●● 3mm ○
+'keys_analyzed'
+'window_hours'
+'type_distribution'
+'actor_frequency'
+'error_clusters'
+'temporal_patterns'
+'hot_files'
+'tag_cooccurrence'
+'repeated_failures'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+hours
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_keys
+●●●●●● 1mm □△
+self
+hours
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+since
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+keys
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+since
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'key_type'
+'what'
+'who'
+'when'
+'is_error'
+'error_type'
+'tags'
+'file_path'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+k
+'value'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+k
+''
+k
+''
+k
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+k
+k
+''
+●●●●●● 1mm □
+●●●●●● 1mm □△
+k
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+k
+json
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+k
+k
+''
+k
+keys
+Exception
+logger
+●●●●●● 1mm □△
+'Key mining failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_type_distribution
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+k
+'key_type'
+k
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_actor_frequency
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+k
+'who'
+k
+keys
+k
+'who'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 1mm □△
+15
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_error_clusters
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+errors
+●●●●●● 1mm □
+k
+k
+keys
+k
+'is_error'
+clusters
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+errors
+clusters
+e
+'error_type'
+●●●●●● 1mm □△
+e
+'what'
+80
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error_type'
+'count'
+'samples'
+t
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+msgs
+●●●●●● 2mm □△
+msgs
+3
+t
+msgs
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+clusters
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_temporal_patterns
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+by_hour
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+keys
+●●●●●● 2mm □
+k
+'when'
+dt
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+k
+'when'
+●●●●●● 2mm □△
+by_hour
+dt
+1
+Exception
+peak
+●●●●●● 1mm □
+by_hour
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+by_hour
+●●●●●● 2mm □△
+●●●●●● 2mm □
+quiet
+●●●●●● 1mm □
+by_hour
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+by_hour
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'by_hour'
+'peak_hour'
+'quiet_hour'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+by_hour
+●●●●●● 2mm □△
+peak
+quiet
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_hot_files
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+k
+'file_path'
+k
+keys
+k
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file'
+'changes'
+f
+c
+f
+c
+counts
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_tag_cooccurrence
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+pairs
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+keys
+tags
+●●●●●● 1mm □
+k
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+tags
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+2
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+j
+●●●●●● 1mm □
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pair
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+tags
+i
+tags
+j
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pairs
+pair
+1
+●●●●●● 3mm ○
+'tags'
+'count'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+c
+p
+c
+pairs
+●●●●●● 1mm □△
+15
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_repeated_failures
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+errors
+●●●●●● 1mm □
+k
+k
+keys
+k
+'is_error'
+what_counts
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+k
+'what'
+60
+k
+errors
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'pattern'
+'count'
+w
+c
+w
+c
+what_counts
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+c
+1
+●●●●●● 1mm □△
+●●●●●● 2mm △
+AdaptiveTrust
+'\n    Updates trust scores in real-time based on action outcomes.\n    Not batch. Not nightly. Every action adjusts trust immediately.\n    '
+_model_trust
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'kimi'
+'opus'
+'qwen'
+'reasoning'
+0.7
+0.8
+0.6
+0.6
+_action_trust
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LEARNING_RATE
+●●●●●● 1mm □
+0.05
+DECAY
+●●●●●● 1mm □
+0.01
+●●●●●● 1mm □
+record_outcome
+●●●●●● 1mm □△
+cls
+model_id
+action
+success
+confidence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+0.5
+'Update trust based on action outcome.'
+cls
+●●●●●● 2mm □
+model_id
+model_id
+cls
+old
+●●●●●● 1mm □
+cls
+model_id
+delta
+●●●●●● 1mm □
+success
+cls
+cls
+delta
+confidence
+cls
+model_id
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+old
+●●●●●● 3mm ○
+delta
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+old
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+action
+0.5
+●●●●●● 2mm □△
+delta
+●●●●●● 1mm □
+success
+cls
+cls
+cls
+action
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+old
+●●●●●● 3mm ○
+delta
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_model_trust
+●●●●●● 1mm □△
+cls
+model_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+cls
+●●●●●● 3mm ○
+cls
+●●●●●● 1mm □△
+model_id
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_all_trust
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+cls
+●●●●●● 3mm ○
+'models'
+'actions'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ConsensusTrustBridge
+'\n    Feeds consensus results back into trust scores.\n    When models disagree → lower trust for the outlier.\n    When models agree → boost trust for all.\n    '
+●●●●●● 1mm □
+process_consensus_result
+●●●●●● 1mm □△
+consensus_result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Called after every consensus run.'
+models_used
+●●●●●● 1mm □
+consensus_result
+●●●●●● 1mm □△
+'models_used'
+●●●●●● 2mm □△
+agreements
+●●●●●● 1mm □
+consensus_result
+●●●●●● 1mm □△
+'agreements'
+●●●●●● 2mm □△
+disagreements
+●●●●●● 1mm □
+consensus_result
+●●●●●● 1mm □△
+'disagreements'
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+consensus_result
+●●●●●● 1mm □△
+'confidence'
+0.5
+●●●●●● 2mm □△
+individual
+●●●●●● 1mm □
+consensus_result
+●●●●●● 1mm □△
+'individual_responses'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models_used
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+disagreements
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreements
+●●●●●● 2mm □△
+0
+mid
+models_used
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+disagreements
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreements
+●●●●●● 2mm □△
+resp
+individual
+●●●●●● 2mm □
+resp
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+●●●●●● 2mm △
+EpisodicMiner
+'\n    Mines episodic memory for decision patterns and success/failure clusters.\n    '
+●●●●●● 1mm □
+mine_episodes
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+500
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+Episode
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_from_json_str
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+episodes
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodes
+●●●●●● 3mm ○
+'status'
+'total'
+'no_episodes'
+0
+high_trust
+●●●●●● 1mm □
+e
+e
+episodes
+e
+0.7
+low_trust
+●●●●●● 1mm □
+e
+e
+episodes
+e
+0.4
+problem_clusters
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+episodes
+problem
+●●●●●● 1mm □
+e
+''
+40
+●●●●●● 2mm □
+problem
+problem_clusters
+problem
+1
+source_quality
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+episodes
+source_quality
+e
+'unknown'
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'high_trust'
+'low_trust'
+'avg_trust'
+'recurring_problems'
+'source_reliability'
+'prediction_accuracy'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+high_trust
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+low_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+e
+episodes
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+'problem'
+'count'
+p
+c
+p
+c
+problem_clusters
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+c
+1
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+source
+scores
+source_quality
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'total'
+'error: '
+e
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_prediction_accuracy
+●●●●●● 1mm □△
+self
+episodes
+●●●●●● 2mm □△
+with_prediction
+●●●●●● 1mm □
+e
+e
+episodes
+e
+●●●●●● 2mm □
+●●●●●● 2mm □
+with_prediction
+●●●●●● 3mm ○
+'count'
+0
+avg_error
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+e
+with_prediction
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+with_prediction
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'count'
+'avg_prediction_error'
+'accuracy'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+with_prediction
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg_error
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1.0
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+avg_error
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_miner
+●●●●●● 1mm □
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_episodic_miner
+●●●●●● 1mm □
+EpisodicMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_intelligence_report
+●●●●●● 1mm □△
+hours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+24
+'Full intelligence report — everything mined and analyzed.'
+●●●●●● 3mm ○
+'timestamp'
+'genesis_patterns'
+'trust_state'
+'episodic_analysis'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_miner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_episodic_miner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

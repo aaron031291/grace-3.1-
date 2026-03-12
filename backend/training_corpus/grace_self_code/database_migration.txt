@@ -1,0 +1,360 @@
+## migration.py
+'\nDatabase initialization and migration utilities.\nHandles database schema creation and management.\n\nSingle source of truth: create_tables() creates ALL app tables. To add a new table:\n  1. Define the model in the appropriate models/*.py (using BaseModel from database.base).\n  2. Import it here (so Base.metadata knows about it).\n  Do not create tables via separate migration scripts that use a different Base.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+base
+●●●●●● 2mm □△○
+Base
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+User
+Conversation
+Message
+Embedding
+Chat
+ChatHistory
+Document
+DocumentChunk
+GovernanceRule
+GovernanceDocument
+GovernanceDecision
+LearningExample
+LearningPattern
+Episode
+Procedure
+LLMUsageStats
+GraphNode
+AdaptiveOverride
+SchemaProposal
+●●●●●● 3mm □△○
+models.dynamic_models
+●●●●●● 2mm □△○
+*
+ImportError
+●●●●●● 3mm □△○
+models.notion_models
+●●●●●● 2mm □△○
+NotionProfile
+NotionTask
+TaskHistory
+TaskTemplate
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+PerformanceBaseline
+DriftAlert
+OperationReplay
+SystemState
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+FixSuggestion
+GenesisKeyArchive
+UserProfile
+●●●●●● 3mm □△○
+database.models.braille_node
+●●●●●● 2mm □△○
+BrailleSandboxNode
+●●●●●● 3mm □△○
+database.models.braille_dictionary
+●●●●●● 2mm □△○
+BrailleDictionaryMapping
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianTag
+DocumentTag
+DocumentRelationship
+LibrarianRule
+LibrarianAction
+LibrarianAudit
+●●●●●● 3mm □△○
+models.query_intelligence_models
+●●●●●● 2mm □△○
+QueryHandlingLog
+KnowledgeGap
+ContextSubmission
+●●●●●● 3mm □△○
+models.file_intelligence_models
+●●●●●● 2mm □△○
+FileIntelligence
+FileRelationship
+ProcessingStrategy
+FileHealthCheck
+●●●●●● 3mm □△○
+database.models.coding_agent_task
+●●●●●● 2mm □△○
+CodingAgentTask
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"\n    Create all database tables defined in Base metadata.\n    \n    This should be called once at application startup to ensure\n    all tables are created if they don't already exist.\n    "
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating database tables...'
+●●●●●● 2mm □△
+Base
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database tables created successfully'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error during table creation (may be normal): '
+●●●●●● 3mm □
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Attempting to create tables individually...'
+●●●●●● 2mm □△
+table_name
+table
+Base
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+table
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"Table '"
+table_name
+"' created or already exists"
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+"Could not create table '"
+table_name
+"': "
+table_error
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Individual table creation completed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+drop_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Drop all database tables.\n    \n    WARNING: This will delete all data. Use with caution, typically only\n    for testing or development cleanup.\n    '
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Dropping all database tables...'
+●●●●●● 2mm □△
+Base
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'All database tables dropped'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+table_exists
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Check if a specific table exists in the database.\n    \n    Args:\n        table_name: Name of the table to check\n        \n    Returns:\n        bool: True if table exists, False otherwise\n    '
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+table_name
+tables
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_table_columns
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Get column information for a specific table.\n    \n    Args:\n        table_name: Name of the table\n        \n    Returns:\n        dict: Column information\n    '
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+table_exists
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+columns
+●●●●●● 1mm □
+col
+inspector
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+columns
+col
+'name'
+●●●●●● 1mm □
+'type'
+'nullable'
+'primary_key'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+col
+'type'
+●●●●●● 2mm □△
+col
+'nullable'
+col
+'primary_key'
+●●●●●● 3mm ○
+columns
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Get list of all tables in the database.\n    \n    Returns:\n        list: Table names\n    '
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_db_schema
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Get complete database schema information.\n    \n    Returns:\n        dict: Schema information for all tables\n    '
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+schema
+●●●●●● 1mm □
+table_name
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+columns
+●●●●●● 1mm □
+col
+inspector
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+columns
+col
+'name'
+●●●●●● 1mm □
+'type'
+'nullable'
+'primary_key'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+col
+'type'
+●●●●●● 2mm □△
+col
+'nullable'
+col
+'primary_key'
+indexes
+●●●●●● 1mm □
+idx
+inspector
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+indexes
+idx
+'name'
+●●●●●● 1mm □
+'columns'
+'unique'
+idx
+'column_names'
+idx
+'unique'
+schema
+table_name
+●●●●●● 1mm □
+'columns'
+'indexes'
+columns
+indexes
+●●●●●● 3mm ○
+schema
+●●●●●● 2mm □△

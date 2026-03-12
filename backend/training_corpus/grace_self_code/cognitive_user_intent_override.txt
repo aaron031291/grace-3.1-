@@ -1,0 +1,857 @@
+## user_intent_override.py
+'\nUser Intent Override — Dynamic Permission System with Guardrails\n\nWhen a user gives an explicit instruction that conflicts with governance\nrules or verification checks, Grace doesn\'t just refuse. Instead:\n\n1. ANALYSE: Parse the user\'s intent and identify governance impacts\n2. WARN: Explain what checks will be skipped and the consequences\n3. OFFER ALTERNATIVES: Suggest compliant ways to achieve the same goal\n4. ACCEPT: If user confirms with explicit permission, execute with monitoring\n5. MONITOR: Track the override execution with enhanced logging\n\nThe user is the real-time deterministic input. Their explicit permission\nmakes the system dynamic while maintaining safety through transparency.\n\nPhilosophy:\n  "Aaron, we appreciate you said to do this. Here\'s what happens if we skip\n   the verification. But here\'s a solution that keeps it tight with the\n   system parameters AND still gets what you want."\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+OVERRIDE_TTL_MINUTES
+●●●●●● 1mm □
+30
+●●●●●● 2mm △
+GovernanceImpact
+rule_name
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+skipped_check
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+Alternative
+description
+●●●●●● 1mm ○
+compliance_level
+●●●●●● 1mm ○
+trade_offs
+●●●●●● 1mm ○
+recommended
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+OverrideAnalysis
+original_intent
+●●●●●● 1mm ○
+parsed_action
+●●●●●● 1mm ○
+governance_impacts
+●●●●●● 3mm □△
+GovernanceImpact
+blast_radius
+●●●●●● 1mm ○
+risk_level
+●●●●●● 1mm ○
+alternatives
+●●●●●● 3mm □△
+Alternative
+override_token
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+explanation
+●●●●●● 1mm ○
+''
+can_proceed
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+dataclass
+_active_tokens
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+UserIntentOverride
+'Handles user requests that may conflict with governance or verification.'
+●●●●●● 1mm □
+analyse
+●●●●●● 1mm □△
+self
+user_command
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n        Analyse what the user wants to do and identify governance impacts.\n        Returns an analysis with alternatives — never just refuses.\n        '
+action
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+user_command
+●●●●●● 2mm □△
+impacts
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+user_command
+●●●●●● 2mm □△
+blast_radius
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+risk_level
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+impacts
+blast_radius
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+impacts
+user_command
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+impacts
+token
+●●●●●● 1mm □
+'override_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+_active_tokens
+token
+●●●●●● 1mm □
+'command'
+'action'
+'impacts'
+'created_at'
+'expires_at'
+'executed'
+user_command
+action
+'rule'
+'severity'
+i
+i
+i
+impacts
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+explanation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+impacts
+alternatives
+risk_level
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+OverrideAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OverrideAnalysis
+●●●●●● 1mm □
+execute_override
+●●●●●● 1mm □△
+self
+token
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        User confirms: execute with override.\n        Enhanced monitoring is applied during override execution.\n        '
+●●●●●● 2mm □
+token
+_active_tokens
+●●●●●● 3mm ○
+'error'
+'executed'
+'Invalid or expired override token'
+●●●●●● 1mm □
+token_data
+●●●●●● 1mm □
+_active_tokens
+token
+expires
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+token_data
+'expires_at'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expires
+_active_tokens
+token
+●●●●●● 3mm ○
+'error'
+'executed'
+'Override token expired'
+●●●●●● 1mm □
+●●●●●● 2mm □
+token_data
+'executed'
+●●●●●● 3mm ○
+'error'
+'executed'
+'Override already executed'
+●●●●●● 1mm □
+token_data
+'executed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+token_data
+'executed_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'user.override_executed'
+'action'
+'impacts'
+token_data
+'action'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+token_data
+'impacts'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'executed'
+'action'
+'impacts_acknowledged'
+'monitoring'
+'token'
+●●●●●● 3mm □△○
+token_data
+'action'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+token_data
+'impacts'
+●●●●●● 2mm □△
+'enhanced'
+token
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_parse_action
+●●●●●● 1mm □△
+self
+command
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Parse what the user is trying to do.'
+lower
+●●●●●● 1mm □
+command
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'generate'
+'create'
+'build'
+'write'
+'code'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code_generation'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'delete'
+'remove'
+'drop'
+'destroy'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'destructive_operation'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'deploy'
+'push'
+'release'
+'ship'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'deployment'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'change'
+'modify'
+'update'
+'edit'
+'refactor'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'modification'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'skip'
+'ignore'
+'bypass'
+'override'
+'disable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'governance_bypass'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'install'
+'add'
+'import'
+'integrate'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'integration'
+●●●●●● 3mm ○
+'general_action'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_governance_impacts
+●●●●●● 1mm □△
+self
+action
+command
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Check what governance rules would be affected.'
+impacts
+●●●●●● 1mm □
+●●●●●● 2mm □
+action
+'destructive_operation'
+impacts
+●●●●●● 1mm □△
+GovernanceImpact
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'governance_bypass'
+impacts
+●●●●●● 1mm □△
+GovernanceImpact
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'deployment'
+impacts
+●●●●●● 1mm □△
+GovernanceImpact
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'code_generation'
+'modification'
+lower
+●●●●●● 1mm □
+command
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'skip test'
+'no test'
+'without test'
+'skip verif'
+●●●●●● 2mm □△
+impacts
+●●●●●● 1mm □△
+GovernanceImpact
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+list_rules
+_list_rule_files
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □
+_list_rule_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rules
+action
+'governance_bypass'
+'destructive_operation'
+rule
+rules
+3
+impacts
+●●●●●● 1mm □△
+GovernanceImpact
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+impacts
+●●●●●● 3mm □△
+GovernanceImpact
+●●●●●● 1mm □
+_calculate_blast_radius
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+action
+'destructive_operation'
+'deployment'
+●●●●●● 3mm ○
+'system-wide'
+●●●●●● 2mm □
+action
+'governance_bypass'
+●●●●●● 3mm ○
+'local'
+●●●●●● 3mm ○
+'isolated'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_calculate_risk
+●●●●●● 1mm □△
+self
+impacts
+blast_radius
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GovernanceImpact
+●●●●●● 1mm ○
+●●●●●● 2mm □
+impacts
+●●●●●● 3mm ○
+'low'
+max_severity
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+i
+i
+impacts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+max_severity
+'critical'
+max_severity
+'high'
+blast_radius
+'system-wide'
+●●●●●● 3mm ○
+'critical'
+●●●●●● 2mm □
+max_severity
+'high'
+●●●●●● 3mm ○
+'high'
+●●●●●● 2mm □
+max_severity
+'medium'
+●●●●●● 3mm ○
+'medium'
+●●●●●● 3mm ○
+'low'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_alternatives
+●●●●●● 1mm □△
+self
+action
+impacts
+command
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GovernanceImpact
+●●●●●● 1mm ○
+'Generate compliant alternatives that achieve the same goal.'
+alternatives
+●●●●●● 1mm □
+●●●●●● 2mm □
+action
+'code_generation'
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+i
+'hallucination_guard'
+i
+impacts
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □△
+Alternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □△
+Alternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'destructive_operation'
+alternatives
+●●●●●● 1mm □△
+Alternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'governance_bypass'
+alternatives
+●●●●●● 1mm □△
+Alternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'deployment'
+alternatives
+●●●●●● 1mm □△
+Alternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+impacts
+alternatives
+●●●●●● 1mm □△
+Alternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+alternatives
+●●●●●● 3mm □△
+Alternative
+●●●●●● 1mm □
+_build_explanation
+●●●●●● 1mm □△
+self
+action
+impacts
+alternatives
+risk_level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GovernanceImpact
+●●●●●● 3mm □△
+Alternative
+●●●●●● 1mm ○
+"Build Grace's natural language explanation to the user."
+●●●●●● 2mm □
+impacts
+●●●●●● 3mm ○
+'This action is fully compliant with all governance rules. Proceeding.'
+lines
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □△
+'I understand you want to '
+action
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+". Here's what I need you to know:"
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+impacts
+lines
+●●●●●● 1mm □△
+'**'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+impacts
+●●●●●● 2mm □△
+' governance impact(s) detected** (Risk: '
+risk_level
+'):'
+●●●●●● 2mm □△
+i
+impact
+●●●●●● 2mm □
+●●●●●● 1mm □△
+impacts
+1
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+i
+'. ['
+impact
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'] '
+impact
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+alternatives
+recommended
+●●●●●● 1mm □
+a
+a
+alternatives
+a
+●●●●●● 2mm □
+recommended
+lines
+●●●●●● 1mm □△
+'**Recommended approach:**'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+recommended
+0
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Trade-off: '
+recommended
+0
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'**Other options:**'
+●●●●●● 2mm □△
+alt
+alternatives
+●●●●●● 2mm □
+alt
+lines
+●●●●●● 1mm □△
+'  - ['
+alt
+'] '
+alt
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+"If you want to proceed with your original intent, confirm and I'll execute with enhanced monitoring."
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_active_overrides
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all active (non-expired) override tokens.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active
+●●●●●● 1mm □
+expired_keys
+●●●●●● 1mm □
+token
+data
+_active_tokens
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expires
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+data
+'expires_at'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+now
+expires
+expired_keys
+●●●●●● 1mm □△
+token
+●●●●●● 2mm □△
+●●●●●● 3mm □
+active
+●●●●●● 1mm □△
+'token'
+'command'
+'action'
+'executed'
+'created_at'
+'expires_at'
+token
+data
+'command'
+100
+data
+'action'
+data
+'executed'
+data
+'created_at'
+data
+'expires_at'
+●●●●●● 2mm □△
+k
+expired_keys
+_active_tokens
+k
+●●●●●● 3mm ○
+active
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_override_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_override_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_override_instance
+●●●●●● 2mm □
+_override_instance
+●●●●●● 1mm □
+UserIntentOverride
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_override_instance
+UserIntentOverride

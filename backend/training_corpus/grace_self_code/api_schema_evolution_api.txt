@@ -1,0 +1,492 @@
+## schema_evolution_api.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+ast
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Depends
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+database.auto_migrate
+●●●●●● 2mm □△○
+run_auto_migrate
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+SchemaProposal
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+WORKSPACE_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DYNAMIC_MODELS_FILE
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'dynamic_models.py'
+●●●●●● 2mm △
+ProposalCreateRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+trigger_reason
+●●●●●● 1mm ○
+proposed_code
+●●●●●● 1mm ○
+●●●●●● 2mm △
+ProposalResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+●●●●●● 1mm △
+●●●●●● 2mm ○
+proposal_id
+●●●●●● 1mm ○
+trigger_reason
+●●●●●● 1mm ○
+proposed_code
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+execution_logs
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+created_at
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+validate_sqlalchemy_ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n    Rigorously gates the generated SQLAlchemy code to ensure it's safe.\n    Rejects any code containing imports other than typical SQLAlchemy ORM,\n    or dangerous constructs like DROP TABLE or os.system.\n    "
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+'eval'
+'exec'
+'open'
+'system'
+'__import__'
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'class '
+code
+'BaseModel'
+code
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_schema_proposals
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all pending and executed schema proposals.'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proposals
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+SchemaProposal
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+SchemaProposal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'proposals'
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+proposals
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/proposals'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_schema_proposal
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+ProposalCreateRequest
+'\n    Called by an agent (or human) to submit a new SQLAlchemy table/column.\n    '
+●●●●●● 2mm □
+validate_sqlalchemy_ast
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proposal_id
+●●●●●● 1mm □
+'SP-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_prop
+●●●●●● 1mm □
+SchemaProposal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+new_prop
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'proposal_id'
+'status'
+●●●●●● 3mm □△○
+proposal_id
+'pending'
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/proposals'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+approve_schema_proposal
+●●●●●● 1mm □△
+proposal_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Approves the proposal, injects it into dynamic_models.py, and executes auto_migrate.\n    '
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prop
+SchemaProposal
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+SchemaProposal
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+SchemaProposal
+proposal_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prop
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prop
+'pending'
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_to_inject
+●●●●●● 1mm □
+prop
+●●●●●● 2mm □
+validate_sqlalchemy_ast
+●●●●●● 1mm □△
+code_to_inject
+●●●●●● 2mm □△
+prop
+●●●●●● 1mm □
+'failed'
+prop
+●●●●●● 1mm □
+'AST Gate failed during approval. Code may be malformed.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+DYNAMIC_MODELS_FILE
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 3mm ○
+'# TRIGGERED BY: '
+●●●●●● 3mm ○
+prop
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'# PROPOSAL ID: '
+●●●●●● 3mm ○
+prop
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+code_to_inject
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+prop
+●●●●●● 1mm □
+'failed'
+prop
+●●●●●● 1mm □
+'Failed to write to dynamic_models.py: '
+file_err
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+models.dynamic_models
+importlib
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □
+run_auto_migrate
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+prop
+●●●●●● 1mm □
+'approved'
+prop
+●●●●●● 1mm □
+'Dynamically injected. Auto-migrate reported: '
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+prop
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'changes'
+'genesis_key'
+●●●●●● 3mm □△○
+changes
+prop
+HTTPException
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/proposals/{proposal_id}/approve'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+reject_schema_proposal
+●●●●●● 1mm □△
+proposal_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Rejects a schema proposal without applying it.'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prop
+SchemaProposal
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+SchemaProposal
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+SchemaProposal
+proposal_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prop
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prop
+●●●●●● 1mm □
+'rejected'
+prop
+●●●●●● 1mm □
+'Rejected by human operator.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'status'
+●●●●●● 3mm □△○
+'rejected'
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/proposals/{proposal_id}/reject'
+●●●●●● 2mm □△

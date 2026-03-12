@@ -1,0 +1,1721 @@
+## librarian_autonomous.py
+"\nAutonomous Librarian — Automatically organises ALL files system-wide.\n\nThe librarian doesn't wait to be asked. She:\n1. Watches for new files/documents from ANY source\n2. Analyses content to determine category\n3. Creates the directory structure if it doesn't exist\n4. Moves/places files into the right location\n5. Tags and indexes everything\n6. Keeps the knowledge base tidy continuously\n\nConnected to: Genesis realtime (watches for uploads), Docs library,\nIngestion pipeline, Whitelist sources, Coding agent outputs,\nMagma memory, Trust Engine.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DIRECTORY_TAXONOMY
+●●●●●● 1mm □
+'code'
+'documentation'
+'data'
+'reports'
+'research'
+'configuration'
+'media'
+'logs'
+'tests'
+'governance'
+'projects'
+'training'
+'python'
+'javascript'
+'typescript'
+'web'
+'styles'
+'react'
+'.py'
+'.js'
+'.jsx'
+'.mjs'
+'.ts'
+'.tsx'
+'.html'
+'.css'
+'.scss'
+'.css'
+'.scss'
+'.less'
+'.jsx'
+'.tsx'
+'readme'
+'guides'
+'api_docs'
+'architecture'
+'csv'
+'json'
+'xml'
+'sql'
+'.csv'
+'.json'
+'.xml'
+'.sql'
+'env'
+'yaml'
+'.env'
+'.ini'
+'.cfg'
+'.yaml'
+'.yml'
+'.toml'
+'images'
+'audio'
+'video'
+'.png'
+'.jpg'
+'.jpeg'
+'.gif'
+'.svg'
+'.webp'
+'.mp3'
+'.wav'
+'.ogg'
+'.mp4'
+'.webm'
+'.avi'
+'system'
+'audit'
+'rules'
+'compliance'
+'policies'
+'datasets'
+'models'
+'exports'
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm △
+AutonomousLibrarian
+'\n    Watches the system and automatically organises files.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+connect_to_realtime
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Connect to genesis realtime engine to watch for new files.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+rt
+●●●●●● 1mm □
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+'upload'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+'file_op'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+'file_ingestion'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Connected to genesis realtime — watching for new files'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Realtime connection failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_file_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Called automatically when a file is created/uploaded anywhere.'
+file_path
+●●●●●● 1mm □
+event
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'output'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □△
+'where'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Auto-organise failed for '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+organise_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Analyse a file and move it to the correct location.\n        Creates directories if they don't exist.\n        Genesis key tracks every decision.\n        "
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 3mm □△
+file_path
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'action'
+'reason'
+'skip'
+'file not found'
+rel
+●●●●●● 1mm □
+full_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+1
+rel
+0
+DIRECTORY_TAXONOMY
+●●●●●● 3mm ○
+'action'
+'path'
+'already_organised'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+ValueError
+suggestion
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+suggestion
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'action'
+'path'
+'no_suggestion'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+suggestion
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+full_path
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'reason'
+'skip'
+'target already exists'
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'action'
+'from'
+'to'
+'directory'
+'organised'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+suggestion
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+store_decision
+store_decision
+●●●●●● 1mm □△
+'organise'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+'Moved to '
+suggestion
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Organised: '
+full_path
+' → '
+suggestion
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm ○
+'action'
+'error'
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+suggest_location
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Determine where a file should be placed based on name, extension, content, and Kimi reasoning.'
+name
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'readme'
+name
+●●●●●● 3mm ○
+'documentation'
+●●●●●● 2mm □
+'test'
+name
+ext
+'.py'
+'.js'
+'.ts'
+●●●●●● 3mm ○
+'tests'
+●●●●●● 2mm □
+'report'
+name
+●●●●●● 3mm ○
+'reports'
+●●●●●● 2mm □
+name
+●●●●●● 1mm □△
+'config'
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □△
+'settings'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'configuration'
+●●●●●● 2mm □
+'license'
+name
+'licence'
+name
+●●●●●● 3mm ○
+'governance/compliance'
+●●●●●● 2mm □
+'gdpr'
+name
+'iso'
+name
+'compliance'
+name
+'policy'
+name
+●●●●●● 3mm ○
+'governance/policies'
+category
+subcats
+DIRECTORY_TAXONOMY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+subcats
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+subcat
+extensions
+subcats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+extensions
+●●●●●● 3mm ○
+category
+'/'
+subcat
+ext_map
+●●●●●● 1mm □
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.html'
+'.css'
+'.md'
+'.rst'
+'.txt'
+'.pdf'
+'.csv'
+'.json'
+'.xml'
+'.yaml'
+'.yml'
+'.toml'
+'.ini'
+'.png'
+'.jpg'
+'.jpeg'
+'.gif'
+'.svg'
+'.mp3'
+'.wav'
+'.mp4'
+'.log'
+'.sql'
+'code/python'
+'code/javascript'
+'code/typescript'
+'code/react'
+'code/react'
+'code/web'
+'code/styles'
+'documentation'
+'documentation'
+'documentation'
+'documentation'
+'data/csv'
+'data/json'
+'data/xml'
+'configuration/yaml'
+'configuration/yaml'
+'configuration/yaml'
+'configuration/env'
+'media/images'
+'media/images'
+'media/images'
+'media/images'
+'media/images'
+'media/audio'
+'media/audio'
+'media/video'
+'logs/system'
+'data/sql'
+suggestion
+●●●●●● 1mm □
+ext_map
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □
+suggestion
+●●●●●● 3mm ○
+suggestion
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kw
+refs
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ref
+refs
+meta
+●●●●●● 1mm □
+ref
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+meta
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+meta
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+meta
+●●●●●● 2mm □△
+Exception
+meta
+●●●●●● 1mm □
+source_type
+●●●●●● 1mm □
+meta
+●●●●●● 1mm □△
+'source_type'
+ref
+●●●●●● 1mm □△
+'source_type'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source_type
+'api'
+'web'
+●●●●●● 3mm ○
+'research/external'
+●●●●●● 2mm □
+source_type
+'document'
+●●●●●● 3mm ○
+'documentation'
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_ask_llm_for_location
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Query LLM (Qwen document model by default) to reason about where an unknown file should be placed.'
+content_preview
+●●●●●● 1mm □
+''
+content_preview
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+2000
+Exception
+content_preview
+●●●●●● 1mm □
+'[Binary file: '
+file_path
+', size: '
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes]'
+categories
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+DIRECTORY_TAXONOMY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'You are a file organiser. Where should this file be placed?\n\nFilename: '
+file_path
+'\nExtension: '
+file_path
+'\nContent preview:\n'
+content_preview
+1000
+'\n\nAvailable categories: '
+categories
+"\nSubcategories can be created freely.\n\nRespond with ONLY the directory path, e.g. 'documentation' or 'code/python' or 'research/ai'. Nothing else."
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+●●●●●● 3mm □△○
+llm_orchestrator.ollama_resolver
+●●●●●● 2mm □△○
+resolve_ollama_model
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'document'
+●●●●●● 2mm □△
+doc_model
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+'document'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+client
+'chat'
+●●●●●● 2mm □△
+raw
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'message'
+raw
+response
+●●●●●● 1mm □
+raw
+'message'
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □
+response
+●●●●●● 1mm □
+raw
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+''
+●●●●●● 3mm □
+response
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+response
+suggestion
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\'"'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestion
+●●●●●● 1mm □
+suggestion
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+suggestion
+●●●●●● 2mm □△
+50
+'/'
+suggestion
+suggestion
+DIRECTORY_TAXONOMY
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Qwen suggests: '
+file_path
+' → '
+suggestion
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+suggestion
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] LLM reasoning failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+organise_all
+●●●●●● 1mm □△
+self
+dry_run
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'Scan the knowledge base root and organise any misplaced files.'
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'scanned'
+'actions'
+0
+actions
+●●●●●● 1mm □
+item
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+suggestion
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+●●●●●● 2mm □
+suggestion
+action
+●●●●●● 1mm □
+'file'
+'suggested'
+'action'
+item
+suggestion
+dry_run
+'would_move'
+'moved'
+●●●●●● 2mm □
+dry_run
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action
+'result'
+●●●●●● 1mm □
+result
+actions
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'scanned'
+'actions'
+'dry_run'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+actions
+dry_run
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+on_new_folder
+●●●●●● 1mm □△
+self
+folder_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Called when a new domain folder is created. Triggers auto-research and idle learning.'
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.auto_research
+●●●●●● 2mm □△○
+get_auto_research
+research
+●●●●●● 1mm □
+get_auto_research
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+research
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+Exception
+analysis
+●●●●●● 1mm □
+'suggested_research'
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder_name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+folder_name
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.idle_learner
+●●●●●● 2mm □△○
+IdleLearner
+learner
+●●●●●● 1mm □
+IdleLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder_name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+●●●●●● 2mm □
+folder_name
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+folder_name
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+queue_autonomous_query
+queue_autonomous_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'notification'
+'folder'
+'suggested_topics'
+'analysis'
+"New folder '"
+folder_path
+"' detected. Research queued."
+folder_path
+analysis
+●●●●●● 1mm □△
+'suggested_research'
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_domain_environment
+●●●●●● 1mm □△
+self
+domain_name
+description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n        Create a full domain environment — like a venv but for ANY topic.\n        Auto-populates with structure, governance, and triggers learning.\n        '
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain_path
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+'domains'
+●●●●●● 3mm □△
+domain_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+domain_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subdirs
+●●●●●● 1mm □
+'documents'
+'code'
+'research'
+'data'
+'governance'
+'notes'
+created
+●●●●●● 1mm □
+sub
+subdirs
+domain_path
+●●●●●● 3mm □△
+sub
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □△
+sub
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+'domain'
+'description'
+'created_at'
+'subdirectories'
+'auto_learn'
+'governance_rules'
+domain_name
+description
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subdirs
+●●●●●● 3mm □△○
+domain_path
+●●●●●● 3mm □△
+'domain_config.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+domain_name
+' '
+description
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+get_reverse_knn
+knn
+●●●●●● 1mm □
+get_reverse_knn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knn
+●●●●●● 1mm □△
+domain_name
+●●●●●● 2mm □△
+knn
+●●●●●● 1mm □△
+domain_name
+' best practices'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+queue_autonomous_query
+queue_autonomous_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'domain.created'
+'domain'
+'path'
+domain_name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+domain_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'created'
+'domain'
+'path'
+'subdirectories'
+'config'
+●●●●●● 3mm □△○
+domain_name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+domain_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+created
+config
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+smart_ingest_document
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Intelligent document processing: Read → Understand → Name → Categorise → Index.\n        The librarian READS the document, extracts key concepts, auto-names it,\n        and places it in the right domain/folder.\n        '
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'File not found: '
+file_path
+result
+●●●●●● 1mm □
+'original_path'
+'original_name'
+'processed'
+file_path
+path
+●●●●●● 1mm □
+content
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'.txt'
+'.md'
+'.py'
+'.js'
+'.json'
+'.csv'
+'.html'
+'.xml'
+'.yml'
+'.yaml'
+content
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+10000
+●●●●●● 1mm △
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'.pdf'
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+extract_file_text
+content
+●●●●●● 1mm □
+extract_file_text
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10000
+Exception
+content
+●●●●●● 1mm □
+'[PDF file: '
+path
+', '
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes]'
+content
+●●●●●● 1mm □
+'['
+path
+' file: '
+path
+', '
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes]'
+Exception
+content
+●●●●●● 1mm □
+'[Error reading: '
+e
+']'
+result
+'content_preview'
+●●●●●● 1mm □
+content
+200
+concepts
+●●●●●● 1mm □
+suggested_name
+●●●●●● 1mm □
+path
+suggested_category
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+'uncategorized'
+●●●●●● 2mm □
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+100
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concepts
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+content
+2000
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+naming_response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+naming_response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'|'
+naming_response
+parts
+●●●●●● 1mm □
+naming_response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'|'
+●●●●●● 2mm □△
+suggested_name
+●●●●●● 1mm □
+parts
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+50
+result
+'ai_description'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+1
+parts
+1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+Exception
+result
+'concepts'
+●●●●●● 1mm □
+concepts
+10
+result
+'suggested_name'
+●●●●●● 1mm □
+suggested_name
+result
+'suggested_category'
+●●●●●● 1mm □
+suggested_category
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+suggested_category
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_name
+●●●●●● 1mm □
+suggested_name
+path
+target_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+new_name
+counter
+●●●●●● 1mm □
+1
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+suggested_name
+'_'
+counter
+path
+counter
+1
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'new_path'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'new_name'
+●●●●●● 1mm □
+target_path
+result
+'processed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+result
+'error'
+●●●●●● 1mm □
+'Move failed: '
+e
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+register_document
+register_document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+ensure_taxonomy
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Create the full directory taxonomy if it doesn't exist."
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □
+●●●●●● 1mm □
+_create
+●●●●●● 1mm □△
+base
+taxonomy
+depth
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+0
+name
+children
+taxonomy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dir_path
+●●●●●● 1mm □
+base
+●●●●●● 3mm □△
+name
+●●●●●● 2mm □
+dir_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dir_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dir_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+children
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+depth
+3
+_create
+●●●●●● 1mm □△
+dir_path
+children
+depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+_create
+●●●●●● 1mm □△
+kb
+DIRECTORY_TAXONOMY
+●●●●●● 2mm □△
+●●●●●● 2mm □
+created
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'created'
+'directories'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+created
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_count
+●●●●●● 1mm □
+0
+dir_count
+●●●●●● 1mm □
+0
+root_files
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+kb
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+file_count
+1
+●●●●●● 1mm △
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dir_count
+1
+item
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+root_files
+1
+●●●●●● 3mm ○
+'connected_to_realtime'
+'total_files'
+'total_directories'
+'root_files_unorganised'
+'taxonomy_categories'
+●●●●●● 3mm △
+file_count
+dir_count
+root_files
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+DIRECTORY_TAXONOMY
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_librarian
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_autonomous_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_librarian
+●●●●●● 2mm □
+_librarian
+●●●●●● 1mm □
+AutonomousLibrarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_librarian
+AutonomousLibrarian

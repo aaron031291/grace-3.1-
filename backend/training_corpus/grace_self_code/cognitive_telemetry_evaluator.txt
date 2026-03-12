@@ -1,0 +1,238 @@
+## telemetry_evaluator.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'TelemetryEvaluator'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RollbackRequired
+●●●●●● 3mm □△
+Exception
+Exception
+'Raised when telemetry indicates anomalous or degraded performance.'
+●●●●●● 2mm △
+TelemetryEvaluator
+'\n    Closes the Domain Intelligence Constitutional Loop (DICL).\n    After the ConstitutionalInterpreter ensures code is strictly safe (Phase 1),\n    this evaluator monitors real-world impact (Phase 2). If the metrics drop,\n    it triggers an automatic rollback to preserve system stability. \n    If they improve, it signals the knowledge graph to lock in those patterns.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+observation_window_sec
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+15
+●●●●●● 3mm △
+●●●●●● 1mm □
+observation_window_sec
+●●●●●● 1mm □
+evaluate_swap_impact
+●●●●●● 1mm □△
+self
+module_name
+baseline_metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Monitors the system for a specific window after a hot-swap.\n        Returns a score from -1.0 (Critical Failure) to 1.0 (Excellent Optimization).\n        '
+logger
+●●●●●● 1mm □△
+'Initiating telemetry tracking for recently swapped module: '
+module_name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Observation window: '
+●●●●●● 3mm △
+'s. Baseline: '
+baseline_metrics
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+current_metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+baseline_metrics
+current_metrics
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+tracker
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+score
+0.2
+logger
+●●●●●● 1mm □△
+'Post-swap telemetry for '
+module_name
+' degraded significantly. Score: '
+score
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+tracker
+●●●●●● 1mm □△
+'context_evolution'
+'failures'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'context_evolution'
+'requests'
+●●●●●● 2mm □△
+RollbackRequired
+●●●●●● 1mm □△
+'Metrics degraded below threshold. Baseline error rate: '
+baseline_metrics
+●●●●●● 1mm □△
+'error_rate'
+●●●●●● 2mm □△
+', Current: '
+current_metrics
+●●●●●● 1mm □△
+'error_rate'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Swap evaluation complete for '
+module_name
+'. Score: '
+score
+'. Status: APPROVED/COMMITTED.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+tracker
+●●●●●● 1mm □△
+'context_evolution'
+'successes'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'context_evolution'
+'requests'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+score
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_gather_current_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Mock function: queries live system state.'
+●●●●●● 3mm ○
+'error_rate'
+'avg_latency_ms'
+'cpu_utilization'
+'memory_utilization'
+0.01
+45.0
+0.15
+0.4
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_delta
+●●●●●● 1mm □△
+self
+baseline
+current
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Calculates a composite score comparing baseline to current metrics.\n        Higher is better.\n        '
+score
+●●●●●● 1mm □
+0.0
+err_delta
+●●●●●● 1mm □
+baseline
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+current
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+score
+err_delta
+●●●●●● 2mm □△
+10.0
+lat_delta
+●●●●●● 1mm □
+baseline
+●●●●●● 1mm □△
+'avg_latency_ms'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+current
+●●●●●● 1mm □△
+'avg_latency_ms'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lat_delta
+0
+score
+0.2
+●●●●●● 1mm △
+lat_delta
+50
+score
+0.5
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+score
+1.0
+●●●●●● 2mm □△
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+evaluator
+●●●●●● 1mm □
+TelemetryEvaluator
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,1229 @@
+## test_server.py
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+git
+●●●●●● 3mm □△○
+git.exc
+●●●●●● 2mm □△○
+BadName
+●●●●●● 3mm □△○
+mcp_server_git.server
+●●●●●● 2mm □△○
+git_checkout
+git_branch
+git_add
+git_status
+git_diff_unstaged
+git_diff_staged
+git_diff
+git_commit
+git_reset
+git_log
+git_create_branch
+git_show
+validate_repo_path
+●●●●●● 2mm □△○
+shutil
+●●●●●● 1mm □
+test_repository
+●●●●●● 1mm □△
+tmp_path
+●●●●●● 2mm □△
+Path
+repo_path
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'temp_test_repo'
+test_repo
+●●●●●● 1mm □
+git
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+repo_path
+●●●●●● 3mm □△
+'test.txt'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+test_repo
+●●●●●● 1mm □△
+'test.txt'
+●●●●●● 2mm □△
+test_repo
+●●●●●● 1mm □△
+'initial commit'
+●●●●●● 2mm □△
+test_repo
+shutil
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_git_checkout_existing_branch
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'test-branch'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'test-branch'
+●●●●●● 2mm □△
+"Switched to branch 'test-branch'"
+result
+test_repository
+'test-branch'
+●●●●●● 1mm □
+test_git_checkout_nonexistent_branch
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'nonexistent-branch'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_branch_local
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'new-branch-local'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+test_repository
+'local'
+●●●●●● 2mm □△
+'new-branch-local'
+result
+●●●●●● 1mm □
+test_git_branch_remote
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+test_repository
+'remote'
+●●●●●● 2mm □△
+''
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_branch_all
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'new-branch-all'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+test_repository
+'all'
+●●●●●● 2mm □△
+'new-branch-all'
+result
+●●●●●● 1mm □
+test_git_branch_contains
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+default_branch
+●●●●●● 1mm □
+test_repository
+test_repository
+●●●●●● 1mm □△
+'-b'
+'feature-branch'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 3mm □△
+Path
+●●●●●● 1mm □△
+'feature.txt'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'feature content'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'feature.txt'
+●●●●●● 2mm □△
+commit
+●●●●●● 1mm □
+test_repository
+●●●●●● 1mm □△
+'feature commit'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+default_branch
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+test_repository
+'local'
+●●●●●● 2mm □△
+'feature-branch'
+result
+default_branch
+result
+●●●●●● 1mm □
+test_git_branch_not_contains
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+default_branch
+●●●●●● 1mm □
+test_repository
+test_repository
+●●●●●● 1mm □△
+'-b'
+'another-feature-branch'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 3mm □△
+Path
+●●●●●● 1mm □△
+'another_feature.txt'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'another feature content'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'another_feature.txt'
+●●●●●● 2mm □△
+commit
+●●●●●● 1mm □
+test_repository
+●●●●●● 1mm □△
+'another feature commit'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+default_branch
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+test_repository
+'local'
+●●●●●● 2mm □△
+'another-feature-branch'
+result
+default_branch
+result
+●●●●●● 1mm □
+test_git_add_all_files
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'all_file.txt'
+file_path
+●●●●●● 1mm □△
+'adding all'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_add
+●●●●●● 1mm □△
+test_repository
+'.'
+●●●●●● 2mm □△
+staged_files
+●●●●●● 1mm □
+item
+item
+test_repository
+●●●●●● 1mm □△
+'HEAD'
+●●●●●● 2mm □△
+'all_file.txt'
+staged_files
+result
+'Files staged successfully'
+●●●●●● 1mm □
+test_git_add_specific_files
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file1
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'file1.txt'
+file2
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'file2.txt'
+file1
+●●●●●● 1mm □△
+'file 1 content'
+●●●●●● 2mm □△
+file2
+●●●●●● 1mm □△
+'file 2 content'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_add
+●●●●●● 1mm □△
+test_repository
+'file1.txt'
+●●●●●● 2mm □△
+staged_files
+●●●●●● 1mm □
+item
+item
+test_repository
+●●●●●● 1mm □△
+'HEAD'
+●●●●●● 2mm □△
+'file1.txt'
+staged_files
+'file2.txt'
+staged_files
+result
+'Files staged successfully'
+●●●●●● 1mm □
+test_git_status
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_status
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+'On branch'
+result
+'branch'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_diff_unstaged
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'test.txt'
+file_path
+●●●●●● 1mm □△
+'modified content'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_diff_unstaged
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+'test.txt'
+result
+'modified content'
+result
+●●●●●● 1mm □
+test_git_diff_unstaged_empty
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_diff_unstaged
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+''
+●●●●●● 1mm □
+test_git_diff_staged
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'staged_file.txt'
+file_path
+●●●●●● 1mm □△
+'staged content'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'staged_file.txt'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_diff_staged
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+'staged_file.txt'
+result
+'staged content'
+result
+●●●●●● 1mm □
+test_git_diff_staged_empty
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_diff_staged
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+''
+●●●●●● 1mm □
+test_git_diff
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+default_branch
+●●●●●● 1mm □
+test_repository
+test_repository
+●●●●●● 1mm □△
+'-b'
+'feature-diff'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'test.txt'
+file_path
+●●●●●● 1mm □△
+'feature changes'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'test.txt'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'feature commit'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_diff
+●●●●●● 1mm □△
+test_repository
+default_branch
+●●●●●● 2mm □△
+'test.txt'
+result
+'feature changes'
+result
+●●●●●● 1mm □
+test_git_commit
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'commit_test.txt'
+file_path
+●●●●●● 1mm □△
+'content to commit'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'commit_test.txt'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_commit
+●●●●●● 1mm □△
+test_repository
+'test commit message'
+●●●●●● 2mm □△
+'Changes committed successfully with hash'
+result
+latest_commit
+●●●●●● 1mm □
+test_repository
+latest_commit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'test commit message'
+●●●●●● 1mm □
+test_git_reset
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'reset_test.txt'
+file_path
+●●●●●● 1mm □△
+'content to reset'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'reset_test.txt'
+●●●●●● 2mm □△
+staged_before
+●●●●●● 1mm □
+item
+item
+test_repository
+●●●●●● 1mm □△
+'HEAD'
+●●●●●● 2mm □△
+'reset_test.txt'
+staged_before
+result
+●●●●●● 1mm □
+git_reset
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+'All staged changes reset'
+staged_after
+●●●●●● 1mm □
+item
+item
+test_repository
+●●●●●● 1mm □△
+'HEAD'
+●●●●●● 2mm □△
+'reset_test.txt'
+staged_after
+●●●●●● 1mm □
+test_git_log
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'log_test_'
+i
+'.txt'
+file_path
+●●●●●● 1mm □△
+'content '
+i
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'log_test_'
+i
+'.txt'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'commit '
+i
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_log
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+2
+'Commit:'
+result
+0
+'Author:'
+result
+0
+'Date:'
+result
+0
+'Message:'
+result
+0
+●●●●●● 1mm □
+test_git_log_default
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_log
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'initial commit'
+result
+0
+●●●●●● 1mm □
+test_git_create_branch
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_create_branch
+●●●●●● 1mm □△
+test_repository
+'new-feature-branch'
+●●●●●● 2mm □△
+"Created branch 'new-feature-branch'"
+result
+branches
+●●●●●● 1mm □
+ref
+ref
+test_repository
+'new-feature-branch'
+branches
+●●●●●● 1mm □
+test_git_create_branch_from_base
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'-b'
+'base-branch'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'base.txt'
+file_path
+●●●●●● 1mm □△
+'base content'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'base.txt'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'base commit'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_create_branch
+●●●●●● 1mm □△
+test_repository
+'derived-branch'
+'base-branch'
+●●●●●● 2mm □△
+"Created branch 'derived-branch' from 'base-branch'"
+result
+●●●●●● 1mm □
+test_git_show
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'show_test.txt'
+file_path
+●●●●●● 1mm □△
+'show content'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'show_test.txt'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'show test commit'
+●●●●●● 2mm □△
+commit_sha
+●●●●●● 1mm □
+test_repository
+result
+●●●●●● 1mm □
+git_show
+●●●●●● 1mm □△
+test_repository
+commit_sha
+●●●●●● 2mm □△
+'Commit:'
+result
+'Author:'
+result
+'show test commit'
+result
+'show_test.txt'
+result
+●●●●●● 1mm □
+test_git_show_initial_commit
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+initial_commit
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+test_repository
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+result
+●●●●●● 1mm □
+git_show
+●●●●●● 1mm □△
+test_repository
+initial_commit
+●●●●●● 2mm □△
+'Commit:'
+result
+'initial commit'
+result
+'test.txt'
+result
+●●●●●● 1mm □
+test_validate_repo_path_no_restriction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'When no repository restriction is configured, any path should be allowed.'
+validate_repo_path
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+'/any/path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_validate_repo_path_exact_match
+●●●●●● 1mm □△
+tmp_path
+●●●●●● 2mm □△
+Path
+'When repo_path exactly matches allowed_repository, validation should pass.'
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'repo'
+allowed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+validate_repo_path
+●●●●●● 1mm □△
+allowed
+allowed
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_validate_repo_path_subdirectory
+●●●●●● 1mm □△
+tmp_path
+●●●●●● 2mm □△
+Path
+'When repo_path is a subdirectory of allowed_repository, validation should pass.'
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'repo'
+allowed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subdir
+●●●●●● 1mm □
+allowed
+●●●●●● 3mm □△
+'subdir'
+subdir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+validate_repo_path
+●●●●●● 1mm □△
+subdir
+allowed
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_validate_repo_path_outside_allowed
+●●●●●● 1mm □△
+tmp_path
+●●●●●● 2mm □△
+Path
+'When repo_path is outside allowed_repository, validation should raise ValueError.'
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'allowed_repo'
+allowed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+outside
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'other_repo'
+outside
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+exc_info
+validate_repo_path
+●●●●●● 1mm □△
+outside
+allowed
+●●●●●● 2mm □△
+'outside the allowed repository'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_validate_repo_path_traversal_attempt
+●●●●●● 1mm □△
+tmp_path
+●●●●●● 2mm □△
+Path
+'Path traversal attempts (../) should be caught and rejected.'
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'allowed_repo'
+allowed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+traversal_path
+●●●●●● 1mm □
+allowed
+●●●●●● 3mm □△
+'..'
+●●●●●● 3mm □△
+'other_repo'
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+exc_info
+validate_repo_path
+●●●●●● 1mm □△
+traversal_path
+allowed
+●●●●●● 2mm □△
+'outside the allowed repository'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_validate_repo_path_symlink_escape
+●●●●●● 1mm □△
+tmp_path
+●●●●●● 2mm □△
+Path
+'Symlinks pointing outside allowed_repository should be rejected.'
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'allowed_repo'
+allowed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+outside
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'outside'
+outside
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+symlink
+●●●●●● 1mm □
+allowed
+●●●●●● 3mm □△
+'escape_link'
+symlink
+●●●●●● 1mm □△
+outside
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+exc_info
+validate_repo_path
+●●●●●● 1mm □△
+symlink
+allowed
+●●●●●● 2mm □△
+'outside the allowed repository'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_diff_rejects_flag_injection
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+'git_diff should reject flags that could be used for argument injection.'
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_diff
+●●●●●● 1mm □△
+test_repository
+'--output=/tmp/evil'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_diff
+●●●●●● 1mm □△
+test_repository
+'--help'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_diff
+●●●●●● 1mm □△
+test_repository
+'-p'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_checkout_rejects_flag_injection
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+'git_checkout should reject flags that could be used for argument injection.'
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'--help'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'--orphan=evil'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'-f'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_diff_allows_valid_refs
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+'git_diff should work normally with valid git refs.'
+default_branch
+●●●●●● 1mm □
+test_repository
+test_repository
+●●●●●● 1mm □△
+'-b'
+'valid-diff-branch'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'test.txt'
+file_path
+●●●●●● 1mm □△
+'valid diff content'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'test.txt'
+●●●●●● 2mm □△
+test_repository
+●●●●●● 1mm □△
+'valid diff commit'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_diff
+●●●●●● 1mm □△
+test_repository
+default_branch
+●●●●●● 2mm □△
+'test.txt'
+result
+result
+●●●●●● 1mm □
+git_diff
+●●●●●● 1mm □△
+test_repository
+'HEAD~1'
+●●●●●● 2mm □△
+'test.txt'
+result
+commit_sha
+●●●●●● 1mm □
+test_repository
+result
+●●●●●● 1mm □
+git_diff
+●●●●●● 1mm □△
+test_repository
+commit_sha
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_git_checkout_allows_valid_branches
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+'git_checkout should work normally with valid branch names.'
+default_branch
+●●●●●● 1mm □
+test_repository
+test_repository
+●●●●●● 1mm □△
+'valid-checkout-branch'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'valid-checkout-branch'
+●●●●●● 2mm □△
+"Switched to branch 'valid-checkout-branch'"
+result
+test_repository
+'valid-checkout-branch'
+result
+●●●●●● 1mm □
+git_checkout
+●●●●●● 1mm □△
+test_repository
+default_branch
+●●●●●● 2mm □△
+'Switched to branch'
+result
+test_repository
+default_branch
+●●●●●● 1mm □
+test_git_diff_rejects_malicious_refs
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+"git_diff should reject refs starting with '-' even if they exist.\n\n    This tests defense in depth against an attacker who creates malicious\n    refs via filesystem manipulation (e.g. using mcp-filesystem to write\n    to .git/refs/heads/--output=...).\n    "
+●●●●●● 2mm □△○
+os
+sha
+●●●●●● 1mm □
+test_repository
+refs_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'refs'
+●●●●●● 3mm □△
+'heads'
+malicious_ref_path
+●●●●●● 1mm □
+refs_dir
+●●●●●● 3mm □△
+'--output=evil.txt'
+malicious_ref_path
+●●●●●● 1mm □△
+sha
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_diff
+●●●●●● 1mm □△
+test_repository
+'--output=evil.txt'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'evil.txt'
+●●●●●● 2mm □△
+malicious_ref_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_checkout_rejects_malicious_refs
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+"git_checkout should reject refs starting with '-' even if they exist."
+sha
+●●●●●● 1mm □
+test_repository
+refs_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+test_repository
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'refs'
+●●●●●● 3mm □△
+'heads'
+malicious_ref_path
+●●●●●● 1mm □
+refs_dir
+●●●●●● 3mm □△
+'--orphan=evil'
+malicious_ref_path
+●●●●●● 1mm □△
+sha
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+BadName
+●●●●●● 2mm □△
+git_checkout
+●●●●●● 1mm □△
+test_repository
+'--orphan=evil'
+●●●●●● 2mm □△
+malicious_ref_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△

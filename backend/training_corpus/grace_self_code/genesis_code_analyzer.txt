@@ -1,0 +1,705 @@
+## code_analyzer.py
+'\nCode Analyzer for Genesis Key system.\n\nDetects errors, suggests fixes, and highlights issues in code like spell-check.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CodeIssue
+'Represents a code issue detected by the analyzer.'
+issue_type
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+line_number
+●●●●●● 2mm ○
+column
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+message
+●●●●●● 1mm ○
+suggested_fix
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+fix_confidence
+●●●●●● 3mm ○
+context
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+CodeAnalyzer
+'\n    Analyzes code for errors and suggests fixes.\n\n    Like spell-check for code - highlights problems and suggests solutions.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'False'
+'None'
+'True'
+'and'
+'as'
+'assert'
+'async'
+'await'
+'break'
+'class'
+'continue'
+'def'
+'del'
+'elif'
+'else'
+'except'
+'finally'
+'for'
+'from'
+'global'
+'if'
+'import'
+'in'
+'is'
+'lambda'
+'nonlocal'
+'not'
+'or'
+'pass'
+'raise'
+'return'
+'try'
+'while'
+'with'
+'yield'
+●●●●●● 1mm □
+analyze_python_code
+●●●●●● 1mm □△
+self
+code
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Analyze Python code for errors and issues.\n\n        Args:\n            code: Python code to analyze\n            file_path: Optional file path for context\n\n        Returns:\n            List of detected code issues\n        '
+issues
+●●●●●● 1mm □
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tree
+code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+CodeIssue
+●●●●●● 1mm □
+analyze_javascript_code
+●●●●●● 1mm □△
+self
+code
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Analyze JavaScript code for errors and issues.\n\n        Args:\n            code: JavaScript code to analyze\n            file_path: Optional file path for context\n\n        Returns:\n            List of detected code issues\n        '
+issues
+●●●●●● 1mm □
+issues
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+CodeIssue
+●●●●●● 1mm □
+_analyze_ast
+●●●●●● 1mm □△
+self
+tree
+code
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm ○
+'Analyze Python AST for issues.'
+issues
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 2mm □
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+arg_idx
+default
+●●●●●● 2mm □
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+default
+ast
+ast
+ast
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+CodeIssue
+●●●●●● 1mm □
+_check_common_patterns
+●●●●●● 1mm □△
+self
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check for common anti-patterns.'
+issues
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line_num
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+'\\bprint\\s*\\('
+line
+●●●●●● 2mm □△
+'def '
+line
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'TODO'
+line
+'FIXME'
+line
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+120
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+CodeIssue
+●●●●●● 1mm □
+_check_style_issues
+●●●●●● 1mm □△
+self
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check for style issues.'
+issues
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line_num
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+line
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line_num
+1
+prev_line
+●●●●●● 1mm □
+line_num
+1
+lines
+line_num
+●●●●●● 1mm □△
+2
+''
+●●●●●● 2mm □
+prev_line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+':'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'    '
+'\t'
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+CodeIssue
+●●●●●● 1mm □
+_check_js_patterns
+●●●●●● 1mm □△
+self
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check for JavaScript patterns and issues.'
+issues
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line_num
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+'\\bconsole\\.log\\s*\\('
+line
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+'\\bvar\\s+'
+line
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'=='
+line
+'==='
+line
+'!='
+line
+'=='
+line
+'==='
+line
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+'[^=!<>]==[^=]'
+line
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+CodeIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+CodeIssue
+●●●●●● 1mm □
+_suggest_syntax_fix
+●●●●●● 1mm □△
+self
+code
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SyntaxError
+'Suggest a fix for syntax errors.'
+●●●●●● 2mm □
+error
+●●●●●● 3mm ○
+●●●●●● 2mm □
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+line
+●●●●●● 1mm □
+lines
+error
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □
+'invalid syntax'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+':'
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+line
+keyword
+'if'
+'else'
+'elif'
+'for'
+'while'
+'def'
+'class'
+'try'
+'except'
+'finally'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+':'
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'('
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+line
+●●●●●● 3mm ○
+')'
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'('
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+line
+●●●●●● 1mm □△
+')'
+''
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_line_context
+●●●●●● 1mm □△
+self
+code
+line_num
+context_lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+2
+'Get context around a line number.'
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line_num
+0
+line_num
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+start
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+line_num
+●●●●●● 1mm □△
+context_lines
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+line_num
+●●●●●● 3mm ○
+context_lines
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+start
+end
+●●●●●● 2mm □△
+prefix
+●●●●●● 1mm □
+i
+line_num
+●●●●●● 1mm □△
+1
+'>>> '
+'    '
+context
+●●●●●● 1mm □△
+prefix
+lines
+i
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_fix_code
+●●●●●● 1mm □△
+self
+issue
+original_code
+●●●●●● 2mm □△
+CodeIssue
+●●●●●● 1mm ○
+'Generate the fixed code for an issue.'
+●●●●●● 2mm □
+issue
+●●●●●● 3mm ○
+●●●●●● 2mm □
+lines
+●●●●●● 1mm □
+original_code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issue
+0
+issue
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+fixed_lines
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixed_lines
+issue
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □
+issue
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+fixed_lines
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+_code_analyzer
+●●●●●● 2mm □○
+CodeAnalyzer
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_code_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global code analyzer instance.'
+●●●●●● 2mm □
+_code_analyzer
+●●●●●● 2mm □
+_code_analyzer
+●●●●●● 1mm □
+CodeAnalyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_code_analyzer
+CodeAnalyzer

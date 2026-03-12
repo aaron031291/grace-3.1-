@@ -1,0 +1,988 @@
+## test_grace_team_management.py
+'\nTests for Grace Team Management Service\n\nComprehensive tests for skill-based auto-assignment system.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+●●●●●● 3mm □△○
+services.grace_team_management
+●●●●●● 2mm □△○
+GraceTeamManagement
+get_team_management
+SkillLevel
+TeamRole
+AssignmentStrategy
+Skill
+TeamMember
+GraceAgent
+AssignmentResult
+●●●●●● 2mm △
+TestSkillLevelEnum
+'Test SkillLevel enum'
+●●●●●● 1mm □
+test_all_levels_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected skill levels exist'
+expected
+●●●●●● 1mm □
+'novice'
+'intermediate'
+'advanced'
+'expert'
+'master'
+level
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+SkillLevel
+level
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_level_ordering
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test skill levels can be ordered'
+levels
+●●●●●● 1mm □
+SkillLevel
+SkillLevel
+SkillLevel
+SkillLevel
+SkillLevel
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+levels
+●●●●●● 2mm □△
+5
+●●●●●● 2mm △
+TestTeamRoleEnum
+'Test TeamRole enum'
+●●●●●● 1mm □
+test_all_roles_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected roles exist'
+expected
+●●●●●● 1mm □
+'developer'
+'designer'
+'architect'
+'qa_engineer'
+'devops'
+'data_scientist'
+'product_manager'
+'tech_lead'
+'grace_agent'
+role
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TeamRole
+role
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestAssignmentStrategyEnum
+'Test AssignmentStrategy enum'
+●●●●●● 1mm □
+test_all_strategies_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected strategies exist'
+expected
+●●●●●● 1mm □
+'skill_match'
+'workload_balance'
+'hybrid'
+'round_robin'
+'priority_first'
+'learning'
+strategy
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+AssignmentStrategy
+strategy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSkillDataclass
+'Test Skill dataclass'
+●●●●●● 1mm □
+test_skill_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a Skill'
+skill
+●●●●●● 1mm □
+Skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skill
+'Python'
+skill
+'backend'
+skill
+SkillLevel
+skill
+0
+●●●●●● 1mm □
+test_skill_with_all_fields
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test skill with all fields'
+skill
+●●●●●● 1mm □
+Skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skill
+SkillLevel
+skill
+5
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+skill
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestTeamMemberDataclass
+'Test TeamMember dataclass'
+●●●●●● 1mm □
+test_member_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a TeamMember'
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+'TM-001'
+member
+'John Developer'
+member
+TeamRole
+member
+●●●●●● 3mm □△○
+member
+0
+●●●●●● 1mm □
+test_member_with_skills
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test member with skills'
+skills
+●●●●●● 1mm □
+Skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_member_availability
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test member availability settings'
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □
+member
+85
+●●●●●● 2mm △
+TestGraceAgentDataclass
+'Test GraceAgent dataclass'
+●●●●●● 1mm □
+test_agent_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a GraceAgent'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+'GA-001'
+agent
+'analysis'
+agent
+●●●●●● 3mm □△○
+agent
+0.95
+●●●●●● 1mm □
+test_agent_with_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test agent with assigned tasks'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+2
+agent
+5
+●●●●●● 2mm △
+TestAssignmentResultDataclass
+'Test AssignmentResult dataclass'
+●●●●●● 1mm □
+test_result_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating an AssignmentResult'
+result
+●●●●●● 1mm □
+AssignmentResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'GT-001'
+result
+0.85
+result
+'team_member'
+●●●●●● 2mm △
+TestGraceTeamManagement
+'Test GraceTeamManagement class'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create fresh instance for each test'
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test manager initialization'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_default_agents_created
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default Grace agents are created'
+agent_types
+●●●●●● 1mm □
+a
+a
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'analysis'
+agent_types
+'coding'
+agent_types
+'testing'
+agent_types
+'research'
+agent_types
+'devops'
+agent_types
+●●●●●● 2mm △
+TestTeamMemberManagement
+'Test team member management functions'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create fresh instance for each test'
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_add_team_member
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding a team member'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+●●●●●● 2mm □
+member
+●●●●●● 1mm □△
+'TM-'
+●●●●●● 2mm □△
+member
+'Test Member'
+member
+●●●●●● 3mm △
+●●●●●● 1mm □
+test_add_member_with_skills
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding member with skills'
+skills
+●●●●●● 1mm □
+'name'
+'category'
+'level'
+'Python'
+'backend'
+'expert'
+'name'
+'category'
+'level'
+'React'
+'frontend'
+'advanced'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+2
+member
+0
+'Python'
+●●●●●● 1mm □
+test_update_team_member
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test updating team member'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+updated
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member
+'current_workload'
+'is_available'
+50
+●●●●●● 1mm □
+●●●●●● 2mm □△
+updated
+50
+updated
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_add_skill_to_member
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding skill to existing member'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+'Docker'
+s
+member
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_team_member
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting team member by ID'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+retrieved
+●●●●●● 2mm □
+retrieved
+'Get Test'
+●●●●●● 1mm □
+test_get_team_by_genesis_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting member by Genesis ID'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'G-GENESIS-001'
+●●●●●● 2mm □△
+retrieved
+●●●●●● 2mm □
+retrieved
+'Genesis Test'
+●●●●●● 1mm □
+test_get_all_team_members
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting all team members'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_members
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_members
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_get_members_by_role
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test filtering members by role'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+developers
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+developers
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_get_members_with_skill
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting members with specific skill'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+python_devs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Python'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+python_devs
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestGraceAgentManagement
+'Test Grace agent management functions'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create fresh instance for each test'
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_add_grace_agent
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding a Grace agent'
+agent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 2mm □
+agent
+●●●●●● 1mm □△
+'GA-'
+●●●●●● 2mm □△
+agent
+'custom'
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □
+test_get_grace_agent
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting agent by ID'
+agent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+retrieved
+●●●●●● 2mm □
+retrieved
+'Get Agent'
+●●●●●● 1mm □
+test_get_agents_by_capability
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting agents by capability'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+python_agents
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'python'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+python_agents
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_available_agents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting available agents'
+available
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+available
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △
+TestAutoAssignment
+'Test auto-assignment functionality'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create fresh instance with test data'
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_auto_assign_skill_match
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-assignment with skill matching'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+result
+'GT-TEST-001'
+result
+''
+result
+0
+●●●●●● 1mm □
+test_auto_assign_workload_balance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-assignment with workload balancing'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+result
+0
+●●●●●● 1mm □
+test_auto_assign_hybrid
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-assignment with hybrid strategy'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+result
+0
+result
+0
+●●●●●● 1mm □
+test_auto_assign_prefer_human
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-assignment preferring human'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+result
+'team_member'
+●●●●●● 1mm □
+test_auto_assign_prefer_agent
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-assignment preferring Grace agent'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+result
+'grace_agent'
+●●●●●● 1mm □
+test_auto_assign_no_candidates
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-assignment with no matching candidates'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_auto_assign_stores_in_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that assignments are stored in history'
+initial_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+initial_count
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □
+test_auto_assign_alternatives
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that alternatives are provided'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestAssignmentCompletion
+'Test assignment completion functionality'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create fresh instance with test data'
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_complete_assignment_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test completing a successful assignment'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_complete_assignment_failure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test completing a failed assignment'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestReporting
+'Test reporting and analytics functions'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create fresh instance with test data'
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_team_overview
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting team overview'
+overview
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'team_members'
+overview
+'grace_agents'
+overview
+'skills_coverage'
+overview
+overview
+'team_members'
+'total'
+2
+●●●●●● 1mm □
+test_get_workload_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting workload report'
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+0
+entry
+report
+'id'
+entry
+'name'
+entry
+'current_workload'
+entry
+●●●●●● 1mm □
+test_suggest_skill_development
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test suggesting skills for development'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'GT-001'
+●●●●●● 1mm □
+'required_skills'
+'react'
+'typescript'
+●●●●●● 3mm △
+'GT-002'
+●●●●●● 1mm □
+'required_skills'
+'react'
+'node'
+suggestions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+suggestions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSingleton
+'Test singleton pattern'
+●●●●●● 1mm □
+test_get_team_management_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that get_team_management returns singleton'
+manager1
+●●●●●● 1mm □
+get_team_management
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager2
+●●●●●● 1mm □
+get_team_management
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager1
+manager2
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

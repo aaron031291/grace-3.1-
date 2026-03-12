@@ -98,11 +98,33 @@ def generate_code(prompt, project_folder="", use_pipeline=False):
             except Exception:
                 pass
         full_prompt = f"{context}\n\n{prompt}" if context else prompt
-        response = client.generate(prompt=full_prompt, system_prompt="You are a precise code generator. Output only valid code.", max_tokens=4096)
-        code = response if isinstance(response, str) else str(response)
-        return {"code": code, "prompt": prompt}
+        import ast
+        
+        max_retries = 3
+        for attempt in range(max_retries):
+            response = client.generate(prompt=full_prompt, system_prompt="You are a precise code generator. Output only valid code.", max_tokens=4096)
+            code = response if isinstance(response, str) else str(response)
+            
+            # Strip markdown ticks for AST validation
+            clean_code = code.strip()
+            if clean_code.startswith("```"):
+                lines = clean_code.split("\n")
+                if lines[0].startswith("```"): lines = lines[1:]
+                if lines[-1].startswith("```"): lines = lines[:-1]
+                clean_code = "\n".join(lines).strip()
+                
+            try:
+                ast.parse(clean_code)
+                is_valid = True
+                break # It's valid, exit the retry loop
+            except SyntaxError as syntax_err:
+                logger.warning(f"Standard LLM generated invalid syntax (Attempt {attempt+1}/{max_retries}): {syntax_err}")
+                full_prompt += f"\n\nERROR IN PREVIOUS OUTPUT:\n{syntax_err}\nFix the syntax error and return the full corrected code."
+                is_valid = False
+                
+        return {"ok": is_valid, "code": code, "prompt": prompt}
     except Exception as e:
-        return {"error": str(e)}
+        return {"ok": False, "error": str(e)}
 
 def apply_code(path, content):
     return write_file(path, content)

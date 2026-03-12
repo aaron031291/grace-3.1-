@@ -1,0 +1,1440 @@
+## llm_collaboration.py
+"\nInter-LLM Collaboration System\n\nEnables multiple LLMs to:\n- Communicate with each other\n- Debate and reach consensus\n- Delegate specialized tasks\n- Review each other's outputs\n- Build collaborative knowledge\n\nAll collaboration is:\n- Tracked with Genesis Keys\n- Logged for audit\n- Trust-scored\n- Integrated with Learning Memory\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+multi_llm_client
+●●●●●● 2mm □△○
+MultiLLMClient
+TaskType
+LLMModel
+●●●●●● 3mm □△○
+repo_access
+●●●●●● 2mm □△○
+RepositoryAccessLayer
+●●●●●● 3mm □△○
+hallucination_guard
+●●●●●● 2mm □△○
+HallucinationGuard
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CollaborationMode
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of collaboration between LLMs.'
+DEBATE
+●●●●●● 1mm □
+'debate'
+CONSENSUS
+●●●●●● 1mm □
+'consensus'
+DELEGATION
+●●●●●● 1mm □
+'delegation'
+REVIEW
+●●●●●● 1mm □
+'review'
+BRAINSTORM
+●●●●●● 1mm □
+'brainstorm'
+VALIDATION
+●●●●●● 1mm □
+'validation'
+●●●●●● 2mm △
+CollaborationRole
+●●●●●● 3mm □△
+Enum
+Enum
+'Roles LLMs can play in collaboration.'
+COORDINATOR
+●●●●●● 1mm □
+'coordinator'
+SPECIALIST
+●●●●●● 1mm □
+'specialist'
+CRITIC
+●●●●●● 1mm □
+'critic'
+VALIDATOR
+●●●●●● 1mm □
+'validator'
+GENERATOR
+●●●●●● 1mm □
+'generator'
+SYNTHESIZER
+●●●●●● 1mm □
+'synthesizer'
+●●●●●● 2mm △
+CollaborationAgent
+'An LLM agent participating in collaboration.'
+agent_id
+●●●●●● 1mm ○
+model
+LLMModel
+role
+CollaborationRole
+task_type
+TaskType
+system_prompt
+●●●●●● 1mm ○
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+CollaborationMessage
+'A message in LLM collaboration.'
+message_id
+●●●●●● 1mm ○
+from_agent_id
+●●●●●● 1mm ○
+to_agent_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+message_type
+●●●●●● 1mm ○
+timestamp
+datetime
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+CollaborationSession
+'A collaboration session between multiple LLMs.'
+session_id
+●●●●●● 1mm ○
+mode
+CollaborationMode
+topic
+●●●●●● 1mm ○
+agents
+●●●●●● 3mm □△
+CollaborationAgent
+messages
+●●●●●● 3mm □△
+CollaborationMessage
+consensus_reached
+●●●●●● 3mm △
+final_output
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+trust_score
+●●●●●● 3mm ○
+confidence_score
+●●●●●● 3mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+started_at
+datetime
+completed_at
+●●●●●● 2mm □○
+datetime
+dataclass
+●●●●●● 2mm △
+DebateResult
+'Result of an LLM debate.'
+winning_position
+●●●●●● 1mm ○
+vote_counts
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+arguments
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+synthesis
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+dataclass
+●●●●●● 2mm △
+ConsensusResult
+'Result of consensus building.'
+consensus_reached
+●●●●●● 3mm △
+consensus_content
+●●●●●● 1mm ○
+agreement_level
+●●●●●● 3mm ○
+holdouts
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+iterations
+●●●●●● 2mm ○
+dataclass
+●●●●●● 2mm △
+LLMCollaborationHub
+'\n    Hub for inter-LLM collaboration.\n\n    Coordinates multiple LLMs working together on complex tasks.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+multi_llm_client
+repo_access
+hallucination_guard
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+HallucinationGuard
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize collaboration hub.\n\n        Args:\n            multi_llm_client: Multi-LLM client\n            repo_access: Repository access layer\n            hallucination_guard: Hallucination guard\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+multi_llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_access
+●●●●●● 3mm △
+●●●●●● 1mm □
+hallucination_guard
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+CollaborationSession
+●●●●●● 3mm △
+●●●●●● 3mm □△
+CollaborationSession
+●●●●●● 1mm □
+start_debate
+●●●●●● 1mm □△
+self
+topic
+positions
+num_agents
+max_rounds
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+3
+3
+●●●●●● 2mm □
+'\n        Start a debate between multiple LLMs.\n\n        Args:\n            topic: Debate topic\n            positions: List of positions to argue (e.g., ["pro", "con", "neutral"])\n            num_agents: Number of agents per position\n            max_rounds: Maximum debate rounds\n            user_id: User ID for tracking\n\n        Returns:\n            DebateResult with winning position and synthesis\n        '
+logger
+●●●●●● 1mm □△
+'[DEBATE] Starting debate on: '
+topic
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+'debate_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+agents
+●●●●●● 1mm □
+position
+positions
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_agents
+●●●●●● 2mm □△
+agent_id
+●●●●●● 1mm □
+'agent_'
+position
+'_'
+i
+model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are participating in a structured debate on: '
+topic
+'\n\nYour position: '
+position
+'\n\nYour role:\n1. Present clear, logical arguments supporting your position\n2. Address counter-arguments respectfully\n3. Use evidence and reasoning\n4. Stay focused on the topic\n5. Be willing to concede valid points\n\nDebate guidelines:\n- Be intellectually honest\n- Use evidence when available\n- Acknowledge limitations\n- Focus on substance, not rhetoric\n'
+agent
+●●●●●● 1mm □
+CollaborationAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agents
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+CollaborationSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+session_id
+●●●●●● 1mm □
+●●●●●● 3mm △○
+all_arguments
+●●●●●● 1mm □
+round_num
+●●●●●● 1mm □
+●●●●●● 1mm □△
+max_rounds
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DEBATE] Round '
+round_num
+●●●●●● 3mm ○
+1
+'/'
+max_rounds
+●●●●●● 2mm □△
+agent
+agents
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+agent
+'position'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Debate Topic: '
+topic
+'\nYour Position: '
+agent
+'position'
+'\n\nRound '
+round_num
+●●●●●● 3mm ○
+1
+':\n\n'
+context
+'\n\nPresent your argument or response (keep it concise, 2-3 paragraphs):'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+'content'
+response
+message
+●●●●●● 1mm □
+CollaborationMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+all_arguments
+●●●●●● 1mm □△
+'agent_id'
+'position'
+'round'
+'argument'
+agent
+agent
+'position'
+round_num
+●●●●●● 3mm ○
+1
+response
+'content'
+●●●●●● 2mm □△
+vote_counts
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+positions
+●●●●●● 2mm □△
+synthesis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+all_arguments
+●●●●●● 2mm □△
+total_votes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+vote_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+max_votes
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+vote_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+total_votes
+0
+max_votes
+●●●●●● 3mm □△
+total_votes
+0.0
+winning_position
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+vote_counts
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □
+synthesis
+●●●●●● 3mm △○
+●●●●●● 1mm □
+confidence
+●●●●●● 3mm △○
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+session_id
+result
+●●●●●● 1mm □
+DebateResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DEBATE] Completed. Winner: '
+winning_position
+' ('
+confidence
+'.2%'
+' confidence)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+DebateResult
+●●●●●● 1mm □
+_build_debate_context
+●●●●●● 1mm □△
+self
+session
+position
+●●●●●● 2mm □△
+CollaborationSession
+●●●●●● 1mm ○
+'Build context from previous debate messages.'
+context_lines
+●●●●●● 1mm □
+msg
+●●●●●● 3mm △○
+6
+msg_position
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'position'
+'unknown'
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □△
+msg_position
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+': '
+msg
+200
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+context_lines
+'\n\n'
+●●●●●● 1mm □△
+context_lines
+●●●●●● 2mm □△
+'No previous arguments yet.'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_conduct_vote
+●●●●●● 1mm □△
+self
+session
+positions
+●●●●●● 2mm □△
+CollaborationSession
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Conduct vote on debate positions.'
+vote_counts
+●●●●●● 1mm □
+pos
+0
+pos
+positions
+judge_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+debate_summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'You are an impartial judge evaluating a debate.\n\nTopic: '
+●●●●●● 3mm △○
+'\nPositions: '
+', '
+●●●●●● 1mm □△
+positions
+●●●●●● 2mm □△
+'\n\nDebate Summary:\n'
+debate_summary
+'\n\nBased on the quality of arguments, logic, and evidence presented, which position had the strongest case?\n\nRespond with ONLY the position name: '
+' or '
+●●●●●● 1mm □△
+positions
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+'content'
+response
+vote
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+position
+positions
+●●●●●● 2mm □
+position
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vote
+vote_counts
+position
+1
+●●●●●● 3mm ○
+vote_counts
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_summarize_debate
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+CollaborationSession
+'Summarize debate messages.'
+summary_lines
+●●●●●● 1mm □
+msg
+●●●●●● 3mm △○
+position
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'position'
+'unknown'
+●●●●●● 2mm □△
+summary_lines
+●●●●●● 1mm □△
+position
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+': '
+msg
+300
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+summary_lines
+10
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_synthesize_debate
+●●●●●● 1mm □△
+self
+session
+arguments
+●●●●●● 2mm □△
+CollaborationSession
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'Synthesize debate into final summary.'
+synthesizer_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+debate_summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Synthesize this debate into a balanced summary.\n\nTopic: '
+●●●●●● 3mm △○
+'\n\nDebate:\n'
+debate_summary
+'\n\nProvide a synthesis that:\n1. Summarizes key arguments from all positions\n2. Identifies areas of agreement\n3. Acknowledges valid points from each side\n4. Provides a balanced conclusion\n\nSynthesis:'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+'success'
+response
+●●●●●● 1mm □△
+'content'
+'Unable to generate synthesis'
+●●●●●● 2mm □△
+'Synthesis failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+build_consensus
+●●●●●● 1mm □△
+self
+topic
+initial_proposals
+num_agents
+max_iterations
+agreement_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+5
+5
+0.8
+'\n        Build consensus among multiple LLMs.\n\n        Args:\n            topic: Topic to reach consensus on\n            initial_proposals: Initial proposals to consider\n            num_agents: Number of agents\n            max_iterations: Maximum consensus iterations\n            agreement_threshold: Required agreement level (0.0-1.0)\n\n        Returns:\n            ConsensusResult with consensus content and agreement level\n        '
+logger
+●●●●●● 1mm □△
+'[CONSENSUS] Building consensus on: '
+topic
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+'consensus_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+agents
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_agents
+●●●●●● 2mm □△
+agent_id
+●●●●●● 1mm □
+'agent_consensus_'
+i
+model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are participating in a consensus-building process.\n\nYour role:\n1. Evaluate proposals carefully\n2. Identify strengths and weaknesses\n3. Suggest improvements\n4. Be willing to compromise\n5. Focus on finding common ground\n\nGuidelines:\n- Be constructive and collaborative\n- Acknowledge good ideas from others\n- Propose concrete improvements\n- Signal when you agree/disagree\n'
+agent
+●●●●●● 1mm □
+CollaborationAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agents
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+CollaborationSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+session_id
+●●●●●● 1mm □
+●●●●●● 3mm △○
+current_proposals
+●●●●●● 1mm □
+initial_proposals
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+iteration
+●●●●●● 1mm □
+0
+consensus_reached
+●●●●●● 1mm □
+●●●●●● 1mm □
+holdouts
+●●●●●● 1mm □
+iteration
+max_iterations
+consensus_reached
+iteration
+1
+logger
+●●●●●● 1mm □△
+'[CONSENSUS] Iteration '
+iteration
+'/'
+max_iterations
+●●●●●● 2mm □△
+feedback_list
+●●●●●● 1mm □
+agent
+agents
+prompt
+●●●●●● 1mm □
+'Topic: '
+topic
+'\n\nCurrent Proposals:\n'
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+'. '
+p
+i
+p
+●●●●●● 2mm □
+●●●●●● 1mm □△
+current_proposals
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\nIteration '
+iteration
+':\n\nYour task:\n1. Evaluate each proposal\n2. Identify your preferred proposal (or suggest improvements)\n3. Rate your agreement level (0-10)\n\nResponse format:\nPREFERRED: [proposal number or "modified"]\nAGREEMENT: [0-10]\nFEEDBACK: [your feedback]\nIMPROVED: [improved version if you suggest changes]'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+'success'
+feedback_list
+●●●●●● 1mm □△
+'agent_id'
+'feedback'
+agent
+response
+'content'
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+CollaborationMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+agreement_level
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+feedback_list
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agreement_level
+agreement_threshold
+consensus_reached
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[CONSENSUS] Consensus reached! Agreement: '
+agreement_level
+'.2%'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+current_proposals
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+feedback_list
+current_proposals
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[CONSENSUS] Agreement: '
+agreement_level
+'.2%'
+', continuing...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+consensus_reached
+final_consensus
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+current_proposals
+●●●●●● 2mm □△
+●●●●●● 3mm □
+final_consensus
+●●●●●● 1mm □
+current_proposals
+current_proposals
+0
+'No consensus reached'
+●●●●●● 3mm □
+holdouts
+●●●●●● 1mm □
+agent
+agent
+agents
+●●●●●● 3mm △○
+●●●●●● 1mm □
+consensus_reached
+●●●●●● 3mm △○
+●●●●●● 1mm □
+final_consensus
+●●●●●● 3mm △○
+●●●●●● 1mm □
+consensus_reached
+agreement_level
+0.0
+●●●●●● 3mm △○
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+session_id
+result
+●●●●●● 1mm □
+ConsensusResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ConsensusResult
+●●●●●● 1mm □
+_analyze_agreement
+●●●●●● 1mm □△
+self
+feedback_list
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'Analyze agreement level from feedback.'
+scores
+●●●●●● 1mm □
+feedback
+feedback_list
+content
+●●●●●● 1mm □
+feedback
+'feedback'
+●●●●●● 2mm □
+'AGREEMENT:'
+content
+score_str
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'AGREEMENT:'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+score_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □△
+score
+●●●●●● 3mm □△
+10.0
+●●●●●● 2mm □△
+ValueError
+IndexError
+scores
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm □
+scores
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scores
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_merge_proposals
+●●●●●● 1mm □△
+self
+session
+feedback_list
+current_proposals
+●●●●●● 2mm □△
+CollaborationSession
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Merge proposals based on feedback.'
+synthesizer_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+feedback_text
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+f
+'feedback'
+f
+feedback_list
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Topic: '
+●●●●●● 3mm △○
+'\n\nCurrent Proposals:\n'
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+'. '
+p
+i
+p
+●●●●●● 2mm □
+●●●●●● 1mm □△
+current_proposals
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\nAgent Feedback:\n'
+feedback_text
+'\n\nTask: Synthesize an improved proposal that addresses the feedback and finds common ground.\n\nImproved Proposal:'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+'success'
+●●●●●● 3mm ○
+response
+'content'
+●●●●●● 3mm ○
+current_proposals
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_final_consensus
+●●●●●● 1mm □△
+self
+session
+proposals
+●●●●●● 2mm □△
+CollaborationSession
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Generate final consensus statement.'
+●●●●●● 3mm ○
+proposals
+proposals
+0
+'Consensus reached (no specific proposal)'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+delegate_task
+●●●●●● 1mm □△
+self
+task
+task_type
+num_specialists
+coordinator_reviews
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm ○
+●●●●●● 3mm △
+3
+●●●●●● 3mm □△○
+'\n        Delegate task to specialized LLM agents.\n\n        Args:\n            task: Task description\n            task_type: Type of task\n            num_specialists: Number of specialist agents\n            coordinator_reviews: Whether coordinator reviews results\n\n        Returns:\n            Delegation result with specialist outputs\n        '
+logger
+●●●●●● 1mm □△
+'[DELEGATION] Delegating task: '
+task
+100
+'...'
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+'delegation_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+coordinator_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+coordinator
+●●●●●● 1mm □
+CollaborationAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+specialists
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_specialists
+●●●●●● 2mm □△
+specialist_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+specialist
+●●●●●● 1mm □
+CollaborationAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+specialists
+●●●●●● 1mm □△
+specialist
+●●●●●● 2mm □△
+specialist_outputs
+●●●●●● 1mm □
+specialist
+specialists
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+'success'
+specialist_outputs
+●●●●●● 1mm □△
+'agent_id'
+'model'
+'output'
+specialist
+specialist
+response
+'content'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+coordinator_reviews
+synthesis_prompt
+●●●●●● 1mm □
+'Task: '
+task
+'\n\nSpecialist Outputs:\n'
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+'. '
+o
+'output'
+300
+'...'
+i
+o
+●●●●●● 2mm □
+●●●●●● 1mm □△
+specialist_outputs
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\nSynthesize the specialist outputs into a coherent final result:'
+synthesis_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+final_output
+●●●●●● 1mm □
+synthesis_response
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+synthesis_response
+●●●●●● 1mm □△
+'content'
+specialist_outputs
+0
+'output'
+●●●●●● 2mm □△
+specialist_outputs
+0
+'output'
+●●●●●● 3mm □
+final_output
+●●●●●● 1mm □
+specialist_outputs
+0
+'output'
+●●●●●● 3mm ○
+'task'
+'specialist_outputs'
+'final_output'
+'num_specialists'
+task
+specialist_outputs
+final_output
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+specialist_outputs
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+peer_review
+●●●●●● 1mm □△
+self
+content
+review_aspects
+num_reviewers
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n        Have multiple LLMs review content.\n\n        Args:\n            content: Content to review\n            review_aspects: Aspects to review (e.g., ["accuracy", "clarity", "completeness"])\n            num_reviewers: Number of reviewer agents\n\n        Returns:\n            Review results with feedback and ratings\n        '
+logger
+●●●●●● 1mm □△
+'[REVIEW] Starting peer review with '
+num_reviewers
+' reviewers'
+●●●●●● 2mm □△
+reviews
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_reviewers
+●●●●●● 2mm □△
+reviewer_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Review the following content:\n\n'
+content
+'\n\nReview Aspects:\n'
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'- '
+aspect
+aspect
+review_aspects
+●●●●●● 2mm □△
+'\n\nFor each aspect, provide:\n1. Rating (0-10)\n2. Feedback\n3. Suggestions for improvement\n\nFormat:\nASPECT: [aspect name]\nRATING: [0-10]\nFEEDBACK: [your feedback]\nSUGGESTIONS: [improvements]\n\n---'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+'success'
+reviews
+●●●●●● 1mm □△
+'reviewer_id'
+'model'
+'review'
+'reviewer_'
+i
+reviewer_model
+response
+'content'
+●●●●●● 2mm □△
+aggregate_ratings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+reviews
+review_aspects
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'reviews'
+'aggregate_ratings'
+'num_reviewers'
+reviews
+aggregate_ratings
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+reviews
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_aggregate_review_ratings
+●●●●●● 1mm □△
+self
+reviews
+aspects
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Aggregate review ratings.'
+●●●●●● 3mm ○
+aspect
+7.5
+aspect
+aspects
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_session
+●●●●●● 1mm □△
+self
+session_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get collaboration session by ID.'
+●●●●●● 2mm □
+session_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+session_id
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △○
+session_id
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+CollaborationSession
+●●●●●● 1mm □
+get_active_sessions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all active collaboration sessions.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+CollaborationSession
+●●●●●● 1mm □
+get_collaboration_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get collaboration statistics.'
+●●●●●● 3mm ○
+'active_sessions'
+'completed_sessions'
+'total_sessions'
+'by_mode'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+mode
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+s
+mode
+●●●●●● 2mm □△
+mode
+CollaborationMode
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_collaboration_hub
+●●●●●● 2mm □○
+LLMCollaborationHub
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_collaboration_hub
+●●●●●● 1mm □△
+multi_llm_client
+repo_access
+hallucination_guard
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+HallucinationGuard
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create global collaboration hub instance.'
+●●●●●● 2mm □
+_collaboration_hub
+●●●●●● 2mm □
+_collaboration_hub
+●●●●●● 1mm □
+LLMCollaborationHub
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_collaboration_hub
+LLMCollaborationHub

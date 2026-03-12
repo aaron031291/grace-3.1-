@@ -1,0 +1,704 @@
+## test_grace_todos_api.py
+'\nTests for Grace Todos API\n\nComprehensive tests for autonomous task management system.\nUpdated to match current API model structure.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+AsyncMock
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+api.grace_todos_api
+●●●●●● 2mm □△○
+router
+TaskStatus
+TaskPriority
+TaskType
+ProcessingMode
+AgentType
+GraceTask
+UserRequirement
+TeamMember
+GraceAgent
+AutonomousAction
+TaskBoard
+tasks_store
+●●●●●● 1mm □
+tasks
+requirements_store
+●●●●●● 1mm □
+requirements
+team_store
+●●●●●● 1mm □
+team_members
+agents_store
+●●●●●● 1mm □
+grace_agents
+actions_store
+●●●●●● 1mm □
+autonomous_actions
+●●●●●● 2mm △
+TestTaskModels
+'Test task-related models'
+●●●●●● 1mm □
+test_grace_task_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a GraceTask'
+task
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+'Test Task'
+task
+'G-TEST-001'
+task
+TaskStatus
+task
+TaskPriority
+task
+TaskType
+task
+0
+●●●●●● 1mm □
+test_grace_task_with_all_fields
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a GraceTask with all fields'
+task
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+TaskStatus
+task
+TaskPriority
+task
+50
+'urgent'
+task
+●●●●●● 1mm □
+test_user_requirement_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a UserRequirement'
+req
+●●●●●● 1mm □
+UserRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+req
+'New Feature Request'
+req
+'G-USER-001'
+req
+'user-aaron'
+req
+'draft'
+●●●●●● 1mm □
+test_team_member_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a TeamMember'
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+'John Developer'
+member
+'G-JOHN-001'
+'python'
+member
+member
+0
+●●●●●● 1mm □
+test_grace_agent_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a GraceAgent'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+'Test Agent'
+agent
+'GA-001'
+agent
+'idle'
+agent
+10
+●●●●●● 2mm △
+TestTaskStatusEnum
+'Test TaskStatus enum'
+●●●●●● 1mm □
+test_all_statuses_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected statuses exist'
+expected
+●●●●●● 1mm □
+'queued'
+'scheduled'
+'running'
+'paused'
+'completed'
+'failed'
+'cancelled'
+status
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TaskStatus
+status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_status_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test status values are correct'
+TaskStatus
+'queued'
+TaskStatus
+'running'
+TaskStatus
+'completed'
+●●●●●● 2mm △
+TestTaskPriorityEnum
+'Test TaskPriority enum'
+●●●●●● 1mm □
+test_all_priorities_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected priorities exist'
+expected
+●●●●●● 1mm □
+'critical'
+'high'
+'medium'
+'low'
+'background'
+priority
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TaskPriority
+priority
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestTaskTypeEnum
+'Test TaskType enum'
+●●●●●● 1mm □
+test_all_types_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected task types exist'
+expected
+●●●●●● 1mm □
+'autonomous'
+'user_request'
+'scheduled'
+'sub_agent'
+'learning'
+'diagnostic'
+'healing'
+'memory'
+'analysis'
+'ingestion'
+task_type
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TaskType
+task_type
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestAutonomousAction
+'Test AutonomousAction model'
+●●●●●● 1mm □
+test_autonomous_action_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating an AutonomousAction'
+action
+●●●●●● 1mm □
+AutonomousAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+'execute'
+action
+'GT-123'
+action
+'GAA-001'
+action
+'pending'
+●●●●●● 1mm □
+test_action_with_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test action with result'
+action
+●●●●●● 1mm □
+AutonomousAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+'completed'
+action
+'success'
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestTaskBoard
+'Test TaskBoard model'
+●●●●●● 1mm □
+test_task_board_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a TaskBoard'
+board
+●●●●●● 1mm □
+TaskBoard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+board
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+board
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+board
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_board_with_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test board with tasks in columns'
+task1
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task2
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task3
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+board
+●●●●●● 1mm □
+TaskBoard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+board
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+board
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestTaskStorage
+'Test in-memory task storage'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear storage before each test'
+tasks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+requirements
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+team_members
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+grace_agents
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_add_task_to_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding a task to storage'
+task
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tasks
+task
+●●●●●● 1mm □
+task
+task
+tasks
+tasks
+task
+'Storage Test'
+●●●●●● 1mm □
+test_add_requirement_to_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding a requirement to storage'
+req
+●●●●●● 1mm □
+UserRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+requirements
+req
+●●●●●● 1mm □
+req
+req
+requirements
+●●●●●● 1mm □
+test_add_team_member_to_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding a team member to storage'
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+team_members
+member
+●●●●●● 1mm □
+member
+member
+team_members
+●●●●●● 2mm △
+TestTaskOperations
+'Test task operations'
+●●●●●● 1mm □
+test_task_status_transitions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test valid status transitions'
+task
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+TaskStatus
+task
+●●●●●● 1mm □
+TaskStatus
+task
+TaskStatus
+task
+●●●●●● 1mm □
+TaskStatus
+task
+●●●●●● 1mm □
+100
+task
+TaskStatus
+task
+100
+●●●●●● 1mm □
+test_task_progress_validation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test progress stays within bounds'
+task
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+task
+100
+●●●●●● 1mm □
+test_sub_task_relationship
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test parent-child task relationship'
+parent
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+child
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parent
+●●●●●● 1mm □△
+child
+●●●●●● 2mm □△
+child
+'G-PARENT'
+child
+parent
+●●●●●● 1mm □
+test_task_dependency_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test task dependencies'
+task1
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task2
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'G-FIRST'
+task2
+●●●●●● 2mm △
+TestAgentOperations
+'Test Grace agent operations'
+●●●●●● 1mm □
+test_agent_task_assignment
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test assigning task to agent'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+'GT-test-001'
+agent
+'GT-test-001'
+agent
+'idle'
+●●●●●● 1mm □
+test_agent_capacity_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test agent capacity limits'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+'GT-001'
+'GT-002'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+test_agent_capability_matching
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test matching agent capabilities to task requirements'
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+required
+●●●●●● 1mm □
+'python'
+'api_design'
+matches
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+cap
+agent
+cap
+required
+●●●●●● 2mm □△
+matches
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestTeamMemberOperations
+'Test team member operations'
+●●●●●● 1mm □
+test_member_skill_matching
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test matching member skills to requirements'
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+required_skills
+●●●●●● 1mm □
+'python'
+'react'
+match_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+required_skills
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+match_count
+2
+●●●●●● 1mm □
+test_member_workload_calculation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test calculating member workload'
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □
+'GT-001'
+'GT-002'
+'GT-003'
+member
+75
+●●●●●● 2mm △
+TestRequirementOperations
+'Test requirement operations'
+●●●●●● 1mm □
+test_requirement_task_generation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating tasks from requirement'
+req
+●●●●●● 1mm □
+UserRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+generated_tasks
+●●●●●● 1mm □
+'GT-001'
+'GT-002'
+req
+●●●●●● 1mm □
+generated_tasks
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+2
+req
+'draft'
+●●●●●● 1mm □
+test_requirement_acceptance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test accepting a requirement'
+req
+●●●●●● 1mm □
+UserRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □
+'active'
+req
+'active'
+●●●●●● 2mm △
+TestProcessingMode
+'Test ProcessingMode enum'
+●●●●●● 1mm □
+test_all_modes_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all processing modes exist'
+expected
+●●●●●● 1mm □
+'sequential'
+'parallel'
+'background'
+'multi_thread'
+'distributed'
+mode
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ProcessingMode
+mode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

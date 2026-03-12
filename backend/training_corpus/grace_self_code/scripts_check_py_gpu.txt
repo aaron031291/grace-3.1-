@@ -1,0 +1,17 @@
+## check_py_gpu.py
+'Exit 0 if Python 3.11 or 3.12 (CUDA wheels), else 1. No args.'
+●●●●●● 2mm □△○
+sys
+v
+●●●●●● 1mm □
+sys
+sys
+●●●●●● 1mm □△
+v
+3
+v
+11
+12
+0
+1
+●●●●●● 2mm □△

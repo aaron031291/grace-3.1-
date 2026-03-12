@@ -1,0 +1,163 @@
+## resource_arbitrator.py
+"\nresource_arbitrator.py\nDynamic Resource Arbitration for Grace's LLM ecosystem.\n\nAssesses task risk and intelligently routes inference to specific models:\n- High Risk / Critical Logic -> Opus (High Trust, Expensive)\n- Low Risk / Bulk / Fast -> Qwen (Local, Fast, Cheaper)\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ResourceArbitrator
+'\n    Intelligently routes tasks to the best LLM provider based on risk vs. speed tradeoffs.\n    '
+CRITICAL_KEYWORDS
+●●●●●● 1mm □
+'architecture'
+'security'
+'database'
+'schema'
+'authentication'
+'authorization'
+'financial'
+'payment'
+'deploy'
+'production'
+'firewall'
+'encryption'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 1mm □
+calculate_risk_score
+●●●●●● 1mm □△
+self
+task_description
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Calculate a risk score (0.0 to 1.0) for a given task.\n        '
+score
+●●●●●● 1mm □
+0.2
+task_desc_lower
+●●●●●● 1mm □
+task_description
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keyword
+●●●●●● 3mm △
+●●●●●● 2mm □
+keyword
+task_desc_lower
+score
+0.3
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'is_production'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+score
+0.4
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'requires_dry_run'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+score
+0.2
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'trust_required'
+0
+●●●●●● 2mm □△
+0.8
+score
+0.3
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+score
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+route_task
+●●●●●● 1mm □△
+self
+task_description
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+"\n        Routes the task to 'opus', 'kimi', or 'qwen' depending on the assessed risk.\n        Returns the model_id.\n        "
+risk_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_description
+context
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ResourceArbitrator] Assessed task risk: '
+risk_score
+'.2f'
+" for '"
+task_description
+50
+"...'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+risk_score
+0.7
+logger
+●●●●●● 1mm □△
+'[ResourceArbitrator] High-Risk task -> Routing to Opus (High Trust).'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'opus'
+●●●●●● 1mm △
+risk_score
+0.4
+logger
+●●●●●● 1mm □△
+'[ResourceArbitrator] Medium-Risk task -> Routing to Kimi (Balanced).'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'kimi'
+logger
+●●●●●● 1mm □△
+'[ResourceArbitrator] Low-Risk task -> Routing to Qwen (Local/Fast).'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'qwen'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_resource_arbitrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ResourceArbitrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ResourceArbitrator

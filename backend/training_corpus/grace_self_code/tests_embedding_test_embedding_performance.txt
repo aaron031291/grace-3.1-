@@ -1,0 +1,1287 @@
+## test_embedding_performance.py
+'\nTests for embedding model performance and similarity calculations.\n'
+●●●●●● 2mm □△○
+unittest
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 2mm △
+TestEmbeddingModel
+●●●●●● 3mm □△
+unittest
+'Test cases for embedding model performance, similarity, and advanced features.'
+●●●●●● 1mm □
+setUpClass
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Set up class fixtures - load model once for all tests.'
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unittest
+●●●●●● 1mm □△
+'CUDA not available - GPU required for tests'
+●●●●●● 2mm □△
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+'qwen_4b'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'LOADING EMBEDDING MODEL'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+EmbeddingModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+load_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Model loaded in '
+load_time
+'.2f'
+' seconds'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+tearDownClass
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Tear down class fixtures - unload model.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'PERFORMANCE SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+total_time
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'Test Name'
+'<50'
+' '
+'Time (ms)'
+'<15'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+65
+●●●●●● 2mm □△
+test_name
+elapsed
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+test_name
+'<50'
+' '
+elapsed
+●●●●●● 2mm □△
+1000
+'>10.2f'
+' ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+65
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TOTAL'
+'<50'
+' '
+total_time
+●●●●●● 2mm □△
+1000
+'>10.2f'
+' ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nUnloading model...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unload_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Model unloaded in '
+unload_time
+'.2f'
+' seconds'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+setUp
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Set up for each test.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+tearDown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Tear down for each test - log timing.'
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+test_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+test_name
+●●●●●● 1mm □
+elapsed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+test_name
+': '
+elapsed
+●●●●●● 2mm □△
+1000
+'.2f'
+' ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_single_text_embedding_shape
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that single text embedding has correct shape.'
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Hello world'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embedding
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embedding
+0
+2560
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_multiple_texts_embedding_shape
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that multiple texts embedding has correct shape.'
+texts
+●●●●●● 1mm □
+'Hello'
+'World'
+'Testing'
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings
+0
+3
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings
+1
+2560
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_embedding_dimension_consistency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that embedding dimension is consistent across calls.'
+dim1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test1'
+●●●●●● 2mm □△
+0
+dim2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test2'
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dim1
+dim2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dim1
+2560
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_embeddings_are_normalized
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that embeddings are normalized when normalize_embeddings=True.'
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test text'
+●●●●●● 2mm □△
+norm
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+embedding
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Normalization Test:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      L2 norm of embedding: '
+norm
+'.6f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Expected: 1.0'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Difference: '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+norm
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+'.6f'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+norm
+1.0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_embedding_numpy_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that numpy output format is correct.'
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embedding
+np
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embedding
+np
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_identical_texts_produce_identical_embeddings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that identical texts produce identical embeddings.'
+text
+●●●●●● 1mm □
+'The same text repeated'
+embedding1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+embedding2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+embedding1
+embedding2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_different_texts_produce_different_embeddings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that different texts produce different embeddings.'
+embedding1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Python programming'
+●●●●●● 2mm □△
+embedding2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Java programming'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+embedding1
+embedding2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_batch_processing_consistency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that batch processing gives same results as individual processing.'
+texts
+●●●●●● 1mm □
+'Hello'
+'World'
+'Test'
+batch_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+individual_embeddings
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+text
+texts
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+batch_embeddings
+individual_embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_batch_size_parameter
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that different batch sizes work correctly.'
+texts
+●●●●●● 1mm □
+'Hello'
+'World'
+'Test'
+'Batch'
+'Size'
+embeddings_bs1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+embeddings_bs2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+embeddings_bs5
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+embeddings_bs1
+embeddings_bs2
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+embeddings_bs2
+embeddings_bs5
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_identical_texts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that identical texts have similarity close to 1.0.'
+text
+●●●●●● 1mm □
+'The quick brown fox'
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+text
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity
+1.0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_very_different_texts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that very different texts have lower similarity.'
+similarity_diff
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Python is a programming language'
+'The cat sat on the mat'
+●●●●●● 2mm □△
+similarity_same
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Python is a programming language'
+'Java is a programming language'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Semantic Understanding Test:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Programming vs Programming: '
+similarity_same
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Programming vs Animal:     '
+similarity_diff
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Difference:                '
+similarity_same
+●●●●●● 1mm □△
+similarity_diff
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+similarity_same
+similarity_diff
+'      ✓ Model correctly distinguished related documents'
+'      ✗ Failed to distinguish'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity_same
+similarity_diff
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_semantically_related
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that semantically related texts have higher similarity.'
+similarity_related
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'machine learning models'
+'artificial intelligence algorithms'
+●●●●●● 2mm □△
+similarity_unrelated
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'machine learning models'
+'The weather is sunny today'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Semantic Relatedness Test:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ML vs AI:           '
+similarity_related
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ML vs Weather:      '
+similarity_unrelated
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Difference:         '
+similarity_related
+●●●●●● 1mm □△
+similarity_unrelated
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+similarity_related
+similarity_unrelated
+'      ✓ Model correctly identified semantic similarity'
+'      ✗ Failed to identify similarity'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity_related
+similarity_unrelated
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_cosine_metric
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine similarity metric.'
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Hello world'
+'Hello there'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity
+●●●●●● 3mm ○
+np
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity
+1.0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_euclidean_metric
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test euclidean similarity metric.'
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Hello world'
+'Hello there'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarity
+●●●●●● 3mm ○
+np
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_symmetry
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that similarity is symmetric.'
+text1
+●●●●●● 1mm □
+'The quick brown fox'
+text2
+●●●●●● 1mm □
+'A fast brown fox'
+sim_12
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+sim_21
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text2
+text1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sim_12
+sim_21
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_similarity_list_inputs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test similarity calculation with list inputs.'
+texts1
+●●●●●● 1mm □
+'Hello'
+'Good morning'
+'Hi'
+texts2
+●●●●●● 1mm □
+'Hi there'
+'Morning'
+'Greetings'
+similarities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts1
+texts2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarities
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarities
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_most_similar_ranking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that most_similar returns results ranked by similarity.'
+query
+●●●●●● 1mm □
+'machine learning'
+candidates
+●●●●●● 1mm □
+'deep neural networks'
+'the weather today'
+'artificial intelligence'
+'a cat sleeping'
+'supervised learning algorithms'
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □
+score
+_
+score
+results
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+candidate
+score
+results
+●●●●●● 3mm △
+●●●●●● 1mm □△
+candidate
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+score
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+score
+1.0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Most Similar Ranking Test:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"      Query: '"
+query
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      All candidates: '
+candidates
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Top 3 results:'
+●●●●●● 2mm □△
+i
+candidate
+score
+●●●●●● 2mm □
+●●●●●● 1mm □△
+results
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        '
+i
+". '"
+candidate
+"': "
+score
+'.4f'
+●●●●●● 2mm □△
+top_candidate
+●●●●●● 1mm □
+results
+0
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+word
+top_candidate
+word
+'learning'
+'algorithm'
+'intelligence'
+'neural'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ✓ Model correctly ranked semantically related documents'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ✗ Model failed to rank related documents correctly'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_most_similar_top_k
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that top_k parameter works correctly.'
+query
+●●●●●● 1mm □
+'test'
+candidates
+●●●●●● 1mm □
+'a'
+'b'
+'c'
+'d'
+'e'
+results_k1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+candidates
+●●●●●● 2mm □△
+results_k3
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+candidates
+●●●●●● 2mm □△
+results_k5
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results_k1
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results_k3
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results_k5
+●●●●●● 2mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_most_similar_with_instruction
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test most_similar with instruction parameter.'
+query
+●●●●●● 1mm □
+'python'
+candidates
+●●●●●● 1mm □
+'java programming'
+'python code'
+'ruby script'
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+candidate
+_
+results
+●●●●●● 3mm △
+●●●●●● 1mm □△
+candidate
+candidates
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_embed_with_scores
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test embed_with_scores returns embeddings and norms.'
+texts
+●●●●●● 1mm □
+'Hello'
+'World'
+'Test'
+embeddings
+norms
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings
+0
+3
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings
+1
+2560
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+norms
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+norm
+norms
+●●●●●● 3mm △
+●●●●●● 1mm □△
+norm
+●●●●●● 3mm ○
+np
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+norm
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_cluster_texts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test text clustering functionality.'
+texts
+●●●●●● 1mm □
+'Python programming'
+'Java code'
+'The cat sat on mat'
+'A dog in the house'
+'Machine learning models'
+'Deep neural networks'
+clusters
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+clusters
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cluster
+clusters
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cluster
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+idx
+cluster
+●●●●●● 3mm △
+●●●●●● 1mm □△
+idx
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+idx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+all_indices
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cluster
+clusters
+all_indices
+●●●●●● 1mm □△
+cluster
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_indices
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Clustering Quality Test:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Input texts: '
+texts
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Number of clusters: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+clusters
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+i
+cluster
+●●●●●● 2mm □
+●●●●●● 1mm □△
+clusters
+●●●●●● 2mm □△
+cluster_texts
+●●●●●● 1mm □
+texts
+idx
+idx
+cluster
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n      Cluster '
+i
+●●●●●● 3mm ○
+1
+': '
+cluster_texts
+●●●●●● 2mm □△
+programming_cluster_found
+●●●●●● 1mm □
+●●●●●● 1mm □
+animal_cluster_found
+●●●●●● 1mm □
+●●●●●● 1mm □
+ml_cluster_found
+●●●●●● 1mm □
+●●●●●● 1mm □
+cluster
+clusters
+cluster_texts
+●●●●●● 1mm □
+texts
+idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+idx
+cluster
+cluster_str
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+cluster_texts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'python'
+cluster_str
+'java'
+cluster_str
+'code'
+cluster_str
+programming_cluster_found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'cat'
+cluster_str
+'dog'
+cluster_str
+animal_cluster_found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'learning'
+cluster_str
+'neural'
+cluster_str
+ml_cluster_found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n      Semantic Quality Metrics:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        Programming cluster found: '
+programming_cluster_found
+'✓'
+'✗'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        Animal cluster found: '
+animal_cluster_found
+'✓'
+'✗'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        ML cluster found: '
+ml_cluster_found
+'✓'
+'✗'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+unittest
+●●●●●● 1mm □△
+●●●●●● 2mm □△

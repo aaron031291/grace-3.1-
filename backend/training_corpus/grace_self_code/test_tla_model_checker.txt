@@ -1,0 +1,144 @@
+## test_tla_model_checker.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+ingest_external_data
+IngestRequest
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' TLA+ Model Checking for Causal Graph Tests       '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1] Attempting to Ingest a Contradictory Invariant (A -> B, B -> A)'
+●●●●●● 2mm □△
+contradiction_data
+●●●●●● 1mm □
+'WARNING: Increasing the core voltage will cause thermal throttling. NOTE: Thermal throttling will cause an increase in the core voltage.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"    Raw Stream: '"
+contradiction_data
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+IngestRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingest_result
+●●●●●● 1mm □
+ingest_external_data
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2] Ingestion Result:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+ingest_result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ingest_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'error'
+'TLA_VIOLATION'
+ingest_result
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    [+] SUCCESS: TLA+ Validator successfully detected the infinite cause-effect loop!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    [+] Generated TLA Spec File: '
+ingest_result
+●●●●●● 1mm □△
+'tla_spec'
+●●●●●● 2mm □△
+'.tla'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    [!] FAILURE: TLA+ Validator allowed a contradictory invariant to enter Magma Memory.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' Testing Complete. '
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

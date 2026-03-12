@@ -1,0 +1,206 @@
+## add_suppression_checks.py
+'\nQuick script to add suppression checks to Genesis error logging.\nRun this to update all Genesis files to respect SUPPRESS_GENESIS_ERRORS flag.\n'
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+genesis_files
+●●●●●● 1mm □
+'genesis/kb_integration.py'
+'genesis/file_watcher.py'
+'genesis/symbiotic_version_control.py'
+'genesis/autonomous_triggers.py'
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+settings_import
+●●●●●● 1mm □
+'\ntry:\n    from settings import settings\nexcept ImportError:\n    settings = None\n'
+error_pattern
+●●●●●● 1mm □
+'(\\s+)(logger\\.error\\(f?".*?"\\))'
+●●●●●● 1mm □
+add_suppression_check
+●●●●●● 1mm □△
+match
+●●●●●● 2mm □△
+indent
+●●●●●● 1mm □
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+error_call
+●●●●●● 1mm □
+match
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+indent
+'if not (settings and settings.SUPPRESS_GENESIS_ERRORS):\n'
+indent
+'    '
+error_call
+file_path
+genesis_files
+full_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Skipping '
+file_path
+' - not found'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Processing '
+file_path
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'from settings import settings'
+content
+import_section_end
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\nlogger = '
+●●●●●● 2mm □△
+●●●●●● 2mm □
+import_section_end
+0
+content
+●●●●●● 1mm □
+content
+import_section_end
+●●●●●● 3mm ○
+'\n'
+●●●●●● 3mm ○
+settings_import
+●●●●●● 3mm ○
+content
+import_section_end
+lines
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+new_lines
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+0
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+lines
+i
+●●●●●● 2mm □
+i
+0
+'logger.error('
+line
+'if not (settings and settings.SUPPRESS_GENESIS_ERRORS)'
+lines
+i
+●●●●●● 1mm □△
+1
+●●●●●● 3mm □△○
+indent
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+indent_str
+●●●●●● 1mm □
+' '
+●●●●●● 2mm □△
+indent
+new_lines
+●●●●●● 1mm □△
+indent_str
+'if not (settings and settings.SUPPRESS_GENESIS_ERRORS):'
+●●●●●● 2mm □△
+new_lines
+●●●●●● 1mm □△
+' '
+●●●●●● 2mm □△
+4
+●●●●●● 3mm ○
+line
+●●●●●● 2mm □△
+●●●●●● 3mm □
+new_lines
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+i
+1
+content
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+new_lines
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Updated '
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ All files updated!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Restart the server to apply changes.'
+●●●●●● 2mm □△

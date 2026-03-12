@@ -1,0 +1,158 @@
+## planner_api.py
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sessions_db
+●●●●●● 1mm □
+'Return a list of active planning sessions.'
+●●●●●● 3mm ○
+'sessions'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+sessions_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/sessions'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Accept a goal and begin generating a plan.'
+sid
+●●●●●● 1mm □
+'PLAN-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+goal
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'goal'
+'Empty Goal'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'id'
+'goal'
+'status'
+'progress'
+'created_at'
+'phases'
+sid
+goal
+'completed'
+100
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'id'
+'title'
+'description'
+'status'
+'tasks'
+'PHASE-1'
+'Initial Setup'
+'Prepare the environment for '
+goal
+'pending'
+'title'
+'status'
+'Setup repository'
+'pending'
+sessions_db
+sid
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+router
+●●●●●● 1mm □△
+'/generate'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Refine an existing plan session.'
+sid
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'sessionId'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sid
+sid
+sessions_db
+●●●●●● 3mm ○
+'error'
+'Session not found'
+feedback
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'feedback'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+sessions_db
+sid
+●●●●●● 3mm △○
+'phases'
+●●●●●● 1mm □△
+'id'
+'title'
+'description'
+'status'
+'tasks'
+'PHASE-'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+'phases'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+'Refinement'
+'Refined from feedback: '
+feedback
+'pending'
+'title'
+'status'
+'Apply feedback'
+'pending'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+router
+●●●●●● 1mm □△
+'/refine'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Load specific session details.'
+●●●●●● 2mm □
+sid
+sessions_db
+●●●●●● 3mm ○
+sessions_db
+sid
+●●●●●● 3mm ○
+'error'
+'Not Found'
+router
+●●●●●● 1mm □△
+'/session/{sid}'
+●●●●●● 2mm □△

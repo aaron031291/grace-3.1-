@@ -1,0 +1,801 @@
+## learning_integration.py
+"\nLearning Integration for Multi-LLM System\n\nIntegrates LLM orchestration with GRACE's Learning Memory:\n- Proactive learning from new documents\n- Autonomous knowledge updates\n- Fine-tuning data generation\n- Trust-scored learning examples\n- Continuous improvement loops\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+multi_llm_client
+●●●●●● 2mm □△○
+MultiLLMClient
+TaskType
+●●●●●● 3mm □△○
+repo_access
+●●●●●● 2mm □△○
+RepositoryAccessLayer
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+LearningExample
+●●●●●● 3mm □△○
+genesis.cognitive_layer1_integration
+●●●●●● 2mm □△○
+CognitiveLayer1Integration
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LearningIntegration
+'\n    Integrates LLM orchestration with Learning Memory.\n\n    Enables:\n    - Proactive learning from new data\n    - Autonomous knowledge updates\n    - Trust-scored training data generation\n    - Continuous LLM improvement\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+multi_llm_client
+repo_access
+learning_memory
+cognitive_layer1
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+LearningMemoryManager
+●●●●●● 2mm □○
+CognitiveLayer1Integration
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize learning integration.\n\n        Args:\n            multi_llm_client: Multi-LLM client\n            repo_access: Repository access\n            learning_memory: Learning memory manager\n            cognitive_layer1: Cognitive Layer 1 integration\n            session: Database session\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+multi_llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_access
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_memory
+●●●●●● 3mm △
+●●●●●● 1mm □
+cognitive_layer1
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'documents_processed'
+'learning_examples_created'
+'knowledge_updates'
+'autonomous_triggers'
+0
+0
+0
+0
+●●●●●● 1mm □
+process_new_document
+●●●●●● 1mm □△
+self
+document_id
+document_content
+document_metadata
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Process new document for learning.\n\n        LLMs analyze the document and extract learning examples.\n\n        Args:\n            document_id: Document ID\n            document_content: Document content\n            document_metadata: Document metadata\n\n        Returns:\n            Learning results\n        '
+logger
+●●●●●● 1mm □△
+'[LEARNING] Processing new document '
+document_id
+' for learning'
+●●●●●● 2mm □△
+extraction_prompt
+●●●●●● 1mm □
+'Analyze this document and extract key learnings.\n\nDocument: '
+document_content
+2000
+'...\n\nExtract:\n1. Key concepts and definitions\n2. Important procedures or patterns\n3. Critical facts or data points\n4. Relationships between concepts\n\nFormat as structured learning examples.'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+'success'
+●●●●●● 3mm ○
+'error'
+'Failed to extract learning examples'
+learning_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+'content'
+document_id
+document_metadata
+●●●●●● 2mm □△
+created_examples
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+example_data
+learning_examples
+example
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+example
+created_examples
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error creating learning example: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'documents_processed'
+1
+●●●●●● 3mm △
+'learning_examples_created'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+created_examples
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'document_id'
+'learning_examples_created'
+'example_ids'
+'extraction_content'
+document_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+created_examples
+●●●●●● 2mm □△
+created_examples
+response
+'content'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_parse_learning_examples
+●●●●●● 1mm □△
+self
+extraction_content
+document_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Parse extracted learning examples.'
+examples
+●●●●●● 1mm □
+examples
+●●●●●● 1mm □△
+'type'
+'data'
+'document_knowledge'
+'context'
+'expected'
+'actual'
+'document_id'
+'filename'
+'extraction'
+document_id
+metadata
+●●●●●● 1mm □△
+'filename'
+'unknown'
+●●●●●● 2mm □△
+extraction_content
+'knowledge_extracted'
+●●●●●● 3mm □△○
+'content'
+extraction_content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+examples
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+update_llm_knowledge
+●●●●●● 1mm □△
+self
+min_trust_score
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+0.8
+100
+'\n        Update LLM knowledge base with high-trust learning examples.\n\n        This creates a knowledge context that LLMs can reference.\n\n        Args:\n            min_trust_score: Minimum trust score for examples\n            limit: Maximum examples to include\n\n        Returns:\n            Knowledge update results\n        '
+logger
+●●●●●● 1mm □△
+'[LEARNING] Updating LLM knowledge base (trust >= '
+min_trust_score
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'error'
+'Repository access not available'
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knowledge_context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+examples
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'knowledge_updates'
+1
+●●●●●● 3mm ○
+'examples_included'
+'patterns_included'
+'knowledge_context_length'
+'min_trust_score'
+'timestamp'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+knowledge_context
+●●●●●● 2mm □△
+min_trust_score
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_build_knowledge_context
+●●●●●● 1mm □△
+self
+examples
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Build knowledge context from examples and patterns.'
+context_lines
+●●●●●● 1mm □
+'# GRACE Knowledge Base\n'
+●●●●●● 2mm □
+patterns
+context_lines
+●●●●●● 1mm □△
+'## Learned Patterns\n'
+●●●●●● 2mm □△
+pattern
+patterns
+10
+context_lines
+●●●●●● 1mm □△
+'### '
+pattern
+'pattern_name'
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □△
+'Trust: '
+pattern
+'trust_score'
+'.2f'
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □△
+'Success Rate: '
+pattern
+'success_rate'
+'.2%'
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+examples
+context_lines
+●●●●●● 1mm □△
+'## Verified Knowledge\n'
+●●●●●● 2mm □△
+example
+examples
+20
+context_lines
+●●●●●● 1mm □△
+'**'
+example
+'example_type'
+'** (Trust: '
+example
+'trust_score'
+'.2f'
+')'
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □△
+'Context: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+'input_context'
+●●●●●● 2mm □△
+200
+'...'
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+context_lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+trigger_autonomous_learning
+●●●●●● 1mm □△
+self
+trigger_type
+trigger_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Trigger autonomous learning based on events.\n\n        LLMs can autonomously decide to learn from events.\n\n        Args:\n            trigger_type: Type of trigger (e.g., "new_document", "error", "pattern_detected")\n            trigger_data: Trigger data\n\n        Returns:\n            Learning trigger results\n        '
+logger
+●●●●●● 1mm □△
+'[LEARNING] Autonomous learning triggered: '
+trigger_type
+●●●●●● 2mm □△
+analysis_prompt
+●●●●●● 1mm □
+'Analyze this event and determine if learning should occur.\n\nTrigger Type: '
+trigger_type
+'\nTrigger Data: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+trigger_data
+●●●●●● 2mm □△
+500
+'\n\nQuestions:\n1. Is this event significant enough to learn from?\n2. What should be learned?\n3. How should this knowledge be stored?\n\nAnalysis:'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+should_learn
+●●●●●● 1mm □
+'yes'
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'significant'
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+should_learn
+●●●●●● 3mm △
+learning_data
+●●●●●● 1mm □
+'context'
+'expected'
+'actual'
+'trigger_type'
+'trigger_data'
+'analysis'
+trigger_type
+trigger_data
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+'learning_triggered'
+●●●●●● 3mm □△○
+'should_learn'
+should_learn
+example
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_id
+●●●●●● 1mm □
+example
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error creating autonomous learning example: '
+e
+●●●●●● 2mm □△
+learning_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+'autonomous_triggers'
+1
+●●●●●● 3mm ○
+'triggered'
+'should_learn'
+'learning_example_id'
+'analysis'
+●●●●●● 3mm □△○
+should_learn
+learning_id
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'triggered'
+'should_learn'
+'analysis'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+generate_fine_tuning_data
+●●●●●● 1mm □△
+self
+task_type
+num_examples
+min_trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+100
+0.8
+'\n        Generate fine-tuning dataset from high-trust examples.\n\n        Args:\n            task_type: Type of task to generate data for\n            num_examples: Number of examples to generate\n            min_trust_score: Minimum trust score\n\n        Returns:\n            Fine-tuning dataset\n        '
+logger
+●●●●●● 1mm □△
+'[LEARNING] Generating fine-tuning data for '
+task_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'error'
+'Repository access not available'
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fine_tuning_examples
+●●●●●● 1mm □
+example
+examples
+fine_tuning_examples
+●●●●●● 1mm □△
+'input'
+'output'
+'trust_score'
+'validated'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 1mm □△
+'input_context'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 1mm □△
+'expected_output'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □△
+'times_validated'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task_type'
+'num_examples'
+'examples'
+'min_trust_score'
+'timestamp'
+task_type
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fine_tuning_examples
+●●●●●● 2mm □△
+fine_tuning_examples
+min_trust_score
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_against_learning_memory
+●●●●●● 1mm □△
+self
+content
+context
+min_trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+0.7
+'\n        Verify content against learning memory.\n\n        Args:\n            content: Content to verify\n            context: Context information\n            min_trust_score: Minimum trust score\n\n        Returns:\n            Verification result\n        '
+logger
+●●●●●● 1mm □△
+'[LEARNING] Verifying content against learning memory'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'verified'
+'reason'
+●●●●●● 1mm □
+'Repository access not available'
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+examples
+●●●●●● 3mm ○
+'verified'
+'reason'
+'trust_score'
+●●●●●● 1mm □
+'No high-trust examples available'
+0.5
+verification_prompt
+●●●●●● 1mm □
+'Verify if this content is consistent with learned knowledge.\n\nContent to verify:\n'
+content
+'\n\nLearned Knowledge (high-trust examples):\n'
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'- '
+ex
+●●●●●● 1mm □△
+'example_type'
+'unknown'
+●●●●●● 2mm □△
+': Trust '
+ex
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+'.2f'
+ex
+examples
+5
+●●●●●● 2mm □△
+'\n\nIs the content consistent with learned knowledge? (Yes/No and why)'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_consistent
+●●●●●● 1mm □
+'yes'
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avg_trust
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+ex
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'verified'
+'trust_score'
+'examples_checked'
+'verification_reasoning'
+'timestamp'
+is_consistent
+is_consistent
+avg_trust
+avg_trust
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_learning_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get learning integration statistics.'
+●●●●●● 3mm ○
+'timestamp'
+●●●●●● 3mm △
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_learning_integration
+●●●●●● 2mm □○
+LearningIntegration
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_learning_integration
+●●●●●● 1mm □△
+multi_llm_client
+repo_access
+learning_memory
+cognitive_layer1
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+LearningMemoryManager
+●●●●●● 2mm □○
+CognitiveLayer1Integration
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create global learning integration instance.'
+●●●●●● 2mm □
+_learning_integration
+●●●●●● 2mm □
+_learning_integration
+●●●●●● 1mm □
+LearningIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_learning_integration
+LearningIntegration

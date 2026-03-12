@@ -1,0 +1,1307 @@
+## autonomous_triggers.py
+'\nGenesis Key Autonomous Trigger Pipeline\n\nGenesis Keys are the CENTRAL TRIGGER for all autonomous actions.\n\nEvery Genesis Key creation can trigger:\n1. Autonomous learning (study new files)\n2. Recursive practice loops (mirror → study → practice)\n3. Predictive context loading (prefetch related topics)\n4. Memory mesh integration (store high-trust patterns)\n\nArchitecture:\n- Trigger Pipeline Checks Type\n  ↓\n- Spawns Appropriate Autonomous Actions\n  ↓\n- Results Create New Genesis Keys\n  ↓\n- RECURSIVE LOOP if needed\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningOrchestrator
+TaskType
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisTriggerPipeline
+'\n    Central trigger pipeline - Genesis Keys trigger autonomous actions.\n\n    Trigger Rules:\n    1. FILE_OPERATION (new/modified file) → Auto-study\n    2. PRACTICE_OUTCOME (failed) → Mirror analysis → Gap study → Retry\n    3. USER_INPUT (question) → Predictive context prefetch\n    4. LEARNING_COMPLETE (study done) → Auto-practice if applicable\n    5. GAP_IDENTIFIED (by mirror) → Targeted study\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+knowledge_base_path
+orchestrator
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm □○
+LearningOrchestrator
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+orchestrator
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Autonomous trigger pipeline initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_orchestrator
+●●●●●● 1mm □△
+self
+orchestrator
+●●●●●● 2mm □△
+LearningOrchestrator
+'Set learning orchestrator reference.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □
+on_genesis_key_created
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Main trigger handler - called whenever ANY Genesis Key is created.\n\n        Checks Genesis Key type and triggers appropriate autonomous actions.\n\n        Args:\n            genesis_key: The newly created Genesis Key\n\n        Returns:\n            Dict with triggered actions and results\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] No orchestrator set, skipping autonomous actions'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'triggered'
+'reason'
+●●●●●● 1mm □
+'No orchestrator'
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Processing: '
+genesis_key
+' (type='
+genesis_key
+')'
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □
+●●●●●● 2mm □
+genesis_key
+GenesisKeyType
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 1mm △
+genesis_key
+GenesisKeyType
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+GenesisKeyType
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 1mm △
+genesis_key
+GenesisKeyType
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+GenesisKeyType
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+triggered_actions
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+triggered_actions
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_key_id'
+'triggered'
+'actions_triggered'
+'total_triggers_fired'
+genesis_key
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+triggered_actions
+●●●●●● 2mm □△
+0
+triggered_actions
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_handle_file_operation
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle FILE_OPERATION Genesis Key.\n\n        Triggers:\n        - Auto-study for new files\n        - Re-study for modified files\n        '
+actions
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+genesis_key
+operation_type
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'operation_type'
+''
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation_type
+'create'
+'modify'
+file_path
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+topic
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[GENESIS-TRIGGER] File operation detected → Triggering autonomous study for '"
+topic
+"'"
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'topic'
+'file_path'
+'task_id'
+'priority'
+'autonomous_study'
+'file_operation'
+topic
+file_path
+task_id
+operation_type
+'create'
+1
+3
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_handle_user_input
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle USER_INPUT Genesis Key.\n\n        Triggers:\n        - Predictive context prefetch for related topics\n        '
+actions
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+genesis_key
+user_input
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'input_text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_input
+topics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+user_input
+●●●●●● 2mm □△
+●●●●●● 2mm □
+topics
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] User input detected → Triggering predictive prefetch for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topics
+●●●●●● 2mm □△
+' related topics'
+●●●●●● 2mm □△
+topic
+topics
+3
+task_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'topic'
+'task_id'
+'predictive_prefetch'
+'user_input'
+topic
+task_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_handle_learning_complete
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle LEARNING_COMPLETE Genesis Key.\n\n        Triggers:\n        - Auto-practice if skill is practice-worthy\n        '
+actions
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+genesis_key
+skill_learned
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'skill_name'
+''
+●●●●●● 2mm □△
+concepts_learned
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+skill_learned
+concepts_learned
+0
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill_learned
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[GENESIS-TRIGGER] Learning complete → Triggering autonomous practice for '"
+skill_learned
+"'"
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'skill'
+'task_id'
+'autonomous_practice'
+'learning_complete'
+skill_learned
+task_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_handle_practice_outcome
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle PRACTICE_OUTCOME Genesis Key.\n\n        Triggers:\n        - If FAILED: Mirror analysis → Gap identification → Targeted study → Retry\n        - If SUCCESS: Log success pattern\n\n        THIS IS THE RECURSIVE LOOP!\n        '
+actions
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+genesis_key
+success
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+skill_name
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'skill_name'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+skill_name
+logger
+●●●●●● 1mm □△
+"[GENESIS-TRIGGER] Practice FAILED → Starting recursive self-improvement loop for '"
+skill_name
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+feedback
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'feedback'
+'Unknown failure'
+●●●●●● 2mm □△
+gap_genesis_key
+●●●●●● 1mm □
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+gap_genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'skill'
+'gap_genesis_key'
+'recursive_loop'
+'recursive_gap_analysis'
+'practice_failed'
+skill_name
+gap_genesis_key
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Recursive loop initiated: Practice failed → Gap identified → Will trigger study → Will retry practice'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+success
+logger
+●●●●●● 1mm □△
+"[GENESIS-TRIGGER] Practice SUCCESS for '"
+skill_name
+"' - Pattern logged"
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'skill'
+'log_success_pattern'
+'practice_success'
+skill_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_handle_gap_identified
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle GAP_IDENTIFIED Genesis Key.\n\n        Triggers:\n        - Targeted study to fill the gap\n        - After study: Retry the practice that failed\n\n        THIS COMPLETES THE RECURSIVE LOOP!\n        '
+actions
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+genesis_key
+skill_name
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'skill_name'
+''
+●●●●●● 2mm □△
+gap_reason
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'gap_reason'
+''
+●●●●●● 2mm □△
+is_recursive
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'recursive_loop'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+skill_name
+logger
+●●●●●● 1mm □△
+"[GENESIS-TRIGGER] Gap identified → Triggering targeted study to fill gap in '"
+skill_name
+"'"
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'skill'
+'gap_reason'
+'task_id'
+'recursive_loop'
+'gap_filling_study'
+'gap_identified'
+skill_name
+gap_reason
+task_id
+is_recursive
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_recursive
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Recursive loop continues: Will retry practice after gap-filling study'
+●●●●●● 2mm □△
+retry_task_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'skill'
+'task_id'
+'recursive_loop'
+'note'
+'retry_practice'
+'gap_study_queued'
+skill_name
+retry_task_id
+●●●●●● 3mm □△○
+'This completes the recursive self-improvement loop'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] ✅ RECURSIVE LOOP COMPLETE: Practice → Failed → Gap Identified → Study Queued → Practice Queued → Loop will continue until success'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_is_learning_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if file is learning-worthy.'
+learning_extensions
+●●●●●● 1mm □
+'.pdf'
+'.docx'
+'.doc'
+'.txt'
+'.md'
+'.py'
+'.json'
+ignore_patterns
+●●●●●● 1mm □
+'node_modules'
+'__pycache__'
+'.git'
+'dist'
+'build'
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_extensions
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+pattern
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+pattern
+ignore_patterns
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_infer_topic_from_path
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Infer learning topic from file path.'
+parent
+●●●●●● 1mm □
+file_path
+topic_mappings
+●●●●●● 1mm □
+'ai research'
+'ai_research'
+'learning_memory'
+'backend'
+'frontend'
+'databases'
+'testing'
+'python'
+'api'
+'architecture'
+'AI and machine learning'
+'AI and machine learning'
+'Learning and memory systems'
+'Backend development'
+'Frontend development'
+'Database design'
+'Testing and TDD'
+'Python programming'
+'API design'
+'Software architecture'
+parent_lower
+●●●●●● 1mm □
+parent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+topic
+topic_mappings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+parent_lower
+●●●●●● 3mm ○
+topic
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_topics_from_input
+●●●●●● 1mm □△
+self
+user_input
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract potential topics from user input for prefetching.'
+keywords
+●●●●●● 1mm □
+'api'
+'rest'
+'authentication'
+'database'
+'python'
+'react'
+'docker'
+'kubernetes'
+'testing'
+'API design'
+'REST APIs'
+'Authentication'
+'Database design'
+'Python programming'
+'React development'
+'Docker containers'
+'Kubernetes'
+'Testing and TDD'
+user_lower
+●●●●●● 1mm □
+user_input
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+extracted_topics
+●●●●●● 1mm □
+keyword
+topic
+keywords
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keyword
+user_lower
+extracted_topics
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+extracted_topics
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_is_practice_worthy_skill
+●●●●●● 1mm □△
+self
+skill_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if skill should be automatically practiced.'
+practice_worthy
+●●●●●● 1mm □
+'python'
+'programming'
+'coding'
+'api'
+'database'
+'testing'
+'docker'
+'kubernetes'
+'react'
+'frontend'
+'backend'
+'algorithm'
+skill_lower
+●●●●●● 1mm □
+skill_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+skill_lower
+kw
+practice_worthy
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+_should_use_multi_llm_verification
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Determine if multi-LLM verification should be triggered.\n\n        Multi-LLM verification is useful for:\n        - Critical decisions (high-stakes)\n        - Complex reasoning tasks\n        - Uncertain or low-confidence responses\n        - Contradictory information detected\n        '
+metadata
+●●●●●● 1mm □
+genesis_key
+needs_verification
+●●●●●● 1mm □
+●●●●●● 1mm □
+confidence
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'confidence_score'
+1.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+confidence
+0.7
+needs_verification
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'contradiction_detected'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+needs_verification
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'high_stakes'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+needs_verification
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+complexity
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'complexity'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+complexity
+0.7
+needs_verification
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'request_verification'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+needs_verification
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+needs_verification
+●●●●●● 3mm △
+●●●●●● 1mm □
+_handle_multi_llm_verification
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle multi-LLM verification trigger.\n\n        Spawns verification task using multiple LLMs to:\n        - Cross-validate responses\n        - Detect hallucinations\n        - Identify contradictions\n        - Provide consensus answer\n        '
+actions
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+genesis_key
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+LLMOrchestrator
+query
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'query'
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □△
+'user_input'
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+logger
+●●●●●● 1mm □△
+"[GENESIS-TRIGGER] Low confidence/contradiction detected → Triggering multi-LLM verification for: '"
+query
+50
+"...'"
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+LLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'query'
+'reason'
+'verification_method'
+'note'
+'multi_llm_verification'
+'low_confidence_or_contradiction'
+query
+100
+metadata
+●●●●●● 1mm □△
+'verification_reason'
+'Low confidence or contradiction detected'
+●●●●●● 2mm □△
+'multi_llm_consensus'
+'Will use 3+ LLMs to cross-validate response'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Multi-LLM verification queued for consensus validation'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error triggering multi-LLM verification: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_should_trigger_health_check
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Determine if health check should be triggered.\n\n        Triggers on:\n        - Multiple errors in short period\n        - Critical failures\n        - System anomalies\n        '
+metadata
+●●●●●● 1mm □
+genesis_key
+●●●●●● 2mm □
+genesis_key
+GenesisKeyType
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'request_health_check'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_handle_health_check_trigger
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle health check and healing trigger.\n\n        Uses autonomous healing system to:\n        - Assess system health\n        - Detect anomalies\n        - Decide healing actions\n        - Execute autonomously (if trust allows)\n        '
+actions
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Error/failure detected → Triggering health check'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healing
+●●●●●● 1mm □
+get_autonomous_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_result
+●●●●●● 1mm □
+healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'health_status'
+'anomalies_detected'
+'actions_executed'
+'awaiting_approval'
+'health_check_and_healing'
+'error_or_failure_detected'
+cycle_result
+'health_status'
+cycle_result
+'anomalies_detected'
+cycle_result
+'actions_executed'
+cycle_result
+'awaiting_approval'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Health check complete: '
+cycle_result
+'health_status'
+', executed '
+cycle_result
+'actions_executed'
+' healing actions'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error triggering health check: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_should_trigger_mirror_analysis
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Determine if mirror self-modeling should be triggered.\n\n        Triggers periodically (every N operations) to build self-model.\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+50
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+_handle_mirror_analysis_trigger
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+GenesisKey
+'\n        Handle mirror self-modeling trigger.\n\n        Uses mirror system to:\n        - Observe recent operations\n        - Detect behavioral patterns\n        - Build self-model\n        - Generate improvement suggestions\n        - Trigger improvement actions\n        '
+actions
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Triggering mirror self-modeling analysis'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+improvement_result
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'action'
+'trigger'
+'patterns_detected'
+'improvement_suggestions'
+'actions_triggered'
+'self_awareness_score'
+'mirror_self_modeling'
+'periodic_self_reflection'
+self_model
+'behavioral_patterns'
+'total_detected'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+self_model
+'improvement_suggestions'
+●●●●●● 2mm □△
+improvement_result
+'actions_triggered'
+self_model
+'self_awareness_score'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Mirror analysis complete: '
+self_model
+'behavioral_patterns'
+'total_detected'
+' patterns, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+self_model
+'improvement_suggestions'
+●●●●●● 2mm □△
+' suggestions, '
+improvement_result
+'actions_triggered'
+' actions triggered'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error triggering mirror analysis: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get trigger pipeline status.'
+●●●●●● 3mm ○
+'triggers_fired'
+'recursive_loops_active'
+'orchestrator_connected'
+'message'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+'Genesis Key autonomous trigger pipeline operational'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_trigger_pipeline
+●●●●●● 2mm □○
+GenesisTriggerPipeline
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+session
+knowledge_base_path
+orchestrator
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+●●●●●● 2mm □○
+LearningOrchestrator
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n    Get or create Genesis trigger pipeline instance.\n    \n    NOTE: 'session' parameter is deprecated and ignored. \n    Pipeline creates fresh sessions on-demand to avoid pickle errors.\n    "
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[GENESIS-TRIGGER] Session parameter is deprecated and ignored (uses session factory instead)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+knowledge_base_path
+●●●●●● 2mm □
+knowledge_base_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_trigger_pipeline
+●●●●●● 2mm □
+_trigger_pipeline
+●●●●●● 1mm □
+GenesisTriggerPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orchestrator
+●●●●●● 2mm □
+_trigger_pipeline
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_trigger_pipeline
+GenesisTriggerPipeline

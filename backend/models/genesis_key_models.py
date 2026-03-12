@@ -51,6 +51,13 @@ class GenesisKeyType(str, enum.Enum):
     ERROR = "error"                             # Errors occurred
     FIX = "fix"                                 # Fixes applied
     ROLLBACK = "rollback"                       # Rollbacks performed
+    
+    # HITL / Spindle Handoff Signals
+    HITL_HANDOFF = "GRACE-OP-012"                # Moving from autonomous mode to HITL
+    HITL_PROBLEMS = "GRACE-HO-004"               # Flagging a specific logic error or SMT timeout
+    HITL_CONFIDENCE_LOW = "GRACE-GV-012"         # Layer score fell below threshold
+    HITL_CLARIFICATION_REQ = "GRACE-CG-001"      # Requesting user clarification on a vague intent
+
 
 
 class GenesisKeyStatus(str, enum.Enum):

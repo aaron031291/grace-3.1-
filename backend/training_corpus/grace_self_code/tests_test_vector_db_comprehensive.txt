@@ -1,0 +1,2867 @@
+## test_vector_db_comprehensive.py
+'\nComprehensive Test Suite for Vector DB Module\n=============================================\nTests for QdrantVectorDB client and operations.\n\nCoverage:\n- QdrantVectorDB initialization\n- Connection management\n- Collection operations (create, exists, delete, list)\n- Vector operations (upsert, search, delete)\n- Collection info retrieval\n- Singleton pattern (get_qdrant_client)\n- Error handling\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 2mm □△○
+sys
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+'Cosine'
+mock_qdrant
+●●●●●● 1mm □
+'Euclid'
+mock_qdrant
+●●●●●● 1mm □
+'Dot'
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'qdrant_client'
+●●●●●● 1mm □
+mock_qdrant
+sys
+'qdrant_client.models'
+●●●●●● 1mm □
+mock_qdrant
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestQdrantVectorDBInit
+'Test QdrantVectorDB initialization.'
+●●●●●● 1mm □
+test_default_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default initialization with default values.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+host
+port
+api_key
+timeout
+●●●●●● 2mm □△
+'localhost'
+6333
+●●●●●● 2mm □
+30
+●●●●●● 3mm △
+●●●●●● 1mm □
+host
+●●●●●● 3mm △
+●●●●●● 1mm □
+port
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+client
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+'localhost'
+client
+6333
+client
+●●●●●● 2mm □
+client
+30
+client
+●●●●●● 2mm □
+client
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_custom_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test custom initialization with provided values.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+host
+port
+api_key
+timeout
+●●●●●● 2mm □△
+'localhost'
+6333
+●●●●●● 2mm □
+30
+●●●●●● 3mm △
+●●●●●● 1mm □
+host
+●●●●●● 3mm △
+●●●●●● 1mm □
+port
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+client
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+'qdrant.example.com'
+client
+6334
+client
+'test-api-key'
+client
+60
+●●●●●● 2mm △
+TestConnectionManagement
+'Test connection management operations.'
+●●●●●● 1mm □
+test_connect_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful connection.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'localhost'
+●●●●●● 3mm △
+●●●●●● 1mm □
+6333
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+connect
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+db
+●●●●●● 3mm □△○
+mock_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_connect_failure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test connection failure handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Connection refused'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'localhost'
+●●●●●● 3mm △
+●●●●●● 1mm □
+6333
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+connect
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_is_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test connection status checking.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+is_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestCollectionOperations
+'Test collection operations.'
+●●●●●● 1mm □
+test_create_collection_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating collection when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_create_collection_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful collection creation.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+mock_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_create_collection_already_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating collection that already exists.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Collection already exists'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 2mm □
+'already exists'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'existing_collection'
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_create_collection_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collection creation error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Unknown error'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 2mm □
+'already exists'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_collection_exists_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test checking collection existence when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+collection_exists
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_collection_exists_true
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collection exists returns true.'
+●●●●●● 2mm △
+MockCollection
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MockCollection
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+mock_collections
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+collection_exists
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+collections
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+name
+c
+collections
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_collection_exists_false
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collection exists returns false.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+mock_collections
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+collection_exists
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+collections
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+name
+c
+collections
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'nonexistent_collection'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_delete_collection_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deleting collection when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+delete_collection
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_delete_collection_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful collection deletion.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+delete_collection
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+mock_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_delete_collection_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collection deletion error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Collection not found'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+delete_collection
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_list_collections_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test listing collections when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+list_collections
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'collection1'
+'collection2'
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+test_list_collections_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful collection listing.'
+●●●●●● 2mm △
+MockCollection
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MockCollection
+●●●●●● 1mm □△
+'collection1'
+●●●●●● 2mm □△
+MockCollection
+●●●●●● 1mm □△
+'collection2'
+●●●●●● 2mm □△
+MockCollection
+●●●●●● 1mm □△
+'collection3'
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+mock_collections
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+list_collections
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+collections
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+c
+collections
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+'collection1'
+result
+'collection2'
+result
+'collection3'
+result
+●●●●●● 1mm □
+test_list_collections_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collection listing error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Network error'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+list_collections
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+c
+collections
+Exception
+●●●●●● 3mm ○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △
+TestVectorOperations
+'Test vector operations.'
+●●●●●● 1mm □
+test_upsert_vectors_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test upserting vectors when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+ids
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_upsert_vectors_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful vector upsert.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+ids
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+points
+●●●●●● 1mm □
+i
+vec
+●●●●●● 2mm □
+●●●●●● 1mm □△
+vectors
+●●●●●● 2mm □△
+point_id
+●●●●●● 1mm □
+ids
+ids
+i
+i
+payload
+●●●●●● 1mm □
+payloads
+payloads
+i
+points
+●●●●●● 1mm □△
+'id'
+'vector'
+'payload'
+point_id
+vec
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vectors
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+1536
+0.2
+●●●●●● 2mm □△
+1536
+payloads
+●●●●●● 1mm □
+'text'
+'doc1'
+'text'
+'doc2'
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+vectors
+payloads
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+mock_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_upsert_vectors_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test vector upsert error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Upsert failed'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+ids
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+points
+●●●●●● 1mm □
+i
+vec
+●●●●●● 2mm □
+●●●●●● 1mm □△
+vectors
+●●●●●● 2mm □△
+points
+●●●●●● 1mm □△
+'id'
+'vector'
+i
+vec
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_search_vectors_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching vectors when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+collection
+query_vector
+limit
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'id'
+'score'
+1
+0.9
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+test_search_vectors_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful vector search.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_results
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+mock_results
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+collection
+query_vector
+limit
+score_threshold
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'score'
+'payload'
+r
+r
+r
+r
+results
+score_threshold
+●●●●●● 2mm □
+r
+score_threshold
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+results
+0
+'id'
+1
+results
+0
+'score'
+0.95
+●●●●●● 1mm □
+test_search_vectors_with_threshold
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test vector search with score threshold.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_results
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+mock_results
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+collection
+query_vector
+limit
+score_threshold
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'score'
+'payload'
+r
+r
+r
+r
+results
+score_threshold
+●●●●●● 2mm □
+r
+score_threshold
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+1
+results
+0
+'score'
+0.7
+●●●●●● 1mm □
+test_search_vectors_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test vector search error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Search failed'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+collection
+query_vector
+limit
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+test_delete_vectors_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deleting vectors when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+delete
+●●●●●● 1mm □△
+self
+collection
+ids
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+1
+2
+3
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_delete_vectors_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful vector deletion.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+delete
+●●●●●● 1mm □△
+self
+collection
+ids
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+1
+2
+3
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+mock_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_delete_vectors_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test vector deletion error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Delete failed'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+delete
+●●●●●● 1mm □△
+self
+collection
+ids
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+1
+2
+3
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestCollectionInfo
+'Test collection info retrieval.'
+●●●●●● 1mm □
+test_get_collection_info_not_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting collection info when not connected.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_collection_info
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'name'
+'vector_count'
+name
+100
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_collection_info_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful collection info retrieval.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_info
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_info
+●●●●●● 1mm □
+1000
+mock_info
+●●●●●● 1mm □
+1000
+mock_info
+●●●●●● 1mm □
+'green'
+mock_client
+●●●●●● 1mm □
+mock_info
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+get_collection_info
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'vectors_count'
+'points_count'
+'status'
+name
+info
+info
+info
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test_collection'
+●●●●●● 2mm □△
+result
+'name'
+'test_collection'
+result
+'vectors_count'
+1000
+result
+'status'
+'green'
+●●●●●● 1mm □
+test_get_collection_info_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collection info retrieval error handling.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Not found'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+get_collection_info
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'vectors_count'
+name
+info
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestDistanceMetrics
+'Test distance metric configurations.'
+●●●●●● 1mm □
+test_cosine_distance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine distance metric.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'test'
+1536
+'Cosine'
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_client
+call_args
+1
+'vectors_config'
+'distance'
+'Cosine'
+●●●●●● 1mm □
+test_euclidean_distance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Euclidean distance metric.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'test'
+1536
+'Euclid'
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_client
+call_args
+1
+'vectors_config'
+'distance'
+'Euclid'
+●●●●●● 1mm □
+test_dot_distance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test dot product distance metric.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'test'
+1536
+'Dot'
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_client
+call_args
+1
+'vectors_config'
+'distance'
+'Dot'
+●●●●●● 2mm △
+TestSingletonPattern
+'Test singleton pattern for get_qdrant_client.'
+●●●●●● 1mm □
+test_get_qdrant_client_creates_instance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test singleton creates instance on first call.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+force_new
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □
+_instance
+●●●●●● 2mm □
+force_new
+_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_instance
+●●●●●● 1mm □
+'localhost'
+_instance
+●●●●●● 1mm □
+6333
+●●●●●● 3mm ○
+_instance
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 2mm □
+client
+'localhost'
+●●●●●● 1mm □
+test_get_qdrant_client_returns_same_instance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test singleton returns same instance on subsequent calls.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+force_new
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □
+_instance
+●●●●●● 2mm □
+force_new
+_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_instance
+client1
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client2
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client1
+client2
+●●●●●● 1mm □
+test_get_qdrant_client_force_new
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test singleton creates new instance when force_new=True.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+force_new
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □
+_instance
+●●●●●● 2mm □
+force_new
+_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_instance
+client1
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client2
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client2
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestVectorDBIntegration
+'Integration-style tests for vector database operations.'
+●●●●●● 1mm □
+test_full_workflow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete workflow: connect, create, upsert, search, delete.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_collections
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+mock_collections
+mock_search_results
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+mock_search_results
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+connect
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+collection
+query_vector
+limit
+●●●●●● 2mm □△
+10
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'score'
+'payload'
+r
+r
+r
+r
+results
+●●●●●● 1mm □
+delete_collection
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+db
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □△
+'test'
+1536
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vectors
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+1536
+db
+●●●●●● 1mm □△
+'test'
+vectors
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+results
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'test'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+results
+0
+'score'
+0.95
+db
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestEdgeCases
+'Test edge cases and boundary conditions.'
+●●●●●● 1mm □
+test_empty_vectors_list
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test upserting empty vectors list.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+vectors
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+mock_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_search_empty_results
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test search with no results.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_client
+●●●●●● 1mm □
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+collection
+query_vector
+limit
+●●●●●● 2mm □△
+10
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'score'
+r
+r
+r
+results
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+test_invalid_distance_metric
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling invalid distance metric.'
+valid_metrics
+●●●●●● 1mm □
+'Cosine'
+'Euclid'
+'Dot'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+create_collection
+●●●●●● 1mm □△
+self
+name
+dimension
+distance
+●●●●●● 2mm □△
+'Cosine'
+●●●●●● 2mm □
+distance
+valid_metrics
+ValueError
+●●●●●● 1mm □△
+'Invalid distance metric: '
+distance
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'test'
+1536
+'InvalidMetric'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_large_batch_upsert
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test upserting large batch of vectors.'
+mock_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_client
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm □
+100
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vectors
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+total
+batch_size
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+vectors
+i
+i
+●●●●●● 3mm ○
+batch_size
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vectors
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+1536
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+250
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'collection'
+vectors
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+mock_client
+3
+●●●●●● 1mm □
+test_vector_dimension_validation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test vector dimension validation.'
+●●●●●● 2mm △
+MockQdrantVectorDB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+1536
+●●●●●● 1mm □
+upsert
+●●●●●● 1mm □△
+self
+collection
+vectors
+payloads
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vec
+vectors
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec
+●●●●●● 2mm □△
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Vector dimension mismatch: expected '
+●●●●●● 3mm △
+', got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □
+MockQdrantVectorDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+1536
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'collection'
+0.1
+●●●●●● 2mm □△
+768
+●●●●●● 2mm □△

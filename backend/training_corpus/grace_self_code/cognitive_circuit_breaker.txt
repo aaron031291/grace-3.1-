@@ -1,0 +1,498 @@
+## circuit_breaker.py
+"\nCircuit Breaker — Prevents dangerous recursive loops from causing stack overflows.\n\nOpus forensic audit identified 3 dangerous recursive loops:\n  1. Genesis Provenance Cascade (8-module deep cycle)\n  2. Core Pipeline Loop (6-module cycle)\n  3. Kimi Enhancement Loop (pipeline ↔ kimi_enhanced)\n\nThis module provides:\n  - Per-loop call depth tracking\n  - Configurable max depth per loop\n  - Automatic circuit breaking when depth exceeded\n  - Named loop registry for Grace's self-awareness\n  - Loop execution metrics for the reporting engine\n\nAlso registers all 12 named system loops (healthy + dangerous) so\nGrace can reference them by name in her internal dialogue.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+NamedLoop
+name
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+max_depth
+●●●●●● 2mm ○
+5
+current_depth
+●●●●●● 2mm ○
+0
+total_executions
+●●●●●● 2mm ○
+0
+total_breaks
+●●●●●● 2mm ○
+0
+dataclass
+NAMED_LOOPS
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+NamedLoop
+'healing_homeostasis'
+'trust_homeostasis'
+'resource_balance'
+'autonomous_learning'
+'memory_mesh_learning'
+'consensus_refinement'
+'cognitive_healing'
+'pipeline_self_repair'
+'genesis_trust'
+'knowledge_integration'
+'cognitive_consensus'
+'live_integration'
+'autonomous_healing'
+'api_request_validation'
+'security_compliance_enforcement'
+'live_integration_safety'
+'sandbox_experiment_lifecycle'
+'autonomous_trigger_validation'
+'emergency_response_coordination'
+'api_response_verification'
+'code_deployment_verification'
+'llm_hallucination_detection'
+'report_generation_verification'
+'data_ingestion_validation'
+'librarian_file_integrity'
+'memory_consistency_maintenance'
+'version_control_integrity'
+'cross_system_synchronization'
+'code_generation_safety'
+'user_intent_adaptation'
+'feedback_loop_optimization'
+'system_health_monitoring'
+'cognitive_load_balancing'
+'performance_optimization_feedback'
+'external_api_reliability'
+'knowledge_graph_maintenance'
+'resource_exhaustion'
+'model_drift_detection'
+'user_feedback'
+'blueprint_build'
+'qwen_coding_net'
+'ethics_governance'
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NamedLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_call_depths
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+_depth_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'executions'
+'breaks'
+0
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+enter_loop
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Enter a named loop. Returns True if OK to proceed, False if circuit broken.\n    Must be paired with exit_loop() in a try/finally.\n    '
+loop
+●●●●●● 1mm □
+NAMED_LOOPS
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+max_depth
+●●●●●● 1mm □
+loop
+loop
+5
+_depth_lock
+_call_depths
+loop_name
+1
+depth
+●●●●●● 1mm □
+_call_depths
+loop_name
+_metrics
+loop_name
+'executions'
+1
+●●●●●● 3mm □△○
+cognitive.ml_trainer
+●●●●●● 2mm □△○
+get_ml_trainer
+get_ml_trainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loop_name
+'depth'
+'max_depth'
+'executions'
+'breaks'
+depth
+max_depth
+_metrics
+loop_name
+'executions'
+_metrics
+loop_name
+'breaks'
+depth
+max_depth
+'success'
+'failure'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+depth
+max_depth
+_depth_lock
+_metrics
+loop_name
+'breaks'
+1
+logger
+●●●●●● 1mm □△
+"[CIRCUIT BREAKER] Loop '"
+loop_name
+"' broken at depth "
+depth
+' (max '
+max_depth
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'circuit_breaker.triggered'
+'loop'
+'depth'
+'max'
+loop_name
+depth
+max_depth
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+exit_loop
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Exit a named loop — decrement depth counter.'
+_depth_lock
+_call_depths
+loop_name
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+_call_depths
+loop_name
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_loop_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get status of all named loops.'
+result
+●●●●●● 1mm □
+_depth_lock
+name
+loop
+NAMED_LOOPS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+_metrics
+●●●●●● 1mm □△
+name
+'executions'
+'breaks'
+0
+0
+●●●●●● 2mm □△
+result
+name
+●●●●●● 1mm □
+'display_name'
+'category'
+'status'
+'description'
+'components'
+'max_depth'
+'current_depth'
+'total_executions'
+'total_breaks'
+loop
+loop
+loop
+loop
+loop
+loop
+_call_depths
+●●●●●● 1mm □△
+name
+0
+●●●●●● 2mm □△
+metrics
+'executions'
+metrics
+'breaks'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_loops_by_category
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get loops grouped by category.'
+by_cat
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+status
+●●●●●● 1mm □
+get_loop_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name
+info
+status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cat
+●●●●●● 1mm □
+info
+'category'
+●●●●●● 2mm □
+cat
+by_cat
+by_cat
+cat
+●●●●●● 1mm □
+by_cat
+cat
+●●●●●● 1mm □△
+'id'
+name
+info
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+by_cat
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+protected_call
+●●●●●● 1mm □△
+loop_name
+fn
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'Execute a function within a circuit-protected loop.'
+●●●●●● 2mm □
+enter_loop
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+fn
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+exit_loop
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+Any

@@ -1,0 +1,353 @@
+## tasks_service.py
+'Tasks domain service — scheduling, time sense.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+uuid
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+SCHED_PATH
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'scheduled_tasks.json'
+●●●●●● 1mm □
+_load_scheduled
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SCHED_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+SCHED_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+SCHED_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_save_scheduled
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+SCHED_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SCHED_PATH
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+live_activity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT key_type, what_description, who_actor, when_timestamp FROM genesis_key WHERE when_timestamp >= :c ORDER BY when_timestamp DESC LIMIT 20'
+●●●●●● 2mm □△
+'c'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'activities'
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+rows
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'activities'
+'timestamp'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+task_history
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+40
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT key_type, what_description, who_actor, when_timestamp FROM genesis_key WHERE when_timestamp >= :c ORDER BY when_timestamp DESC LIMIT :l'
+●●●●●● 2mm □△
+'c'
+'l'
+cutoff
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'history'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+rows
+Exception
+●●●●●● 3mm ○
+'history'
+●●●●●● 1mm □
+submit_task
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+gk
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'submitted'
+'genesis_key_id'
+●●●●●● 3mm □△○
+gk
+Exception
+●●●●●● 3mm ○
+'submitted'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+get_scheduled
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □
+_load_scheduled
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+tasks
+●●●●●● 2mm □
+t
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'scheduled'
+t
+●●●●●● 1mm □△
+'scheduled_for'
+''
+●●●●●● 2mm □△
+now
+t
+'status'
+●●●●●● 1mm □
+'overdue'
+●●●●●● 3mm ○
+'tasks'
+tasks
+●●●●●● 1mm □
+schedule_task
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □
+_load_scheduled
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'id'
+'title'
+'scheduled_for'
+'priority'
+'status'
+'created_at'
+'sched-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+payload
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □△
+'scheduled_for'
+''
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □△
+'priority'
+'medium'
+●●●●●● 2mm □△
+'scheduled'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+_save_scheduled
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 1mm □
+delete_scheduled
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □
+_load_scheduled
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filtered
+●●●●●● 1mm □
+t
+t
+tasks
+t
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+task_id
+_save_scheduled
+●●●●●● 1mm □△
+filtered
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'deleted'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+time_sense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm ○
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+planner_sessions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm ○
+'sessions'
+Exception
+●●●●●● 3mm ○
+'sessions'

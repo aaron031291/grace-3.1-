@@ -1,0 +1,948 @@
+## seed_default_rules.py
+'\nSeed Default Categorization Rules\n\nCreates a comprehensive set of default rules for automatic file categorization.\nThese rules cover common file types, naming patterns, and directory structures.\n\nRun this script after migration to populate the rules table:\n    python backend/librarian/seed_default_rules.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+librarian.rule_categorizer
+●●●●●● 2mm □△○
+RuleBasedCategorizer
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DEFAULT_RULES
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'PDF Documents'
+'PDF document files'
+'extension'
+'\\.pdf$'
+'assign_tag'
+'tag_names'
+'document'
+'pdf'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Markdown Documentation'
+'Markdown documentation files'
+'extension'
+'\\.md$'
+'assign_tag'
+'tag_names'
+'documentation'
+'markdown'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Python Code'
+'Python source code files'
+'extension'
+'\\.py$'
+'assign_tag'
+'tag_names'
+'code'
+'python'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'JavaScript Code'
+'JavaScript/TypeScript files'
+'extension'
+'\\.(js|jsx|ts|tsx)$'
+'assign_tag'
+'tag_names'
+'code'
+'javascript'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'JSON Data'
+'JSON data files'
+'extension'
+'\\.json$'
+'assign_tag'
+'tag_names'
+'data'
+'json'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'YAML Configuration'
+'YAML configuration files'
+'extension'
+'\\.(yaml|yml)$'
+'assign_tag'
+'tag_names'
+'configuration'
+'yaml'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Text Files'
+'Plain text files'
+'extension'
+'\\.txt$'
+'assign_tag'
+'tag_names'
+'document'
+'text'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'CSV Data'
+'CSV data files'
+'extension'
+'\\.csv$'
+'assign_tag'
+'tag_names'
+'data'
+'csv'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Excel Spreadsheets'
+'Excel spreadsheet files'
+'extension'
+'\\.(xlsx|xls)$'
+'assign_tag'
+'tag_names'
+'document'
+'spreadsheet'
+'excel'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Word Documents'
+'Microsoft Word documents'
+'extension'
+'\\.(docx|doc)$'
+'assign_tag'
+'tag_names'
+'document'
+'word'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'PowerPoint Presentations'
+'PowerPoint presentation files'
+'extension'
+'\\.(pptx|ppt)$'
+'assign_tag'
+'tag_names'
+'document'
+'presentation'
+'powerpoint'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Image Files'
+'Image files (PNG, JPG, GIF, etc.)'
+'extension'
+'\\.(png|jpg|jpeg|gif|bmp|svg|webp)$'
+'assign_tag'
+'tag_names'
+'media'
+'image'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Audio Files'
+'Audio files (MP3, WAV, etc.)'
+'extension'
+'\\.(mp3|wav|m4a|flac|ogg|aac)$'
+'assign_tag'
+'tag_names'
+'media'
+'audio'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Video Files'
+'Video files (MP4, AVI, etc.)'
+'extension'
+'\\.(mp4|avi|mov|mkv|webm|flv)$'
+'assign_tag'
+'tag_names'
+'media'
+'video'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'HTML Files'
+'HTML web page files'
+'extension'
+'\\.(html|htm)$'
+'assign_tag'
+'tag_names'
+'code'
+'html'
+'web'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'CSS Stylesheets'
+'CSS stylesheet files'
+'extension'
+'\\.(css|scss|sass|less)$'
+'assign_tag'
+'tag_names'
+'code'
+'css'
+'web'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Shell Scripts'
+'Shell script files'
+'extension'
+'\\.(sh|bash)$'
+'assign_tag'
+'tag_names'
+'code'
+'script'
+'shell'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'SQL Scripts'
+'SQL database scripts'
+'extension'
+'\\.sql$'
+'assign_tag'
+'tag_names'
+'code'
+'sql'
+'database'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Java Code'
+'Java source code files'
+'extension'
+'\\.java$'
+'assign_tag'
+'tag_names'
+'code'
+'java'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'C/C++ Code'
+'C and C++ source code files'
+'extension'
+'\\.(c|cpp|cc|h|hpp)$'
+'assign_tag'
+'tag_names'
+'code'
+'c++'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Rust Code'
+'Rust source code files'
+'extension'
+'\\.rs$'
+'assign_tag'
+'tag_names'
+'code'
+'rust'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'Go Code'
+'Go source code files'
+'extension'
+'\\.go$'
+'assign_tag'
+'tag_names'
+'code'
+'golang'
+10
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'AI Research Folder'
+'Files in AI research directories'
+'path'
+'ai[_\\s\\-]research'
+'assign_tag'
+'tag_names'
+'ai'
+'research'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Systems Thinking Folder'
+'Files in systems thinking directories'
+'path'
+'systems[_\\s\\-]thinking'
+'assign_tag'
+'tag_names'
+'systems'
+'architecture'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Learning Memory Folder'
+'Files in learning memory directories'
+'path'
+'learning[_\\s\\-]memory'
+'assign_tag'
+'tag_names'
+'learning'
+'memory'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Documentation Folder'
+'Files in documentation directories'
+'path'
+'/(docs?|documentation)/'
+'assign_tag'
+'tag_names'
+'documentation'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Test Files Folder'
+'Files in test directories'
+'path'
+'/(tests?|testing|__tests__)/'
+'assign_tag'
+'tag_names'
+'test'
+'testing'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Examples Folder'
+'Files in examples directories'
+'path'
+'/(examples?|samples?)/'
+'assign_tag'
+'tag_names'
+'example'
+'tutorial'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Configuration Folder'
+'Files in config directories'
+'path'
+'/(config|configuration|settings)/'
+'assign_tag'
+'tag_names'
+'configuration'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Scripts Folder'
+'Files in scripts directories'
+'path'
+'/scripts?/'
+'assign_tag'
+'tag_names'
+'script'
+20
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'README Files'
+'README documentation files'
+'filename'
+'^README'
+'assign_tag'
+'tag_names'
+'documentation'
+'readme'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'License Files'
+'License files'
+'filename'
+'^LICENSE'
+'assign_tag'
+'tag_names'
+'legal'
+'license'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Changelog Files'
+'Changelog files'
+'filename'
+'^(CHANGELOG|HISTORY)'
+'assign_tag'
+'tag_names'
+'documentation'
+'changelog'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Contributing Guide'
+'Contributing guidelines'
+'filename'
+'^CONTRIBUTING'
+'assign_tag'
+'tag_names'
+'documentation'
+'contributing'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Test Files'
+'Test files (test_*.py pattern)'
+'filename'
+'^test_.*\\.py$'
+'assign_tag'
+'tag_names'
+'test'
+'python'
+15
+●●●●●● 3mm □△○
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Configuration Files'
+'Common configuration filenames'
+'filename'
+'^(config|settings|\\.env|\\.ini)'
+'assign_tag'
+'tag_names'
+'configuration'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Package Files'
+'Package definition files'
+'filename'
+'^(package\\.json|requirements\\.txt|Pipfile|setup\\.py|pyproject\\.toml|Cargo\\.toml|go\\.mod)$'
+'assign_tag'
+'tag_names'
+'configuration'
+'dependencies'
+15
+●●●●●● 3mm □△○
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Docker Files'
+'Docker-related files'
+'filename'
+'^(Dockerfile|docker-compose)'
+'assign_tag'
+'tag_names'
+'devops'
+'docker'
+'configuration'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'CI/CD Files'
+'CI/CD configuration files'
+'filename'
+'^(\\.github|\\.gitlab-ci|\\.travis|jenkinsfile|\\.circleci)'
+'assign_tag'
+'tag_names'
+'devops'
+'ci-cd'
+'configuration'
+15
+●●●●●● 1mm □
+'name'
+'description'
+'pattern_type'
+'pattern_value'
+'action_type'
+'action_params'
+'priority'
+'case_sensitive'
+'Makefile'
+'Build automation files'
+'filename'
+'^(Makefile|makefile)$'
+'assign_tag'
+'tag_names'
+'build'
+'automation'
+15
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+seed_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Seed default categorization rules into database.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Seeding Default Categorization Rules'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+categorizer
+●●●●●● 1mm □
+RuleBasedCategorizer
+●●●●●● 1mm □△
+db
+●●●●●● 2mm □△
+rules_created
+●●●●●● 1mm □
+0
+rules_skipped
+●●●●●● 1mm □
+0
+errors
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'\nProcessing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+DEFAULT_RULES
+●●●●●● 2mm □△
+' default rules...\n'
+●●●●●● 2mm □△
+rule_data
+DEFAULT_RULES
+existing_rules
+●●●●●● 1mm □
+categorizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+r
+'name'
+rule_data
+'name'
+r
+existing_rules
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"✓ Rule '"
+rule_data
+'name'
+"' already exists, skipping..."
+●●●●●● 2mm □△
+rules_skipped
+1
+rule
+●●●●●● 1mm □
+categorizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Created rule: '
+rule_data
+'name'
+' (ID: '
+rule
+', Priority: '
+rule_data
+●●●●●● 1mm □△
+'priority'
+0
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+rules_created
+1
+Exception
+error_msg
+●●●●●● 1mm □
+"✗ Failed to create rule '"
+rule_data
+'name'
+"': "
+e
+logger
+●●●●●● 1mm □△
+error_msg
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □△
+error_msg
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Seeding Summary'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created: '
+rules_created
+' rules'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Skipped: '
+rules_skipped
+' rules (already exist)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors
+logger
+●●●●●● 1mm □△
+'Errors: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error
+errors
+logger
+●●●●●● 1mm □△
+'  '
+error
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Default rules have been seeded!'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'You can now use the RuleBasedCategorizer to automatically tag documents.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Next steps:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  1. Test rules: Use categorizer.test_rule_against_documents(rule_id)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  2. Process documents: Use LibrarianEngine to process existing documents'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  3. Add custom rules: Use categorizer.create_rule() or API endpoints'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+seed_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△

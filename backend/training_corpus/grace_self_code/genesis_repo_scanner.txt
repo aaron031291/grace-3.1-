@@ -1,0 +1,873 @@
+## repo_scanner.py
+'\nRepository Genesis Key Scanner.\n\nScans the entire repository and assigns Genesis Keys to:\n- All directories\n- All subdirectories\n- All files\n\nStores in immutable memory for complete tracking.\nIntegrates with file version tracker for automatic version control.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RepoScanner
+'\n    Scans repository and assigns Genesis Keys to everything.\n\n    Creates immutable memory snapshot of entire repo structure.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+repo_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+'scan_timestamp'
+'repo_path'
+'root_genesis_key'
+'directories'
+'files'
+'statistics'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo_path
+●●●●●● 2mm □
+'total_directories'
+'total_files'
+'total_size_bytes'
+0
+0
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+'__pycache__'
+'.git'
+'node_modules'
+'.venv'
+'venv'
+'.pytest_cache'
+'.mypy_cache'
+'dist'
+'build'
+'*.pyc'
+'.DS_Store'
+●●●●●● 1mm □
+should_skip
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if path should be skipped.'
+path_str
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+path_str
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+generate_directory_key
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Generate Genesis Key for directory.'
+path_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'DIR-'
+path_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_file_key
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Generate Genesis Key for file.'
+path_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'FILE-'
+path_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_file_metadata
+●●●●●● 1mm □△
+self
+abs_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get file metadata.'
+stat
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'size_bytes'
+'modified_at'
+'created_at'
+'is_executable'
+stat
+datetime
+●●●●●● 1mm □△
+stat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+stat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+abs_path
+os
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to get metadata for '
+abs_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+scan_repository
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Scan entire repository and assign Genesis Keys.\n\n        Returns immutable memory snapshot.\n        '
+logger
+●●●●●● 1mm □△
+'Starting repository scan: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+root_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+''
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'root_genesis_key'
+●●●●●● 1mm □
+root_key
+●●●●●● 3mm △
+'statistics'
+'total_directories'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'directories'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'statistics'
+'total_files'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'files'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'statistics'
+'total_size_bytes'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+'size_bytes'
+f
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'size_bytes'
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Scan complete: '
+●●●●●● 3mm △
+'statistics'
+'total_directories'
+' dirs, '
+●●●●●● 3mm △
+'statistics'
+'total_files'
+' files'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_scan_directory
+●●●●●● 1mm □△
+self
+abs_path
+rel_path
+parent_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Recursively scan directory and assign Genesis Keys.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+dir_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rel_path
+'root'
+●●●●●● 2mm □△
+dir_name
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+'root'
+is_root
+●●●●●● 1mm □
+rel_path
+''
+dir_info
+●●●●●● 1mm □
+'genesis_key'
+'path'
+'absolute_path'
+'name'
+'parent_genesis_key'
+'is_root'
+'subdirectories'
+'files'
+'scanned_at'
+dir_key
+rel_path
+abs_path
+dir_name
+parent_key
+is_root
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+item_abs
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+item
+●●●●●● 2mm □△
+item_rel
+●●●●●● 1mm □
+rel_path
+os
+●●●●●● 1mm □△
+rel_path
+item
+●●●●●● 2mm □△
+item
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item_abs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+item_abs
+●●●●●● 2mm □△
+subdir_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item_abs
+item_rel
+dir_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+subdir_key
+dir_info
+'subdirectories'
+●●●●●● 1mm □△
+subdir_key
+●●●●●● 2mm □△
+●●●●●● 1mm △
+os
+●●●●●● 1mm □△
+item_abs
+●●●●●● 2mm □△
+file_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item_abs
+item_rel
+dir_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_key
+dir_info
+'files'
+●●●●●● 1mm □△
+file_key
+●●●●●● 2mm □△
+PermissionError
+logger
+●●●●●● 1mm □△
+'Permission denied: '
+abs_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error scanning '
+abs_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'directories'
+rel_path
+'root'
+●●●●●● 1mm □
+dir_info
+●●●●●● 3mm ○
+dir_key
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_scan_file
+●●●●●● 1mm □△
+self
+abs_path
+rel_path
+parent_dir_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Assign Genesis Key to file.'
+file_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rel_path
+●●●●●● 2mm □△
+file_name
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+file_ext
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+file_name
+●●●●●● 2mm □△
+1
+metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+file_info
+●●●●●● 1mm □
+'genesis_key'
+'path'
+'absolute_path'
+'name'
+'extension'
+'directory_genesis_key'
+'scanned_at'
+file_key
+rel_path
+abs_path
+file_name
+file_ext
+parent_dir_key
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 3mm △
+'files'
+rel_path
+●●●●●● 1mm □
+file_info
+●●●●●● 3mm ○
+file_key
+●●●●●● 1mm ○
+●●●●●● 1mm □
+save_immutable_memory
+●●●●●● 1mm □△
+self
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Save immutable memory to JSON file.\n\n        This creates a permanent snapshot that cannot be changed.\n        '
+●●●●●● 2mm □
+output_path
+output_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'.genesis_immutable_memory.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+●●●●●● 3mm △
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Immutable memory saved to: '
+output_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+output_path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_directory_tree
+●●●●●● 1mm □△
+self
+rel_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'root'
+'Get directory tree starting from path.'
+●●●●●● 2mm □
+rel_path
+●●●●●● 3mm △
+'directories'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+dir_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+'directories'
+rel_path
+tree
+●●●●●● 1mm □
+'genesis_key'
+'name'
+'path'
+'subdirectories'
+'files'
+dir_info
+'genesis_key'
+dir_info
+'name'
+dir_info
+'path'
+subdir_key
+dir_info
+'subdirectories'
+path
+info
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+'genesis_key'
+subdir_key
+subtree
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+subtree
+tree
+'subdirectories'
+●●●●●● 1mm □△
+subtree
+●●●●●● 2mm □△
+file_key
+dir_info
+'files'
+path
+info
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+'genesis_key'
+file_key
+tree
+'files'
+●●●●●● 1mm □△
+'genesis_key'
+'name'
+'path'
+'size_bytes'
+info
+'genesis_key'
+info
+'name'
+info
+'path'
+info
+●●●●●● 1mm □△
+'size_bytes'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tree
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+find_by_genesis_key
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Find directory or file by Genesis Key.'
+path
+info
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+'genesis_key'
+genesis_key
+●●●●●● 3mm ○
+'type'
+'info'
+'directory'
+info
+path
+info
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+'genesis_key'
+genesis_key
+●●●●●● 3mm ○
+'type'
+'info'
+'file'
+info
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get scan statistics.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'statistics'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+integrate_with_version_tracking
+●●●●●● 1mm □△
+self
+user_id
+version_note
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Integrate scanned files with file version tracker.\n\n        Creates initial versions for all scanned files.\n        Links file Genesis Keys with version control.\n        '
+●●●●●● 3mm □△○
+genesis.file_version_tracker
+●●●●●● 2mm □△○
+get_file_version_tracker
+tracker
+●●●●●● 1mm □
+get_file_version_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracked_count
+●●●●●● 1mm □
+0
+skipped_count
+●●●●●● 1mm □
+0
+error_count
+●●●●●● 1mm □
+0
+file_path
+file_info
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_genesis_key
+●●●●●● 1mm □
+file_info
+'genesis_key'
+abs_path
+●●●●●● 1mm □
+file_info
+'absolute_path'
+result
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'changed'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+tracked_count
+1
+●●●●●● 3mm □
+skipped_count
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Error tracking file '
+file_path
+': '
+e
+●●●●●● 2mm □△
+error_count
+1
+●●●●●● 3mm ○
+'total_files'
+'tracked'
+'skipped'
+'errors'
+'message'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'files'
+●●●●●● 2mm □△
+tracked_count
+skipped_count
+error_count
+'Version tracking integrated: '
+tracked_count
+' files tracked'
+Exception
+logger
+●●●●●● 1mm □△
+'Error integrating with version tracking: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'message'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'Failed to integrate with version tracking'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+scan_and_save_repo
+●●●●●● 1mm □△
+repo_path
+integrate_version_tracking
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n    Scan repository and save immutable memory.\n\n    Args:\n        repo_path: Path to repository\n        integrate_version_tracking: Whether to integrate with file version tracking\n        user_id: User ID for version tracking\n\n    Returns:\n        Immutable memory with scan results\n    '
+scanner
+●●●●●● 1mm □
+RepoScanner
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+immutable_memory
+●●●●●● 1mm □
+scanner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scanner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+integrate_version_tracking
+tracking_result
+●●●●●● 1mm □
+scanner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+immutable_memory
+'version_tracking'
+●●●●●● 1mm □
+tracking_result
+●●●●●● 3mm ○
+immutable_memory
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_repo_scanner
+●●●●●● 2mm □○
+RepoScanner
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_repo_scanner
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get or create global repo scanner.'
+●●●●●● 2mm □
+_repo_scanner
+●●●●●● 2mm □
+repo_path
+●●●●●● 2mm □
+●●●●●● 2mm □
+repo_path
+●●●●●● 2mm □
+repo_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_repo_scanner
+●●●●●● 1mm □
+RepoScanner
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_repo_scanner
+RepoScanner

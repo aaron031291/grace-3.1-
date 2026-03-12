@@ -1,0 +1,1648 @@
+## genesis_key_service.py
+'\nGenesis Key Service - Comprehensive tracking and version control system.\n\nGenesis keys are deterministic (hash-based) and never model-generated.\nKey IDs: GK- from (key_type, what, who, where, why, how, timestamp, input_hash, parent_key_id);\nGU- from identifier hash; FS- from genesis_key_id + suggestion content.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+contextlib
+●●●●●● 2mm □△○
+contextmanager
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy.exc
+●●●●●● 2mm □△○
+IntegrityError
+OperationalError
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+FixSuggestion
+GenesisKeyArchive
+UserProfile
+GenesisKeyType
+GenesisKeyStatus
+FixSuggestionStatus
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+get_session_factory
+●●●●●● 3mm □△○
+version_control.git_service
+●●●●●● 2mm □△○
+GitService
+●●●●●● 3mm □△○
+genesis.kb_integration
+●●●●●● 2mm □△○
+get_kb_integration
+●●●●●● 2mm □△○
+os
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKeyService
+'\n    Service for creating and managing Genesis Keys.\n\n    Provides automatic tracking of all operations with comprehensive metadata.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GitService
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Git service not available for Genesis Key tracking: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_user_id
+●●●●●● 1mm □△
+self
+identifier
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Generate a Genesis user ID.\n\n        Args:\n            identifier: Optional identifier (email, username, etc.)\n\n        Returns:\n            Unique user ID\n        '
+seed
+●●●●●● 1mm □
+identifier
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'anonymous'
+●●●●●● 3mm ○
+'GU-'
+hashlib
+●●●●●● 1mm □△
+seed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_or_create_user
+●●●●●● 1mm □△
+self
+user_id
+username
+email
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create a user profile.'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+user_id
+user_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+email
+username
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+UserProfile
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+UserProfile
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user
+user
+●●●●●● 1mm □
+UserProfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+user
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created new user profile: '
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy.orm.session
+●●●●●● 2mm □△○
+make_transient
+sess
+●●●●●● 1mm □△
+user
+●●●●●● 2mm □△
+make_transient
+●●●●●● 1mm □△
+user
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+user
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to create user profile: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UserProfile
+●●●●●● 1mm □
+create_key
+●●●●●● 1mm □△
+self
+key_type
+what_description
+who_actor
+where_location
+why_reason
+how_method
+user_id
+session_id
+file_path
+line_number
+function_name
+code_before
+code_after
+is_error
+error_type
+error_message
+error_traceback
+input_data
+output_data
+context_data
+tags
+parent_key_id
+session
+●●●●●● 2mm □△
+GenesisKeyType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Create a new Genesis Key with comprehensive tracking.\n\n        Args:\n            key_type: Type of Genesis Key\n            what_description: What happened\n            who_actor: Who performed the action\n            where_location: Where it happened\n            why_reason: Why it happened\n            how_method: How it was done\n            user_id: User ID (Genesis-generated)\n            session_id: Session ID for tracking\n            file_path: File path for code changes\n            line_number: Line number\n            function_name: Function name\n            code_before: Code before change\n            code_after: Code after change\n            is_error: Whether this is an error\n            error_type: Type of error\n            error_message: Error message\n            error_traceback: Error traceback\n            input_data: Input data\n            output_data: Output data\n            context_data: Additional context\n            tags: Searchable tags\n            parent_key_id: Parent key for chaining\n            session: Database session\n\n        Returns:\n            Created Genesis Key\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+close_session
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △
+close_session
+●●●●●● 1mm □
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+sess
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+sess
+sess
+sess
+logger
+●●●●●● 1mm □△
+'[GENESIS] Session has pending changes, expiring all objects'
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Session cleanup warning: '
+cleanup_error
+●●●●●● 2mm □△
+when_ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+input_hash
+●●●●●● 1mm □
+input_data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+''
+payload
+●●●●●● 1mm □
+key_type
+'|'
+what_description
+'|'
+who_actor
+'|'
+where_location
+''
+'|'
+why_reason
+''
+'|'
+how_method
+''
+'|'
+when_ts
+'|'
+input_hash
+'|'
+parent_key_id
+''
+key_id
+●●●●●● 1mm □
+'GK-'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+32
+commit_sha
+●●●●●● 1mm □
+●●●●●● 2mm □
+branch_name
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+key_type
+GenesisKeyType
+commits
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+commits
+commit_sha
+●●●●●● 1mm □
+commits
+0
+●●●●●● 1mm □△
+'sha'
+●●●●●● 2mm □△
+Exception
+metadata_human
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata_ai
+●●●●●● 1mm □
+'key_type'
+'timestamp'
+'commit_sha'
+'has_code_change'
+'is_error'
+'input_hash'
+'output_hash'
+'tags'
+key_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commit_sha
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code_before
+code_after
+●●●●●● 2mm □△
+is_error
+input_data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+output_data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tags
+●●●●●● 1mm □
+_sqlite_json_safe
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+'Ensure value is JSON-serializable for SQLite JSON columns. Recursively replaces\n                coroutines and other non-serializable values so insert never fails.'
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<coroutine not awaited>'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+_sqlite_json_safe
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_sqlite_json_safe
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+TypeError
+ValueError
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+last_err
+●●●●●● 1mm □
+●●●●●● 2mm □
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OperationalError
+last_err
+●●●●●● 1mm □
+e
+●●●●●● 2mm □
+'locked'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'busy'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'timeout'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+attempt
+2
+●●●●●● 2mm □△○
+time
+time
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+attempt
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+IntegrityError
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+key
+●●●●●● 1mm □
+existing
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+Exception
+●●●●●● 2mm □
+'Identity map already had an identity'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+last_err
+last_err
+extracted_key_id
+●●●●●● 1mm □
+key
+extracted_key_data
+●●●●●● 1mm □
+'key_id'
+'key_type'
+'what_description'
+'who_actor'
+'where_location'
+'why_reason'
+'how_method'
+'file_path'
+'user_id'
+'session_id'
+'is_error'
+'code_before'
+'code_after'
+'input_data'
+'output_data'
+'context_data'
+'tags'
+'when_timestamp'
+key
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+key
+'value'
+●●●●●● 2mm □△
+key
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy.orm.session
+●●●●●● 2mm □△○
+make_transient
+sess
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+make_transient
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+user_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+user_id
+key_type
+is_error
+sess
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Genesis user stats update skipped: %s'
+us_err
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+threading
+kb_integration
+●●●●●● 1mm □
+get_kb_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_kb_data
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+extracted_key_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_integration
+●●●●●● 1mm □△
+_kb_data
+●●●●●● 2mm □△
+Exception
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to launch KB save thread: %s'
+kb_error
+●●●●●● 2mm □△
+LEARNABLE_TYPES
+●●●●●● 1mm □
+'AI_RESPONSE'
+'AI_CODE_GENERATION'
+'CODING_AGENT_ACTION'
+'ERROR'
+'FIX'
+'LEARNING_COMPLETE'
+'GAP_IDENTIFIED'
+'CODE_CHANGE'
+'USER_INPUT'
+'USER_UPLOAD'
+key_type_str
+●●●●●● 1mm □
+extracted_key_data
+●●●●●● 1mm □△
+'key_type'
+''
+●●●●●● 2mm □△
+should_learn
+●●●●●● 1mm □
+key_type_str
+LEARNABLE_TYPES
+●●●●●● 2mm □
+should_learn
+●●●●●● 2mm □△○
+threading
+_mesh_data
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+extracted_key_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_feed_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegration
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 1mm □
+_s
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+'raw'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mesh_sess
+mesh
+●●●●●● 1mm □
+MemoryMeshIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Memory mesh feed skipped: '
+e
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+trigger_pipeline
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger_result
+●●●●●● 1mm □
+trigger_pipeline
+●●●●●● 1mm □△
+extracted_key_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trigger_result
+trigger_result
+●●●●●● 1mm □△
+'triggered'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Triggered autonomous actions from Genesis Key: '
+extracted_key_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Created Genesis Key: '
+extracted_key_id
+' - '
+what_description
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to create Genesis Key: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_operation
+●●●●●● 1mm □△
+self
+key_type
+operation_name
+who_actor
+user_id
+session_id
+why_reason
+context_data
+session
+●●●●●● 2mm □△
+GenesisKeyType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Context manager for tracking operations with Genesis Keys.\n\n        Usage:\n            with genesis.track_operation(\n                GenesisKeyType.USER_INPUT,\n                "file_upload",\n                "user@example.com"\n            ) as key:\n                # Perform operation\n                result = upload_file()\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+●●●●●● 2mm □
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+'Completed: '
+operation_name
+key
+●●●●●● 1mm □
+GenesisKeyStatus
+duration
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+'duration_seconds'
+'status'
+duration
+'success'
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+key
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+'Failed: '
+operation_name
+key
+●●●●●● 1mm □
+GenesisKeyStatus
+key
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+key
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+'duration_seconds'
+'status'
+duration
+'failed'
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contextmanager
+●●●●●● 1mm □
+create_fix_suggestion
+●●●●●● 1mm □△
+self
+genesis_key_id
+suggestion_type
+title
+description
+severity
+fix_code
+fix_diff
+confidence
+metadata
+session
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Create a fix suggestion for an error.'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+suggestion
+●●●●●● 1mm □
+FixSuggestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+suggestion
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+key
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created fix suggestion: '
+suggestion
+' for key '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+suggestion
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FixSuggestion
+●●●●●● 1mm □
+apply_fix
+●●●●●● 1mm □△
+self
+suggestion_id
+applied_by
+session
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Apply a fix suggestion and create a new Genesis Key for the fix.'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+suggestion
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+FixSuggestion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+FixSuggestion
+suggestion_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+suggestion
+ValueError
+●●●●●● 1mm □△
+'Fix suggestion not found: '
+suggestion_id
+●●●●●● 2mm □△
+original_key
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+suggestion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fix_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestion
+●●●●●● 1mm □
+FixSuggestionStatus
+suggestion
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestion
+●●●●●● 1mm □
+applied_by
+suggestion
+●●●●●● 1mm □
+fix_key
+●●●●●● 2mm □
+original_key
+original_key
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+original_key
+●●●●●● 1mm □
+fix_key
+original_key
+●●●●●● 1mm □
+GenesisKeyStatus
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Applied fix: '
+suggestion_id
+', created key: '
+fix_key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fix_key
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+_generate_human_metadata
+●●●●●● 1mm □△
+self
+key_type
+what
+where
+when
+why
+who
+how
+●●●●●● 2mm □△
+GenesisKeyType
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+datetime
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Generate human-readable metadata summary.'
+parts
+●●●●●● 1mm □
+'WHAT: '
+what
+'WHO: '
+who
+'WHEN: '
+when
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S UTC'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+where
+parts
+●●●●●● 1mm □△
+'WHERE: '
+where
+●●●●●● 2mm □△
+●●●●●● 2mm □
+why
+parts
+●●●●●● 1mm □△
+'WHY: '
+why
+●●●●●● 2mm □△
+●●●●●● 2mm □
+how
+parts
+●●●●●● 1mm □△
+'HOW: '
+how
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'TYPE: '
+key_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_hash_data
+●●●●●● 1mm □△
+self
+data
+●●●●●● 2mm □△
+Any
+'Generate hash of data for comparison.'
+data_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+data_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_update_user_stats
+●●●●●● 1mm □△
+self
+user_id
+key_type
+is_error
+session
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+GenesisKeyType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'Update user statistics.'
+user
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+UserProfile
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+UserProfile
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user
+user
+1
+user
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key_type
+GenesisKeyType
+user
+1
+●●●●●● 2mm □
+is_error
+user
+1
+●●●●●● 2mm □
+key_type
+GenesisKeyType
+user
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to update user stats: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_keys_for_archival
+●●●●●● 1mm □△
+self
+before_date
+session
+●●●●●● 2mm □△
+datetime
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get keys ready for archival (older than specified date).'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+keys
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+before_date
+GenesisKey
+GenesisKeyStatus
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+keys
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm □
+rollback_to_key
+●●●●●● 1mm □△
+self
+key_id
+rolled_back_by
+session
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Rollback to a specific Genesis Key state.'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+target_key
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target_key
+ValueError
+●●●●●● 1mm □△
+'Genesis Key not found: '
+key_id
+●●●●●● 2mm □△
+rollback_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_key
+●●●●●● 1mm □
+GenesisKeyStatus
+●●●●●● 2mm □
+●●●●●● 3mm △
+target_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target_key
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Reverted Git to commit: '
+target_key
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Git revert failed: '
+e
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Rolled back to key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rollback_key
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get a Genesis Key service instance.'
+●●●●●● 3mm ○
+GenesisKeyService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKeyService
+get_genesis_key_service
+●●●●●● 1mm □
+get_genesis_service

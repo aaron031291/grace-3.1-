@@ -1,0 +1,1258 @@
+## grace_agent.py
+"\nGrace Agent\n\nThe complete software engineering agent that combines Grace's cognitive\nsystems with execution capabilities to solve real programming tasks.\n\nThis is the main agent loop that:\n1. Understands tasks using RAG\n2. Plans approach using OODA\n3. Executes using the execution bridge\n4. Learns from outcomes\n5. Iterates until complete\n"
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Callable
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+execution.bridge
+●●●●●● 2mm □△○
+ExecutionBridge
+ExecutionConfig
+get_execution_bridge
+●●●●●● 3mm □△○
+execution.actions
+●●●●●● 2mm □△○
+GraceAction
+ActionRequest
+ActionResult
+ActionStatus
+create_action
+●●●●●● 3mm □△○
+execution.feedback
+●●●●●● 2mm □△○
+FeedbackProcessor
+get_feedback_processor
+LearningSignal
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TaskStatus
+●●●●●● 3mm □△
+Enum
+Enum
+'Status of a task.'
+PENDING
+●●●●●● 1mm □
+'pending'
+PLANNING
+●●●●●● 1mm □
+'planning'
+EXECUTING
+●●●●●● 1mm □
+'executing'
+BLOCKED
+●●●●●● 1mm □
+'blocked'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+CANCELLED
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 2mm △
+AgentConfig
+'Configuration for the Grace Agent.'
+max_iterations
+●●●●●● 2mm ○
+50
+timeout_per_action
+●●●●●● 2mm ○
+300
+workspace_dir
+●●●●●● 1mm ○
+●●●●●● 2mm □
+confidence_threshold
+●●●●●● 3mm ○
+0.5
+use_rag
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+use_memory
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_confirmation_for_git
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_confirmation_for_delete
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+auto_commit
+●●●●●● 3mm △
+●●●●●● 1mm □
+test_before_commit
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+learn_from_execution
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+min_confidence_for_pattern
+●●●●●● 3mm ○
+0.6
+dataclass
+●●●●●● 2mm △
+TaskResult
+'Result of a task execution.'
+task_id
+●●●●●● 1mm ○
+status
+TaskStatus
+summary
+●●●●●● 1mm ○
+''
+output
+●●●●●● 1mm ○
+''
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+actions_executed
+●●●●●● 2mm ○
+0
+actions_succeeded
+●●●●●● 2mm ○
+0
+actions_failed
+●●●●●● 2mm ○
+0
+files_created
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_modified
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_deleted
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns_learned
+●●●●●● 2mm ○
+0
+trust_delta
+●●●●●● 3mm ○
+0.0
+started_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+completed_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+duration_seconds
+●●●●●● 3mm ○
+0.0
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task_id'
+'status'
+'summary'
+'output'
+'error'
+'actions_executed'
+'actions_succeeded'
+'actions_failed'
+'files_created'
+'files_modified'
+'files_deleted'
+'patterns_learned'
+'trust_delta'
+'started_at'
+'completed_at'
+'duration_seconds'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+GraceAgent
+'\n    Grace\'s Software Engineering Agent.\n\n    Combines:\n    - RAG retrieval for knowledge\n    - OODA loop for decision making\n    - Execution bridge for actions\n    - Feedback processor for learning\n\n    Usage:\n        agent = GraceAgent()\n        result = await agent.solve_task("Fix the bug in auth.py")\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+config
+retriever
+llm_client
+genesis_tracker
+●●●●●● 2mm □△
+AgentConfig
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+config
+AgentConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_tracker
+exec_config
+●●●●●● 1mm □
+ExecutionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_execution_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_feedback_processor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Tuple
+ActionRequest
+ActionResult
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm △○
+ActionRequest
+ActionResult
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Main entry point: solve a software engineering task.\n\n        Args:\n            task: Natural language description of the task\n            context: Additional context (files, constraints, etc.)\n            on_action: Callback for each action (for UI updates)\n\n        Returns:\n            TaskResult with summary, files affected, etc.\n        '
+task_id
+●●●●●● 1mm □
+'TASK-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm △
+●●●●●● 1mm □
+task
+●●●●●● 3mm △
+●●●●●● 1mm □
+context
+●●●●●● 3mm △
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'Starting task '
+task_id
+': '
+task
+100
+'...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+understanding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Task understanding: '
+understanding
+●●●●●● 1mm □△
+'summary'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskStatus
+plan
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+understanding
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created plan with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+●●●●●● 1mm □△
+'steps'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' steps'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskStatus
+iteration
+●●●●●● 1mm □
+0
+iteration
+●●●●●● 3mm △
+iteration
+1
+next_action
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+plan
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+next_action
+●●●●●● 2mm □
+●●●●●● 2mm □
+next_action
+GraceAction
+action_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+next_action
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+next_action
+action_result
+●●●●●● 2mm □△
+result
+1
+●●●●●● 2mm □
+action_result
+result
+1
+●●●●●● 3mm □
+result
+1
+result
+●●●●●● 1mm □△
+action_result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+action_result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+action_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+on_action
+on_action
+●●●●●● 1mm □△
+next_action
+action_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+signals
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+next_action
+action_result
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+signals
+●●●●●● 2mm □△
+result
+action_result
+●●●●●● 2mm □
+action_result
+ActionStatus
+should_continue
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_result
+plan
+●●●●●● 2mm □△
+●●●●●● 2mm □
+should_continue
+result
+●●●●●● 1mm □
+TaskStatus
+result
+●●●●●● 1mm □
+action_result
+●●●●●● 2mm □
+result
+TaskStatus
+result
+●●●●●● 1mm □
+TaskStatus
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Task '
+task_id
+' completed: '
+result
+' ('
+result
+' actions, '
+result
+'.1f'
+'s)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Task '
+task_id
+' failed with error'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskStatus
+result
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+TaskResult
+●●●●●● 1mm ○
+'\n        Understand the task using RAG and context analysis.\n        '
+understanding
+●●●●●● 1mm □
+'task'
+'task_type'
+'entities'
+'context'
+'constraints'
+task
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+understanding
+'context'
+●●●●●● 1mm □
+results
+Exception
+logger
+●●●●●● 1mm □△
+'RAG retrieval failed: '
+e
+●●●●●● 2mm □△
+understanding
+'entities'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+understanding
+'summary'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+understanding
+●●●●●● 2mm □△
+●●●●●● 3mm □
+understanding
+'summary'
+●●●●●● 1mm □
+'Task: '
+task
+200
+●●●●●● 3mm ○
+understanding
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_classify_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Classify the type of task.'
+task_lower
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task_lower
+w
+'fix'
+'bug'
+'error'
+'issue'
+'broken'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'bug_fix'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task_lower
+w
+'add'
+'create'
+'implement'
+'new'
+'feature'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'feature'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task_lower
+w
+'refactor'
+'clean'
+'improve'
+'optimize'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'refactor'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task_lower
+w
+'test'
+'testing'
+'coverage'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'testing'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task_lower
+w
+'document'
+'readme'
+'comment'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'documentation'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task_lower
+w
+'review'
+'check'
+'analyze'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'review'
+●●●●●● 3mm ○
+'general'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_entities
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract file names, function names, etc. from task.'
+entities
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+re
+file_patterns
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[\\w/\\\\]+\\.\\w+'
+task
+●●●●●● 2mm □△
+f
+file_patterns
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'file'
+f
+●●●●●● 2mm □△
+func_patterns
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b(\\w+)\\s*\\('
+task
+●●●●●● 2mm □△
+f
+func_patterns
+●●●●●● 2mm □
+f
+'if'
+'for'
+'while'
+'with'
+'def'
+'class'
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'function'
+f
+●●●●●● 2mm □△
+class_patterns
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b([A-Z][a-zA-Z0-9]+)\\b'
+task
+●●●●●● 2mm □△
+c
+class_patterns
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+2
+entities
+●●●●●● 1mm □△
+'type'
+'value'
+'class'
+c
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entities
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Retrieve relevant context using RAG.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'source'
+'score'
+r
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+1000
+r
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+r
+results
+Exception
+logger
+●●●●●● 1mm □△
+'Retrieval failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Generate a summary of task understanding using LLM.'
+●●●●●● 3mm ○
+'Task type: '
+understanding
+'task_type'
+', Entities: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+understanding
+'entities'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Create an execution plan for the task.\n        '
+task_type
+●●●●●● 1mm □
+understanding
+●●●●●● 1mm □△
+'task_type'
+'general'
+●●●●●● 2mm □△
+plan
+●●●●●● 1mm □
+'goal'
+'task_type'
+'steps'
+'current_step'
+task
+task_type
+0
+●●●●●● 2mm □
+task_type
+'bug_fix'
+plan
+'steps'
+●●●●●● 1mm □
+'action'
+'description'
+'read_relevant_files'
+'Read the relevant code'
+'action'
+'description'
+'understand_bug'
+'Understand the bug'
+'action'
+'description'
+'write_fix'
+'Write the fix'
+'action'
+'description'
+'run_tests'
+'Run tests to verify'
+'action'
+'description'
+'finish'
+'Complete task'
+●●●●●● 1mm △
+task_type
+'feature'
+plan
+'steps'
+●●●●●● 1mm □
+'action'
+'description'
+'understand_requirements'
+'Understand what to build'
+'action'
+'description'
+'read_existing_code'
+'Read existing code structure'
+'action'
+'description'
+'write_code'
+'Write the new code'
+'action'
+'description'
+'write_tests'
+'Write tests'
+'action'
+'description'
+'run_tests'
+'Run tests'
+'action'
+'description'
+'finish'
+'Complete task'
+●●●●●● 2mm □
+task_type
+'refactor'
+plan
+'steps'
+●●●●●● 1mm □
+'action'
+'description'
+'read_code'
+'Read code to refactor'
+'action'
+'description'
+'run_tests'
+'Run tests (baseline)'
+'action'
+'description'
+'refactor'
+'Refactor the code'
+'action'
+'description'
+'run_tests'
+'Run tests (verify)'
+'action'
+'description'
+'finish'
+'Complete task'
+●●●●●● 3mm □
+plan
+'steps'
+●●●●●● 1mm □
+'action'
+'description'
+'analyze'
+'Analyze the task'
+'action'
+'description'
+'execute'
+'Execute required actions'
+'action'
+'description'
+'verify'
+'Verify the result'
+'action'
+'description'
+'finish'
+'Complete task'
+●●●●●● 3mm ○
+plan
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+Tuple
+ActionRequest
+ActionResult
+'\n        Decide the next action based on plan and history.\n\n        This is where the OODA loop happens:\n        - Observe: Look at history and current state\n        - Orient: Understand where we are in the plan\n        - Decide: Choose the next action\n        - Act: Return the action to execute\n        '
+●●●●●● 2mm □
+plan
+'current_step'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+'steps'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+create_action
+●●●●●● 1mm □△
+GraceAction
+'result'
+'summary'
+'Task completed'
+'All steps executed'
+●●●●●● 2mm □△
+current_step
+●●●●●● 1mm □
+plan
+'steps'
+plan
+'current_step'
+step_action
+●●●●●● 1mm □
+current_step
+●●●●●● 1mm □△
+'action'
+''
+●●●●●● 2mm □△
+last_result
+●●●●●● 1mm □
+history
+history
+1
+1
+●●●●●● 2mm □
+●●●●●● 2mm □
+step_action
+'read_relevant_files'
+step_action
+'read_code'
+step_action
+'read_existing_code'
+entities
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'entities'
+●●●●●● 2mm □△
+e
+'type'
+'file'
+●●●●●● 2mm □
+entities
+file_path
+●●●●●● 1mm □
+entities
+0
+'value'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+create_action
+●●●●●● 1mm □△
+GraceAction
+'pattern'
+'path'
+'*.py'
+'.'
+●●●●●● 2mm □△
+plan
+'current_step'
+1
+●●●●●● 3mm ○
+create_action
+●●●●●● 1mm □△
+GraceAction
+'path'
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+step_action
+'run_tests'
+plan
+'current_step'
+1
+●●●●●● 3mm ○
+create_action
+●●●●●● 1mm □△
+GraceAction
+'test_path'
+'test_framework'
+'.'
+'auto'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step_action
+'finish'
+●●●●●● 3mm ○
+create_action
+●●●●●● 1mm □△
+GraceAction
+'result'
+'summary'
+'completed'
+'Task finished'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+plan
+'current_step'
+1
+●●●●●● 3mm □
+●●●●●● 3mm ○
+create_action
+●●●●●● 1mm □△
+GraceAction
+'thought'
+'Executing step: '
+current_step
+●●●●●● 1mm □△
+'description'
+step_action
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+ActionRequest
+ActionResult
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Handle a failed action.\n\n        Returns True if we should continue, False if we should abort.\n        '
+logger
+●●●●●● 1mm □△
+'Action failed: '
+result
+●●●●●● 2mm □△
+error
+●●●●●● 1mm □
+result
+''
+●●●●●● 2mm □
+'not found'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm △
+'permission'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'timeout'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+recent_failures
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+r
+●●●●●● 3mm △
+5
+r
+ActionStatus
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+recent_failures
+3
+●●●●●● 3mm △
+●●●●●● 1mm ○
+TaskResult
+'Create a summary of the task execution.'
+lines
+●●●●●● 1mm □
+'Task: '
+task
+100
+'Status: '
+result
+'Actions: '
+result
+' ('
+result
+' succeeded, '
+result
+' failed)'
+●●●●●● 2mm □
+result
+lines
+●●●●●● 1mm □△
+'Files created: '
+', '
+●●●●●● 1mm □△
+result
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+lines
+●●●●●● 1mm □△
+'Files modified: '
+', '
+●●●●●● 1mm □△
+result
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+lines
+●●●●●● 1mm □△
+'Error: '
+result
+200
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Write code to a file based on specification.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Write code to '
+file_path
+': '
+specification
+●●●●●● 2mm □△
+TaskResult
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Fix a bug based on description.'
+task
+●●●●●● 1mm □
+'Fix bug: '
+description
+●●●●●● 2mm □
+file_path
+task
+' in '
+file_path
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+TaskResult
+●●●●●● 1mm ○
+'.'
+'Run tests and report results.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Run tests in '
+test_path
+●●●●●● 2mm □△
+TaskResult
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Refactor code based on description.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Refactor '
+file_path
+': '
+description
+●●●●●● 2mm □△
+TaskResult
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Tuple

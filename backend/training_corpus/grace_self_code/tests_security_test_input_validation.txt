@@ -1,0 +1,113 @@
+## test_input_validation.py
+'\nTests for input validation and sanitization.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm △
+TestSQLInjectionPrevention
+●●●●●● 1mm □
+test_brain_rejects_sql_injection_in_action
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+"/api/v2/system/'; DROP TABLE--"
+●●●●●● 2mm □△
+r
+400
+404
+500
+●●●●●● 1mm □
+test_brain_rejects_path_traversal
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/files/../../etc/passwd'
+●●●●●● 2mm □△
+r
+400
+404
+500
+●●●●●● 2mm △
+TestMalformedInput
+●●●●●● 1mm □
+test_non_json_body_handled
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/system/runtime'
+●●●●●● 2mm □△
+r
+200
+400
+422
+500
+●●●●●● 1mm □
+test_oversized_payload_handled
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+huge
+●●●●●● 1mm □
+'data'
+'x'
+●●●●●● 2mm □△
+100000
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/system/runtime'
+●●●●●● 2mm □△
+r
+200
+413
+422
+500
+●●●●●● 2mm △
+TestGenesisKeyIntegrity
+●●●●●● 1mm □
+test_genesis_stats_returns_valid_data
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/stats'
+●●●●●● 2mm □△
+r
+200
+500
+●●●●●● 2mm □
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_keys'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'total_keys'
+●●●●●● 2mm ○
+●●●●●● 2mm □△

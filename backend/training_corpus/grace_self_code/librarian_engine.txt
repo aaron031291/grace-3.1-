@@ -1,0 +1,974 @@
+## engine.py
+'\nLibrarianEngine - Central Orchestrator\n\nCoordinates all librarian components to provide comprehensive file management:\n- Rule-based categorization\n- AI content analysis (via LLM Orchestrator)\n- Tag management\n- Relationship detection\n- Approval workflow\n\nFULLY INTEGRATED with:\n- LLM Orchestrator for AI operations\n- Cognitive Framework (OODA Loop + 12 Invariants)\n- Genesis Key tracking\n- Layer 1 Message Bus\n\nThis is the main entry point for the librarian system.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 3mm □△○
+librarian.tag_manager
+●●●●●● 2mm □△○
+TagManager
+●●●●●● 3mm □△○
+librarian.rule_categorizer
+●●●●●● 2mm □△○
+RuleBasedCategorizer
+●●●●●● 3mm □△○
+librarian.ai_analyzer
+●●●●●● 2mm □△○
+AIContentAnalyzer
+●●●●●● 3mm □△○
+librarian.relationship_manager
+●●●●●● 2mm □△○
+RelationshipManager
+●●●●●● 3mm □△○
+librarian.approval_workflow
+●●●●●● 2mm □△○
+ApprovalWorkflow
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LibrarianEngine
+'\n    Central orchestrator for the Grace Librarian System.\n\n    NOW FULLY INTEGRATED with LLM Orchestrator for all AI operations.\n\n    Coordinates all librarian components to automatically organize, categorize,\n    and index documents. Handles the complete processing pipeline:\n\n    1. Rule-based categorization (fast pattern matching)\n    2. AI content analysis (via LLM Orchestrator with full cognitive pipeline)\n    3. Tag assignment (with confidence tracking)\n    4. Relationship detection (citations, versions, similarity)\n    5. Approval workflow (for sensitive operations)\n\n    All AI operations include:\n    - OODA Loop enforcement\n    - 12 Invariants validation\n    - Genesis Key tracking\n    - Hallucination mitigation\n    - Learning Memory integration\n\n    Example:\n        >>> from database.session import initialize_session_factory\n        >>> from database.config import DatabaseConfig\n        >>> from database.connection import DatabaseConnection\n        >>> from embedding import get_embedding_model\n        >>> from llm_orchestrator.llm_orchestrator import get_llm_orchestrator\n        >>> from vector_db.client import get_qdrant_client\n        >>>\n        >>> # Initialize\n        >>> config = DatabaseConfig.from_env()\n        >>> DatabaseConnection.initialize(config)\n        >>> SessionLocal = initialize_session_factory()\n        >>> db = SessionLocal()\n        >>>\n        >>> # Create engine with LLM Orchestrator (preferred)\n        >>> librarian = LibrarianEngine(\n        ...     db_session=db,\n        ...     embedding_model=get_embedding_model(),\n        ...     llm_orchestrator=get_llm_orchestrator(session=db),\n        ...     vector_db_client=get_qdrant_client()\n        ... )\n        >>>\n        >>> # Process a document\n        >>> result = librarian.process_document(document_id=123)\n        >>> print(f"Tags: {result[\'tags_assigned\']}")\n        >>> print(f"Relationships: {result[\'relationships_detected\']}")\n        >>> print(f"Genesis Key: {result.get(\'genesis_key_id\')}")\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+embedding_model
+llm_client
+llm_orchestrator
+vector_db_client
+ai_model_name
+use_ai
+detect_relationships
+ai_confidence_threshold
+similarity_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'mistral:7b'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+0.6
+0.7
+'\n        Initialize LibrarianEngine with all components.\n\n        Args:\n            db_session: SQLAlchemy database session\n            embedding_model: Embedding model for similarity\n            llm_client: Provider-agnostic LLM client (replaces legacy ollama_client)\n            llm_orchestrator: LLM Orchestrator instance (preferred)\n            vector_db_client: Qdrant vector DB client\n            ai_model_name: LLM model name (default: "mistral:7b")\n            use_ai: Enable AI content analysis (default: True)\n            detect_relationships: Enable relationship detection (default: True)\n            ai_confidence_threshold: Min confidence for AI suggestions (default: 0.6)\n            similarity_threshold: Min similarity for relationships (default: 0.7)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_ai
+●●●●●● 3mm △
+●●●●●● 1mm □
+detect_relationships
+●●●●●● 3mm △
+●●●●●● 1mm □
+ai_confidence_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+similarity_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+TagManager
+●●●●●● 1mm □△
+db_session
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+RuleBasedCategorizer
+●●●●●● 1mm □△
+db_session
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ApprovalWorkflow
+●●●●●● 1mm □△
+db_session
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_orchestrator
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+use_ai
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] ✓ Connected to LLM Orchestrator'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Could not connect to LLM Orchestrator: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+use_ai
+doc_client
+●●●●●● 1mm □
+llm_client
+doc_model
+●●●●●● 1mm □
+ai_model_name
+●●●●●● 2mm □
+doc_client
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+●●●●●● 3mm □△○
+llm_orchestrator.ollama_resolver
+●●●●●● 2mm □△○
+resolve_ollama_model
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+doc_client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'document'
+●●●●●● 2mm □△
+doc_model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+doc_client
+'_default_model'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+resolve_ollama_model
+●●●●●● 1mm □△
+'document'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_model
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LIBRARIAN_AI_MODEL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+doc_model
+●●●●●● 1mm □
+settings
+doc_model
+●●●●●● 1mm □
+doc_model
+'qwen3:32b'
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Using document model for parse/read: %s'
+doc_model
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AIContentAnalyzer
+●●●●●● 1mm □△
+db_session
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] AI analyzer created but not available'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] ✓ AI analyzer ready (via LLM Orchestrator)'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Failed to initialize AI analyzer: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+detect_relationships
+●●●●●● 3mm △
+●●●●●● 1mm □
+RelationshipManager
+●●●●●● 1mm □△
+db_session
+embedding_model
+vector_db_client
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Engine initialized (AI: '
+●●●●●● 3mm △
+●●●●●● 2mm □
+', Relationships: '
+●●●●●● 3mm △
+●●●●●● 2mm □
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_document
+●●●●●● 1mm □△
+self
+document_id
+use_ai
+detect_relationships
+auto_execute
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Process a single document through the complete pipeline.\n\n        Args:\n            document_id: Document ID to process\n            use_ai: Override use_ai setting (default: use engine setting)\n            detect_relationships: Override setting (default: use engine setting)\n            auto_execute: Auto-execute approved actions (default: True)\n\n        Returns:\n            Dict: Processing results with tags, relationships, actions\n\n        Example:\n            >>> result = librarian.process_document(123)\n            >>> {\n            ...     "document_id": 123,\n            ...     "tags_assigned": 5,\n            ...     "relationships_detected": 3,\n            ...     "actions_created": 2,\n            ...     "rules_matched": ["PDF Documents", "AI Research Folder"],\n            ...     "ai_analysis": {"confidence": 0.9, "category": "research"},\n            ...     "status": "success"\n            ... }\n        '
+use_ai_analysis
+●●●●●● 1mm □
+use_ai
+●●●●●● 2mm □
+use_ai
+●●●●●● 3mm △
+detect_rels
+●●●●●● 1mm □
+detect_relationships
+●●●●●● 2mm □
+detect_relationships
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+'document_id'
+'tags_assigned'
+'relationships_detected'
+'actions_created'
+'rules_matched'
+'ai_analysis'
+'status'
+document_id
+0
+0
+0
+●●●●●● 2mm □
+'pending'
+document
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+result
+'status'
+●●●●●● 1mm □
+'error'
+result
+'error'
+●●●●●● 1mm □
+'Document '
+document_id
+' not found'
+●●●●●● 3mm ○
+result
+logger
+●●●●●● 1mm □△
+'Processing document '
+document_id
+': '
+document
+●●●●●● 2mm □△
+rule_matches
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document_id
+●●●●●● 2mm □△
+result
+'rules_matched'
+●●●●●● 1mm □
+match
+'rule_name'
+match
+rule_matches
+rule_tags
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+match
+rule_matches
+●●●●●● 2mm □
+match
+'action_type'
+'assign_tag'
+tag_names
+●●●●●● 1mm □
+match
+'action_params'
+●●●●●● 1mm □△
+'tag_names'
+●●●●●● 2mm □△
+rule_tags
+●●●●●● 1mm □△
+tag_names
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule_tags
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'tags_assigned'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rule_tags
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Assigned '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rule_tags
+●●●●●● 2mm □△
+' rule-based tags'
+●●●●●● 2mm □△
+ai_tags
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_ai_analysis
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rule_matches
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rule_tags
+●●●●●● 2mm □△
+3
+ai_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document_id
+●●●●●● 2mm □△
+result
+'ai_analysis'
+●●●●●● 1mm □
+'confidence'
+'category'
+'topics'
+ai_result
+●●●●●● 1mm □△
+'confidence'
+0.0
+●●●●●● 2mm □△
+ai_result
+●●●●●● 1mm □△
+'category'
+'unknown'
+●●●●●● 2mm □△
+ai_result
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ai_result
+●●●●●● 1mm □△
+'confidence'
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+ai_tags
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+ai_result
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ai_tags
+●●●●●● 1mm □
+ai_tags
+●●●●●● 1mm □△
+rule_tags
+●●●●●● 2mm □
+ai_tags
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'tags_assigned'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ai_tags
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Assigned '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ai_tags
+●●●●●● 2mm □△
+' AI-suggested tags'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'AI analysis failed for document '
+document_id
+': '
+e
+●●●●●● 2mm □△
+result
+'ai_analysis'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+detect_rels
+●●●●●● 3mm △
+relationships
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+relationships
+saved_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+relationships
+●●●●●● 2mm □△
+result
+'relationships_detected'
+●●●●●● 1mm □
+saved_count
+logger
+●●●●●● 1mm □△
+'Detected and saved '
+saved_count
+' relationships'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Relationship detection failed for document '
+document_id
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+auto_execute
+approved_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+approved_count
+0
+logger
+●●●●●● 1mm □△
+'Auto-approved '
+approved_count
+' actions'
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'success'
+logger
+●●●●●● 1mm □△
+'Successfully processed document '
+document_id
+': '
+result
+'tags_assigned'
+' tags, '
+result
+'relationships_detected'
+' relationships'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error processing document '
+document_id
+': '
+e
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'error'
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_batch
+●●●●●● 1mm □△
+self
+document_ids
+use_ai
+detect_relationships
+skip_errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Process multiple documents in batch.\n\n        Args:\n            document_ids: List of document IDs\n            use_ai: Override AI setting\n            detect_relationships: Override relationship detection\n            skip_errors: Continue on errors (default: True)\n\n        Returns:\n            List[Dict]: Results for each document\n\n        Example:\n            >>> results = librarian.process_batch([1, 2, 3, 4, 5])\n            >>> successful = [r for r in results if r["status"] == "success"]\n            >>> print(f"Processed {len(successful)}/{len(results)} documents")\n        '
+results
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'Batch processing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+document_ids
+●●●●●● 2mm □△
+' documents'
+●●●●●● 2mm □△
+doc_id
+document_ids
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to process document '
+doc_id
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+skip_errors
+results
+●●●●●● 1mm □△
+'document_id'
+'status'
+'error'
+'tags_assigned'
+'relationships_detected'
+doc_id
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □
+successful
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+r
+results
+r
+'status'
+'success'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Batch processing complete: '
+successful
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+document_ids
+●●●●●● 2mm □△
+' successful'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+reprocess_all_documents
+●●●●●● 1mm □△
+self
+use_ai
+detect_relationships
+batch_size
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+10
+●●●●●● 2mm □
+'\n        Reprocess all documents in the knowledge base.\n\n        Useful after:\n        - Adding new rules\n        - Updating AI models\n        - System upgrades\n\n        Args:\n            use_ai: Use AI analysis (default: False, expensive)\n            detect_relationships: Detect relationships (default: True)\n            batch_size: Process in batches of N documents\n            limit: Maximum documents to process (None = all)\n\n        Returns:\n            Dict: Summary statistics\n\n        Example:\n            >>> # Reprocess all with rules only (fast)\n            >>> summary = librarian.reprocess_all_documents(use_ai=False)\n            >>> print(f"Processed {summary[\'documents_processed\']} documents")\n            >>>\n            >>> # Reprocess with AI (expensive, limit to 100)\n            >>> summary = librarian.reprocess_all_documents(use_ai=True, limit=100)\n        '
+logger
+●●●●●● 1mm □△
+'Starting full knowledge base reprocessing...'
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+'completed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □
+limit
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+all_documents
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_docs
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_documents
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Found '
+total_docs
+' documents to reprocess'
+●●●●●● 2mm □△
+all_results
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+total_docs
+batch_size
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+all_documents
+i
+i
+●●●●●● 3mm ○
+batch_size
+batch_ids
+●●●●●● 1mm □
+doc
+doc
+batch
+logger
+●●●●●● 1mm □△
+'Processing batch '
+i
+●●●●●● 1mm □○
+batch_size
+●●●●●● 3mm ○
+1
+'/'
+total_docs
+●●●●●● 3mm ○
+batch_size
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □○
+batch_size
+●●●●●● 2mm □△
+batch_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_results
+●●●●●● 1mm □△
+batch_results
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+r
+r
+all_results
+r
+'status'
+'success'
+failed
+●●●●●● 1mm □
+r
+r
+all_results
+r
+'status'
+'error'
+total_tags
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'tags_assigned'
+0
+●●●●●● 2mm □△
+r
+all_results
+●●●●●● 2mm □△
+total_relationships
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'relationships_detected'
+0
+●●●●●● 2mm □△
+r
+all_results
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+'documents_processed'
+'successful'
+'failed'
+'total_tags_assigned'
+'total_relationships_detected'
+'average_tags_per_doc'
+'settings'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_results
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successful
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed
+●●●●●● 2mm □△
+total_tags
+total_relationships
+all_results
+total_tags
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_results
+●●●●●● 2mm □△
+0
+'use_ai'
+'detect_relationships'
+'batch_size'
+use_ai
+detect_relationships
+batch_size
+logger
+●●●●●● 1mm □△
+'Reprocessing complete: '
+summary
+'successful'
+'/'
+summary
+'documents_processed'
+' successful'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Assigned '
+summary
+'total_tags_assigned'
+' tags, detected '
+summary
+'total_relationships_detected'
+' relationships'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+summary
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_system_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get comprehensive system statistics.\n\n        Returns:\n            Dict: Statistics from all components\n\n        Example:\n            >>> stats = librarian.get_system_statistics()\n            >>> print(f"Total tags: {stats[\'tags\'][\'total\']}")\n            >>> print(f"Total rules: {stats[\'rules\'][\'total\']}")\n        '
+stats
+●●●●●● 1mm □
+'tags'
+'rules'
+'actions'
+'ai_available'
+'relationships_enabled'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+health_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check health of all librarian components.\n\n        Returns:\n            Dict: Health status of each component\n\n        Example:\n            >>> health = librarian.health_check()\n            >>> if health["overall_status"] == "healthy":\n            ...     print("All systems operational")\n        '
+health
+●●●●●● 1mm □
+'tag_manager'
+'rule_categorizer'
+'approval_workflow'
+'ai_analyzer'
+'relationship_manager'
+'overall_status'
+'healthy'
+'healthy'
+'healthy'
+'unavailable'
+'unavailable'
+'healthy'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'ai_analyzer'
+●●●●●● 1mm □
+'healthy'
+●●●●●● 3mm □
+health
+'ai_analyzer'
+●●●●●● 1mm □
+'degraded'
+●●●●●● 3mm □
+health
+'overall_status'
+●●●●●● 1mm □
+'degraded'
+●●●●●● 2mm □
+●●●●●● 3mm △
+health
+'relationship_manager'
+●●●●●● 1mm □
+'healthy'
+●●●●●● 3mm ○
+health
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

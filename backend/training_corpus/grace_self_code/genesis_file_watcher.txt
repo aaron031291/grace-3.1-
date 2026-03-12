@@ -1,0 +1,779 @@
+## file_watcher.py
+'\nFile System Watcher for Automatic Version Control.\n\nWatches file changes in the workspace and automatically creates\nGenesis Keys + Version entries for all modifications.\n\nThis makes GRACE truly autonomous - file changes are tracked\nin real-time without manual intervention.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Set
+Dict
+Any
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+watchdog.observers
+●●●●●● 2mm □△○
+Observer
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisFileWatcher
+●●●●●● 3mm □△
+FileSystemEventHandler
+FileSystemEventHandler
+'\n    Watches file system changes and creates Genesis Keys + Versions automatically.\n\n    Monitors a directory tree and triggers symbiotic version control\n    for all file modifications, creates, and deletes.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+watch_path
+exclude_patterns
+debounce_seconds
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Set
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+2.0
+"\n        Initialize file watcher.\n\n        Args:\n            watch_path: Root path to watch for file changes\n            exclude_patterns: Set of patterns to exclude (e.g., {'.git', '__pycache__', '.pyc'})\n            debounce_seconds: Wait time after last change before triggering version control\n        "
+●●●●●● 3mm △
+●●●●●● 1mm □
+watch_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+exclude_patterns
+'.git'
+'__pycache__'
+'.pyc'
+'.pyo'
+'.pyd'
+'node_modules'
+'.venv'
+'venv'
+'env'
+'.genesis_file_versions.json'
+'.genesis_immutable_memory.json'
+'.db'
+'.db-shm'
+'.db-wal'
+'observations.json'
+'.log'
+'embedding_debug.log'
+'logs'
+'genesis_key'
+'layer_1'
+'auto_search'
+'GU-'
+'session_SS-'
+'sandbox_lab'
+'EXP-'
+●●●●●● 3mm △
+●●●●●● 1mm □
+debounce_seconds
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'GenesisFileWatcher initialized for: '
+watch_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_symbiotic_vc
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Lazy load symbiotic version control to avoid circular imports.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+genesis.symbiotic_version_control
+●●●●●● 2mm □△○
+get_symbiotic_version_control
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_symbiotic_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+_HARD_IGNORE_FRAGMENTS
+●●●●●● 1mm □
+'AppData'
+'appdata'
+'.cache'
+'cache2'
+'Cache'
+'mozilla'
+'firefox'
+'Firefox'
+'chromium'
+'chrome'
+'Google'
+'.mozilla'
+'Temp'
+'tmp'
+'.tmp'
+'Local\\Packages'
+'.local/share/Trash'
+'Recycle.Bin'
+'thumbnails'
+'.thumbnails'
+'Recently Used'
+'recently-used'
+'fontconfig'
+'dconf'
+'pulse'
+'snap'
+'flatpak'
+'BrowserMetrics'
+'CrashReports'
+●●●●●● 1mm □
+_should_ignore
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if file should be ignored based on exclude patterns.'
+file_path_str
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+frag
+●●●●●● 3mm △
+●●●●●● 2mm □
+frag
+file_path_str
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+path_parts
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+file_path_str
+'/layer_1/'
+file_path_str
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'/GU-'
+file_path_str
+'\\GU-'
+file_path_str
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'session_SS-'
+file_path_str
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+part
+path_parts
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+part
+part
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+part
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+filename
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+filename
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+pattern
+filename
+filename
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_is_debounced
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if enough time has passed since last modification.\n\n        Many editors trigger multiple file events for a single save.\n        This debouncing prevents creating multiple versions for the same change.\n        '
+current_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_time
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_time
+●●●●●● 1mm □△
+last_time
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+file_path
+●●●●●● 1mm □
+current_time
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_track_file_change
+●●●●●● 1mm □△
+self
+file_path
+operation_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Track file change using symbiotic version control.'
+rel_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] Received event: file_path='
+file_path
+', watch_path='
+●●●●●● 3mm △
+', rel_path='
+rel_path
+●●●●●● 2mm □△
+symbiotic
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+symbiotic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] Tracked: '
+rel_path
+' - Operation: '
+operation_type
+', Genesis Key: '
+result
+'operation_genesis_key'
+', Version: '
+result
+●●●●●● 1mm □△
+'version_number'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] Error tracking '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_modified
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+'Handle file modification events.'
+●●●●●● 2mm □
+event
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] Debouncing: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] File modified: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+'modify'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_created
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+'Handle file creation events.'
+●●●●●● 2mm □
+event
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] File created: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+'create'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_deleted
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+'Handle file deletion events.'
+●●●●●● 2mm □
+event
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] File deleted: '
+file_path
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] Tracked deletion: '
+rel_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER] Error tracking deletion '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get watcher statistics.'
+●●●●●● 3mm ○
+'watch_path'
+'files_tracked'
+'excluded_patterns'
+'debounce_seconds'
+'active_files_monitoring'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+FileWatcherService
+'\n    Service to manage file watchers for multiple directories.\n\n    Can watch multiple directories simultaneously and coordinate\n    version tracking across all of them.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Observer
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GenesisFileWatcher
+logger
+●●●●●● 1mm □△
+'FileWatcherService initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start_watching
+●●●●●● 1mm □△
+self
+watch_path
+recursive
+exclude_patterns
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+Set
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n        Start watching a directory for file changes.\n\n        Args:\n            watch_path: Path to watch\n            recursive: Whether to watch subdirectories\n            exclude_patterns: Patterns to exclude from watching\n\n        Returns:\n            True if started successfully, False otherwise\n        '
+●●●●●● 2mm □
+watch_path
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Already watching: '
+watch_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □
+GenesisFileWatcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observer
+●●●●●● 1mm □
+Observer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observer
+●●●●●● 1mm □△
+handler
+watch_path
+●●●●●● 2mm □△
+observer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+watch_path
+●●●●●● 1mm □
+observer
+●●●●●● 3mm △
+watch_path
+●●●●●● 1mm □
+handler
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER_SERVICE] Started watching: '
+watch_path
+' (recursive='
+recursive
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER_SERVICE] Failed to start watching '
+watch_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+stop_watching
+●●●●●● 1mm □△
+self
+watch_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Stop watching a directory.'
+●●●●●● 2mm □
+watch_path
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Not watching: '
+watch_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+observer
+●●●●●● 1mm □
+●●●●●● 3mm △
+watch_path
+observer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+watch_path
+●●●●●● 3mm △
+watch_path
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER_SERVICE] Stopped watching: '
+watch_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE_WATCHER_SERVICE] Failed to stop watching '
+watch_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+stop_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop all watchers.'
+watch_path
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+watch_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get statistics for all watchers.'
+stats
+●●●●●● 1mm □
+'active_watchers'
+'watched_paths'
+'handlers'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+watch_path
+handler
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'handlers'
+watch_path
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_file_watcher_service
+●●●●●● 2mm □○
+FileWatcherService
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_file_watcher_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global file watcher service.'
+●●●●●● 2mm □
+_file_watcher_service
+●●●●●● 2mm □
+_file_watcher_service
+●●●●●● 1mm □
+FileWatcherService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_file_watcher_service
+FileWatcherService
+●●●●●● 1mm □
+start_watching_workspace
+●●●●●● 1mm □△
+workspace_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n    Convenience function to start watching the GRACE workspace.\n\n    Args:\n        workspace_path: Path to workspace (defaults to grace_3 root)\n\n    Returns:\n        True if started successfully\n    '
+●●●●●● 2mm □
+workspace_path
+●●●●●● 2mm □
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+workspace_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+get_file_watcher_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △

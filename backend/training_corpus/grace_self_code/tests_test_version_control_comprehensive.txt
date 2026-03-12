@@ -1,0 +1,2446 @@
+## test_version_control_comprehensive.py
+'\nComprehensive Test Suite for Version Control Module\n===================================================\nTests for GitService and version control functionality.\n\nCoverage:\n- GitService initialization\n- Repository operations\n- Commit history retrieval\n- Commit details\n- Diff generation\n- Branch operations\n- File history tracking\n- Error handling\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+mock_dulwich
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_dulwich
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_dulwich
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_dulwich
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_dulwich
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'dulwich'
+●●●●●● 1mm □
+mock_dulwich
+sys
+'dulwich.repo'
+●●●●●● 1mm □
+mock_dulwich
+sys
+'dulwich.objects'
+●●●●●● 1mm □
+mock_dulwich
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestGitServiceInit
+'Test GitService initialization.'
+●●●●●● 1mm □
+test_init_existing_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test initializing with existing repository.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+repo_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+'/path/to/project'
+●●●●●● 2mm □△
+service
+'/path/to/project'
+service
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_init_new_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test initializing a new repository.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+repo_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+'/new/project'
+●●●●●● 2mm □△
+service
+●●●●●● 3mm □△○
+service
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_init_failure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test initialization failure handling.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+repo_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+'Failed to initialize repository'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+Exception
+●●●●●● 2mm □△
+MockGitService
+●●●●●● 1mm □△
+'/invalid/path'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestCommitHistory
+'Test commit history retrieval.'
+●●●●●● 1mm □
+test_get_commits
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test retrieving commit history.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'sha'
+'message'
+'author'
+'abc123'
+'First commit'
+'user1'
+'sha'
+'message'
+'author'
+'def456'
+'Second commit'
+'user1'
+'sha'
+'message'
+'author'
+'ghi789'
+'Third commit'
+'user2'
+●●●●●● 1mm □
+get_commits
+●●●●●● 1mm □△
+self
+limit
+skip
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+100
+0
+●●●●●● 3mm ○
+●●●●●● 3mm △
+skip
+skip
+●●●●●● 3mm ○
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commits
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+commits
+●●●●●● 2mm □△
+2
+commits
+0
+'sha'
+'abc123'
+commits
+1
+'sha'
+'def456'
+●●●●●● 1mm □
+test_get_commits_with_skip
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test commit history with skip parameter.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'sha'
+'commit_'
+i
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_commits
+●●●●●● 1mm □△
+self
+limit
+skip
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+100
+0
+●●●●●● 3mm ○
+●●●●●● 3mm △
+skip
+skip
+●●●●●● 3mm ○
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commits
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+commits
+●●●●●● 2mm □△
+5
+commits
+0
+'sha'
+'commit_10'
+●●●●●● 1mm □
+test_get_commits_empty_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting commits from empty repository.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commits
+●●●●●● 1mm □△
+self
+limit
+skip
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+100
+0
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commits
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commits
+●●●●●● 2mm △
+TestCommitDetails
+'Test commit details retrieval.'
+●●●●●● 1mm □
+test_get_commit_details
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test retrieving detailed commit information.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'abc123'
+'sha'
+'message'
+'author'
+'author_email'
+'date'
+'parent_shas'
+'abc123'
+'Add new feature'
+'John Doe'
+'john@example.com'
+datetime
+●●●●●● 1mm □△
+2024
+1
+15
+10
+30
+0
+●●●●●● 2mm □△
+'xyz789'
+●●●●●● 1mm □
+get_commit_details
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+commit_sha
+●●●●●● 3mm △
+Exception
+●●●●●● 1mm □△
+'Commit '
+commit_sha
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+commit_sha
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+details
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc123'
+●●●●●● 2mm □△
+details
+'sha'
+'abc123'
+details
+'author'
+'John Doe'
+details
+'message'
+'Add new feature'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+details
+'parent_shas'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_commit_details_not_found
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test error when commit not found.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_details
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Exception
+●●●●●● 1mm □△
+'Commit '
+commit_sha
+' not found'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+Exception
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_format_commit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test commit formatting.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+_format_commit
+●●●●●● 1mm □△
+self
+commit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sha'
+'message'
+'author'
+'timestamp'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+commit
+'hex'
+●●●●●● 2mm □△
+commit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+commit
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+commit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+commit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commit
+●●●●●● 1mm □
+●●●●●● 1mm □△
+commit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+commit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commit
+datetime
+●●●●●● 1mm □△
+commit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+mock_commit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_commit
+●●●●●● 1mm □
+b'abc123'
+mock_commit
+●●●●●● 1mm □
+b'Test commit message'
+mock_commit
+●●●●●● 1mm □
+b'Test Author <test@example.com>'
+mock_commit
+●●●●●● 1mm □
+1705312200
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+formatted
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+mock_commit
+●●●●●● 2mm □△
+'sha'
+formatted
+'message'
+formatted
+'author'
+formatted
+●●●●●● 2mm △
+TestCommitDiff
+'Test commit diff functionality.'
+●●●●●● 1mm □
+test_get_commit_diff
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting diff for a commit.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_diff
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'commit_sha'
+'files_changed'
+'stats'
+commit_sha
+'path'
+'status'
+'additions'
+'deletions'
+'src/main.py'
+'modified'
+10
+5
+'path'
+'status'
+'additions'
+'deletions'
+'src/utils.py'
+'added'
+50
+0
+'additions'
+'deletions'
+'files_modified'
+60
+5
+2
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc123'
+●●●●●● 2mm □△
+diff
+'commit_sha'
+'abc123'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+diff
+'files_changed'
+●●●●●● 2mm □△
+2
+diff
+'stats'
+'additions'
+60
+●●●●●● 1mm □
+test_get_diff_with_added_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test diff showing added file.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_diff
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'files_changed'
+'stats'
+'path'
+'status'
+'additions'
+'deletions'
+'new_file.py'
+'added'
+100
+0
+'additions'
+'deletions'
+'files_modified'
+100
+0
+1
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc123'
+●●●●●● 2mm □△
+diff
+'files_changed'
+0
+'status'
+'added'
+diff
+'stats'
+'deletions'
+0
+●●●●●● 1mm □
+test_get_diff_with_deleted_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test diff showing deleted file.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_diff
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'files_changed'
+'stats'
+'path'
+'status'
+'additions'
+'deletions'
+'old_file.py'
+'deleted'
+0
+50
+'additions'
+'deletions'
+'files_modified'
+0
+50
+1
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc123'
+●●●●●● 2mm □△
+diff
+'files_changed'
+0
+'status'
+'deleted'
+diff
+'stats'
+'additions'
+0
+●●●●●● 1mm □
+test_get_diff_initial_commit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test diff for initial commit (no parent).'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_diff
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'commit_sha'
+'is_initial'
+'files_changed'
+'stats'
+commit_sha
+●●●●●● 3mm □△○
+'path'
+'status'
+'README.md'
+'added'
+'additions'
+'deletions'
+'files_modified'
+10
+0
+1
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'initial_commit'
+●●●●●● 2mm □△
+diff
+'is_initial'
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestTreeOperations
+'Test tree and file operations.'
+●●●●●● 1mm □
+test_get_tree_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting files from a tree.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+_get_tree_files
+●●●●●● 1mm □△
+self
+tree
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'src/main.py'
+'src/utils.py'
+'README.md'
+'mode'
+'sha'
+'100644'
+'abc123'
+'mode'
+'sha'
+'100644'
+'def456'
+'mode'
+'sha'
+'100644'
+'ghi789'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_tree
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+mock_tree
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+3
+'src/main.py'
+files
+●●●●●● 1mm □
+test_get_tree_files_with_content
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting files with content.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+_get_tree_files_with_content
+●●●●●● 1mm □△
+self
+tree
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'README.md'
+'mode'
+'sha'
+'content'
+'100644'
+'abc123'
+'# Project Title\n\nDescription here.'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_tree
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+mock_tree
+●●●●●● 2mm □△
+'README.md'
+files
+'content'
+files
+'README.md'
+'# Project Title'
+files
+'README.md'
+'content'
+●●●●●● 2mm △
+TestBranchOperations
+'Test branch operations.'
+●●●●●● 1mm □
+test_get_branches
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting all branches.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_branches
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'is_current'
+'last_commit'
+'main'
+●●●●●● 3mm □△○
+'abc123'
+'name'
+'is_current'
+'last_commit'
+'feature/new'
+●●●●●● 1mm □
+'def456'
+'name'
+'is_current'
+'last_commit'
+'bugfix/fix'
+●●●●●● 1mm □
+'ghi789'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+branches
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+branches
+●●●●●● 2mm □△
+3
+branches
+0
+'is_current'
+●●●●●● 3mm □△○
+branches
+0
+'name'
+'main'
+●●●●●● 1mm □
+test_get_current_branch
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting current branch.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_current_branch
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'main'
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+branch
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+branch
+'main'
+●●●●●● 1mm □
+test_checkout_branch
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test branch checkout.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'main'
+●●●●●● 1mm □
+checkout
+●●●●●● 1mm □△
+self
+branch_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+branch_name
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'feature/new'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+service
+'feature/new'
+●●●●●● 2mm △
+TestFileHistory
+'Test file history tracking.'
+●●●●●● 1mm □
+test_get_file_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting commit history for a file.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_file_history
+●●●●●● 1mm □△
+self
+file_path
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+50
+●●●●●● 3mm ○
+'sha'
+'message'
+'date'
+'abc123'
+'Update file'
+'2024-01-15'
+'sha'
+'message'
+'date'
+'def456'
+'Fix bug in file'
+'2024-01-10'
+'sha'
+'message'
+'date'
+'ghi789'
+'Initial add'
+'2024-01-01'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'src/main.py'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+3
+history
+0
+'message'
+'Update file'
+●●●●●● 1mm □
+test_get_file_at_commit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting file content at specific commit.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_file_at_commit
+●●●●●● 1mm □△
+self
+file_path
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+contents
+●●●●●● 1mm □
+'main.py'
+'abc123'
+'main.py'
+'def456'
+"print('v1')"
+"print('v2')"
+●●●●●● 3mm ○
+contents
+●●●●●● 1mm □△
+file_path
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v1
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'main.py'
+'abc123'
+●●●●●● 2mm □△
+v2
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'main.py'
+'def456'
+●●●●●● 2mm □△
+v1
+"print('v1')"
+v2
+"print('v2')"
+●●●●●● 2mm △
+TestRepositoryState
+'Test repository state queries.'
+●●●●●● 1mm □
+test_is_dirty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test checking if repo has uncommitted changes.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+dirty
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+dirty
+●●●●●● 1mm □
+is_dirty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+clean_repo
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dirty_repo
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+clean_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+dirty_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting repository status.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'branch'
+'staged'
+'unstaged'
+'untracked'
+'main'
+'file1.py'
+'file2.py'
+'file3.py'
+'new_file.py'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'branch'
+'main'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+status
+'staged'
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+status
+'unstaged'
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_get_head_sha
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting HEAD commit SHA.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_head_sha
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'abc123def456'
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+head
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+head
+'abc123def456'
+●●●●●● 2mm △
+TestRemoteOperations
+'Test remote repository operations.'
+●●●●●● 1mm □
+test_get_remotes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting remote repositories.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_remotes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'url'
+'origin'
+'git@git.example.com:user/repo.git'
+'name'
+'url'
+'upstream'
+'git@git.example.com:org/repo.git'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+remotes
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+remotes
+●●●●●● 2mm □△
+2
+remotes
+0
+'name'
+'origin'
+●●●●●● 1mm □
+test_has_remote
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test checking if remote exists.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'origin'
+'url'
+●●●●●● 1mm □
+has_remote
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+name
+●●●●●● 3mm △
+●●●●●● 3mm △
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'origin'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+service
+●●●●●● 1mm □△
+'upstream'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestTagOperations
+'Test tag operations.'
+●●●●●● 1mm □
+test_get_tags
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting all tags.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_tags
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'sha'
+'message'
+'v1.0.0'
+'abc123'
+'Release 1.0.0'
+'name'
+'sha'
+'message'
+'v1.1.0'
+'def456'
+'Release 1.1.0'
+'name'
+'sha'
+'message'
+'v2.0.0'
+'ghi789'
+'Release 2.0.0'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+3
+tags
+0
+'name'
+'v1.0.0'
+●●●●●● 1mm □
+test_get_tag_commit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting commit for a tag.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'v1.0.0'
+'v2.0.0'
+'abc123'
+'def456'
+●●●●●● 1mm □
+get_tag_commit
+●●●●●● 1mm □△
+self
+tag_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tag_name
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'v1.0.0'
+●●●●●● 2mm □△
+'abc123'
+service
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestStatistics
+'Test repository statistics.'
+●●●●●● 1mm □
+test_get_commit_count
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting total commit count.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_count
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+150
+●●●●●● 2mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+150
+●●●●●● 1mm □
+test_get_contributor_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting contributor statistics.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_contributor_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'author'
+'commits'
+'additions'
+'deletions'
+'Alice'
+50
+5000
+2000
+'author'
+'commits'
+'additions'
+'deletions'
+'Bob'
+30
+3000
+1000
+'author'
+'commits'
+'additions'
+'deletions'
+'Charlie'
+20
+2000
+500
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stats
+●●●●●● 2mm □△
+3
+stats
+0
+'author'
+'Alice'
+stats
+0
+'commits'
+50
+●●●●●● 1mm □
+test_get_file_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting file statistics.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_file_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_files'
+'by_extension'
+150
+'.py'
+'.js'
+'.md'
+'.json'
+80
+40
+20
+10
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'total_files'
+150
+stats
+'by_extension'
+'.py'
+80
+●●●●●● 2mm △
+TestComparison
+'Test comparison functionality.'
+●●●●●● 1mm □
+test_compare_commits
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test comparing two commits.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+compare_commits
+●●●●●● 1mm □△
+self
+from_sha
+to_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'from'
+'to'
+'commits_between'
+'files_changed'
+'additions'
+'deletions'
+from_sha
+to_sha
+5
+10
+200
+50
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comparison
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc123'
+'def456'
+●●●●●● 2mm □△
+comparison
+'commits_between'
+5
+comparison
+'files_changed'
+10
+●●●●●● 1mm □
+test_compare_branches
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test comparing two branches.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+compare_branches
+●●●●●● 1mm □△
+self
+base
+compare
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'base'
+'compare'
+'ahead'
+'behind'
+'mergeable'
+base
+compare
+3
+2
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comparison
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'main'
+'feature'
+●●●●●● 2mm □△
+comparison
+'ahead'
+3
+comparison
+'behind'
+2
+comparison
+'mergeable'
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestErrorHandling
+'Test error handling.'
+●●●●●● 1mm □
+test_invalid_commit_sha
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling of invalid commit SHA.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_details
+●●●●●● 1mm □△
+self
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+commit_sha
+●●●●●● 2mm □△
+40
+ValueError
+●●●●●● 1mm □△
+'Invalid commit SHA'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+'Commit not found'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'short'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_repository_not_initialized
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling when repository not initialized.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_commits
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+Exception
+●●●●●● 1mm □△
+'Repository not initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+Exception
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_file_not_in_repo
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling file not in repository.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_file_at_commit
+●●●●●● 1mm □△
+self
+file_path
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+FileNotFoundError
+●●●●●● 1mm □△
+'File '
+file_path
+' not found at '
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+FileNotFoundError
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'nonexistent.py'
+'abc123'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestUtilityMethods
+'Test utility methods.'
+●●●●●● 1mm □
+test_sha_short
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test shortening SHA.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+short_sha
+●●●●●● 1mm □△
+self
+full_sha
+length
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+7
+●●●●●● 3mm ○
+full_sha
+length
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+short
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc123def456ghi789'
+●●●●●● 2mm □△
+short
+'abc123d'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+short
+●●●●●● 2mm □△
+7
+●●●●●● 1mm □
+test_is_valid_sha
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test SHA validation.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+is_valid_sha
+●●●●●● 1mm □△
+self
+sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sha
+●●●●●● 2mm □△
+7
+40
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+c
+'0123456789abcdef'
+c
+sha
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'abc123d'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+service
+●●●●●● 1mm □△
+'abc123def456789012345678901234567890abcd'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+service
+●●●●●● 1mm □△
+'xyz'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'ghijkl'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_resolve_ref
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test resolving Git references.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'HEAD'
+'refs/heads/main'
+'refs/heads/feature'
+'refs/tags/v1.0.0'
+'abc123'
+'abc123'
+'def456'
+'ghi789'
+●●●●●● 1mm □
+resolve_ref
+●●●●●● 1mm □△
+self
+ref
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+ref
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ref
+prefix
+'refs/heads/'
+'refs/tags/'
+●●●●●● 2mm □
+prefix
+ref
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+prefix
+ref
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'HEAD'
+●●●●●● 2mm □△
+'abc123'
+service
+●●●●●● 1mm □△
+'main'
+●●●●●● 2mm □△
+'abc123'
+service
+●●●●●● 1mm □△
+'v1.0.0'
+●●●●●● 2mm □△
+'ghi789'
+service
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestIntegration
+'Integration tests for GitService.'
+●●●●●● 1mm □
+test_full_commit_workflow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test full commit information retrieval workflow.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'abc123'
+'sha'
+'message'
+'author'
+'abc123'
+'Add feature'
+'Alice'
+●●●●●● 1mm □
+get_commits
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_commit_details
+●●●●●● 1mm □△
+self
+sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sha
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_commit_diff
+●●●●●● 1mm □△
+self
+sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'sha'
+'files_changed'
+sha
+'path'
+'status'
+'main.py'
+'modified'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+commits
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+commits
+●●●●●● 2mm □△
+0
+details
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+commits
+0
+'sha'
+●●●●●● 2mm □△
+'message'
+details
+diff
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+commits
+0
+'sha'
+●●●●●● 2mm □△
+'files_changed'
+diff
+●●●●●● 1mm □
+test_branch_comparison_workflow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test branch comparison workflow.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'main'
+'feature'
+'abc123'
+'def456'
+●●●●●● 1mm □
+get_branches
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'sha'
+name
+sha
+name
+sha
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+compare_branches
+●●●●●● 1mm □△
+self
+base
+compare
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'base'
+'compare'
+'ahead'
+'behind'
+base
+compare
+3
+1
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+branches
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+branches
+●●●●●● 2mm □△
+2
+comparison
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'main'
+'feature'
+●●●●●● 2mm □△
+comparison
+'ahead'
+3
+●●●●●● 2mm △
+TestEdgeCases
+'Test edge cases.'
+●●●●●● 1mm □
+test_empty_repository
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling empty repository.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+get_commits
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'sha'
+'abc'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_head_sha
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'abc123'
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_binary_file_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling binary files.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_file_content
+●●●●●● 1mm □△
+self
+path
+commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+'.png'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'is_binary'
+'content'
+'size'
+path
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+15000
+●●●●●● 3mm ○
+'path'
+'is_binary'
+'content'
+path
+●●●●●● 1mm □
+'file content'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_file
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'readme.md'
+'abc'
+●●●●●● 2mm □△
+binary_file
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'image.png'
+'abc'
+●●●●●● 2mm □△
+text_file
+'is_binary'
+●●●●●● 1mm □
+text_file
+'content'
+●●●●●● 2mm □
+binary_file
+'is_binary'
+●●●●●● 3mm □△○
+binary_file
+'content'
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_unicode_in_commit_message
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Unicode in commit messages.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+get_commit_details
+●●●●●● 1mm □△
+self
+sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'sha'
+'message'
+sha
+'Fix bug with emoji support'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+details
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'abc'
+●●●●●● 2mm □△
+'emoji'
+details
+'message'
+●●●●●● 1mm □
+test_very_long_file_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling very long file paths.'
+●●●●●● 2mm △
+MockGitService
+●●●●●● 1mm □
+_normalize_path
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+max_length
+●●●●●● 1mm □
+260
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+max_length
+●●●●●● 3mm ○
+path
+max_length
+●●●●●● 3mm ○
+path
+●●●●●● 1mm ○
+service
+●●●●●● 1mm □
+MockGitService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+long_path
+●●●●●● 1mm □
+'a/'
+●●●●●● 2mm □△
+200
+●●●●●● 3mm ○
+'file.py'
+normalized
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+long_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+normalized
+●●●●●● 2mm □△
+260
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

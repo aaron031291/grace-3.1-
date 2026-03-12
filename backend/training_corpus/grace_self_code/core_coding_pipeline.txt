@@ -1,0 +1,3103 @@
+## coding_pipeline.py
+"\nGrace Coding Pipeline — 9-Phase Error Mitigation (determinism to the door of LLMs).\n\nDeterminism full scope and full breadth: Phase 0 runs first (Genesis keys, probe agent,\nAST/deterministic bridge, auto-fix). LLM is used only when we can't finish deterministically.\n\nFlow:\n  Phase 0 (deterministic): Search Genesis keys → Probe agent → Deterministic scan + fix →\n  User task → Planner → Consensus on plan → Break into chunks →\n  Each chunk runs through Layers 1–8 → Probe + verify at each layer →\n  Hand off to LLM only for reasoning/validation/generation when Phase 0 says so.\n\nPhases:\n  0. DETERMINISTIC PRE-PHASE — Genesis error search, probe (testing), AST/parse, auto-fix\n  1. RUNTIME ENVIRONMENT — isolated context per task\n  2. TASK DECOMPOSITION — break into sub-problems\n  3. SOLUTION PROPOSAL — generate 3 diverse approaches\n  4. SOLUTION SELECTION — evaluate and pick best approach\n  5. SIMULATION & REASONING — simulate against requirements\n  6. CODE GENERATION — translate chosen approach into code\n  7. VERIFICATION — deterministic first, then probe, then LLM backup\n  8. DEPLOYMENT GATE — consensus approval, trust score check\n\nCross-cutting: Genesis keys, trust score, probe at every layer, anti-hallucination,\nLLM only where Phase 0 / deterministic path cannot complete.\n"
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LayerResult
+layer
+●●●●●● 2mm ○
+name
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+output
+Any
+●●●●●● 2mm □
+trust_score
+●●●●●● 3mm ○
+0.0
+reasoning
+●●●●●● 1mm ○
+''
+duration_ms
+●●●●●● 3mm ○
+0
+genesis_key_id
+●●●●●● 1mm ○
+''
+probe_passed
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+ChunkResult
+chunk_id
+●●●●●● 2mm ○
+description
+●●●●●● 1mm ○
+layers
+●●●●●● 3mm □△
+LayerResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+consensus
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm ○
+'pending'
+dataclass
+●●●●●● 2mm △
+PipelineResult
+task
+●●●●●● 1mm ○
+chunks
+●●●●●● 3mm □△
+ChunkResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+final_consensus
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm ○
+'pending'
+total_duration_ms
+●●●●●● 3mm ○
+0
+trust_score
+●●●●●● 3mm ○
+0.0
+dataclass
+PHASE_0_NAME
+●●●●●● 1mm □
+'Deterministic Pre-Phase'
+LAYER_NAMES
+●●●●●● 1mm □
+1
+2
+3
+4
+5
+6
+7
+8
+'Runtime Environment'
+'Task Decomposition'
+'Solution Proposal'
+'Solution Selection'
+'Simulation & Reasoning'
+'Code Generation'
+'Verification & Testing'
+'Deployment Gate'
+●●●●●● 2mm △
+PipelineProgress
+'Real-time progress tracking for the pipeline.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+'threading'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+run_id
+task
+total_chunks
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+run_id
+●●●●●● 1mm □
+'run_id'
+'task'
+'status'
+'total_chunks'
+'completed_chunks'
+'current_chunk'
+'current_layer'
+'current_layer_name'
+'percent'
+'started_at'
+'layers_completed'
+'total_layers'
+'errors'
+'trust_scores'
+run_id
+task
+100
+'running'
+total_chunks
+0
+0
+0
+''
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+total_chunks
+●●●●●● 2mm □△
+8
+●●●●●● 1mm □
+update_layer
+●●●●●● 1mm □△
+self
+run_id
+chunk
+layer
+layer_name
+status
+trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0
+●●●●●● 3mm △
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+r
+●●●●●● 1mm □
+●●●●●● 3mm △
+run_id
+r
+'current_chunk'
+●●●●●● 1mm □
+chunk
+r
+'current_layer'
+●●●●●● 1mm □
+layer
+r
+'current_layer_name'
+●●●●●● 1mm □
+layer_name
+●●●●●● 2mm □
+status
+'passed'
+r
+'layers_completed'
+1
+r
+'trust_scores'
+●●●●●● 1mm □△
+trust
+●●●●●● 2mm □△
+●●●●●● 1mm △
+status
+'failed'
+r
+'errors'
+●●●●●● 1mm □△
+'Chunk '
+chunk
+' Layer '
+layer
+': '
+layer_name
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+r
+'total_layers'
+r
+'percent'
+●●●●●● 1mm □
+total
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+r
+'layers_completed'
+●●●●●● 3mm □△
+total
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+complete_chunk
+●●●●●● 1mm □△
+self
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+run_id
+'completed_chunks'
+1
+●●●●●● 1mm □
+finish
+●●●●●● 1mm □△
+self
+run_id
+status
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+run_id
+'status'
+●●●●●● 1mm □
+status
+●●●●●● 3mm △
+run_id
+'percent'
+●●●●●● 1mm □
+status
+'passed'
+100
+●●●●●● 3mm △
+run_id
+'percent'
+●●●●●● 3mm △
+run_id
+'finished_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get
+●●●●●● 1mm □△
+self
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_progress
+●●●●●● 1mm □
+PipelineProgress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_pipeline_progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_progress
+PipelineProgress
+●●●●●● 2mm △
+CodingPipeline
+'\n    The 8-layer coding pipeline. Every code task goes through this.\n    Supports background processing, progress tracking, and parallel layer execution.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+2
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.6
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_progress
+●●●●●● 1mm □
+run_background
+●●●●●● 1mm □△
+self
+task
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Run the pipeline in a background thread. Returns run_id for tracking.'
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_run_id
+run_id
+●●●●●● 1mm □
+deterministic_run_id
+●●●●●● 1mm □△
+task
+500
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_bg
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+threading
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'pipeline_background'
+'Pipeline queued: '
+task
+80
+'run_id'
+run_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+run_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+run
+●●●●●● 1mm □△
+self
+task
+context
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Execute the full pipeline for a task with progress tracking.'
+●●●●●● 2mm □△○
+concurrent.futures
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_run_id
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_id
+run_id
+●●●●●● 1mm □
+deterministic_run_id
+●●●●●● 1mm □△
+task
+500
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+PipelineResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+snapshot_state
+check_budget
+snapshot_id
+●●●●●● 1mm □
+snapshot_state
+●●●●●● 1mm □△
+'pipeline:'
+task
+30
+●●●●●● 2mm □△
+●●●●●● 2mm □
+check_budget
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'budget_exceeded'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+task
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+'budget_exceeded'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+snapshot_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'pipeline_start'
+'Pipeline started: '
+task
+100
+'task'
+'run_id'
+task
+run_id
+●●●●●● 2mm □△
+phase0_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+core.deterministic_first_loop
+●●●●●● 2mm □△○
+run_deterministic_first_loop
+get_handoff_context
+phase0_result
+●●●●●● 1mm □
+run_deterministic_first_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handoff
+●●●●●● 1mm □
+get_handoff_context
+●●●●●● 1mm □△
+phase0_result
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+context
+'phase0'
+●●●●●● 1mm □
+phase0_result
+context
+'handoff_to_llm'
+●●●●●● 1mm □
+handoff
+Exception
+logger
+●●●●●● 1mm □△
+'Phase 0 (deterministic first) skipped: '
+e
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+context
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_governance_coding_contract
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+get_environment
+env
+●●●●●● 1mm □
+get_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contract
+●●●●●● 1mm □
+get_governance_coding_contract
+●●●●●● 1mm □△
+env
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+context
+'governance_coding_contract'
+●●●●●● 1mm □
+contract
+context
+'contract_text'
+●●●●●● 1mm □
+contract
+●●●●●● 1mm □△
+'contract_text'
+''
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Governance coding contract load skipped: '
+e
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+result
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+task
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+'failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+task
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+plan_consensus
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Plan for: '
+task
+'\nChunks: '
+json
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+plan_consensus
+●●●●●● 1mm □△
+'agreed'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'plan_rejected'
+result
+●●●●●● 1mm □
+plan_consensus
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+'plan_rejected'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+i
+chunk_desc
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □
+ChunkResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □
+'running'
+layer_num
+1
+2
+layer_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_num
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+layer_result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+layer_num
+layer_result
+layer_result
+layer_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer_result
+'failed'
+chunk
+●●●●●● 1mm □
+'failed'
+●●●●●● 2mm □
+chunk
+'failed'
+result
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+concurrent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pool
+future_propose
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+●●●●●● 3mm △
+3
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+future_select
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+●●●●●● 3mm △
+4
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+l3
+●●●●●● 1mm □
+future_propose
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+l4
+●●●●●● 1mm □
+future_select
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+l3
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+3
+l3
+l3
+l3
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+l4
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+4
+l4
+l4
+l4
+●●●●●● 2mm □△
+●●●●●● 2mm □
+l3
+'failed'
+l4
+'failed'
+chunk
+●●●●●● 1mm □
+'failed'
+result
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+l5
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+5
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+l5
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+5
+l5
+l5
+l5
+●●●●●● 2mm □△
+l6
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+6
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+l6
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+6
+l6
+l6
+l6
+●●●●●● 2mm □△
+l7
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+7
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+l7
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+7
+l7
+l7
+l7
+●●●●●● 2mm □△
+l8
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+8
+chunk_desc
+task
+context
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+l8
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+i
+8
+l8
+l8
+l8
+●●●●●● 2mm □△
+failed_layers
+●●●●●● 1mm □
+l
+l
+chunk
+l
+'failed'
+●●●●●● 2mm □
+failed_layers
+chunk
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm □
+chunk
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Chunk '
+i
+' complete: '
+chunk_desc
+●●●●●● 2mm □△
+●●●●●● 3mm □
+chunk
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'agreed'
+●●●●●● 2mm □△
+'passed'
+'failed'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+passed_chunks
+●●●●●● 1mm □
+c
+c
+result
+c
+'passed'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+passed_chunks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'All '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' chunks passed for: '
+task
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'agreed'
+●●●●●● 2mm □△
+'passed'
+'failed'
+●●●●●● 1mm △
+passed_chunks
+result
+●●●●●● 1mm □
+'partial'
+result
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+rollback_to
+●●●●●● 2mm □
+snapshot_id
+rollback_to
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'pipeline_rollback'
+'Pipeline failed, rolled back to '
+snapshot_id
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'pipeline_complete'
+'Pipeline '
+result
+': '
+task
+100
+'status'
+'run_id'
+'chunks'
+'passed'
+'trust'
+result
+run_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+passed_chunks
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 1mm □
+_cb
+test_result
+●●●●●● 1mm □
+_cb
+●●●●●● 1mm □△
+'ai'
+'logic_tests'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+test_result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 1mm □
+_cb
+_cb
+●●●●●● 1mm □△
+'ai'
+'deterministic_scan'
+●●●●●● 2mm □△
+_cb
+●●●●●● 1mm □△
+'ai'
+'deterministic_fix'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 1mm □
+_cb
+_cb
+●●●●●● 1mm □△
+'ai'
+'generate'
+'prompt'
+'Verify and polish: '
+task
+100
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 1mm □
+_cb
+_cb
+●●●●●● 1mm □△
+'ai'
+'console'
+'message'
+'Pipeline complete for: '
+task
+50
+'. Status: '
+result
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+notify
+notify
+●●●●●● 1mm □△
+'Pipeline '
+result
+': '
+task
+50
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+passed_chunks
+●●●●●● 2mm □△
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' chunks passed. Trust: '
+result
+'.0%'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 1mm □
+_cb
+_cb
+●●●●●● 1mm □△
+'system'
+'hot_reload_all'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 1mm □
+_cb
+_cb
+●●●●●● 1mm □△
+'system'
+'generate_report'
+'hours'
+1
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+PipelineResult
+●●●●●● 1mm □
+_plan_task
+●●●●●● 1mm □△
+self
+task
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Break task into manageable chunks using LLM.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fast'
+'prompt'
+'models'
+'Break this task into 3-7 sequential chunks. Each chunk should be completable independently. Return ONLY a JSON array of strings.\n\nTask: '
+task
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+r
+'data'
+●●●●●● 1mm □△
+'individual_responses'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\[.*\\]'
+response
+re
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+task
+●●●●●● 3mm ○
+task
+Exception
+●●●●●● 3mm ○
+task
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_execute_layer
+●●●●●● 1mm □△
+self
+layer_num
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Execute a single layer of the pipeline.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+LAYER_NAMES
+●●●●●● 1mm □△
+layer_num
+'Layer '
+layer_num
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+LayerResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror_obs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_num
+chunk
+●●●●●● 2mm □△
+past_failure
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 1mm □
+_ss
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+_ss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_s
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+_s
+●●●●●● 2mm □△
+similar
+●●●●●● 1mm □
+buf
+●●●●●● 1mm □△
+chunk
+100
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+e
+e
+similar
+●●●●●● 1mm □
+●●●●●● 1mm □△
+e
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'fail'
+e
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+e
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'failed'
+●●●●●● 2mm □
+failed
+past_failure
+●●●●●● 1mm □
+failed
+0
+task
+●●●●●● 1mm □
+'WARNING: A similar task failed before. Past problem: '
+past_failure
+100
+'. Be careful with the same approach.\n\n'
+task
+Exception
+phase0
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'phase0'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+should_use_llm
+●●●●●● 2mm □
+should_use_llm
+●●●●●● 1mm □△
+phase0
+task
+name
+●●●●●● 2mm □△
+reasoning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_num
+chunk
+task
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+reasoning
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+'proceed'
+●●●●●● 2mm □
+layer_num
+1
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+context
+●●●●●● 2mm □△
+●●●●●● 1mm △
+layer_num
+2
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer_num
+3
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 1mm △
+layer_num
+4
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer_num
+5
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+task
+●●●●●● 2mm □△
+●●●●●● 1mm △
+layer_num
+6
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer_num
+7
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm △
+layer_num
+8
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+hallucination
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+layer_num
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hallucination
+'passed'
+result
+●●●●●● 1mm □
+'failed'
+result
+●●●●●● 1mm □
+'hallucination_detected'
+'original_output'
+hallucination
+'flags'
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_num
+context
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_num
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+●●●●●● 3mm △
+'passed'
+'failed'
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+record_kpi
+record_kpi
+●●●●●● 1mm □△
+'coding_pipeline'
+name
+●●●●●● 2mm □△
+Exception
+Exception
+result
+●●●●●● 1mm □
+'failed'
+result
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+gk
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'layer_'
+layer_num
+name
+': '
+result
+' for '
+chunk
+50
+'layer'
+'status'
+'trust'
+layer_num
+result
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+gk
+''
+●●●●●● 3mm ○
+result
+LayerResult
+●●●●●● 1mm □
+_layer_runtime
+●●●●●● 1mm □△
+self
+chunk
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Layer 1: Check system health, connectivity, rules. Deterministic probe when Phase 0 provided.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+health
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'health'
+●●●●●● 2mm □△
+connectivity
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'connectivity'
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'govern'
+'rules'
+●●●●●● 2mm □△
+phase0
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'phase0'
+●●●●●● 2mm □△
+gaps
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'knowledge_gaps_deep'
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+'environment'
+'health'
+'connectivity'
+'active_rules'
+'knowledge_gaps'
+'isolated'
+health
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+'unavailable'
+connectivity
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+connectivity
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+'unavailable'
+rules
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+gaps
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'knowledge_gaps'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+phase0
+out
+'phase0_deterministic'
+●●●●●● 1mm □
+'handoff_to_llm'
+'probe_broken'
+'remaining_for_llm'
+phase0
+●●●●●● 1mm □△
+'handoff_to_llm'
+●●●●●● 2mm □△
+phase0
+●●●●●● 1mm □△
+'probe_result'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_broken'
+0
+●●●●●● 2mm □△
+phase0
+●●●●●● 1mm □△
+'deterministic_result'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'remaining_count'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_decompose
+●●●●●● 1mm □△
+self
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Layer 2: Decompose with ambiguity check, project context, governance coding contract.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+contract_text
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'contract_text'
+''
+●●●●●● 2mm □△
+2000
+contract_preamble
+●●●●●● 1mm □
+contract_text
+'\n\nGovernance coding contract (must be satisfied):\n'
+contract_text
+''
+ambiguity
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'ambiguity'
+'text'
+chunk
+●●●●●● 2mm □△
+is_ambiguous
+●●●●●● 1mm □
+ambiguity
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+ambiguity
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'is_ambiguous'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+get_environment
+env
+●●●●●● 1mm □
+get_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_ctx
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'code'
+'project_context'
+'id'
+env
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'govern'
+'rules'
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'files'
+'search'
+'query'
+'limit'
+chunk
+50
+5
+●●●●●● 2mm □△
+planner
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'run_independent'
+'prompt'
+'models'
+'Decompose this into sub-tasks. Follow the governance coding contract.'
+contract_preamble
+'\n\nTask:\n'
+chunk
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sub_tasks'
+'is_ambiguous'
+'project_context_loaded'
+'governance_rules'
+'existing_code_found'
+planner
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+is_ambiguous
+project_ctx
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+existing
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+existing
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_propose
+●●●●●● 1mm □△
+self
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Layer 3: Propose using consensus, check models, oracle, governance coding contract.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+contract_text
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'contract_text'
+''
+●●●●●● 2mm □△
+2000
+contract_preamble
+●●●●●● 1mm □
+contract_text
+'\n\nGovernance coding contract:\n'
+contract_text
+''
+models
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'models'
+●●●●●● 2mm □△
+oracle
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'oracle'
+●●●●●● 2mm □△
+training
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'training'
+●●●●●● 2mm □△
+proposals
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'consensus'
+'prompt'
+'Propose 3 different approaches. Follow the governance coding contract.'
+contract_preamble
+'\n\n'
+chunk
+●●●●●● 2mm □△
+quick
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'quick'
+'prompt'
+'Quick approach for: '
+chunk
+100
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'proposals'
+'quick_alternative'
+'models_available'
+'oracle_consulted'
+proposals
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+quick
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+quick
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'final_output'
+''
+●●●●●● 2mm □△
+200
+''
+models
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+oracle
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_select
+●●●●●● 1mm □△
+self
+chunk
+proposals
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Layer 4: Select best approach using bandit + trust + DL prediction.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+trust
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'trust'
+●●●●●● 2mm □△
+bandit
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'bandit_select'
+'options'
+'approach_1'
+'approach_2'
+'approach_3'
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'dl_predict'
+'key_type'
+'what'
+'code_change'
+chunk
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'selected'
+'trust_state'
+'success_prediction'
+bandit
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'selected'
+'approach_1'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'success_probability'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_simulate
+●●●●●● 1mm □△
+self
+chunk
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Layer 5: Simulate using DL model, cognitive report, OODA.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+dl_pred
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'dl_predict'
+'key_type'
+'what'
+'code_change'
+'simulate: '
+chunk
+50
+●●●●●● 2mm □△
+cognitive
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'cognitive_report'
+'query'
+chunk
+100
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'simulated'
+'success_probability'
+'cognitive_assessment'
+●●●●●● 3mm □△○
+dl_pred
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+dl_pred
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'success_probability'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cognitive
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+cognitive
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'invariants'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_generate
+●●●●●● 1mm □△
+self
+chunk
+task
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Layer 6: Generate code with persona, context, governance coding contract, environment routing.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+contract_text
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'contract_text'
+''
+●●●●●● 2mm □△
+2000
+contract_preamble
+●●●●●● 1mm □
+contract_text
+'Governance coding contract (must satisfy):\n'
+contract_text
+'\n\n'
+''
+persona
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'govern'
+'persona'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+get_environment
+env
+●●●●●● 1mm □
+get_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scoped
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'code'
+'project_chat'
+'project_id'
+'message'
+env
+contract_preamble
+'Generate code for: '
+chunk
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'code'
+'generate'
+'prompt'
+'project_folder'
+contract_preamble
+chunk
+'.'
+●●●●●● 2mm □△
+generated_code
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □
+generated_code
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+scan_code_security
+record_provenance
+record_usage
+scan
+●●●●●● 1mm □
+scan_code_security
+●●●●●● 1mm □△
+generated_code
+'pipeline_chunk'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+scan
+●●●●●● 1mm □△
+'blocked'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code'
+'security_blocked'
+'findings'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+scan
+'findings'
+record_provenance
+●●●●●● 1mm □△
+'code_generation'
+hashlib
+●●●●●● 1mm □△
+generated_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 2mm □△
+record_usage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+call_brain
+●●●●●● 1mm □△
+'system'
+'env_write'
+'path'
+'content'
+'source'
+'backend/generated_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'.py'
+generated_code
+'coding_pipeline'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code'
+'persona_applied'
+'environment'
+'project_scoped'
+code
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+persona
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+env
+scoped
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_verify
+●●●●●● 1mm □△
+self
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Layer 7: DETERMINISTIC verification first, LLM cognitive report as backup.'
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+DeterministicAutoFixer
+det_report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+det_problems
+●●●●●● 1mm □
+det_report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+det_problems
+fixer
+●●●●●● 1mm □
+DeterministicAutoFixer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+auto_fixes
+●●●●●● 1mm □
+fixer
+●●●●●● 1mm □△
+det_problems
+●●●●●● 2mm □△
+●●●●●● 3mm □
+auto_fixes
+●●●●●● 1mm □
+det_result
+●●●●●● 1mm □
+'deterministic_checks'
+'deterministic_problems'
+'auto_fixed'
+'remaining_problems'
+det_report
+●●●●●● 1mm □△
+'total_checks'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+det_problems
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+auto_fixes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+det_problems
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+auto_fixes
+●●●●●● 2mm □△
+Exception
+det_result
+●●●●●● 1mm □
+'deterministic_checks'
+'error'
+0
+'bridge unavailable'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+invariants
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'invariants'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'deterministic'
+'invariants'
+'verified'
+det_result
+invariants
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+invariants
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+'failed'
+det_result
+●●●●●● 1mm □△
+'remaining_problems'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_layer_deploy_gate
+●●●●●● 1mm □△
+self
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Layer 8: Deployment gate — check approvals, run auto-cycle, final trust.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+approvals
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'govern'
+'approvals'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'trust'
+●●●●●● 2mm □△
+auto
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'auto_cycle'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'gate'
+'requires_human'
+'pending_approvals'
+'trust_state'
+'auto_cycle_ran'
+'pending_approval'
+●●●●●● 3mm □△○
+approvals
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+approvals
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'approvals'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+trust
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+auto
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_consensus
+●●●●●● 1mm □△
+self
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fast'
+'prompt'
+'models'
+'Do you agree with this? Answer YES or NO with brief reason.\n\n'
+topic
+'kimi'
+'opus'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'individual_responses'
+●●●●●● 2mm □△
+agreed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'yes'
+resp
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+20
+resp
+responses
+resp
+●●●●●● 1mm □△
+'response'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'agreed'
+'responses'
+'topic'
+agreed
+responses
+topic
+100
+Exception
+●●●●●● 3mm ○
+'agreed'
+'reason'
+●●●●●● 3mm □△○
+'consensus unavailable, defaulting to agree'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_reason
+●●●●●● 1mm □△
+self
+layer_num
+chunk
+task
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'ooda'
+'observation'
+'Layer '
+layer_num
+': '
+chunk
+100
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'decide'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'action'
+'proceed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'proceed'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_time_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm ○
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_mirror_observe
+●●●●●● 1mm □△
+self
+layer_num
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+core.awareness.self_model
+●●●●●● 2mm □△○
+SelfModel
+●●●●●● 3mm ○
+SelfModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_anti_hallucination_check
+●●●●●● 1mm □△
+self
+output
+layer_num
+●●●●●● 2mm □△
+Any
+●●●●●● 2mm ○
+'\n        Multi-level hallucination verification.\n        Level 1: Pattern matching (fast)\n        Level 2: Syntax validation (for code)\n        Level 3: Dependency verification\n        Level 4: Semantic check against codebase\n        '
+checks
+●●●●●● 1mm □
+'passed'
+'flags'
+'level'
+●●●●●● 3mm □△○
+0
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+output
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+checks
+text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+text_lower
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'as an ai language model'
+text_lower
+checks
+'flags'
+●●●●●● 1mm □△
+'self_referential'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+text_lower
+p
+'100% guaranteed'
+'absolutely impossible'
+'never fails'
+●●●●●● 2mm □△
+checks
+'flags'
+●●●●●● 1mm □△
+'overconfident'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'i cannot'
+text_lower
+'help'
+text_lower
+layer_num
+6
+checks
+'flags'
+●●●●●● 1mm □△
+'refusal_in_code_gen'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+10
+layer_num
+3
+6
+checks
+'flags'
+●●●●●● 1mm □△
+'suspiciously_short'
+●●●●●● 2mm □△
+checks
+'level'
+●●●●●● 1mm □
+1
+●●●●●● 2mm □
+layer_num
+6
+●●●●●● 1mm □
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □
+●●●●●● 1mm □△
+code
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+ast
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+checks
+'syntax_valid'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+SyntaxError
+checks
+'flags'
+●●●●●● 1mm □△
+'syntax_error: '
+e
+' line '
+e
+●●●●●● 2mm □△
+checks
+'level'
+●●●●●● 1mm □
+2
+●●●●●● 2mm □
+layer_num
+6
+●●●●●● 1mm □
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □
+●●●●●● 1mm □△
+code
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+suspicious_imports
+●●●●●● 1mm □
+line
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'import '
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+'from '
+●●●●●● 2mm □△
+module
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+dangerous
+●●●●●● 1mm □
+'subprocess'
+'shutil'
+'ctypes'
+'pickle'
+●●●●●● 2mm □
+module
+dangerous
+suspicious_imports
+●●●●●● 1mm □△
+module
+●●●●●● 2mm □△
+●●●●●● 2mm □
+suspicious_imports
+checks
+'flags'
+●●●●●● 1mm □△
+'dangerous_imports: '
+suspicious_imports
+●●●●●● 2mm □△
+checks
+'level'
+●●●●●● 1mm □
+3
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+list_rules
+rules
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rules
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+checks
+'governance_active'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+checks
+'rules_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+'documents'
+●●●●●● 2mm □△
+Exception
+checks
+'level'
+●●●●●● 1mm □
+4
+checks
+'passed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+checks
+'flags'
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+checks
+'flags'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+checks
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_probe_layer
+●●●●●● 1mm □△
+self
+layer_num
+context
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Probe check: use Phase 0 (deterministic) probe result when available, else runtime check.'
+phase0
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'phase0'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+phase0
+phase0
+●●●●●● 1mm □△
+'probe_result'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_broken
+●●●●●● 1mm □
+phase0
+'probe_result'
+●●●●●● 1mm □△
+'total_broken'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+total_broken
+0
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'runtime'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_layer_trust
+●●●●●● 1mm □△
+self
+layer_num
+result
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+LayerResult
+base
+●●●●●● 1mm □
+0.7
+●●●●●● 2mm □
+result
+base
+0.1
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+base
+0.05
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+base
+0.1
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+base
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_calculate_trust
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+PipelineResult
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+0.0
+scores
+●●●●●● 1mm □
+chunk
+result
+layer
+chunk
+scores
+●●●●●● 1mm □△
+layer
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scores
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_track
+●●●●●● 1mm □△
+self
+event
+what
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+●●●●●● 3mm ○
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+_pipeline
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_coding_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_pipeline
+●●●●●● 2mm □
+_pipeline
+●●●●●● 1mm □
+CodingPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_pipeline
+CodingPipeline

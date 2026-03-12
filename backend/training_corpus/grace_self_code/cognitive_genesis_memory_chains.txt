@@ -1,0 +1,849 @@
+## genesis_memory_chains.py
+'\nGenesis Memory Chains\n\nTracks the complete learning journey for each Genesis Key:\n- Episodic chain: All experiences related to that source\n- Trust evolution: How understanding deepened over time\n- Procedural emergence: Skills extracted from that source\n- Knowledge graph: Connections between concepts\n\nGrace Alignment: Maintains episodic continuity and learning narrative\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+and_
+or_
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+LearningExample
+Episode
+Procedure
+GenesisKey
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisMemoryChain
+"\n    Tracks complete memory chain for a Genesis Key.\n\n    Represents Grace's learning journey from a specific source:\n    - Initial ingestion → Learning examples → Episodes → Procedures\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n        Initialize Genesis Memory Chain tracker.\n\n        Args:\n            session: Database session\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+logger
+●●●●●● 1mm □△
+'[GENESIS-MEMORY-CHAIN] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_memory_chain
+●●●●●● 1mm □△
+self
+genesis_key_id
+include_timeline
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Get complete memory chain for Genesis Key.\n\n        Args:\n            genesis_key_id: Genesis Key ID\n            include_timeline: Include detailed timeline\n\n        Returns:\n            Complete memory chain data\n        '
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+logger
+●●●●●● 1mm □△
+'[GENESIS-MEMORY-CHAIN] Genesis Key not found: '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+learning_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+Procedure
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_evolution
+●●●●●● 1mm □
+ex
+ex
+learning_examples
+trust_trend
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trust_evolution
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □
+'genesis_key_id'
+'genesis_key_name'
+'source'
+'created_at'
+'learning_journey'
+'knowledge_depth'
+'learning_velocity'
+genesis_key_id
+genesis_key
+genesis_key
+'Unknown'
+genesis_key
+genesis_key
+'Unknown'
+genesis_key
+genesis_key
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'total_examples'
+'high_trust_examples'
+'trust_evolution'
+'trust_trend'
+'avg_trust'
+'episodes_created'
+'high_trust_episodes'
+'skills_emerged'
+'high_success_skills'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+ex
+learning_examples
+ex
+0.7
+●●●●●● 2mm □△
+trust_evolution
+trust_trend
+trust_evolution
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+trust_evolution
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trust_evolution
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+ep
+episodes
+ep
+0.7
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+procedures
+p
+0.7
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_examples
+episodes
+procedures
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_timeline
+●●●●●● 3mm □
+'timeline'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+learning_examples
+episodes
+procedures
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-MEMORY-CHAIN] Retrieved chain for '
+genesis_key_id
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+' examples, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+' episodes, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+' procedures'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-MEMORY-CHAIN] Error getting chain: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_trust_trend
+●●●●●● 1mm □△
+self
+trust_scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+'\n        Calculate overall trust trend.\n\n        Args:\n            trust_scores: List of trust scores over time\n\n        Returns:\n            "improving", "stable", or "declining"\n        '
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trust_scores
+●●●●●● 2mm □△
+3
+●●●●●● 3mm ○
+'insufficient_data'
+first_third
+●●●●●● 1mm □
+trust_scores
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trust_scores
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+3
+last_third
+●●●●●● 1mm □
+trust_scores
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trust_scores
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+3
+avg_first
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+first_third
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+first_third
+●●●●●● 2mm □△
+avg_last
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+last_third
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+last_third
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+avg_last
+●●●●●● 1mm □△
+avg_first
+●●●●●● 2mm □
+diff
+0.1
+●●●●●● 3mm ○
+'improving'
+●●●●●● 1mm △
+diff
+0.1
+●●●●●● 3mm ○
+'declining'
+●●●●●● 3mm ○
+'stable'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_calculate_knowledge_depth
+●●●●●● 1mm □△
+self
+learning_examples
+episodes
+procedures
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningExample
+●●●●●● 3mm □△
+Episode
+●●●●●● 3mm □△
+Procedure
+'\n        Calculate knowledge depth metrics.\n\n        Args:\n            learning_examples: Learning examples\n            episodes: Episodes\n            procedures: Procedures\n\n        Returns:\n            Knowledge depth metrics\n        '
+depth_score
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+learning_examples
+depth_score
+1
+●●●●●● 2mm □
+episodes
+depth_score
+1
+●●●●●● 2mm □
+procedures
+depth_score
+1
+example_types
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+ex
+ex
+learning_examples
+●●●●●● 2mm □△
+breadth_score
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+example_types
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedures
+mastery_score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+p
+procedures
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+●●●●●● 3mm □
+mastery_score
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm ○
+'depth_layers'
+'max_depth'
+'breadth_types'
+'mastery_score'
+'overall_depth'
+depth_score
+3
+breadth_score
+mastery_score
+depth_score
+●●●●●● 3mm □△
+3
+●●●●●● 3mm ○
+mastery_score
+●●●●●● 3mm □△
+2
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_learning_velocity
+●●●●●● 1mm □△
+self
+learning_examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningExample
+'\n        Calculate learning velocity (rate of learning).\n\n        Args:\n            learning_examples: Learning examples ordered by time\n\n        Returns:\n            Learning velocity metrics\n        '
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+'examples_per_day'
+'velocity'
+0
+'not_enough_data'
+first_time
+●●●●●● 1mm □
+learning_examples
+0
+last_time
+●●●●●● 1mm □
+learning_examples
+1
+●●●●●● 2mm □
+first_time
+last_time
+●●●●●● 3mm ○
+'examples_per_day'
+'velocity'
+0
+'unknown'
+time_span
+●●●●●● 1mm □
+last_time
+●●●●●● 1mm □△
+first_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+86400
+●●●●●● 2mm □
+time_span
+0
+time_span
+●●●●●● 1mm □
+1
+examples_per_day
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+time_span
+●●●●●● 2mm □
+examples_per_day
+10
+velocity
+●●●●●● 1mm □
+'rapid'
+●●●●●● 1mm △
+examples_per_day
+3
+velocity
+●●●●●● 1mm □
+'steady'
+●●●●●● 2mm □
+examples_per_day
+0.5
+velocity
+●●●●●● 1mm □
+'slow'
+●●●●●● 3mm □
+velocity
+●●●●●● 1mm □
+'minimal'
+●●●●●● 3mm ○
+'examples_per_day'
+'total_examples'
+'time_span_days'
+'velocity'
+examples_per_day
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+time_span
+velocity
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_build_timeline
+●●●●●● 1mm □△
+self
+genesis_key
+learning_examples
+episodes
+procedures
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 3mm □△
+LearningExample
+●●●●●● 3mm □△
+Episode
+●●●●●● 3mm □△
+Procedure
+'\n        Build chronological timeline of events.\n\n        Args:\n            genesis_key: Genesis Key\n            learning_examples: Learning examples\n            episodes: Episodes\n            procedures: Procedures\n\n        Returns:\n            Chronological timeline\n        '
+timeline
+●●●●●● 1mm □
+●●●●●● 2mm □
+genesis_key
+genesis_key
+timeline
+●●●●●● 1mm □△
+'timestamp'
+'event_type'
+'description'
+'data'
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'genesis_key_created'
+"Genesis Key '"
+genesis_key
+"' created"
+'genesis_key_id'
+'source'
+genesis_key
+genesis_key
+●●●●●● 2mm □△
+ex
+learning_examples
+●●●●●● 2mm □
+ex
+timeline
+●●●●●● 1mm □△
+'timestamp'
+'event_type'
+'description'
+'data'
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'learning_ingested'
+'Learning example ingested (trust='
+ex
+'.2f'
+')'
+'learning_id'
+'example_type'
+'trust_score'
+ex
+ex
+ex
+●●●●●● 2mm □△
+ep
+episodes
+●●●●●● 2mm □
+ep
+timeline
+●●●●●● 1mm □△
+'timestamp'
+'event_type'
+'description'
+'data'
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'episode_created'
+'Episode created (trust='
+ep
+'.2f'
+')'
+'episode_id'
+'trust_score'
+ep
+ep
+●●●●●● 2mm □△
+proc
+procedures
+●●●●●● 2mm □
+proc
+timeline
+●●●●●● 1mm □△
+'timestamp'
+'event_type'
+'description'
+'data'
+proc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'procedure_emerged'
+"Procedure '"
+proc
+"' emerged (success="
+proc
+'.2f'
+')'
+'procedure_id'
+'name'
+'success_rate'
+proc
+proc
+proc
+●●●●●● 2mm □△
+timeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+timeline
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all_genesis_chains
+●●●●●● 1mm □△
+self
+min_learning_examples
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+1
+'\n        Get memory chains for all Genesis Keys.\n\n        Args:\n            min_learning_examples: Minimum learning examples to include\n\n        Returns:\n            List of memory chain summaries\n        '
+genesis_keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+GenesisKey
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'example_count'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+GenesisKey
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+min_learning_examples
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □
+gk_id
+gk_name
+example_count
+genesis_keys
+chain_summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □△
+chain_summary
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-MEMORY-CHAIN] Retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+' chains'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chains
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-MEMORY-CHAIN] Error getting all chains: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_learning_narrative
+●●●●●● 1mm □△
+self
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Generate natural language narrative of learning journey.\n\n        Args:\n            genesis_key_id: Genesis Key ID\n\n        Returns:\n            Natural language narrative\n        '
+●●●●●● 3mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'No learning journey found for Genesis Key '
+genesis_key_id
+journey
+●●●●●● 1mm □
+●●●●●● 3mm □
+'learning_journey'
+depth
+●●●●●● 1mm □
+●●●●●● 3mm □
+'knowledge_depth'
+velocity
+●●●●●● 1mm □
+●●●●●● 3mm □
+'learning_velocity'
+narrative
+●●●●●● 1mm □
+'\nGenesis Key: '
+●●●●●● 3mm □
+'genesis_key_name'
+'\nSource: '
+●●●●●● 3mm □
+'source'
+'\n\nLearning Journey:\n- Total learning examples: '
+journey
+'total_examples'
+'\n- High-trust examples: '
+journey
+'high_trust_examples'
+'\n- Average trust score: '
+journey
+'avg_trust'
+'.2f'
+'\n- Trust trend: '
+journey
+'trust_trend'
+'\n\nMemory Formation:\n- Episodes created: '
+journey
+'episodes_created'
+' (episodic memory)\n- Skills emerged: '
+journey
+'skills_emerged'
+' (procedural memory)\n- High-success skills: '
+journey
+'high_success_skills'
+'\n\nKnowledge Depth:\n- Depth layers: '
+depth
+'depth_layers'
+'/'
+depth
+'max_depth'
+'\n- Mastery score: '
+depth
+'mastery_score'
+'.2f'
+'\n- Overall depth: '
+depth
+'overall_depth'
+'.2f'
+'\n\nLearning Velocity:\n- Rate: '
+velocity
+'examples_per_day'
+'.2f'
+' examples/day\n- Velocity: '
+velocity
+'velocity'
+'\n- Time span: '
+velocity
+●●●●●● 1mm □△
+'time_span_days'
+0
+●●●●●● 2mm □△
+'.1f'
+' days\n'
+●●●●●● 3mm ○
+narrative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_genesis_memory_chain
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Get Genesis Memory Chain tracker'
+●●●●●● 3mm ○
+GenesisMemoryChain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisMemoryChain

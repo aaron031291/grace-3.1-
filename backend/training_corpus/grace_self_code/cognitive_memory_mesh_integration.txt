@@ -1,0 +1,1086 @@
+## memory_mesh_integration.py
+'\nMemory Mesh Integration with Learning Memory\n\nConnects learning memory to episodic and procedural memory,\ncreating a feedback loop for continuous improvement.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+LearningExample
+LearningPattern
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+Episode
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+ProceduralRepository
+Procedure
+●●●●●● 2mm △
+MemoryMeshIntegration
+'\n    Integrates learning memory with the full memory mesh.\n\n    Flow:\n    1. Learning data comes in (from files, user feedback, system observations)\n    2. Trust scores calculated and stored in learning_memory\n    3. High-trust examples feed into episodic memory\n    4. Patterns extracted and stored as procedures\n    5. Procedures used in inference\n    6. Outcomes feed back to update trust scores\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ProceduralRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_learning_experience
+●●●●●● 1mm □△
+self
+experience_type
+context
+action_taken
+outcome
+expected_outcome
+source
+user_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'system_observation'
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Ingest a learning experience into the memory mesh.\n\n        This is the main entry point for learning data.\n\n        Args:\n            experience_type: Type of experience (success, failure, feedback, etc.)\n            context: Contextual information\n            action_taken: What was done\n            outcome: What happened\n            expected_outcome: What was expected (if different from outcome)\n            source: Source of learning\n            user_id: Genesis ID if user-provided\n            genesis_key_id: Link to Genesis Key\n\n        Returns:\n            Learning example ID\n        '
+●●●●●● 1mm □
+_safe_dict
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+'Coerce any value to a JSON-safe dict for SQLite.'
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_j
+parsed
+●●●●●● 1mm □
+_j
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+parsed
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parsed
+'raw'
+val
+Exception
+●●●●●● 3mm ○
+'raw'
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_j
+_j
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+TypeError
+ValueError
+●●●●●● 3mm ○
+k
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'raw'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+_safe_dict
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+action_taken
+●●●●●● 1mm □
+_safe_dict
+●●●●●● 1mm □△
+action_taken
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □
+_safe_dict
+●●●●●● 1mm □△
+outcome
+●●●●●● 2mm □△
+expected_outcome
+●●●●●● 1mm □
+expected_outcome
+_safe_dict
+●●●●●● 1mm □△
+expected_outcome
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning_data
+●●●●●● 1mm □
+'context'
+'expected'
+'actual'
+context
+expected_outcome
+outcome
+outcome
+learning_example
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning_example
+0.7
+episode
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+context
+action_taken
+outcome
+expected_outcome
+●●●●●● 2mm □△
+learning_example
+●●●●●● 1mm □
+episode
+●●●●●● 2mm □
+learning_example
+0.8
+experience_type
+'success'
+'pattern'
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+context
+action_taken
+outcome
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedure
+learning_example
+●●●●●● 1mm □
+procedure
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+learning_example
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_add_to_episodic_memory
+●●●●●● 1mm □△
+self
+learning_example
+context
+action
+outcome
+expected_outcome
+●●●●●● 2mm □△
+LearningExample
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Add high-trust learning example to episodic memory.\n        '
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_json
+●●●●●● 1mm □
+_json_safe
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'{'
+'['
+●●●●●● 2mm □△
+_json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+'raw'
+val
+Exception
+●●●●●● 3mm ○
+'raw'
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+TypeError
+ValueError
+●●●●●● 3mm ○
+k
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'raw'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+problem_text
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+context
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+context
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problem_text
+●●●●●● 2mm □△
+2000
+problem_text
+●●●●●● 1mm □
+problem_text
+2000
+episode
+●●●●●● 1mm □
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episode
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+episode
+Episode
+●●●●●● 1mm □
+_calculate_prediction_error
+●●●●●● 1mm □△
+self
+actual
+expected
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Calculate error between expected and actual outcomes.\n        '
+●●●●●● 2mm □
+expected
+●●●●●● 3mm ○
+0.0
+matching_keys
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+actual
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+expected
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matching_keys
+●●●●●● 3mm ○
+1.0
+errors
+●●●●●● 1mm □
+key
+matching_keys
+●●●●●● 2mm □
+actual
+key
+expected
+key
+errors
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+actual
+key
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+expected
+key
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+actual
+key
+●●●●●● 1mm □△
+expected
+key
+●●●●●● 2mm □△
+max_val
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+actual
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+expected
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+max_val
+0
+errors
+●●●●●● 1mm □△
+diff
+●●●●●● 3mm □△
+max_val
+●●●●●● 2mm □△
+●●●●●● 3mm □
+errors
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+errors
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_update_procedural_memory
+●●●●●● 1mm □△
+self
+learning_example
+context
+action
+outcome
+●●●●●● 2mm □△
+LearningExample
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Update procedural memory based on learning example.\n        '
+goal
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'goal'
+learning_example
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+existing
+●●●●●● 3mm □
+similar_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similar_examples
+●●●●●● 2mm □△
+2
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedure
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Procedure
+●●●●●● 1mm □
+_find_similar_learning_examples
+●●●●●● 1mm □△
+self
+example
+min_trust
+●●●●●● 2mm □△
+LearningExample
+●●●●●● 3mm ○
+0.7
+'\n        Find similar high-trust learning examples.\n        '
+similar
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+example
+LearningExample
+min_trust
+LearningExample
+example
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similar
+●●●●●● 3mm □△
+LearningExample
+●●●●●● 1mm □
+feedback_loop_update
+●●●●●● 1mm □△
+self
+learning_example_id
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'\n        Feedback loop: Update trust scores based on real-world outcomes.\n\n        When a learning example is used and we observe the outcome,\n        update its trust score.\n\n        Args:\n            learning_example_id: Learning example that was used\n            actual_outcome: The actual outcome observed\n            success: Whether it was successful\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example_id
+success
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+learning_example_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+example
+●●●●●● 3mm ○
+●●●●●● 2mm □
+example
+0.5
+example
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+example
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+success
+●●●●●● 2mm □△
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+example
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedure
+procedure
+0.5
+procedure
+●●●●●● 1mm □
+procedure
+procedure
+'needs_review'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+procedure
+'low_success_reason'
+●●●●●● 1mm □
+'trust_score_drop'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_remove_from_episodic
+●●●●●● 1mm □△
+self
+episode_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Remove low-trust episode from episodic memory.\n        '
+episode
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+episode_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episode
+episode
+●●●●●● 1mm □
+0.3
+episode
+●●●●●● 1mm □
+episode
+episode
+'deprecated'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+get_training_dataset
+●●●●●● 1mm □△
+self
+experience_type
+min_trust_score
+max_examples
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.7
+1000
+'\n        Get high-trust training dataset for fine-tuning or learning.\n\n        This data can be used to:\n        1. Fine-tune language models\n        2. Train classifiers\n        3. Improve inference patterns\n\n        Args:\n            experience_type: Filter by type\n            min_trust_score: Minimum trust threshold\n            max_examples: Maximum examples to return\n\n        Returns:\n            List of training examples in standard format\n        '
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+training_data
+●●●●●● 1mm □
+ex
+examples
+training_data
+●●●●●● 1mm □△
+'input'
+'output'
+'trust_score'
+'source'
+'metadata'
+ex
+ex
+ex
+ex
+'example_id'
+'times_validated'
+'times_invalidated'
+'created_at'
+ex
+ex
+ex
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+training_data
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+export_training_data_to_file
+●●●●●● 1mm □△
+self
+output_path
+experience_type
+min_trust_score
+format
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+0.7
+'jsonl'
+"\n        Export training data to file for external use.\n\n        Args:\n            output_path: Where to save the file\n            experience_type: Filter by type\n            min_trust_score: Minimum trust threshold\n            format: 'jsonl' or 'json'\n        "
+●●●●●● 2mm □△○
+json
+training_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△○
+'jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+'w'
+●●●●●● 2mm □△
+f
+item
+training_data
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+training_data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_memory_mesh_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get statistics about the entire memory mesh.\n        OPTIMIZED: Single aggregation query instead of 7 separate queries\n        '
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+case
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_learning'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+case
+●●●●●● 1mm □△
+LearningExample
+0.7
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'high_trust_learning'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+case
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'linked_episodes'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_episodes'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_procedures'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+case
+●●●●●● 1mm □△
+Procedure
+0.7
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'high_success_procedures'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+LearningExample
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+LearningExample
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+total_learning
+●●●●●● 1mm □
+stats
+0
+high_trust_learning
+●●●●●● 1mm □
+stats
+0
+linked_episodes
+●●●●●● 1mm □
+stats
+0
+total_episodes
+●●●●●● 1mm □
+stats
+0
+total_procedures
+●●●●●● 1mm □
+stats
+0
+high_success_procedures
+●●●●●● 1mm □
+stats
+0
+●●●●●● 3mm ○
+'learning_memory'
+'episodic_memory'
+'procedural_memory'
+'pattern_extraction'
+'total_examples'
+'high_trust_examples'
+'trust_ratio'
+total_learning
+high_trust_learning
+total_learning
+0
+high_trust_learning
+●●●●●● 3mm □△
+total_learning
+0
+'total_episodes'
+'linked_from_learning'
+'linkage_ratio'
+total_episodes
+linked_episodes
+total_episodes
+0
+linked_episodes
+●●●●●● 3mm □△
+total_episodes
+0
+'total_procedures'
+'high_success_procedures'
+'success_ratio'
+total_procedures
+high_success_procedures
+total_procedures
+0
+high_success_procedures
+●●●●●● 3mm □△
+total_procedures
+0
+'total_patterns'
+total_patterns
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+sync_learning_folders
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Sync learning memory from file system folders.\n\n        Reads data from knowledge_base/layer_1/learning_memory/*\n        and ingests into memory mesh.\n        '
+●●●●●● 2mm □△○
+json
+learning_type_dir
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning_type_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_type
+●●●●●● 1mm □
+learning_type_dir
+date_dir
+learning_type_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+date_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_file
+date_dir
+●●●●●● 1mm □△
+'learning_*.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_file
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+learning_file
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error ingesting '
+learning_file
+': '
+e
+●●●●●● 2mm □△

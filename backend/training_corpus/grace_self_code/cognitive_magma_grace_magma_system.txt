@@ -1,0 +1,998 @@
+## grace_magma_system.py
+'\nGrace Magma System - Unified Memory Architecture\n\nThis is the single unified entry point that integrates Magma Memory\nwith ALL Grace systems:\n\nCore Memory:\n- MagmaMemory: Graph-based memory with 4 relation types\n- RRF Fusion: Multi-source retrieval fusion\n- Causal Inference: LLM-powered cause-effect reasoning\n\nLayer Integration:\n- Layer 1: Message Bus connector (event-driven memory)\n- Layer 2: Interpreter pattern memory (recurring issues)\n- Layer 3: Judgement decision memory (precedents)\n- Layer 4: Action Router memory (learned procedures)\n\nSecurity Integration:\n- Genesis Keys: Full provenance tracking\n- Trust Scoring: Neural trust-aware retrieval\n- Governance: Constitutional enforcement\n\nUsage:\n    from cognitive.magma.grace_magma_system import GraceMagmaSystem, get_grace_magma\n\n    # Get singleton instance\n    magma = get_grace_magma()\n\n    # Ingest content\n    magma.ingest("Learning experience about Python error handling")\n\n    # Query memory\n    results = magma.query("How do I handle errors?")\n\n    # Get context for LLM\n    context = magma.get_context("What causes timeout errors?")\n\n    # Causal inference\n    causes = magma.why("What causes database connection failures?")\n\n    # Store a pattern from Layer 2\n    magma.store_pattern("error_cluster", "Database timeout pattern")\n\n    # Store a decision from Layer 3\n    magma.store_decision("heal", "database", "Reconnect database")\n\n    # Store a procedure from Layer 4\n    magma.store_procedure("heal", "Reconnect DB", ["Stop pool", "Restart"])\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraceMagmaConfig
+'Configuration for Grace Magma System.'
+embedding_dimension
+●●●●●● 2mm ○
+384
+max_context_length
+●●●●●● 2mm ○
+4000
+consolidation_interval_seconds
+●●●●●● 2mm ○
+300
+auto_connect_layers
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+auto_ingest_events
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+enable_genesis_tracking
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+enable_trust_scoring
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+enable_governance
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+min_trust_threshold
+●●●●●● 3mm ○
+0.5
+max_workers
+●●●●●● 2mm ○
+4
+cache_size
+●●●●●● 2mm ○
+1000
+dataclass
+●●●●●● 2mm △
+GraceMagmaSystem
+'\n    Unified Grace Magma Memory System.\n\n    This is THE single entry point for all memory operations in Grace.\n    It unifies:\n    - Graph-based memory (semantic, temporal, causal, entity)\n    - Layer 1-4 integrations\n    - Security integrations (Genesis, Trust, Governance)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+config
+embedding_fn
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GraceMagmaConfig
+●●●●●● 2mm □○
+●●●●●● 1mm △○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize the unified Grace Magma System.\n\n        Args:\n            config: Configuration options\n            embedding_fn: Optional embedding function\n            session: Database session\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+config
+GraceMagmaConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_fn
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] GraceMagmaSystem created (lazy initialization)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Initialize all components.\n\n        Call this explicitly or let it auto-initialize on first use.\n        '
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+cognitive.magma
+●●●●●● 2mm □△○
+MagmaMemory
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Core MagmaMemory initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma.layer_integrations
+●●●●●● 2mm □△○
+MagmaMessageBusConnector
+InterpreterPatternMemory
+JudgementDecisionMemory
+ActionRouterMemory
+MagmaGenesisIntegration
+MagmaTrustIntegration
+MagmaGovernanceIntegration
+●●●●●● 3mm △
+●●●●●● 1mm □
+InterpreterPatternMemory
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+JudgementDecisionMemory
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ActionRouterMemory
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Layer 2-4 integrations initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaMessageBusConnector
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Layer 1 Message Bus connected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaGenesisIntegration
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaTrustIntegration
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaGovernanceIntegration
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Security integrations initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] ✓ System fully initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Initialization failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_ensure_initialized
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure system is initialized before use.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest
+●●●●●● 1mm □△
+self
+content
+genesis_key_id
+metadata
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Ingest content into Magma memory.\n\n        This is the primary write operation. Content is:\n        - Segmented into meaningful units\n        - Embedded into semantic space\n        - Linked across all 4 graphs (semantic, temporal, causal, entity)\n        - Tracked with Genesis Key\n        - Validated by governance\n\n        Args:\n            content: Text content to ingest\n            genesis_key_id: Optional existing Genesis Key\n            metadata: Optional metadata\n            user_id: Optional user ID for tracking\n\n        Returns:\n            IngestionResult with details\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+allowed
+reason
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+allowed
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Ingestion blocked: '
+reason
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Ingestion blocked by governance: '
+reason
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+genesis_key_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+result
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+self
+query
+top_k
+min_trust
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+10
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Query Magma memory.\n\n        This is the primary read operation. Uses:\n        - Intent-aware routing to select graphs\n        - Multi-hop graph traversal\n        - RRF fusion of results from all sources\n        - Trust-based filtering (if enabled)\n\n        Args:\n            query: Search query\n            top_k: Maximum results\n            min_trust: Minimum trust score (uses config default if None)\n            user_id: Optional user ID for tracking\n\n        Returns:\n            List of FusedResult objects\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+allowed
+reason
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+allowed
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Query blocked: '
+reason
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Query blocked by governance: '
+reason
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+trust_threshold
+●●●●●● 1mm □
+min_trust
+●●●●●● 3mm △
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+trust_threshold
+top_k
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+results
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+self
+query
+max_length
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Get linearized context for LLM consumption.\n\n        Synthesizes retrieval results into a formatted context string\n        suitable for adding to LLM prompts.\n\n        Args:\n            query: Query to retrieve context for\n            max_length: Maximum context length in characters\n            user_id: Optional user ID\n\n        Returns:\n            Formatted context string\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_len
+●●●●●● 1mm □
+max_length
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+why
+●●●●●● 1mm □△
+self
+query
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Answer "why" questions using causal inference.\n\n        Combines:\n        - Pattern-based causal detection\n        - Causal graph traversal\n        - LLM-powered causal reasoning\n\n        Args:\n            query: Causal question (e.g., "Why did X happen?")\n            user_id: Optional user ID\n\n        Returns:\n            CausalInferenceResult with claims and chains\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+result
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+explain
+●●●●●● 1mm □△
+self
+query
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Get human-readable explanation of causal relationships.\n\n        Args:\n            query: What to explain\n            user_id: Optional user ID\n\n        Returns:\n            Natural language explanation\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+store_pattern
+●●●●●● 1mm □△
+self
+pattern_type
+description
+confidence
+affected_components
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0.7
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Store a detected pattern (Layer 2 integration).\n\n        Called by the Interpreter layer when patterns are detected.\n\n        Args:\n            pattern_type: Type of pattern\n            description: Pattern description\n            confidence: Detection confidence\n            affected_components: List of affected components\n            genesis_key_id: Optional Genesis Key\n\n        Returns:\n            Pattern ID\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_similar_patterns
+●●●●●● 1mm □△
+self
+description
+pattern_type
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+5
+'\n        Find similar patterns from memory.\n\n        Args:\n            description: Pattern to match\n            pattern_type: Optional type filter\n            top_k: Maximum results\n\n        Returns:\n            List of similar PatternMemoryEntry objects\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+store_decision
+●●●●●● 1mm □△
+self
+action
+health_status
+context
+confidence
+risk_level
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0.7
+'medium'
+●●●●●● 2mm □
+'\n        Store a judgement decision (Layer 3 integration).\n\n        Called by the Judgement layer when decisions are made.\n\n        Args:\n            action: Recommended action\n            health_status: System health at time of decision\n            context: Decision context\n            confidence: Decision confidence\n            risk_level: Risk level (low/medium/high/critical)\n            genesis_key_id: Optional Genesis Key\n\n        Returns:\n            Decision ID\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_precedents
+●●●●●● 1mm □△
+self
+health_status
+risk_level
+context
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'\n        Find similar past decisions as precedents.\n\n        Args:\n            health_status: Current health\n            risk_level: Current risk\n            context: Current context\n            top_k: Maximum results\n\n        Returns:\n            List of DecisionPrecedent objects\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+record_decision_outcome
+●●●●●● 1mm □△
+self
+decision_id
+outcome
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'\n        Record outcome of a past decision.\n\n        Args:\n            decision_id: Decision to update\n            outcome: What happened\n            success: Whether decision was successful\n\n        Returns:\n            True if updated\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+outcome
+success
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+store_procedure
+●●●●●● 1mm □△
+self
+action_type
+name
+steps
+target_components
+success
+duration_ms
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+0
+●●●●●● 2mm □
+'\n        Store an executed procedure (Layer 4 integration).\n\n        Called by the Action Router when procedures complete.\n\n        Args:\n            action_type: Type of action (heal, alert, etc.)\n            name: Procedure name\n            steps: List of steps taken\n            target_components: Components affected\n            success: Whether procedure succeeded\n            duration_ms: Execution duration\n            genesis_key_id: Optional Genesis Key\n\n        Returns:\n            Procedure ID\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_procedures
+●●●●●● 1mm □△
+self
+action_type
+target_component
+min_success_rate
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.5
+5
+'\n        Find relevant procedures for an action.\n\n        Args:\n            action_type: Type of action needed\n            target_component: Optional component filter\n            min_success_rate: Minimum success rate\n            top_k: Maximum results\n\n        Returns:\n            List of ActionProcedure objects\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+get_best_procedure
+●●●●●● 1mm □△
+self
+action_type
+target_component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Get the best procedure for an action.\n\n        Returns the highest-success-rate procedure for the given\n        action type and target component.\n\n        Args:\n            action_type: Action type\n            target_component: Target component\n\n        Returns:\n            ActionProcedure or None\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+target_component
+●●●●●● 2mm □△
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Access underlying graph structures.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Access semantic relation graph.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Access temporal relation graph.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Access causal relation graph.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Access entity relation graph.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get comprehensive system statistics.\n\n        Returns:\n            Dict with stats from all components\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph_stats
+●●●●●● 1mm □
+name
+graph
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph_stats
+name
+●●●●●● 1mm □
+'nodes'
+'edges'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graph
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graph
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'initialized'
+'graphs'
+'patterns_stored'
+'decisions_stored'
+'procedures_stored'
+'security'
+●●●●●● 3mm △
+graph_stats
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+'genesis_enabled'
+'trust_enabled'
+'governance_enabled'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+health_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check system health.\n\n        Returns:\n            (healthy, message)\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'System not initialized'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'health check'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'System healthy'
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Health check failed: '
+e
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+shutdown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Gracefully shut down the system.'
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Shutting down...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'consolidation'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[GRACE-MAGMA] Shutdown complete'
+●●●●●● 2mm □△
+_grace_magma_instance
+●●●●●● 2mm □○
+GraceMagmaSystem
+●●●●●● 2mm □
+_instance_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_grace_magma
+●●●●●● 1mm □△
+config
+force_new
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GraceMagmaConfig
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n    Get the singleton GraceMagmaSystem instance.\n\n    Args:\n        config: Optional configuration (only used for new instance)\n        force_new: Force create a new instance\n\n    Returns:\n        GraceMagmaSystem instance\n    '
+_instance_lock
+●●●●●● 2mm □
+force_new
+_grace_magma_instance
+●●●●●● 2mm □
+_grace_magma_instance
+●●●●●● 1mm □
+GraceMagmaSystem
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_grace_magma_instance
+GraceMagmaSystem
+●●●●●● 1mm □
+reset_grace_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset the singleton (mainly for testing).'
+_instance_lock
+●●●●●● 2mm □
+_grace_magma_instance
+_grace_magma_instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_grace_magma_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+ingest
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Quick ingest into Grace Magma.'
+●●●●●● 3mm ○
+get_grace_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+query_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Quick query from Grace Magma.'
+●●●●●● 3mm ○
+get_grace_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+query_text
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+query_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Quick context retrieval from Grace Magma.'
+●●●●●● 3mm ○
+get_grace_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+query_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+why
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Quick causal inference from Grace Magma.'
+●●●●●● 3mm ○
+get_grace_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△

@@ -1,0 +1,85 @@
+## conftest.py
+'\nShared test fixtures for Grace AI test suite.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+pytest
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'SKIP_QDRANT_CHECK'
+'SKIP_OLLAMA_CHECK'
+'SKIP_AUTO_INGESTION'
+'DISABLE_CONTINUOUS_LEARNING'
+'SKIP_LLM_CHECK'
+'LIGHTWEIGHT_MODE'
+'DATABASE_PATH'
+'true'
+'true'
+'true'
+'true'
+'true'
+'true'
+'true'
+':memory:'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+app
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 1mm □
+_app
+●●●●●● 3mm ○
+_app
+pytest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 3mm ○
+TestClient
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+pytest

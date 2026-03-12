@@ -1,0 +1,335 @@
+## fix_gdp_ingestion.py
+'Fix: Re-ingest GDP document and clean up orphaned vectors.'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+api.file_ingestion
+●●●●●● 2mm □△○
+get_file_manager
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+sessionmaker
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FIX: GDP DOCUMENT RE-INGESTION'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n1. Initializing database...'
+●●●●●● 2mm □△
+db_type
+●●●●●● 1mm □
+settings
+DatabaseType
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+DatabaseType
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+sessionmaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n2. Checking for orphaned vectors...'
+●●●●●● 2mm □△
+orphaned_vector_ids
+●●●●●● 1mm □
+vector_id
+●●●●●● 1mm □
+●●●●●● 1mm □△
+2000
+2010
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+vector_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+orphaned_vector_ids
+●●●●●● 1mm □△
+vector_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orphaned_vector_ids
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned_vector_ids
+●●●●●● 2mm □△
+' orphaned vectors: '
+orphaned_vector_ids
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n3. Removing orphaned vectors from Qdrant...'
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_id
+orphaned_vector_ids
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✓ Removed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned_vector_ids
+●●●●●● 2mm □△
+' orphaned vectors'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✗ Error removing vectors: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   No orphaned vectors found'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n4. Re-ingesting GDP document...'
+●●●●●● 2mm □△
+gdp_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'/home/umer/Public/projects/grace_3/backend/knowledge_base/forensic/gdp_volatility.pdf'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gdp_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Found GDP file: '
+gdp_path
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □
+get_file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+FileHandler
+text
+error
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+gdp_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+result_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+doc_id
+message
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result_obj
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✓ Re-ingestion successful'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Document ID: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Message: '
+result
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n5. Verification:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✓ Document found in database'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     ID: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Filename: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Status: '
+doc
+●●●●●● 2mm □△
+chunk_count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Chunks: '
+chunk_count
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✗ Re-ingestion failed: '
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✗ GDP file not found at '
+gdp_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FIX COMPLETE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△

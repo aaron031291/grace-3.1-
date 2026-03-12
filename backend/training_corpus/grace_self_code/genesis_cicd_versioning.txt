@@ -1,0 +1,1020 @@
+## cicd_versioning.py
+'\nCI/CD Pipeline Version Control\n==============================\nVersion control for all pipeline mutations.\nTracks every change with Genesis Keys for full audit trail.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MutationType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of pipeline mutations.'
+CREATE
+●●●●●● 1mm □
+'create'
+UPDATE
+●●●●●● 1mm □
+'update'
+DELETE
+●●●●●● 1mm □
+'delete'
+ENABLE
+●●●●●● 1mm □
+'enable'
+DISABLE
+●●●●●● 1mm □
+'disable'
+ROLLBACK
+●●●●●● 1mm □
+'rollback'
+●●●●●● 2mm △
+PipelineVersion
+'A versioned snapshot of a pipeline configuration.'
+version_id
+●●●●●● 1mm ○
+pipeline_id
+●●●●●● 1mm ○
+version_number
+●●●●●● 2mm ○
+mutation_type
+MutationType
+genesis_key
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+author
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+config_hash
+●●●●●● 1mm ○
+config_snapshot
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+previous_version
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+PipelineVersionHistory
+'Complete version history for a pipeline.'
+pipeline_id
+●●●●●● 1mm ○
+current_version
+●●●●●● 2mm ○
+versions
+●●●●●● 3mm □△
+PipelineVersion
+created_at
+●●●●●● 1mm ○
+updated_at
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+CICDVersionControl
+'\n    Version control system for CI/CD pipelines.\n\n    Features:\n    - Automatic versioning on every mutation\n    - Genesis Key tracking for audit trail\n    - Rollback to any previous version\n    - Diff between versions\n    - Full history retention\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+storage_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+storage_dir
+'/tmp/grace-cicd/versions'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PipelineVersionHistory
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_versions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load version history from disk.'
+history_file
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*/history.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history_file
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+pipeline_id
+●●●●●● 1mm □
+data
+'pipeline_id'
+versions
+●●●●●● 1mm □
+v
+data
+●●●●●● 1mm □△
+'versions'
+●●●●●● 2mm □△
+versions
+●●●●●● 1mm □△
+PipelineVersion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+PipelineVersionHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VC] Loaded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+versions
+●●●●●● 2mm □△
+" versions for pipeline '"
+pipeline_id
+"'"
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[VC] Failed to load version history: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_history
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Save version history to disk.'
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+pipeline_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+pipeline_id
+pipeline_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_data
+●●●●●● 1mm □
+'pipeline_id'
+'current_version'
+'versions'
+'created_at'
+'updated_at'
+history
+history
+asdict
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+history
+history
+history
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+pipeline_dir
+●●●●●● 3mm □△
+'history.json'
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+history_data
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[VC] Saved version history for pipeline '"
+pipeline_id
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compute_hash
+●●●●●● 1mm □△
+self
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Compute hash of pipeline configuration.'
+config_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+config_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_version_id
+●●●●●● 1mm □△
+self
+pipeline_id
+version_number
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Generate unique version ID.'
+●●●●●● 3mm ○
+pipeline_id
+'-v'
+version_number
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+mutation_type
+pipeline_id
+version
+●●●●●● 2mm □△
+MutationType
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Generate Genesis Key for version control operation.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_data
+●●●●●● 1mm □
+'cicd:version:'
+mutation_type
+':'
+pipeline_id
+':v'
+version
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'gk-vc-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+record_mutation
+●●●●●● 1mm □△
+self
+pipeline_id
+mutation_type
+config
+author
+message
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+MutationType
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'system'
+''
+'\n        Record a pipeline mutation.\n\n        Args:\n            pipeline_id: Pipeline identifier\n            mutation_type: Type of mutation\n            config: Current pipeline configuration\n            author: Who made the change\n            message: Commit message\n\n        Returns:\n            PipelineVersion object\n        '
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 1mm □
+PipelineVersionHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+new_version_number
+●●●●●● 1mm □
+history
+●●●●●● 3mm ○
+1
+version_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+new_version_number
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mutation_type
+pipeline_id
+new_version_number
+●●●●●● 2mm □△
+previous_version
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+history
+previous_version
+●●●●●● 1mm □
+history
+1
+version
+●●●●●● 1mm □
+PipelineVersion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □△
+version
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+new_version_number
+history
+●●●●●● 1mm □
+timestamp
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+version
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VC] Recorded '
+mutation_type
+" for pipeline '"
+pipeline_id
+"' -> v"
+new_version_number
+' ('
+genesis_key
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+version
+PipelineVersion
+●●●●●● 1mm □
+_save_version_file
+●●●●●● 1mm □△
+self
+version
+●●●●●● 2mm □△
+PipelineVersion
+'Save individual version snapshot.'
+version_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+version
+●●●●●● 3mm □△
+'versions'
+version_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+version_file
+●●●●●● 1mm □
+version_dir
+●●●●●● 3mm □△
+'v'
+version
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+version_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+asdict
+●●●●●● 1mm □△
+version
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_version
+●●●●●● 1mm □△
+self
+pipeline_id
+version_number
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'\n        Get a specific version of a pipeline.\n\n        Args:\n            pipeline_id: Pipeline identifier\n            version_number: Version number (default: latest)\n\n        Returns:\n            PipelineVersion or None\n        '
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 2mm □
+version_number
+●●●●●● 2mm □
+●●●●●● 3mm ○
+history
+history
+1
+●●●●●● 2mm □
+v
+history
+●●●●●● 2mm □
+v
+version_number
+●●●●●● 3mm ○
+v
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+PipelineVersion
+●●●●●● 1mm □
+get_history
+●●●●●● 1mm □△
+self
+pipeline_id
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+50
+'\n        Get version history for a pipeline.\n\n        Args:\n            pipeline_id: Pipeline identifier\n            limit: Maximum versions to return\n\n        Returns:\n            List of PipelineVersion objects (newest first)\n        '
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+history
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+PipelineVersion
+●●●●●● 1mm □
+get_all_histories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all pipeline version histories.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PipelineVersionHistory
+●●●●●● 1mm □
+diff_versions
+●●●●●● 1mm □△
+self
+pipeline_id
+version_a
+version_b
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'\n        Compare two versions of a pipeline.\n\n        Args:\n            pipeline_id: Pipeline identifier\n            version_a: First version number\n            version_b: Second version number\n\n        Returns:\n            Dict with differences\n        '
+v_a
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+version_a
+●●●●●● 2mm □△
+v_b
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+version_b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+v_a
+v_b
+●●●●●● 3mm ○
+'error'
+'Version not found'
+config_a
+●●●●●● 1mm □
+v_a
+config_b
+●●●●●● 1mm □
+v_b
+added
+●●●●●● 1mm □
+removed
+●●●●●● 1mm □
+modified
+●●●●●● 1mm □
+all_keys
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+config_a
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+config_b
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key
+all_keys
+●●●●●● 2mm □
+key
+config_a
+added
+key
+●●●●●● 1mm □
+config_b
+key
+●●●●●● 1mm △
+key
+config_b
+removed
+key
+●●●●●● 1mm □
+config_a
+key
+●●●●●● 2mm □
+config_a
+key
+config_b
+key
+modified
+key
+●●●●●● 1mm □
+'old'
+'new'
+config_a
+key
+config_b
+key
+●●●●●● 3mm ○
+'pipeline_id'
+'version_a'
+'version_b'
+'hash_a'
+'hash_b'
+'changes'
+'has_changes'
+pipeline_id
+version_a
+version_b
+v_a
+v_b
+'added'
+'removed'
+'modified'
+added
+removed
+modified
+●●●●●● 3mm △
+●●●●●● 1mm □△
+added
+removed
+modified
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+rollback
+●●●●●● 1mm □△
+self
+pipeline_id
+target_version
+author
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'system'
+'\n        Rollback a pipeline to a previous version.\n\n        Args:\n            pipeline_id: Pipeline identifier\n            target_version: Version to rollback to\n            author: Who performed the rollback\n\n        Returns:\n            New PipelineVersion representing the rollback\n        '
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+target_version
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+logger
+●●●●●● 1mm □△
+'[VC] Cannot rollback: version '
+target_version
+" not found for pipeline '"
+pipeline_id
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+rollback_version
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rollback_version
+'rollback_target'
+●●●●●● 1mm □
+target_version
+rollback_version
+'rollback_hash'
+●●●●●● 1mm □
+target
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rollback_version
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[VC] Rolled back pipeline '"
+pipeline_id
+"' to v"
+target_version
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rollback_version
+●●●●●● 2mm □○
+PipelineVersion
+●●●●●● 1mm □
+get_genesis_keys
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Get Genesis Keys for version control operations.\n\n        Args:\n            pipeline_id: Optional filter by pipeline\n\n        Returns:\n            List of Genesis Key records\n        '
+keys
+●●●●●● 1mm □
+pid
+history
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pipeline_id
+pid
+pipeline_id
+v
+history
+keys
+●●●●●● 1mm □△
+'genesis_key'
+'pipeline_id'
+'version'
+'mutation_type'
+'author'
+'timestamp'
+'message'
+v
+v
+v
+v
+v
+v
+v
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+keys
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+export_history
+●●●●●● 1mm □△
+self
+pipeline_id
+format
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'json'
+'\n        Export version history.\n\n        Args:\n            pipeline_id: Pipeline identifier\n            format: Export format (json, markdown)\n\n        Returns:\n            Exported history string\n        '
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+''
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+●●●●●● 2mm □
+●●●●●● 2mm □△○
+'markdown'
+lines
+●●●●●● 1mm □
+'# Version History: '
+pipeline_id
+''
+'**Current Version:** '
+history
+'**Created:** '
+history
+'**Last Updated:** '
+history
+''
+'## Versions'
+''
+v
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'### v'
+v
+' ('
+v
+')'
+'- **Genesis Key:** `'
+v
+'`'
+'- **Author:** '
+v
+'- **Timestamp:** '
+v
+'- **Message:** '
+v
+'- **Config Hash:** `'
+v
+'`'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+'pipeline_id'
+'current_version'
+'created_at'
+'updated_at'
+'versions'
+history
+history
+history
+history
+asdict
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+history
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+_version_control
+●●●●●● 2mm □○
+CICDVersionControl
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global version control instance.'
+●●●●●● 2mm □
+_version_control
+●●●●●● 2mm □
+_version_control
+●●●●●● 1mm □
+CICDVersionControl
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_version_control
+CICDVersionControl
+●●●●●● 1mm □
+on_pipeline_create
+●●●●●● 1mm □△
+pipeline_id
+config
+author
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'system'
+'Hook: Record pipeline creation.'
+vc
+●●●●●● 1mm □
+get_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+vc
+●●●●●● 1mm □△
+pipeline_id
+MutationType
+config
+author
+'Pipeline created'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_pipeline_update
+●●●●●● 1mm □△
+pipeline_id
+config
+author
+message
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'system'
+''
+'Hook: Record pipeline update.'
+vc
+●●●●●● 1mm □
+get_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+vc
+●●●●●● 1mm □△
+pipeline_id
+MutationType
+config
+author
+message
+'Pipeline updated'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_pipeline_delete
+●●●●●● 1mm □△
+pipeline_id
+config
+author
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'system'
+'Hook: Record pipeline deletion.'
+vc
+●●●●●● 1mm □
+get_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+vc
+●●●●●● 1mm □△
+pipeline_id
+MutationType
+config
+author
+'Pipeline deleted'
+●●●●●● 2mm □△

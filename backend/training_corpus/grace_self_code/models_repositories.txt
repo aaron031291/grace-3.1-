@@ -1,0 +1,775 @@
+## repositories.py
+'\nExample repositories demonstrating database operations.\nThese are templates - create specific repositories for your models.\n'
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+database.repository
+●●●●●● 2mm □△○
+BaseRepository
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+User
+Conversation
+Message
+Embedding
+Chat
+ChatHistory
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm △
+UserRepository
+●●●●●● 3mm □△
+BaseRepository
+User
+'Repository for User model operations.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+User
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_by_username
+●●●●●● 1mm □△
+self
+username
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get user by username.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+User
+●●●●●● 1mm □
+get_by_email
+●●●●●● 1mm □△
+self
+email
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get user by email.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+User
+●●●●●● 1mm □
+get_active_users
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all active users.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+User
+●●●●●● 2mm △
+ConversationRepository
+●●●●●● 3mm □△
+BaseRepository
+Conversation
+'Repository for Conversation model operations.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+Conversation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all_conversations
+●●●●●● 1mm □△
+self
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'Get all conversations with pagination.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Conversation
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Conversation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Conversation
+●●●●●● 1mm □
+search_by_title
+●●●●●● 1mm □△
+self
+search_term
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search conversations by title.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Conversation
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Conversation
+●●●●●● 1mm □△
+'%'
+search_term
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Conversation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Conversation
+●●●●●● 2mm △
+MessageRepository
+●●●●●● 3mm □△
+BaseRepository
+Message
+'Repository for Message model operations.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+Message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_by_conversation
+●●●●●● 1mm □△
+self
+conversation_id
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'Get messages for a conversation.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Message
+conversation_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Message
+●●●●●● 1mm □
+count_by_conversation
+●●●●●● 1mm □△
+self
+conversation_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Count messages in a conversation.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Message
+conversation_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+EmbeddingRepository
+●●●●●● 3mm □△
+BaseRepository
+Embedding
+'Repository for Embedding model operations.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+Embedding
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_by_source
+●●●●●● 1mm □△
+self
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get embeddings by source.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Embedding
+●●●●●● 1mm □
+get_by_model
+●●●●●● 1mm □△
+self
+model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get embeddings by model.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Embedding
+●●●●●● 2mm △
+ChatRepository
+●●●●●● 3mm □△
+BaseRepository
+Chat
+'Repository for Chat model operations.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all_chats
+●●●●●● 1mm □△
+self
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'Get all chats with pagination.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Chat
+●●●●●● 1mm □
+get_active_chats
+●●●●●● 1mm □△
+self
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'Get all active chats.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Chat
+●●●●●● 1mm □
+count_active
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Count total active chats.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_recent
+●●●●●● 1mm □△
+self
+days
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+7
+'Get chats created in the last N days.'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+timedelta
+start_date
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+start_date
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Chat
+●●●●●● 1mm □
+search_by_title
+●●●●●● 1mm □△
+self
+search_term
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search chats by title.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 1mm □△
+'%'
+search_term
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Chat
+●●●●●● 1mm □
+deactivate
+●●●●●● 1mm □△
+self
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Deactivate a chat.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Chat
+●●●●●● 1mm □
+activate
+●●●●●● 1mm □△
+self
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Activate a chat.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Chat
+●●●●●● 2mm △
+ChatHistoryRepository
+●●●●●● 3mm □△
+BaseRepository
+ChatHistory
+'Repository for ChatHistory model operations.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_by_chat
+●●●●●● 1mm □△
+self
+chat_id
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'Get chat history for a chat with pagination.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+chat_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ChatHistory
+●●●●●● 1mm □
+get_by_chat_reverse
+●●●●●● 1mm □△
+self
+chat_id
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'Get chat history in reverse order (newest first).'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+chat_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ChatHistory
+●●●●●● 1mm □
+count_by_chat
+●●●●●● 1mm □△
+self
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Count messages in a chat.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+chat_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_by_role
+●●●●●● 1mm □△
+self
+chat_id
+role
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'Get messages by role in a chat.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+chat_id
+ChatHistory
+role
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ChatHistory
+●●●●●● 1mm □
+count_tokens_in_chat
+●●●●●● 1mm □△
+self
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Count total tokens used in a chat.'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+chat_id
+ChatHistory
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+row
+0
+row
+result
+row
+0
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_edited_messages
+●●●●●● 1mm □△
+self
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Get edited messages in a chat.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+chat_id
+ChatHistory
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ChatHistory
+●●●●●● 1mm □
+add_message
+●●●●●● 1mm □△
+self
+chat_id
+role
+content
+tokens
+token_ids
+completion_time
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Add a message to chat history.'
+message
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+message
+ChatHistory
+●●●●●● 1mm □
+edit_message
+●●●●●● 1mm □△
+self
+message_id
+new_content
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'Edit a message in chat history.'
+message
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+message
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+ChatHistory

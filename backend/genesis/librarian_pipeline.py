@@ -23,7 +23,6 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import uuid
-import mimetypes
 import shutil
 
 logger = logging.getLogger(__name__)

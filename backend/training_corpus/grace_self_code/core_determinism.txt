@@ -1,0 +1,387 @@
+## determinism.py
+'\nEnterprise determinism — single source of truth for reproducible, auditable behavior.\n\nDesign principles:\n  - No random, no model in ID or gate logic; same inputs ⇒ same outputs.\n  - Configurable via env (DETERMINISM_*) for compliance and tuning without code change.\n  - Structured logging at DEBUG for audit trails (who decided what, why).\n  - Explicit encoding (UTF-8) and bounded inputs for security and portability.\n\nUse everywhere that must be reproducible: pipeline run IDs, trace IDs, LLM gates,\nmodel selection, temperature, and Genesis key alignment.\n\nAPI version: 1.0 — bump when hashing or gate semantics change.\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DETERMINISM_API_VERSION
+●●●●●● 1mm □
+'1.0'
+DEFAULT_HASH_ALGORITHM
+●●●●●● 1mm □
+'sha256'
+DEFAULT_ENCODING
+●●●●●● 1mm □
+'utf-8'
+RUN_ID_PREFIX
+●●●●●● 1mm □
+'PIPE-'
+RUN_ID_HEX_LEN
+●●●●●● 1mm □
+8
+TRACE_ID_HEX_LEN
+●●●●●● 1mm □
+16
+KEY_ID_HEX_LEN
+●●●●●● 1mm □
+32
+TASK_TRUNCATE
+●●●●●● 1mm □
+200
+TEMPERATURE_DETERMINISTIC
+●●●●●● 1mm □
+0.0
+TEMPERATURE_NONDETERMINISTIC_CAP
+●●●●●● 1mm □
+0.3
+●●●●●● 1mm □
+_config_float
+●●●●●● 1mm □△
+key
+default
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Read float from env for tunable constants.'
+val
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+default
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+ValueError
+●●●●●● 3mm ○
+default
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_hash_payload
+●●●●●● 1mm □△
+payload
+hex_len
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+32
+'Single canonical hash: UTF-8, SHA-256, deterministic.'
+raw
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+DEFAULT_ENCODING
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hex_len
+●●●●●● 1mm ○
+●●●●●● 1mm □
+deterministic_choice
+●●●●●● 1mm □△
+options
+seed
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Any
+●●●●●● 1mm ○
+''
+'\n    Pick one option deterministically from seed (no random).\n\n    Args:\n        options: Non-empty list of choices.\n        seed: Deterministic seed; same seed ⇒ same choice.\n\n    Returns:\n        One element from options, or None if options is empty.\n\n    Example:\n        >>> deterministic_choice(["a", "b", "c"], "task-1")\n        \'b\'\n    '
+●●●●●● 2mm □
+options
+●●●●●● 3mm ○
+●●●●●● 2mm □
+seed_safe
+●●●●●● 1mm □
+seed
+●●●●●● 2mm □
+seed
+''
+idx
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+_hash_payload
+●●●●●● 1mm □△
+seed_safe
+16
+●●●●●● 2mm □△
+16
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+options
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+options
+idx
+●●●●●● 2mm □○
+Any
+●●●●●● 1mm □
+deterministic_run_id
+●●●●●● 1mm □△
+task
+bucket_minutes
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n    Deterministic pipeline run ID: same task in same time bucket ⇒ same ID.\n\n    Args:\n        task: Task description (truncated to TASK_TRUNCATE).\n        bucket_minutes: If True, bucket by minute (default); if False, by second.\n\n    Returns:\n        Run ID like PIPE-<8 hex chars>.\n    '
+fmt
+●●●●●● 1mm □
+bucket_minutes
+'%Y-%m-%d-%H-%M'
+'%Y-%m-%d-%H-%M-%S'
+bucket
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+fmt
+●●●●●● 2mm □△
+task_safe
+●●●●●● 1mm □
+task
+''
+TASK_TRUNCATE
+payload
+●●●●●● 1mm □
+RUN_ID_PREFIX
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+'|'
+task_safe
+'|'
+bucket
+●●●●●● 3mm ○
+RUN_ID_PREFIX
+_hash_payload
+●●●●●● 1mm □△
+payload
+RUN_ID_HEX_LEN
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+deterministic_trace_id
+●●●●●● 1mm □△
+path
+name
+bucket_minutes
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+''
+''
+●●●●●● 3mm □△○
+'\n    Deterministic trace ID from path/name + time bucket (no UUID).\n\n    Args:\n        path: Request path or scope.\n        name: Span or operation name.\n        bucket_minutes: If True, same minute ⇒ same ID for same path/name.\n\n    Returns:\n        16-char hex trace ID.\n    '
+fmt
+●●●●●● 1mm □
+bucket_minutes
+'%Y%m%d%H%M'
+'%Y%m%d%H%M%S'
+bucket
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+fmt
+●●●●●● 2mm □△
+seed
+●●●●●● 1mm □
+path
+''
+'|'
+name
+''
+'|'
+bucket
+●●●●●● 3mm ○
+_hash_payload
+●●●●●● 1mm □△
+seed
+TRACE_ID_HEX_LEN
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+should_use_llm
+●●●●●● 1mm □△
+phase0_result
+task
+layer_name
+force_deterministic
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+''
+''
+●●●●●● 1mm □
+'\n    Gate: should this step use the LLM or stay deterministic?\n\n    Returns False when deterministic path is sufficient (Phase 0 handled it or\n    force_deterministic is set). Logs at DEBUG for audit.\n\n    Args:\n        phase0_result: Result from deterministic-first loop; handoff_to_llm drives decision.\n        task: Task description (for logging).\n        layer_name: Pipeline layer name (for logging).\n        force_deterministic: If True, always return False.\n\n    Returns:\n        True if LLM should be used, False otherwise.\n    '
+●●●●●● 2mm □
+force_deterministic
+logger
+●●●●●● 1mm □△
+'determinism.gate should_use_llm=False reason=force_deterministic layer=%s'
+layer_name
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+phase0_result
+●●●●●● 2mm □
+phase0_result
+●●●●●● 1mm □△
+'handoff_to_llm'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'determinism.gate should_use_llm=False reason=phase0_no_handoff layer=%s'
+layer_name
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+deterministic_temperature
+●●●●●● 1mm □△
+for_deterministic
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n    Temperature for LLM calls: 0 when deterministic, else capped value.\n\n    Override via env: DETERMINISM_TEMPERATURE_CAPPED (default 0.3).\n    '
+●●●●●● 2mm □
+for_deterministic
+●●●●●● 3mm ○
+TEMPERATURE_DETERMINISTIC
+cap
+●●●●●● 1mm □
+_config_float
+●●●●●● 1mm □△
+'DETERMINISM_TEMPERATURE_CAPPED'
+TEMPERATURE_NONDETERMINISTIC_CAP
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cap
+●●●●●● 3mm ○
+●●●●●● 1mm □
+llm_kwargs_for_determinism
+●●●●●● 1mm □△
+use_deterministic
+●●●●●● 2mm □△
+●●●●●● 3mm △
+Any
+'Merge temperature into kwargs for LLM calls (deterministic ⇒ 0).'
+out
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+kwargs
+●●●●●● 2mm □△
+out
+'temperature'
+●●●●●● 1mm □
+deterministic_temperature
+●●●●●● 1mm □△
+use_deterministic
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+deterministic_model_choice
+●●●●●● 1mm □△
+available_models
+task_seed
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Pick one model deterministically (same task_seed ⇒ same model).'
+●●●●●● 2mm □
+available_models
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+deterministic_choice
+●●●●●● 1mm □△
+available_models
+task_seed
+'default'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_determinism_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return version and config for health/docs (enterprise observability).'
+●●●●●● 3mm ○
+'api_version'
+'hash_algorithm'
+'encoding'
+'temperature_deterministic'
+'temperature_capped'
+DETERMINISM_API_VERSION
+DEFAULT_HASH_ALGORITHM
+DEFAULT_ENCODING
+TEMPERATURE_DETERMINISTIC
+_config_float
+●●●●●● 1mm □△
+'DETERMINISM_TEMPERATURE_CAPPED'
+TEMPERATURE_NONDETERMINISTIC_CAP
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

@@ -53,17 +53,7 @@ def publish(topic: str, data: Dict[str, Any] = None, source: str = "system"):
     Publish an event. Handlers run synchronously in the caller's thread.
     For non-blocking, wrap the publish call in a thread.
     """
-    payload = data or {}
-    
-    # Guardian Schema Enforcement for Errors
-    if "error" in topic.lower() or "fail" in topic.lower():
-        if "stack_trace" not in payload:
-            payload["stack_trace"] = "unknown_stack_trace (Schema Enforcement)"
-            logger.warning(f"EventBus schema enforcement: Missing stack_trace added to {topic}")
-        if "version" not in payload:
-            payload["version"] = "unknown_version (Schema Enforcement)"
-            
-    event = Event(topic=topic, data=payload, source=source)
+    event = Event(topic=topic, data=data or {}, source=source)
 
     with _lock:
         _event_log.append({"topic": topic, "source": source, "ts": event.timestamp})

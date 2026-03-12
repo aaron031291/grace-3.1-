@@ -1,0 +1,1489 @@
+## service.py
+'\nWeb scraping service using trafilatura.\n\nThis service handles the core scraping logic including:\n- Fetching web pages\n- Extracting content with trafilatura\n- Following links with depth control\n- Filtering relevant links\n- Storing results\n'
+●●●●●● 2mm □△○
+trafilatura
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Set
+Optional
+Dict
+●●●●●● 3mm □△○
+urllib.parse
+●●●●●● 2mm □△○
+urljoin
+urlparse
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+models
+●●●●●● 2mm □△○
+ScrapingJob
+ScrapedPage
+●●●●●● 3mm □△○
+url_validator
+●●●●●● 2mm □△○
+URLValidator
+●●●●●● 3mm □△○
+document_downloader
+●●●●●● 2mm □△○
+DocumentDownloader
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+ImportError
+settings
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+WebScrapingService
+'\n    Service for scraping web content with depth control.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n        Initialize the scraping service.\n        \n        Args:\n            db_session: SQLAlchemy database session\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+Set
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+30
+●●●●●● 3mm △
+●●●●●● 1mm □
+10
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Embedding model loaded for semantic relevance filtering'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Embedding model not available: '
+e
+'. Using keyword-based filtering only.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DocumentDownloader
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 3mm □△○
+100
+'\n        Start a scraping job asynchronously.\n        \n        Args:\n            job_id: ID of the scraping job\n            url: Starting URL to scrape\n            depth: Maximum depth to crawl\n            same_domain_only: Whether to stay on the same domain\n            max_pages: Maximum number of pages to scrape\n        '
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+logger
+●●●●●● 1mm □△
+'Job '
+job_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+job
+●●●●●● 1mm □
+'running'
+job
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+●●●●●● 1mm □
+'completed'
+job
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error in scraping job '
+job_id
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+●●●●●● 1mm □
+'failed'
+job
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'\n        Recursively scrape URL and follow links up to specified depth.\n        \n        Args:\n            job_id: ID of the scraping job\n            url: URL to scrape\n            depth: Maximum depth to crawl\n            current_depth: Current depth level\n            parent_url: URL of the parent page\n            same_domain_only: Whether to stay on same domain\n            max_pages: Maximum number of pages to scrape\n            base_url: The original starting URL\n        '
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+max_pages
+logger
+●●●●●● 1mm □△
+'Reached max pages limit ('
+max_pages
+') for job '
+job_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+normalized_url
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+normalized_url
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+normalized_url
+●●●●●● 2mm □△
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid
+●●●●●● 3mm △
+●●●●●● 1mm □△
+job_id
+url
+current_depth
+parent_url
+error
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'📥 Detected Google Drive URL: '
+url
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'📄 Detected downloadable document: '
+url
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+job_id
+url
+current_depth
+parent_url
+'Skipped: Binary file detected'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+same_domain_only
+URLValidator
+●●●●●● 1mm □△
+url
+base_url
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Skipping '
+url
+' - different domain'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'Scraping '
+url
+' at depth '
+current_depth
+●●●●●● 2mm □△
+downloaded
+●●●●●● 1mm □
+●●●●●● 2mm □
+headers
+●●●●●● 1mm □
+'User-Agent'
+'Accept'
+'Accept-Language'
+'Referer'
+'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'
+'en-US,en;q=0.5'
+'https://www.google.com/'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+downloaded
+●●●●●● 1mm □
+response
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Request failed with status '
+response
+' for '
+url
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Requests fetch failed for '
+url
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+downloaded
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Falling back to trafilatura native fetch...'
+●●●●●● 2mm □△
+downloaded
+●●●●●● 1mm □
+trafilatura
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+is_empty
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+downloaded
+●●●●●● 2mm □
+is_empty
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+downloaded
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+is_empty
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+downloaded
+●●●●●● 2mm □△
+0
+is_empty
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+downloaded
+●●●●●● 2mm □△
+0
+is_empty
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+is_empty
+●●●●●● 3mm △
+●●●●●● 1mm □△
+job_id
+url
+current_depth
+parent_url
+'Failed to fetch content'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+downloaded
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+job_id
+url
+current_depth
+parent_url
+'Content too large (>'
+●●●●●● 3mm △
+' bytes)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+content
+●●●●●● 1mm □
+trafilatura
+●●●●●● 1mm □△
+downloaded
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Content extraction failed for '
+url
+': '
+e
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+content
+●●●●●● 3mm △
+●●●●●● 1mm □△
+job_id
+url
+current_depth
+parent_url
+'No content extracted'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □
+trafilatura
+●●●●●● 1mm □△
+downloaded
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+metadata
+metadata
+url
+●●●●●● 2mm □
+current_depth
+0
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'🔍 Creating base page embedding (depth='
+current_depth
+')...'
+●●●●●● 2mm □△
+base_text
+●●●●●● 1mm □
+title
+' '
+content
+500
+logger
+●●●●●● 1mm □△
+'🔍 Base text length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+base_text
+●●●●●● 2mm □△
+' chars'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+base_text
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Created base page embedding! Shape: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'❌ Failed to create base embedding: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+current_depth
+0
+logger
+●●●●●● 1mm □△
+'⚠️ Skipping base embedding: model='
+●●●●●● 3mm △
+●●●●●● 2mm □
+', existing='
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_depth
+depth
+links
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+downloaded
+url
+●●●●●● 2mm □△
+relevant_links
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+job
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+relevant_links
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+link
+relevant_links
+max_pages
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error scraping '
+url
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+job_id
+url
+current_depth
+parent_url
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_extract_links
+●●●●●● 1mm □△
+self
+html_content
+base_url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Extract all links from HTML content.\n        \n        Args:\n            html_content: HTML content\n            base_url: Base URL for resolving relative links\n            \n        Returns:\n            List of absolute URLs\n        '
+●●●●●● 3mm □△○
+lxml
+●●●●●● 2mm □△○
+html
+●●●●●● 1mm □
+lxml_html
+tree
+●●●●●● 1mm □
+lxml_html
+●●●●●● 1mm □△
+html_content
+●●●●●● 2mm □△
+links
+●●●●●● 1mm □
+tree
+●●●●●● 1mm □△
+'//a/@href'
+●●●●●● 2mm □△
+absolute_links
+●●●●●● 1mm □
+link
+links
+absolute_url
+●●●●●● 1mm □
+urljoin
+●●●●●● 1mm □△
+base_url
+link
+●●●●●● 2mm □△
+absolute_links
+●●●●●● 1mm □△
+absolute_url
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+absolute_links
+Exception
+logger
+●●●●●● 1mm □△
+'Error extracting links: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_filter_relevant_links
+●●●●●● 1mm □△
+self
+links
+base_url
+same_domain_only
+original_url
+job_id
+current_depth
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'\n        Filter links to only include relevant ones.\n        \n        Args:\n            links: List of URLs to filter\n            base_url: Current page URL\n            same_domain_only: Whether to filter by domain\n            original_url: The original starting URL\n            job_id: ID of the scraping job\n            current_depth: Current depth level\n            \n        Returns:\n            List of filtered URLs\n        '
+filtered
+●●●●●● 1mm □
+link
+links
+is_valid
+_
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid
+normalized
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+●●●●●● 2mm □
+normalized
+●●●●●● 3mm △
+●●●●●● 2mm □
+same_domain_only
+URLValidator
+●●●●●● 1mm □△
+link
+original_url
+●●●●●● 2mm □△
+is_document
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+is_drive
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_document
+is_drive
+logger
+●●●●●● 1mm □△
+'📥 Including document/Drive URL (bypassing filters): '
+link
+●●●●●● 2mm □△
+filtered
+●●●●●● 1mm □△
+normalized
+●●●●●● 2mm □△
+●●●●●● 2mm □
+URLValidator
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+skip_patterns
+●●●●●● 1mm □
+'/login'
+'/signup'
+'/register'
+'/auth'
+'/logout'
+'/account'
+'/profile'
+'/settings'
+'/cart'
+'/checkout'
+'/payment'
+'/admin'
+'/wp-admin'
+'/wp-login'
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+pattern
+parsed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+skip_patterns
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+url_text
+●●●●●● 1mm □
+parsed
+●●●●●● 1mm □△
+'/'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+url_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+3
+logger
+●●●●●● 1mm □△
+'Skipping '
+link
+': URL text too short'
+●●●●●● 2mm □△
+url_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+url_text
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+url_embedding
+●●●●●● 2mm □△
+●●●●●● 2mm □
+similarity
+0.3
+logger
+●●●●●● 1mm □△
+'🔍 Filtered: '
+parsed
+' (similarity: '
+similarity
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'❌ Semantic filtering failed for '
+link
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'⚠️ No base embedding yet, skipping semantic filter for '
+link
+●●●●●● 2mm □△
+filtered
+●●●●●● 1mm □△
+normalized
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filtered
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_cosine_similarity
+●●●●●● 1mm □△
+self
+vec1
+vec2
+●●●●●● 2mm □△
+'\n        Calculate cosine similarity between two vectors.\n        \n        Args:\n            vec1: First vector\n            vec2: Second vector\n            \n        Returns:\n            Cosine similarity score (0-1)\n        '
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+vec1
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+vec1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vec2
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+vec2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+norm1
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+vec1
+●●●●●● 2mm □△
+norm2
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+vec2
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+dot_product
+●●●●●● 3mm □△
+norm1
+●●●●●● 2mm □△
+norm2
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+similarity
+'item'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+similarity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+similarity
+'__len__'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+1
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error calculating cosine similarity: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.5
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_store_page_success
+●●●●●● 1mm □△
+self
+job_id
+url
+depth_level
+parent_url
+title
+content
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Store successfully scraped page in database and save as file.\n        \n        Args:\n            job_id: ID of the scraping job\n            url: Page URL\n            depth_level: Depth level of this page\n            parent_url: URL of parent page\n            title: Page title\n            content: Extracted content\n            \n        Returns:\n            ID of the created page record\n        '
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Saved content to file: '
+file_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to save content to file: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+page
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+1
+job
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+job
+job
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Stored page: '
+url
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+' chars)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+page
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_save_content_to_file
+●●●●●● 1mm □△
+self
+content
+title
+url
+folder_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Save scraped content to a text file in knowledge_base folder.\n        \n        Args:\n            content: The scraped content\n            title: Page title\n            url: Page URL\n            folder_path: Optional subfolder path\n            \n        Returns:\n            Path to the saved file\n        '
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+knowledge_base_dir
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+knowledge_base_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+folder_path
+target_dir
+●●●●●● 1mm □
+knowledge_base_dir
+●●●●●● 3mm □△
+folder_path
+●●●●●● 3mm □
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 3mm □
+domain
+●●●●●● 1mm □
+parsed
+●●●●●● 1mm □△
+'www.'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.'
+'_'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+target_dir
+●●●●●● 1mm □
+knowledge_base_dir
+●●●●●● 3mm □△
+'scraped_'
+domain
+'_'
+timestamp
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+title
+safe_title
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[^\\w\\s-]'
+''
+title
+●●●●●● 2mm □△
+safe_title
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[-\\s]+'
+'_'
+safe_title
+●●●●●● 2mm □△
+filename
+●●●●●● 1mm □
+safe_title
+50
+'.txt'
+●●●●●● 3mm □
+path_parts
+●●●●●● 1mm □
+parsed
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+path_parts
+path_parts
+1
+filename
+●●●●●● 1mm □
+path_parts
+1
+50
+'.txt'
+filename
+●●●●●● 1mm □
+'index.txt'
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+filename
+counter
+●●●●●● 1mm □
+1
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name_without_ext
+●●●●●● 1mm □
+filename
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+0
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+name_without_ext
+'_'
+counter
+'.txt'
+counter
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+'Source: '
+url
+'\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'Title: '
+title
+'\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'Scraped: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+'\n\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'\n        Download a document and store it in the knowledge base.\n        \n        Args:\n            job_id: ID of the scraping job\n            url: Document URL\n            depth_level: Depth level of this document\n            parent_url: URL of parent page\n        '
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+logger
+●●●●●● 1mm □△
+'Job '
+job_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+metadata
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+page
+●●●●●● 2mm □△
+job
+1
+job
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+job
+job
+●●●●●● 3mm ○
+job
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Stored document: '
+url
+' -> '
+metadata
+'file_path'
+' ('
+metadata
+'file_size'
+' bytes)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error downloading document '
+url
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_store_filtered_page
+●●●●●● 1mm □△
+self
+job_id
+url
+depth_level
+parent_url
+similarity_score
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'\n        Store a page that was filtered out by semantic similarity.\n        \n        Args:\n            job_id: ID of the scraping job\n            url: Page URL\n            depth_level: Depth level of this page\n            parent_url: URL of parent page\n            similarity_score: Semantic similarity score\n        '
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+page
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_mark_page_failed
+●●●●●● 1mm □△
+self
+job_id
+url
+depth_level
+parent_url
+error_message
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Mark a page as failed in database.\n        \n        Args:\n            job_id: ID of the scraping job\n            url: Page URL\n            depth_level: Depth level of this page\n            parent_url: URL of parent page\n            error_message: Error message\n        '
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+page
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job
+1
+job
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+job
+job
+●●●●●● 3mm ○
+job
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Failed to scrape '
+url
+': '
+error_message
+●●●●●● 2mm □△
+●●●●●● 2mm □

@@ -1,0 +1,1765 @@
+## reporting_engine.py
+'\nReporting Engine — Holistic Daily/Weekly System Intelligence Reports\n\nGenerates comprehensive reports covering every domain in Grace:\n  - Trust scores: up/down trends per component\n  - Self-learning: what was learned, knowledge expansion metrics\n  - Self-healing: what broke, how it was fixed, recovery times\n  - Coding agent: generation success rates, quality trends\n  - Governance: compliance status, rule enforcement stats\n  - LLM usage: costs, latency, error rates by provider\n  - Memory: growth across all 5 memory systems\n  - Consensus: roundtable runs, agreement rates\n  - Genesis Keys: activity volumes, error patterns\n  - Integration health: component citizenship, connectivity\n\nReports are:\n  - Generated daily (auto) or on-demand\n  - Stored as files in data/reports/ for history\n  - Written in NLP (natural language) for human consumption\n  - Include what improved, what degraded, problems, solutions, and next steps\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+REPORTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'reports'
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+initialize_session_factory
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 1mm □
+SL
+●●●●●● 3mm ○
+SL
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+generate_report
+●●●●●● 1mm □△
+period
+days
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'daily'
+1
+"\n    Generate a holistic system report.\n    period: 'daily', 'weekly', 'monthly'\n    days: how many days to look back\n    "
+●●●●●● 2mm □
+period
+'weekly'
+days
+●●●●●● 1mm □
+7
+●●●●●● 1mm △
+period
+'monthly'
+days
+●●●●●● 1mm □
+30
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+'report_id'
+'period'
+'days_covered'
+'generated_at'
+'cutoff'
+'sections'
+'summary'
+'nlp_report'
+'report_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+period
+days
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+report
+'sections'
+'trust'
+●●●●●● 1mm □
+_report_trust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sections'
+'learning'
+●●●●●● 1mm □
+_report_learning
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+report
+'sections'
+'healing'
+●●●●●● 1mm □
+_report_healing
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+report
+'sections'
+'llm_usage'
+●●●●●● 1mm □
+_report_llm_usage
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+report
+'sections'
+'genesis_keys'
+●●●●●● 1mm □
+_report_genesis_keys
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+report
+'sections'
+'memory'
+●●●●●● 1mm □
+_report_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sections'
+'integration'
+●●●●●● 1mm □
+_report_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sections'
+'documents'
+●●●●●● 1mm □
+_report_documents
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+report
+'sections'
+'flash_cache'
+●●●●●● 1mm □
+_report_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sections'
+'consensus'
+●●●●●● 1mm □
+_report_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'summary'
+●●●●●● 1mm □
+_build_summary
+●●●●●● 1mm □△
+report
+'sections'
+●●●●●● 2mm □△
+report
+'nlp_report'
+●●●●●● 1mm □
+_generate_nlp_report
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+_save_report
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_trust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Trust Engine metrics.'
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dashboard
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'overall_trust'
+'component_count'
+'components'
+'status'
+dashboard
+●●●●●● 1mm □△
+'overall_trust'
+0
+●●●●●● 2mm □△
+dashboard
+●●●●●● 1mm □△
+'component_count'
+0
+●●●●●● 2mm □△
+dashboard
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'error'
+'unavailable'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_learning
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+datetime
+'Learning system metrics.'
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+'status'
+'db_unavailable'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+total
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM learning_examples'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+recent
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM learning_examples WHERE created_at >= :c'
+●●●●●● 2mm □△
+'c'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+avg_trust
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT AVG(trust_score) FROM learning_examples'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+patterns
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM learning_patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+procedures
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM procedures'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+episodes
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM episodes'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'total_examples'
+'new_examples'
+'avg_trust'
+'patterns'
+'procedures'
+'episodes'
+'status'
+total
+recent
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg_trust
+3
+●●●●●● 2mm □△
+patterns
+procedures
+episodes
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'error'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_healing
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+datetime
+'Immune system / healing metrics.'
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+playbook
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+playbook
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+playbook
+r
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_healing_actions'
+'successful'
+'failed'
+'success_rate'
+'status'
+total
+successful
+total
+●●●●●● 1mm □△
+successful
+total
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+successful
+●●●●●● 3mm □△
+total
+3
+●●●●●● 2mm □△
+0
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'total_healing_actions'
+'unavailable'
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_llm_usage
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+datetime
+'LLM usage and costs.'
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+get_llm_usage_stats
+stats
+●●●●●● 1mm □
+get_llm_usage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_calls'
+'total_errors'
+'avg_latency_ms'
+'error_rate'
+'by_provider'
+'status'
+stats
+●●●●●● 1mm □△
+'total_calls'
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+'total_errors'
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+'avg_latency_ms'
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+'by_provider'
+●●●●●● 2mm □△
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_genesis_keys
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+datetime
+'Genesis Key activity.'
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+'status'
+'db_unavailable'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+total
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+recent
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :c'
+●●●●●● 2mm □△
+'c'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+by_type
+●●●●●● 1mm □
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT key_type, COUNT(*) FROM genesis_key WHERE when_timestamp >= :c GROUP BY key_type'
+●●●●●● 2mm □△
+'c'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+by_type
+●●●●●● 1mm □
+r
+0
+r
+1
+r
+rows
+Exception
+errors
+●●●●●● 1mm □
+0
+errors
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key WHERE is_error = 1 AND when_timestamp >= :c'
+●●●●●● 2mm □△
+'c'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+Exception
+●●●●●● 3mm ○
+'total_keys'
+'recent_keys'
+'errors'
+'by_type'
+'status'
+total
+recent
+errors
+by_type
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'error'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Unified memory statistics.'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+●●●●●● 3mm ○
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Integration health.'
+●●●●●● 3mm □△○
+cognitive.central_orchestrator
+●●●●●● 2mm □△○
+get_orchestrator
+orch
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+orch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_components'
+'healthy'
+'broken'
+'health_percent'
+'status'
+health
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □△
+'healthy'
+0
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □△
+'broken'
+0
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □△
+'health_percent'
+0
+●●●●●● 2mm □△
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_documents
+●●●●●● 1mm □△
+cutoff
+●●●●●● 2mm □△
+datetime
+'Document library metrics.'
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+'status'
+'db_unavailable'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+total
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+recent
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM documents WHERE created_at >= :c'
+●●●●●● 2mm □△
+'c'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+total_size
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT SUM(file_size) FROM documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'total_documents'
+'new_documents'
+'total_size_mb'
+'status'
+total
+recent
+total_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_size
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+2
+●●●●●● 2mm □△
+0
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'error'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Flash cache statistics.'
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+●●●●●● 3mm ○
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_report_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Consensus engine status.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_available_models
+get_batch_queue
+models
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □
+get_batch_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available_models'
+'total_models'
+'batch_queue_pending'
+'batch_queue_completed'
+'status'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+m
+m
+models
+m
+'available'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+q
+queue
+q
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'queued'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+q
+queue
+q
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'completed'
+●●●●●● 2mm □△
+'active'
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_build_summary
+●●●●●● 1mm □△
+sections
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Build high-level summary from all sections.'
+improvements
+●●●●●● 1mm □
+problems
+●●●●●● 1mm □
+metrics
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'trust'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+trust
+●●●●●● 1mm □△
+'overall_trust'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+metrics
+'trust_score'
+●●●●●● 1mm □
+trust
+'overall_trust'
+●●●●●● 2mm □
+trust
+'overall_trust'
+70
+improvements
+●●●●●● 1mm □△
+'Trust score is healthy'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+problems
+●●●●●● 1mm □△
+'Trust score is low: '
+trust
+'overall_trust'
+●●●●●● 2mm □△
+learning
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'learning'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning
+●●●●●● 1mm □△
+'new_examples'
+0
+●●●●●● 2mm □△
+0
+improvements
+●●●●●● 1mm □△
+'Learned '
+learning
+'new_examples'
+' new examples'
+●●●●●● 2mm □△
+metrics
+'total_knowledge'
+●●●●●● 1mm □
+learning
+●●●●●● 1mm □△
+'total_examples'
+0
+●●●●●● 2mm □△
+healing
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'healing'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healing
+●●●●●● 1mm □△
+'success_rate'
+0
+●●●●●● 2mm □△
+0.8
+improvements
+●●●●●● 1mm □△
+'Healing success rate: '
+healing
+'success_rate'
+●●●●●● 2mm □△
+100
+'.0f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+healing
+●●●●●● 1mm □△
+'total_healing_actions'
+0
+●●●●●● 2mm □△
+0
+problems
+●●●●●● 1mm □△
+'Healing success rate: '
+healing
+●●●●●● 1mm □△
+'success_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+'.0f'
+'%'
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'llm_usage'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+0.1
+problems
+●●●●●● 1mm □△
+'LLM error rate: '
+llm
+'error_rate'
+●●●●●● 2mm □△
+100
+'.1f'
+'%'
+●●●●●● 2mm □△
+metrics
+'llm_calls'
+●●●●●● 1mm □
+llm
+●●●●●● 1mm □△
+'total_calls'
+0
+●●●●●● 2mm □△
+integration
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'integration'
+●●●●●● 2mm □△
+metrics
+'integration_health'
+●●●●●● 1mm □
+integration
+●●●●●● 1mm □△
+'health_percent'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+integration
+●●●●●● 1mm □△
+'broken'
+0
+●●●●●● 2mm □△
+0
+problems
+●●●●●● 1mm □△
+integration
+'broken'
+' broken integrations'
+●●●●●● 2mm □△
+genesis
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+metrics
+'genesis_keys_today'
+●●●●●● 1mm □
+genesis
+●●●●●● 1mm □△
+'recent_keys'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis
+●●●●●● 1mm □△
+'errors'
+0
+●●●●●● 2mm □△
+5
+problems
+●●●●●● 1mm □△
+genesis
+'errors'
+' genesis key errors'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'improvements'
+'problems'
+'metrics'
+'health_score'
+improvements
+problems
+metrics
+_calculate_health_score
+●●●●●● 1mm □△
+sections
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_health_score
+●●●●●● 1mm □△
+sections
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Calculate overall system health 0-100.'
+score
+●●●●●● 1mm □
+50.0
+trust
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'trust'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+trust
+●●●●●● 1mm □△
+'overall_trust'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+score
+trust
+'overall_trust'
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+0.2
+integration
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'integration'
+●●●●●● 2mm □△
+score
+integration
+●●●●●● 1mm □△
+'health_percent'
+50
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+0.3
+healing
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'healing'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healing
+●●●●●● 1mm □△
+'total_healing_actions'
+0
+●●●●●● 2mm □△
+0
+score
+healing
+●●●●●● 1mm □△
+'success_rate'
+0.5
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+20
+llm
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'llm_usage'
+●●●●●● 2mm □△
+score
+llm
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+30
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+score
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_generate_nlp_report
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Generate natural language report for human consumption.'
+summary
+●●●●●● 1mm □
+report
+'summary'
+sections
+●●●●●● 1mm □
+report
+'sections'
+period
+●●●●●● 1mm □
+report
+'period'
+health
+●●●●●● 1mm □
+summary
+●●●●●● 1mm □△
+'health_score'
+50
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □△
+'# Grace System Report — '
+period
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'Generated: '
+report
+'generated_at'
+19
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'Overall Health Score: '
+health
+'/100\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+summary
+●●●●●● 1mm □△
+'improvements'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+"## What's Improved"
+●●●●●● 2mm □△
+imp
+summary
+'improvements'
+lines
+●●●●●● 1mm □△
+'  + '
+imp
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+summary
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'## Problems & Areas for Attention'
+●●●●●● 2mm □△
+prob
+summary
+'problems'
+lines
+●●●●●● 1mm □△
+'  - '
+prob
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'## Key Metrics'
+●●●●●● 2mm □△
+key
+val
+summary
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nice_key
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+nice_key
+': '
+val
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+learning
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'learning'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'active'
+lines
+●●●●●● 1mm □△
+'## Learning & Knowledge'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Total knowledge base: '
+learning
+●●●●●● 1mm □△
+'total_examples'
+0
+●●●●●● 2mm □△
+' examples'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  New this period: '
+learning
+●●●●●● 1mm □△
+'new_examples'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Patterns extracted: '
+learning
+●●●●●● 1mm □△
+'patterns'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Procedures learned: '
+learning
+●●●●●● 1mm □△
+'procedures'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Episodic memories: '
+learning
+●●●●●● 1mm □△
+'episodes'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'llm_usage'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'active'
+lines
+●●●●●● 1mm □△
+'## LLM Usage'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Total calls: '
+llm
+●●●●●● 1mm □△
+'total_calls'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Avg latency: '
+llm
+●●●●●● 1mm □△
+'avg_latency_ms'
+0
+●●●●●● 2mm □△
+'.0f'
+'ms'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Error rate: '
+llm
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+'.1f'
+'%'
+●●●●●● 2mm □△
+prov
+stats
+llm
+●●●●●● 1mm □△
+'by_provider'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'    '
+prov
+': '
+stats
+●●●●●● 1mm □△
+'calls'
+0
+●●●●●● 2mm □△
+' calls, '
+stats
+●●●●●● 1mm □△
+'errors'
+0
+●●●●●● 2mm □△
+' errors'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+integration
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'integration'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+integration
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'active'
+lines
+●●●●●● 1mm □△
+'## Integration Health'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Components: '
+integration
+●●●●●● 1mm □△
+'healthy'
+0
+●●●●●● 2mm □△
+'/'
+integration
+●●●●●● 1mm □△
+'total_components'
+0
+●●●●●● 2mm □△
+' healthy'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Health: '
+integration
+●●●●●● 1mm □△
+'health_percent'
+0
+●●●●●● 2mm □△
+'%'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+genesis
+●●●●●● 1mm □
+sections
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'active'
+lines
+●●●●●● 1mm □△
+'## Activity (Genesis Keys)'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Total keys: '
+genesis
+●●●●●● 1mm □△
+'total_keys'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  This period: '
+genesis
+●●●●●● 1mm □△
+'recent_keys'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  Errors: '
+genesis
+●●●●●● 1mm □△
+'errors'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'---'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'Report generated by Grace Reporting Engine'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_save_report
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Save report to disk.'
+REPORTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rid
+●●●●●● 1mm □
+report
+'report_id'
+REPORTS_DIR
+●●●●●● 3mm □△
+rid
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+REPORTS_DIR
+●●●●●● 3mm □△
+rid
+'.txt'
+●●●●●● 1mm □△
+report
+'nlp_report'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+list_reports
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'List available reports.'
+REPORTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+REPORTS_DIR
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+limit
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □△
+'report_id'
+'period'
+'generated_at'
+'health_score'
+'improvements'
+'problems'
+data
+●●●●●● 1mm □△
+'report_id'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'period'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'generated_at'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'health_score'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'improvements'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+reports
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_report
+●●●●●● 1mm □△
+report_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a specific report.'
+path
+●●●●●● 1mm □
+REPORTS_DIR
+●●●●●● 3mm □△
+report_id
+'.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

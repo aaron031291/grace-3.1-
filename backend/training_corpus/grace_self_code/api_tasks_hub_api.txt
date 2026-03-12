@@ -1,0 +1,176 @@
+## tasks_hub_api.py
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+uuid
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scheduled_db
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'tasks'
+router
+●●●●●● 1mm □△
+'/active'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'activity_count'
+'activities'
+'system'
+0
+'cpu'
+'memory'
+0
+0
+router
+●●●●●● 1mm □△
+'/live'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+40
+●●●●●● 3mm ○
+'history'
+router
+●●●●●● 1mm □△
+'/history'
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'now'
+'activity_pattern'
+'upcoming_tasks'
+'day_of_week'
+'period_label'
+'time'
+'is_business_hours'
+now
+●●●●●● 1mm □△
+'%A'
+●●●●●● 2mm □△
+'Day'
+now
+●●●●●● 1mm □△
+'%H:%M:%S'
+●●●●●● 2mm □△
+9
+now
+17
+'peak_hour'
+'peak_day'
+'14:00'
+'Wednesday'
+router
+●●●●●● 1mm □△
+'/time-sense'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'success'
+'Task received'
+router
+●●●●●● 1mm □△
+'/submit'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'tasks'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+scheduled_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/scheduled'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tid
+●●●●●● 1mm □
+'TASK-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+task
+●●●●●● 1mm □
+'id'
+'title'
+'status'
+'next_run'
+tid
+payload
+●●●●●● 1mm □△
+'title'
+'New Task'
+●●●●●● 2mm □△
+'scheduled'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scheduled_db
+tid
+●●●●●● 1mm □
+task
+●●●●●● 3mm ○
+task
+router
+●●●●●● 1mm □△
+'/schedule'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm △
+scheduled_db
+scheduled_db
+●●●●●● 1mm △
+●●●●●● 3mm ○
+'status'
+'deleted'
+router
+●●●●●● 1mm □△
+'/scheduled/{id}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm △
+scheduled_db
+scheduled_db
+●●●●●● 1mm △
+'status'
+●●●●●● 1mm □
+'running'
+scheduled_db
+●●●●●● 1mm △
+'last_run'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'running'
+router
+●●●●●● 1mm □△
+'/scheduled/{id}/run'
+●●●●●● 2mm □△

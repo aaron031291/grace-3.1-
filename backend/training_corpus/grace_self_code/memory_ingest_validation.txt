@@ -1,0 +1,141 @@
+## ingest_validation.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_recent_validations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Ingest recent successful validations from MongoDB into Magma memory.\n    This creates learning points for the autonomous loop and coding agent.\n    '
+●●●●●● 3mm □△○
+database.mongo_client
+●●●●●● 2mm □△○
+get_db
+db
+●●●●●● 1mm □
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[INGEST] MongoDB not configured. Skipping validation ingestion.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+collection
+●●●●●● 1mm □
+db
+'validation_results'
+recent_successes
+●●●●●● 1mm □
+collection
+●●●●●● 1mm □△
+'status'
+'success'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'completed_at'
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 1mm □
+magma
+count
+●●●●●● 1mm □
+0
+doc
+recent_successes
+task_id
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'task_id'
+'unknown'
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'target'
+'unknown'
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'stages'
+●●●●●● 2mm □△
+stage_summaries
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+s
+'stage'
+' ('
+s
+●●●●●● 1mm □△
+'score'
+100
+●●●●●● 2mm □△
+')'
+s
+stages
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'Successful Validation Run ['
+task_id
+'] on '
+target
+'. Stages passed: '
+stage_summaries
+'.'
+magma
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+count
+1
+logger
+●●●●●● 1mm □△
+'[INGEST] Ingested '
+count
+' recent successful validations into Magma memory.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+Exception
+logger
+●●●●●● 1mm □△
+'[INGEST] Failed to ingest validations: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm □
+__name__
+'__main__'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingest_recent_validations
+●●●●●● 1mm □△
+●●●●●● 2mm □△

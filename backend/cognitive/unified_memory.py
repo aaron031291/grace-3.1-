@@ -63,14 +63,9 @@ def _coerce_dict(val) -> dict:
 
 
 class UnifiedMemory:
-    """
-    Single interface for all Grace memory systems. Use get_unified_memory() to get the singleton.
-    Enforces TrustGate and Memory Heat circuit breaking for Continual Context Evolution.
-    """
+    """Single interface for all Grace memory systems. Use get_unified_memory() to get the singleton."""
 
     _instance = None
-    _heat_breaker_active = False  # If True, blocks all memory mutation methods
-
 
     @classmethod
     def get_instance(cls) -> "UnifiedMemory":
@@ -86,18 +81,9 @@ class UnifiedMemory:
         action: str,
         outcome: str,
         trust: float = 0.5,
-        source: str = "system",
-        trust_coin: Optional[str] = None
+        source: str = "system"
     ) -> bool:
-        """Store a concrete experience. Enforced by TrustGate."""
-        if self._heat_breaker_active:
-            logger.warning("TRUST_GATE: Memory Circuit Breaker is active. Episode mutation rejected.")
-            return False
-            
-        if trust_coin != "VVT_PLATINUM_COIN" and source != "system":
-            logger.warning(f"TRUST_GATE: Episode mutation from '{source}' proposed without valid Trust Coin from VVT layer. Rejected.")
-            return False
-            
+        """Store a concrete experience. Uses EpisodicBuffer."""
         session = _get_session()
         if not session:
             return False
@@ -116,13 +102,6 @@ class UnifiedMemory:
                 store_decision(problem[:200], str(action)[:200], str(outcome)[:200])
             except Exception:
                 pass
-                
-            # TRIGGER ACTIVE RESILIENCE HOOK
-            try:
-                self.analyze_for_resilience()
-            except Exception as e:
-                logger.error(f"Active resilience hook failed: {e}")
-                
             return True
         except Exception as e:
             logger.debug(f"Store episode failed: {e}")
@@ -138,18 +117,9 @@ class UnifiedMemory:
         actual: str = "",
         trust: float = 0.5,
         source: str = "system",
-        example_type: str = "general",
-        trust_coin: Optional[str] = None
+        example_type: str = "general"
     ) -> bool:
-        """Store a learning example. Enforced by TrustGate."""
-        if self._heat_breaker_active:
-            logger.warning("TRUST_GATE: Memory Circuit Breaker is active. Learning mutation rejected.")
-            return False
-            
-        if trust_coin != "VVT_PLATINUM_COIN" and source != "system":
-            logger.warning(f"TRUST_GATE: Learning mutation from '{source}' proposed without valid Trust Coin. Rejected.")
-            return False
-            
+        """Store a learning example. Uses LearningMemoryManager."""
         session = _get_session()
         if not session:
             return False
@@ -180,18 +150,9 @@ class UnifiedMemory:
         goal: str,
         steps: str,
         trust: float = 0.5,
-        proc_type: str = "general",
-        trust_coin: Optional[str] = None
+        proc_type: str = "general"
     ) -> bool:
-        """Store a learned skill/procedure. Enforced by TrustGate."""
-        if self._heat_breaker_active:
-            logger.warning("TRUST_GATE: Memory Circuit Breaker is active. Procedural mutation rejected.")
-            return False
-            
-        if trust_coin != "VVT_PLATINUM_COIN" and source != "system":
-            logger.warning(f"TRUST_GATE: Procedural mutation from '{source}' proposed without valid Trust Coin. Rejected.")
-            return False
-            
+        """Store a learned skill/procedure. Uses ProceduralRepository."""
         session = _get_session()
         if not session:
             return False
@@ -221,16 +182,12 @@ class UnifiedMemory:
         self,
         query: str = "",
         limit: int = 10,
-        min_trust: float = 0.0,
-        view: str = "experimental" # 'deterministic' or 'experimental'
+        min_trust: float = 0.0
     ) -> List[dict]:
-        """Recall experiences. Deterministic view strictly enforces high trust thresholds."""
+        """Recall past experiences. Uses EpisodicBuffer when query given, else recent list."""
         session = _get_session()
         if not session:
             return []
-            
-        # Deterministic view enforces VVT Layer 10+ standard (0.8+)
-        actual_min_trust = 0.8 if view == "deterministic" else min_trust
         try:
             from cognitive.episodic_memory import EpisodicBuffer, Episode
             buf = EpisodicBuffer(session)
@@ -266,18 +223,15 @@ class UnifiedMemory:
         self,
         query: str = "",
         limit: int = 10,
-        min_trust: float = 0.0,
-        view: str = "experimental"
+        min_trust: float = 0.0
     ) -> List[dict]:
-        """Recall learning examples."""
+        """Recall learning examples. Uses LearningExample via session."""
         session = _get_session()
         if not session:
             return []
-            
-        actual_min_trust = 0.8 if view == "deterministic" else min_trust
         try:
             from cognitive.learning_memory import LearningExample
-            q = session.query(LearningExample).filter(LearningExample.trust_score >= actual_min_trust)
+            q = session.query(LearningExample).filter(LearningExample.trust_score >= min_trust)
             if query and query.strip():
                 q = q.filter(LearningExample.input_context.contains(query))
             rows = q.order_by(LearningExample.created_at.desc()).limit(limit).all()
@@ -307,18 +261,15 @@ class UnifiedMemory:
         self,
         query: str = "",
         limit: int = 10,
-        min_trust: float = 0.0,
-        view: str = "experimental"
+        min_trust: float = 0.0
     ) -> List[dict]:
-        """Recall learned procedures."""
+        """Recall learned procedures. Uses Procedure via session."""
         session = _get_session()
         if not session:
             return []
-            
-        actual_min_trust = 0.8 if view == "deterministic" else min_trust
         try:
             from cognitive.procedural_memory import Procedure
-            q = session.query(Procedure).filter(Procedure.trust_score >= actual_min_trust)
+            q = session.query(Procedure).filter(Procedure.trust_score >= min_trust)
             if query and query.strip():
                 q = q.filter(Procedure.goal.contains(query))
             rows = q.order_by(Procedure.trust_score.desc()).limit(limit).all()

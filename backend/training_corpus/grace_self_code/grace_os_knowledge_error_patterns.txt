@@ -1,0 +1,246 @@
+## error_patterns.py
+'\nGrace OS — Error Patterns\n\nKnown error → fix mappings. Records patterns from past sessions so\nGrace can recognize and apply proven fixes automatically.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+difflib
+●●●●●● 2mm □△○
+SequenceMatcher
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ErrorPatterns
+'\n    Stores and retrieves known error patterns with their fixes.\n    Supports fuzzy matching for error signature lookup.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_pattern
+●●●●●● 1mm □△
+self
+error_signature
+fix_description
+success_rate
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+1.0
+●●●●●● 2mm □
+'Record a new error→fix mapping or update an existing one.'
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+error_signature
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+existing
+'occurrences'
+1
+existing
+'success_rate'
+●●●●●● 1mm □
+existing
+'success_rate'
+●●●●●● 2mm □△
+existing
+'occurrences'
+●●●●●● 1mm □△
+1
+●●●●●● 3mm ○
+success_rate
+●●●●●● 3mm □△
+existing
+'occurrences'
+existing
+'last_seen'
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fix_description
+existing
+'fixes'
+existing
+'fixes'
+●●●●●● 1mm □△
+fix_description
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+'error_signature'
+'fixes'
+'success_rate'
+'occurrences'
+'first_seen'
+'last_seen'
+'context'
+error_signature
+fix_description
+success_rate
+1
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+logger
+●●●●●● 1mm □△
+'[ErrorPatterns] Recorded pattern: '
+error_signature
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+find_fix
+●●●●●● 1mm □△
+self
+error_signature
+threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.6
+'\n        Find a fix for an error. Uses fuzzy matching if exact match not found.\n        Returns the best matching pattern or None.\n        '
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+error_signature
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+key
+best_match
+●●●●●● 1mm □
+●●●●●● 2mm □
+best_score
+●●●●●● 1mm □
+0.0
+stored_key
+pattern
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+SequenceMatcher
+●●●●●● 1mm □△
+●●●●●● 2mm □
+key
+stored_key
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+score
+best_score
+score
+threshold
+best_score
+●●●●●● 1mm □
+score
+best_match
+●●●●●● 1mm □
+pattern
+●●●●●● 3mm ○
+best_match
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_top_patterns
+●●●●●● 1mm □△
+self
+n
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'Get the most frequently occurring error patterns.'
+sorted_patterns
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sorted_patterns
+n
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all_patterns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all recorded patterns.'
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_normalize
+●●●●●● 1mm □△
+self
+signature
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Normalize an error signature for matching.'
+●●●●●● 3mm ○
+signature
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○

@@ -1,0 +1,188 @@
+## force_reingest.py
+'\nForce Re-Ingestion Script\nResets ingestion status in SQL database to trigger re-ingestion into Qdrant.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 1mm □
+reset_ingestion_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset all documents to pending status to force re-ingestion.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Force Re-Ingestion'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+documents
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFound '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+documents
+●●●●●● 2mm □△
+' documents in database'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+documents
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'No documents to reset'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+completed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+d
+documents
+d
+'completed'
+●●●●●● 2mm □△
+pending
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+d
+documents
+d
+'pending'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+d
+documents
+d
+'failed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nCurrent status:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Completed: '
+completed
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Pending: '
+pending
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Failed: '
+failed
+●●●●●● 2mm □△
+doc
+documents
+doc
+●●●●●● 1mm □
+'pending'
+doc
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Reset '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+documents
+●●●●●● 2mm □△
+" documents to 'pending' status"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Vector IDs cleared'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nNext step: Restart backend to trigger auto-ingestion'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+reset_ingestion_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△

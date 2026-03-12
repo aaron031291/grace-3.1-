@@ -163,7 +163,6 @@ class LoopOrchestrator:
         self,
         composite_id: str,
         context: Dict[str, Any] = None,
-        parallel: bool = False,
     ) -> CompositeResult:
         """
         Execute a composite loop — multiple loops with cross-referencing.

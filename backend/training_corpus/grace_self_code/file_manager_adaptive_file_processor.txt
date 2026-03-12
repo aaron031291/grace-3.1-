@@ -1,0 +1,818 @@
+## adaptive_file_processor.py
+'\nGrace Adaptive File Processor\n\nLearns optimal processing strategies from experience.\nContinuously improves file processing quality.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProcessingStrategy
+'Processing strategy for a file type.'
+file_type
+●●●●●● 1mm ○
+chunk_size
+●●●●●● 2mm ○
+overlap
+●●●●●● 2mm ○
+use_semantic_chunking
+●●●●●● 3mm △
+embedding_batch_size
+●●●●●● 2mm ○
+quality_threshold
+●●●●●● 3mm ○
+additional_params
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+success_rate
+●●●●●● 3mm ○
+0.5
+avg_quality_score
+●●●●●● 3mm ○
+0.5
+avg_processing_time
+●●●●●● 3mm ○
+0.0
+times_used
+●●●●●● 2mm ○
+0
+last_used
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ProcessingOutcome
+'Outcome of a file processing operation.'
+file_id
+●●●●●● 2mm ○
+file_path
+●●●●●● 1mm ○
+file_type
+●●●●●● 1mm ○
+strategy_used
+ProcessingStrategy
+success
+●●●●●● 3mm △
+quality_score
+●●●●●● 3mm ○
+processing_time
+●●●●●● 3mm ○
+num_chunks
+●●●●●● 2mm ○
+num_embeddings
+●●●●●● 2mm ○
+errors
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+timestamp
+datetime
+dataclass
+●●●●●● 2mm △
+StrategyLearner
+'\n    Learns optimal processing strategies from historical outcomes.\n\n    Grace Principle: Recursive Learning\n    - Tracks performance of different strategies\n    - Adapts recommendations based on outcomes\n    - Continuously improves processing quality\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+genesis_tracker
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize Strategy Learner.\n\n        Args:\n            session: Database session\n            genesis_tracker: GenesisFileTracker for tracking\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_tracker
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ProcessingStrategy
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_optimal_strategy
+●●●●●● 1mm □△
+self
+file_type
+file_size
+complexity_level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'intermediate'
+'\n        Get optimal processing strategy for a file type.\n\n        Args:\n            file_type: File extension (.pdf, .py, etc.)\n            file_size: Size of file in bytes\n            complexity_level: Complexity assessment\n\n        Returns:\n            Optimal ProcessingStrategy\n        '
+cache_key
+●●●●●● 1mm □
+file_type
+'_'
+complexity_level
+●●●●●● 2mm □
+cache_key
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Using cached strategy for '
+cache_key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+cache_key
+●●●●●● 2mm □
+●●●●●● 3mm △
+strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_type
+complexity_level
+●●●●●● 2mm □△
+●●●●●● 2mm □
+strategy
+●●●●●● 3mm △
+cache_key
+●●●●●● 1mm □
+strategy
+●●●●●● 3mm ○
+strategy
+strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_type
+file_size
+complexity_level
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Using default strategy for '
+file_type
+': chunk_size='
+strategy
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+strategy
+ProcessingStrategy
+●●●●●● 1mm □
+_get_learned_strategy
+●●●●●● 1mm □△
+self
+file_type
+complexity_level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Retrieve learned strategy from database.\n\n        Args:\n            file_type: File extension\n            complexity_level: Complexity level\n\n        Returns:\n            ProcessingStrategy if found, None otherwise\n        '
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+query
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n                SELECT\n                    file_type,\n                    strategy,\n                    success_rate,\n                    avg_quality_score,\n                    times_used,\n                    last_used\n                FROM processing_strategies\n                WHERE file_type = :file_type\n                ORDER BY (success_rate * 0.6 + avg_quality_score * 0.4) DESC\n                LIMIT 1\n            '
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+'file_type'
+file_type
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 2mm □△○
+json
+strategy_data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+1
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+ProcessingStrategy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Loaded learned strategy for '
+file_type
+': success_rate='
+strategy
+'.2f'
+', quality='
+strategy
+'.2f'
+', used='
+strategy
+' times'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+strategy
+Exception
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Error loading learned strategy: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+ProcessingStrategy
+●●●●●● 1mm □
+_get_default_strategy
+●●●●●● 1mm □△
+self
+file_type
+file_size
+complexity_level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'\n        Get default processing strategy.\n\n        Args:\n            file_type: File extension\n            file_size: File size in bytes\n            complexity_level: Complexity level\n\n        Returns:\n            Default ProcessingStrategy\n        '
+chunk_size
+●●●●●● 1mm □
+1024
+overlap
+●●●●●● 1mm □
+100
+use_semantic
+●●●●●● 1mm □
+●●●●●● 1mm □
+batch_size
+●●●●●● 1mm □
+32
+quality_threshold
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+file_type
+'.pdf'
+'.docx'
+'.txt'
+chunk_size
+●●●●●● 1mm □
+1024
+use_semantic
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm △
+file_type
+'.py'
+'.js'
+'.java'
+'.cpp'
+chunk_size
+●●●●●● 1mm □
+512
+use_semantic
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+overlap
+●●●●●● 1mm □
+50
+●●●●●● 2mm □
+file_type
+'.md'
+'.rst'
+chunk_size
+●●●●●● 1mm □
+800
+use_semantic
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+complexity_level
+'beginner'
+chunk_size
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk_size
+●●●●●● 2mm □△
+0.8
+●●●●●● 2mm □△
+quality_threshold
+●●●●●● 1mm □
+0.4
+●●●●●● 1mm △
+complexity_level
+'advanced'
+chunk_size
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk_size
+●●●●●● 2mm □△
+1.2
+●●●●●● 2mm □△
+quality_threshold
+●●●●●● 1mm □
+0.6
+●●●●●● 2mm □
+file_size
+1000000
+chunk_size
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk_size
+●●●●●● 2mm □△
+1.5
+●●●●●● 2mm □△
+batch_size
+●●●●●● 1mm □
+16
+●●●●●● 1mm △
+file_size
+10000
+chunk_size
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk_size
+●●●●●● 2mm □△
+0.5
+●●●●●● 2mm □△
+batch_size
+●●●●●● 1mm □
+64
+●●●●●● 3mm ○
+ProcessingStrategy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ProcessingStrategy
+●●●●●● 1mm □
+learn_from_outcome
+●●●●●● 1mm □△
+self
+outcome
+●●●●●● 2mm □△
+ProcessingOutcome
+'\n        Learn from a processing outcome and update strategies.\n\n        Args:\n            outcome: ProcessingOutcome to learn from\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] No session, cannot learn'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 2mm □△○
+json
+strategy_json
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+'chunk_size'
+'overlap'
+'use_semantic'
+'batch_size'
+'quality_threshold'
+'additional'
+outcome
+outcome
+outcome
+outcome
+outcome
+outcome
+●●●●●● 2mm □△
+check_query
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n                SELECT id, success_rate, avg_quality_score, times_used\n                FROM processing_strategies\n                WHERE file_type = :file_type AND strategy = :strategy\n            '
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+check_query
+'file_type'
+'strategy'
+outcome
+strategy_json
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+strategy_id
+old_success_rate
+old_quality
+old_times
+●●●●●● 1mm □
+existing
+new_times
+●●●●●● 1mm □
+old_times
+●●●●●● 3mm ○
+1
+new_success_rate
+●●●●●● 1mm □
+old_success_rate
+●●●●●● 2mm □△
+old_times
+●●●●●● 3mm ○
+outcome
+1.0
+0.0
+●●●●●● 3mm □△
+new_times
+new_quality
+●●●●●● 1mm □
+old_quality
+●●●●●● 2mm □△
+old_times
+●●●●●● 3mm ○
+outcome
+●●●●●● 3mm □△
+new_times
+update_query
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n                    UPDATE processing_strategies\n                    SET success_rate = :success_rate,\n                        avg_quality_score = :quality,\n                        times_used = :times_used,\n                        last_used = :last_used,\n                        updated_at = :updated_at\n                    WHERE id = :id\n                '
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+update_query
+'success_rate'
+'quality'
+'times_used'
+'last_used'
+'updated_at'
+'id'
+new_success_rate
+new_quality
+new_times
+outcome
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+strategy_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Updated strategy for '
+outcome
+': success_rate='
+new_success_rate
+'.2f'
+', quality='
+new_quality
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+insert_query
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n                    INSERT INTO processing_strategies\n                    (file_type, strategy, success_rate, avg_quality_score,\n                     times_used, last_used, created_at, updated_at)\n                    VALUES\n                    (:file_type, :strategy, :success_rate, :quality,\n                     1, :last_used, :created_at, :updated_at)\n                '
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+insert_query
+'file_type'
+'strategy'
+'success_rate'
+'quality'
+'last_used'
+'created_at'
+'updated_at'
+outcome
+strategy_json
+outcome
+1.0
+0.0
+outcome
+outcome
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Created new strategy for '
+outcome
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache_keys_to_clear
+●●●●●● 1mm □
+k
+k
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+●●●●●● 1mm □△
+outcome
+●●●●●● 2mm □△
+key
+cache_keys_to_clear
+●●●●●● 3mm △
+key
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[STRATEGY-LEARNER] Error learning from outcome: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △
+PerformanceTracker
+'\n    Tracks file processing performance metrics.\n\n    Grace Principle: Self-Awareness\n    - Records all processing outcomes\n    - Identifies performance trends\n    - Detects degradation early\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Initialize Performance Tracker.\n\n        Args:\n            session: Database session\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+logger
+●●●●●● 1mm □△
+'[PERFORMANCE-TRACKER] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_outcome
+●●●●●● 1mm □△
+self
+outcome
+●●●●●● 2mm □△
+ProcessingOutcome
+'\n        Record a processing outcome.\n\n        Args:\n            outcome: ProcessingOutcome to record\n        '
+logger
+●●●●●● 1mm □△
+'[PERFORMANCE-TRACKER] Recording outcome: file='
+Path
+●●●●●● 1mm □△
+outcome
+●●●●●● 2mm □△
+', success='
+outcome
+', quality='
+outcome
+'.2f'
+', time='
+outcome
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_performance_summary
+●●●●●● 1mm □△
+self
+file_type
+days
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+7
+'\n        Get performance summary for recent processing.\n\n        Args:\n            file_type: Filter by file type (optional)\n            days: Number of days to analyze\n\n        Returns:\n            Performance summary dict\n        '
+●●●●●● 3mm ○
+'total_processed'
+'success_rate'
+'avg_quality'
+'avg_time'
+0
+0.0
+0.0
+0.0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+AdaptiveFileProcessor
+'\n    Processes files using learned optimal strategies.\n\n    Grace Principle: Autonomy + Recursive Learning\n    - Uses best-known strategies automatically\n    - Learns from every processing outcome\n    - Continuously improves without human intervention\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+intelligence_agent
+genesis_tracker
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize Adaptive File Processor.\n\n        Args:\n            session: Database session\n            intelligence_agent: FileIntelligenceAgent instance\n            genesis_tracker: GenesisFileTracker instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+intelligence_agent
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_tracker
+●●●●●● 3mm △
+●●●●●● 1mm □
+StrategyLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+PerformanceTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ADAPTIVE-PROCESSOR] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_processing_strategy
+●●●●●● 1mm □△
+self
+file_path
+file_intelligence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+'\n        Get optimal processing strategy for a file.\n\n        Args:\n            file_path: Path to file\n            file_intelligence: FileIntelligence if already analyzed\n\n        Returns:\n            Optimal ProcessingStrategy\n        '
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_size
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+file_size
+●●●●●● 1mm □
+0
+complexity
+●●●●●● 1mm □
+'intermediate'
+●●●●●● 2mm □
+file_intelligence
+complexity
+●●●●●● 1mm □
+file_intelligence
+strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ADAPTIVE-PROCESSOR] Strategy for '
+path
+': chunk_size='
+strategy
+', semantic='
+strategy
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+strategy
+ProcessingStrategy
+●●●●●● 1mm □
+record_processing_outcome
+●●●●●● 1mm □△
+self
+file_id
+file_path
+strategy
+success
+quality_score
+processing_time
+num_chunks
+num_embeddings
+errors
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+ProcessingStrategy
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+0
+0
+●●●●●● 2mm □
+'\n        Record processing outcome and learn from it.\n\n        Args:\n            file_id: Document ID\n            file_path: Path to file\n            strategy: Strategy that was used\n            success: Whether processing succeeded\n            quality_score: Quality score achieved\n            processing_time: Time taken in seconds\n            num_chunks: Number of chunks created\n            num_embeddings: Number of embeddings generated\n            errors: List of errors if any\n        '
+outcome
+●●●●●● 1mm □
+ProcessingOutcome
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+outcome
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+outcome
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ADAPTIVE-PROCESSOR] Recorded outcome and learned from it: file_id='
+file_id
+', success='
+success
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_adaptive_processor
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_adaptive_file_processor
+●●●●●● 1mm □△
+session
+intelligence_agent
+genesis_tracker
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Get or create AdaptiveFileProcessor singleton.\n\n    Args:\n        session: Database session\n        intelligence_agent: FileIntelligenceAgent instance\n        genesis_tracker: GenesisFileTracker instance\n\n    Returns:\n        AdaptiveFileProcessor instance\n    '
+●●●●●● 2mm □
+_adaptive_processor
+●●●●●● 2mm □
+_adaptive_processor
+●●●●●● 1mm □
+AdaptiveFileProcessor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_adaptive_processor
+AdaptiveFileProcessor

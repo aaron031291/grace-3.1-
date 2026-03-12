@@ -1,0 +1,590 @@
+## memory_mesh_cache.py
+'\nMemory Mesh Caching Layer\n\nMulti-tier caching for Memory Mesh scalability:\n- Tier 1: LRU cache for high-trust learning examples\n- Tier 2: Procedure match cache\n- Tier 3: Stats cache\n\nPerformance Improvement: 5-10x faster for cached queries\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+lru_cache
+wraps
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MemoryMeshCache
+'\n    Intelligent caching layer for Memory Mesh operations.\n\n    Features:\n    - LRU cache for frequently accessed data\n    - TTL-based invalidation\n    - Automatic cache warming\n    - Cache statistics tracking\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+ttl_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+300
+'\n        Initialize cache layer.\n\n        Args:\n            ttl_seconds: Time-to-live for cache entries (default 5 minutes)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+ttl_seconds
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+'hits'
+'misses'
+'invalidations'
+'last_reset'
+0
+0
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CACHE] Initialized with TTL='
+ttl_seconds
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+invalidate_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Invalidate all cached data'
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+'invalidations'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CACHE] All caches invalidated (version='
+●●●●●● 3mm △
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_cache_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get cache performance statistics'
+total_requests
+●●●●●● 1mm □
+●●●●●● 3mm △
+'hits'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'misses'
+hit_rate
+●●●●●● 1mm □
+total_requests
+0
+●●●●●● 3mm △
+'hits'
+●●●●●● 3mm □△
+total_requests
+0
+●●●●●● 3mm ○
+'hits'
+'misses'
+'hit_rate'
+'invalidations'
+'cache_version'
+'last_reset'
+●●●●●● 3mm △
+'hits'
+●●●●●● 3mm △
+'misses'
+hit_rate
+●●●●●● 3mm △
+'invalidations'
+●●●●●● 3mm △
+●●●●●● 3mm △
+'last_reset'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_high_trust_learning_cached
+●●●●●● 1mm □△
+self
+min_trust
+cache_version
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+'\n        Cached high-trust learning IDs.\n\n        Returns tuple of IDs for immutability (required for caching)\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tuple
+●●●●●● 1mm ○
+Ellipsis
+●●●●●● 1mm □
+get_high_trust_learning
+●●●●●● 1mm □△
+self
+session
+min_trust
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+0.7
+1000
+'\n        Get high-trust learning examples with caching.\n\n        Args:\n            session: Database session\n            min_trust: Minimum trust score\n            limit: Maximum examples to return\n\n        Returns:\n            List of LearningExample objects\n        '
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+LearningExample
+cache_key
+●●●●●● 1mm □
+min_trust
+limit
+●●●●●● 3mm △
+cached_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+min_trust
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cached_ids
+●●●●●● 3mm △
+'hits'
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+cached_ids
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+KeyError
+TypeError
+AttributeError
+●●●●●● 3mm △
+'misses'
+1
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_ids
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+ex
+ex
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+min_trust
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+examples
+●●●●●● 3mm □△
+●●●●●● 1mm □
+_get_memory_stats_cached
+●●●●●● 1mm □△
+self
+cache_version
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Cached memory mesh statistics'
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_or_compute_stats
+●●●●●● 1mm □△
+self
+compute_func
+ttl_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'\n        Get memory stats with caching.\n\n        Args:\n            compute_func: Function to compute stats if cache miss\n            ttl_seconds: Override default TTL\n\n        Returns:\n            Memory mesh statistics\n        '
+cached
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cached
+●●●●●● 3mm △
+'hits'
+1
+●●●●●● 3mm ○
+cached
+KeyError
+TypeError
+AttributeError
+●●●●●● 3mm △
+'misses'
+1
+stats
+●●●●●● 1mm □
+compute_func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_find_similar_examples_cached
+●●●●●● 1mm □△
+self
+example_type
+min_trust
+cache_version
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+'Cached similar example IDs'
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tuple
+●●●●●● 1mm ○
+Ellipsis
+●●●●●● 1mm □
+find_similar_examples
+●●●●●● 1mm □△
+self
+session
+example_type
+min_trust
+exclude_id
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+0.7
+●●●●●● 2mm □
+5
+'\n        Find similar learning examples with caching.\n\n        Args:\n            session: Database session\n            example_type: Type of example to match\n            min_trust: Minimum trust score\n            exclude_id: ID to exclude from results\n            limit: Maximum examples to return\n\n        Returns:\n            List of similar LearningExample objects\n        '
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+LearningExample
+cached_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example_type
+min_trust
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cached_ids
+●●●●●● 3mm △
+'hits'
+1
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+cached_ids
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exclude_id
+examples
+●●●●●● 1mm □
+ex
+ex
+examples
+ex
+exclude_id
+●●●●●● 3mm ○
+examples
+limit
+KeyError
+TypeError
+AttributeError
+●●●●●● 3mm △
+'misses'
+1
+query
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+example_type
+LearningExample
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exclude_id
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LearningExample
+exclude_id
+●●●●●● 2mm □△
+examples
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+examples
+●●●●●● 3mm □△
+●●●●●● 1mm □
+_procedure_cache_key
+●●●●●● 1mm □△
+self
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Generate cache key for procedure match'
+context_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+goal
+':'
+context_str
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+combined
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_procedure_match_cached
+●●●●●● 1mm □△
+self
+cache_key
+cache_version
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Cached procedure match results'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Tuple
+●●●●●● 1mm □
+find_matching_procedure
+●●●●●● 1mm □△
+self
+session
+goal
+context
+min_success_rate
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+0.7
+'\n        Find matching procedure with caching.\n\n        Args:\n            session: Database session\n            goal: Goal to match\n            context: Context for matching\n            min_success_rate: Minimum procedure success rate\n\n        Returns:\n            Matching Procedure or None\n        '
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Procedure
+cache_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+cached
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cache_key
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cached
+●●●●●● 3mm △
+'hits'
+1
+procedure_id
+●●●●●● 1mm □
+cached
+0
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+procedure_id
+●●●●●● 2mm □△
+KeyError
+TypeError
+AttributeError
+●●●●●● 3mm △
+'misses'
+1
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+goal
+●●●●●● 2mm □△
+Procedure
+min_success_rate
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedure
+_global_cache
+●●●●●● 2mm □○
+MemoryMeshCache
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_memory_mesh_cache
+●●●●●● 1mm □△
+ttl_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+300
+'Get or create global Memory Mesh cache'
+●●●●●● 2mm □
+_global_cache
+●●●●●● 2mm □
+_global_cache
+●●●●●● 1mm □
+MemoryMeshCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_global_cache
+MemoryMeshCache
+●●●●●● 1mm □
+invalidate_memory_mesh_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Invalidate all Memory Mesh caches'
+cache
+●●●●●● 1mm □
+get_memory_mesh_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△

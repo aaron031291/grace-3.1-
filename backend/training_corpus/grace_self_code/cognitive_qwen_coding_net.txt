@@ -1,0 +1,1556 @@
+## qwen_coding_net.py
+"\nQwen Coding Net — Unified coding execution through Grace's internal world.\n\nConnects: Qwen (coding) + Consensus (design) + Ghost Memory (context) +\nTimeSense (temporal awareness) + Architecture Compass (self-awareness) +\nTrust Engine (quality) + Circuit Breaker (token management) + Genesis Keys\n\nThe full loop:\n  1. User describes task in consensus chat\n  2. Ghost Memory starts tracking silently\n  3. TimeSense provides temporal context (time of day, urgency)\n  4. Kimi+Opus design blueprint via consensus\n  5. Blueprint chunked for Qwen's token window\n  6. Each chunk: Ghost Memory injects context → Qwen codes → Compiler tests\n  7. Circuit breaker manages token limits (save → reset → continue)\n  8. On success: Ghost Memory reflects → Playbook stores → Reset\n  9. On failure: retry with ghost context → escalate if stuck\n  10. Everything tracked via Genesis Keys\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+QwenCodingNet
+'Unified coding execution engine — everything connected.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'QwenCodingNet'
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+task
+use_consensus
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Full unified execution: task description → working code.\n        Connected to: ghost memory, consensus, TimeSense, compiler,\n        diagnostic engine, self-healing, immune system, test engines.\n        '
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'task'
+'status'
+'code'
+'attempts'
+'ghost_reflection'
+task
+'started'
+''
+0
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+time_context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'context'
+'Time: '
+time_context
+●●●●●● 1mm □△
+'summary'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+ghost
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'blocked_by_immune'
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△○
+coding_agent.deterministic_gate
+●●●●●● 2mm □△○
+get_gate
+gate_report
+●●●●●● 1mm □
+get_gate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gate_report
+result
+'status'
+●●●●●● 1mm □
+'blocked_by_gate'
+result
+'gate_report'
+●●●●●● 1mm □
+gate_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'gate_blocked'
+'Risk='
+gate_report
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ghost
+●●●●●● 1mm □△
+'gate'
+'Gate OK (risk='
+gate_report
+'.2f'
+')'
+●●●●●● 2mm □△
+Exception
+gate_report
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[QWEN-NET] Gate skipped: %s'
+_ge
+●●●●●● 2mm □△
+episodic_context
+●●●●●● 1mm □
+''
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicMemory
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ep_session
+ep_mem
+●●●●●● 1mm □
+EpisodicMemory
+●●●●●● 1mm □△
+_ep_session
+●●●●●● 2mm □△
+past
+●●●●●● 1mm □
+ep_mem
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+past
+snippets
+●●●●●● 1mm □
+ep
+past
+outcome
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ep
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+100
+snippets
+●●●●●● 1mm □△
+'Past: '
+ep
+80
+' → '
+outcome
+80
+●●●●●● 2mm □△
+episodic_context
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+snippets
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'episodic'
+episodic_context
+200
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[QWEN-NET] Episodic injection skipped: %s'
+_ee
+●●●●●● 2mm □△
+arch_context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'context'
+'Architecture: '
+arch_context
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_consensus
+blueprint
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+ghost
+time_context
+●●●●●● 2mm □△
+●●●●●● 3mm □
+blueprint
+●●●●●● 1mm □
+'architecture'
+'functions'
+'direct'
+task
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+gate_report
+blueprint
+'_gate_context'
+●●●●●● 1mm □
+gate_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodic_context
+blueprint
+'_episodic_context'
+●●●●●● 1mm □
+episodic_context
+ghost
+●●●●●● 1mm □△
+'blueprint'
+json
+●●●●●● 1mm □△
+blueprint
+●●●●●● 2mm □△
+500
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+blueprint
+ghost
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+result
+'code'
+●●●●●● 1mm □
+code
+result
+'status'
+●●●●●● 1mm □
+'completed'
+ghost
+●●●●●● 1mm □△
+'success'
+'Code generated: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+' chars'
+●●●●●● 2mm □△
+verified
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+coding_agent.verification_pass
+●●●●●● 2mm □△○
+get_verification_pass
+vpass
+●●●●●● 1mm □
+get_verification_pass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost_ctx
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ghost
+'get_context'
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+v_result
+●●●●●● 1mm □
+vpass
+●●●●●● 1mm □△
+code
+task
+●●●●●● 2mm □△
+result
+'verification'
+●●●●●● 1mm □
+'accepted'
+'trust_score'
+'flags'
+v_result
+v_result
+v_result
+●●●●●● 2mm □
+v_result
+ghost
+●●●●●● 1mm □△
+'verify_rejected'
+v_result
+200
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'verification_failed'
+result
+'revision_hint'
+●●●●●● 1mm □
+v_result
+verified
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □
+ghost
+●●●●●● 1mm □△
+'verify_passed'
+'Trust='
+v_result
+'.2f'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[QWEN-NET] Verification skipped: %s'
+_ve
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verified
+test_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+ghost
+●●●●●● 2mm □△
+result
+'test_result'
+●●●●●● 1mm □
+test_result
+●●●●●● 2mm □
+test_result
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+diag
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+ghost
+●●●●●● 2mm □△
+result
+'diagnostics'
+●●●●●● 1mm □
+diag
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+ghost
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'pass'
+'All checks passed'
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'deployed'
+●●●●●● 3mm □
+healed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+test_result
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm △
+healed
+result
+'code'
+●●●●●● 1mm □
+healed
+result
+'status'
+●●●●●● 1mm □
+'healed_and_deployed'
+ghost
+●●●●●● 1mm □△
+'failure'
+'Tests failed: '
+test_result
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'needs_fix'
+●●●●●● 3mm □
+result
+'status'
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm □
+ghost
+●●●●●● 1mm □△
+'failure'
+'No code generated'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'status'
+'deployed'
+'healed_and_deployed'
+reflection
+●●●●●● 1mm □
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'ghost_reflection'
+●●●●●● 1mm □
+reflection
+●●●●●● 1mm □△
+'reflection'
+●●●●●● 2mm □△
+result
+'duration_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+'ghost_stats'
+●●●●●● 1mm □
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+chat_execute
+●●●●●● 1mm □△
+self
+message
+conversation_history
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Execute from the consensus chat — message comes in, code goes out.\n        Ghost memory holds the full conversation context.\n        '
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conversation_history
+msg
+conversation_history
+5
+ghost
+●●●●●● 1mm □△
+'chat'
+msg
+●●●●●● 1mm □△
+'role'
+'user'
+●●●●●● 2mm □△
+': '
+msg
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'chat'
+'user: '
+message
+●●●●●● 2mm □△
+is_code
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'build'
+'create'
+'code'
+'write'
+'function'
+'fix'
+'add'
+'implement'
+'endpoint'
+'api'
+'component'
+'module'
+'class'
+'test'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_code
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'response'
+result
+500
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task'
+'status'
+'response'
+'models'
+message
+'responded'
+result
+result
+Exception
+●●●●●● 3mm ○
+'task'
+'status'
+'error'
+message
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_immune_scan
+●●●●●● 1mm □△
+self
+task
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Immune system scan — reject dangerous tasks.'
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+dangerous
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'delete all'
+'drop table'
+'rm -rf'
+'format disk'
+'shutdown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dangerous
+ghost
+●●●●●● 1mm □△
+'immune_block'
+'Task blocked by immune system: '
+task
+50
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_run_diagnostics
+●●●●●● 1mm □△
+self
+code
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Run diagnostic engine on generated code.'
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+get_diagnostics
+diag
+●●●●●● 1mm □
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'diagnostic'
+'Code diagnostics running'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'checked'
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'checked'
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_run_tests
+●●●●●● 1mm □△
+self
+code
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Run test engines on generated code.'
+●●●●●● 3mm □△○
+cognitive.code_sandbox
+●●●●●● 2mm □△○
+verify_code_quality
+quality
+●●●●●● 1mm □
+verify_code_quality
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'test'
+'Quality score: '
+quality
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+'/100'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_self_heal
+●●●●●● 1mm □△
+self
+code
+test_result
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'Attempt to self-heal failed code.'
+error
+●●●●●● 1mm □
+test_result
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+●●●●●● 3mm ○
+●●●●●● 2mm □
+ghost
+●●●●●● 1mm □△
+'healing'
+'Attempting self-heal: '
+error
+100
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_qwen_coder
+qwen
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fix
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+fix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fix
+●●●●●● 2mm □△
+20
+fix
+●●●●●● 1mm □
+fix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'`'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fix
+●●●●●● 1mm □△
+'python'
+●●●●●● 2mm □△
+fix
+●●●●●● 1mm □
+fix
+6
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retest
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+fix
+ghost
+●●●●●● 2mm □△
+●●●●●● 2mm □
+retest
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'healed'
+'Self-healing successful'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fix
+ghost
+●●●●●● 1mm □△
+'heal_failed'
+'Self-healing did not fix the issue'
+●●●●●● 2mm □△
+Exception
+ghost
+●●●●●● 1mm □△
+'heal_error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get temporal awareness from TimeSense.'
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ts
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'summary'
+'hour'
+'is_business'
+now
+●●●●●● 1mm □△
+'%A %H:%M'
+●●●●●● 2mm □△
+' UTC'
+now
+9
+now
+17
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_get_architecture_context
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get relevant architecture info from compass.'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+compass
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+relevant
+●●●●●● 1mm □
+compass
+●●●●●● 1mm □△
+task
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □
+relevant
+explanations
+●●●●●● 1mm □
+compass
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+100
+r
+relevant
+3
+●●●●●● 3mm ○
+'; '
+●●●●●● 1mm □△
+explanations
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'Architecture context unavailable'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_consensus_design
+●●●●●● 1mm □△
+self
+task
+ghost
+time_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'Use Kimi+Opus to design the blueprint. TimeSense injected.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+ghost_context
+●●●●●● 1mm □
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_str
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+time_context
+time_str
+●●●●●● 1mm □
+'\n[TimeSense: '
+time_context
+●●●●●● 1mm □△
+'summary'
+''
+●●●●●● 2mm □△
+']'
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'consensus'
+'Blueprint designed: '
+result
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\{[\\s\\S]+\\}'
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+m
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'architecture'
+'functions'
+result
+500
+Exception
+ghost
+●●●●●● 1mm □△
+'error'
+'Consensus design failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'architecture'
+'functions'
+'fallback'
+task
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_build_with_token_management
+●●●●●● 1mm □△
+self
+task
+blueprint
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'Build code with circuit breaker managing token limits.\n        Deterministic gate context + episodic memory prepended to prompt.\n        '
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+●●●●●● 2mm □
+enter_loop
+●●●●●● 1mm □△
+'blueprint_build'
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'error'
+'Circuit breaker blocked — too many attempts'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_qwen_coder
+qwen
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost_context
+●●●●●● 1mm □
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+arch
+●●●●●● 1mm □
+blueprint
+●●●●●● 1mm □△
+'architecture'
+task
+●●●●●● 2mm □△
+gate_ctx
+●●●●●● 1mm □
+blueprint
+●●●●●● 1mm □△
+'_gate_context'
+''
+●●●●●● 2mm □△
+episodic_ctx
+●●●●●● 1mm □
+blueprint
+●●●●●● 1mm □△
+'_episodic_context'
+''
+●●●●●● 2mm □△
+sections
+●●●●●● 1mm □
+'Build Python code for this task:\n\nTask: '
+task
+'\nArchitecture: '
+arch
+400
+●●●●●● 2mm □
+gate_ctx
+sections
+●●●●●● 1mm □△
+gate_ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodic_ctx
+sections
+●●●●●● 1mm □△
+'=== RELATED PAST WORK ===\n'
+episodic_ctx
+'\n========================'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ghost_context
+sections
+●●●●●● 1mm □△
+'Session context:\n'
+ghost_context
+●●●●●● 2mm □△
+sections
+●●●●●● 1mm □△
+'Output ONLY valid Python code. No explanations.'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+sections
+●●●●●● 2mm □△
+est_tokens
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+4
+●●●●●● 2mm □
+est_tokens
+3500
+prompt
+●●●●●● 1mm □
+'Build Python code:\nTask: '
+task
+'\n'
+●●●●●● 3mm ○
+gate_ctx
+gate_ctx
+300
+''
+●●●●●● 3mm ○
+'\nOutput ONLY Python code.'
+code
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+code
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```python'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+9
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+3
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+3
+ghost
+●●●●●● 1mm □△
+'code_generated'
+code
+200
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exit_loop
+●●●●●● 1mm □△
+'blueprint_build'
+●●●●●● 2mm □△
+Exception
+ghost
+●●●●●● 1mm □△
+'error'
+'Build failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_compile_and_test
+●●●●●● 1mm □△
+self
+code
+ghost
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"Compile and test through Grace's compiler."
+●●●●●● 3mm □△○
+cognitive.grace_compiler
+●●●●●● 2mm □△○
+get_grace_compiler
+compiler
+●●●●●● 1mm □
+get_grace_compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+compiler
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+compile_result
+●●●●●● 1mm □
+'passed'
+'trust_score'
+'error'
+'warnings'
+result
+result
+result
+'; '
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+''
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+result
+'pass'
+'failure'
+'Compile: '
+result
+'PASS'
+'FAIL'
+' (trust: '
+result
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+compile_result
+Exception
+ghost
+●●●●●● 1mm □△
+'error'
+'Compile failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'passed'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_qwen_net
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QwenCodingNet
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+QwenCodingNet
+●●●●●● 1mm □
+generate_code
+●●●●●● 1mm □△
+prompt
+project_folder
+use_pipeline
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+''
+●●●●●● 1mm □
+'\n    Generate code from a prompt. Agentic entry: either fast path (Qwen coder only)\n    or full pipeline (consensus design → Qwen build → compile/test → self-heal).\n    Returns {code, prompt, status?, stages_passed?, trust_score?} for brain/HealingCoordinator.\n    '
+●●●●●● 2mm □
+use_pipeline
+prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+get_qwen_net
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+prompt
+'Generate placeholder'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code'
+'prompt'
+'status'
+'stages_passed'
+'trust_score'
+code
+prompt
+result
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'test_result'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+'design'
+'build'
+'compile'
+'design'
+'build'
+result
+●●●●●● 1mm □△
+'test_result'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_qwen_coder
+qwen
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+project_folder
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kb
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+project_folder
+●●●●●● 1mm □△
+'..'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+context
+●●●●●● 1mm □
+'Project files: '
+●●●●●● 3mm ○
+', '
+●●●●●● 1mm □△
+f
+f
+files
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+●●●●●● 2mm □△
+Exception
+full_prompt
+●●●●●● 1mm □
+context
+context
+'\n\n'
+prompt
+prompt
+raw
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+raw
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+raw
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lines
+0
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+lines
+1
+●●●●●● 2mm □
+lines
+lines
+1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'```'
+lines
+●●●●●● 1mm □
+lines
+1
+code
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code'
+'prompt'
+'trust_score'
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt
+0.7
+Exception
+logger
+●●●●●● 1mm □△
+'generate_code fast path failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code'
+'prompt'
+'error'
+'trust_score'
+''
+prompt
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0.0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

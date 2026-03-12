@@ -1,0 +1,281 @@
+## test_api_codebase.py
+'\nTests for Codebase Browser API endpoints.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestCodebaseRepositories
+'Test codebase repository endpoints.'
+●●●●●● 1mm □
+test_list_repositories
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test listing repositories.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/repositories'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_repository_info
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting repository info via list.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/repositories'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_add_repository
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test adding a repository - not implemented as POST.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/repositories'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestCodebaseFiles
+'Test codebase file browsing endpoints.'
+●●●●●● 1mm □
+test_list_files
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test listing files in a directory.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/files?path=/'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_get_file_content
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting file content.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/file?path=/test.py'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_get_file_with_line_range
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting file content with line range.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/file?path=/test.py&start_line=1&end_line=50'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+pytest
+●●●●●● 2mm △
+TestCodebaseSearch
+'Test codebase search endpoints.'
+●●●●●● 1mm □
+test_search_code
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test searching code.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/search?query=def%20main'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_search_code_regex
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test regex search in code.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/search?query=def'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest
+●●●●●● 2mm △
+TestCodebaseCommits
+'Test codebase commit history endpoints.'
+●●●●●● 1mm □
+test_get_commits
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting commit history.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/commits'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_get_commits_with_limit
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting limited commit history.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/commits?limit=10'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_get_commit_details
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting specific commit details.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/commits'
+●●●●●● 2mm □△
+response
+200
+404
+500
+pytest
+●●●●●● 2mm △
+TestCodebaseAnalysis
+'Test codebase analysis endpoints.'
+●●●●●● 1mm □
+test_analyze_codebase
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test codebase analysis.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/analysis'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_get_code_metrics
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting code metrics via analysis.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/analysis'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_analyze_file
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test analyzing a specific file via file endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/codebase/file?path=/app.py'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+pytest

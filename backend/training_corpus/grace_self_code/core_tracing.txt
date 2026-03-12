@@ -1,0 +1,539 @@
+## tracing.py
+'\nBuilt-in Distributed Tracing — trace IDs flow through the entire system.\n\nNo OpenTelemetry dependency. Just thread-local context + lightweight keys.\n\nEvery request gets a trace_id that propagates:\n  brain → service → cognitive → back\n  \nPlus: lightweight Genesis keys (in-memory ring buffer, batch-flush every 10s).\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+queue
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_trace_local
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+new_trace
+●●●●●● 1mm □△
+path
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'Start a new trace. Returns deterministic trace_id (no random).'
+bucket
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d%H%M'
+●●●●●● 2mm □△
+seed
+●●●●●● 1mm □
+path
+'|'
+name
+'|'
+bucket
+'|'
+●●●●●● 1mm △
+●●●●●● 1mm □△
+_trace_local
+●●●●●● 2mm □△
+tid
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+seed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+_trace_local
+●●●●●● 1mm □
+tid
+_trace_local
+●●●●●● 1mm □
+_trace_local
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tid
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_trace_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get current trace ID.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+_trace_local
+'trace_id'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+new_trace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+add_span
+●●●●●● 1mm □△
+name
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Add a span to the current trace.'
+spans
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+_trace_local
+'spans'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+spans
+●●●●●● 2mm □
+_trace_local
+spans
+●●●●●● 1mm □
+spans
+●●●●●● 1mm □△
+'name'
+'ts'
+'data'
+name
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_trace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the full current trace.'
+●●●●●● 3mm ○
+'trace_id'
+'spans'
+'duration_ms'
+get_trace_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+_trace_local
+'spans'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+_trace_local
+'start_time'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LightKey
+'Minimal Genesis key — 5 fields, no DB write.'
+key_type
+●●●●●● 1mm ○
+what
+●●●●●● 1mm ○
+who
+●●●●●● 1mm ○
+'system'
+tags
+●●●●●● 1mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trace_id
+●●●●●● 1mm ○
+''
+ts
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+_ring_buffer
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_flush_queue
+queue
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_flush_thread_started
+●●●●●● 1mm □
+●●●●●● 1mm □
+_flush_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FLUSH_INTERVAL
+●●●●●● 1mm □
+10.0
+FLUSH_BATCH_SIZE
+●●●●●● 1mm □
+500
+●●●●●● 1mm □
+light_track
+●●●●●● 1mm □△
+key_type
+what
+who
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+'system'
+●●●●●● 2mm □
+'\n    Lightweight Genesis key — NO DB write, NO event bus.\n    Just appends to an in-memory ring buffer.\n    Batch-flushed to DB every 10 seconds.\n\n    ~100ns per call vs ~5ms for full track().\n    '
+key
+●●●●●● 1mm □
+LightKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ring_buffer
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+_flush_queue
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+queue
+_ensure_flush_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_recent_keys
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get the N most recent lightweight keys from the ring buffer.'
+keys
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_ring_buffer
+●●●●●● 2mm □△
+n
+●●●●●● 3mm ○
+'key_type'
+'what'
+'who'
+'tags'
+'trace_id'
+'ts'
+k
+k
+k
+k
+k
+datetime
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_buffer_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get ring buffer stats.'
+●●●●●● 3mm ○
+'buffer_size'
+'buffer_capacity'
+'flush_queue_size'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_ring_buffer
+●●●●●● 2mm □△
+_ring_buffer
+_flush_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ensure_flush_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the background flush thread if not running.'
+●●●●●● 2mm □
+_flush_thread_started
+●●●●●● 3mm ○
+_flush_lock
+●●●●●● 2mm □
+_flush_thread_started
+●●●●●● 3mm ○
+_flush_thread_started
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_flush_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Background thread: batch-flushes lightweight keys to DB.'
+●●●●●● 3mm □△○
+batch
+●●●●●● 1mm □
+deadline
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FLUSH_INTERVAL
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+deadline
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+batch
+●●●●●● 2mm □△
+FLUSH_BATCH_SIZE
+key
+●●●●●● 1mm □
+_flush_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+queue
+●●●●●● 2mm □
+batch
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+key
+batch
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Batch flush error: '
+e
+●●●●●● 2mm □△
+_auto_probe_registered
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+register_auto_probe
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Subscribe to Genesis key events — auto-probe on code changes.'
+●●●●●● 2mm □
+_auto_probe_registered
+●●●●●● 3mm ○
+_auto_probe_registered
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+●●●●●● 1mm □
+_on_code_change
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+event
+'data'
+●●●●●● 2mm □△
+event
+event
+tags
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+key_type
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'key_type'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key_type
+'code_change'
+'file_op'
+'code_change'
+tags
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'genesis.code_change'
+_on_code_change
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'genesis.file_op'
+_on_code_change
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'genesis.key_created'
+_on_code_change
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Auto-probe registered on code change events'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Auto-probe registration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_auto_probe
+●●●●●● 1mm □△
+event_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Run probe + self-test when code changes.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+probe_result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'probe'
+●●●●●● 2mm □△
+health_result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'problems'
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+health_result
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+probe_ok
+●●●●●● 1mm □
+probe_result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+light_track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+problems
+call_brain
+●●●●●● 1mm □△
+'system'
+'auto_cycle'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Auto-probe error: '
+e
+●●●●●● 2mm □△

@@ -1,0 +1,341 @@
+## debug_document_status.py
+'\nDebug script to check document ingestion status and vectors.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_document_status
+●●●●●● 1mm □△
+filename_pattern
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check document status in database.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DOCUMENT STATUS CHECK'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+documents
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+'%'
+filename_pattern
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+documents
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ No documents found matching: '
+filename_pattern
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+doc
+documents
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📄 Document: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ID: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Status: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Created: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Text length: '
+doc
+' chars'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Total chunks: '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Confidence score: '
+doc
+'.3f'
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n   📦 Chunks ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' total):'
+●●●●●● 2mm □△
+i
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+3
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Chunk '
+i
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+' chars'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        Vector ID: '
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        Text preview: '
+chunk
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+3
+' more chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n   🔍 Checking Qdrant vectors...'
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+chunks
+0
+vector_id
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunks
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ✓ Vector '
+vector_id
+' found in Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ❌ Vector '
+vector_id
+' NOT found in Qdrant'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ❌ Error checking vector: '
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ❌ Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n   📊 Status Summary:'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+'completed'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"      ⚠️  Document status is '"
+doc
+"' (should be 'completed')"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"      ✓ Document status is 'completed'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ❌ No chunks recorded (total_chunks = 0)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ✓ '
+doc
+' chunks recorded'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ❌ No chunk records in database'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      ✓ '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunk records found'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point.'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Usage: python debug_document_status.py <filename_pattern>'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Example: python debug_document_status.py gdp_volatility'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+pattern
+●●●●●● 1mm □
+sys
+1
+check_document_status
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

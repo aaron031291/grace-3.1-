@@ -1,0 +1,33 @@
+## diagnostic_engine.py
+'\nDiagnostic Engine — re-export from diagnostic_machine.\n\nCanonical import path for the new architecture.\n'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+get_diagnostic_engine
+start_diagnostic_engine
+stop_diagnostic_engine
+EngineState
+TriggerSource
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+TrustEngine
+ImportError
+get_trust_engine
+●●●●●● 1mm □
+●●●●●● 2mm □
+TrustEngine
+●●●●●● 1mm □
+●●●●●● 2mm □
+__all__
+●●●●●● 1mm □
+'DiagnosticEngine'
+'get_diagnostic_engine'
+'start_diagnostic_engine'
+'stop_diagnostic_engine'
+'EngineState'
+'TriggerSource'
+'get_trust_engine'
+'TrustEngine'

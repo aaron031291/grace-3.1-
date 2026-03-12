@@ -1,0 +1,866 @@
+## test_ask_grace.py
+'\nTests for the Ask Grace component — verifies:\n1. Connector registers with Layer 1 message bus\n2. Intent classification works for all known patterns\n3. Deterministic responses generate correctly\n4. Context aggregation pulls from available registries\n5. Cognitive event bus integration publishes events\n6. API endpoints return valid responses\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+pytest
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+reset_message_bus
+_spec
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+'ask_grace_api'
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+'api'
+'ask_grace_api.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_ask_grace_api
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+_spec
+●●●●●● 2mm □△
+_spec
+●●●●●● 1mm □△
+_ask_grace_api
+●●●●●● 2mm □△
+●●●●●● 1mm □
+clean_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reset_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reset_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestAskGraceConnector
+●●●●●● 1mm □
+test_connector_registers_with_bus
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+AskGraceConnector
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'registered_components'
+1
+'cognitive_engine'
+stats
+'components'
+●●●●●● 1mm □
+test_connector_request_handlers_registered
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+AskGraceConnector
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handlers
+●●●●●● 1mm □
+stats
+'request_handlers'
+●●●●●● 1mm □△
+'cognitive_engine'
+●●●●●● 2mm □△
+'ask_grace_query'
+handlers
+'ask_grace_components'
+handlers
+'ask_grace_health'
+handlers
+●●●●●● 1mm □
+test_connector_autonomous_actions_registered
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+AskGraceConnector
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger_events
+●●●●●● 1mm □
+a
+'trigger_event'
+a
+actions
+'trigger.probe_completed'
+trigger_events
+●●●●●● 1mm □
+test_connector_records_queries
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+AskGraceConnector
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □△
+'what is broken?'
+'System is healthy'
+'health_check'
+●●●●●● 2mm □△
+queries
+●●●●●● 1mm □
+connector
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+queries
+●●●●●● 2mm □△
+1
+queries
+0
+'query'
+'what is broken?'
+queries
+0
+'intent'
+'health_check'
+●●●●●● 1mm □
+test_connector_query_limit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+AskGraceConnector
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+5
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □△
+'query '
+i
+'response '
+i
+'general'
+●●●●●● 2mm □△
+queries
+●●●●●● 1mm □
+connector
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+queries
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □
+test_gather_system_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+AskGraceConnector
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+AskGraceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'timestamp'
+context
+'sources_queried'
+context
+'message_bus'
+context
+●●●●●● 1mm □
+●●●●●● 1mm □△
+context
+'message_bus'
+'stats'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestIntentClassification
+●●●●●● 1mm □
+test_health_intents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'is the system healthy?'
+●●●●●● 2mm □△
+'health_check'
+classify
+●●●●●● 1mm □△
+'what is broken?'
+●●●●●● 2mm □△
+'health_check'
+classify
+●●●●●● 1mm □△
+'show me errors'
+●●●●●● 2mm □△
+'health_check'
+classify
+●●●●●● 1mm □△
+'is Grace running?'
+●●●●●● 2mm □△
+'health_check'
+classify
+●●●●●● 1mm □△
+'are there any degraded components?'
+●●●●●● 2mm □△
+'health_check'
+●●●●●● 1mm □
+test_component_intents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'list all components'
+●●●●●● 2mm □△
+'component_query'
+classify
+●●●●●● 1mm □△
+'show me all services'
+●●●●●● 2mm □△
+'component_query'
+classify
+●●●●●● 1mm □△
+'what is the trust engine?'
+●●●●●● 2mm □△
+'component_query'
+classify
+●●●●●● 1mm □△
+'find the memory module'
+●●●●●● 2mm □△
+'component_query'
+●●●●●● 1mm □
+test_bus_intents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'how many messages on the bus?'
+●●●●●● 2mm □△
+'bus_query'
+classify
+●●●●●● 1mm □△
+'show me event subscribers'
+●●●●●● 2mm □△
+'bus_query'
+classify
+●●●●●● 1mm □△
+'what layer 1 components are connected?'
+●●●●●● 2mm □△
+'bus_query'
+●●●●●● 1mm □
+test_genesis_intents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'show me recent genesis keys'
+●●●●●● 2mm □△
+'genesis_query'
+classify
+●●●●●● 1mm □△
+'show the audit trail for this change'
+●●●●●● 2mm □△
+'genesis_query'
+classify
+●●●●●● 1mm □△
+'show tracking provenance'
+●●●●●● 2mm □△
+'genesis_query'
+●●●●●● 1mm □
+test_probe_intents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'which endpoints are active?'
+●●●●●● 2mm □△
+'probe_query'
+classify
+●●●●●● 1mm □△
+'probe all APIs'
+●●●●●● 2mm □△
+'probe_query'
+classify
+●●●●●● 1mm □△
+'are there dormant routes?'
+●●●●●● 2mm □△
+'probe_query'
+●●●●●● 1mm □
+test_capability_intents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'what can you do?'
+●●●●●● 2mm □△
+'capability_query'
+classify
+●●●●●● 1mm □△
+'what features are available?'
+●●●●●● 2mm □△
+'capability_query'
+●●●●●● 1mm □
+test_general_fallback
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+classify
+●●●●●● 1mm □
+_ask_grace_api
+classify
+●●●●●● 1mm □△
+'tell me a joke'
+●●●●●● 2mm □△
+'general'
+classify
+●●●●●● 1mm □△
+'how is the weather today?'
+●●●●●● 2mm □△
+'general'
+●●●●●● 2mm △
+TestDeterministicResponses
+●●●●●● 1mm □
+test_health_response_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+_build_deterministic_response
+●●●●●● 1mm □
+_ask_grace_api
+context
+●●●●●● 1mm □
+'system_health'
+'system_registry'
+'live_status'
+'total'
+'green'
+'amber'
+'red'
+'health_pct'
+50
+45
+3
+2
+90.0
+'broken'
+'degraded'
+'name'
+'description'
+'broken_module'
+'Some broken thing'
+'name'
+'description'
+'slow_module'
+'Slow but works'
+'summary'
+'models'
+'Grace is running with 1 error'
+'ollama'
+'status'
+'connected'
+response
+●●●●●● 1mm □
+_build_deterministic_response
+●●●●●● 1mm □△
+'health_check'
+'is it healthy?'
+context
+●●●●●● 2mm □△
+response
+●●●●●● 2mm □
+'90.0%'
+response
+'broken_module'
+response
+'slow_module'
+response
+'ollama'
+response
+●●●●●● 1mm □
+test_bus_response_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+_build_deterministic_response
+●●●●●● 1mm □
+_ask_grace_api
+context
+●●●●●● 1mm □
+'bus_stats'
+'autonomous_actions'
+'total_messages'
+'requests'
+'events'
+'commands'
+'autonomous_actions_triggered'
+'registered_components'
+'components'
+42
+10
+30
+2
+5
+3
+'genesis_keys'
+'memory_mesh'
+'cognitive_engine'
+'description'
+'trigger_event'
+'enabled'
+'Auto-create Genesis Key'
+'ingestion.file_processed'
+●●●●●● 3mm □△○
+response
+●●●●●● 1mm □
+_build_deterministic_response
+●●●●●● 1mm □△
+'bus_query'
+'bus stats?'
+context
+●●●●●● 2mm □△
+response
+●●●●●● 2mm □
+'42'
+response
+'genesis_keys'
+response
+'Auto-create Genesis Key'
+response
+●●●●●● 1mm □
+test_component_response_with_category
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+_build_deterministic_response
+●●●●●● 1mm □
+_ask_grace_api
+context
+●●●●●● 1mm □
+'components'
+'by_category'
+'name'
+'category'
+'status'
+'description'
+'TrustEngine'
+'intelligence'
+'green'
+'Trust scoring'
+'name'
+'category'
+'status'
+'description'
+'MemoryMesh'
+'cognitive'
+'green'
+'Memory system'
+'intelligence'
+'cognitive'
+'name'
+'status'
+'description'
+'TrustEngine'
+'green'
+'Trust scoring'
+'name'
+'status'
+'description'
+'MemoryMesh'
+'green'
+'Memory system'
+response
+●●●●●● 1mm □
+_build_deterministic_response
+●●●●●● 1mm □△
+'component_query'
+'list components'
+context
+●●●●●● 2mm □△
+response
+●●●●●● 2mm □
+'INTELLIGENCE'
+response
+'COGNITIVE'
+response
+'TrustEngine'
+response
+●●●●●● 1mm □
+test_general_returns_none
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+_ask_grace_api
+●●●●●● 1mm □△
+'general'
+'what is life?'
+●●●●●● 2mm □△
+response
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestCognitiveEventBusIntegration
+●●●●●● 1mm □
+test_event_published_on_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+get_recent_events
+received
+●●●●●● 1mm □
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'ask_grace.query_completed'
+handler
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'ask_grace.query_completed'
+'query'
+'intent'
+'method'
+'test'
+'general'
+'deterministic'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+1
+received
+0
+'intent'
+'general'
+●●●●●● 1mm □
+test_events_appear_in_log
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+get_recent_events
+publish
+●●●●●● 1mm □△
+'ask_grace.query_completed'
+'test'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □
+get_recent_events
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+topics
+●●●●●● 1mm □
+e
+'topic'
+e
+events
+'ask_grace.query_completed'
+topics
+●●●●●● 2mm △
+TestContextAggregation
+●●●●●● 1mm □
+test_builds_context_with_available_sources
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_ask_grace_api
+●●●●●● 1mm □△
+'health_check'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'sources'
+context
+'sources_queried'
+context
+●●●●●● 1mm □
+test_bus_query_includes_bus_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_ask_grace_api
+●●●●●● 1mm □△
+'bus_query'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'sources'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'message_bus'
+sources
+'bus_stats'
+context
+●●●●●● 2mm △
+TestContextSummarization
+●●●●●● 1mm □
+test_summarize_with_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+_summarize_context
+●●●●●● 1mm □
+_ask_grace_api
+context
+●●●●●● 1mm □
+'system_registry'
+'message_bus'
+'live_status'
+'health'
+'broken'
+'total'
+'green'
+'amber'
+'red'
+'health_pct'
+10
+8
+1
+1
+80
+'name'
+'broken_thing'
+'stats'
+'total_messages'
+'registered_components'
+'autonomous_actions'
+100
+5
+3
+'summary'
+'models'
+'Grace is running'
+'ollama'
+'status'
+'connected'
+summary
+●●●●●● 1mm □
+_summarize_context
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+'System Registry'
+summary
+'Message Bus'
+summary
+'Grace is running'
+summary
+●●●●●● 1mm □
+test_summarize_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+_ask_grace_api
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+'No system context available.'
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

@@ -1,0 +1,850 @@
+## autonomous_healing_loop.py
+'\nThe 13th Loop — Autonomous Healing Pipeline\n\nComplete autonomous healing from detection to resolution.\nNo human intervention required for deterministic failures.\n\n8 Stages:\n  1. Detection & Triage (immune system detects anomaly)\n  2. Diagnostic Consensus (multi-model diagnosis)\n  3. Strategy Selection (surgical vs guided rewrite)\n  4. Pre-Healing Validation (feasibility check)\n  5. Healing Execution (apply fix with snapshot)\n  6. Quality Verification (score before vs after)\n  7. Commit/Rollback Decision (only commit if better)\n  8. System Learning & Notification (memory + event bus)\n\nBuilt from HEAL-001 incident: Opus wholesale rewrite caused 50.6% content\nloss and quality regression from 6.7→4.5. This loop prevents that.\n\nSafety Rules (from HEAL-001 lessons):\n  - Files >20KB: ALWAYS surgical, never wholesale rewrite\n  - Quality gate: reject if healed_score < original_score\n  - Size gate: reject if healed_size < original_size * 0.8\n  - Snapshot: ALWAYS backup before healing\n  - Circuit breaker: max 3 consecutive failures before escalation\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MAX_WHOLESALE_REWRITE_SIZE
+●●●●●● 1mm □
+15000
+QUALITY_REGRESSION_THRESHOLD
+●●●●●● 1mm □
+0.5
+CONTENT_LOSS_THRESHOLD
+●●●●●● 1mm □
+0.2
+SURGICAL_PREFERENCE_THRESHOLD
+●●●●●● 1mm □
+0.3
+SNAPSHOTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'healing_snapshots'
+●●●●●● 1mm □
+_create_snapshot
+●●●●●● 1mm □△
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Create a pre-healing backup.'
+SNAPSHOTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+snapshot_id
+●●●●●● 1mm □
+'snap_'
+hashlib
+●●●●●● 1mm □△
+file_path
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+snapshot
+●●●●●● 1mm □
+'id'
+'file_path'
+'content'
+'checksum'
+'timestamp'
+snapshot_id
+file_path
+content
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SNAPSHOTS_DIR
+●●●●●● 3mm □△
+snapshot_id
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+snapshot
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshot_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_restore_snapshot
+●●●●●● 1mm □△
+snapshot_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Restore from a healing snapshot.'
+path
+●●●●●● 1mm □
+SNAPSHOTS_DIR
+●●●●●● 3mm □△
+snapshot_id
+'.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+snapshot
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+snapshot
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+snapshot
+'content'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshot
+'file_path'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_score_content
+●●●●●● 1mm □△
+content
+label
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'content'
+'Score content quality using trust engine.'
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+'heal_'
+label
+'Heal: '
+label
+content
+1000
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+score
+0.7
+Exception
+●●●●●● 3mm ○
+0.7
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_validate_code_blocks
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Count valid/invalid Python code blocks.'
+valid
+●●●●●● 1mm □
+0
+invalid
+●●●●●● 1mm □
+0
+in_code
+●●●●●● 1mm □
+●●●●●● 1mm □
+buf
+●●●●●● 1mm □
+line
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```python'
+●●●●●● 2mm □△
+in_code
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+buf
+●●●●●● 1mm □
+●●●●●● 1mm △
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'```'
+in_code
+in_code
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+buf
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 1mm □△
+buf
+●●●●●● 2mm □△
+'<heal>'
+'exec'
+●●●●●● 2mm □△
+valid
+1
+SyntaxError
+invalid
+1
+●●●●●● 2mm □
+in_code
+buf
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+valid
+invalid
+Tuple
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+heal_content
+●●●●●● 1mm □△
+file_path
+content
+errors
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'immune_system'
+'\n    The complete autonomous healing pipeline.\n    Returns the healing result with full provenance.\n    '
+result
+●●●●●● 1mm □
+'file_path'
+'stage'
+'success'
+'strategy'
+'original_score'
+'healed_score'
+'content_preserved'
+'snapshot_id'
+'errors_fixed'
+'lessons'
+file_path
+'initiated'
+●●●●●● 1mm □
+●●●●●● 2mm □
+0
+0
+0
+●●●●●● 2mm □
+0
+result
+'stage'
+●●●●●● 1mm □
+'triage'
+content_size
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+error_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+valid_before
+invalid_before
+●●●●●● 1mm □
+_validate_code_blocks
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+original_score
+●●●●●● 1mm □
+_score_content
+●●●●●● 1mm □△
+content
+'original'
+●●●●●● 2mm □△
+result
+'original_score'
+●●●●●● 1mm □
+original_score
+logger
+●●●●●● 1mm □△
+'[HEAL-13] Triage: '
+file_path
+' ('
+content_size
+' chars, '
+error_count
+' errors, score '
+original_score
+')'
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'strategy_selection'
+●●●●●● 2mm □
+content_size
+MAX_WHOLESALE_REWRITE_SIZE
+strategy
+●●●●●● 1mm □
+'surgical'
+reason
+●●●●●● 1mm □
+'File too large for rewrite ('
+content_size
+' > '
+MAX_WHOLESALE_REWRITE_SIZE
+')'
+●●●●●● 1mm △
+error_count
+0
+●●●●●● 3mm ○
+'stage'
+'success'
+'strategy'
+result
+'no_errors'
+●●●●●● 3mm □△○
+'none'
+strategy
+●●●●●● 1mm □
+'surgical'
+reason
+●●●●●● 1mm □
+'Surgical preferred (HEAL-001 lesson)'
+result
+'strategy'
+●●●●●● 1mm □
+strategy
+logger
+●●●●●● 1mm □△
+'[HEAL-13] Strategy: '
+strategy
+' ('
+reason
+')'
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'pre_validation'
+result
+'stage'
+●●●●●● 1mm □
+'snapshot'
+snapshot_id
+●●●●●● 1mm □
+_create_snapshot
+●●●●●● 1mm □△
+file_path
+content
+●●●●●● 2mm □△
+result
+'snapshot_id'
+●●●●●● 1mm □
+snapshot_id
+result
+'stage'
+●●●●●● 1mm □
+'healing'
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+●●●●●● 2mm □
+enter_loop
+●●●●●● 1mm □△
+'autonomous_healing'
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'circuit_broken'
+result
+'lessons'
+●●●●●● 1mm □△
+'Circuit breaker prevented healing loop — too many consecutive failures'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □
+strategy
+'surgical'
+healed_content
+●●●●●● 1mm □
+_surgical_heal
+●●●●●● 1mm □△
+content
+errors
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healed_content
+●●●●●● 1mm □
+_guided_heal
+●●●●●● 1mm □△
+content
+errors
+●●●●●● 2mm □△
+exit_loop
+●●●●●● 1mm □△
+'autonomous_healing'
+●●●●●● 2mm □△
+Exception
+_restore_snapshot
+●●●●●● 1mm □△
+snapshot_id
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'healing_failed'
+result
+'lessons'
+●●●●●● 1mm □△
+'Healing execution failed: '
+e
+●●●●●● 2mm □△
+_log_incident
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+'stage'
+●●●●●● 1mm □
+'verification'
+size_ratio
+●●●●●● 1mm □
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+healed_content
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+0
+result
+'content_preserved'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+size_ratio
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □
+size_ratio
+1
+●●●●●● 1mm □△
+CONTENT_LOSS_THRESHOLD
+logger
+●●●●●● 1mm □△
+'[HEAL-13] REJECTED: Content loss '
+1
+●●●●●● 1mm □△
+size_ratio
+●●●●●● 2mm □△
+100
+'.1f'
+'%'
+●●●●●● 2mm □△
+_restore_snapshot
+●●●●●● 1mm □△
+snapshot_id
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'rejected_content_loss'
+result
+'lessons'
+●●●●●● 1mm □△
+'Rejected: '
+1
+●●●●●● 1mm □△
+size_ratio
+●●●●●● 2mm □△
+100
+'.1f'
+'% content loss (threshold: '
+CONTENT_LOSS_THRESHOLD
+●●●●●● 2mm □△
+100
+'%)'
+●●●●●● 2mm □△
+_log_incident
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+healed_score
+●●●●●● 1mm □
+_score_content
+●●●●●● 1mm □△
+healed_content
+'healed'
+●●●●●● 2mm □△
+result
+'healed_score'
+●●●●●● 1mm □
+healed_score
+●●●●●● 2mm □
+healed_score
+original_score
+●●●●●● 1mm □△
+QUALITY_REGRESSION_THRESHOLD
+logger
+●●●●●● 1mm □△
+'[HEAL-13] REJECTED: Quality regression '
+original_score
+'→'
+healed_score
+●●●●●● 2mm □△
+_restore_snapshot
+●●●●●● 1mm □△
+snapshot_id
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'rejected_quality_regression'
+result
+'lessons'
+●●●●●● 1mm □△
+'Rejected: Quality dropped '
+original_score
+'→'
+healed_score
+●●●●●● 2mm □△
+_log_incident
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+valid_after
+invalid_after
+●●●●●● 1mm □
+_validate_code_blocks
+●●●●●● 1mm □△
+healed_content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+invalid_after
+invalid_before
+logger
+●●●●●● 1mm □△
+'[HEAL-13] REJECTED: More invalid code blocks ('
+invalid_before
+'→'
+invalid_after
+')'
+●●●●●● 2mm □△
+_restore_snapshot
+●●●●●● 1mm □△
+snapshot_id
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'rejected_code_regression'
+result
+'lessons'
+●●●●●● 1mm □△
+'Rejected: Invalid code blocks increased '
+invalid_before
+'→'
+invalid_after
+●●●●●● 2mm □△
+_log_incident
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+'stage'
+●●●●●● 1mm □
+'committed'
+result
+'success'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'errors_fixed'
+●●●●●● 1mm □
+error_count
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+healed_content
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[HEAL-13] COMMITTED: '
+file_path
+' (score '
+original_score
+'→'
+healed_score
+', preserved '
+size_ratio
+●●●●●● 2mm □△
+100
+'.1f'
+'%)'
+●●●●●● 2mm □△
+result
+'stage'
+●●●●●● 1mm □
+'learning'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'healing.autonomous_completed'
+'file'
+'strategy'
+'success'
+'score_before'
+'score_after'
+file_path
+strategy
+result
+'success'
+original_score
+healed_score
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+il
+●●●●●● 1mm □△
+'autonomous_healing'
+'original_score'
+'healed_score'
+'content_preserved'
+'errors_fixed'
+original_score
+healed_score
+size_ratio
+error_count
+result
+'success'
+'success'
+'failure'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_surgical_heal
+●●●●●● 1mm □△
+content
+errors
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Fix specific errors without rewriting the whole file.'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed
+●●●●●● 1mm □
+content
+error
+errors
+prompt
+●●●●●● 1mm □
+'Fix this SINGLE error in the text below. Output ONLY the corrected section (the few lines that need changing). Do NOT rewrite the whole content.\n\nError to fix: '
+error
+'\n\nContent (first 2000 chars for context):\n'
+healed
+2000
+fix
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+fix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fix
+●●●●●● 2mm □△
+10
+Exception
+●●●●●● 3mm ○
+healed
+Exception
+●●●●●● 3mm ○
+content
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_guided_heal
+●●●●●● 1mm □△
+content
+errors
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Guided rewrite with strict size and quality constraints.'
+●●●●●● 3mm ○
+content
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_log_incident
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Log a healing incident for the reporting engine.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception

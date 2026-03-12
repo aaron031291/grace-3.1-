@@ -1,0 +1,543 @@
+## test_genesis_pipeline.py
+'\nTest Genesis Key creation and autonomous trigger pipeline.\n\nThis script verifies that:\n1. Genesis Keys are created for all inputs\n2. Autonomous trigger pipeline is executed\n3. Learning actions are triggered\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+create_engine
+text
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 2mm □
+sys
+'win32'
+os
+'PYTHONIOENCODING'
+●●●●●● 1mm □
+'utf-8'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_genesis_key_creation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that Genesis Keys are created properly.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 1: Genesis Key Creation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Genesis Key created successfully!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Key ID: '
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Type: '
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Description: '
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Timestamp: '
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Genesis Key creation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+check_database_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check Genesis Key database status.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 2: Database Status Check'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+'sqlite:///data/grace.db'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) as count FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_keys
+●●●●●● 1mm □
+result
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Total Genesis Keys in database: '
+total_keys
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            SELECT key_id, key_type, what_description, when_timestamp\n            FROM genesis_key\n            ORDER BY when_timestamp DESC\n            LIMIT 5\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRecent Genesis Keys:'
+●●●●●● 2mm □△
+row
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - ['
+row
+1
+'] '
+row
+2
+60
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     ID: '
+row
+0
+30
+'... | '
+row
+3
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARNING] No Genesis Keys found in database'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking related tables:'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM user_profile'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - User Profiles: '
+result
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM fix_suggestion'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Fix Suggestions: '
+result
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key_archive'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Archives: '
+result
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM learning_patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Learning Patterns: '
+result
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Learning Patterns: Table not found'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+total_keys
+0
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Database check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_autonomous_trigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that autonomous triggers are working.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 3: Autonomous Trigger Pipeline'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Test Genesis Key created: '
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   The autonomous trigger pipeline should have been called automatically!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   Check logs above for '[OK] Triggered X autonomous action(s)' message"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Autonomous trigger test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'GENESIS KEY PIPELINE TEST SUITE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Genesis Key creation and autonomous trigger system...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'Genesis Key Creation'
+test_genesis_key_creation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Database Status'
+check_database_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Autonomous Triggers'
+test_autonomous_trigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+test_name
+passed
+results
+status
+●●●●●● 1mm □
+passed
+'[PASS]'
+'[FAIL]'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' - '
+test_name
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+result
+1
+result
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SUCCESS] All tests passed! Genesis Key pipeline is working correctly.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSUMMARY:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Genesis Keys are being created'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Autonomous trigger pipeline is connected'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - All inputs flow through the Genesis Key system'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARNING] Some tests failed. Please review the errors above.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

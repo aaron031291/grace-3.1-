@@ -1,0 +1,322 @@
+## create_scraping_tables.py
+'\nSimple script to create scraping tables.\nRun this from the backend directory with: ./venv/bin/python create_scraping_tables.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+Integer
+String
+Text
+DateTime
+ForeignKey
+create_engine
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+Base
+●●●●●● 2mm △
+ScrapingJob
+●●●●●● 3mm □△
+Base
+Base
+'Model for tracking web scraping jobs.'
+__tablename__
+●●●●●● 1mm □
+'scraping_jobs'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+2048
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+depth
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_pages
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+pages_scraped
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+pages_failed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+started_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+completed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+error_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+folder_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+512
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+same_domain_only
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+max_pages
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ScrapedPage
+●●●●●● 3mm □△
+Base
+Base
+'Model for individual scraped pages.'
+__tablename__
+●●●●●● 1mm □
+'scraped_pages'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+job_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'scraping_jobs.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+2048
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+depth_level
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+parent_url
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+2048
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+512
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+content_length
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+scraped_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create scraping tables in the database.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating scraping tables...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Base
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created scraping_jobs table'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created scraped_pages table'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Migration completed successfully!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nYou can now restart your backend server to use the web scraping feature.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Migration failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

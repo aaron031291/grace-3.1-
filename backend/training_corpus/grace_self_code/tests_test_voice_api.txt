@@ -1,0 +1,1314 @@
+## test_voice_api.py
+'\nComprehensive Component Tests for Voice API\n\nTests the complete voice functionality:\n- TTS (Text-to-Speech) with multiple engines\n- STT (Speech-to-Text) handling\n- NLP preprocessing\n- WebSocket continuous voice sessions\n- Voice settings management\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+patch
+MagicMock
+AsyncMock
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+io
+●●●●●● 2mm □△○
+base64
+●●●●●● 2mm □△○
+importlib.util
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+load_voice_api_module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Load voice_api module directly without going through api package.'
+voice_api_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'api'
+●●●●●● 3mm □△
+'voice_api.py'
+spec
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+'voice_api'
+voice_api_path
+●●●●●● 2mm □△
+voice_api
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+spec
+●●●●●● 2mm □△
+sys
+'voice_api'
+●●●●●● 1mm □
+voice_api
+spec
+●●●●●● 1mm □△
+voice_api
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+voice_api
+voice_api
+●●●●●● 1mm □
+load_voice_api_module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestTTSEngine
+'Test TTSEngine enum'
+●●●●●● 1mm □
+test_all_engines_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected TTS engines are defined'
+TTSEngine
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TTSEngine
+'EDGE_TTS'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TTSEngine
+'PYTTSX3'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TTSEngine
+'SYSTEM'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_engine_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test engine string values'
+TTSEngine
+●●●●●● 1mm □
+voice_api
+TTSEngine
+'edge_tts'
+TTSEngine
+'pyttsx3'
+TTSEngine
+'system'
+●●●●●● 2mm △
+TestSTTEngine
+'Test STTEngine enum'
+●●●●●● 1mm □
+test_all_engines_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected STT engines are defined'
+STTEngine
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+STTEngine
+'WHISPER'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+STTEngine
+'WEB_SPEECH'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestVoiceSettings
+'Test VoiceSettings model'
+●●●●●● 1mm □
+test_default_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default voice settings'
+VoiceSettings
+●●●●●● 1mm □
+voice_api
+TTSEngine
+●●●●●● 1mm □
+voice_api
+STTEngine
+●●●●●● 1mm □
+voice_api
+settings
+●●●●●● 1mm □
+VoiceSettings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+settings
+TTSEngine
+settings
+'en-US-AriaNeural'
+settings
+'+0%'
+settings
+'+0Hz'
+settings
+STTEngine
+settings
+'en-US'
+settings
+●●●●●● 1mm □
+settings
+●●●●●● 3mm □△○
+settings
+'grace'
+●●●●●● 1mm □
+test_custom_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test custom voice settings'
+VoiceSettings
+●●●●●● 1mm □
+voice_api
+TTSEngine
+●●●●●● 1mm □
+voice_api
+settings
+●●●●●● 1mm □
+VoiceSettings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+settings
+TTSEngine
+settings
+'en-GB-SoniaNeural'
+settings
+'+10%'
+settings
+●●●●●● 3mm □△○
+settings
+'hey grace'
+●●●●●● 2mm △
+TestTTSRequest
+'Test TTSRequest model'
+●●●●●● 1mm □
+test_tts_request_minimal
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test minimal TTS request'
+TTSRequest
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm □△
+●●●●●● 1mm □
+TTSRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'Hello world'
+●●●●●● 3mm □△
+'en-US-AriaNeural'
+●●●●●● 3mm □△
+'+0%'
+●●●●●● 3mm □△
+'+0Hz'
+●●●●●● 1mm □
+test_tts_request_full
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test full TTS request'
+TTSRequest
+●●●●●● 1mm □
+voice_api
+TTSEngine
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm □△
+●●●●●● 1mm □
+TTSRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'Hello world'
+●●●●●● 3mm □△
+'en-GB-RyanNeural'
+●●●●●● 3mm □△
+'+20%'
+●●●●●● 3mm □△
+'-5Hz'
+●●●●●● 2mm △
+TestSTTResponse
+'Test STTResponse model'
+●●●●●● 1mm □
+test_stt_response
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test STT response'
+STTResponse
+●●●●●● 1mm □
+voice_api
+response
+●●●●●● 1mm □
+STTResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+'Hello world'
+response
+0.95
+response
+'en-US'
+response
+1500.0
+●●●●●● 2mm △
+TestNLPProcessedText
+'Test NLPProcessedText model'
+●●●●●● 1mm □
+test_nlp_processed_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test NLP processed text'
+NLPProcessedText
+●●●●●● 1mm □
+voice_api
+processed
+●●●●●● 1mm □
+NLPProcessedText
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+processed
+'um, like, what is the weather?'
+processed
+'what is the weather?'
+processed
+'question'
+processed
+'neutral'
+●●●●●● 2mm △
+TestVoiceManager
+'Test VoiceManager class'
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create VoiceManager instance'
+VoiceManager
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm ○
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_voice_manager_initialization
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test VoiceManager initializes correctly'
+manager
+●●●●●● 2mm □
+manager
+●●●●●● 2mm □
+manager
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_available_voices_structure
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test available voices structure'
+voices
+●●●●●● 1mm □
+manager
+'en-US'
+voices
+'en-GB'
+voices
+'en-AU'
+voices
+us_voices
+●●●●●● 1mm □
+voices
+'en-US'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+us_voices
+●●●●●● 2mm □△
+0
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'id'
+v
+v
+us_voices
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'name'
+v
+v
+us_voices
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'gender'
+v
+v
+us_voices
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestVoiceManagerNLP
+'Test VoiceManager NLP functionality'
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create VoiceManager instance'
+VoiceManager
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm ○
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_preprocess_text_nlp_basic
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test basic NLP preprocessing'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Hello world'
+●●●●●● 2mm □△
+result
+'Hello world'
+result
+'Hello world'
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_preprocess_removes_filler_words
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test filler word removal'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'um, like, what is that?'
+●●●●●● 2mm □△
+'um'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'um, like, what is that?'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □
+test_detect_intent_question
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test question intent detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'What is machine learning?'
+●●●●●● 2mm □△
+result
+'question'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'How does this work?'
+●●●●●● 2mm □△
+result
+'question'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Can you help me?'
+●●●●●● 2mm □△
+result
+'question'
+●●●●●● 1mm □
+test_detect_intent_command
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test command intent detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Create a new file'
+●●●●●● 2mm □△
+result
+'command'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Delete the old data'
+●●●●●● 2mm □△
+result
+'command'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Run the tests'
+●●●●●● 2mm □△
+result
+'command'
+●●●●●● 1mm □
+test_detect_intent_request
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test request intent detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Please help me with this'
+●●●●●● 2mm □△
+result
+'request'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'I need some assistance'
+●●●●●● 2mm □△
+result
+'request'
+●●●●●● 1mm □
+test_detect_intent_greeting
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test greeting intent detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Hello there!'
+●●●●●● 2mm □△
+result
+'greeting'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Hi Grace'
+●●●●●● 2mm □△
+result
+'greeting'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Good morning'
+●●●●●● 2mm □△
+result
+'greeting'
+●●●●●● 1mm □
+test_detect_intent_farewell
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test farewell intent detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Goodbye'
+●●●●●● 2mm □△
+result
+'farewell'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Bye for now'
+●●●●●● 2mm □△
+result
+'farewell'
+●●●●●● 1mm □
+test_detect_intent_statement
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test statement intent detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'The sky is blue'
+●●●●●● 2mm □△
+result
+'statement'
+●●●●●● 1mm □
+test_extract_entities_file_path
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test file path entity extraction'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Open the file test.py'
+●●●●●● 2mm □△
+file_entities
+●●●●●● 1mm □
+e
+e
+result
+e
+'type'
+'file_path'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_entities
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'test.py'
+e
+'value'
+e
+file_entities
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_extract_entities_url
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test URL entity extraction'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Visit https://example.com'
+●●●●●● 2mm □△
+url_entities
+●●●●●● 1mm □
+e
+e
+result
+e
+'type'
+'url'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+url_entities
+●●●●●● 2mm □△
+1
+url_entities
+0
+'value'
+'https://example.com'
+●●●●●● 1mm □
+test_extract_entities_numbers
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test number entity extraction'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Set timeout to 30 seconds'
+●●●●●● 2mm □△
+number_entities
+●●●●●● 1mm □
+e
+e
+result
+e
+'type'
+'number'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+number_entities
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+e
+'value'
+'30'
+e
+number_entities
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_detect_sentiment_positive
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test positive sentiment detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'This is great! I love it!'
+●●●●●● 2mm □△
+result
+'positive'
+●●●●●● 1mm □
+test_detect_sentiment_negative
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test negative sentiment detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'This is terrible, the code has bugs'
+●●●●●● 2mm □△
+result
+'negative'
+●●●●●● 1mm □
+test_detect_sentiment_neutral
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test neutral sentiment detection'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'The function returns a value'
+●●●●●● 2mm □△
+result
+'neutral'
+●●●●●● 2mm △
+TestVoiceManagerTTS
+'Test VoiceManager TTS functionality'
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create VoiceManager instance'
+VoiceManager
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm ○
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test checking TTS availability'
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'edge_tts'
+results
+'pyttsx3'
+results
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+'edge_tts'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+'pyttsx3'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestVoiceSession
+'Test VoiceSession class'
+●●●●●● 1mm □
+mock_websocket
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock WebSocket'
+ws
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ws
+pytest
+'Test starting a voice session'
+VoiceSession
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm △○
+●●●●●● 1mm □
+VoiceSession
+●●●●●● 1mm □△
+mock_websocket
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm □△○
+mock_websocket
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_websocket
+0
+0
+call_args
+'type'
+'session_started'
+pytest
+'Test stopping a voice session'
+VoiceSession
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm △○
+●●●●●● 1mm □
+VoiceSession
+●●●●●● 1mm □△
+mock_websocket
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+mock_websocket
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_args
+●●●●●● 1mm □
+mock_websocket
+0
+0
+call_args
+'type'
+'session_ended'
+pytest
+●●●●●● 1mm □
+test_session_conversation_history
+●●●●●● 1mm □△
+self
+mock_websocket
+●●●●●● 2mm □△
+'Test conversation history tracking'
+VoiceSession
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm △○
+●●●●●● 1mm □
+VoiceSession
+●●●●●● 1mm □△
+mock_websocket
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+'Hello'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+1
+●●●●●● 3mm △○
+0
+'role'
+'user'
+●●●●●● 2mm △
+TestVoiceAPIEndpoints
+'Test Voice API endpoints'
+'Test getting available voices for a locale'
+get_available_voices
+●●●●●● 1mm □
+voice_api
+result
+●●●●●● 1mm □
+get_available_voices
+●●●●●● 1mm □△
+'en-US'
+●●●●●● 2mm □△
+result
+'locale'
+'en-US'
+'voices'
+result
+result
+'total'
+0
+voices
+●●●●●● 1mm □
+result
+'voices'
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'id'
+v
+v
+voices
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+'name'
+v
+v
+voices
+●●●●●● 2mm □△
+pytest
+'Test getting GB voices'
+get_available_voices
+●●●●●● 1mm □
+voice_api
+result
+●●●●●● 1mm □
+get_available_voices
+●●●●●● 1mm □△
+'en-GB'
+●●●●●● 2mm □△
+result
+'locale'
+'en-GB'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'voices'
+●●●●●● 2mm □△
+0
+pytest
+'Test getting voices for unknown locale returns all English'
+get_available_voices
+●●●●●● 1mm □
+voice_api
+result
+●●●●●● 1mm □
+get_available_voices
+●●●●●● 1mm □△
+'fr-FR'
+●●●●●● 2mm □△
+'voices'
+result
+pytest
+'Test getting voice settings'
+get_voice_settings
+●●●●●● 1mm □
+voice_api
+result
+●●●●●● 1mm □
+get_voice_settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'tts_engine'
+result
+'tts_voice'
+result
+'stt_language'
+result
+pytest
+'Test updating voice settings'
+update_voice_settings
+●●●●●● 1mm □
+voice_api
+VoiceSettings
+●●●●●● 1mm □
+voice_api
+TTSEngine
+●●●●●● 1mm □
+voice_api
+new_settings
+●●●●●● 1mm □
+VoiceSettings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+update_voice_settings
+●●●●●● 1mm □△
+new_settings
+●●●●●● 2mm □△
+result
+'status'
+'updated'
+result
+'settings'
+'tts_engine'
+'pyttsx3'
+pytest
+'Test NLP processing endpoint'
+process_text_nlp
+●●●●●● 1mm □
+voice_api
+result
+●●●●●● 1mm □
+process_text_nlp
+●●●●●● 1mm □△
+'What is machine learning?'
+●●●●●● 2mm □△
+'original_text'
+result
+'cleaned_text'
+result
+'intent'
+result
+result
+'intent'
+'question'
+pytest
+●●●●●● 2mm △
+TestVoiceAPIIntegration
+'Integration tests for Voice API'
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create VoiceManager instance'
+VoiceManager
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm ○
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_full_nlp_pipeline
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test complete NLP processing pipeline'
+text
+●●●●●● 1mm □
+'um, like, can you help me open the file test.py at https://example.com'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+result
+''
+result
+text
+result
+'question'
+'request'
+'statement'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+'Test getting voice system status'
+get_voice_status
+●●●●●● 1mm □
+voice_api
+status
+●●●●●● 1mm □
+get_voice_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'status'
+'online'
+'tts_engines'
+status
+'stt_engines'
+status
+'current_settings'
+status
+'timestamp'
+status
+pytest
+●●●●●● 2mm △
+TestVoiceAPIErrorHandling
+'Test error handling in Voice API'
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create VoiceManager instance'
+VoiceManager
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm ○
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_nlp_empty_text
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test NLP with empty text'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+result
+''
+result
+''
+●●●●●● 1mm □
+test_nlp_whitespace_only
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test NLP with whitespace only'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'   '
+●●●●●● 2mm □△
+result
+''
+●●●●●● 1mm □
+test_nlp_special_characters
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test NLP with special characters'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'!@#$%^&*()'
+●●●●●● 2mm □△
+result
+'!@#$%^&*()'
+●●●●●● 1mm □
+test_nlp_very_long_text
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test NLP with very long text'
+long_text
+●●●●●● 1mm □
+'hello '
+●●●●●● 2mm □△
+1000
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+long_text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_nlp_unicode_text
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test NLP with unicode characters'
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'Hello World!'
+●●●●●● 2mm □△
+result
+'Hello World!'
+●●●●●● 2mm △
+TestVoiceQuality
+'Test voice quality related functionality'
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create VoiceManager instance'
+VoiceManager
+●●●●●● 1mm □
+voice_api
+●●●●●● 3mm ○
+VoiceManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_available_voice_count
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test sufficient voices are available'
+total_voices
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+voices
+●●●●●● 2mm □△
+voices
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_voices
+15
+●●●●●● 1mm □
+test_voice_genders_balanced
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test voice genders are somewhat balanced'
+us_voices
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'en-US'
+●●●●●● 2mm □△
+male_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+v
+us_voices
+v
+'gender'
+'Male'
+●●●●●● 2mm □△
+female_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+v
+us_voices
+v
+'gender'
+'Female'
+●●●●●● 2mm □△
+male_count
+0
+female_count
+0
+●●●●●● 1mm □
+test_default_voice_exists
+●●●●●● 1mm □△
+self
+manager
+●●●●●● 2mm □△
+'Test default voice is in available voices'
+default_voice
+●●●●●● 1mm □
+manager
+all_voice_ids
+●●●●●● 1mm □
+voices
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_voice_ids
+●●●●●● 1mm □△
+v
+'id'
+v
+voices
+●●●●●● 2mm □△
+default_voice
+all_voice_ids
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

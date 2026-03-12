@@ -10,7 +10,7 @@ SQLite anti-lock strategy:
 """
 
 from sqlalchemy import create_engine, Engine, event, text
-from sqlalchemy.pool import QueuePool, NullPool, StaticPool
+from sqlalchemy.pool import StaticPool, QueuePool, NullPool
 from typing import Optional
 import logging
 
@@ -116,7 +116,7 @@ class DatabaseConnection:
             )
 
             @event.listens_for(engine, "connect")
-            def _set_sqlite_pragmas(dbapi_conn, connection_record):
+            def set_sqlite_pragma(dbapi_conn, _connection_record):
                 cursor = dbapi_conn.cursor()
                 cursor.execute("PRAGMA journal_mode=WAL")
                 cursor.execute(f"PRAGMA busy_timeout={SQLITE_BUSY_TIMEOUT_MS}")

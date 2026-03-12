@@ -1,0 +1,599 @@
+## reingest_missing_files.py
+'\nRe-ingest missing files from ai research folder.\nThese files were uploaded but failed to ingest before the 5GB limit update.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+extract_file_text
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 1mm □
+get_missing_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Identify files that are uploaded but not ingested.'
+metadata_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'.metadata.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata_path
+'r'
+●●●●●● 2mm □△
+f
+metadata
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+'data/grace.db'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+"\n        SELECT file_path\n        FROM documents\n        WHERE file_path LIKE '%ai research%'\n    "
+●●●●●● 2mm □△
+ingested_paths
+●●●●●● 1mm □
+row
+0
+row
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingested_files
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+ingested_paths
+●●●●●● 2mm □△
+missing_files
+●●●●●● 1mm □
+key
+info
+metadata
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'ai research'
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filename
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'filename'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+filename
+filename
+ingested_files
+file_path
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'files:'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\\\'
+os
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+size_mb
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'size'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+missing_files
+●●●●●● 1mm □△
+'filename'
+'path'
+'full_path'
+'size_mb'
+filename
+file_path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+size_mb
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+missing_files
+●●●●●● 2mm □△
+TextIngestionService
+'Ingest a single file.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nProcessing: '
+file_info
+'filename'
+' ('
+file_info
+'size_mb'
+'.2f'
+' MB)'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+extract_file_text
+●●●●●● 1mm □△
+file_info
+'full_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+text
+error
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+error
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [ERROR] Extraction error: '
+error
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □
+text
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+text
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] No text extracted from '
+file_info
+'filename'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Extracted '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+file_info
+'path'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] Document already exists in database, skipping'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+doc
+●●●●●● 1mm □
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Created document record (ID: '
+doc
+')'
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Ingested into vector database'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [ERROR] Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [ERROR] Failed to process '
+file_info
+'filename'
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Main re-ingestion process.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Re-ingesting Missing Files from AI Research Folder'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1/4] Identifying missing files...'
+●●●●●● 2mm □△
+missing_files
+●●●●●● 1mm □
+get_missing_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+missing_files
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] No missing files found - all files are already ingested!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_files
+●●●●●● 2mm □△
+' missing files'
+●●●●●● 2mm □△
+missing_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2/4] Missing files summary:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total files: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_files
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total size: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+'size_mb'
+f
+missing_files
+●●●●●● 2mm □△
+'.2f'
+' MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Smallest: '
+missing_files
+0
+'filename'
+' ('
+missing_files
+0
+'size_mb'
+'.2f'
+' MB)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Largest: '
+missing_files
+1
+'filename'
+' ('
+missing_files
+1
+'size_mb'
+'.2f'
+' MB)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3/5] Initializing database...'
+●●●●●● 2mm □△
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Database initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4/5] Initializing ingestion service...'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Ingestion service ready'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[5/5] Processing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_files
+●●●●●● 2mm □△
+' files...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+success_count
+●●●●●● 1mm □
+0
+failed_files
+●●●●●● 1mm □
+i
+file_info
+●●●●●● 2mm □
+●●●●●● 1mm □△
+missing_files
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n['
+i
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_files
+●●●●●● 2mm □△
+'] '
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+ingest_file
+●●●●●● 1mm □△
+file_info
+ingestion_service
+session_factory
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+success_count
+1
+●●●●●● 3mm □
+failed_files
+●●●●●● 1mm □△
+file_info
+'filename'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Re-ingestion Complete'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Successfully ingested: '
+success_count
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_files
+●●●●●● 2mm □△
+' files'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed_files
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARN] Failed files ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed_files
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+filename
+failed_files
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+filename
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SUCCESS] All files successfully ingested!'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,142 @@
+## remove_ref.py
+●●●●●● 2mm □△○
+os
+file1
+●●●●●● 1mm □
+'c:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\llm_orchestrator\\hallucination_guard.py'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file1
+'r'
+●●●●●● 2mm □△
+f
+c1
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c1
+●●●●●● 1mm □
+c1
+●●●●●● 1mm □△
+'from confidence_scorer.confidence_scorer import ConfidenceScorer\nfrom confidence_scorer.contradiction_detector import SemanticContradictionDetector'
+''
+●●●●●● 2mm □△
+c1
+●●●●●● 1mm □
+c1
+●●●●●● 1mm □△
+'confidence_scorer: Optional[ConfidenceScorer] = None'
+'confidence_scorer: Optional[Any] = None'
+●●●●●● 2mm □△
+c1
+●●●●●● 1mm □
+c1
+●●●●●● 1mm □△
+'contradiction_detector: Optional[SemanticContradictionDetector] = None'
+'contradiction_detector: Optional[Any] = None'
+●●●●●● 2mm □△
+c1
+●●●●●● 1mm □
+c1
+●●●●●● 1mm □△
+'self.contradiction_detector = contradiction_detector or SemanticContradictionDetector()'
+'self.contradiction_detector = contradiction_detector'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file1
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+c1
+●●●●●● 2mm □△
+file2
+●●●●●● 1mm □
+'c:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\llm_orchestrator\\llm_orchestrator.py'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file2
+'r'
+●●●●●● 2mm □△
+f
+c2
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c2
+●●●●●● 1mm □
+c2
+●●●●●● 1mm □△
+'from confidence_scorer.confidence_scorer import ConfidenceScorer\n'
+''
+●●●●●● 2mm □△
+c2
+●●●●●● 1mm □
+c2
+●●●●●● 1mm □△
+"            if hasattr(self, 'confidence_scorer') and hasattr(self.confidence_scorer, 'calculate_confidence_score'):\n"
+'            if False:\n'
+●●●●●● 2mm □△
+c2
+●●●●●● 1mm □
+c2
+●●●●●● 1mm □△
+'self.confidence_scorer = ConfidenceScorer()'
+'self.confidence_scorer = None'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file2
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+c2
+●●●●●● 2mm □△
+file3
+●●●●●● 1mm □
+'c:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2\\backend\\ingestion\\service.py'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file3
+'r'
+●●●●●● 2mm □△
+f
+c3
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c3
+●●●●●● 1mm □
+c3
+●●●●●● 1mm □△
+'from confidence_scorer import ConfidenceScorer\n'
+''
+●●●●●● 2mm □△
+c3
+●●●●●● 1mm □
+c3
+●●●●●● 1mm □△
+'self.confidence_scorer = ConfidenceScorer()'
+'self.confidence_scorer = None'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file3
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+c3
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Imports fixed.'
+●●●●●● 2mm □△

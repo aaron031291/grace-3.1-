@@ -300,9 +300,9 @@ class MultiLLMClient:
             ],
             priority=8
         ),
-        "qwen3.5-coder-32b": LLMModel(
-            name="Qwen 3.5 Coder 32B",
-            model_id="qwen3.5-coder:32b",
+        "qwen2.5-coder-32b": LLMModel(
+            name="Qwen 2.5 Coder 32B",
+            model_id="qwen2.5-coder:32b-instruct",
             capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
             context_window=32768,
             recommended_tasks=[
@@ -312,9 +312,9 @@ class MultiLLMClient:
             ],
             priority=9
         ),
-        "qwen3.5-coder-7b": LLMModel(
-            name="Qwen 3.5 Coder 7B",
-            model_id="qwen3.5-coder:7b",
+        "qwen2.5-coder-7b": LLMModel(
+            name="Qwen 2.5 Coder 7B",
+            model_id="qwen2.5-coder:7b-instruct",
             capabilities=[ModelCapability.CODE],
             context_window=32768,
             recommended_tasks=[
@@ -345,9 +345,9 @@ class MultiLLMClient:
             ],
             priority=7
         ),
-        "qwen3.5-72b": LLMModel(
-            name="Qwen 3.5 72B",
-            model_id="qwen3.5:72b",
+        "qwen2.5-72b": LLMModel(
+            name="Qwen 2.5 72B",
+            model_id="qwen2.5:72b-instruct",
             capabilities=[ModelCapability.REASONING, ModelCapability.GENERAL],
             context_window=32768,
             recommended_tasks=[
@@ -357,9 +357,9 @@ class MultiLLMClient:
             ],
             priority=9
         ),
-        "qwen3.5-32b": LLMModel(
-            name="Qwen 3.5 32B",
-            model_id="qwen3.5:32b",
+        "qwen3-32b": LLMModel(
+            name="Qwen 3 32B",
+            model_id="qwen3:32b",
             capabilities=[ModelCapability.REASONING, ModelCapability.CODE, ModelCapability.GENERAL],
             context_window=32768,
             recommended_tasks=[
@@ -370,9 +370,9 @@ class MultiLLMClient:
             ],
             priority=10
         ),
-        "qwen3.5-14b": LLMModel(
-            name="Qwen 3.5 14B",
-            model_id="qwen3.5:14b",
+        "qwen3-14b": LLMModel(
+            name="Qwen 3 14B",
+            model_id="qwen3:14b",
             capabilities=[ModelCapability.REASONING, ModelCapability.SPEED, ModelCapability.GENERAL],
             context_window=32768,
             recommended_tasks=[

@@ -1,0 +1,1023 @@
+## initializer.py
+'\nEnvironment initializer module that handles:\n- Virtual environment detection and creation\n- Dependency installation with error recovery\n- Ollama service detection and startup\n- Model availability checking and pulling\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+socket
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+huggingface_hub
+●●●●●● 2mm □△○
+snapshot_download
+ImportError
+snapshot_download
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △
+EnvironmentInitializer
+'Handles environment setup and dependency installation.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'venv'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'requirements.txt'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'requirements.txt.bak'
+●●●●●● 1mm □
+detect_or_create_venv
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Detect if virtual environment exists, create one if not.\n        \n        Returns:\n            bool: True if venv exists or was created successfully, False otherwise\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Virtual environment found at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Virtual environment not found. Creating at '
+●●●●●● 3mm △
+'...'
+●●●●●● 2mm □△
+subprocess
+●●●●●● 1mm □△
+sys
+'-m'
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Virtual environment created successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+subprocess
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to create virtual environment: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_pip_executable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get the pip executable path for the virtual environment.'
+●●●●●● 2mm □
+sys
+'win32'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'Scripts'
+●●●●●● 3mm □△
+'pip'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'bin'
+●●●●●● 3mm □△
+'pip'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+install_requirements
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Install requirements from requirements.txt.\n        \n        Returns:\n            bool: True if installation successful, False otherwise\n        '
+pip_exe
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+pip_exe
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] pip executable not found in virtual environment'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'📦 Installing requirements...'
+●●●●●● 2mm □△
+subprocess
+●●●●●● 1mm □△
+pip_exe
+'install'
+'-r'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Requirements installed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+subprocess
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to install requirements: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+cleanup_version_pins
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Remove version pins from requirements.txt (e.g., ==, >=, <=).\n        Creates a backup first.\n        \n        Returns:\n            bool: True if successful, False otherwise\n        '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+original_content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+original_content
+●●●●●● 2mm □△
+cleaned_lines
+●●●●●● 1mm □
+line
+original_content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+line
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+cleaned_lines
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 3mm □
+cleaned_package
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[=!<>~]'
+line
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+cleaned_package
+cleaned_lines
+●●●●●● 1mm □△
+cleaned_package
+●●●●●● 2mm □△
+cleaned_content
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+cleaned_lines
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+cleaned_content
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Cleaned version pins from requirements.txt'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to clean version pins: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+restore_requirements
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Restore requirements.txt from backup.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Restored original requirements.txt'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to restore requirements: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+uninstall_requirements
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Uninstall all packages from requirements.txt.\n        \n        Returns:\n            bool: True if successful, False otherwise\n        '
+pip_exe
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+pip_exe
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🗑 Uninstalling requirements...'
+●●●●●● 2mm □△
+subprocess
+●●●●●● 1mm □△
+pip_exe
+'uninstall'
+'-r'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'-y'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Requirements uninstalled successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+subprocess
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Warning during uninstall: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+install_dependencies
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Install dependencies with error recovery.\n        If installation fails, attempt recovery by cleaning version pins.\n        \n        Returns:\n            bool: True if installation successful, False otherwise\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARN] Initial installation failed. Attempting recovery...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🔄 Retrying installation with cleaned requirements...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Installation successful after cleanup'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Installation failed even after recovery attempt'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+check_ollama_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if Ollama service is running.\n        \n        Returns:\n            bool: True if Ollama is running, False otherwise\n        '
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'ollama'
+'list'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+0
+FileNotFoundError
+subprocess
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+ollama_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if ollama command is available in PATH.'
+●●●●●● 3mm ○
+shutil
+●●●●●● 1mm □△
+'ollama'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+start_ollama
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Attempt to start Ollama serve.\n        \n        Returns:\n            bool: True if started successfully, False otherwise\n        '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' Starting Ollama serve...'
+●●●●●● 2mm □△
+subprocess
+●●●●●● 1mm □△
+'ollama'
+'serve'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Ollama serve started'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+FileNotFoundError
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to start Ollama: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+setup_ollama
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check and setup Ollama service.\n        \n        Returns:\n            bool: True if Ollama is running or was started, False otherwise\n        '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n🔍 Checking Ollama service...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Ollama is not installed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📥 Please download and install Ollama from: https://ollama.ai'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Ollama is already running'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Ollama service started successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to start Ollama service'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Warning: Failed to ensure default LLM model'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Warning: Failed to ensure embedding model'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+ensure_llm_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if the default LLM model is available, pull it if not.\n        \n        Returns:\n            bool: True if model is available or was pulled successfully\n        '
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+model_name
+●●●●●● 1mm □
+settings
+ImportError
+AttributeError
+model_name
+●●●●●● 1mm □
+'mistral:7b'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n🔍 Checking for default LLM model: '
+model_name
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'ollama'
+'list'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+0
+model_name
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"[OK] Model '"
+model_name
+"' is already available"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"📥 Pulling model '"
+model_name
+"'. This may take a while..."
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'ollama'
+'pull'
+model_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"[OK] Model '"
+model_name
+"' pulled successfully"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"[FAIL] Failed to pull model '"
+model_name
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm △
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Error: '
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"[FAIL] Timeout while pulling model '"
+model_name
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Error checking/pulling LLM model: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+ensure_embedding_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if embedding model exists locally, download from HuggingFace if not.\n        \n        Returns:\n            bool: True if model exists or was downloaded successfully\n        '
+embedding_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+'qwen_4b'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n🔍 Checking embedding model at '
+embedding_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embedding_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_dir
+●●●●●● 3mm □△
+'config.json'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Embedding model already exists'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+embedding_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'📥 Downloading Qwen3-4B embedding model from HuggingFace...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   This may take a few minutes on first run...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snapshot_download
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] huggingface-hub not available. Please install it with: pip install huggingface-hub'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+model_repo
+●●●●●● 1mm □
+'Qwen/Qwen3-Embedding-4B'
+snapshot_download
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Embedding model downloaded to '
+embedding_dir
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to download embedding model: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  You can manually download from: https://huggingface.co/'
+model_repo
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+check_qdrant_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if Qdrant service is running on port 6333.\n        \n        Returns:\n            bool: True if Qdrant is running, False otherwise\n        '
+sock
+●●●●●● 1mm □
+socket
+●●●●●● 1mm □△
+socket
+socket
+●●●●●● 2mm □△
+sock
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+sock
+●●●●●● 1mm □△
+'localhost'
+6333
+●●●●●● 2mm □△
+sock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+0
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+docker_engine_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if Docker engine is running.\n        \n        Returns:\n            bool: True if Docker is running, False otherwise\n        '
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'docker'
+'ps'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+0
+FileNotFoundError
+subprocess
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+docker_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if docker command is available in PATH.'
+●●●●●● 3mm ○
+shutil
+●●●●●● 1mm □△
+'docker'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+start_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Start Qdrant container using Docker.\n        \n        Returns:\n            bool: True if started successfully, False otherwise\n        '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' Starting Qdrant container...'
+●●●●●● 2mm □△
+subprocess
+●●●●●● 1mm □△
+'docker'
+'run'
+'-d'
+'-p'
+'6333:6333'
+'-v'
+'qdrant_storage:/qdrant/storage'
+'qdrant/qdrant'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Qdrant container started'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+subprocess
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to start Qdrant container: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Error starting Qdrant: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+setup_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check and setup Qdrant vector database service.\n        \n        Returns:\n            bool: True if Qdrant is running or was started, False otherwise\n        '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n🔍 Checking Qdrant service...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Qdrant is already running on port 6333'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Qdrant is not running on port 6333'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Docker is not installed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📥 Please download and install Docker from: https://www.docker.com/products/docker-desktop'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Docker engine is not running'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📥 Please start Docker Desktop or Docker daemon before running this program'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Qdrant container started successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Failed to start Qdrant container'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Run full environment initialization.\n        \n        Returns:\n            bool: True if all steps successful, False otherwise\n        '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace Environment Initialization'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARN] Warning: Ollama setup failed, but proceeding...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Error: Qdrant setup failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Environment initialization complete!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point for environment initialization.'
+initializer
+●●●●●● 1mm □
+EnvironmentInitializer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+initializer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

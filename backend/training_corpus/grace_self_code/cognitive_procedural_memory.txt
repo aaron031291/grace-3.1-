@@ -1,0 +1,911 @@
+## procedural_memory.py
+'\nProcedural Memory - Learned Skills and Procedures\n\nStores HOW to do things, not just WHAT is true.\nThis is the difference between knowing and doing.\n\nOPTIMIZED: Now supports semantic similarity for procedure finding\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Float
+Integer
+Text
+JSON
+ForeignKey
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+Procedure
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Learned procedure or skill.\n\n    Example: "How to fix a broken Dockerfile" (procedure)\n    vs "What is a Dockerfile" (semantic knowledge)\n    '
+__tablename__
+●●●●●● 1mm □
+'procedures'
+__table_args__
+●●●●●● 1mm □
+'extend_existing'
+●●●●●● 3mm □△○
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 2mm □△
+goal
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+procedure_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 2mm □△
+steps
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+preconditions
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+success_rate
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+usage_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+supporting_examples
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+learned_from_episode_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+procedure_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProceduralRepository
+'\n    Manages procedural memory - learned skills and procedures.\n\n    OPTIMIZED: Now supports semantic similarity for procedure finding\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+embedder
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedder
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Lazy load embedder for semantic similarity'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Semantic similarity enabled'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Embedder not available, using text matching: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+create_procedure
+●●●●●● 1mm □△
+self
+goal
+action_sequence
+preconditions
+supporting_examples
+procedure_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'general'
+'\n        Create new procedure from successful examples.\n        '
+name
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+procedure_type
+●●●●●● 2mm □△
+procedure
+●●●●●● 1mm □
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+procedure
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedure
+Procedure
+●●●●●● 1mm □
+_generate_procedure_name
+●●●●●● 1mm □△
+self
+goal
+proc_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate unique procedure name.'
+clean_goal
+●●●●●● 1mm □
+goal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+50
+timestamp
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+proc_type
+'_'
+clean_goal
+'_'
+timestamp
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_procedure
+●●●●●● 1mm □△
+self
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Find existing procedure for goal and context.\n\n        OPTIMIZED: Uses semantic similarity when embedder is available,\n        falls back to text CONTAINS when not.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Semantic search failed, using fallback: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Procedure
+●●●●●● 1mm □
+_find_procedure_semantic
+●●●●●● 1mm □△
+self
+goal
+context
+min_similarity
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+0.6
+'\n        Find procedure using semantic similarity (embedding-based).\n        '
+goal_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+●●●●●● 2mm □△
+0
+goal_embedding
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+goal_embedding
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedures
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □
+proc
+procedures
+proc_embedding
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+proc
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal_embedding
+proc_embedding
+●●●●●● 2mm □△
+precond_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+proc
+●●●●●● 2mm □△
+combined_score
+●●●●●● 1mm □
+similarity
+●●●●●● 2mm □△
+0.7
+●●●●●● 3mm ○
+precond_score
+●●●●●● 2mm □△
+0.3
+●●●●●● 2mm □
+similarity
+min_similarity
+scored
+●●●●●● 1mm □△
+combined_score
+proc
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+scored
+●●●●●● 3mm ○
+●●●●●● 2mm □
+scored
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+best_score
+best_proc
+●●●●●● 1mm □
+scored
+0
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Semantic match found: '
+best_proc
+' (score='
+best_score
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+best_proc
+●●●●●● 2mm □○
+Procedure
+●●●●●● 1mm □
+_find_procedure_text
+●●●●●● 1mm □△
+self
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Find procedure using text CONTAINS (fallback).\n        '
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+goal
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedures
+●●●●●● 3mm ○
+●●●●●● 2mm □
+best_match
+●●●●●● 1mm □
+●●●●●● 2mm □
+best_score
+●●●●●● 1mm □
+0.0
+proc
+procedures
+score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+proc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+score
+best_score
+best_score
+●●●●●● 1mm □
+score
+best_match
+●●●●●● 1mm □
+proc
+●●●●●● 3mm ○
+best_score
+0.5
+best_match
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Procedure
+●●●●●● 1mm □
+_cosine_similarity
+●●●●●● 1mm □△
+self
+a
+b
+●●●●●● 2mm □△
+np
+np
+'Calculate cosine similarity between two vectors.'
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_match_preconditions
+●●●●●● 1mm □△
+self
+context
+preconditions
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Calculate how well context matches preconditions.'
+●●●●●● 2mm □
+preconditions
+●●●●●● 3mm ○
+0.5
+matching_keys
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+preconditions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matching_keys
+●●●●●● 3mm ○
+0.0
+matches
+●●●●●● 1mm □
+0
+key
+matching_keys
+●●●●●● 2mm □
+context
+key
+preconditions
+key
+matches
+1
+●●●●●● 3mm ○
+matches
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+matching_keys
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+generate_procedure_embedding
+●●●●●● 1mm □△
+self
+procedure
+●●●●●● 2mm □△
+Procedure
+'\n        Generate and store embedding for a procedure.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+text
+●●●●●● 1mm □
+procedure
+': '
+procedure
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+0
+procedure
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+embedding
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embedding
+Exception
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Error generating embedding: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+index_all_procedures
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"\n        Generate embeddings for all procedures that don't have them.\n        Returns count of procedures indexed.\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Cannot index - no embedder available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedures
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] All procedures already indexed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+texts
+●●●●●● 1mm □
+p
+': '
+p
+p
+procedures
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+proc
+emb
+●●●●●● 3mm □
+●●●●●● 1mm □△
+procedures
+embeddings
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+emb
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[PROCEDURAL] Indexed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+' procedures'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+suggest_procedure
+●●●●●● 1mm □△
+self
+goal
+context
+min_success_rate
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+0.6
+'\n        Suggest procedure for current situation.\n        '
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedure
+procedure
+min_success_rate
+●●●●●● 3mm ○
+procedure
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Procedure
+●●●●●● 1mm □
+update_success_rate
+●●●●●● 1mm □△
+self
+procedure_id
+succeeded
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'\n        Update success rate based on outcome.\n        '
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+procedure_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedure
+●●●●●● 3mm ○
+procedure
+1
+●●●●●● 2mm □
+succeeded
+procedure
+1
+procedure
+●●●●●● 1mm □
+procedure
+●●●●●● 3mm □△
+procedure
+●●●●●● 2mm □
+procedure
+5
+recent_performance
+●●●●●● 1mm □
+procedure
+procedure
+●●●●●● 1mm □
+recent_performance
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_procedure_evidence
+●●●●●● 1mm □△
+self
+procedure_id
+new_example
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+'\n        Add new evidence to existing procedure.\n        '
+procedure
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+procedure_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedure
+●●●●●● 3mm ○
+●●●●●● 2mm □
+procedure
+●●●●●● 2mm □
+procedure
+●●●●●● 1mm □
+procedure
+●●●●●● 1mm □△
+new_example
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+procedure_id
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □
+classify_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Classify query type for routing.'
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+word
+query_lower
+word
+'how'
+'fix'
+'configure'
+'setup'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'how_to'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+word
+query_lower
+word
+'what'
+'define'
+'explain'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'definition'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+word
+query_lower
+word
+'why'
+'reason'
+'cause'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'explanation'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+word
+query_lower
+word
+'code'
+'function'
+'class'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code_search'
+●●●●●● 3mm ○
+'general'
+●●●●●● 1mm ○

@@ -1,0 +1,929 @@
+## memory_mesh_learner.py
+'\nMemory Mesh Learning Feedback System\n\nMemory mesh analyzes high-trust patterns and proactively suggests\nwhat Grace should learn next based on:\n1. Knowledge gaps identified from past failures\n2. High-value topics with insufficient practice\n3. Related concepts that appear frequently together\n4. Success patterns that should be reinforced\n\nThis creates a feedback loop: Memory → Learning → Memory\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Tuple
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+and_
+or_
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+TrustScorer
+LearningExample
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MemoryMeshLearner
+'\n    Analyzes memory mesh to determine what Grace should learn proactively.\n\n    Analyzes:\n    - Knowledge gaps (low operational confidence)\n    - High-value under-practiced topics\n    - Frequently co-occurring concepts\n    - Success/failure patterns\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+TrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+identify_knowledge_gaps
+●●●●●● 1mm □△
+self
+min_data_confidence
+max_operational_confidence
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+0.7
+0.4
+'\n        Identify knowledge gaps from memory mesh.\n\n        A gap exists when:\n        - Grace has read about a topic (high data_confidence)\n        - But cannot apply it (low operational_confidence)\n\n        Returns topics Grace should practice more.\n        '
+gaps
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+json
+all_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gap_examples
+●●●●●● 1mm □
+example
+all_examples
+meta
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+example
+'example_metadata'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+example
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+example
+Exception
+dc
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+meta
+●●●●●● 1mm □△
+'data_confidence'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+oc
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+meta
+●●●●●● 1mm □△
+'operational_confidence'
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dc
+min_data_confidence
+oc
+max_operational_confidence
+gap_examples
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gap_examples
+●●●●●● 2mm □△
+20
+example
+gap_examples
+ctx
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+example
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □
+topic
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'topic'
+'Unknown'
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+example
+'example_metadata'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+example
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+example
+Exception
+dc
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+meta
+●●●●●● 1mm □△
+'data_confidence'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+oc
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+meta
+●●●●●● 1mm □△
+'operational_confidence'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gaps
+●●●●●● 1mm □△
+'topic'
+'data_confidence'
+'operational_confidence'
+'gap_size'
+'recommendation'
+'reason'
+'learning_example_id'
+topic
+dc
+oc
+dc
+●●●●●● 1mm □△
+oc
+'practice'
+"Grace knows '"
+topic
+"' theoretically but needs hands-on practice"
+example
+●●●●●● 2mm □△
+gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] Identified '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+●●●●●● 2mm □△
+' knowledge gaps'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] FAILED identifying knowledge gaps (fix LearningExample/example_metadata): %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+gaps
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+identify_high_value_topics
+●●●●●● 1mm □△
+self
+min_trust_score
+min_occurrences
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+0.8
+5
+'\n        Identify high-value topics worth reinforcing.\n\n        A topic is high-value when:\n        - High trust score (proven reliable)\n        - Appears frequently (important)\n        - Could benefit from additional practice\n\n        Returns topics Grace should reinforce through practice.\n        '
+high_value_topics
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+json
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+min_trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic_counts
+●●●●●● 1mm □
+topic_trust_sum
+●●●●●● 1mm □
+ex
+examples
+ctx
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ex
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ex
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ex
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+ex
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □
+topic
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'topic'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+topic
+topic_counts
+topic
+●●●●●● 1mm □
+topic_counts
+●●●●●● 1mm □△
+topic
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+topic_trust_sum
+topic
+●●●●●● 1mm □
+topic_trust_sum
+●●●●●● 1mm □△
+topic
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ex
+0
+topic
+count
+topic_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+min_occurrences
+avg_trust
+●●●●●● 1mm □
+topic_trust_sum
+topic
+●●●●●● 3mm □△
+count
+●●●●●● 2mm □
+avg_trust
+min_trust_score
+high_value_topics
+●●●●●● 1mm □△
+'topic'
+'occurrences'
+'avg_trust_score'
+'recommendation'
+'reason'
+'priority'
+topic
+count
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+avg_trust
+●●●●●● 2mm □△
+'reinforce'
+'High-value topic (trust='
+avg_trust
+'.2f'
+') that appears '
+count
+' times'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+count
+●●●●●● 2mm □△
+avg_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+high_value_topics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] Identified '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+high_value_topics
+●●●●●● 2mm □△
+' high-value topics'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] FAILED identifying high-value topics: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+high_value_topics
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+identify_related_topic_clusters
+●●●●●● 1mm □△
+self
+min_correlation
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.6
+'\n        Identify topics that frequently appear together.\n        '
+clusters
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_parse
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+all_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_topics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+example
+all_examples
+meta
+●●●●●● 1mm □
+_parse
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+example
+'example_metadata'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+example
+'metadata'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+_parse
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+meta
+●●●●●● 1mm □△
+'file_path'
+'unknown'
+●●●●●● 2mm □△
+topic
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'topic'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Unknown'
+●●●●●● 2mm □
+file_path
+file_topics
+file_topics
+file_path
+●●●●●● 1mm □
+●●●●●● 2mm □
+topic
+file_topics
+file_path
+file_topics
+file_path
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+topic_pairs
+●●●●●● 1mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+topics
+file_topics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+topic1
+●●●●●● 2mm □
+●●●●●● 1mm □△
+topics
+●●●●●● 2mm □△
+topic2
+topics
+i
+●●●●●● 3mm ○
+1
+pair
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+topic1
+topic2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+topic_pairs
+pair
+●●●●●● 1mm □
+topic_pairs
+●●●●●● 1mm □△
+pair
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+total_files
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_topics
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+topic1
+topic2
+count
+topic_pairs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+correlation
+●●●●●● 1mm □
+count
+●●●●●● 3mm □△
+total_files
+●●●●●● 2mm □
+correlation
+min_correlation
+clusters
+●●●●●● 1mm □△
+'topic1'
+'topic2'
+'co_occurrences'
+'correlation'
+'recommendation'
+'reason'
+topic1
+topic2
+count
+correlation
+'study_together'
+"Topics '"
+topic1
+"' and '"
+topic2
+"' appear together "
+count
+' times (correlation='
+correlation
+'.2f'
+')'
+●●●●●● 2mm □△
+clusters
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] Identified %d topic clusters'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+clusters
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error identifying topic clusters: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+clusters
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+analyze_failure_patterns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Analyze failures to identify what needs re-study.\n        '
+failure_patterns
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_parse
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+failing_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+or_
+●●●●●● 1mm □△
+LearningExample
+1
+LearningExample
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+failing_examples
+ctx
+●●●●●● 1mm □
+_parse
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+topic
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'topic'
+'Unknown'
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+_parse
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+example
+'example_metadata'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+example
+'metadata'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+failure_patterns
+●●●●●● 1mm □△
+'topic'
+'times_validated'
+'times_invalidated'
+'trust_score'
+'recommendation'
+'reason'
+'learning_example_id'
+'urgency'
+topic
+example
+example
+example
+'restudy'
+"Topic '"
+topic
+"' has "
+example
+' failures and only '
+example
+' successes'
+example
+example
+2
+'high'
+'medium'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] Identified %d failure patterns'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failure_patterns
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] Error analyzing failure patterns: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failure_patterns
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_learning_suggestions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get comprehensive learning suggestions from memory mesh.\n\n        Combines all analysis types:\n        - Knowledge gaps\n        - High-value topics\n        - Related clusters\n        - Failure patterns\n\n        Returns prioritized list of what Grace should learn next.\n        '
+suggestions
+●●●●●● 1mm □
+'timestamp'
+'knowledge_gaps'
+'high_value_topics'
+'related_clusters'
+'failure_patterns'
+'top_priorities'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+'knowledge_gaps'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+'high_value_topics'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+'related_clusters'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+'failure_patterns'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+priorities
+●●●●●● 1mm □
+pattern
+suggestions
+'failure_patterns'
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+'urgency'
+●●●●●● 2mm □△
+'high'
+priorities
+●●●●●● 1mm □△
+'topic'
+'action'
+'priority'
+'reason'
+pattern
+'topic'
+'restudy'
+1
+pattern
+'reason'
+●●●●●● 2mm □△
+gap
+suggestions
+'knowledge_gaps'
+5
+priorities
+●●●●●● 1mm □△
+'topic'
+'action'
+'priority'
+'reason'
+gap
+'topic'
+'practice'
+2
+gap
+'reason'
+●●●●●● 2mm □△
+topic_info
+suggestions
+'high_value_topics'
+3
+priorities
+●●●●●● 1mm □△
+'topic'
+'action'
+'priority'
+'reason'
+topic_info
+'topic'
+'reinforce'
+3
+topic_info
+'reason'
+●●●●●● 2mm □△
+suggestions
+'top_priorities'
+●●●●●● 1mm □
+priorities
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-LEARNER] Generated learning suggestions: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+priorities
+●●●●●● 2mm □△
+' top priorities'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting learning suggestions: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+suggestions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_memory_mesh_learner
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Get memory mesh learner instance.'
+●●●●●● 3mm ○
+MemoryMeshLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MemoryMeshLearner

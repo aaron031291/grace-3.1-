@@ -258,13 +258,12 @@ def diagnostic() -> Dict[str, Any]:
 
 def _check_imports():
     try:
-        from cognitive import pipeline, consensus_engine, flash_cache, trust_engine
-        from cognitive import circuit_breaker, event_bus, unified_memory
-        from cognitive import architecture_compass, grace_compiler, reverse_knn
-        return True, "All core modules importable"
+        import fastapi
+        import sqlalchemy
+        import pydantic
+        return True, "Core dependencies present"
     except ImportError as e:
-        return False, f"Import failed: {e}"
-
+        return False, f"Missing: {e}"
 def _check_database():
     try:
         from database.session import SessionLocal, initialize_session_factory

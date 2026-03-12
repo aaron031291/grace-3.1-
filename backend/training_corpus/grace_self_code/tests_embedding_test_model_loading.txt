@@ -1,0 +1,331 @@
+## test_model_loading.py
+'\nTests for embedding model VRAM usage monitoring.\n'
+●●●●●● 2mm □△○
+unittest
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+gc
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 2mm △
+TestVRAMUsage
+●●●●●● 3mm □△
+unittest
+'Test cases for monitoring VRAM usage during model operations.'
+●●●●●● 1mm □
+setUp
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Set up test fixtures.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+'qwen_4b'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'CUDA not available - GPU required for tests'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_vram_usage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"\n        Get current VRAM usage.\n        \n        Returns:\n            dict with 'used', 'total', and 'percentage' keys\n        "
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+allocated
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+512
+●●●●●● 3mm □○
+3
+total
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+512
+●●●●●● 3mm □○
+3
+reserved
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+512
+●●●●●● 3mm □○
+3
+percentage
+●●●●●● 1mm □
+allocated
+●●●●●● 3mm □△
+total
+●●●●●● 2mm □△
+100
+●●●●●● 3mm ○
+'allocated_gb'
+'reserved_gb'
+'total_gb'
+'percentage'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+allocated
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+reserved
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+percentage
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_vram_status
+●●●●●● 1mm □△
+self
+label
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Print VRAM usage with a label.'
+usage
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'VRAM Status: '
+label
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Allocated: '
+usage
+'allocated_gb'
+' GB / '
+usage
+'total_gb'
+' GB ('
+usage
+'percentage'
+'%)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Reserved:  '
+usage
+'reserved_gb'
+' GB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_vram_usage_load_unload_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test VRAM usage: before load -> after load -> after unload.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Initial State (Before Model Load)'
+●●●●●● 2mm □△
+initial_usage
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Loading model...'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+EmbeddingModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'After Model Load'
+●●●●●● 2mm □△
+loaded_usage
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vram_increase
+●●●●●● 1mm □
+loaded_usage
+'allocated_gb'
+●●●●●● 1mm □△
+initial_usage
+'allocated_gb'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'VRAM increase after loading: '
+vram_increase
+' GB'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loaded_usage
+'allocated_gb'
+initial_usage
+'allocated_gb'
+'VRAM should increase after loading model'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+vram_increase
+0.5
+'Model should use at least 0.5 GB of VRAM (Qwen 4B should use ~8-10 GB)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Unloading model...'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'After Model Unload'
+●●●●●● 2mm □△
+unloaded_usage
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vram_decrease
+●●●●●● 1mm □
+loaded_usage
+'allocated_gb'
+●●●●●● 1mm □△
+unloaded_usage
+'allocated_gb'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'VRAM decrease after unloading: '
+vram_decrease
+' GB'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unloaded_usage
+'allocated_gb'
+loaded_usage
+'allocated_gb'
+'VRAM should decrease after unloading model'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nVRAM Usage Summary:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Before load:  '
+initial_usage
+'allocated_gb'
+' GB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  After load:   '
+loaded_usage
+'allocated_gb'
+' GB (↑ '
+vram_increase
+' GB)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  After unload: '
+unloaded_usage
+'allocated_gb'
+' GB (↓ '
+vram_decrease
+' GB)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+unittest
+●●●●●● 1mm □△
+●●●●●● 2mm □△

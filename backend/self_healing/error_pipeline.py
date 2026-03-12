@@ -214,6 +214,27 @@ class ErrorPipeline:
         healed = False
         fix_description = "No automatic fix available"
 
+        # ── Episodic Memory Fast-Path (Qwen Manifesto Pillar 2) ──────
+        self.active_playbooks[playbook_name] = f"Querying Episodic Memory for previous {error_class} error at {location}..."
+        try:
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
+            # If we recently solved this exact error at this location, try to pull the outcome
+            historical_episodes = mem.retrieve_episodes(
+                query=f"{payload['exc_type']} at {location}",
+                limit=1,
+                min_trust=0.7 
+            )
+            if historical_episodes:
+                best_episode = historical_episodes[0]
+                outcome = best_episode.get("outcome", "")
+                if "healed:" in outcome or "success" in outcome.lower():
+                    logger.info("[ERROR-PIPELINE] Found historical fix in Episodic Memory: %s", outcome)
+                    # We log it and let the LLM/Deterministic rules apply it faster by passing context
+                    payload["context"]["historical_fix"] = outcome
+        except Exception as mem_err:
+            logger.debug("[ERROR-PIPELINE] Episodic memory fast-path lookup failed: %s", mem_err)
+
         # ── Route to the right healer ────────────────────────────────
         try:
             if error_class == "schema":
@@ -250,8 +271,8 @@ class ErrorPipeline:
                     healed, fix_description = self._create_coding_agent_task(payload)
     
             else:
-                self.active_playbooks[playbook_name] = f"Unknown error class. Escalating {location} to Coding Agent..."
-                healed, fix_description = self._create_coding_agent_task(payload)
+                self.active_playbooks[playbook_name] = f"Unknown error class. Escaping {location} to human review..."
+                healed, fix_description = self._queue_for_human_review(payload)
                 
         finally:
             # Clean up active playbook tracking and move to history
@@ -394,21 +415,11 @@ class ErrorPipeline:
             #   → backend/cognitive/mirror_self_modeling.py
             target_file = self._location_to_file(payload["location"])
 
-            # Read the existing code so the coding agent has the full file context
-            existing_code = ""
-            if target_file:
-                try:
-                    with open(target_file, "r", encoding="utf-8") as f:
-                        existing_code = f.read()
-                except Exception:
-                    pass
-
             instructions = (
                 f"Fix the {payload['exc_type']} error in {payload['location']}.\n"
                 f"Error: {payload['exc_str']}\n"
                 f"Traceback:\n{payload['tb'][-1000:]}\n"
-                "Apply a minimal, targeted fix. Do not refactor unrelated code.\n"
-                "**CRITICAL**: You MUST return the ENTIRE MODIFIED FILE. Do not skip or omit any code! We will overwrite the file with your output."
+                "Apply a minimal, targeted fix. Do not refactor unrelated code."
             )
 
             context = {
@@ -418,7 +429,6 @@ class ErrorPipeline:
                 "traceback": payload["tb"][-2000:],
                 "target_file": target_file,           # ← fix_applier uses this
                 "file": target_file,
-                "existing_code": existing_code,       # Full file context for Qwen
                 "submitted_at": payload["timestamp"],
                 **payload.get("context", {}),
             }
@@ -588,3 +598,7 @@ def get_error_pipeline() -> ErrorPipeline:
     if _pipeline_instance is None:
         _pipeline_instance = ErrorPipeline()
     return _pipeline_instance
+
+def report_error(exc: Exception, context: Dict[str, Any] = None, module: str = "", function: str = "") -> None:
+    """Convenience wrapper for ErrorPipeline.handle"""
+    get_error_pipeline().handle(exc, context, module, function)

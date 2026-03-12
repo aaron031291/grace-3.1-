@@ -1,0 +1,363 @@
+## __init__.py
+'\nMagma Memory System - Grace\'s Unified Memory Architecture\n\nAdvanced memory architecture that extends Grace\'s Memory Mesh with:\n1. Relation Graphs (Semantic, Temporal, Causal, Entity)\n2. Intent-Aware Router with Anchor Identification\n3. RRF Fusion (Reciprocal Rank Fusion)\n4. Adaptive Topological Retrieval\n5. Synaptic Ingestion with Event Segmentation\n6. Async Consolidation Pipeline\n7. Neighbor Retrieval\n8. LLM Causal Inference\n\nDeep Integration with Grace Layers:\n- Layer 1: Message Bus connector (event-driven memory)\n- Layer 2: Interpreter pattern memory (recurring issues)\n- Layer 3: Judgement decision memory (precedents)\n- Layer 4: Action Router memory (learned procedures)\n\nSecurity Integrations:\n- Genesis Keys: Full provenance tracking\n- Trust Scoring: Neural trust-aware retrieval\n- Governance: Constitutional enforcement\n\nRECOMMENDED: Use GraceMagmaSystem for the unified experience:\n\n    from cognitive.magma import get_grace_magma\n\n    magma = get_grace_magma()\n\n    # Ingest content (tracked, validated, linked)\n    magma.ingest("Machine learning causes better predictions.")\n\n    # Query with trust-aware retrieval\n    results = magma.query("What causes better predictions?")\n\n    # Get context for LLM\n    context = magma.get_context("What causes better predictions?")\n\n    # Causal inference\n    causes = magma.why("Why did the prediction fail?")\n\n    # Store/find patterns (Layer 2)\n    magma.store_pattern("error_cluster", "Database timeout pattern")\n\n    # Store/find decisions (Layer 3)\n    magma.store_decision("heal", "database", "Reconnect database")\n\n    # Store/find procedures (Layer 4)\n    magma.store_procedure("heal", "Reconnect DB", ["Stop pool", "Restart"])\n\nAlternative: Use MagmaMemory for low-level access:\n\n    from cognitive.magma import MagmaMemory\n\n    magma = MagmaMemory()\n    result = magma.ingest("Content here")\n    results = magma.query("Query here")\n'
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+SemanticGraph
+TemporalGraph
+CausalGraph
+EntityGraph
+GraphNode
+GraphEdge
+RelationType
+BaseRelationGraph
+●●●●●● 3mm □△○
+cognitive.magma.intent_router
+●●●●●● 2mm □△○
+IntentAwareRouter
+QueryIntent
+AnchorType
+Anchor
+QueryAnalysis
+IntentClassifier
+AnchorIdentifier
+GraphSelector
+RetrievalPolicySelector
+●●●●●● 3mm □△○
+cognitive.magma.rrf_fusion
+●●●●●● 2mm □△○
+MagmaFusion
+RRFFusion
+WeightedRRFFusion
+CombSUMFusion
+CombMNZFusion
+InterleavingFusion
+RetrievalResult
+FusedResult
+FusionMethod
+●●●●●● 3mm □△○
+cognitive.magma.topological_retrieval
+●●●●●● 2mm □△○
+AdaptiveTopologicalRetriever
+GraphTraverser
+TraversalPolicy
+TraversalConfig
+TraversalResult
+●●●●●● 3mm □△○
+cognitive.magma.synaptic_ingestion
+●●●●●● 2mm □△○
+SynapticIngestionPipeline
+EventSegmenter
+SemanticLinker
+TemporalLinker
+EntityLinker
+CausalLinker
+Segment
+SegmentType
+IngestionResult
+●●●●●● 3mm □△○
+cognitive.magma.async_consolidation
+●●●●●● 2mm □△○
+AsyncOperationQueue
+NeighborRetriever
+ContextSynthesizer
+ConsolidationWorker
+QueuedOperation
+OperationType
+OperationPriority
+OperationResult
+●●●●●● 3mm □△○
+cognitive.magma.causal_inference
+●●●●●● 2mm □△○
+LLMCausalInferencer
+CausalPatternDetector
+CausalClaim
+CausalChain
+CausalExplanation
+CausalRelationStrength
+●●●●●● 3mm □△○
+cognitive.magma.grace_magma_system
+●●●●●● 2mm □△○
+GraceMagmaSystem
+GraceMagmaConfig
+get_grace_magma
+reset_grace_magma
+ingest
+query
+get_context
+why
+●●●●●● 3mm □△○
+cognitive.magma.layer_integrations
+●●●●●● 2mm □△○
+MagmaMessageBusConnector
+InterpreterPatternMemory
+JudgementDecisionMemory
+ActionRouterMemory
+MagmaGenesisIntegration
+MagmaTrustIntegration
+MagmaGovernanceIntegration
+create_magma_layer_integrations
+●●●●●● 2mm △
+MagmaMemory
+'\n    Unified Magma Memory interface.\n\n    Combines all Magma components into a single, easy-to-use API.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+embedding_fn
+llm_fn
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize Magma Memory.\n\n        Args:\n            embedding_fn: Optional embedding function (text -> vector)\n            llm_fn: Optional LLM function (prompt -> response)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+IntentAwareRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagmaFusion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AdaptiveTopologicalRetriever
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+SynapticIngestionPipeline
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AsyncOperationQueue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+NeighborRetriever
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ContextSynthesizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ConsolidationWorker
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest
+●●●●●● 1mm □△
+self
+content
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Ingest content into Magma memory.\n\n        Args:\n            content: Content to ingest\n            genesis_key_id: Optional Genesis Key for tracking\n            **kwargs: Additional metadata\n\n        Returns:\n            IngestionResult\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+self
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+'\n        Query Magma memory.\n\n        Args:\n            query: Query string\n            limit: Maximum results\n\n        Returns:\n            List of RetrievalResult\n        '
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+limit
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+self
+results
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Generate context for LLM consumption.\n\n        Args:\n            results: List of RetrievalResult\n            query: Optional original query\n\n        Returns:\n            Linearized context string\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+results
+query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+infer_causation
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Infer causal relationships from text.\n\n        Args:\n            text: Text to analyze\n\n        Returns:\n            List of CausalClaim\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+explain
+●●●●●● 1mm □△
+self
+cause
+effect
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Explain causal relationship.\n\n        Args:\n            cause: Cause concept\n            effect: Effect concept\n\n        Returns:\n            CausalExplanation\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cause
+effect
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get Magma memory statistics.'
+●●●●●● 3mm ○
+'graphs'
+'queue'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start_background_processing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start background consolidation worker.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop_background_processing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop background consolidation worker.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+__all__
+●●●●●● 1mm □
+'GraceMagmaSystem'
+'GraceMagmaConfig'
+'get_grace_magma'
+'reset_grace_magma'
+'ingest'
+'query'
+'get_context'
+'why'
+'MagmaMessageBusConnector'
+'InterpreterPatternMemory'
+'JudgementDecisionMemory'
+'ActionRouterMemory'
+'MagmaGenesisIntegration'
+'MagmaTrustIntegration'
+'MagmaGovernanceIntegration'
+'create_magma_layer_integrations'
+'MagmaMemory'
+'MagmaRelationGraphs'
+'SemanticGraph'
+'TemporalGraph'
+'CausalGraph'
+'EntityGraph'
+'GraphNode'
+'GraphEdge'
+'RelationType'
+'BaseRelationGraph'
+'IntentAwareRouter'
+'QueryIntent'
+'AnchorType'
+'Anchor'
+'QueryAnalysis'
+'IntentClassifier'
+'AnchorIdentifier'
+'GraphSelector'
+'RetrievalPolicySelector'
+'MagmaFusion'
+'RRFFusion'
+'WeightedRRFFusion'
+'CombSUMFusion'
+'CombMNZFusion'
+'InterleavingFusion'
+'RetrievalResult'
+'FusedResult'
+'FusionMethod'
+'AdaptiveTopologicalRetriever'
+'GraphTraverser'
+'TraversalPolicy'
+'TraversalConfig'
+'TraversalResult'
+'SynapticIngestionPipeline'
+'EventSegmenter'
+'SemanticLinker'
+'TemporalLinker'
+'EntityLinker'
+'CausalLinker'
+'Segment'
+'SegmentType'
+'IngestionResult'
+'AsyncOperationQueue'
+'NeighborRetriever'
+'ContextSynthesizer'
+'ConsolidationWorker'
+'QueuedOperation'
+'OperationType'
+'OperationPriority'
+'OperationResult'
+'LLMCausalInferencer'
+'CausalPatternDetector'
+'CausalClaim'
+'CausalChain'
+'CausalExplanation'
+'CausalRelationStrength'

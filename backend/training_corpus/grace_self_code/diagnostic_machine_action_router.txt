@@ -1,0 +1,4054 @@
+## action_router.py
+"\nLayer 4 - Action Router: Response Execution Layer\n\nRoutes decisions to appropriate actions:\n- Alert Human: Notify operators of issues\n- Trigger Self-Healing: Attempt automatic fixes\n- Freeze System: Halt operations for safety\n- Recommend Learning: Capture patterns for improvement\n- Do Nothing: System is healthy, no action needed\n- Trigger CI/CD: Initiate pipeline for testing/deployment\n\nEnhanced with Grace's cognitive systems:\n- OODA Loop for structured decision-making\n- Sandbox Lab for action testing\n- Multi-LLM Orchestration for complex decisions\n- Memory Mesh for learned procedures and episodic memory\n- RAG System for knowledge retrieval\n- World Model for system context understanding\n- Neuro-Symbolic Reasoner for hybrid reasoning\n- Genesis Keys for complete tracking\n- Learning Efficiency Tracking for metrics\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+interpreters
+●●●●●● 2mm □△○
+InterpretedData
+Pattern
+PatternType
+●●●●●● 3mm □△○
+judgement
+●●●●●● 2mm □△○
+JudgementResult
+HealthStatus
+RiskLevel
+ForensicFinding
+●●●●●● 3mm □△○
+cognitive.engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+COGNITIVE_ENGINE_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+CognitiveEngine
+●●●●●● 1mm □
+●●●●●● 2mm □
+DecisionContext
+●●●●●● 1mm □
+●●●●●● 2mm □
+COGNITIVE_ENGINE_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+ExperimentType
+SANDBOX_LAB_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+AutonomousSandboxLab
+●●●●●● 1mm □
+●●●●●● 2mm □
+ExperimentType
+●●●●●● 1mm □
+●●●●●● 2mm □
+SANDBOX_LAB_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+LLMOrchestrator
+LLM_ORCHESTRATOR_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+LLMOrchestrator
+●●●●●● 1mm □
+●●●●●● 2mm □
+LLM_ORCHESTRATOR_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegration
+MEMORY_MESH_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+MemoryMeshIntegration
+●●●●●● 1mm □
+●●●●●● 2mm □
+MEMORY_MESH_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+RAG_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+DocumentRetriever
+●●●●●● 1mm □
+●●●●●● 2mm □
+RAG_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+genesis.pipeline_integration
+●●●●●● 2mm □△○
+DataPipeline
+WORLD_MODEL_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+DataPipeline
+●●●●●● 1mm □
+●●●●●● 2mm □
+WORLD_MODEL_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ml_intelligence.neuro_symbolic_reasoner
+●●●●●● 2mm □△○
+NeuroSymbolicReasoner
+NEURO_SYMBOLIC_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+NeuroSymbolicReasoner
+●●●●●● 1mm □
+●●●●●● 2mm □
+NEURO_SYMBOLIC_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+GenesisKeyService
+GENESIS_KEYS_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+GenesisKeyService
+●●●●●● 1mm □
+●●●●●● 2mm □
+GENESIS_KEYS_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.learning_efficiency_tracker
+●●●●●● 2mm □△○
+LearningEfficiencyTracker
+LEARNING_EFFICIENCY_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+LearningEfficiencyTracker
+●●●●●● 1mm □
+●●●●●● 2mm □
+LEARNING_EFFICIENCY_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+AutonomousHealingSystem
+AUTONOMOUS_HEALING_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+AutonomousHealingSystem
+●●●●●● 1mm □
+●●●●●● 2mm □
+AUTONOMOUS_HEALING_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+get_mirror_system
+PatternType
+●●●●●● 1mm □
+MirrorPatternType
+MIRROR_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+MirrorSelfModelingSystem
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_mirror_system
+●●●●●● 1mm □
+●●●●●● 2mm □
+MirrorPatternType
+●●●●●● 1mm □
+●●●●●● 2mm □
+MIRROR_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.braille_compiler
+●●●●●● 2mm □△○
+NLPCompilerEdge
+BRAILLE_COMPILER_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+NLPCompilerEdge
+●●●●●● 1mm □
+●●●●●● 2mm □
+BRAILLE_COMPILER_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ActionType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of actions the router can execute.'
+ALERT_HUMAN
+●●●●●● 1mm □
+'alert_human'
+TRIGGER_HEALING
+●●●●●● 1mm □
+'trigger_healing'
+FREEZE_SYSTEM
+●●●●●● 1mm □
+'freeze_system'
+RECOMMEND_LEARNING
+●●●●●● 1mm □
+'recommend_learning'
+DO_NOTHING
+●●●●●● 1mm □
+'do_nothing'
+TRIGGER_CICD
+●●●●●● 1mm □
+'trigger_cicd'
+ESCALATE
+●●●●●● 1mm □
+'escalate'
+LOG_OBSERVATION
+●●●●●● 1mm □
+'log_observation'
+●●●●●● 2mm △
+ActionPriority
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Priority levels for actions.'
+IMMEDIATE
+●●●●●● 1mm □
+'immediate'
+HIGH
+●●●●●● 1mm □
+'high'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+LOW
+●●●●●● 1mm □
+'low'
+●●●●●● 2mm △
+ActionStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Status of action execution.'
+PENDING
+●●●●●● 1mm □
+'pending'
+IN_PROGRESS
+●●●●●● 1mm □
+'in_progress'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+SKIPPED
+●●●●●● 1mm □
+'skipped'
+●●●●●● 2mm △
+ActionResult
+'Result of an executed action.'
+action_id
+●●●●●● 1mm ○
+action_type
+ActionType
+status
+ActionStatus
+message
+●●●●●● 1mm ○
+details
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 3mm ○
+0.0
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ActionDecision
+'A decision about what action to take.'
+decision_id
+●●●●●● 1mm ○
+action_type
+ActionType
+priority
+ActionPriority
+reason
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+target_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parameters
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 3mm □△
+ActionResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+HealingAction
+'A self-healing action to execute.'
+healing_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+target_component
+●●●●●● 1mm ○
+command
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+function
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+parameters
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reversible
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+estimated_duration_ms
+●●●●●● 3mm ○
+1000.0
+dataclass
+●●●●●● 2mm △
+AlertConfig
+'Configuration for alerting.'
+alert_file
+●●●●●● 1mm ○
+'alerts.jsonl'
+webhook_url
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+email_recipients
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+slack_channel
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+enable_sound
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+CICDConfig
+'Configuration for CI/CD triggering.'
+enabled
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+pipeline_command
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+external_workflow_file
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+test_command
+●●●●●● 1mm ○
+'pytest tests/ -v'
+pre_flight_checks
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ActionRouter
+'\n    Layer 4 - Action Router: Executes appropriate responses based on judgement.\n\n    This layer routes decisions to concrete actions:\n    - Alert Human: Send notifications to operators\n    - Trigger Healing: Execute automatic recovery procedures\n    - Freeze System: Halt dangerous operations\n    - Recommend Learning: Capture insights for future improvement\n    - Do Nothing: Acknowledge healthy state\n    - Trigger CI/CD: Run test pipelines\n    '
+HEALING_ACTIONS
+●●●●●● 1mm □
+'restart_service'
+'clear_cache'
+'reconnect_database'
+'reset_vector_db'
+'run_garbage_collection'
+HealingAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+alert_config
+cicd_config
+log_dir
+enable_healing
+enable_freeze
+dry_run
+session
+kb_path
+enable_cognitive
+enable_sandbox
+enable_llm
+●●●●●● 2mm □△
+AlertConfig
+CICDConfig
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+"\n        Initialize the action router with Grace's cognitive systems.\n        \n        Args:\n            alert_config: Alert configuration\n            cicd_config: CI/CD configuration\n            log_dir: Log directory path\n            enable_healing: Enable healing actions\n            enable_freeze: Enable system freeze\n            dry_run: Dry run mode (no actual execution)\n            session: Database session for Grace systems\n            kb_path: Knowledge base path for Grace systems\n            enable_cognitive: Enable OODA loop and cognitive engine\n            enable_sandbox: Enable sandbox testing\n            enable_llm: Enable LLM orchestration\n        "
+●●●●●● 3mm △
+●●●●●● 1mm □
+alert_config
+AlertConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+cicd_config
+CICDConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_dir
+Path
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_healing
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_freeze
+●●●●●● 3mm △
+●●●●●● 1mm □
+dry_run
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+kb_path
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+enable_cognitive
+enable_sandbox
+enable_llm
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_init_grace_systems
+●●●●●● 1mm □△
+self
+enable_cognitive
+enable_sandbox
+enable_llm
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+"Initialize Grace's cognitive systems."
+●●●●●● 2mm □
+enable_cognitive
+COGNITIVE_ENGINE_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Cognitive Engine initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Cognitive Engine unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+enable_sandbox
+SANDBOX_LAB_AVAILABLE
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+get_sandbox_lab
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Sandbox Lab initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Sandbox Lab unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+enable_llm
+LLM_ORCHESTRATOR_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+LLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] LLM Orchestrator initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] LLM Orchestrator unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+MEMORY_MESH_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+MemoryMeshIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Memory Mesh initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Memory Mesh unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+RAG_AVAILABLE
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+_emb
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_emb
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] RAG Retriever initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[LAYER4] RAG Retriever unavailable: get_embedding_model() returned None'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] RAG Retriever unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+WORLD_MODEL_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+DataPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] World Model initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] World Model unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+NEURO_SYMBOLIC_AVAILABLE
+_retriever
+●●●●●● 1mm □
+●●●●●● 3mm △
+_learning_memory
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+_learning_memory
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+NeuroSymbolicReasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Neuro-Symbolic Reasoner initialized (retriever=%s, learning_memory=%s)'
+_retriever
+●●●●●● 2mm □
+_learning_memory
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Neuro-Symbolic Reasoner unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+GENESIS_KEYS_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+GenesisKeyService
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Genesis Key Service initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Genesis Key Service unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+LEARNING_EFFICIENCY_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningEfficiencyTracker
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Learning Efficiency Tracker initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Learning Efficiency Tracker unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+AUTONOMOUS_HEALING_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+AutonomousHealingSystem
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Autonomous Healing System initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Autonomous Healing System unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+MIRROR_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror Self-Modeling System initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror Self-Modeling System unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_register_default_healing_functions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register default healing functions.'
+●●●●●● 3mm △
+'clear_application_cache'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'reset_database_connection'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'reset_vector_db_client'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'force_garbage_collection'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+register_healing_function
+●●●●●● 1mm □△
+self
+name
+func
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'Register a custom healing function.'
+●●●●●● 3mm △
+name
+●●●●●● 1mm □
+func
+●●●●●● 1mm □
+_create_action_genesis_key
+●●●●●● 1mm □△
+self
+action_type
+decision
+what_description
+●●●●●● 2mm □△
+ActionType
+ActionDecision
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Create a Genesis Key for an action.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+what
+●●●●●● 1mm □
+what_description
+'Execute '
+action_type
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] GENESIS KEY CREATION FAILED (fix genesis/DB): %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Any
+●●●●●● 1mm □
+route
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+JudgementResult
+"\n        Route judgement to appropriate action with Grace's cognitive systems.\n        \n        Enhanced flow:\n        1. OODA Loop: Observe → Orient → Decide → Act\n        2. RAG: Retrieve relevant knowledge\n        3. World Model: Understand system context\n        4. Episodic Memory: Recall similar successes\n        5. Procedural Memory: Retrieve learned procedures\n        6. Multi-LLM: Get consensus on action (if complex)\n        7. Neuro-Symbolic: Hybrid reasoning\n        8. Sandbox Lab: Test action first (if risky)\n        9. Execute: Execute with tracking\n        10. Learn: Store outcome in memory\n        "
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] ROUTING FAILED (cycle will fail): %s'
+e
+●●●●●● 2mm □△
+ActionDecision
+●●●●●● 1mm □
+_route_impl
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+JudgementResult
+'Inner routing logic; exceptions are caught by route() for robust cycles.'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'ooda'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm △
+decision_context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_context
+'health_status'
+'critical_components'
+'risk_vectors'
+'patterns'
+judgement
+judgement
+r
+r
+judgement
+p
+p
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_context
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] OODA Loop: Observed and Oriented'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] OODA Loop failed: '
+e
+●●●●●● 2mm □△
+knowledge_context
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+query
+●●●●●● 1mm □
+'System health '
+judgement
+' components '
+', '
+●●●●●● 1mm □△
+judgement
+●●●●●● 2mm □△
+knowledge
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+knowledge_context
+●●●●●● 1mm □
+'retrieved_knowledge'
+knowledge
+logger
+●●●●●● 1mm □△
+'[LAYER4] RAG retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+knowledge
+●●●●●● 2mm □△
+' relevant documents'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] RAG retrieval failed: '
+e
+●●●●●● 2mm □△
+world_model_context
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+judgement
+world_model_context
+●●●●●● 1mm □
+'components'
+'relationships'
+judgement
+logger
+●●●●●● 1mm □△
+'[LAYER4] World Model context retrieved'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] World Model failed: '
+e
+●●●●●● 2mm □△
+past_actions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+query_context
+●●●●●● 1mm □
+'health_status'
+'components'
+'patterns'
+judgement
+judgement
+p
+p
+interpreted_data
+problem_str
+●●●●●● 1mm □
+'Health: '
+judgement
+', Components: '
+','
+●●●●●● 1mm □△
+judgement
+●●●●●● 2mm □△
+retrieved_episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+retrieved_episodes
+past_actions
+●●●●●● 1mm □△
+retrieved_episodes
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Episodic Memory: Retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+retrieved_episodes
+●●●●●● 2mm □△
+' past actions'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Episodic Memory retrieval failed: '
+e
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+goal_str
+●●●●●● 1mm □
+'Fix health '
+judgement
+' for '
+','
+●●●●●● 1mm □△
+judgement
+●●●●●● 2mm □△
+query_context
+●●●●●● 1mm □
+'health_status'
+'components'
+judgement
+judgement
+proc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+proc
+procedures
+●●●●●● 1mm □△
+proc
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Procedural Memory: Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+' procedures'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Procedural Memory retrieval failed: '
+e
+●●●●●● 2mm □△
+llm_suggestion
+●●●●●● 1mm □
+●●●●●● 2mm □
+braille_bitmask
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+judgement
+0.7
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+context
+●●●●●● 1mm □
+'health_status'
+'critical_components'
+'patterns'
+'knowledge'
+judgement
+judgement
+p
+p
+interpreted_data
+knowledge_context
+●●●●●● 1mm □△
+'retrieved_knowledge'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'System health is '
+context
+'health_status'
+'. Critical components: '
+', '
+●●●●●● 1mm □△
+context
+'critical_components'
+●●●●●● 2mm □△
+'. Observed patterns: '
+', '
+●●●●●● 1mm □△
+context
+'patterns'
+●●●●●● 2mm □△
+'. Analyze root cause and recommend the safest automated action.'
+llm_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm_result
+llm_result
+llm_suggestion
+●●●●●● 1mm □
+llm_result
+●●●●●● 2mm □
+BRAILLE_COMPILER_AVAILABLE
+NLPCompilerEdge
+●●●●●● 2mm □
+compiler
+●●●●●● 1mm □
+NLPCompilerEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_context
+●●●●●● 1mm □
+'is_maintenance_window'
+'is_emergency'
+'has_elevation_token'
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'value'
+''
+●●●●●● 2mm □△
+'critical'
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[LAYER4] Passing LLM output through Braille Compiler Edge...'
+●●●●●● 2mm □△
+b_mask
+b_msg
+●●●●●● 1mm □
+compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+b_mask
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[LAYER4] BRAILLE GUARD PASSED: '
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+b_mask
+●●●●●● 2mm □△
+' ('
+b_msg
+')'
+●●●●●● 2mm □△
+braille_bitmask
+●●●●●● 1mm □
+b_mask
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[LAYER4] BRAILLE GUARD REJECTED LLM INTENT: '
+b_msg
+'. Halting automated action.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+judgement
+●●●●●● 1mm □
+'alert'
+●●●●●● 3mm □
+judgement
+●●●●●● 1mm □
+0.1
+●●●●●● 3mm □
+llm_suggestion
+●●●●●● 1mm □
+'[BRAILLE HALT] Hallucination/Topology violation blocked: '
+b_msg
+logger
+●●●●●● 1mm □△
+'[LAYER4] Multi-LLM Consensus resulted in success: '
+llm_result
+llm_result
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Multi-LLM orchestration failed: '
+e
+●●●●●● 2mm □△
+reasoning_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+query
+●●●●●● 1mm □
+'What action should we take for '
+judgement
+'?'
+reasoning_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Neuro-Symbolic reasoning completed'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Neuro-Symbolic reasoning failed: '
+e
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reasoning_result
+decision
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+decision
+reasoning_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+past_actions
+decision
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+decision
+●●●●●● 3mm ○
+0.1
+1.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+alternatives
+●●●●●● 1mm □
+'action'
+'confidence'
+decision
+decision
+selected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_context
+alternatives
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] OODA Loop: Decision made'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] OODA Decide failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_context
+decision
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] OODA Loop: Action completed'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] OODA Act failed: '
+e
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+end_time
+●●●●●● 2mm □
+●●●●●● 3mm △
+decision
+stored_count
+●●●●●● 1mm □
+0
+result
+decision
+●●●●●● 2mm □
+result
+ActionStatus
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stored_count
+1
+logger
+●●●●●● 1mm □△
+'[LAYER4] Learning: Stored '
+stored_count
+' successful action outcome(s) in memory'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Learning storage failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+duration
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Efficiency tracking failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+genesis_key_ids
+●●●●●● 1mm □
+result
+decision
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'details'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+genesis_key_ids
+●●●●●● 1mm □△
+result
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key_ids
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror observing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+genesis_key_ids
+●●●●●● 2mm □△
+' action Genesis Keys'
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action_patterns
+●●●●●● 1mm □
+pattern
+patterns
+pattern_genesis_keys
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'evidence'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+gk_id
+pattern_genesis_keys
+gk_id
+genesis_key_ids
+●●●●●● 2mm □△
+action_patterns
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action_patterns
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror detected '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+action_patterns
+●●●●●● 2mm □△
+' patterns for this action:'
+●●●●●● 2mm □△
+pattern
+action_patterns
+logger
+●●●●●● 1mm □△
+'[LAYER4]   - '
+pattern
+●●●●●● 1mm □△
+'pattern_type'
+●●●●●● 2mm □△
+': '
+pattern
+●●●●●● 1mm □△
+'description'
+pattern
+●●●●●● 1mm □△
+'recommendation'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+MirrorPatternType
+pattern
+●●●●●● 1mm □△
+'pattern_type'
+●●●●●● 2mm □△
+'repeated_failure'
+logger
+●●●●●● 1mm □△
+'[LAYER4] Repeated failure detected! Consider triggering study task.'
+●●●●●● 2mm □△
+observation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror observed '
+observation
+●●●●●● 1mm □△
+'total_operations'
+0
+●●●●●● 2mm □△
+' recent operations'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror observation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+logger
+●●●●●● 1mm □△
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+ActionDecision
+●●●●●● 1mm □
+_create_decision
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+JudgementResult
+'Create action decision based on judgement.'
+action_mapping
+●●●●●● 1mm □
+'freeze'
+'alert'
+'heal'
+'monitor'
+'none'
+ActionType
+ActionPriority
+ActionType
+ActionPriority
+ActionType
+ActionPriority
+ActionType
+ActionPriority
+ActionType
+ActionPriority
+recommended
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'recommended_action'
+'none'
+●●●●●● 2mm □△
+'none'
+action_type
+priority
+●●●●●● 1mm □
+action_mapping
+●●●●●● 1mm □△
+recommended
+ActionType
+ActionPriority
+●●●●●● 2mm □△
+target_components
+●●●●●● 1mm □
+health
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'health'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+health
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+health
+'critical_components'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+target_components
+●●●●●● 1mm □△
+health
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+health
+'degraded_components'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+target_components
+●●●●●● 1mm □△
+health
+●●●●●● 2mm □△
+conf
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'confidence'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conf
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'overall_confidence'
+0.5
+●●●●●● 2mm □△
+0.5
+health_status_val
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm □
+health
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+health
+'status'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+health_status_val
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+health
+'value'
+'unknown'
+●●●●●● 2mm □△
+parameters
+●●●●●● 1mm □
+'health_status'
+'health_score'
+'confidence'
+'risk_count'
+'alert_count'
+health_status_val
+health
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+health
+'overall_score'
+0.0
+●●●●●● 2mm □△
+0.0
+conf
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'risk_vectors'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+judgement
+'avn_alerts'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+should_trigger_cicd
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 2mm □
+should_trigger_cicd
+action_type
+●●●●●● 1mm □
+ActionType
+parameters
+'cicd_reason'
+●●●●●● 1mm □
+should_trigger_cicd
+learning_patterns
+●●●●●● 1mm □
+p
+p
+interpreted_data
+p
+PatternType
+●●●●●● 2mm □
+learning_patterns
+action_type
+ActionType
+action_type
+●●●●●● 1mm □
+ActionType
+parameters
+'learning_patterns'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_patterns
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionDecision
+●●●●●● 1mm □
+_should_trigger_cicd
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+JudgementResult
+'Determine if CI/CD pipeline should be triggered.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+sensor_data
+●●●●●● 2mm □
+sensor_data
+0.95
+●●●●●● 2mm □
+sensor_data
+0
+●●●●●● 3mm ○
+'infrastructure_test_failures'
+●●●●●● 2mm □
+judgement
+'heal'
+●●●●●● 3mm ○
+'post_healing_verification'
+code_quality_patterns
+●●●●●● 1mm □
+p
+p
+interpreted_data
+p
+PatternType
+●●●●●● 2mm □
+code_quality_patterns
+code_quality_patterns
+0
+5
+●●●●●● 3mm ○
+'code_quality_regression'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_reason
+●●●●●● 1mm □△
+self
+action_type
+judgement
+●●●●●● 2mm □△
+ActionType
+JudgementResult
+'Generate human-readable reason for action.'
+reasons
+●●●●●● 1mm □
+ActionType
+ActionType
+ActionType
+ActionType
+ActionType
+ActionType
+ActionType
+ActionType
+'Critical health status ('
+judgement
+') requires system freeze'
+'Health issues detected: '
+', '
+●●●●●● 1mm □△
+judgement
+●●●●●● 3mm ○
+judgement
+●●●●●● 2mm □△
+'System requires attention'
+'Attempting automatic recovery for: '
+', '
+●●●●●● 1mm □△
+judgement
+●●●●●● 2mm □△
+'Self-healing triggered'
+'Running CI/CD pipeline to verify system state'
+'Learning opportunities detected from recent patterns'
+'Monitoring system state'
+'System is healthy, no action required'
+'Issue requires escalation to higher authority'
+●●●●●● 3mm ○
+reasons
+●●●●●● 1mm □△
+action_type
+'Action required'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_execute_actions
+●●●●●● 1mm □△
+self
+decision
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+ActionDecision
+SensorData
+InterpretedData
+JudgementResult
+'Execute actions based on decision.'
+results
+●●●●●● 1mm □
+●●●●●● 2mm □
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+judgement
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+sensor_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+judgement
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+ActionType
+results
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+ActionResult
+●●●●●● 1mm □
+_execute_freeze
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+ActionDecision
+'Execute system freeze action with Genesis Key tracking.'
+●●●●●● 3mm △
+1
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ActionType
+decision
+'Freeze system for safety'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+'SKIPPED'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+freeze_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'SYSTEM_FROZEN'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+freeze_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+'frozen_at'
+'decision_id'
+'reason'
+'components'
+'genesis_key_id'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+decision
+decision
+genesis_key
+genesis_key
+●●●●●● 2mm □
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'SYSTEM FROZEN: '
+decision
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+'COMPLETED'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to freeze system: '
+e
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+'FAILED'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ActionResult
+●●●●●● 1mm □
+_update_genesis_key_status
+●●●●●● 1mm □△
+self
+genesis_key
+status
+result
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+ActionResult
+●●●●●● 2mm □
+'Update Genesis Key with action result.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+genesis_key
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □
+'status'
+status
+●●●●●● 2mm □
+result
+metadata
+●●●●●● 1mm □△
+'action_id'
+'message'
+'duration_ms'
+result
+result
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Failed to update Genesis Key: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_execute_alert
+●●●●●● 1mm □△
+self
+decision
+judgement
+●●●●●● 2mm □△
+ActionDecision
+JudgementResult
+'Execute alert action.'
+●●●●●● 3mm △
+1
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'timestamp'
+'severity'
+'decision_id'
+'reason'
+'health_status'
+'health_score'
+'critical_components'
+'degraded_components'
+'avn_alerts'
+'risk_vectors'
+'ALERT-'
+●●●●●● 3mm △
+'04d'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement
+HealthStatus
+'critical'
+'warning'
+decision
+decision
+judgement
+judgement
+judgement
+judgement
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+judgement
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+judgement
+●●●●●● 2mm □△
+alert_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alert_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'ALERT: '
+decision
+●●●●●● 2mm □△
+notification_results
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+webhook_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+notification_results
+●●●●●● 1mm □△
+'webhook'
+webhook_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+email_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+notification_results
+●●●●●● 1mm □△
+'email'
+email_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+slack_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+notification_results
+●●●●●● 1mm □△
+'slack'
+slack_result
+●●●●●● 2mm □△
+alert_payload
+'notification_results'
+●●●●●● 1mm □
+notification_results
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to send alert: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_send_webhook_notification
+●●●●●● 1mm □△
+self
+alert_payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Send notification to configured webhook URL.\n\n        Args:\n            alert_payload: Alert data to send\n\n        Returns:\n            Dict with success status and any response data\n        '
+●●●●●● 2mm □△○
+urllib.request
+●●●●●● 2mm □△○
+urllib.error
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+headers
+●●●●●● 1mm □
+'Content-Type'
+'User-Agent'
+'application/json'
+'GRACE-ActionRouter/1.0'
+●●●●●● 3mm □△
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+response
+status_code
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response_text
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Webhook notification sent: '
+status_code
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'status_code'
+'response'
+●●●●●● 3mm □△○
+status_code
+response_text
+500
+urllib
+logger
+●●●●●● 1mm □△
+'[LAYER4] Webhook notification failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Webhook notification error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_send_email_notification
+●●●●●● 1mm □△
+self
+alert_payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Send email notification to configured recipients.\n\n        Args:\n            alert_payload: Alert data to include in email\n\n        Returns:\n            Dict with success status and delivery info\n        '
+●●●●●● 2mm □△○
+smtplib
+●●●●●● 3mm □△○
+email.mime.text
+●●●●●● 2mm □△○
+MIMEText
+●●●●●● 3mm □△○
+email.mime.multipart
+●●●●●● 2mm □△○
+MIMEMultipart
+smtp_host
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'SMTP_HOST'
+'localhost'
+●●●●●● 2mm □△
+smtp_port
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'SMTP_PORT'
+'25'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+smtp_user
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'SMTP_USER'
+''
+●●●●●● 2mm □△
+smtp_pass
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'SMTP_PASS'
+''
+●●●●●● 2mm □△
+from_addr
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'ALERT_FROM_EMAIL'
+'grace@localhost'
+●●●●●● 2mm □△
+severity
+●●●●●● 1mm □
+alert_payload
+●●●●●● 1mm □△
+'severity'
+'warning'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subject
+●●●●●● 1mm □
+'[GRACE '
+severity
+'] '
+alert_payload
+●●●●●● 1mm □△
+'reason'
+'System Alert'
+●●●●●● 2mm □△
+body
+●●●●●● 1mm □
+'\nGRACE Autonomous System Alert\n=============================\n\nAlert ID: '
+alert_payload
+●●●●●● 1mm □△
+'alert_id'
+'N/A'
+●●●●●● 2mm □△
+'\nTimestamp: '
+alert_payload
+●●●●●● 1mm □△
+'timestamp'
+'N/A'
+●●●●●● 2mm □△
+'\nSeverity: '
+severity
+'\n\nReason: '
+alert_payload
+●●●●●● 1mm □△
+'reason'
+'N/A'
+●●●●●● 2mm □△
+'\n\nHealth Status: '
+alert_payload
+●●●●●● 1mm □△
+'health_status'
+'N/A'
+●●●●●● 2mm □△
+'\nHealth Score: '
+alert_payload
+●●●●●● 1mm □△
+'health_score'
+'N/A'
+●●●●●● 2mm □△
+'\n\nCritical Components: '
+', '
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 1mm □△
+'critical_components'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'None'
+'\nDegraded Components: '
+', '
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 1mm □△
+'degraded_components'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'None'
+'\n\nAVN Alerts: '
+alert_payload
+●●●●●● 1mm □△
+'avn_alerts'
+0
+●●●●●● 2mm □△
+'\nRisk Vectors: '
+alert_payload
+●●●●●● 1mm □△
+'risk_vectors'
+0
+●●●●●● 2mm □△
+'\n\n---\nThis is an automated message from GRACE Action Router.\n'
+msg
+●●●●●● 1mm □
+MIMEMultipart
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+'Subject'
+●●●●●● 1mm □
+subject
+msg
+'From'
+●●●●●● 1mm □
+from_addr
+msg
+'To'
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+MIMEText
+●●●●●● 1mm □△
+body
+'plain'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+smtplib
+●●●●●● 1mm □△
+smtp_host
+smtp_port
+●●●●●● 2mm □△
+server
+●●●●●● 2mm □
+smtp_user
+smtp_pass
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+smtp_user
+smtp_pass
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+from_addr
+●●●●●● 3mm △
+msg
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Email notification sent to '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' recipients'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'recipients'
+'subject'
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+subject
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Email notification failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_send_slack_notification
+●●●●●● 1mm □△
+self
+alert_payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Send notification to configured Slack channel.\n\n        Args:\n            alert_payload: Alert data to post\n\n        Returns:\n            Dict with success status and response info\n        '
+●●●●●● 2mm □△○
+urllib.request
+●●●●●● 2mm □△○
+urllib.error
+slack_webhook
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'SLACK_WEBHOOK_URL'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+slack_webhook
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'SLACK_WEBHOOK_URL not configured'
+severity
+●●●●●● 1mm □
+alert_payload
+●●●●●● 1mm □△
+'severity'
+'warning'
+●●●●●● 2mm □△
+emoji
+●●●●●● 1mm □
+severity
+'critical'
+':red_circle:'
+':warning:'
+color
+●●●●●● 1mm □
+severity
+'critical'
+'#dc3545'
+'#ffc107'
+slack_message
+●●●●●● 1mm □
+'channel'
+'username'
+'icon_emoji'
+'attachments'
+●●●●●● 3mm △
+'GRACE Alert Bot'
+':robot_face:'
+'color'
+'blocks'
+color
+'type'
+'text'
+'header'
+'type'
+'text'
+'emoji'
+'plain_text'
+emoji
+' GRACE System Alert'
+●●●●●● 3mm □△○
+'type'
+'fields'
+'section'
+'type'
+'text'
+'mrkdwn'
+'*Alert ID:*\n'
+alert_payload
+●●●●●● 1mm □△
+'alert_id'
+'N/A'
+●●●●●● 2mm □△
+'type'
+'text'
+'mrkdwn'
+'*Severity:*\n'
+severity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'type'
+'text'
+'mrkdwn'
+'*Health Status:*\n'
+alert_payload
+●●●●●● 1mm □△
+'health_status'
+'N/A'
+●●●●●● 2mm □△
+'type'
+'text'
+'mrkdwn'
+'*Health Score:*\n'
+alert_payload
+●●●●●● 1mm □△
+'health_score'
+'N/A'
+●●●●●● 2mm □△
+'type'
+'text'
+'section'
+'type'
+'text'
+'mrkdwn'
+'*Reason:*\n'
+alert_payload
+●●●●●● 1mm □△
+'reason'
+'Unknown'
+●●●●●● 2mm □△
+'type'
+'elements'
+'context'
+'type'
+'text'
+'mrkdwn'
+'Timestamp: '
+alert_payload
+●●●●●● 1mm □△
+'timestamp'
+'N/A'
+●●●●●● 2mm □△
+critical
+●●●●●● 1mm □
+alert_payload
+●●●●●● 1mm □△
+'critical_components'
+●●●●●● 2mm □△
+degraded
+●●●●●● 1mm □
+alert_payload
+●●●●●● 1mm □△
+'degraded_components'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+critical
+degraded
+component_text
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+critical
+component_text
+':x: *Critical:* '
+', '
+●●●●●● 1mm □△
+critical
+●●●●●● 2mm □△
+'\n'
+●●●●●● 2mm □
+degraded
+component_text
+':warning: *Degraded:* '
+', '
+●●●●●● 1mm □△
+degraded
+●●●●●● 2mm □△
+slack_message
+'attachments'
+0
+'blocks'
+●●●●●● 1mm □△
+3
+'type'
+'text'
+'section'
+'type'
+'text'
+'mrkdwn'
+component_text
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+slack_message
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+headers
+●●●●●● 1mm □
+'Content-Type'
+'application/json'
+●●●●●● 3mm □△
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+slack_webhook
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+response
+status_code
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Slack notification sent to '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'channel'
+'status_code'
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+status_code
+urllib
+logger
+●●●●●● 1mm □△
+'[LAYER4] Slack notification failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Slack notification error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_execute_healing
+●●●●●● 1mm □△
+self
+decision
+sensor_data
+judgement
+●●●●●● 2mm □△
+ActionDecision
+SensorData
+JudgementResult
+"\n        Execute self-healing actions with Grace's enhanced systems.\n        \n        Enhanced flow:\n        1. Create Genesis Key for tracking\n        2. Check Sandbox Lab if action is risky\n        3. Use Autonomous Healing System (if available)\n        4. Fallback to basic healing functions\n        5. Store outcome in Memory Mesh\n        6. Update Genesis Key with result\n        "
+results
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] Created Genesis Key: '
+genesis_key
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Genesis Key creation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_decisions
+●●●●●● 1mm □
+'healing_action'
+'anomaly'
+'execution_mode'
+'genesis_key_id'
+'auto_heal'
+'anomaly_type'
+'affected_components'
+'severity'
+judgement
+decision
+judgement
+HealthStatus
+'critical'
+'warning'
+decision
+0.8
+'autonomous'
+'manual'
+genesis_key
+genesis_key
+●●●●●● 2mm □
+healing_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+executed
+healing_result
+●●●●●● 1mm □△
+'executed'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+results
+●●●●●● 1mm □△
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+logger
+●●●●●● 1mm □△
+'[LAYER4] Autonomous Healing System executed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' actions'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Autonomous Healing System failed, falling back to basic: '
+e
+●●●●●● 2mm □△
+healing_actions
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+sensor_data
+healing_actions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'reconnect_database'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+sensor_data
+healing_actions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'reset_vector_db'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+sensor_data
+85
+healing_actions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'run_garbage_collection'
+●●●●●● 2mm □△
+healing
+healing_actions
+●●●●●● 3mm △
+1
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+should_test_sandbox
+●●●●●● 1mm □
+●●●●●● 3mm △
+judgement
+HealthStatus
+decision
+0.8
+●●●●●● 2mm □
+should_test_sandbox
+experiment
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[LAYER4] Testing healing action '"
+healing
+"' in sandbox"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+experiment
+0.85
+results
+●●●●●● 1mm □△
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Sandbox test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healing
+healing
+●●●●●● 3mm △
+func
+●●●●●● 1mm □
+●●●●●● 3mm △
+healing
+success
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+healing
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+success
+logger
+●●●●●● 1mm □△
+"[LAYER4] Stored healing '"
+healing
+"' in Memory Mesh"
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Memory Mesh storage failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+●●●●●● 1mm □△
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Healing action failed: '
+e
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+results
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+ActionStatus
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+result
+results
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'details'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+'genesis_key_id'
+●●●●●● 1mm □
+genesis_key
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Genesis Key update failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+genesis_key
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action_patterns
+●●●●●● 1mm □
+pattern
+patterns
+pattern_genesis_keys
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'evidence'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+pattern_genesis_keys
+action_patterns
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+pattern_topic
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'topic'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_topic
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+component
+pattern_topic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+decision
+●●●●●● 2mm □△
+action_patterns
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action_patterns
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror detected '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+action_patterns
+●●●●●● 2mm □△
+' patterns for this healing action:'
+●●●●●● 2mm □△
+pattern
+action_patterns
+pattern_type
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'pattern_type'
+'unknown'
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'description'
+pattern
+●●●●●● 1mm □△
+'recommendation'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4]   - '
+pattern_type
+': '
+description
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+'repeated_failure'
+occurrences
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □△
+'occurrences'
+0
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER4] ⚠️  Repeated failure detected! This healing action has failed '
+occurrences
+' times. Consider: (1) Reviewing approach, (2) Additional study, (3) Breaking into smaller steps'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+pattern_type
+'success_sequence'
+logger
+●●●●●● 1mm □△
+'[LAYER4] ✅ Success sequence detected! This healing pattern works well.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+'efficiency_drop'
+logger
+●●●●●● 1mm □△
+'[LAYER4] ⚠️  Efficiency drop detected! This action is taking longer.'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+pattern_type
+'improvement_opportunity'
+logger
+●●●●●● 1mm □△
+'[LAYER4] 💡 Improvement opportunity detected!'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+'learning_plateau'
+logger
+●●●●●● 1mm □△
+'[LAYER4] 📊 Learning plateau detected! No improvement in this area.'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+pattern_type
+'anomalous_behavior'
+logger
+●●●●●● 1mm □△
+'[LAYER4] ⚠️  Anomalous behavior detected! Unexpected pattern.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror: No patterns detected for this healing action yet'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Mirror pattern detection failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+logger
+●●●●●● 1mm □△
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+●●●●●● 3mm △
+1
+results
+●●●●●● 1mm □△
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+ActionResult
+●●●●●● 1mm □
+_execute_cicd
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+ActionDecision
+'Execute CI/CD pipeline trigger.'
+●●●●●● 3mm △
+1
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd_reason
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □△
+'cicd_reason'
+'diagnostic_trigger'
+●●●●●● 2mm □△
+cicd_log
+●●●●●● 1mm □
+'trigger_id'
+'timestamp'
+'reason'
+'decision_id'
+'CICD-'
+●●●●●● 3mm △
+'04d'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd_reason
+decision
+cicd_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'cicd_triggers.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cicd_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+cicd_log
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+result
+0
+●●●●●● 3mm □
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'CI/CD trigger failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_execute_learning_capture
+●●●●●● 1mm □△
+self
+decision
+interpreted_data
+●●●●●● 2mm □△
+ActionDecision
+InterpretedData
+'Execute learning capture action with Memory Mesh integration.'
+●●●●●● 3mm △
+1
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ActionType
+decision
+'Capture learning patterns'
+●●●●●● 2mm □△
+learning_patterns
+●●●●●● 1mm □
+p
+p
+interpreted_data
+p
+PatternType
+learning_data
+●●●●●● 1mm □
+'capture_id'
+'timestamp'
+'decision_id'
+'genesis_key_id'
+'patterns'
+'LEARN-'
+●●●●●● 3mm △
+'04d'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+genesis_key
+genesis_key
+●●●●●● 2mm □
+'description'
+'confidence'
+'affected_components'
+'evidence'
+p
+p
+p
+p
+p
+learning_patterns
+learning_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'learning_captures.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+learning_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+learning_patterns
+pattern
+learning_patterns
+logger
+●●●●●● 1mm □△
+'[LAYER4] Stored '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_patterns
+●●●●●● 2mm □△
+' patterns in Memory Mesh'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LAYER4] Memory Mesh storage failed: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Learning captured: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_patterns
+●●●●●● 2mm □△
+' patterns'
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+'COMPLETED'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Learning capture failed: '
+e
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+'FAILED'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ActionResult
+●●●●●● 1mm □
+_execute_log_observation
+●●●●●● 1mm □△
+self
+decision
+judgement
+●●●●●● 2mm □△
+ActionDecision
+JudgementResult
+'Execute observation logging action.'
+●●●●●● 3mm △
+1
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observation
+●●●●●● 1mm □
+'observation_id'
+'timestamp'
+'decision_id'
+'health_score'
+'health_status'
+'confidence'
+'drift_detected'
+'OBS-'
+●●●●●● 3mm △
+'04d'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+judgement
+judgement
+judgement
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+d
+0.1
+d
+judgement
+●●●●●● 2mm □△
+obs_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'observations.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+obs_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+observation
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Observation logging failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_execute_noop
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+ActionDecision
+'Execute no-operation (healthy state).'
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_log_decision
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+ActionDecision
+'Log decision to decision log.'
+decision_log
+●●●●●● 1mm □
+'decision_id'
+'timestamp'
+'action_type'
+'priority'
+'reason'
+'confidence'
+'target_components'
+'results'
+decision
+decision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+decision
+decision
+decision
+decision
+'action_id'
+'status'
+'message'
+r
+r
+r
+r
+decision
+decision_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'action_decisions.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+decision_log
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to log decision: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_heal_clear_cache
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Clear application cache via brain (system/clear_cache).'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'clear_cache'
+params
+●●●●●● 2mm □△
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+logger
+●●●●●● 1mm □△
+'Clearing application cache (via brain)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ok
+Exception
+logger
+●●●●●● 1mm □△
+'Cache clear failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_reset_database
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reset database connection via brain (system/reset_db).'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'reset_db'
+params
+●●●●●● 2mm □△
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+logger
+●●●●●● 1mm □△
+'Database connection reset (via brain)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ok
+Exception
+logger
+●●●●●● 1mm □△
+'Database reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_reset_vector_db
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reset vector database client via brain (system/reset_vector_db).'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'reset_vector_db'
+params
+●●●●●● 2mm □△
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+logger
+●●●●●● 1mm □△
+'Vector DB client reset (via brain)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ok
+Exception
+logger
+●●●●●● 1mm □△
+'Vector DB reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_garbage_collection
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Force garbage collection via brain (system/gc).'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'gc'
+params
+●●●●●● 2mm □△
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+logger
+●●●●●● 1mm □△
+'Garbage collection completed (via brain)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ok
+Exception
+logger
+●●●●●● 1mm □△
+'GC failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+ActionDecision
+'Convert action decision to dictionary for serialization.'
+●●●●●● 3mm ○
+'decision_id'
+'decision_timestamp'
+'action_type'
+'priority'
+'reason'
+'confidence'
+'target_components'
+'parameters'
+'results'
+decision
+decision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+decision
+decision
+decision
+decision
+decision
+'action_id'
+'action_type'
+'status'
+'message'
+'duration_ms'
+'timestamp'
+r
+r
+r
+r
+r
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+decision
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

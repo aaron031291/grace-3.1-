@@ -1,0 +1,350 @@
+## model_rollback.py
+'\nModel Rollback CLI — Revert to previous model versions.\n\nUsage:\n  python scripts/model_rollback.py --list           # Show version history\n  python scripts/model_rollback.py --rollback -1    # Rollback to previous version\n  python scripts/model_rollback.py --provider kimi  # Rollback specific provider\n'
+●●●●●● 2mm □△○
+argparse
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_versions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.model_updater
+●●●●●● 2mm □△○
+get_version_history
+history
+●●●●●● 1mm □
+get_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Current Models ==='
+●●●●●● 2mm □△
+provider
+model
+history
+●●●●●● 1mm □△
+'current'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+provider
+': '
+model
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Version History ==='
+●●●●●● 2mm □△
+entry
+history
+●●●●●● 1mm □△
+'history'
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ['
+entry
+●●●●●● 1mm □△
+'updated_at'
+'?'
+●●●●●● 2mm □△
+'] '
+entry
+●●●●●● 1mm □△
+'provider'
+●●●●●● 2mm □△
+': '
+entry
+●●●●●● 1mm □△
+'old_model'
+●●●●●● 2mm □△
+' → '
+entry
+●●●●●● 1mm □△
+'new_model'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Last '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 1mm □△
+'checks'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' Checks ==='
+●●●●●● 2mm □△
+check
+history
+●●●●●● 1mm □△
+'checks'
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ['
+check
+●●●●●● 1mm □△
+'timestamp'
+'?'
+●●●●●● 2mm □△
+'] Kimi: '
+check
+●●●●●● 1mm □△
+'kimi_count'
+0
+●●●●●● 2mm □△
+' models, Opus: '
+check
+●●●●●● 1mm □△
+'opus_count'
+0
+●●●●●● 2mm □△
+' models, Ollama: '
+check
+●●●●●● 1mm □△
+'ollama_count'
+0
+●●●●●● 2mm □△
+' models'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+rollback
+●●●●●● 1mm □△
+version_offset
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.model_updater
+●●●●●● 2mm □△○
+get_version_history
+update_model
+history
+●●●●●● 1mm □
+get_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □
+history
+●●●●●● 1mm □△
+'history'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+changes
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'No version history to rollback to.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+provider
+changes
+●●●●●● 1mm □
+c
+c
+changes
+c
+●●●●●● 1mm □△
+'provider'
+●●●●●● 2mm □△
+provider
+●●●●●● 2mm □
+changes
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'No history for provider: '
+provider
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+idx
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+version_offset
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+idx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+changes
+idx
+changes
+0
+old_model
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+'old_model'
+●●●●●● 2mm □△
+prov
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+'provider'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+old_model
+prov
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Invalid rollback target.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRolling back '
+prov
+':'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Current: '
+history
+●●●●●● 1mm □△
+'current'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+prov
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Rolling back to: '
+old_model
+●●●●●● 2mm □△
+confirm
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'\nConfirm rollback? (y/n): '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+confirm
+'y'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Cancelled.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+update_model
+●●●●●● 1mm □△
+prov
+old_model
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'updated'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Rolled back '
+prov
+' to '
+old_model
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ Rollback failed: '
+result
+●●●●●● 1mm □△
+'error'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--list'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--rollback'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--provider'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+list_versions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+●●●●●● 2mm □
+rollback
+●●●●●● 1mm □△
+args
+args
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,25 @@
+## __init__.py
+"coding_agent package — Grace's autonomous coding agent."
+●●●●●● 3mm □△○
+coding_agent.task_queue
+●●●●●● 2mm □△○
+submit
+start_worker
+get_status
+register_handler
+●●●●●● 3mm □△○
+coding_agent.deterministic_gate
+●●●●●● 2mm □△○
+get_gate
+●●●●●● 3mm □△○
+coding_agent.verification_pass
+●●●●●● 2mm □△○
+get_verification_pass
+__all__
+●●●●●● 1mm □
+'submit'
+'start_worker'
+'get_status'
+'register_handler'
+'get_gate'
+'get_verification_pass'

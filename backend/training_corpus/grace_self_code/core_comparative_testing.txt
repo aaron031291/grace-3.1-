@@ -1,0 +1,223 @@
+## comparative_testing.py
+'\nA/B Comparative Testing Framework\nSimultaneously executes tasks in the standard backend and the deterministic \nBraille Sandbox to definitively measure optimization gains.\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+●●●●●● 3mm □△○
+core.services.code_service
+●●●●●● 2mm □△○
+generate_code
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_ab_optimization_test
+●●●●●● 1mm □△
+prompt
+target_file
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n    Executes a given instruction exactly twice inside the Grace environment:\n    A) Standard Backend LLM execution\n    B) Spindle Braille Sandbox deterministic execution\n    \n    Returns optimization telemetry comparing the two pathways.\n    '
+metrics
+●●●●●● 1mm □
+'optimization_gain_ms'
+'environment_a_standard'
+'environment_b_sandbox'
+0
+'latency_ms'
+'status'
+0
+'pending'
+'latency_ms'
+'status'
+0
+'pending'
+logger
+●●●●●● 1mm □△
+'Executing task in Environment A (Standard)'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+a_result
+●●●●●● 1mm □
+generate_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'environment_a_standard'
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+2
+●●●●●● 2mm □△
+metrics
+'environment_a_standard'
+'status'
+●●●●●● 1mm □
+a_result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+'success'
+'failed'
+Exception
+metrics
+'environment_a_standard'
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+2
+●●●●●● 2mm □△
+metrics
+'environment_a_standard'
+'status'
+●●●●●● 1mm □
+'failed'
+logger
+●●●●●● 1mm □△
+'Standard execution failed: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Executing task in Environment B (Spindle Sandbox + Unified Memory)'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+b_result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'environment_b_sandbox'
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+2
+●●●●●● 2mm □△
+metrics
+'environment_b_sandbox'
+'status'
+●●●●●● 1mm □
+'success'
+Exception
+metrics
+'environment_b_sandbox'
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+2
+●●●●●● 2mm □△
+metrics
+'environment_b_sandbox'
+'status'
+●●●●●● 1mm □
+'failed'
+logger
+●●●●●● 1mm □△
+'Sandbox execution failed: '
+e
+●●●●●● 2mm □△
+standard_ms
+●●●●●● 1mm □
+metrics
+'environment_a_standard'
+'latency_ms'
+sandbox_ms
+●●●●●● 1mm □
+metrics
+'environment_b_sandbox'
+'latency_ms'
+●●●●●● 2mm □
+sandbox_ms
+0
+standard_ms
+0
+gain
+●●●●●● 1mm □
+standard_ms
+●●●●●● 1mm □△
+sandbox_ms
+metrics
+'optimization_gain_ms'
+●●●●●● 1mm □
+gain
+●●●●●● 2mm □
+gain
+0
+logger
+●●●●●● 1mm □△
+'Sandbox optimization achieved: '
+gain
+'ms faster execution.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Sandbox optimization deficit: '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+gain
+●●●●●● 2mm □△
+'ms slower execution.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

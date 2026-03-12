@@ -1,0 +1,3020 @@
+## test_layer4_action_router.py
+'\nComprehensive Tests for Layer 4 Action Router\n\nTests all components and Grace system integrations:\n- Basic action routing\n- OODA Loop integration\n- Sandbox Lab integration\n- Multi-LLM integration\n- Memory Mesh integration\n- RAG System integration\n- World Model integration\n- Neuro-Symbolic Reasoner integration\n- Genesis Keys integration\n- Learning Efficiency Tracking integration\n- Autonomous Healing System integration\n- Mirror Self-Modeling integration\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+warnings
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+timezone
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+call
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+ActionType
+ActionPriority
+ActionStatus
+ActionResult
+ActionDecision
+AlertConfig
+CICDConfig
+HealingAction
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 1mm □
+SensorTestResultData
+MetricsData
+TestResultData
+●●●●●● 1mm □
+SensorTestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpretedData
+Pattern
+PatternType
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementResult
+HealthStatus
+RiskLevel
+HealthScore
+ConfidenceScore
+RiskVector
+AVNAlert
+DriftAnalysis
+●●●●●● 1mm □
+temp_log_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create temporary log directory.'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create mock database session.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+temp_log_dir
+●●●●●● 2mm □△
+'Create basic ActionRouter without Grace systems.'
+●●●●●● 3mm ○
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+temp_log_dir
+mock_session
+●●●●●● 2mm □△
+'Create ActionRouter with all Grace systems enabled.'
+kb_path
+●●●●●● 1mm □
+temp_log_dir
+●●●●●● 3mm □△
+'knowledge_base'
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+sample_sensor_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create sample sensor data.'
+●●●●●● 3mm ○
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+sample_interpreted_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create sample interpreted data.'
+●●●●●● 3mm ○
+InterpretedData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+sample_judgement_healthy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create sample judgement for healthy system.'
+●●●●●● 3mm ○
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+sample_judgement_critical
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create sample judgement for critical system.'
+●●●●●● 3mm ○
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestBasicActionRouter
+'Test basic ActionRouter functionality without Grace systems.'
+●●●●●● 1mm □
+test_router_initialization
+●●●●●● 1mm □△
+self
+temp_log_dir
+●●●●●● 2mm □△
+'Test ActionRouter initializes correctly.'
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 2mm □
+router
+●●●●●● 2mm □
+router
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+0
+router
+0
+●●●●●● 1mm □
+test_create_decision_healthy
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_healthy
+●●●●●● 2mm □△
+'Test decision creation for healthy system.'
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_healthy
+●●●●●● 2mm □△
+decision
+ActionType
+decision
+ActionPriority
+decision
+0.9
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_create_decision_critical
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test decision creation for critical system.'
+basic_router
+●●●●●● 1mm □
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+ActionType
+decision
+ActionPriority
+'database'
+decision
+'api'
+decision
+●●●●●● 1mm □
+test_execute_freeze
+●●●●●● 1mm □△
+self
+basic_router
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test system freeze execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+result
+ActionStatus
+'freeze'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+basic_router
+●●●●●● 3mm □△
+'SYSTEM_FROZEN'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_execute_freeze_disabled
+●●●●●● 1mm □△
+self
+basic_router
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test freeze execution when disabled.'
+basic_router
+●●●●●● 1mm □
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+result
+ActionStatus
+●●●●●● 1mm □
+test_execute_alert
+●●●●●● 1mm □△
+self
+basic_router
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test alert execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_judgement_critical
+●●●●●● 2mm □△
+result
+ActionStatus
+'alert'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+alert_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+basic_router
+alert_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_execute_healing_basic
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test basic healing execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample_sensor_data
+●●●●●● 1mm □
+●●●●●● 1mm □
+results
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'database'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_execute_healing_disabled
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test healing execution when disabled.'
+basic_router
+●●●●●● 1mm □
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+1
+results
+0
+ActionStatus
+●●●●●● 1mm □
+test_execute_cicd
+●●●●●● 1mm □△
+self
+basic_router
+●●●●●● 2mm □△
+'Test CI/CD execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+result
+ActionStatus
+'ci'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cicd'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'cicd_triggers.jsonl'
+cicd_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_execute_learning_capture
+●●●●●● 1mm □△
+self
+basic_router
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test learning capture execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_interpreted_data
+●●●●●● 2mm □△
+result
+ActionStatus
+'learning'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'pattern'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'learning_captures.jsonl'
+learning_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_execute_log_observation
+●●●●●● 1mm □△
+self
+basic_router
+sample_judgement_healthy
+●●●●●● 2mm □△
+'Test observation logging.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_judgement_healthy
+●●●●●● 2mm □△
+result
+ActionStatus
+'observation'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+obs_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'observations.jsonl'
+obs_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_execute_noop
+●●●●●● 1mm □△
+self
+basic_router
+●●●●●● 2mm □△
+'Test no-operation execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+result
+ActionStatus
+'healthy'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_route_complete_flow
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_healthy
+●●●●●● 2mm □△
+'Test complete routing flow.'
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_healthy
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+decision
+ActionType
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+decision
+●●●●●● 2mm □
+decision_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'action_decisions.jsonl'
+decision_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestOODALoopIntegration
+'Test OODA Loop / Cognitive Engine integration.'
+●●●●●● 1mm □
+test_ooda_loop_integration
+●●●●●● 1mm □△
+self
+mock_decision_context
+mock_cognitive_engine
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test OODA Loop is called during routing.'
+mock_engine
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_engine
+mock_context
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_decision_context
+●●●●●● 1mm □
+mock_context
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+mock_engine
+mock_engine
+mock_engine
+mock_engine
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.CognitiveEngine'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.DecisionContext'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ooda_loop_handles_failure
+●●●●●● 1mm □△
+self
+mock_cognitive_engine
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test OODA Loop gracefully handles failures.'
+mock_engine
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_engine
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'OODA failed'
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_engine
+sample_sensor_data
+●●●●●● 1mm □
+0.98
+sample_sensor_data
+●●●●●● 1mm □
+0
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+decision
+ActionType
+ActionType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.CognitiveEngine'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSandboxLabIntegration
+'Test Sandbox Lab integration.'
+●●●●●● 1mm □
+test_sandbox_lab_initialization
+●●●●●● 1mm □△
+self
+enhanced_router
+●●●●●● 2mm □△
+'Test Sandbox Lab initialization is attempted.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+enhanced_router
+'sandbox_lab'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_sandbox_testing_for_risky_actions
+●●●●●● 1mm □△
+self
+mock_sandbox_class
+enhanced_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test risky actions are tested in sandbox first.'
+mock_lab
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_experiment
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_experiment
+●●●●●● 1mm □
+'EXP-001'
+mock_experiment
+●●●●●● 1mm □
+0.9
+mock_lab
+●●●●●● 1mm □
+mock_experiment
+enhanced_router
+●●●●●● 1mm □
+mock_lab
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample_judgement_critical
+●●●●●● 1mm □
+HealthStatus
+results
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_lab
+'propose_experiment'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.AutonomousSandboxLab'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_sandbox_failure_skips_action
+●●●●●● 1mm □△
+self
+mock_sandbox_class
+enhanced_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test that failed sandbox tests skip action execution.'
+mock_lab
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_experiment
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_experiment
+●●●●●● 1mm □
+'EXP-001'
+mock_experiment
+●●●●●● 1mm □
+0.5
+mock_lab
+●●●●●● 1mm □
+mock_experiment
+enhanced_router
+●●●●●● 1mm □
+mock_lab
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample_judgement_critical
+●●●●●● 1mm □
+HealthStatus
+sample_sensor_data
+●●●●●● 1mm □
+●●●●●● 1mm □
+results
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+skipped_results
+●●●●●● 1mm □
+r
+r
+results
+r
+ActionStatus
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.AutonomousSandboxLab'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestMultiLLMIntegration
+'Test Multi-LLM Orchestration integration.'
+●●●●●● 1mm □
+test_llm_orchestrator_initialization
+●●●●●● 1mm □△
+self
+mock_llm_class
+enhanced_router
+●●●●●● 2mm □△
+'Test LLM Orchestrator is initialized.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+enhanced_router
+'llm_orchestrator'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.LLMOrchestrator'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_llm_used_for_complex_decisions
+●●●●●● 1mm □△
+self
+mock_llm_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test LLM is used for complex decisions (low confidence).'
+mock_llm
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_llm
+sample_judgement_critical
+●●●●●● 1mm □
+0.6
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.LLMOrchestrator'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestMemoryMeshIntegration
+'Test Memory Mesh (Procedural + Episodic) integration.'
+●●●●●● 1mm □
+test_memory_mesh_initialization
+●●●●●● 1mm □△
+self
+mock_memory_class
+enhanced_router
+●●●●●● 2mm □△
+'Test Memory Mesh is initialized.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+enhanced_router
+'memory_mesh'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.MemoryMeshIntegration'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_memory_mesh_stores_outcomes
+●●●●●● 1mm □△
+self
+mock_memory_class
+enhanced_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test Memory Mesh stores action outcomes.'
+mock_mesh
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_mesh
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample_sensor_data
+●●●●●● 1mm □
+●●●●●● 1mm □
+results
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.MemoryMeshIntegration'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestRAGIntegration
+'Test RAG System integration.'
+●●●●●● 1mm □
+test_rag_retrieval
+●●●●●● 1mm □△
+self
+mock_rag_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test RAG retrieves knowledge before routing.'
+mock_rag
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_rag
+●●●●●● 1mm □
+'content'
+'relevance'
+'Database connection troubleshooting'
+0.85
+'content'
+'relevance'
+'System recovery procedures'
+0.75
+enhanced_router
+●●●●●● 1mm □
+mock_rag
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+mock_rag
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.DocumentRetriever'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rag_handles_failure
+●●●●●● 1mm □△
+self
+mock_rag_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test RAG gracefully handles failures.'
+mock_rag
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_rag
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'RAG failed'
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_rag
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.DocumentRetriever'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestGenesisKeysIntegration
+'Test Genesis Keys integration.'
+●●●●●● 1mm □
+test_genesis_key_creation
+●●●●●● 1mm □△
+self
+mock_genesis_class
+enhanced_router
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test Genesis Keys are created for actions.'
+mock_service
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-TEST-001'
+mock_service
+●●●●●● 1mm □
+mock_key
+enhanced_router
+●●●●●● 1mm □
+mock_service
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+ActionType
+decision
+'Execute healing action'
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 2mm □
+mock_service
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.GenesisKeyService'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_genesis_key_update
+●●●●●● 1mm □△
+self
+mock_genesis_class
+enhanced_router
+●●●●●● 2mm □△
+'Test Genesis Keys are updated with results.'
+mock_service
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-TEST-001'
+enhanced_router
+●●●●●● 1mm □
+mock_service
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □△
+mock_key
+'COMPLETED'
+result
+●●●●●● 2mm □△
+mock_service
+call_args
+●●●●●● 1mm □
+mock_service
+call_args
+0
+0
+'GK-TEST-001'
+call_args
+1
+'status'
+'COMPLETED'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.GenesisKeyService'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestLearningEfficiencyIntegration
+'Test Learning Efficiency Tracking integration.'
+●●●●●● 1mm □
+test_efficiency_tracking
+●●●●●● 1mm □△
+self
+mock_efficiency_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test learning efficiency is tracked.'
+mock_tracker
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_tracker
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+mock_tracker
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.LearningEfficiencyTracker'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_efficiency_tracks_time
+●●●●●● 1mm □△
+self
+mock_efficiency_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test efficiency tracking includes time metrics.'
+mock_tracker
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_tracker
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mock_tracker
+call_kwargs
+●●●●●● 1mm □
+mock_tracker
+1
+'time_to_insight_seconds'
+call_kwargs
+call_kwargs
+'time_to_insight_seconds'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.LearningEfficiencyTracker'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestAutonomousHealingIntegration
+'Test Autonomous Healing System integration.'
+●●●●●● 1mm □
+test_autonomous_healing_used
+●●●●●● 1mm □△
+self
+mock_healing_class
+enhanced_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test Autonomous Healing System is used when available.'
+mock_healing
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_healing
+●●●●●● 1mm □
+'executed'
+'awaiting_approval'
+'failed'
+'healing_action'
+'success'
+'duration_ms'
+'reconnect_database'
+●●●●●● 3mm □△○
+500.0
+enhanced_router
+●●●●●● 1mm □
+mock_healing
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+mock_healing
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.AutonomousHealingSystem'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestMirrorSelfModelingIntegration
+'Test Mirror Self-Modeling integration.'
+●●●●●● 1mm □
+test_mirror_initialization
+●●●●●● 1mm □△
+self
+mock_get_mirror
+enhanced_router
+●●●●●● 2mm □△
+'Test Mirror system is initialized.'
+mock_mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_get_mirror
+●●●●●● 1mm □
+mock_mirror
+enhanced_router
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.get_mirror_system'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_mirror_observes_actions
+●●●●●● 1mm □△
+self
+mock_get_mirror
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test Mirror observes actions through Genesis Keys.'
+mock_mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mirror
+●●●●●● 1mm □
+mock_mirror
+●●●●●● 1mm □
+'total_operations'
+'operations_by_type'
+10
+'HEALING_ACTION'
+5
+enhanced_router
+●●●●●● 1mm □
+mock_mirror
+mock_genesis
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-TEST-001'
+mock_genesis
+●●●●●● 1mm □
+mock_key
+enhanced_router
+●●●●●● 1mm □
+mock_genesis
+sample_sensor_data
+●●●●●● 1mm □
+0.98
+sample_sensor_data
+●●●●●● 1mm □
+0
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_mirror
+'detect_behavioral_patterns'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_mirror
+'observe_recent_operations'
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.get_mirror_system'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_mirror_detects_patterns
+●●●●●● 1mm □△
+self
+mock_get_mirror
+enhanced_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test Mirror detects patterns and logs them.'
+mock_mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mirror
+●●●●●● 1mm □
+'pattern_type'
+'topic'
+'occurrences'
+'recommendation'
+'evidence'
+'repeated_failure'
+'database_healing'
+5
+'Review approach'
+'GK-TEST-001'
+mock_mirror
+●●●●●● 1mm □
+'total_operations'
+10
+enhanced_router
+●●●●●● 1mm □
+mock_mirror
+mock_genesis
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-TEST-001'
+mock_genesis
+●●●●●● 1mm □
+mock_key
+enhanced_router
+●●●●●● 1mm □
+mock_genesis
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+mock_mirror
+patterns
+●●●●●● 1mm □
+mock_mirror
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+0
+patterns
+0
+'pattern_type'
+'repeated_failure'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.get_mirror_system'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestCompleteIntegrationFlow
+'Test complete integration flow with all systems.'
+●●●●●● 1mm □
+test_complete_enhanced_flow
+●●●●●● 1mm □△
+self
+mock_get_mirror
+mock_efficiency
+mock_genesis
+mock_rag
+mock_cognitive
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test complete enhanced flow with all Grace systems.'
+mock_cognitive_engine
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_cognitive_engine
+mock_rag_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_rag_instance
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □
+mock_rag_instance
+mock_genesis_service
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-TEST-001'
+mock_genesis_service
+●●●●●● 1mm □
+mock_key
+enhanced_router
+●●●●●● 1mm □
+mock_genesis_service
+mock_efficiency_tracker
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_efficiency_tracker
+mock_mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mirror
+●●●●●● 1mm □
+mock_mirror
+●●●●●● 1mm □
+'total_operations'
+0
+enhanced_router
+●●●●●● 1mm □
+mock_mirror
+sample_sensor_data
+●●●●●● 1mm □
+0.98
+sample_sensor_data
+●●●●●● 1mm □
+0
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_cognitive_engine
+'observe'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_rag_instance
+'retrieve'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_genesis_service
+'create_genesis_key'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_efficiency_tracker
+'record_insight'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enhanced_router
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mock_mirror
+'detect_behavioral_patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.CognitiveEngine'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.DocumentRetriever'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.GenesisKeyService'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.LearningEfficiencyTracker'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.get_mirror_system'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_graceful_degradation
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test system works without Grace systems.'
+sample_sensor_data
+●●●●●● 1mm □
+0.98
+sample_sensor_data
+●●●●●● 1mm □
+0
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+decision
+ActionType
+ActionType
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △
+TestEdgeCases
+'Test edge cases and error handling.'
+●●●●●● 1mm □
+test_empty_target_components
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test routing with no target components.'
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+decision
+ActionType
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_multiple_healing_actions
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test multiple healing actions execute.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample_sensor_data
+●●●●●● 1mm □
+●●●●●● 1mm □
+sample_sensor_data
+●●●●●● 1mm □
+●●●●●● 1mm □
+sample_sensor_data
+●●●●●● 1mm □
+90.0
+results
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_dry_run_mode
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+"Test dry run mode doesn't execute actions."
+basic_router
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_decision_logging
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test decision logging works.'
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'action_decisions.jsonl'
+log_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+0
+log_entry
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+log_entry
+'decision_id'
+decision
+log_entry
+'action_type'
+decision
+●●●●●● 2mm △
+TestHelperMethods
+'Test helper methods.'
+●●●●●● 1mm □
+test_create_action_genesis_key
+●●●●●● 1mm □△
+self
+mock_genesis_class
+enhanced_router
+●●●●●● 2mm □△
+'Test Genesis Key creation helper.'
+mock_service
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-HELPER-001'
+mock_service
+●●●●●● 1mm □
+mock_key
+enhanced_router
+●●●●●● 1mm □
+mock_service
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+ActionType
+decision
+'Test action'
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 2mm □
+mock_service
+call_kwargs
+●●●●●● 1mm □
+mock_service
+1
+call_kwargs
+'key_type'
+'TRIGGER_HEALING'
+call_kwargs
+'what'
+'Test action'
+'database'
+call_kwargs
+'where'
+call_kwargs
+'why'
+'Test'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.GenesisKeyService'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_update_genesis_key_status
+●●●●●● 1mm □△
+self
+mock_genesis_class
+enhanced_router
+●●●●●● 2mm □△
+'Test Genesis Key status update helper.'
+mock_service
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_service
+mock_key
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_key
+●●●●●● 1mm □
+'GK-UPDATE-001'
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □△
+mock_key
+'COMPLETED'
+result
+●●●●●● 2mm □△
+mock_service
+call_args
+●●●●●● 1mm □
+mock_service
+call_args
+0
+0
+'GK-UPDATE-001'
+call_args
+1
+'status'
+'COMPLETED'
+'action_id'
+call_args
+1
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.GenesisKeyService'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestConfiguration
+'Test configuration options.'
+●●●●●● 1mm □
+test_alert_config
+●●●●●● 1mm □△
+self
+temp_log_dir
+●●●●●● 2mm □△
+'Test alert configuration.'
+custom_alert
+●●●●●● 1mm □
+AlertConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+'custom_alerts.jsonl'
+router
+'https://example.com/webhook'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+router
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_cicd_config
+●●●●●● 1mm □△
+self
+temp_log_dir
+●●●●●● 2mm □△
+'Test CI/CD configuration.'
+custom_cicd
+●●●●●● 1mm □
+CICDConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 3mm □△○
+router
+'npm run test'
+router
+'jest --coverage'
+●●●●●● 1mm □
+test_enable_disable_flags
+●●●●●● 1mm □△
+self
+temp_log_dir
+●●●●●● 2mm □△
+'Test enable/disable flags.'
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+router
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestWorldModelIntegration
+'Test World Model integration.'
+●●●●●● 1mm □
+test_world_model_initialization
+●●●●●● 1mm □△
+self
+mock_world_class
+enhanced_router
+●●●●●● 2mm □△
+'Test World Model is initialized.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+enhanced_router
+'world_model'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.DataPipeline'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_world_model_context_retrieval
+●●●●●● 1mm □△
+self
+mock_world_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test World Model retrieves system context.'
+mock_world
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced_router
+●●●●●● 1mm □
+mock_world
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.DataPipeline'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestNeuroSymbolicIntegration
+'Test Neuro-Symbolic Reasoner integration.'
+●●●●●● 1mm □
+test_neuro_symbolic_initialization
+●●●●●● 1mm □△
+self
+mock_reasoner_class
+enhanced_router
+●●●●●● 2mm □△
+'Test Neuro-Symbolic Reasoner is initialized.'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+enhanced_router
+'neuro_symbolic_reasoner'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.NeuroSymbolicReasoner'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_neuro_symbolic_reasoning
+●●●●●● 1mm □△
+self
+mock_reasoner_class
+enhanced_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test Neuro-Symbolic reasoning is used.'
+mock_reasoner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_result
+●●●●●● 1mm □
+0.85
+mock_reasoner
+●●●●●● 1mm □
+mock_result
+enhanced_router
+●●●●●● 1mm □
+mock_reasoner
+decision
+●●●●●● 1mm □
+enhanced_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+mock_reasoner
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'diagnostic_machine.action_router.NeuroSymbolicReasoner'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestActionTypeMapping
+'Test action type mapping logic.'
+●●●●●● 1mm □
+test_action_mapping_freeze
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test freeze action mapping.'
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+decision
+ActionType
+decision
+ActionPriority
+●●●●●● 1mm □
+test_action_mapping_alert
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test alert action mapping.'
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+decision
+ActionType
+decision
+ActionPriority
+●●●●●● 1mm □
+test_action_mapping_heal
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test heal action mapping.'
+sample_sensor_data
+●●●●●● 1mm □
+0.98
+sample_sensor_data
+●●●●●● 1mm □
+0
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+decision
+ActionType
+ActionType
+decision
+ActionPriority
+●●●●●● 2mm △
+TestCICDTriggerLogic
+'Test CI/CD trigger decision logic.'
+●●●●●● 1mm □
+test_cicd_triggered_on_test_failures
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test CI/CD triggered on test failures.'
+sample_sensor_data
+●●●●●● 1mm □
+0.9
+sample_sensor_data
+●●●●●● 1mm □
+2
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+should_trigger
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+should_trigger
+'infrastructure_test_failures'
+●●●●●● 1mm □
+test_cicd_triggered_on_healing
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test CI/CD triggered after healing.'
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+should_trigger
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+should_trigger
+'post_healing_verification'
+●●●●●● 1mm □
+test_cicd_not_triggered_when_disabled
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+●●●●●● 2mm □△
+'Test CI/CD not triggered when disabled.'
+basic_router
+●●●●●● 1mm □
+●●●●●● 1mm □
+judgement
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+should_trigger
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+judgement
+●●●●●● 2mm □△
+should_trigger
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestHealingFunctionRegistry
+'Test healing function registry.'
+●●●●●● 1mm □
+test_register_healing_function
+●●●●●● 1mm □△
+self
+basic_router
+●●●●●● 2mm □△
+'Test custom healing function registration.'
+●●●●●● 1mm □
+custom_heal
+●●●●●● 1mm □△
+params
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+basic_router
+●●●●●● 1mm □△
+'custom_heal'
+custom_heal
+●●●●●● 2mm □△
+'custom_heal'
+basic_router
+basic_router
+'custom_heal'
+custom_heal
+●●●●●● 1mm □
+test_default_healing_functions_registered
+●●●●●● 1mm □△
+self
+basic_router
+●●●●●● 2mm □△
+'Test default healing functions are registered.'
+'clear_application_cache'
+basic_router
+'reset_database_connection'
+basic_router
+'reset_vector_db_client'
+basic_router
+'force_garbage_collection'
+basic_router
+●●●●●● 1mm □
+test_healing_function_execution
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test healing function execution.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample_sensor_data
+●●●●●● 1mm □
+90.0
+results
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+decision
+sample_sensor_data
+sample_judgement_critical
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+gc_results
+●●●●●● 1mm □
+r
+r
+results
+'gc'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'garbage'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gc_results
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △
+TestDecisionLogging
+'Test decision logging functionality.'
+●●●●●● 1mm □
+test_decision_logged_to_file
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test decisions are logged to file.'
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'action_decisions.jsonl'
+log_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+0
+log_entry
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+log_entry
+'decision_id'
+decision
+log_entry
+'action_type'
+decision
+log_entry
+'confidence'
+decision
+●●●●●● 1mm □
+test_decision_log_includes_results
+●●●●●● 1mm □△
+self
+basic_router
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test decision log includes action results.'
+decision
+●●●●●● 1mm □
+basic_router
+●●●●●● 1mm □△
+sample_sensor_data
+sample_interpreted_data
+sample_judgement_critical
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+basic_router
+●●●●●● 3mm □△
+'action_decisions.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'r'
+●●●●●● 2mm □△
+f
+log_entry
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+'results'
+log_entry
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_entry
+'results'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestNotificationSystem
+'Tests for webhook, email, and Slack notification features.'
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+self
+temp_log_dir
+●●●●●● 2mm □△
+'Create router with all notification channels configured.'
+alert_config
+●●●●●● 1mm □
+AlertConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_webhook_notification_success
+●●●●●● 1mm □△
+self
+router_with_notifications
+●●●●●● 2mm □△
+'Test successful webhook notification.'
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'severity'
+'reason'
+'timestamp'
+'ALERT-0001'
+'critical'
+'Test alert'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'urllib.request.urlopen'
+●●●●●● 2mm □△
+mock_urlopen
+mock_response
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_response
+●●●●●● 1mm □
+200
+mock_response
+●●●●●● 1mm □
+b'{"ok": true}'
+mock_response
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_response
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_urlopen
+●●●●●● 1mm □
+mock_response
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+result
+'status_code'
+200
+mock_urlopen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_webhook_notification_failure
+●●●●●● 1mm □△
+self
+router_with_notifications
+●●●●●● 2mm □△
+'Test webhook notification handles failure gracefully.'
+●●●●●● 2mm □△○
+urllib.error
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'severity'
+'ALERT-0001'
+'warning'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'urllib.request.urlopen'
+●●●●●● 2mm □△
+mock_urlopen
+mock_urlopen
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+'Connection refused'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+'error'
+result
+●●●●●● 1mm □
+test_email_notification_success
+●●●●●● 1mm □△
+self
+router_with_notifications
+●●●●●● 2mm □△
+'Test successful email notification.'
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'severity'
+'reason'
+'timestamp'
+'health_status'
+'health_score'
+'critical_components'
+'degraded_components'
+'avn_alerts'
+'risk_vectors'
+'ALERT-0002'
+'warning'
+'Test email alert'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'degraded'
+0.65
+'api_server'
+1
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'smtplib.SMTP'
+●●●●●● 2mm □△
+mock_smtp
+mock_server
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_smtp
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_smtp
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+result
+'recipients'
+'admin@example.com'
+'ops@example.com'
+'[GRACE WARNING]'
+result
+'subject'
+mock_server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_email_notification_failure
+●●●●●● 1mm □△
+self
+router_with_notifications
+●●●●●● 2mm □△
+'Test email notification handles SMTP failure gracefully.'
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'severity'
+'ALERT-0003'
+'critical'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'smtplib.SMTP'
+●●●●●● 2mm □△
+mock_smtp
+mock_smtp
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'SMTP connection failed'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+'error'
+result
+●●●●●● 1mm □
+test_slack_notification_success
+●●●●●● 1mm □△
+self
+router_with_notifications
+●●●●●● 2mm □△
+'Test successful Slack notification.'
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'severity'
+'reason'
+'timestamp'
+'health_status'
+'health_score'
+'critical_components'
+'degraded_components'
+'ALERT-0004'
+'critical'
+'Critical system failure'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'critical'
+0.25
+'database'
+'cache'
+'api_server'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'os.environ'
+'SLACK_WEBHOOK_URL'
+'https://hooks.slack.com/test'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'urllib.request.urlopen'
+●●●●●● 2mm □△
+mock_urlopen
+mock_response
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_response
+●●●●●● 1mm □
+200
+mock_response
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_response
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_urlopen
+●●●●●● 1mm □
+mock_response
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+result
+'channel'
+'#alerts'
+mock_urlopen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_slack_notification_missing_webhook
+●●●●●● 1mm □△
+self
+router_with_notifications
+●●●●●● 2mm □△
+'Test Slack notification fails gracefully when webhook not configured.'
+alert_payload
+●●●●●● 1mm □
+'alert_id'
+'severity'
+'ALERT-0005'
+'warning'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'os.environ'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+os
+os
+●●●●●● 1mm □△
+'SLACK_WEBHOOK_URL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+alert_payload
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+'not configured'
+result
+'error'
+●●●●●● 1mm □
+test_alert_sends_all_notifications
+●●●●●● 1mm □△
+self
+router_with_notifications
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test that alert execution sends to all configured channels.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+router_with_notifications
+'_send_webhook_notification'
+●●●●●● 2mm □△
+mock_webhook
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+router_with_notifications
+'_send_email_notification'
+●●●●●● 2mm □△
+mock_email
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+router_with_notifications
+'_send_slack_notification'
+●●●●●● 2mm □△
+mock_slack
+mock_webhook
+●●●●●● 1mm □
+'success'
+'status_code'
+●●●●●● 3mm □△○
+200
+mock_email
+●●●●●● 1mm □
+'success'
+'recipients'
+●●●●●● 3mm □△○
+'admin@example.com'
+mock_slack
+●●●●●● 1mm □
+'success'
+'channel'
+●●●●●● 3mm □△○
+'#alerts'
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+decision
+sample_judgement_critical
+●●●●●● 2mm □△
+result
+ActionStatus
+mock_webhook
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_email
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_slack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'notification_results'
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'notification_results'
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_alert_continues_if_one_notification_fails
+●●●●●● 1mm □△
+self
+router_with_notifications
+sample_judgement_critical
+●●●●●● 2mm □△
+'Test that alert continues even if one notification channel fails.'
+decision
+●●●●●● 1mm □
+ActionDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+router_with_notifications
+'_send_webhook_notification'
+●●●●●● 2mm □△
+mock_webhook
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+router_with_notifications
+'_send_email_notification'
+●●●●●● 2mm □△
+mock_email
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+router_with_notifications
+'_send_slack_notification'
+●●●●●● 2mm □△
+mock_slack
+mock_webhook
+●●●●●● 1mm □
+'success'
+'error'
+●●●●●● 1mm □
+'Connection timeout'
+mock_email
+●●●●●● 1mm □
+'success'
+'recipients'
+●●●●●● 3mm □△○
+'admin@example.com'
+mock_slack
+●●●●●● 1mm □
+'success'
+'channel'
+●●●●●● 3mm □△○
+'#alerts'
+result
+●●●●●● 1mm □
+router_with_notifications
+●●●●●● 1mm □△
+decision
+sample_judgement_critical
+●●●●●● 2mm □△
+result
+ActionStatus
+mock_webhook
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_email
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_slack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

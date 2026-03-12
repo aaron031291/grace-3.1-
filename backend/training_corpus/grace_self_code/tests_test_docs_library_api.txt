@@ -1,0 +1,312 @@
+## test_docs_library_api.py
+'Tests for Docs Library API helpers.'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestDocsLibraryHelpers
+●●●●●● 1mm □
+test_safe_json_parse_valid
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_safe_json_parse
+_safe_json_parse
+●●●●●● 1mm □△
+'["a","b"]'
+●●●●●● 2mm □△
+'a'
+'b'
+_safe_json_parse
+●●●●●● 1mm □△
+'{"k":"v"}'
+●●●●●● 2mm □△
+'k'
+'v'
+●●●●●● 1mm □
+test_safe_json_parse_invalid
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_safe_json_parse
+_safe_json_parse
+●●●●●● 1mm □△
+'not json'
+●●●●●● 2mm □△
+_safe_json_parse
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+_safe_json_parse
+●●●●●● 1mm □△
+''
+'default'
+●●●●●● 2mm □△
+'default'
+●●●●●● 1mm □
+test_guess_mime
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_guess_mime
+_guess_mime
+●●●●●● 1mm □△
+'report.pdf'
+●●●●●● 2mm □△
+'application/pdf'
+_guess_mime
+●●●●●● 1mm □△
+'notes.txt'
+●●●●●● 2mm □△
+'text/plain'
+_guess_mime
+●●●●●● 1mm □△
+'data.csv'
+●●●●●● 2mm □△
+'text/csv'
+_guess_mime
+●●●●●● 1mm □△
+'doc.docx'
+●●●●●● 2mm □△
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+_guess_mime
+●●●●●● 1mm □△
+'script.py'
+●●●●●● 2mm □△
+'text/x-python'
+_guess_mime
+●●●●●● 1mm □△
+'unknown.xyz'
+●●●●●● 2mm □△
+'application/octet-stream'
+●●●●●● 1mm □
+test_file_extension
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_file_extension
+_file_extension
+●●●●●● 1mm □△
+'test.pdf'
+●●●●●● 2mm □△
+'.pdf'
+_file_extension
+●●●●●● 1mm □△
+'file.TXT'
+●●●●●● 2mm □△
+'.txt'
+_file_extension
+●●●●●● 1mm □△
+'noext'
+●●●●●● 2mm □△
+''
+_file_extension
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □
+test_doc_to_dict_minimal
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_doc_to_dict
+●●●●●● 2mm △
+FakeDoc
+●●●●●● 1mm △
+●●●●●● 1mm □
+1
+filename
+●●●●●● 1mm □
+'test.txt'
+original_filename
+●●●●●● 1mm □
+'test.txt'
+file_path
+●●●●●● 1mm □
+''
+file_size
+●●●●●● 1mm □
+100
+mime_type
+●●●●●● 1mm □
+'text/plain'
+source
+●●●●●● 1mm □
+'upload'
+status
+●●●●●● 1mm □
+'completed'
+upload_method
+●●●●●● 1mm □
+'ui-upload'
+total_chunks
+●●●●●● 1mm □
+0
+tags
+●●●●●● 1mm □
+●●●●●● 2mm □
+description
+●●●●●● 1mm □
+●●●●●● 2mm □
+document_metadata
+●●●●●● 1mm □
+●●●●●● 2mm □
+confidence_score
+●●●●●● 1mm □
+0.8
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+FakeDoc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'id'
+1
+result
+'filename'
+'test.txt'
+result
+'file_size'
+100
+result
+'status'
+'completed'
+result
+'tags'
+result
+'folder'
+''
+●●●●●● 1mm □
+test_doc_to_dict_with_folder
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_doc_to_dict
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm △
+FakeDoc
+●●●●●● 1mm △
+●●●●●● 1mm □
+2
+filename
+●●●●●● 1mm □
+'report.pdf'
+original_filename
+●●●●●● 1mm □
+'report.pdf'
+file_path
+●●●●●● 1mm □
+''
+file_size
+●●●●●● 1mm □
+5000
+mime_type
+●●●●●● 1mm □
+'application/pdf'
+source
+●●●●●● 1mm □
+'knowledge_base'
+status
+●●●●●● 1mm □
+'completed'
+upload_method
+●●●●●● 1mm □
+'librarian_upload'
+total_chunks
+●●●●●● 1mm □
+5
+tags
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+'research'
+'ai'
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+'An AI report'
+document_metadata
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+'directory'
+'reports/2024'
+●●●●●● 2mm □△
+confidence_score
+●●●●●● 1mm □
+0.9
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+FakeDoc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'tags'
+'research'
+'ai'
+result
+'description'
+'An AI report'
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

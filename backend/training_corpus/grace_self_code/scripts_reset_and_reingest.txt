@@ -1,0 +1,1317 @@
+## reset_and_reingest.py
+'\nComplete reset and re-ingestion script for Grace Knowledge Base.\n\nThis script:\n1. Clears all data from PostgreSQL/SQLite database\n2. Clears all data from Qdrant vector database\n3. Resets the file ingestion tracking state\n4. Triggers fresh auto-ingestion of all files in knowledge_base/\n\nEnhanced logging shows:\n- Which files are being ingested\n- Progress updates in real-time\n- Timestamps for all operations\n- Success/failure status for each file\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+time
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ColoredFormatter
+●●●●●● 3mm □△
+logging
+'Formatter that adds colors and better formatting.'
+COLORS
+●●●●●● 1mm □
+'DEBUG'
+'INFO'
+'WARNING'
+'ERROR'
+'CRITICAL'
+'\x1b[36m'
+'\x1b[92m'
+'\x1b[93m'
+'\x1b[91m'
+'\x1b[95m'
+RESET
+●●●●●● 1mm □
+'\x1b[0m'
+●●●●●● 1mm □
+format
+●●●●●● 1mm □△
+self
+record
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+sys
+'isatty'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+levelname
+●●●●●● 1mm □
+record
+●●●●●● 2mm □
+levelname
+●●●●●● 3mm △
+record
+●●●●●● 1mm □
+●●●●●● 3mm △
+levelname
+levelname
+●●●●●● 3mm △
+record
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S.%f'
+●●●●●● 2mm □△
+3
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 1mm □
+setup_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Configure logging with timestamps and colors.'
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+handler
+logger
+logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+console_handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+console_handler
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+formatter
+●●●●●● 1mm □
+ColoredFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+console_handler
+●●●●●● 1mm □△
+formatter
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+console_handler
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+setup_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+clear_sqlite
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear all data from SQLite database.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[1/4] CLEARING SQLITE DATABASE'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+Chat
+ChatHistory
+logger
+●●●●●● 1mm □△
+'Setting up SQLite configuration...'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing database connection...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating session factory...'
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleting document chunks...'
+●●●●●● 2mm □△
+chunk_count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Deleted '
+chunk_count
+' document chunks'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleting documents...'
+●●●●●● 2mm □△
+doc_count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Deleted '
+doc_count
+' documents'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleting chat histories...'
+●●●●●● 2mm □△
+history_count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Deleted '
+history_count
+' chat history entries'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleting chats...'
+●●●●●● 2mm □△
+chat_count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Deleted '
+chat_count
+' chats'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ SQLite database cleared successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 2mm □
+'no such table'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"✓ Database tables don't exist yet (OK - nothing to clear)"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Error clearing SQLite: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to clear SQLite: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+clear_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear all data from Qdrant vector database.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[2/4] CLEARING QDRANT VECTOR DATABASE'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+logger
+●●●●●● 1mm □△
+'Connecting to Qdrant...'
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collection_name
+●●●●●● 1mm □
+'documents'
+logger
+●●●●●● 1mm □△
+"Attempting to delete Qdrant collection: '"
+collection_name
+"'"
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"✓ Qdrant collection '"
+collection_name
+"' deleted successfully"
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'not found'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"✓ Collection '"
+collection_name
+"' doesn't exist (OK - nothing to delete)"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✓ Qdrant vector database cleared successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to clear Qdrant: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+reset_file_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset file ingestion tracking state.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[3/4] RESETTING FILE INGESTION TRACKING'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+tracking_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'.ingestion_state.json'
+●●●●●● 2mm □
+tracking_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Removing file tracking state: '
+tracking_file
+●●●●●● 2mm □△
+tracking_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ File tracking state removed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✓ No existing file tracking state found'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating empty ingestion state file for fresh start...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tracking_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Empty ingestion state file created'
+●●●●●● 2mm □△
+git_dir
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'.git'
+●●●●●● 2mm □
+git_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Found git repository at '
+kb_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Removing git repository to allow clean reinitialization...'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+git_dir
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Git repository removed - will be reinitialized during ingestion'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✓ No existing git repository found (OK)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ File ingestion tracking reset successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to reset file tracking: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+trigger_auto_ingestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Trigger auto-ingestion of knowledge base files.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[4/4] TRIGGERING AUTO-INGESTION OF ALL FILES'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.file_ingestion
+●●●●●● 2mm □△○
+get_file_manager
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+logger
+●●●●●● 1mm □△
+'Verifying database connection...'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Database engine ready'
+●●●●●● 2mm □△
+RuntimeError
+logger
+●●●●●● 1mm □△
+'Database not yet initialized: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Waiting 2 seconds for database initialization...'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing session factory...'
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Session factory initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating database tables...'
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Database tables created/verified'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Issue with table creation: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Getting file ingestion manager...'
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □
+get_file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ File manager initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing git repository...'
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Git repository initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'SCANNING KNOWLEDGE BASE FOR FILES'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+kb_path
+●●●●●● 1mm □
+file_manager
+logger
+●●●●●● 1mm □△
+'Knowledge base path: '
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kb_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+files_to_process
+●●●●●● 1mm □
+f
+f
+all_files
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total files found in knowledge base: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files_to_process
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+files_to_process
+logger
+●●●●●● 1mm □△
+'\nFiles to be ingested:'
+●●●●●● 2mm □△
+i
+file_path
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+files_to_process
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+size_kb
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+512
+logger
+●●●●●● 1mm □△
+'  '
+i
+'3d'
+'. '
+rel_path
+' ('
+size_kb
+'.1f'
+' KB)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'No files found in knowledge base!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Knowledge base path does not exist: '
+kb_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Creating knowledge base directory...'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✓ Knowledge base directory created'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'PERFORMING INITIAL SCAN AND PROCESSING ALL FILES'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+max_retries
+●●●●●● 1mm □
+3
+retry_count
+●●●●●● 1mm □
+0
+results
+●●●●●● 1mm □
+retry_count
+max_retries
+logger
+●●●●●● 1mm □△
+'Scan attempt '
+retry_count
+●●●●●● 3mm ○
+1
+'/'
+max_retries
+'...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Scan completed, processed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' files'
+●●●●●● 2mm □△
+Exception
+retry_count
+1
+●●●●●● 2mm □
+retry_count
+max_retries
+logger
+●●●●●● 1mm □△
+'Scan attempt '
+retry_count
+' failed: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Retrying in 2 seconds...'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Initial scan failed after '
+max_retries
+' attempts: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 2mm □
+results
+logger
+●●●●●● 1mm □△
+'\nIngestion completed with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' files processed:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+added_count
+●●●●●● 1mm □
+0
+modified_count
+●●●●●● 1mm □
+0
+deleted_count
+●●●●●● 1mm □
+0
+success_count
+●●●●●● 1mm □
+0
+failed_count
+●●●●●● 1mm □
+0
+result
+results
+status
+●●●●●● 1mm □
+result
+'✓ SUCCESS'
+'✗ FAILED'
+change_type
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'added'
+added_count
+1
+●●●●●● 1mm △
+result
+'modified'
+modified_count
+1
+●●●●●● 2mm □
+result
+'deleted'
+deleted_count
+1
+●●●●●● 2mm □
+result
+success_count
+1
+●●●●●● 3mm □
+failed_count
+1
+logger
+●●●●●● 1mm □△
+status
+' | '
+change_type
+'8s'
+' | '
+result
+'50s'
+' | Doc ID: '
+result
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+logger
+●●●●●● 1mm □△
+'         | Message: '
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+logger
+●●●●●● 1mm □△
+'         | Error: '
+result
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Summary Statistics:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total processed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Successful: '
+success_count
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Failed: '
+failed_count
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Added: '
+added_count
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Modified: '
+modified_count
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Deleted: '
+deleted_count
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'No files were processed in the scan'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ AUTO-INGESTION COMPLETED'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nNext steps:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • The system is ready for use'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Auto-ingestion monitor is running (checks every 30 seconds)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • New files added to knowledge_base/ will be automatically ingested'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Check logs above for ingestion progress and any errors'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to trigger auto-ingestion: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Execute complete reset and re-ingestion flow.'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'╔'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'╗'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+'GRACE KNOWLEDGE BASE - COMPLETE RESET & RE-INGESTION'
+●●●●●● 1mm □△
+78
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+'Started: '
+start_time
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+78
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'╚'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'╝'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+steps
+●●●●●● 1mm □
+'Clear SQLite'
+clear_sqlite
+'Clear Qdrant'
+clear_qdrant
+'Reset File Tracking'
+reset_file_tracking
+'Trigger Auto-Ingestion'
+trigger_auto_ingestion
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+step_name
+step_func
+steps
+●●●●●● 2mm □
+step_func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✗ '
+step_name
+' failed'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 1mm □
+Exception
+logger
+●●●●●● 1mm □△
+'✗ '
+step_name
+' encountered an error: '
+e
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'╔'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'╗'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+'✓ RESET AND RE-INGESTION COMPLETED SUCCESSFULLY'
+●●●●●● 1mm □△
+78
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+'✗ RESET AND RE-INGESTION COMPLETED WITH ERRORS'
+●●●●●● 1mm □△
+78
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+'Duration: '
+duration
+'.1f'
+' seconds'
+●●●●●● 1mm □△
+78
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+'Ended: '
+end_time
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+78
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'╚'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+78
+●●●●●● 3mm ○
+'╝'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

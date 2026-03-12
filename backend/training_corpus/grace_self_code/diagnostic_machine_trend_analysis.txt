@@ -1,0 +1,1604 @@
+## trend_analysis.py
+'\nHistorical Trend Analysis for Diagnostic Machine\n\nProvides:\n- Time-series storage of diagnostic metrics\n- Trend detection and visualization data\n- Predictive alerting based on trends\n- Baseline auto-calibration from historical data\n- Anomaly detection using historical context\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+statistics
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TrendDirection
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Direction of a trend.'
+IMPROVING
+●●●●●● 1mm □
+'improving'
+STABLE
+●●●●●● 1mm □
+'stable'
+DEGRADING
+●●●●●● 1mm □
+'degrading'
+VOLATILE
+●●●●●● 1mm □
+'volatile'
+●●●●●● 2mm △
+TrendSignificance
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Significance level of a trend.'
+NONE
+●●●●●● 1mm □
+'none'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+MetricPoint
+'A single metric data point.'
+timestamp
+datetime
+value
+●●●●●● 3mm ○
+metric_name
+●●●●●● 1mm ○
+tags
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+TrendResult
+'Result of trend analysis.'
+metric_name
+●●●●●● 1mm ○
+direction
+TrendDirection
+significance
+TrendSignificance
+change_percent
+●●●●●● 3mm ○
+current_value
+●●●●●● 3mm ○
+baseline_value
+●●●●●● 3mm ○
+trend_slope
+●●●●●● 3mm ○
+data_points
+●●●●●● 2mm ○
+time_window_hours
+●●●●●● 2mm ○
+prediction
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+alert_threshold_breached
+●●●●●● 3mm △
+●●●●●● 1mm □
+recommendation
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+HistoricalSummary
+'Summary of historical metrics.'
+metric_name
+●●●●●● 1mm ○
+min_value
+●●●●●● 3mm ○
+max_value
+●●●●●● 3mm ○
+avg_value
+●●●●●● 3mm ○
+std_dev
+●●●●●● 3mm ○
+percentile_25
+●●●●●● 3mm ○
+percentile_50
+●●●●●● 3mm ○
+percentile_75
+●●●●●● 3mm ○
+percentile_95
+●●●●●● 3mm ○
+data_points
+●●●●●● 2mm ○
+time_range_hours
+●●●●●● 2mm ○
+dataclass
+●●●●●● 2mm △
+TimeSeriesStore
+'\n    Stores time-series diagnostic metrics for trend analysis.\n\n    Features:\n    - Efficient time-based storage\n    - Automatic data retention/cleanup\n    - Fast retrieval by time range\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+storage_dir
+retention_days
+max_points_per_metric
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+30
+10000
+●●●●●● 3mm △
+●●●●●● 1mm □
+storage_dir
+Path
+●●●●●● 1mm □△
+storage_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'diagnostic_metrics'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+retention_days
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_points_per_metric
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+MetricPoint
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+1000
+●●●●●● 1mm □
+store
+●●●●●● 1mm □△
+self
+metric_name
+value
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Store a metric data point.'
+point
+●●●●●● 1mm □
+MetricPoint
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+metric_name
+●●●●●● 1mm □△
+point
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+metric_name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+metric_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+metric_name
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+metric_name
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+100
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store_batch
+●●●●●● 1mm □△
+self
+metrics
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Store multiple metrics at once.'
+metric_name
+value
+metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+value
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm □
+retrieve
+●●●●●● 1mm □△
+self
+metric_name
+hours
+end_time
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+datetime
+24
+●●●●●● 2mm □
+'Retrieve metric points within time range.'
+end_time
+●●●●●● 1mm □
+end_time
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+points
+●●●●●● 1mm □
+p
+p
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+start_time
+p
+end_time
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+points
+●●●●●● 2mm □△
+10
+disk_points
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+start_time
+end_time
+●●●●●● 2mm □△
+points
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+points
+disk_points
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+points
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+MetricPoint
+●●●●●● 1mm □
+get_latest
+●●●●●● 1mm □△
+self
+metric_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the most recent data point for a metric.'
+●●●●●● 2mm □
+metric_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+metric_name
+●●●●●● 3mm ○
+●●●●●● 3mm △
+metric_name
+1
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+MetricPoint
+●●●●●● 1mm □
+_persist_metric
+●●●●●● 1mm □△
+self
+metric_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Persist metric data to disk.'
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+safe_name
+●●●●●● 1mm □
+metric_name
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+safe_name
+'_'
+today
+'.jsonl'
+points_to_write
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+100
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'a'
+●●●●●● 2mm □△
+f
+point
+points_to_write
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'timestamp'
+'value'
+'tags'
+point
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+point
+point
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to persist metric '
+metric_name
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_metric
+●●●●●● 1mm □△
+self
+metric_name
+start_time
+end_time
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+datetime
+datetime
+'Load metric data from disk.'
+points
+●●●●●● 1mm □
+safe_name
+●●●●●● 1mm □
+metric_name
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+safe_name
+'_*.jsonl'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+line
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+data
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_time
+timestamp
+end_time
+points
+●●●●●● 1mm □△
+MetricPoint
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+json
+KeyError
+Exception
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to load metric '
+metric_name
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+points
+●●●●●● 3mm □△
+MetricPoint
+●●●●●● 1mm □
+_merge_points
+●●●●●● 1mm □△
+self
+points1
+points2
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+MetricPoint
+●●●●●● 3mm □△
+MetricPoint
+'Merge two lists of points, removing duplicates.'
+seen
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+merged
+●●●●●● 1mm □
+p
+points1
+●●●●●● 3mm ○
+points2
+key
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □
+key
+seen
+seen
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+merged
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+merged
+●●●●●● 3mm □△
+MetricPoint
+●●●●●● 1mm □
+cleanup_old_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Remove data older than retention period.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff_str
+●●●●●● 1mm □
+cutoff
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*.jsonl'
+●●●●●● 2mm □△
+date_part
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □
+date_part
+cutoff_str
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cleaned up old metric file: '
+file_path
+●●●●●● 2mm □△
+Exception
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to cleanup old data: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TrendAnalyzer
+'\n    Analyzes trends in diagnostic metrics.\n\n    Features:\n    - Linear regression for trend detection\n    - Volatility analysis\n    - Predictive alerting\n    - Baseline comparison\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+store
+baseline_window_hours
+alert_thresholds
+●●●●●● 2mm □△
+TimeSeriesStore
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+168
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+store
+TimeSeriesStore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+baseline_window_hours
+●●●●●● 3mm △
+●●●●●● 1mm □
+alert_thresholds
+'health_score'
+'pass_rate'
+'cpu_percent'
+'memory_percent'
+'error_count'
+20
+15
+30
+25
+50
+●●●●●● 1mm □
+analyze_trend
+●●●●●● 1mm □△
+self
+metric_name
+window_hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+24
+'Analyze trend for a metric over specified window.'
+recent_points
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_points
+●●●●●● 2mm □△
+3
+●●●●●● 3mm ○
+TrendResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+baseline_points
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+baseline_values
+●●●●●● 1mm □
+p
+p
+baseline_points
+baseline_avg
+●●●●●● 1mm □
+baseline_values
+statistics
+●●●●●● 1mm □△
+baseline_values
+●●●●●● 2mm □△
+0.0
+recent_values
+●●●●●● 1mm □
+p
+p
+recent_points
+5
+current_value
+●●●●●● 1mm □
+statistics
+●●●●●● 1mm □△
+recent_values
+●●●●●● 2mm □△
+slope
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+recent_points
+●●●●●● 2mm □△
+●●●●●● 2mm □
+baseline_avg
+0
+change_percent
+●●●●●● 1mm □
+current_value
+●●●●●● 1mm □△
+baseline_avg
+●●●●●● 3mm □△
+baseline_avg
+●●●●●● 2mm □△
+100
+●●●●●● 3mm □
+change_percent
+●●●●●● 1mm □
+0.0
+direction
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+slope
+change_percent
+●●●●●● 2mm □△
+significance
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+change_percent
+metric_name
+●●●●●● 2mm □△
+threshold
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+30
+●●●●●● 2mm □△
+alert_breached
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+change_percent
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+threshold
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □
+current_value
+●●●●●● 3mm ○
+slope
+●●●●●● 2mm □△
+24
+recommendation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+direction
+significance
+change_percent
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TrendResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TrendResult
+●●●●●● 1mm □
+get_historical_summary
+●●●●●● 1mm □△
+self
+metric_name
+hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+168
+'Get summary statistics for a metric.'
+points
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+points
+●●●●●● 3mm ○
+HistoricalSummary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+values
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+p
+p
+points
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HistoricalSummary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HistoricalSummary
+●●●●●● 1mm □
+calibrate_baseline
+●●●●●● 1mm □△
+self
+metric_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Auto-calibrate baseline from historical data.'
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'recommended_baseline'
+'recommended_warning_threshold'
+'recommended_critical_threshold'
+'volatility'
+summary
+summary
+summary
+summary
+0
+summary
+●●●●●● 3mm □△
+summary
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+detect_anomalies
+●●●●●● 1mm □△
+self
+metric_name
+hours
+std_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+24
+2.0
+'Detect anomalies using statistical methods.'
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+recent_points
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+anomalies
+●●●●●● 1mm □
+point
+recent_points
+●●●●●● 2mm □
+summary
+0
+z_score
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+point
+●●●●●● 1mm □△
+summary
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+summary
+●●●●●● 2mm □
+z_score
+std_threshold
+anomalies
+●●●●●● 1mm □△
+'timestamp'
+'value'
+'z_score'
+'expected_range'
+point
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+point
+z_score
+summary
+●●●●●● 1mm □△
+std_threshold
+●●●●●● 2mm □△
+summary
+summary
+●●●●●● 3mm ○
+std_threshold
+●●●●●● 2mm □△
+summary
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_slope
+●●●●●● 1mm □△
+self
+points
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+MetricPoint
+'Calculate linear regression slope.'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+points
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+0.0
+first_time
+●●●●●● 1mm □
+points
+0
+x_values
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+first_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+p
+points
+y_values
+●●●●●● 1mm □
+p
+p
+points
+n
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+points
+●●●●●● 2mm □△
+sum_x
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x_values
+●●●●●● 2mm □△
+sum_y
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+y_values
+●●●●●● 2mm □△
+sum_xy
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+y
+x
+y
+●●●●●● 3mm □
+●●●●●● 1mm □△
+x_values
+y_values
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sum_xx
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x
+x
+x_values
+●●●●●● 2mm □△
+denominator
+●●●●●● 1mm □
+n
+●●●●●● 2mm □△
+sum_xx
+●●●●●● 1mm □△
+sum_x
+●●●●●● 2mm □△
+sum_x
+●●●●●● 2mm □
+denominator
+0
+●●●●●● 3mm ○
+0.0
+slope
+●●●●●● 1mm □
+n
+●●●●●● 2mm □△
+sum_xy
+●●●●●● 1mm □△
+sum_x
+●●●●●● 2mm □△
+sum_y
+●●●●●● 3mm □△
+denominator
+●●●●●● 3mm ○
+slope
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_determine_direction
+●●●●●● 1mm □△
+self
+slope
+change_percent
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'Determine trend direction from slope and change.'
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+slope
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+change_percent
+●●●●●● 2mm □△
+5
+●●●●●● 3mm ○
+TrendDirection
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+slope
+●●●●●● 2mm □△
+0.1
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+change_percent
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+TrendDirection
+●●●●●● 2mm □
+change_percent
+5
+slope
+0.01
+●●●●●● 3mm ○
+TrendDirection
+●●●●●● 1mm △
+change_percent
+5
+slope
+0.01
+●●●●●● 3mm ○
+TrendDirection
+●●●●●● 3mm ○
+TrendDirection
+TrendDirection
+●●●●●● 1mm □
+_determine_significance
+●●●●●● 1mm □△
+self
+change_percent
+metric_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+'Determine significance of the trend.'
+abs_change
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+change_percent
+●●●●●● 2mm □△
+threshold
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+30
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+abs_change
+threshold
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+TrendSignificance
+●●●●●● 1mm △
+abs_change
+threshold
+●●●●●● 3mm ○
+TrendSignificance
+●●●●●● 2mm □
+abs_change
+threshold
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+TrendSignificance
+●●●●●● 1mm △
+abs_change
+threshold
+●●●●●● 2mm □△
+0.25
+●●●●●● 3mm ○
+TrendSignificance
+●●●●●● 3mm ○
+TrendSignificance
+TrendSignificance
+●●●●●● 1mm □
+_percentile
+●●●●●● 1mm □△
+self
+sorted_values
+percentile
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+'Calculate percentile of sorted values.'
+●●●●●● 2mm □
+sorted_values
+●●●●●● 3mm ○
+0.0
+k
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_values
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+percentile
+●●●●●● 3mm □△
+100
+f
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+f
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_values
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+1
+f
+●●●●●● 3mm ○
+sorted_values
+f
+●●●●●● 3mm ○
+sorted_values
+c
+●●●●●● 1mm □△
+sorted_values
+f
+●●●●●● 2mm □△
+k
+●●●●●● 1mm □△
+f
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_generate_recommendation
+●●●●●● 1mm □△
+self
+metric_name
+direction
+significance
+change_percent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TrendDirection
+TrendSignificance
+●●●●●● 3mm ○
+'Generate human-readable recommendation.'
+●●●●●● 2mm □
+significance
+TrendSignificance
+●●●●●● 3mm ○
+'Metric is stable, no action needed'
+recommendations
+●●●●●● 1mm □
+TrendDirection
+TrendDirection
+TrendDirection
+TrendSignificance
+TrendSignificance
+TrendSignificance
+TrendSignificance
+'URGENT: '
+metric_name
+' has degraded by '
+change_percent
+'.1f'
+'%. Immediate investigation required.'
+metric_name
+' is showing concerning degradation ('
+change_percent
+'.1f'
+'%). Review recent changes.'
+metric_name
+' is trending downward. Monitor closely.'
+'Minor degradation in '
+metric_name
+'. Continue monitoring.'
+TrendSignificance
+TrendSignificance
+TrendSignificance
+TrendSignificance
+metric_name
+' has improved significantly ('
+change_percent
+'.1f'
+'%). Consider updating baselines.'
+metric_name
+' is showing strong improvement.'
+'Positive trend in '
+metric_name
+'.'
+'Slight improvement in '
+metric_name
+'.'
+TrendSignificance
+TrendSignificance
+TrendSignificance
+TrendSignificance
+'ALERT: '
+metric_name
+' is highly volatile. System may be unstable.'
+metric_name
+' showing high volatility. Investigate cause.'
+'Moderate volatility in '
+metric_name
+'.'
+'Minor fluctuations in '
+metric_name
+'.'
+●●●●●● 3mm ○
+recommendations
+●●●●●● 1mm □△
+direction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+significance
+'Trend detected in '
+metric_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+DiagnosticMetricsCollector
+'\n    Collects and stores diagnostic metrics for trend analysis.\n\n    Automatically extracts key metrics from diagnostic cycles.\n    '
+TRACKED_METRICS
+●●●●●● 1mm □
+'health_score'
+'pass_rate'
+'cpu_percent'
+'memory_percent'
+'disk_percent'
+'confidence_score'
+'anomaly_count'
+'pattern_count'
+'error_count'
+'warning_count'
+'cycle_duration_ms'
+'sensors_available'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+store
+●●●●●● 2mm □△
+TimeSeriesStore
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+store
+TimeSeriesStore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+collect_from_cycle
+●●●●●● 1mm □△
+self
+cycle_id
+sensor_data
+interpreted_data
+judgement
+cycle_duration_ms
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 3mm ○
+'Extract and store metrics from a diagnostic cycle.'
+tags
+●●●●●● 1mm □
+'cycle_id'
+cycle_id
+metrics
+●●●●●● 1mm □
+●●●●●● 2mm □
+judgement
+health
+●●●●●● 1mm □
+judgement
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+metrics
+'health_score'
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'overall_score'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+metrics
+'confidence_score'
+●●●●●● 1mm □
+judgement
+●●●●●● 1mm □△
+'confidence'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'overall_confidence'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+sensor_data
+test_results
+●●●●●● 1mm □
+sensor_data
+●●●●●● 1mm □△
+'test_results'
+●●●●●● 2mm □△
+metrics
+'pass_rate'
+●●●●●● 1mm □
+test_results
+●●●●●● 1mm □△
+'pass_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+metrics_data
+●●●●●● 1mm □
+sensor_data
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+metrics
+'cpu_percent'
+●●●●●● 1mm □
+metrics_data
+●●●●●● 1mm □△
+'cpu_percent'
+0
+●●●●●● 2mm □△
+metrics
+'memory_percent'
+●●●●●● 1mm □
+metrics_data
+●●●●●● 1mm □△
+'memory_percent'
+0
+●●●●●● 2mm □△
+metrics
+'disk_percent'
+●●●●●● 1mm □
+metrics_data
+●●●●●● 1mm □△
+'disk_percent'
+0
+●●●●●● 2mm □△
+metrics
+'sensors_available'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 1mm □△
+'sensors_available'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logs
+●●●●●● 1mm □
+sensor_data
+●●●●●● 1mm □△
+'logs'
+●●●●●● 2mm □△
+metrics
+'error_count'
+●●●●●● 1mm □
+logs
+●●●●●● 1mm □△
+'error_count'
+0
+●●●●●● 2mm □△
+metrics
+'warning_count'
+●●●●●● 1mm □
+logs
+●●●●●● 1mm □△
+'warning_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+interpreted_data
+metrics
+'anomaly_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 1mm □△
+'anomalies'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+metrics
+'pattern_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 1mm □△
+'patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+metrics
+'cycle_duration_ms'
+●●●●●● 1mm □
+cycle_duration_ms
+metric_name
+value
+metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+value
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all_trends
+●●●●●● 1mm □△
+self
+window_hours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+24
+'Get trend analysis for all tracked metrics.'
+analyzer
+●●●●●● 1mm □
+TrendAnalyzer
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+trends
+●●●●●● 1mm □
+metric_name
+●●●●●● 3mm △
+trends
+metric_name
+●●●●●● 1mm □
+analyzer
+●●●●●● 1mm □△
+metric_name
+window_hours
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trends
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TrendResult
+_time_series_store
+●●●●●● 2mm □○
+TimeSeriesStore
+●●●●●● 2mm □
+_trend_analyzer
+●●●●●● 2mm □○
+TrendAnalyzer
+●●●●●● 2mm □
+_metrics_collector
+●●●●●● 2mm □○
+DiagnosticMetricsCollector
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_time_series_store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global time series store.'
+●●●●●● 2mm □
+_time_series_store
+●●●●●● 2mm □
+_time_series_store
+●●●●●● 1mm □
+TimeSeriesStore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_time_series_store
+TimeSeriesStore
+●●●●●● 1mm □
+get_trend_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global trend analyzer.'
+●●●●●● 2mm □
+_trend_analyzer
+●●●●●● 2mm □
+_trend_analyzer
+●●●●●● 1mm □
+TrendAnalyzer
+●●●●●● 1mm □△
+get_time_series_store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_trend_analyzer
+TrendAnalyzer
+●●●●●● 1mm □
+get_metrics_collector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global metrics collector.'
+●●●●●● 2mm □
+_metrics_collector
+●●●●●● 2mm □
+_metrics_collector
+●●●●●● 1mm □
+DiagnosticMetricsCollector
+●●●●●● 1mm □△
+get_time_series_store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_metrics_collector
+DiagnosticMetricsCollector

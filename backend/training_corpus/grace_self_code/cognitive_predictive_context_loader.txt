@@ -1,0 +1,937 @@
+## predictive_context_loader.py
+'\nPredictive Context Loader - Proactive Knowledge Fetching\n\nGrace doesn\'t just wait for queries - she thinks ahead!\n\nWhen Grace encounters a whitelisted trigger (e.g., "REST API design"),\nshe proactively pre-fetches related topics and brings them into context\nBEFORE they\'re explicitly requested.\n\nThis is deterministic preemptive fetching:\n1. Detect trigger topic\n2. Identify neighboring/related topics\n3. Pre-fetch relevant knowledge\n4. Cache in active context\n5. Ready when needed\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Set
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PreFetchedContext
+'Pre-fetched context ready for use.'
+topic
+●●●●●● 1mm ○
+related_topics
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+knowledge_chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+trust_score
+●●●●●● 3mm ○
+operational_confidence
+●●●●●● 3mm ○
+fetched_at
+datetime
+expires_at
+datetime
+dataclass
+●●●●●● 2mm △
+TopicRelationshipGraph
+'\n    Maps relationships between topics.\n\n    Examples:\n    - "REST API" → ["HTTP methods", "Authentication", "JSON", "CRUD"]\n    - "Python functions" → ["parameters", "return values", "decorators", "lambdas"]\n    - "Database design" → ["normalization", "indexes", "foreign keys", "transactions"]\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'REST API'
+'API design'
+'API authentication'
+'backend development'
+'microservices'
+'database design'
+'SQL'
+'Python'
+'Python functions'
+'testing'
+'unit testing'
+'software architecture'
+'design patterns'
+'DevOps'
+'Docker'
+'HTTP methods'
+'HTTP status codes'
+'API authentication'
+'JSON'
+'API versioning'
+'CRUD operations'
+'RESTful principles'
+'REST API'
+'GraphQL'
+'API documentation'
+'API security'
+'rate limiting'
+'pagination'
+'error handling'
+'JWT'
+'OAuth'
+'API keys'
+'session management'
+'token refresh'
+'CORS'
+'REST API'
+'databases'
+'server architecture'
+'microservices'
+'caching'
+'message queues'
+'load balancing'
+'service mesh'
+'API gateway'
+'service discovery'
+'distributed systems'
+'containerization'
+'Docker'
+'normalization'
+'indexes'
+'foreign keys'
+'transactions'
+'SQL'
+'query optimization'
+'database schema'
+'SELECT queries'
+'JOIN operations'
+'transactions'
+'indexes'
+'stored procedures'
+'database normalization'
+'Python functions'
+'Python classes'
+'Python modules'
+'Python decorators'
+'Python generators'
+'error handling'
+'parameters'
+'return values'
+'decorators'
+'lambda functions'
+'closures'
+'function composition'
+'unit testing'
+'integration testing'
+'test fixtures'
+'mocking'
+'test coverage'
+'TDD'
+'test fixtures'
+'assertions'
+'test isolation'
+'mocking'
+'pytest'
+'test coverage'
+'design patterns'
+'SOLID principles'
+'clean architecture'
+'domain driven design'
+'microservices'
+'monolithic architecture'
+'singleton'
+'factory'
+'observer'
+'strategy'
+'dependency injection'
+'repository pattern'
+'CI/CD'
+'Docker'
+'Kubernetes'
+'infrastructure as code'
+'monitoring'
+'logging'
+'deployment strategies'
+'containers'
+'Dockerfile'
+'docker-compose'
+'images'
+'volumes'
+'networking'
+'orchestration'
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_related_topics
+●●●●●● 1mm □△
+self
+topic
+depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+1
+'\n        Get topics related to this topic.\n\n        Args:\n            topic: Source topic\n            depth: How many hops to traverse (1 = immediate neighbors, 2 = neighbors of neighbors)\n\n        Returns:\n            List of related topics\n        '
+related
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic_lower
+●●●●●● 1mm □
+topic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+values
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+topic_lower
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+related
+●●●●●● 1mm □△
+values
+●●●●●● 2mm □△
+●●●●●● 2mm □
+topic_lower
+●●●●●● 3mm △
+related
+●●●●●● 1mm □△
+●●●●●● 3mm △
+topic_lower
+●●●●●● 2mm □△
+●●●●●● 2mm □
+depth
+1
+related_topic
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+related
+●●●●●● 2mm □△
+related
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+related_topic
+depth
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+related
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+learn_relationship
+●●●●●● 1mm □△
+self
+topic1
+topic2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Learn a relationship between two topics.\n\n        Called when topics frequently appear together.\n        '
+●●●●●● 3mm △
+topic1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+topic2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+topic2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+topic1
+●●●●●● 2mm □△
+●●●●●● 2mm △
+WhitelistTrigger
+'\n    Defines triggers that activate predictive fetching.\n\n    When Grace encounters these topics, she proactively fetches related content.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'REST API'
+'API design'
+'backend development'
+'database design'
+'microservices'
+'testing'
+'Python'
+'Docker'
+'Kubernetes'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'authentication'
+'caching'
+'monitoring'
+'design patterns'
+'clean architecture'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'tutorial'
+'example'
+'how to'
+'guide'
+'introduction'
+'basics'
+'fundamentals'
+●●●●●● 1mm □
+should_prefetch
+●●●●●● 1mm □△
+self
+query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Determine if we should trigger predictive fetching.\n\n        Args:\n            query: User query or current topic\n            context: Additional context (task type, complexity, etc.)\n\n        Returns:\n            True if predictive fetching should activate\n        '
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger
+●●●●●● 3mm △
+●●●●●● 2mm □
+trigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_lower
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'complexity'
+0.5
+●●●●●● 2mm □△
+0.6
+trigger
+●●●●●● 3mm △
+●●●●●● 2mm □
+trigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_lower
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'task_type'
+●●●●●● 2mm □△
+'learning'
+trigger
+●●●●●● 3mm △
+●●●●●● 2mm □
+trigger
+query_lower
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_prefetch_depth
+●●●●●● 1mm □△
+self
+query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Determine how many relationship hops to pre-fetch.\n\n        Returns:\n            1 = immediate neighbors only\n            2 = neighbors + neighbors of neighbors\n            3 = deep prefetch (used for complex tasks)\n        '
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_lower
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'complexity'
+0.5
+●●●●●● 2mm □△
+0.7
+●●●●●● 3mm ○
+3
+●●●●●● 3mm ○
+2
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'task_type'
+●●●●●● 2mm □△
+'learning'
+●●●●●● 3mm ○
+2
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 2mm △
+PredictiveContextLoader
+"\n    Proactive knowledge fetching system.\n\n    Grace thinks ahead and pre-fetches related knowledge\n    before it's explicitly requested.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+retriever
+cache_ttl_minutes
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+DocumentRetriever
+●●●●●● 2mm ○
+30
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TopicRelationshipGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+WhitelistTrigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PreFetchedContext
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+process_query
+●●●●●● 1mm □△
+self
+query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Process a query with predictive fetching.\n\n        1. Check if query triggers prefetch\n        2. If yes, identify related topics\n        3. Pre-fetch knowledge for all related topics\n        4. Cache for future use\n        5. Return main query result + prefetched context\n\n        Args:\n            query: Current query/topic\n            context: Task context\n\n        Returns:\n            Enhanced result with prefetched context ready\n        '
+logger
+●●●●●● 1mm □△
+'Processing query with predictive fetching: '
+query
+●●●●●● 2mm □△
+should_prefetch
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+should_prefetch
+logger
+●●●●●● 1mm □△
+'No prefetch trigger for: '
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'main_result'
+'prefetched'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'🔮 Predictive fetching activated for: '
+query
+●●●●●● 2mm □△
+depth
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+related_topics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'📊 Identified '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+related_topics
+●●●●●● 2mm □△
+' related topics (depth='
+depth
+')'
+●●●●●● 2mm □△
+prefetched_contexts
+●●●●●● 1mm □
+topic
+related_topics
+●●●●●● 2mm □
+topic
+●●●●●● 3mm △
+cached
+●●●●●● 1mm □
+●●●●●● 3mm △
+topic
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cached
+logger
+●●●●●● 1mm □△
+'[OK] Cache hit: '
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+prefetched_contexts
+●●●●●● 1mm □△
+cached
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'→ Pre-fetching: '
+topic
+●●●●●● 2mm □△
+prefetched
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prefetched
+●●●●●● 3mm △
+topic
+●●●●●● 1mm □
+prefetched
+prefetched_contexts
+●●●●●● 1mm □△
+prefetched
+●●●●●● 2mm □△
+topic
+related_topics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+topic
+●●●●●● 2mm □△
+main_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OK] Pre-fetched '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+prefetched_contexts
+●●●●●● 2mm □△
+' contexts ready'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'main_result'
+'prefetched_contexts'
+'ready_topics'
+'statistics'
+main_result
+prefetched_contexts
+ctx
+ctx
+prefetched_contexts
+'prefetch_hits'
+'prefetch_misses'
+'cache_size'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_fetch_main_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Fetch main query result.'
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_prefetch_topic
+●●●●●● 1mm □△
+self
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Pre-fetch knowledge for a topic.\n\n        Retrieves relevant chunks and calculates trust scores.\n        '
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'chunks'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+●●●●●● 2mm □
+trust_score
+operational_confidence
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+PreFetchedContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+context
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to prefetch topic '
+topic
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+PreFetchedContext
+●●●●●● 1mm □
+_calculate_topic_confidence
+●●●●●● 1mm □△
+self
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Calculate trust score and operational confidence for a topic.\n\n        Queries learning_examples to see what Grace knows about this topic.\n        '
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+'topic'
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+examples
+●●●●●● 3mm ○
+0.5
+0.3
+avg_trust
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+ex
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+operational_confidences
+●●●●●● 1mm □
+ex
+examples
+●●●●●● 2mm □
+ex
+'operational_confidence'
+ex
+operational_confidences
+●●●●●● 1mm □△
+ex
+'operational_confidence'
+●●●●●● 2mm □△
+avg_operational
+●●●●●● 1mm □
+operational_confidences
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+operational_confidences
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+operational_confidences
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+avg_trust
+avg_operational
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_cached_context
+●●●●●● 1mm □△
+self
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Get pre-fetched context if available.\n\n        This is called when Grace actually needs the topic.\n        If it's already cached, instant access!\n        "
+●●●●●● 2mm □
+topic
+●●●●●● 3mm △
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+topic
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'🎯 CACHE HIT: '
+topic
+' was already prefetched!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+context
+●●●●●● 3mm □
+●●●●●● 3mm △
+topic
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'Cache miss: '
+topic
+' not prefetched'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+PreFetchedContext
+●●●●●● 1mm □
+warmup_topics
+●●●●●● 1mm □△
+self
+topics
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Warm up cache with specific topics.\n\n        Useful when Grace starts a training session or begins a complex task.\n        '
+logger
+●●●●●● 1mm □△
+'🔥 Warming up cache for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topics
+●●●●●● 2mm □△
+' topics'
+●●●●●● 2mm □△
+topic
+topics
+●●●●●● 2mm □
+topic
+●●●●●● 3mm △
+prefetched
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prefetched
+●●●●●● 3mm △
+topic
+●●●●●● 1mm □
+prefetched
+●●●●●● 1mm □
+clear_expired_cache
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear expired entries from cache.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expired
+●●●●●● 1mm □
+topic
+topic
+ctx
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+ctx
+topic
+expired
+●●●●●● 3mm △
+topic
+●●●●●● 2mm □
+expired
+logger
+●●●●●● 1mm □△
+'Cleared '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+expired
+●●●●●● 2mm □△
+' expired cache entries'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get prefetch statistics.'
+total_requests
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+hit_rate
+●●●●●● 1mm □
+total_requests
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+total_requests
+●●●●●● 2mm □△
+100
+0
+●●●●●● 3mm ○
+'cache_size'
+'total_hits'
+'total_misses'
+'hit_rate_percent'
+'cached_topics'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hit_rate
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

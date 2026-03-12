@@ -1,0 +1,439 @@
+PYTHON SYNTAX TO BRAILLE MAPPING
+
+================================
+BRAILLE ENCODING | MEMORY CONTEXT | GENESIS KEY | CATEGORY
+================================
+
+KEYWORDS - CONTROL FLOW
+-----------------------
+def          | ●●●●●● 1mm □      | GRACE-PY-001 | DEFINITION
+if           | ●●●●●● 2mm □      | GRACE-PY-002 | CONDITIONAL
+else         | ●●●●●● 3mm □      | GRACE-PY-003 | CONDITIONAL
+elif         | ●●●●●● 1mm △      | GRACE-PY-004 | CONDITIONAL
+for          | ●●●●●● 2mm △      | GRACE-PY-005 | LOOP
+while        | ●●●●●● 3mm △      | GRACE-PY-006 | LOOP
+break        | ●●●●●● 1mm ○      | GRACE-PY-007 | CONTROL
+continue     | ●●●●●● 2mm ○      | GRACE-PY-008 | CONTROL
+return       | ●●●●●● 3mm ○      | GRACE-PY-009 | CONTROL
+pass         | ●●●●●● 1mm □△     | GRACE-PY-010 | CONTROL
+yield        | ●●●●●● 2mm □△     | GRACE-PY-011 | CONTROL
+with         | ●●●●●● 3mm □△     | GRACE-PY-012 | CONTEXT
+try          | ●●●●●● 1mm □○     | GRACE-PY-013 | EXCEPTION
+except       | ●●●●●● 2mm □○     | GRACE-PY-014 | EXCEPTION
+finally      | ●●●●●● 3mm □○     | GRACE-PY-015 | EXCEPTION
+raise        | ●●●●●● 1mm △○     | GRACE-PY-016 | EXCEPTION
+assert       | ●●●●●● 2mm △○     | GRACE-PY-017 | DEBUG
+async        | ●●●●●● 3mm △○     | GRACE-PY-018 | ASYNC
+await        | ●●●●●● 1mm □△○    | GRACE-PY-019 | ASYNC
+import       | ●●●●●● 2mm □△○    | GRACE-PY-020 | MODULE
+from         | ●●●●●● 3mm □△○    | GRACE-PY-021 | MODULE
+as           | ●●●●●● 1mm □      | GRACE-PY-022 | ALIAS
+global       | ●●●●●● 2mm □      | GRACE-PY-023 | SCOPE
+nonlocal     | ●●●●●● 3mm □      | GRACE-PY-024 | SCOPE
+lambda       | ●●●●●● 1mm △      | GRACE-PY-025 | FUNCTION
+
+KEYWORDS - DEFINITIONS
+----------------------
+class        | ●●●●●● 2mm △      | GRACE-PY-026 | CLASS
+self         | ●●●●●● 3mm △      | GRACE-PY-027 | CLASS
+init         | ●●●●●● 1mm ○      | GRACE-PY-028 | CLASS
+super        | ●●●●●● 2mm ○      | GRACE-PY-029 | CLASS
+property     | ●●●●●● 3mm ○      | GRACE-PY-030 | CLASS
+staticmethod | ●●●●●● 1mm □△     | GRACE-PY-031 | CLASS
+classmethod  | ●●●●●● 2mm □△     | GRACE-PY-032 | CLASS
+inherit      | ●●●●●● 3mm □△     | GRACE-PY-033 | CLASS
+pass         | ●●●●●● 1mm □○     | GRACE-PY-034 | CLASS
+abstract     | ●●●●●● 2mm □○     | GRACE-PY-035 | CLASS
+interface    | ●●●●●● 3mm □○     | GRACE-PY-036 | CLASS
+
+KEYWORDS - LOGIC
+----------------
+and          | ●●●●●● 1mm △○     | GRACE-PY-037 | BOOLEAN
+or           | ●●●●●● 2mm △○     | GRACE-PY-038 | BOOLEAN
+not          | ●●●●●● 3mm △○     | GRACE-PY-039 | BOOLEAN
+in           | ●●●●●● 1mm □△○    | GRACE-PY-040 | MEMBERSHIP
+is           | ●●●●●● 2mm □△○    | GRACE-PY-041 | IDENTITY
+True         | ●●●●●● 3mm □△○    | GRACE-PY-042 | LITERAL
+False        | ●●●●●● 1mm □      | GRACE-PY-043 | LITERAL
+None         | ●●●●●● 2mm □      | GRACE-PY-044 | LITERAL
+
+DATA TYPES
+----------
+int          | ●●●●●● 3mm □      | GRACE-PY-045 | TYPE
+float        | ●●●●●● 1mm △      | GRACE-PY-046 | TYPE
+str          | ●●●●●● 2mm △      | GRACE-PY-047 | TYPE
+bool         | ●●●●●● 3mm △      | GRACE-PY-048 | TYPE
+list         | ●●●●●● 1mm ○      | GRACE-PY-049 | TYPE
+dict         | ●●●●●● 2mm ○      | GRACE-PY-050 | TYPE
+tuple        | ●●●●●● 3mm ○      | GRACE-PY-051 | TYPE
+set          | ●●●●●● 1mm □△     | GRACE-PY-052 | TYPE
+bytes        | ●●●●●● 2mm □△     | GRACE-PY-053 | TYPE
+bytearray    | ●●●●●● 3mm □△     | GRACE-PY-054 | TYPE
+object       | ●●●●●● 1mm □○     | GRACE-PY-055 | TYPE
+type         | ●●●●●● 2mm □○     | GRACE-PY-056 | TYPE
+any          | ●●●●●● 3mm □○     | GRACE-PY-057 | TYPE HINT
+union        | ●●●●●● 1mm △○     | GRACE-PY-058 | TYPE HINT
+optional     | ●●●●●● 2mm △○     | GRACE-PY-059 | TYPE HINT
+callable     | ●●●●●● 3mm △○     | GRACE-PY-060 | TYPE HINT
+
+BUILT-IN FUNCTIONS
+------------------
+print        | ●●●●●● 1mm □△○    | GRACE-PY-061 | OUTPUT
+input        | ●●●●●● 2mm □△○    | GRACE-PY-062 | INPUT
+len          | ●●●●●● 3mm □△○    | GRACE-PY-063 | MEASURE
+range        | ●●●●●● 1mm □      | GRACE-PY-064 | SEQUENCE
+enumerate    | ●●●●●● 2mm □      | GRACE-PY-065 | ITERATION
+zip          | ●●●●●● 3mm □      | GRACE-PY-066 | COMBINATION
+map          | ●●●●●● 1mm △      | GRACE-PY-067 | TRANSFORM
+filter       | ●●●●●● 2mm △      | GRACE-PY-068 | FILTER
+reduce       | ●●●●●● 3mm △      | GRACE-PY-069 | ACCUMULATE
+sum          | ●●●●●● 1mm ○      | GRACE-PY-070 | MATH
+min          | ●●●●●● 2mm ○      | GRACE-PY-071 | COMPARE
+max          | ●●●●●● 3mm ○      | GRACE-PY-072 | COMPARE
+abs          | ●●●●●● 1mm □△     | GRACE-PY-073 | MATH
+round        | ●●●●●● 2mm □△     | GRACE-PY-074 | MATH
+pow          | ●●●●●● 3mm □△     | GRACE-PY-075 | MATH
+divmod       | ●●●●●● 1mm □○     | GRACE-PY-076 | MATH
+sorted       | ●●●●●● 2mm □○     | GRACE-PY-077 | ORDER
+reversed     | ●●●●●● 3mm □○     | GRACE-PY-078 | ORDER
+all          | ●●●●●● 1mm △○     | GRACE-PY-079 | VALIDATE
+any          | ●●●●●● 2mm △○     | GRACE-PY-080 | VALIDATE
+hasattr      | ●●●●●● 3mm △○     | GRACE-PY-081 | INTROSPECTION
+getattr      | ●●●●●● 1mm □△○    | GRACE-PY-082 | INTROSPECTION
+setattr      | ●●●●●● 2mm □△○    | GRACE-PY-083 | INTROSPECTION
+delattr      | ●●●●●● 3mm □△○    | GRACE-PY-084 | INTROSPECTION
+isinstance   | ●●●●●● 1mm □      | GRACE-PY-085 | TYPE CHECK
+issubclass   | ●●●●●● 2mm □      | GRACE-PY-086 | TYPE CHECK
+type         | ●●●●●● 3mm □      | GRACE-PY-087 | TYPE CHECK
+id           | ●●●●●● 1mm △      | GRACE-PY-088 | IDENTITY
+hash         | ●●●●●● 2mm △      | GRACE-PY-089 | HASH
+repr         | ●●●●●● 3mm △      | GRACE-PY-090 | STRING
+str          | ●●●●●● 1mm ○      | GRACE-PY-091 | CONVERT
+int          | ●●●●●● 2mm ○      | GRACE-PY-092 | CONVERT
+float        | ●●●●●● 3mm ○      | GRACE-PY-093 | CONVERT
+list         | ●●●●●● 1mm □△     | GRACE-PY-094 | CONVERT
+dict         | ●●●●●● 2mm □△     | GRACE-PY-095 | CONVERT
+tuple        | ●●●●●● 3mm □△     | GRACE-PY-096 | CONVERT
+set          | ●●●●●● 1mm □○     | GRACE-PY-097 | CONVERT
+frozenset    | ●●●●●● 2mm □○     | GRACE-PY-098 | CONVERT
+chr          | ●●●●●● 3mm □○     | GRACE-PY-099 | CONVERT
+ord          | ●●●●●● 1mm △○     | GRACE-PY-100 | CONVERT
+bin          | ●●●●●● 2mm △○     | GRACE-PY-101 | CONVERT
+hex          | ●●●●●● 3mm △○     | GRACE-PY-102 | CONVERT
+oct          | ●●●●●● 1mm □△○    | GRACE-PY-103 | CONVERT
+format       | ●●●●●● 2mm □△○    | GRACE-PY-104 | FORMAT
+open         | ●●●●●● 3mm □△○    | GRACE-PY-105 | FILE
+help         | ●●●●●● 1mm □      | GRACE-PY-106 | DEBUG
+dir          | ●●●●●● 2mm □      | GRACE-PY-107 | DEBUG
+vars         | ●●●●●● 3mm □      | GRACE-PY-108 | DEBUG
+locals       | ●●●●●● 1mm △      | GRACE-PY-109 | DEBUG
+globals      | ●●●●●● 2mm △      | GRACE-PY-110 | DEBUG
+eval         | ●●●●●● 3mm △      | GRACE-PY-111 | EXECUTE
+exec         | ●●●●●● 1mm ○      | GRACE-PY-112 | EXECUTE
+compile      | ●●●●●● 2mm ○      | GRACE-PY-113 | EXECUTE
+
+OPERATORS
+---------
+add          | ●●●●●● 3mm ○      | GRACE-PY-114 | ARITHMETIC
+subtract     | ●●●●●● 1mm □△     | GRACE-PY-115 | ARITHMETIC
+multiply     | ●●●●●● 2mm □△     | GRACE-PY-116 | ARITHMETIC
+divide       | ●●●●●● 3mm □△     | GRACE-PY-117 | ARITHMETIC
+floor_divide | ●●●●●● 1mm □○     | GRACE-PY-118 | ARITHMETIC
+modulo       | ●●●●●● 2mm □○     | GRACE-PY-119 | ARITHMETIC
+power        | ●●●●●● 3mm □○     | GRACE-PY-120 | ARITHMETIC
+equal        | ●●●●●● 1mm △○     | GRACE-PY-121 | COMPARISON
+not_equal    | ●●●●●● 2mm △○     | GRACE-PY-122 | COMPARISON
+less         | ●●●●●● 3mm △○     | GRACE-PY-123 | COMPARISON
+less_equal   | ●●●●●● 1mm □△○    | GRACE-PY-124 | COMPARISON
+greater      | ●●●●●● 2mm □△○    | GRACE-PY-125 | COMPARISON
+greater_equal| ●●●●●● 3mm □△○    | GRACE-PY-126 | COMPARISON
+assign       | ●●●●●● 1mm □      | GRACE-PY-127 | ASSIGNMENT
+add_assign   | ●●●●●● 2mm □      | GRACE-PY-128 | ASSIGNMENT
+subtract_assign | ●●●●●● 3mm □      | GRACE-PY-129 | ASSIGNMENT
+multiply_assign | ●●●●●● 1mm △      | GRACE-PY-130 | ASSIGNMENT
+divide_assign   | ●●●●●● 2mm △      | GRACE-PY-131 | ASSIGNMENT
+bitwise_and  | ●●●●●● 3mm △      | GRACE-PY-132 | BITWISE
+bitwise_or   | ●●●●●● 1mm ○      | GRACE-PY-133 | BITWISE
+bitwise_xor  | ●●●●●● 2mm ○      | GRACE-PY-134 | BITWISE
+bitwise_not  | ●●●●●● 3mm ○      | GRACE-PY-135 | BITWISE
+left_shift   | ●●●●●● 1mm □△     | GRACE-PY-136 | BITWISE
+right_shift  | ●●●●●● 2mm □△     | GRACE-PY-137 | BITWISE
+
+STANDARD LIBRARY - OS/SYS
+-------------------------
+os.path.exists | ●●●●●● 3mm □△     | GRACE-SL-001 | FILE CHECK
+os.path.join   | ●●●●●● 1mm □○     | GRACE-SL-002 | PATH
+os.path.dirname| ●●●●●● 2mm □○     | GRACE-SL-003 | PATH
+os.path.basename| ●●●●●● 3mm □○    | GRACE-SL-004 | PATH
+os.listdir     | ●●●●●● 1mm △○     | GRACE-SL-005 | DIRECTORY
+os.mkdir       | ●●●●●● 2mm △○     | GRACE-SL-006 | DIRECTORY
+os.remove      | ●●●●●● 3mm △○     | GRACE-SL-007 | FILE
+os.rename      | ●●●●●● 1mm □△○    | GRACE-SL-008 | FILE
+os.environ     | ●●●●●● 2mm □△○    | GRACE-SL-009 | ENVIRONMENT
+sys.argv       | ●●●●●● 3mm □△○    | GRACE-SL-010 | ARGUMENTS
+sys.exit       | ●●●●●● 1mm □      | GRACE-SL-011 | EXIT
+sys.path       | ●●●●●● 2mm □      | GRACE-SL-012 | PATH
+sys.platform   | ●●●●●● 3mm □      | GRACE-SL-013 | PLATFORM
+
+STANDARD LIBRARY - DATETIME
+---------------------------
+datetime.now   | ●●●●●● 1mm △      | GRACE-SL-014 | TIME
+datetime.date  | ●●●●●● 2mm △      | GRACE-SL-015 | DATE
+datetime.time  | ●●●●●● 3mm △      | GRACE-SL-016 | TIME
+timedelta      | ●●●●●● 1mm ○      | GRACE-SL-017 | DURATION
+strftime       | ●●●●●● 2mm ○      | GRACE-SL-018 | FORMAT
+strptime       | ●●●●●● 3mm ○      | GRACE-SL-019 | PARSE
+
+STANDARD LIBRARY - JSON
+-----------------------
+json.load      | ●●●●●● 1mm □△     | GRACE-SL-020 | PARSE
+json.loads     | ●●●●●● 2mm □△     | GRACE-SL-021 | PARSE
+json.dump      | ●●●●●● 3mm □△     | GRACE-SL-022 | SERIALIZE
+json.dumps     | ●●●●●● 1mm □○     | GRACE-SL-023 | SERIALIZE
+
+STANDARD LIBRARY - RE
+---------------------
+re.search      | ●●●●●● 2mm □○     | GRACE-SL-024 | REGEX
+re.match       | ●●●●●● 3mm □○     | GRACE-SL-025 | REGEX
+re.findall     | ●●●●●● 1mm △○     | GRACE-SL-026 | REGEX
+re.sub         | ●●●●●● 2mm △○     | GRACE-SL-027 | REGEX
+re.compile     | ●●●●●● 3mm △○     | GRACE-SL-028 | REGEX
+
+STANDARD LIBRARY - COLLECTIONS
+------------------------------
+Counter        | ●●●●●● 1mm □△○    | GRACE-SL-029 | COUNT
+defaultdict    | ●●●●●● 2mm □△○    | GRACE-SL-030 | DEFAULT
+deque          | ●●●●●● 3mm □△○    | GRACE-SL-031 | QUEUE
+namedtuple     | ●●●●●● 1mm □      | GRACE-SL-032 | STRUCTURE
+OrderedDict    | ●●●●●● 2mm □      | GRACE-SL-033 | ORDERED
+
+STANDARD LIBRARY - ITERTOOLS
+----------------------------
+chain          | ●●●●●● 3mm □      | GRACE-SL-034 | COMBINE
+combinations   | ●●●●●● 1mm △      | GRACE-SL-035 | COMBINE
+permutations   | ●●●●●● 2mm △      | GRACE-SL-036 | ARRANGE
+groupby        | ●●●●●● 3mm △      | GRACE-SL-037 | GROUP
+
+STANDARD LIBRARY - FUNCTOOLS
+----------------------------
+partial        | ●●●●●● 1mm ○      | GRACE-SL-038 | PARTIAL
+wraps          | ●●●●●● 2mm ○      | GRACE-SL-039 | DECORATOR
+lru_cache      | ●●●●●● 3mm ○      | GRACE-SL-040 | CACHE
+reduce         | ●●●●●● 1mm □△     | GRACE-SL-041 | ACCUMULATE
+
+STANDARD LIBRARY - TYPING
+-------------------------
+Generic        | ●●●●●● 2mm □△     | GRACE-SL-042 | GENERIC
+List           | ●●●●●● 3mm □△     | GRACE-SL-043 | TYPE
+Dict           | ●●●●●● 1mm □○     | GRACE-SL-044 | TYPE
+Optional       | ●●●●●● 2mm □○     | GRACE-SL-045 | TYPE
+Union          | ●●●●●● 3mm □○     | GRACE-SL-046 | TYPE
+Callable       | ●●●●●● 1mm △○     | GRACE-SL-047 | TYPE
+TypeVar        | ●●●●●● 2mm △○     | GRACE-SL-048 | GENERIC
+Protocol       | ●●●●●● 3mm △○     | GRACE-SL-049 | INTERFACE
+
+STANDARD LIBRARY - LOGGING
+--------------------------
+logging.info   | ●●●●●● 1mm □△○    | GRACE-SL-050 | LOG
+logging.debug  | ●●●●●● 2mm □△○    | GRACE-SL-051 | LOG
+logging.warning| ●●●●●● 3mm □△○    | GRACE-SL-052 | LOG
+logging.error  | ●●●●●● 1mm □      | GRACE-SL-053 | LOG
+logging.critical| ●●●●●● 2mm □      | GRACE-SL-054 | LOG
+getLogger      | ●●●●●● 3mm □      | GRACE-SL-055 | LOGGER
+
+STANDARD LIBRARY - UNITTEST
+---------------------------
+TestCase       | ●●●●●● 1mm △      | GRACE-SL-056 | TEST
+assertEqual    | ●●●●●● 2mm △      | GRACE-SL-057 | ASSERT
+assertTrue     | ●●●●●● 3mm △      | GRACE-SL-058 | ASSERT
+assertRaises   | ●●●●●● 1mm ○      | GRACE-SL-059 | ASSERT
+setUp          | ●●●●●● 2mm ○      | GRACE-SL-060 | FIXTURE
+tearDown       | ●●●●●● 3mm ○      | GRACE-SL-061 | FIXTURE
+mock           | ●●●●●● 1mm □△     | GRACE-SL-062 | MOCK
+patch          | ●●●●●● 2mm □△     | GRACE-SL-063 | MOCK
+
+POPULAR LIBRARIES - REQUESTS
+----------------------------
+requests.get   | ●●●●●● 3mm □△     | GRACE-LB-001 | HTTP GET
+requests.post  | ●●●●●● 1mm □○     | GRACE-LB-002 | HTTP POST
+requests.put   | ●●●●●● 2mm □○     | GRACE-LB-003 | HTTP PUT
+requests.delete| ●●●●●● 3mm □○     | GRACE-LB-004 | HTTP DELETE
+requests.head  | ●●●●●● 1mm △○     | GRACE-LB-005 | HTTP HEAD
+requests.patch | ●●●●●● 2mm △○     | GRACE-LB-006 | HTTP PATCH
+Response.json  | ●●●●●● 3mm △○     | GRACE-LB-007 | PARSE
+Response.text  | ●●●●●● 1mm □△○    | GRACE-LB-008 | CONTENT
+Response.status_code | ●●●●●● 2mm □△○ | GRACE-LB-009 | STATUS
+
+POPULAR LIBRARIES - NUMPY
+-------------------------
+np.array       | ●●●●●● 3mm □△○    | GRACE-LB-010 | ARRAY
+np.zeros       | ●●●●●● 1mm □      | GRACE-LB-011 | ARRAY
+np.ones        | ●●●●●● 2mm □      | GRACE-LB-012 | ARRAY
+np.reshape     | ●●●●●● 3mm □      | GRACE-LB-013 | SHAPE
+np.dot         | ●●●●●● 1mm △      | GRACE-LB-014 | MATRIX
+np.sum         | ●●●●●● 2mm △      | GRACE-LB-015 | AGGREGATE
+np.mean        | ●●●●●● 3mm △      | GRACE-LB-016 | STATISTIC
+np.std         | ●●●●●● 1mm ○      | GRACE-LB-017 | STATISTIC
+np.max         | ●●●●●● 2mm ○      | GRACE-LB-018 | AGGREGATE
+np.min         | ●●●●●● 3mm ○      | GRACE-LB-019 | AGGREGATE
+np.argmax      | ●●●●●● 1mm □△     | GRACE-LB-020 | INDEX
+np.argmin      | ●●●●●● 2mm □△     | GRACE-LB-021 | INDEX
+np.transpose   | ●●●●●● 3mm □△     | GRACE-LB-022 | TRANSFORM
+np.concatenate | ●●●●●● 1mm □○     | GRACE-LB-023 | COMBINE
+np.split       | ●●●●●● 2mm □○     | GRACE-LB-024 | DIVIDE
+
+POPULAR LIBRARIES - PANDAS
+--------------------------
+pd.DataFrame   | ●●●●●● 3mm □○     | GRACE-LB-025 | DATAFRAME
+pd.Series      | ●●●●●● 1mm △○     | GRACE-LB-026 | SERIES
+pd.read_csv    | ●●●●●● 2mm △○     | GRACE-LB-027 | LOAD
+pd.read_json   | ●●●●●● 3mm △○     | GRACE-LB-028 | LOAD
+pd.read_sql    | ●●●●●● 1mm □△○    | GRACE-LB-029 | LOAD
+df.head        | ●●●●●● 2mm □△○    | GRACE-LB-030 | INSPECT
+df.tail        | ●●●●●● 3mm □△○    | GRACE-LB-031 | INSPECT
+df.describe    | ●●●●●● 1mm □      | GRACE-LB-032 | SUMMARIZE
+df.groupby     | ●●●●●● 2mm □      | GRACE-LB-033 | GROUP
+df.merge       | ●●●●●● 3mm □      | GRACE-LB-034 | JOIN
+df.join        | ●●●●●● 1mm △      | GRACE-LB-035 | JOIN
+df.sort_values | ●●●●●● 2mm △      | GRACE-LB-036 | SORT
+df.dropna      | ●●●●●● 3mm △      | GRACE-LB-037 | CLEAN
+df.fillna      | ●●●●●● 1mm ○      | GRACE-LB-038 | CLEAN
+df.apply       | ●●●●●● 2mm ○      | GRACE-LB-039 | TRANSFORM
+df.map         | ●●●●●● 3mm ○      | GRACE-LB-040 | TRANSFORM
+
+POPULAR LIBRARIES - FLASK
+-------------------------
+Flask          | ●●●●●● 1mm □△     | GRACE-LB-041 | APP
+app.route      | ●●●●●● 2mm □△     | GRACE-LB-042 | ROUTE
+request        | ●●●●●● 3mm □△     | GRACE-LB-043 | REQUEST
+jsonify        | ●●●●●● 1mm □○     | GRACE-LB-044 | RESPONSE
+render_template| ●●●●●● 2mm □○     | GRACE-LB-045 | RENDER
+redirect       | ●●●●●● 3mm □○     | GRACE-LB-046 | REDIRECT
+url_for        | ●●●●●● 1mm △○     | GRACE-LB-047 | URL
+abort          | ●●●●●● 2mm △○     | GRACE-LB-048 | ERROR
+session        | ●●●●●● 3mm △○     | GRACE-LB-049 | SESSION
+
+POPULAR LIBRARIES - DJANGO
+--------------------------
+django.setup   | ●●●●●● 1mm □△○    | GRACE-LB-050 | SETUP
+models.Model   | ●●●●●● 2mm □△○    | GRACE-LB-051 | MODEL
+models.CharField| ●●●●●● 3mm □△○   | GRACE-LB-052 | FIELD
+models.IntegerField| ●●●●●● 1mm □   | GRACE-LB-053 | FIELD
+models.ForeignKey| ●●●●●● 2mm □    | GRACE-LB-054 | RELATION
+models.ManyToManyField| ●●●●●● 3mm □ | GRACE-LB-055 | RELATION
+views.View     | ●●●●●● 1mm △      | GRACE-LB-056 | VIEW
+views.TemplateView| ●●●●●● 2mm △   | GRACE-LB-057 | VIEW
+urls.path      | ●●●●●● 3mm △      | GRACE-LB-058 | URL
+urls.include   | ●●●●●● 1mm ○      | GRACE-LB-059 | INCLUDE
+migrate        | ●●●●●● 2mm ○      | GRACE-LB-060 | MIGRATE
+admin.site.register| ●●●●●● 3mm ○  | GRACE-LB-061 | ADMIN
+
+POPULAR LIBRARIES - SQLALCHEMY
+------------------------------
+create_engine  | ●●●●●● 1mm □△     | GRACE-LB-062 | CONNECT
+Session        | ●●●●●● 2mm □△     | GRACE-LB-063 | SESSION
+session.query  | ●●●●●● 3mm □△     | GRACE-LB-064 | QUERY
+session.add    | ●●●●●● 1mm □○     | GRACE-LB-065 | INSERT
+session.commit | ●●●●●● 2mm □○     | GRACE-LB-066 | COMMIT
+session.rollback| ●●●●●● 3mm □○    | GRACE-LB-067 | ROLLBACK
+Column         | ●●●●●● 1mm △○     | GRACE-LB-068 | COLUMN
+Table          | ●●●●●● 2mm △○     | GRACE-LB-069 | TABLE
+Integer        | ●●●●●● 3mm △○     | GRACE-LB-070 | TYPE
+String         | ●●●●●● 1mm □△○    | GRACE-LB-071 | TYPE
+Float          | ●●●●●● 2mm □△○    | GRACE-LB-072 | TYPE
+Boolean        | ●●●●●● 3mm □△○    | GRACE-LB-073 | TYPE
+DateTime       | ●●●●●● 1mm □      | GRACE-LB-074 | TYPE
+relationship   | ●●●●●● 2mm □      | GRACE-LB-075 | RELATION
+backref        | ●●●●●● 3mm □      | GRACE-LB-076 | RELATION
+
+POPULAR LIBRARIES - PYTEST
+--------------------------
+pytest.fixture | ●●●●●● 1mm △      | GRACE-LB-077 | FIXTURE
+pytest.mark.parametrize | ●●●●●● 2mm △ | GRACE-LB-078 | PARAM
+assert         | ●●●●●● 3mm △      | GRACE-LB-079 | ASSERT
+monkeypatch    | ●●●●●● 1mm ○      | GRACE-LB-080 | MOCK
+capsys         | ●●●●●● 2mm ○      | GRACE-LB-081 | CAPTURE
+tmp_path       | ●●●●●● 3mm ○      | GRACE-LB-082 | TEMP
+
+POPULAR LIBRARIES - BEAUTIFULSOUP
+---------------------------------
+BeautifulSoup  | ●●●●●● 1mm □△     | GRACE-LB-083 | PARSE
+soup.find      | ●●●●●● 2mm □△     | GRACE-LB-084 | SEARCH
+soup.find_all  | ●●●●●● 3mm □△     | GRACE-LB-085 | SEARCH
+soup.select    | ●●●●●● 1mm □○     | GRACE-LB-086 | CSS SELECT
+tag.get_text   | ●●●●●● 2mm □○     | GRACE-LB-087 | EXTRACT
+tag.get        | ●●●●●● 3mm □○     | GRACE-LB-088 | ATTRIBUTE
+
+POPULAR LIBRARIES - MATPLOTLIB
+------------------------------
+plt.plot       | ●●●●●● 1mm △○     | GRACE-LB-089 | PLOT
+plt.scatter    | ●●●●●● 2mm △○     | GRACE-LB-090 | SCATTER
+plt.bar        | ●●●●●● 3mm △○     | GRACE-LB-091 | BAR
+plt.hist       | ●●●●●● 1mm □△○    | GRACE-LB-092 | HISTOGRAM
+plt.xlabel     | ●●●●●● 2mm □△○    | GRACE-LB-093 | LABEL
+plt.ylabel     | ●●●●●● 3mm □△○    | GRACE-LB-094 | LABEL
+plt.title      | ●●●●●● 1mm □      | GRACE-LB-095 | TITLE
+plt.legend     | ●●●●●● 2mm □      | GRACE-LB-096 | LEGEND
+plt.show       | ●●●●●● 3mm □      | GRACE-LB-097 | DISPLAY
+plt.savefig    | ●●●●●● 1mm △      | GRACE-LB-098 | SAVE
+plt.figure     | ●●●●●● 2mm △      | GRACE-LB-099 | FIGURE
+plt.subplot    | ●●●●●● 3mm △      | GRACE-LB-100 | SUBPLOT
+
+================================
+COMPOSITION RULES FOR PYTHON
+================================
+1. BASIC STATEMENT
+[KEYWORD] + [EXPRESSION] + [EXECUTION]
+Example: if + condition + colon_block
+
+2. FUNCTION DEFINITION
+def + name + ( + parameters + ) + : + body
+●●●●●● 1mm □ + identifier + ●●●●●● 1mm □△ + args + ●●●●●● 2mm □△ + block
+
+3. CLASS DEFINITION
+class + name + ( + inherit + ) + : + body
+●●●●●● 2mm △ + identifier + ●●●●●● 1mm □△ + parent + block
+
+4. IMPORT STATEMENT
+import + module + (as + alias)
+●●●●●● 1mm □△○ + module_name + ●●●●●● 2mm □△○ + alias
+
+5. FUNCTION CALL
+name + ( + arguments + )
+identifier + ●●●●●● 1mm □△ + args + ●●●●●● 2mm □△
+
+6. ATTRIBUTE ACCESS
+object + . + attribute
+identifier + ●●●●●● 1mm △ + identifier
+
+7. ASSIGNMENT
+target + = + value
+identifier + ●●●●●● 1mm □ + expression
+
+8. COMPARISON
+left + operator + right
+expression + ●●●●●● 1mm △○ + expression
+
+================================
+DEBUGGING AIDS
+================================
+| Problem | Tool | Output |
+|---------|------|--------|
+| Wrong syntax | Grammar validator | "Expected ●●●●●● 2mm □, found ●●●●●● 1mm △" |
+| Unknown identifier | Symbol table lookup | "Undefined: use 'define' or 'import'" |
+| Type mismatch | Invariant checker | "Expected int, got str at genesis key GRACE-PY-045" |
+| Runtime error | Genesis tracer | Full chain from input to failure point |
+
+================================
+TOTAL MAPPINGS
+================================
+Python Keywords: 137 symbols
+Built-in Functions: 53 symbols
+Standard Library: 64 symbols
+Popular Libraries: 100 symbols
+--------------------------------
+TOTAL: 354 symbols
+Remaining reserved: 222 symbols
+================================
+VERSION
+================

@@ -1,0 +1,1544 @@
+## test_database.py
+'\nDatabase module tests.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database
+●●●●●● 2mm □△○
+session
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+drop_tables
+table_exists
+get_all_tables
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+User
+Conversation
+Message
+Chat
+ChatHistory
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+UserRepository
+ConversationRepository
+ChatRepository
+ChatHistoryRepository
+●●●●●● 1mm □
+temp_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create a temporary SQLite database for testing.'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+db_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+tmpdir
+'test_grace.db'
+●●●●●● 2mm □△
+db_path
+pytest
+●●●●●● 1mm □
+test_config
+●●●●●● 1mm □△
+temp_db
+●●●●●● 2mm □△
+'Create a test database configuration.'
+●●●●●● 3mm ○
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+initialized_db
+●●●●●● 1mm □△
+test_config
+●●●●●● 2mm □△
+'Initialize database for testing.'
+DatabaseConnection
+●●●●●● 1mm □△
+test_config
+●●●●●● 2mm □△
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+drop_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestDatabaseConfig
+'Test database configuration.'
+●●●●●● 1mm □
+test_sqlite_connection_string
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test SQLite connection string generation.'
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sqlite:///'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_postgresql_connection_string
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test PostgreSQL connection string generation.'
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'postgresql+psycopg2://user:pass@localhost:5432/testdb'
+●●●●●● 1mm □
+test_mysql_connection_string
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test MySQL connection string generation.'
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'mysql+pymysql://user:pass@localhost:3306/testdb'
+●●●●●● 2mm △
+TestDatabaseConnection
+'Test database connection.'
+●●●●●● 1mm □
+test_initialize_connection
+●●●●●● 1mm □△
+self
+test_config
+●●●●●● 2mm □△
+'Test database connection initialization.'
+db
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+test_config
+●●●●●● 2mm □△
+db
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_singleton_pattern
+●●●●●● 1mm □△
+self
+test_config
+●●●●●● 2mm □△
+'Test database connection is singleton.'
+db1
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+test_config
+●●●●●● 2mm □△
+db2
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db1
+db2
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_health_check
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test database health check.'
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestDatabaseModels
+'Test database models.'
+●●●●●● 1mm □
+test_create_user
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test creating a user.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+User
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+user
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_user
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+User
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_user
+●●●●●● 2mm □
+created_user
+'test@example.com'
+created_user
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_user_timestamps
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test user creation timestamps.'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+timedelta
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+User
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+user
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user
+●●●●●● 2mm □
+user
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+user
+●●●●●● 1mm □△
+user
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_conversation_relationship
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test conversation relationship.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conversation
+●●●●●● 1mm □
+Conversation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+conversation
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conv
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Conversation
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conv
+●●●●●● 2mm □
+conv
+'Test Chat'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestBaseRepository
+'Test base repository functionality.'
+●●●●●● 1mm □
+test_create_user
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository create operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user
+●●●●●● 2mm □
+user
+'testuser'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_user
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository get operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+user
+retrieved_user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+retrieved_user
+●●●●●● 2mm □
+retrieved_user
+'test'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_update_user
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository update operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+user
+updated_user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+updated_user
+'Updated Name'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_delete_user
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository delete operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+user
+deleted
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+deleted
+●●●●●● 3mm □△○
+retrieved_user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+retrieved_user
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_all
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository get_all operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+users
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+users
+●●●●●● 2mm □△
+3
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_filter
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository filter operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_users
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active_users
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_count
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository count operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_exists
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository exists operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_bulk_create
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository bulk create.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+users
+●●●●●● 1mm □
+User
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+User
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+User
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+users
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+created
+●●●●●● 2mm □△
+3
+total
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+3
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_bulk_delete
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test repository bulk delete.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user1
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user2
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user3
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+deleted_count
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+user1
+user2
+●●●●●● 2mm □△
+deleted_count
+2
+remaining
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+remaining
+1
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestCustomRepositories
+'Test custom repository implementations.'
+●●●●●● 1mm □
+test_get_by_username
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test custom get_by_username method.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+'testuser'
+●●●●●● 2mm □△
+user
+●●●●●● 2mm □
+user
+'test@example.com'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_active_users
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test custom get_active_users method.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+UserRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_users
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active_users
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_all_conversations
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test getting all conversations.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conv_repo
+●●●●●● 1mm □
+ConversationRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+conv_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conv_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conversations
+●●●●●● 1mm □
+conv_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+conversations
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestMigration
+'Test migration utilities.'
+●●●●●● 1mm □
+test_table_exists
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test table_exists function.'
+table_exists
+●●●●●● 1mm □△
+'users'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+table_exists
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_get_all_tables
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test get_all_tables function.'
+tables
+●●●●●● 1mm □
+get_all_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'users'
+tables
+'conversations'
+tables
+'messages'
+tables
+'chats'
+tables
+'chat_history'
+tables
+●●●●●● 2mm △
+TestChatModel
+'Test Chat model.'
+●●●●●● 1mm □
+test_create_chat
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test creating a chat.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_chat
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_chat
+●●●●●● 2mm □
+created_chat
+'Test Chat'
+created_chat
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_multiple_chats
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test creating multiple chats.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat1
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat2
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat1
+●●●●●● 2mm □
+chat2
+●●●●●● 2mm □
+chat1
+●●●●●● 3mm □△○
+chat2
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestChatHistoryModel
+'Test ChatHistory model.'
+●●●●●● 1mm □
+test_create_chat_history
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test creating chat history.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+ChatHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_history
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_history
+●●●●●● 2mm □
+created_history
+'user'
+created_history
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestChatRepository
+'Test ChatRepository operations.'
+●●●●●● 1mm □
+test_get_all_chats
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test getting all chats.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chats
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chats
+●●●●●● 2mm □△
+3
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_active_chats
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test getting active chats.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat1
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat2
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat3
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_chats
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active_chats
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_deactivate_chat
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test deactivating a chat.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+deactivated
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+deactivated
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_search_by_title
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test searching chats by title.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+'Python'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestChatHistoryRepository
+'Test ChatHistoryRepository operations.'
+●●●●●● 1mm □
+test_add_message
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test adding a message to chat history.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 2mm □
+message
+'user'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_by_chat
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test getting messages from a chat.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+messages
+●●●●●● 2mm □△
+3
+messages
+0
+'user'
+messages
+1
+'assistant'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_by_role
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test getting messages by role.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_messages
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat
+'user'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+user_messages
+●●●●●● 2mm □△
+2
+assistant_messages
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat
+'assistant'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+assistant_messages
+●●●●●● 2mm □△
+1
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_edit_message
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test editing a message.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edited
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+message
+'Modified'
+●●●●●● 2mm □△
+edited
+'Modified'
+edited
+●●●●●● 3mm □△○
+edited
+'Original'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_count_tokens
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test counting tokens in a chat.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_tokens
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+total_tokens
+6
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_edited_messages
+●●●●●● 1mm □△
+self
+initialized_db
+●●●●●● 2mm □△
+'Test getting edited messages.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg1
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg2
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg3
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+msg1
+'Modified 1'
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+msg3
+'Modified 3'
+●●●●●● 2mm □△
+edited
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edited
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,1386 @@
+## qwen_pool.py
+'\nQwen Model Pool — Async hot-swappable task-routed pool for 3 local Qwen 3.5 models.\n\nManages qwen3.5:27b (code/general/reasoning), qwen3.5:9b (fast)\nwith automatic task-based routing, async execution, health monitoring,\nand governance contract enforcement.\n\nArchitecture:\n  User/Grace query → task classification → pool selects optimal model →\n  governance wrapper applied → async execution → Genesis key tracked →\n  memory/event bus notified → response returned\n\nGovernance coding contract:\n  - READ-ONLY by default: Qwen observes, analyzes, suggests\n  - WRITE only when user explicitly prompts for code changes\n  - All outputs pass through GovernanceAwareLLM (rules, hallucination guard)\n  - Every call gets a Genesis key for full provenance\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+QwenTask
+●●●●●● 3mm □△
+Enum
+Enum
+CODE
+●●●●●● 1mm □
+'code'
+REASON
+●●●●●● 1mm □
+'reason'
+FAST
+●●●●●● 1mm □
+'fast'
+GENERAL
+●●●●●● 1mm □
+'general'
+CHAT
+●●●●●● 1mm □
+'chat'
+DIAGNOSE
+●●●●●● 1mm □
+'diagnose'
+HEAL
+●●●●●● 1mm □
+'heal'
+LEARN
+●●●●●● 1mm □
+'learn'
+AUDIT
+●●●●●● 1mm □
+'audit'
+●●●●●● 2mm △
+WriteMode
+●●●●●● 3mm □△
+Enum
+Enum
+READ_ONLY
+●●●●●● 1mm □
+'read_only'
+WRITE
+●●●●●● 1mm □
+'write'
+_TASK_TO_MODEL_KEY
+●●●●●● 1mm □
+QwenTask
+QwenTask
+QwenTask
+QwenTask
+QwenTask
+QwenTask
+QwenTask
+QwenTask
+QwenTask
+'code'
+'reason'
+'fast'
+'code'
+'fast'
+'reason'
+'reason'
+'fast'
+'reason'
+●●●●●● 2mm △
+ModelSlot
+key
+●●●●●● 1mm ○
+model_name
+●●●●●● 1mm ○
+tasks
+●●●●●● 3mm □△
+QwenTask
+healthy
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+total_calls
+●●●●●● 2mm ○
+0
+total_errors
+●●●●●● 2mm ○
+0
+total_latency_ms
+●●●●●● 3mm ○
+0
+last_used
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+last_error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+PoolStats
+total_calls
+●●●●●● 2mm ○
+0
+total_errors
+●●●●●● 2mm ○
+0
+active_tasks
+●●●●●● 2mm ○
+0
+by_model
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+by_task
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+write_calls
+●●●●●● 2mm ○
+0
+read_only_calls
+●●●●●● 2mm ○
+0
+dataclass
+●●●●●● 2mm △
+QwenModelPool
+'\n    Async hot-swappable pool that manages all 3 Qwen models.\n\n    Key behaviors:\n    - Task-based routing: each task type maps to the optimal model\n    - Hot-swap: models can be added/removed/replaced at runtime\n    - Async: all calls run in a thread pool for non-blocking execution\n    - Failover: if the primary model for a task fails, falls back to another\n    - Governance: every call is wrapped with governance rules\n    - Read-only by default: write mode requires explicit user intent\n    - Health tracking: per-model health with auto-degradation\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ModelSlot
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+BaseLLMClient
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+PoolStats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+WriteMode
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load models from settings and create clients.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+ImportError
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] Settings unavailable, using defaults'
+●●●●●● 2mm □△
+settings
+●●●●●● 1mm □
+●●●●●● 2mm □
+model_configs
+●●●●●● 1mm □
+'code'
+'reason'
+'fast'
+'model_name'
+'tasks'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_CODE_MODEL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_CODE'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+'qwen3.5:27b'
+QwenTask
+QwenTask
+QwenTask
+'model_name'
+'tasks'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_REASON_MODEL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_REASON'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+'qwen3.5:27b'
+QwenTask
+QwenTask
+QwenTask
+'model_name'
+'tasks'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_FAST'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+'qwen3.5:9b'
+QwenTask
+QwenTask
+QwenTask
+key
+cfg
+model_configs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+ModelSlot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] Initialized with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' models: '
+●●●●●● 3mm ○
+', '
+●●●●●● 1mm □△
+k
+'='
+s
+k
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_build_clients
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create governed Qwen clients for each slot.'
+●●●●●● 3mm □△○
+qwen_client
+●●●●●● 2mm □△○
+QwenLLMClient
+●●●●●● 3mm □△○
+governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+api_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_API_KEY'
+''
+●●●●●● 2mm □△
+ImportError
+api_key
+●●●●●● 1mm □
+''
+key
+slot
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+raw_client
+●●●●●● 1mm □
+QwenLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+GovernanceAwareLLM
+●●●●●● 1mm □△
+raw_client
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_select_model
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+QwenTask
+'Select the best available model for a task.'
+primary_key
+●●●●●● 1mm □
+_TASK_TO_MODEL_KEY
+●●●●●● 1mm □△
+task
+'code'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+primary_key
+●●●●●● 3mm △
+●●●●●● 3mm △
+primary_key
+●●●●●● 3mm ○
+primary_key
+key
+slot
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+slot
+slot
+●●●●●● 3mm ○
+key
+key
+slot
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+slot
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] Failover: '
+task
+' → '
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+●●●●●● 3mm ○
+primary_key
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_classify_task
+●●●●●● 1mm □△
+self
+prompt
+explicit_task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Classify a prompt into a task type.'
+●●●●●● 2mm □
+explicit_task
+●●●●●● 3mm ○
+QwenTask
+●●●●●● 1mm □△
+explicit_task
+●●●●●● 2mm □△
+ValueError
+p
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_signals
+●●●●●● 1mm □
+'write code'
+'implement'
+'function'
+'class '
+'def '
+'refactor'
+'fix the code'
+'generate code'
+'build a'
+'create a script'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+p
+s
+code_signals
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QwenTask
+reason_signals
+●●●●●● 1mm □
+'why'
+'explain'
+'analyze'
+'reason'
+'think through'
+'what if'
+'compare'
+'trade-off'
+'pros and cons'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+p
+s
+reason_signals
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QwenTask
+diagnose_signals
+●●●●●● 1mm □
+'diagnose'
+'debug'
+'error'
+'broken'
+'failing'
+'crash'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+p
+s
+diagnose_signals
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QwenTask
+heal_signals
+●●●●●● 1mm □
+'fix'
+'heal'
+'repair'
+'recover'
+'self-heal'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+p
+s
+heal_signals
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QwenTask
+●●●●●● 3mm ○
+QwenTask
+QwenTask
+●●●●●● 1mm □
+_check_write_permission
+●●●●●● 1mm □△
+self
+task
+user_prompted
+●●●●●● 2mm □△
+QwenTask
+●●●●●● 3mm △
+'Enforce read-only unless user explicitly requests write.'
+write_tasks
+●●●●●● 1mm □
+QwenTask
+QwenTask
+●●●●●● 2mm □
+task
+write_tasks
+user_prompted
+●●●●●● 3mm ○
+WriteMode
+●●●●●● 3mm ○
+WriteMode
+WriteMode
+●●●●●● 1mm □
+_apply_read_only_prefix
+●●●●●● 1mm □△
+self
+system_prompt
+mode
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+WriteMode
+'Inject read-only governance contract into the system prompt.'
+base
+●●●●●● 1mm □
+system_prompt
+''
+●●●●●● 2mm □
+mode
+WriteMode
+contract
+●●●●●● 1mm □
+'\n\nGOVERNANCE CONTRACT — READ-ONLY MODE:\nYou are in READ-ONLY mode. You may observe, analyze, explain, and suggest.\nYou MUST NOT generate code that modifies files, databases, or system state.\nIf asked to make changes, explain what you WOULD do and ask the user to confirm.\n'
+●●●●●● 3mm ○
+base
+●●●●●● 3mm ○
+contract
+●●●●●● 3mm □
+contract
+●●●●●● 1mm □
+'\n\nGOVERNANCE CONTRACT — WRITE MODE (user-authorized):\nThe user has explicitly requested changes. You may generate code and modifications.\nAll changes are tracked via Genesis keys. Follow all governance rules.\n'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+base
+●●●●●● 3mm ○
+contract
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Async generate with task routing, governance, and tracking.\n\n        Returns dict with response, model used, task, mode, and latency.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified_task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+task
+●●●●●● 2mm □△
+model_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+classified_task
+●●●●●● 2mm □△
+mode
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+classified_task
+user_prompted
+●●●●●● 2mm □△
+governed_prompt
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+system_prompt
+mode
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 3mm ○
+'response'
+'error'
+'No Qwen model available'
+●●●●●● 3mm □△○
+slot
+●●●●●● 1mm □
+●●●●●● 3mm △
+model_key
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+classified_task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+classified_task
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+mode
+WriteMode
+●●●●●● 3mm △
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+1
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 3mm △
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+error_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] '
+model_key
+' failed: '
+e
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+slot
+1
+slot
+●●●●●● 1mm □
+error_msg
+●●●●●● 2mm □
+slot
+3
+slot
+0
+error_rate
+●●●●●● 1mm □
+slot
+●●●●●● 3mm □△
+slot
+●●●●●● 2mm □
+error_rate
+0.5
+slot
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] '
+model_key
+' marked unhealthy (error rate '
+error_rate
+'.0%'
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error_msg
+fallback_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fallback_key
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] Failover '
+model_key
+' → '
+fallback_key
+●●●●●● 2mm □△
+fallback_client
+●●●●●● 1mm □
+●●●●●● 3mm △
+fallback_key
+response
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 3mm △
+fallback_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model_key
+●●●●●● 1mm □
+fallback_key
+error_msg
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+error_msg
+●●●●●● 1mm □
+'Primary: '
+error_msg
+'; Fallback: '
+e2
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+slot
+1
+slot
+latency
+slot
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+classified_task
+model_key
+mode
+latency
+error_msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'model'
+'model_key'
+'task'
+'mode'
+'latency_ms'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+''
+●●●●●● 3mm △
+model_key
+model_key
+classified_task
+mode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+latency
+1
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Async chat with task routing.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_msg
+●●●●●● 1mm □
+messages
+messages
+1
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+''
+classified_task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+last_msg
+task
+'chat'
+●●●●●● 2mm □△
+model_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+classified_task
+●●●●●● 2mm □△
+mode
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+classified_task
+user_prompted
+●●●●●● 2mm □△
+governed_messages
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+messages
+●●●●●● 2mm □△
+contract
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □
+mode
+●●●●●● 2mm □△
+●●●●●● 2mm □
+governed_messages
+governed_messages
+0
+●●●●●● 1mm □△
+'role'
+●●●●●● 2mm □△
+'system'
+governed_messages
+0
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+governed_messages
+0
+'content'
+●●●●●● 3mm ○
+contract
+●●●●●● 3mm □
+governed_messages
+●●●●●● 1mm □△
+0
+'role'
+'content'
+'system'
+contract
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 3mm ○
+'response'
+'error'
+'No Qwen model available'
+●●●●●● 3mm □△○
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 3mm △
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+response
+●●●●●● 1mm □
+''
+error_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+slot
+●●●●●● 1mm □
+●●●●●● 3mm △
+model_key
+●●●●●● 3mm △
+slot
+1
+slot
+latency
+slot
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'model'
+'model_key'
+'task'
+'mode'
+'latency_ms'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+slot
+model_key
+classified_task
+mode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+latency
+1
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_fallback
+●●●●●● 1mm □△
+self
+failed_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a fallback model key when the primary fails.'
+fallback_order
+●●●●●● 1mm □
+'fast'
+'code'
+'reason'
+key
+fallback_order
+●●●●●● 2mm □
+key
+failed_key
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+●●●●●● 3mm ○
+key
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_emit_events
+●●●●●● 1mm □△
+self
+task
+model_key
+mode
+latency_ms
+error
+●●●●●● 2mm □△
+QwenTask
+●●●●●● 1mm ○
+WriteMode
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Fire events to cognitive event bus and Layer 1.'
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'qwen_pool.call_completed'
+'task'
+'model'
+'mode'
+'latency_ms'
+'success'
+task
+model_key
+mode
+latency_ms
+error
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+swap_model
+●●●●●● 1mm □△
+self
+key
+new_model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Hot-swap a model at runtime without restarting.'
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Unknown slot: '
+key
+●●●●●● 2mm □△
+old_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+new_model_name
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+qwen_client
+●●●●●● 2mm □△○
+QwenLLMClient
+●●●●●● 3mm □△○
+governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+api_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_API_KEY'
+''
+●●●●●● 2mm □△
+ImportError
+api_key
+●●●●●● 1mm □
+''
+raw
+●●●●●● 1mm □
+QwenLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+GovernanceAwareLLM
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[QWEN-POOL] Hot-swapped '
+key
+': '
+old_name
+' → '
+new_model_name
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'qwen_pool.model_swapped'
+'slot'
+'old_model'
+'new_model'
+key
+old_name
+new_model_name
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+mark_healthy
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Manually mark a model as healthy after recovery.'
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+set_write_mode
+●●●●●● 1mm □△
+self
+enabled
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'Enable/disable global write mode (overrides per-call checks).'
+●●●●●● 3mm △
+●●●●●● 1mm □
+enabled
+WriteMode
+WriteMode
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Full pool status for monitoring and Ask Grace.'
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'initialized'
+'global_write_mode'
+'stats'
+'models'
+●●●●●● 3mm △
+●●●●●● 3mm △
+'total_calls'
+'total_errors'
+'active_tasks'
+'write_calls'
+'read_only_calls'
+'by_task'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+key
+'model_name'
+'healthy'
+'total_calls'
+'total_errors'
+'avg_latency_ms'
+'last_used'
+'last_error'
+'tasks'
+slot
+slot
+slot
+slot
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+slot
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+slot
+1
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+slot
+slot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+slot
+t
+t
+slot
+key
+slot
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_client_for_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the governed client for a specific task (for direct use by factory).'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qt
+●●●●●● 1mm □
+QwenTask
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+ValueError
+qt
+●●●●●● 1mm □
+QwenTask
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+qt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+BaseLLMClient
+_pool
+●●●●●● 2mm □○
+QwenModelPool
+●●●●●● 2mm □
+_pool_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_qwen_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global Qwen model pool singleton.'
+●●●●●● 2mm □
+_pool
+●●●●●● 2mm □
+_pool_lock
+●●●●●● 2mm □
+_pool
+●●●●●● 2mm □
+_pool
+●●●●●● 1mm □
+QwenModelPool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_pool
+QwenModelPool

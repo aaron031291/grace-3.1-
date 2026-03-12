@@ -1,0 +1,1138 @@
+## ollama_test.py
+'\nTests for Ollama client model detection and response generation.\n'
+●●●●●● 2mm □△○
+unittest
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+ollama_client.client
+●●●●●● 2mm □△○
+OllamaClient
+get_ollama_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+OLLAMA_URL
+●●●●●● 1mm □
+settings
+ImportError
+OLLAMA_URL
+●●●●●● 1mm □
+'http://localhost:11434'
+●●●●●● 2mm △
+TestOllamaConnection
+●●●●●● 3mm □△
+unittest
+'Test cases for Ollama service connectivity.'
+●●●●●● 1mm □
+setUp
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Set up test fixtures.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_ollama_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ollama_service_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that Ollama service is running and accessible.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Checking Ollama service at '
+●●●●●● 3mm △
+'...'
+●●●●●● 2mm □△
+is_running
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_running
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Ollama service is running'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗ Ollama service is not running at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+is_running
+'Ollama service not running at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_available_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test retrieving list of available models.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Fetching available models...'
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+' model(s):'
+●●●●●● 2mm □△
+model
+models
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+model
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+0
+'No models found in Ollama'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Could not fetch models: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_running_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test retrieving list of running models.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Fetching running models...'
+●●●●●● 2mm □△
+running
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Running models: '
+running
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+running
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Could not fetch running models: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestOllamaResponseGeneration
+●●●●●● 3mm □△
+unittest
+'Test cases for generating responses from Ollama models.'
+●●●●●● 1mm □
+setUpClass
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Set up class fixtures.'
+cls
+●●●●●● 1mm □
+get_ollama_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unittest
+●●●●●● 1mm □△
+'Ollama service is not running'
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models
+unittest
+●●●●●● 1mm □△
+'No models available in Ollama'
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+models
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Using model: '
+cls
+●●●●●● 2mm □△
+Exception
+unittest
+●●●●●● 1mm □△
+'Could not get models: '
+e
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+tearDownClass
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Tear down class fixtures.'
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'RESPONSE GENERATION PERFORMANCE SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+test_name
+metrics
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+test_name
+':'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Prompt: '
+metrics
+'prompt'
+60
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Generation time: '
+metrics
+'gen_time'
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metrics
+'response'
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response preview: '
+metrics
+'response'
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+setUp
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Set up for each test.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+tearDown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Tear down for each test.'
+test_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'_response_generated'
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+test_name
+●●●●●● 1mm □
+'prompt'
+'response'
+'gen_time'
+●●●●●● 3mm △
+●●●●●● 3mm △
+elapsed
+●●●●●● 1mm □
+test_simple_prompt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating response to a simple prompt.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 1: Simple Prompt'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'What is machine learning?'
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Prompt: '"
+prompt
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Generating response...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Response generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_coding_question
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating response to a coding question.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 2: Coding Question'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Write a Python function to calculate factorial of a number'
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Prompt: '"
+prompt
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Generating response...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Response generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_creative_writing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating creative response.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 3: Creative Writing'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Write a short poem about artificial intelligence'
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Prompt: '"
+prompt
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Generating response...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Response generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_factual_question
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating response to a factual question.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 4: Factual Question'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'What is the capital of France?'
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Prompt: '"
+prompt
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Generating response...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+response_lower
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contains_paris
+●●●●●● 1mm □
+'paris'
+response_lower
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Response generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Contains 'Paris': "
+contains_paris
+'✓'
+'✗'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_multi_turn_conversation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test multi-turn conversation with context.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 5: Multi-Turn Conversation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt1
+●●●●●● 1mm □
+'What is Python?'
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Turn 1 Prompt: '"
+prompt1
+"'"
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time1
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Turn 1 response generated in '
+time1
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response1
+100
+'...'
+●●●●●● 2mm □△
+prompt2
+●●●●●● 1mm □
+'Based on your previous answer about Python, what are its main uses?'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n  Turn 2 Prompt: '"
+prompt2
+"'"
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time2
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response2
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Turn 2 response generated in '
+time2
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response2
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response1
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response2
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response1
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response2
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Multi-turn conversation completed successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total time: '
+time1
+●●●●●● 3mm ○
+time2
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_response_with_different_temperatures
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that different temperature values produce different responses.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 6: Temperature Effects'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Tell me something interesting'
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  Prompt: '"
+prompt
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Testing different temperature values...'
+●●●●●● 2mm □△
+temperatures
+●●●●●● 1mm □
+0.1
+0.5
+0.9
+responses
+●●●●●● 1mm □
+temp
+temperatures
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Temperature: '
+temp
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+responses
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Response: '
+response
+80
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+responses
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+responses
+0
+responses
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  ✓ Different temperatures produced different responses'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_chat_endpoint
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test chat endpoint with message list.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 7: Chat Endpoint'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+'You are a helpful assistant that explains concepts simply.'
+'role'
+'content'
+'user'
+'What is machine learning in simple terms?'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Chat: ML explanation'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Sending chat messages...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Chat response generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_chat_multi_turn
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test chat endpoint with multi-turn conversation.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Test 8: Chat Multi-Turn'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+'You are a coding expert.'
+'role'
+'content'
+'user'
+'What is Python?'
+'role'
+'content'
+'assistant'
+'Python is a high-level programming language known for its simplicity and readability.'
+'role'
+'content'
+'user'
+'What are its main uses?'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Chat: Python uses'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Sending multi-turn chat...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 3mm △
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Chat response generated in '
+gen_time
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Response: '
+response
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+unittest
+●●●●●● 1mm □△
+●●●●●● 2mm □△

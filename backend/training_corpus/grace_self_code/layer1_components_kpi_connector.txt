@@ -1,0 +1,635 @@
+## kpi_connector.py
+'\nKPI Connector - Layer 1 Integration\n\nConnects KPI tracking system to Layer 1 message bus, enabling autonomous\nKPI tracking and trust score generation from component performance.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+Message
+ComponentType
+MessageType
+get_message_bus
+●●●●●● 3mm □△○
+layer1.autonomous_actions
+●●●●●● 2mm □△○
+AutonomousAction
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+KPITracker
+KPI_TRACKER_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+get_kpi_tracker
+●●●●●● 1mm □
+●●●●●● 2mm □
+KPITracker
+●●●●●● 1mm □
+●●●●●● 2mm □
+KPI_TRACKER_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+KPIConnector
+'\n    Connector for KPI tracking system.\n    \n    Integrates KPI tracker with Layer 1 message bus for:\n    - Autonomous KPI tracking on component actions\n    - KPI-to-trust score conversion\n    - Component-level trust aggregation\n    - System-wide trust metric\n    - Integration with trust-aware systems\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+message_bus
+kpi_tracker
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □○
+KPITracker
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize KPI connector.\n\n        Args:\n            message_bus: Layer 1 message bus instance\n            kpi_tracker: KPI tracker instance (optional, uses singleton if not provided)\n        '
+●●●●●● 2mm □
+KPI_TRACKER_AVAILABLE
+ImportError
+●●●●●● 1mm □△
+'KPI tracker not available'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+kpi_tracker
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] Registered with message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_common_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register common components with default metric weights.'
+common_components
+●●●●●● 1mm □
+'rag'
+'ingestion'
+'memory_mesh'
+'llm_orchestration'
+'neuro_symbolic'
+'knowledge_base'
+'requests_handled'
+'successes'
+'failures'
+1.0
+2.0
+1.0
+'files_processed'
+'files_succeeded'
+'files_failed'
+1.0
+2.0
+1.0
+'operations'
+'successes'
+1.0
+2.0
+'requests'
+'successes'
+'errors'
+1.0
+2.0
+1.0
+'reasoning_queries'
+'successful_reasoning'
+1.0
+2.0
+'repositories_ingested'
+'verification_passed'
+1.0
+2.0
+component_name
+weights
+common_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+weights
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers with message bus.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+MessageType
+'kpi.increment'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+MessageType
+'kpi.get_component_trust'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+MessageType
+'kpi.get_system_trust'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+MessageType
+'kpi.get_health'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register autonomous actions for automatic KPI tracking.'
+action_patterns
+●●●●●● 1mm □
+'rag.query_received'
+'rag'
+'requests_handled'
+'rag.retrieval_success'
+'rag'
+'successes'
+'rag.retrieval_failure'
+'rag'
+'failures'
+'ingestion.file_processed'
+'ingestion'
+'files_processed'
+'ingestion.file_succeeded'
+'ingestion'
+'files_succeeded'
+'ingestion.file_failed'
+'ingestion'
+'files_failed'
+'memory_mesh.operation'
+'memory_mesh'
+'operations'
+'llm.request'
+'llm_orchestration'
+'requests'
+'llm.success'
+'llm_orchestration'
+'successes'
+'llm.error'
+'llm_orchestration'
+'errors'
+'neuro_symbolic.reasoning_complete'
+'neuro_symbolic'
+'reasoning_queries'
+'knowledge_base.ingestion_complete'
+'knowledge_base'
+'repositories_ingested'
+'knowledge_base.integrity_verified'
+'knowledge_base'
+'verification_passed'
+trigger_event
+component_name
+metric_name
+action_patterns
+●●●●●● 1mm □
+make_handler
+●●●●●● 1mm □△
+comp
+met
+●●●●●● 2mm □△
+Message
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+comp
+met
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+handler
+handler
+●●●●●● 1mm □
+make_handler
+●●●●●● 1mm □△
+component_name
+metric_name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Subscribe to relevant events.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*.success'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*.failure'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*.error'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+Message
+'Handle increment KPI request.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Connector disabled'
+component_name
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'component_name'
+●●●●●● 2mm □△
+metric_name
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'metric_name'
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'value'
+1.0
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_name
+metric_name
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'component_name and metric_name required'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+metric_name
+value
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] Failed to increment KPI: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle get component trust request.'
+component_name
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'component_name'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_name
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'component_name required'
+trust_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'component_name'
+'trust_score'
+'health'
+●●●●●● 3mm □△○
+component_name
+trust_score
+health
+Exception
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] Failed to get component trust: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle get system trust request.'
+component_weights
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'component_weights'
+●●●●●● 2mm □△
+system_trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_weights
+●●●●●● 2mm □△
+system_health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'system_trust_score'
+'system_health'
+●●●●●● 3mm □△○
+system_trust
+system_health
+Exception
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] Failed to get system trust: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle get health request.'
+component_name
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'component_name'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_name
+health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 3mm □
+health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'health'
+●●●●●● 3mm □△○
+health
+Exception
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] Failed to get health: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Autonomous action: Track component action.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □
+'topic'
+'timestamp'
+message
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+metric_name
+1.0
+metadata
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] 🤖 Auto-tracked: '
+component_name
+'.'
+metric_name
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[KPI-CONNECTOR] Auto-tracking failed: '
+e
+●●●●●● 2mm □△
+Message
+'Handle success events.'
+topic_parts
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topic_parts
+●●●●●● 2mm □△
+2
+component_name
+●●●●●● 1mm □
+topic_parts
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+'successes'
+1.0
+●●●●●● 2mm □△
+Message
+'Handle failure events.'
+topic_parts
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topic_parts
+●●●●●● 2mm □△
+2
+component_name
+●●●●●● 1mm □
+topic_parts
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+'failures'
+1.0
+●●●●●● 2mm □△
+Message
+'Handle error events.'
+topic_parts
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topic_parts
+●●●●●● 2mm □△
+2
+component_name
+●●●●●● 1mm □
+topic_parts
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+'errors'
+1.0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_kpi_connector
+●●●●●● 1mm □△
+message_bus
+kpi_tracker
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □○
+KPITracker
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Factory function to create KPI connector.\n\n    Args:\n        message_bus: Layer 1 message bus instance\n        kpi_tracker: KPI tracker instance (optional)\n\n    Returns:\n        KPIConnector instance\n    '
+●●●●●● 2mm □
+KPI_TRACKER_AVAILABLE
+ImportError
+●●●●●● 1mm □△
+'KPI tracker not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+KPIConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+KPIConnector

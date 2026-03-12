@@ -1,0 +1,145 @@
+## diagnose_openai.py
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+'backend/.env'
+●●●●●● 2mm □△
+api_key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'LLM_API_KEY'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'LLM_MODEL'
+'gpt-4o'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing OpenAI with model: '
+model
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'API Key present: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+api_key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://api.openai.com/v1/chat/completions'
+headers
+●●●●●● 1mm □
+'Authorization'
+'Content-Type'
+'Bearer '
+api_key
+'application/json'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'max_tokens'
+model
+'role'
+'content'
+'user'
+'Say hello'
+5
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Response Status: '
+response
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Response Content: '
+response
+200
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking /models endpoint:'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+'https://api.openai.com/v1/models'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Response Status: '
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+models
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+' models'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Is '
+model
+' in models? '
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+m
+'id'
+model
+m
+models
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Response Content: '
+response
+200
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error: '
+e
+●●●●●● 2mm □△

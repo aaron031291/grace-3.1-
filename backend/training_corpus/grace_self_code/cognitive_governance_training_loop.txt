@@ -1,0 +1,477 @@
+## governance_training_loop.py
+'\nGovernance Training Loop — KB → Learning Memory → Oracle → Sandbox → 60d → Report → Approval → +30% → System\n\nFull pipeline for autonomous training with human-readable Oracle and governance:\n1. Knowledge base → Learning memory (sync folders / gap fill)\n2. Learning memory → Oracle (human-readable files for librarian and file management)\n3. New logic → Sandbox environment, test all new logic\n4. 60-day trial: live data inputs/outputs, governed by global and local rules + trust score APIs\n5. After 60 days: right report, user-in-loop for governance approval\n6. If system improvement >= 30% and approved → add to system, then normal governance prevails\n\nLibrarian and brains are connected via Oracle export (librarian sees files) and brain actions.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+TRIAL_DAYS
+●●●●●● 1mm □
+60
+IMPROVEMENT_THRESHOLD
+●●●●●● 1mm □
+0.3
+●●●●●● 1mm □
+run_oracle_export
+●●●●●● 1mm □△
+kb_path
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+500
+0.3
+'Push learning memory to Oracle (human-readable files). Librarian and file management use this.'
+●●●●●● 3mm □△○
+cognitive.oracle_export
+●●●●●● 2mm □△○
+export_learning_memory_to_oracle
+●●●●●● 3mm ○
+export_learning_memory_to_oracle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Oracle export failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'exported'
+'errors'
+'error'
+0
+1
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_governance_checks
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Governance by global and local rules + trust score APIs.'
+result
+●●●●●● 1mm □
+'passed'
+'global_rules'
+'local_rules'
+'trust_api'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'trust_api'
+'models'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+trust
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'trust_api'
+'ok'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trust
+●●●●●● 2mm □△
+Exception
+result
+'trust_api'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+result
+'passed'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'local_rules'
+'memory_stats'
+●●●●●● 1mm □
+k
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'count'
+v
+●●●●●● 2mm □△
+v
+k
+v
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'local_rules'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Exception
+result
+'passed'
+●●●●●● 1mm □
+●●●●●● 1mm □
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_full_cycle
+●●●●●● 1mm □△
+kb_path
+export_to_oracle
+run_sandbox_review
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n    One full governance training cycle:\n    - Sync learning memory from KB (if mesh integration available)\n    - Export learning memory → Oracle (human-readable)\n    - Run governance checks (global/local rules, trust APIs)\n    - Optionally review sandbox experiments (60-day trial, report, approval queue)\n    '
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'cycle_at'
+'oracle_export'
+'governance'
+'sandbox_review'
+'errors'
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+export_to_oracle
+result
+'oracle_export'
+●●●●●● 1mm □
+run_oracle_export
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'errors'
+●●●●●● 1mm □△
+'oracle_export: '
+e
+●●●●●● 2mm □△
+result
+'governance'
+●●●●●● 1mm □
+run_governance_checks
+●●●●●● 1mm □△
+'cycle_at'
+result
+'cycle_at'
+●●●●●● 2mm □△
+Exception
+result
+'errors'
+●●●●●● 1mm □△
+'governance: '
+e
+●●●●●● 2mm □△
+result
+'governance'
+●●●●●● 1mm □
+'passed'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_sandbox_review
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+get_sandbox_lab
+ExperimentStatus
+TRIAL_DAYS_GOVERNANCE
+IMPROVEMENT_THRESHOLD_PROMOTION
+lab
+●●●●●● 1mm □
+get_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+awaiting
+●●●●●● 1mm □
+e
+e
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+ExperimentStatus
+in_trial
+●●●●●● 1mm □
+e
+e
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+ExperimentStatus
+result
+'sandbox_review'
+●●●●●● 1mm □
+'trial_days'
+'improvement_threshold_percent'
+'awaiting_approval'
+'in_trial'
+'awaiting_ids'
+'message'
+TRIAL_DAYS_GOVERNANCE
+IMPROVEMENT_THRESHOLD_PROMOTION
+●●●●●● 2mm □△
+100
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+awaiting
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+in_trial
+●●●●●● 2mm □△
+e
+e
+awaiting
+'User-in-loop approval required for validated experiments; if +30% and approved, add to system.'
+Exception
+result
+'errors'
+●●●●●● 1mm □△
+'sandbox_review: '
+e
+●●●●●● 2mm □△
+result
+'sandbox_review'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+result
+'duration_sec'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_governance_report
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Generate 60-day right report for governance approval (single experiment or summary).'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+get_sandbox_lab
+ExperimentStatus
+lab
+●●●●●● 1mm □
+get_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+experiment_id
+exp
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 3mm ○
+'error'
+'experiment_id'
+'experiment_not_found'
+experiment_id
+●●●●●● 2mm □
+exp
+ExperimentStatus
+●●●●●● 3mm ○
+'experiment_id'
+'status'
+'message'
+experiment_id
+exp
+'Report only for validated experiments (trial complete).'
+●●●●●● 3mm ○
+'experiment_id'
+'name'
+'trial_days'
+'trial_complete'
+'success_rate'
+'improvement_percent'
+'trust_score'
+'meets_30_percent'
+'ready_for_approval'
+exp
+exp
+exp
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+exp
+exp
+0
+IMPROVEMENT_THRESHOLD
+●●●●●● 2mm □△
+100
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+validated
+●●●●●● 1mm □
+e
+e
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+ExperimentStatus
+in_trial
+●●●●●● 1mm □
+e
+e
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+ExperimentStatus
+●●●●●● 3mm ○
+'validated_count'
+'in_trial_count'
+'validated_ids'
+'trial_days'
+'improvement_threshold_percent'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+validated
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+in_trial
+●●●●●● 2mm □△
+e
+e
+validated
+TRIAL_DAYS
+IMPROVEMENT_THRESHOLD
+●●●●●● 2mm □△
+100
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

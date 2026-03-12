@@ -1,0 +1,409 @@
+## memory_graph_models.py
+"\nPersistent graph memory models — nodes, edges, and user thinking patterns.\n\nThese models back MAGMA's in-memory graphs with database persistence.\nOn startup, graphs are rehydrated from the database.\nOn every add_node/add_edge, the change is persisted.\n\nUser thinking pattern models track how each user communicates,\nwhat topics they focus on, and how Grace should adapt.\n"
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Text
+Boolean
+Integer
+Float
+DateTime
+JSON
+ForeignKey
+Index
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 2mm △
+GraphNodeRecord
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Persistent storage for MAGMA graph nodes.'
+__tablename__
+●●●●●● 1mm □
+'graph_nodes'
+node_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+graph_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+node_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+embedding_json
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+metadata_json
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+workspace_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_gn_graph_type'
+'graph_type'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_gn_workspace'
+'workspace_id'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraphEdgeRecord
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Persistent storage for MAGMA graph edges.'
+__tablename__
+●●●●●● 1mm □
+'graph_edges'
+edge_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+graph_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source_node_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+target_node_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+relation_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+weight
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+metadata_json
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+workspace_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_ge_source'
+'source_node_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_ge_target'
+'target_node_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_ge_relation'
+'relation_type'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+UserThinkingPattern
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+"\n    Tracks how a user thinks, communicates, and works.\n\n    Grace observes each user's interactions over time and builds a profile:\n    - Communication style (verbose vs concise, technical vs casual)\n    - Topic preferences (what they ask about most)\n    - Problem-solving approach (methodical vs exploratory)\n    - Response preferences (code-first vs explanation-first)\n    - Time patterns (when they're active, session lengths)\n    - Error patterns (common mistakes, recurring issues)\n    "
+__tablename__
+●●●●●● 1mm □
+'user_thinking_patterns'
+user_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pattern_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pattern_key
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pattern_value
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+observation_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+last_observed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+metadata_json
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_utp_user_type'
+'user_id'
+'pattern_type'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_utp_user_key'
+'user_id'
+'pattern_key'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+UserInteractionLog
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Raw interaction log for user pattern extraction.\n\n    Every user message is logged (content hash only, not full content for privacy)\n    with metadata that the pattern learner analyzes.\n    '
+__tablename__
+●●●●●● 1mm □
+'user_interaction_logs'
+user_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+interaction_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+64
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content_length
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+topic_tags
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+response_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+response_length
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+response_time_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+satisfaction_signal
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+metadata_json
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_uil_user_session'
+'user_id'
+'session_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_uil_user_type'
+'user_id'
+'interaction_type'
+●●●●●● 2mm □△

@@ -1,0 +1,704 @@
+## qwen_client.py
+'\nQwen 3.5 LLM Client — open-source model running locally via Ollama.\n\nDefault mode: LOCAL via Ollama (no API key, no cloud, fully private).\n  ollama pull qwen3.5:9b       — 9B model (fast, efficient)\n  ollama pull qwen3.5:27b      — 27B dense model (recommended default)\n  ollama pull qwen3.5:122b-a10b — 122B MoE, 10B active (high quality, 262K context)\n  ollama pull qwen3.5:397b-a17b — 397B flagship MoE\n\nQwen 3.5 features: 201 languages, hybrid Gated DeltaNet architecture,\nnative 262K context window, unified multimodal (text, images, video).\n\nOptional cloud mode: set QWEN_API_KEY for DashScope API if needed.\n'
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+QWEN_DEFAULT_BASE_URL
+●●●●●● 1mm □
+'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'
+QWEN_DEFAULT_MODEL
+●●●●●● 1mm □
+'qwen3.5:27b'
+●●●●●● 2mm △
+QwenLLMClient
+●●●●●● 3mm □△
+BaseLLMClient
+BaseLLMClient
+'\n    Client for Qwen 3.5 open-source model running locally via Ollama.\n\n    Default: Ollama local mode (free, private, no API key).\n    Optional: DashScope cloud mode when QWEN_API_KEY is set.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+base_url
+model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_BASE_URL'
+''
+●●●●●● 2mm □△
+QWEN_DEFAULT_BASE_URL
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_MODEL'
+''
+●●●●●● 2mm □△
+QWEN_DEFAULT_MODEL
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Authorization'
+'Content-Type'
+'Bearer '
+●●●●●● 3mm △
+'application/json'
+mode
+●●●●●● 1mm □
+●●●●●● 3mm △
+'cloud (DashScope)'
+'local (Ollama)'
+logger
+●●●●●● 1mm □△
+'[QWEN] Initialized in '
+mode
+' mode, model='
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+temperature
+max_tokens
+stream
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+messages
+●●●●●● 1mm □
+●●●●●● 2mm □
+system_prompt
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+system_prompt
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_chat_cloud
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+'/chat/completions'
+model_name
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+model_name
+messages
+stream
+●●●●●● 2mm □
+temperature
+●●●●●● 2mm □
+payload
+'temperature'
+●●●●●● 1mm □
+temperature
+●●●●●● 2mm □
+max_tokens
+●●●●●● 2mm □
+payload
+'max_tokens'
+●●●●●● 1mm □
+max_tokens
+enable_thinking
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'enable_thinking'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_thinking
+●●●●●● 2mm □
+payload
+'extra_body'
+●●●●●● 1mm □
+'enable_thinking'
+enable_thinking
+payload
+●●●●●● 1mm □△
+kwargs
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[QWEN] Cloud request to '
+url
+' model='
+model_name
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+logger
+●●●●●● 1mm □△
+'[QWEN] Error ('
+response
+'): '
+response
+500
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stream
+●●●●●● 3mm ○
+response
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+'choices'
+0
+'message'
+'content'
+Exception
+logger
+●●●●●● 1mm □△
+'[QWEN] Cloud API failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_chat_ollama
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+ollama_url
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_URL'
+'http://localhost:11434'
+●●●●●● 2mm □△
+model_name
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_MODEL'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_FAST'
+''
+●●●●●● 2mm □△
+'qwen3.5:27b'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+model_name
+messages
+●●●●●● 1mm □
+options
+●●●●●● 1mm □
+●●●●●● 2mm □
+temperature
+●●●●●● 2mm □
+options
+'temperature'
+●●●●●● 1mm □
+temperature
+●●●●●● 2mm □
+max_tokens
+●●●●●● 2mm □
+options
+'num_predict'
+●●●●●● 1mm □
+max_tokens
+●●●●●● 2mm □
+options
+payload
+'options'
+●●●●●● 1mm □
+options
+logger
+●●●●●● 1mm □△
+'[QWEN] Ollama fallback model='
+model_name
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+ollama_url
+'/api/chat'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[QWEN] Ollama fallback failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+'/models'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+200
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □
+ollama_url
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_URL'
+'http://localhost:11434'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+ollama_url
+'/api/tags'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+200
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+'/models'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[QWEN] Error fetching models: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'name'
+●●●●●● 3mm △
+'Qwen ('
+●●●●●● 3mm △
+')'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'id'
+'name'
+'qwen-local'
+'Qwen via Ollama (local)'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+model_name
+model_name
+m
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+m
+models
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+code_generate
+●●●●●● 1mm □△
+self
+prompt
+language
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'python'
+''
+"Code generation using Qwen's coding capabilities."
+system
+●●●●●● 1mm □
+'You are an expert '
+language
+' programmer. Generate clean, well-structured, production-quality code. Include type hints and handle edge cases. Only output the code, no explanations unless asked.'
+full_prompt
+●●●●●● 1mm □
+prompt
+●●●●●● 2mm □
+context
+full_prompt
+●●●●●● 1mm □
+'Existing code context:\n```\n'
+context
+'\n```\n\n'
+prompt
+●●●●●● 2mm □
+●●●●●● 3mm △
+code_model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_CODE_MODEL'
+''
+●●●●●● 2mm □△
+'qwen-coder-plus'
+●●●●●● 3mm □
+code_model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_CODE_MODEL'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_CODE'
+''
+●●●●●● 2mm □△
+'qwen3.5:27b'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+reason
+●●●●●● 1mm □△
+self
+problem
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+"Deep reasoning using Qwen 3.5's thinking mode."
+system
+●●●●●● 1mm □
+'You are a deep reasoning engine. Think step by step through the problem. Consider multiple angles, identify assumptions, and verify your conclusions.'
+full_prompt
+●●●●●● 1mm □
+problem
+●●●●●● 2mm □
+context
+full_prompt
+●●●●●● 1mm □
+'Context:\n'
+context
+'\n\nProblem:\n'
+problem
+●●●●●● 2mm □
+●●●●●● 3mm △
+reason_model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_REASON_MODEL'
+''
+●●●●●● 2mm □△
+'qwq-plus'
+●●●●●● 3mm □
+reason_model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QWEN_REASON_MODEL'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_REASON'
+''
+●●●●●● 2mm □△
+'qwen3.5:27b'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○

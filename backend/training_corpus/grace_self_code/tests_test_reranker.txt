@@ -1,0 +1,129 @@
+## test_reranker.py
+'\nTest the reranker functionality.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.reranker
+●●●●●● 2mm □△○
+get_reranker
+●●●●●● 1mm □
+test_reranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test reranker initialization and basic functionality.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing reranker...'
+●●●●●● 2mm □△
+reranker
+●●●●●● 1mm □
+get_reranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Reranker loaded: '
+reranker
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Device: '
+reranker
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+'What is machine learning?'
+chunks
+●●●●●● 1mm □
+'chunk_id'
+'text'
+1
+'Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience.'
+'chunk_id'
+'text'
+2
+'The weather today is sunny with a high of 75 degrees.'
+'chunk_id'
+'text'
+3
+'Deep learning uses neural networks with multiple layers to process complex data.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nOriginal chunks:'
+●●●●●● 2mm □△
+chunk
+chunks
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+chunk
+'chunk_id'
+': '
+chunk
+'text'
+60
+'...'
+●●●●●● 2mm □△
+reranked
+●●●●●● 1mm □
+reranker
+●●●●●● 1mm □△
+query
+chunks
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nReranked chunks (top 2):'
+●●●●●● 2mm □△
+chunk
+reranked
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+chunk
+'chunk_id'
+': '
+chunk
+'text'
+60
+'... (score: '
+chunk
+'rerank_score'
+'.4f'
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Reranker test passed!'
+●●●●●● 2mm □△
+reranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Reranker unloaded'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_reranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△

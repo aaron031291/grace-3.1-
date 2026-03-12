@@ -1,0 +1,291 @@
+## test_genesis_feature_v2.py
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+BASE_URL
+●●●●●● 1mm □
+'http://localhost:8000'
+●●●●●● 1mm □
+test_genesis_feature
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Genesis Key Feature...'
+●●●●●● 2mm □△
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/health'
+●●●●●● 2mm □△
+requests
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Server is not running on http://localhost:8000. Please start the backend server first.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1] Creating User Profile...'
+●●●●●● 2mm □△
+user_payload
+●●●●●● 1mm □
+'username'
+'email'
+'test_user_genesis'
+'test@genesis.com'
+user_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/genesis/users'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+user_data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+user_data
+'user_id'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'User created: '
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'User creation failed (status '
+response
+'): '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+user_id
+●●●●●● 1mm □
+'test_user_fallback'
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error creating user: '
+e
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+'test_user_fallback'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2] Creating Genesis Key...'
+●●●●●● 2mm □△
+key_payload
+●●●●●● 1mm □
+'key_type'
+'what_description'
+'who_actor'
+'where_location'
+'why_reason'
+'how_method'
+'user_id'
+'tags'
+'user_input'
+'Testing genesis key creation'
+'test_script'
+'test_genesis_feature_v2.py'
+'Validation of feature'
+'API Call'
+user_id
+'test'
+'genesis'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/genesis/keys'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to create key: '
+response
+' - '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_id
+●●●●●● 1mm □
+key_data
+'key_id'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Genesis Key Created: '
+key_id
+●●●●●● 2mm □△
+key_data
+'what_description'
+key_payload
+'what_description'
+key_data
+'key_type'
+key_payload
+'key_type'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASS] Key creation validated'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3] Retrieving Key '
+key_id
+'...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/genesis/keys/'
+key_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+retrieved_key
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieved_key
+'key_id'
+key_id
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASS] Key retrieval validated'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to retrieve key: '
+response
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4] Listing Keys...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/genesis/keys?limit=5'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+keys
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+' keys'
+●●●●●● 2mm □△
+found
+●●●●●● 1mm □
+●●●●●● 1mm □
+k
+keys
+●●●●●● 2mm □
+k
+'key_id'
+key_id
+found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+found
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASS] Newly created key found in list'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Newly created key NOT found in recent list (might be pagination or order)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to list keys: '
+response
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[5] Getting Stats...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/genesis/stats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASS] Stats retrieved'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to get stats: '
+response
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Test failed with exception: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_genesis_feature
+●●●●●● 1mm □△
+●●●●●● 2mm □△

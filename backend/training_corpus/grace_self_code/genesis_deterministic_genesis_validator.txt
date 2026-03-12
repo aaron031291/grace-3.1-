@@ -1,0 +1,1413 @@
+## deterministic_genesis_validator.py
+'\nDeterministic Genesis Key Validator\n=====================================\nPure deterministic analysis of the Genesis Key system — no LLM needed.\n\nChecks:\n1. Schema Integrity: Required fields, valid enums, well-formed key_ids\n2. Chain Integrity: parent_key_id references resolve, no orphaned chains\n3. Fix Linkage: fix_key_id and fix_suggestion references are valid\n4. KB Sync: Keys in DB match files in knowledge_base/layer_1/genesis_key/\n5. User Profile Consistency: user_ids in keys exist in user_profile table\n6. Archive Consistency: archive counts align with actual key counts\n7. Connector Wiring: GenesisKeysConnector field names match the model\n8. Route Wiring: Frontend expects /genesis/* routes — are they registered?\n9. Timestamp Ordering: Child keys should have timestamps after their parents\n10. Duplicate Detection: No duplicate key_ids\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisIssue
+'A single deterministic Genesis validation issue.'
+check
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+fix_suggestion
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+GenesisValidationReport
+'Full deterministic Genesis Key validation report.'
+timestamp
+●●●●●● 1mm ○
+total_issues
+●●●●●● 2mm ○
+critical_count
+●●●●●● 2mm ○
+warning_count
+●●●●●● 2mm ○
+info_count
+●●●●●● 2mm ○
+checks_run
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'total_issues'
+'critical_count'
+'warning_count'
+'info_count'
+'checks_run'
+'issues'
+'stats'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+check_genesis_schema_integrity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify the GenesisKey model has all required columns and the\n    enum types are consistent between model definition and service usage.\n    '
+issues
+●●●●●● 1mm □
+model_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'genesis_key_models.py'
+service_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'genesis'
+●●●●●● 3mm □△
+'genesis_key_service.py'
+●●●●●● 2mm □
+model_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+source
+●●●●●● 1mm □
+model_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+required_columns
+●●●●●● 1mm □
+'key_id'
+'parent_key_id'
+'key_type'
+'status'
+'what_description'
+'who_actor'
+'when_timestamp'
+'is_error'
+'has_fix_suggestion'
+'fix_applied'
+found_columns
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+target
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+target
+ast
+●●●●●● 2mm □△
+found_columns
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+missing
+●●●●●● 1mm □
+required_columns
+●●●●●● 1mm □△
+found_columns
+●●●●●● 2mm □
+missing
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+enum_classes
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □△
+'Type'
+'Status'
+●●●●●● 2mm □△
+enum_classes
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+expected_enums
+●●●●●● 1mm □
+'GenesisKeyType'
+'GenesisKeyStatus'
+'FixSuggestionStatus'
+missing_enums
+●●●●●● 1mm □
+expected_enums
+●●●●●● 1mm □△
+enum_classes
+●●●●●● 2mm □
+missing_enums
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+service_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+svc_source
+●●●●●● 1mm □
+service_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+svc_tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+svc_source
+●●●●●● 2mm □△
+imported_names
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+svc_tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+'genesis_key_models'
+node
+alias
+node
+imported_names
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+expected_imports
+●●●●●● 1mm □
+'GenesisKey'
+'GenesisKeyType'
+'GenesisKeyStatus'
+missing_imports
+●●●●●● 1mm □
+expected_imports
+●●●●●● 1mm □△
+imported_names
+●●●●●● 2mm □
+missing_imports
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_chain_integrity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify parent_key_id references resolve to existing keys in the DB.\n    Uses direct SQLite access for deterministic, session-free checking.\n    '
+issues
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+tables
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+total_keys
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+orphans
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n            SELECT gk.key_id, gk.parent_key_id\n            FROM genesis_key gk\n            WHERE gk.parent_key_id IS NOT NULL\n              AND gk.parent_key_id != ''\n              AND gk.parent_key_id NOT IN (SELECT key_id FROM genesis_key)\n        "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orphans
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+duplicates
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'\n            SELECT key_id, COUNT(*) as cnt\n            FROM genesis_key\n            GROUP BY key_id\n            HAVING cnt > 1\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+duplicates
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_fix_linkage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify fix_key_id references and fix_suggestion foreign keys resolve.'
+issues
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+tables
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+broken_fix_links
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n            SELECT key_id, fix_key_id\n            FROM genesis_key\n            WHERE fix_key_id IS NOT NULL\n              AND fix_key_id != ''\n              AND fix_key_id NOT IN (SELECT key_id FROM genesis_key)\n        "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+broken_fix_links
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'fix_suggestion'
+tables
+orphan_suggestions
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'\n                SELECT fs.suggestion_id, fs.genesis_key_id\n                FROM fix_suggestion fs\n                WHERE fs.genesis_key_id NOT IN (SELECT key_id FROM genesis_key)\n            '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orphan_suggestions
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_keys_without_fix
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n                SELECT COUNT(*)\n                FROM genesis_key\n                WHERE is_error = 1\n                  AND has_fix_suggestion = 0\n                  AND status != 'fixed'\n            "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+error_keys_without_fix
+10
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_kb_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify the knowledge_base/layer_1/genesis_key/ directory structure\n    exists and contains data if the DB has Genesis Keys.\n    '
+issues
+●●●●●● 1mm □
+kb_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'layer_1'
+●●●●●● 3mm □△
+'genesis_key'
+●●●●●● 2mm □
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+json_files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kb_path
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+user_dirs
+●●●●●● 1mm □
+d
+d
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+db_key_count
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+tables
+db_key_count
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+db_key_count
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+json_files
+●●●●●● 2mm □△
+0
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+db_key_count
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+json_files
+●●●●●● 2mm □△
+0
+ratio
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+json_files
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+db_key_count
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ratio
+0.1
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_user_profiles
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify user_ids referenced in Genesis Keys exist in user_profile table.'
+issues
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+tables
+'user_profile'
+tables
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+orphan_users
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n            SELECT DISTINCT gk.user_id\n            FROM genesis_key gk\n            WHERE gk.user_id IS NOT NULL\n              AND gk.user_id != ''\n              AND gk.user_id NOT IN (SELECT user_id FROM user_profile)\n        "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orphan_users
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stale_profiles
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'\n            SELECT user_id, total_actions,\n                   (SELECT COUNT(*) FROM genesis_key WHERE user_id = user_profile.user_id) as actual\n            FROM user_profile\n            WHERE total_actions > 0\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+recorded
+actual
+stale_profiles
+●●●●●● 2mm □
+actual
+0
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+recorded
+●●●●●● 1mm □△
+actual
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+actual
+●●●●●● 2mm □△
+0.5
+10
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_connector_wiring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify the GenesisKeysConnector uses field names that match the\n    GenesisKey model. Known issue: connector uses genesis_key_id vs key_id.\n    '
+issues
+●●●●●● 1mm □
+connector_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'layer1'
+●●●●●● 3mm □△
+'components'
+●●●●●● 3mm □△
+'genesis_keys_connector.py'
+●●●●●● 2mm □
+connector_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+source
+●●●●●● 1mm □
+connector_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+issues
+mismatches
+●●●●●● 1mm □
+●●●●●● 2mm □
+'genesis_key_id'
+source
+'key_id'
+source
+●●●●●● 1mm □△
+'genesis_key_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'"immutable"'
+source
+"'immutable'"
+source
+mismatches
+●●●●●● 1mm □△
+'immutable (not in GenesisKey model)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'"metadata"'
+source
+'"metadata_human"'
+source
+'"metadata_ai"'
+source
+●●●●●● 2mm □
+'metadata'
+source
+'context_data'
+source
+mismatches
+●●●●●● 1mm □△
+'metadata (model uses metadata_human/metadata_ai)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mismatches
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+init_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'layer1'
+●●●●●● 3mm □△
+'initialize.py'
+●●●●●● 2mm □
+init_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+init_source
+●●●●●● 1mm □
+init_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'GenesisKeysConnector'
+init_source
+'genesis_keys'
+init_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_route_wiring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Check if the frontend expects /genesis/* API routes and whether\n    those routes are actually registered in app.py.\n    '
+issues
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'app.py'
+●●●●●● 2mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+app_source
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+frontend_panel
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'frontend'
+●●●●●● 3mm □△
+'src'
+●●●●●● 3mm □△
+'components'
+●●●●●● 3mm □△
+'GenesisKeyPanel.jsx'
+expected_routes
+●●●●●● 1mm □
+●●●●●● 2mm □
+frontend_panel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+panel_source
+●●●●●● 1mm □
+frontend_panel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+api_calls
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'["\\\']\\/genesis\\/[^"\\\']*["\\\']'
+panel_source
+●●●●●● 2mm □△
+expected_routes
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+api_calls
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+expected_routes
+genesis_router_registered
+●●●●●● 1mm □
+'genesis'
+app_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'include_router'
+app_source
+'genesis_keys'
+app_source
+●●●●●● 2mm □
+genesis_router_registered
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_timestamp_ordering
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify child keys have timestamps after their parent keys.'
+issues
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+tables
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+inverted
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'\n            SELECT child.key_id, child.when_timestamp, parent.key_id, parent.when_timestamp\n            FROM genesis_key child\n            JOIN genesis_key parent ON child.parent_key_id = parent.key_id\n            WHERE child.when_timestamp < parent.when_timestamp\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+inverted
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+check_genesis_import_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify the Genesis Key import chain resolves without errors.'
+issues
+●●●●●● 1mm □
+critical_files
+●●●●●● 1mm □
+'models/genesis_key_models.py'
+'genesis/genesis_key_service.py'
+'genesis/kb_integration.py'
+'api/_genesis_tracker.py'
+rel_path
+critical_files
+full_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+rel_path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+GenesisIssue
+●●●●●● 1mm □
+run_genesis_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Run the complete deterministic Genesis Key validation pipeline.\n    No LLM needed. Pure structural + data analysis.\n    '
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_issues
+●●●●●● 3mm □△
+GenesisIssue
+checks_run
+●●●●●● 1mm □
+checks
+●●●●●● 1mm □
+'schema_integrity'
+check_genesis_schema_integrity
+'import_chain'
+check_genesis_import_chain
+'chain_integrity'
+check_genesis_chain_integrity
+'fix_linkage'
+check_genesis_fix_linkage
+'kb_sync'
+check_genesis_kb_sync
+'user_profiles'
+check_genesis_user_profiles
+'connector_wiring'
+check_genesis_connector_wiring
+'route_wiring'
+check_genesis_route_wiring
+'timestamp_ordering'
+check_genesis_timestamp_ordering
+name
+checker
+checks
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-GENESIS] Running '
+name
+'...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+checks_run
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+Exception
+all_issues
+●●●●●● 1mm □△
+GenesisIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+checks_run
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+stats
+●●●●●● 1mm □
+_gather_genesis_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+GenesisValidationReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-GENESIS] Complete: '
+report
+' issues ('
+report
+' critical, '
+report
+' warning, '
+report
+' info) in '
+elapsed
+'.0f'
+'ms'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+GenesisValidationReport
+●●●●●● 1mm □
+_gather_genesis_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Gather basic Genesis Key statistics from the DB.'
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'total_keys'
+'error_keys'
+'fixed_keys'
+'unique_users'
+'key_types'
+'kb_files'
+0
+0
+0
+0
+0
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'genesis_key'
+tables
+stats
+'total_keys'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'error_keys'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key WHERE is_error = 1'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'fixed_keys'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM genesis_key WHERE status = 'fixed'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'unique_users'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(DISTINCT user_id) FROM genesis_key WHERE user_id IS NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+row
+conn
+●●●●●● 1mm □△
+'SELECT key_type, COUNT(*) FROM genesis_key GROUP BY key_type ORDER BY COUNT(*) DESC LIMIT 10'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'key_types'
+row
+0
+●●●●●● 1mm □
+row
+1
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+kb_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'layer_1'
+●●●●●● 3mm □△
+'genesis_key'
+●●●●●● 2mm □
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'kb_files'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+kb_path
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

@@ -1,0 +1,238 @@
+## test_chat_api.py
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+sys
+BASE_URL
+●●●●●● 1mm □
+'http://localhost:8000'
+●●●●●● 1mm □
+test_chat_flow
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Chat Flow...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n1. Creating Chat...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/chats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED to create chat: '
+response
+' '
+response
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Retrying with default model...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/chats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED again: '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chat
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_id
+●●●●●● 1mm □
+chat
+'id'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: Created chat '
+chat_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'EXCEPTION creating chat: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n2. Listing Chats...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/chats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED to list chats: '
+response
+' '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chats
+●●●●●● 1mm □
+data
+'chats'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: Retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chats
+●●●●●● 2mm □△
+' chats'
+●●●●●● 2mm □△
+found
+●●●●●● 1mm □
+●●●●●● 1mm □
+c
+chats
+●●●●●● 2mm □
+c
+'id'
+chat_id
+found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found created chat in list: '
+c
+'id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+found
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'ERROR: Created chat '
+chat_id
+' not found in list!'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'EXCEPTION listing chats: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n3. Getting Chat '
+chat_id
+' details...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/chats/'
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED to get chat details: '
+response
+' '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: Got chat details for '
+chat_id
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'EXCEPTION getting chat details: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n4. Getting Chat '
+chat_id
+' messages...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/chats/'
+chat_id
+'/messages'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED to get messages: '
+response
+' '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: Got messages for '
+chat_id
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'EXCEPTION getting messages: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_chat_flow
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,516 @@
+## test_pdf_fix.py
+'\nTest script to verify PDF text extraction improvements.\nTests the new encoding handling and fallback mechanisms.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+FileHandler
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_text_cleaning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test the text cleaning functionality.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 1: Text Cleaning'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_text
+●●●●●● 1mm □
+'This is a test\x80ëL\x93NÎº\x82l\x1e\x87ýwith encoding\x14²\x1fz[\x9d\x87=\x08\x84:¡`\x8eçissues'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nOriginal text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cleaned
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+test_text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Cleaned text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cleaned
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Result: '
+'encoding'
+cleaned
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cleaned
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_text
+●●●●●● 2mm □△
+'PASS'
+'FAIL'
+●●●●●● 2mm □△
+test_text2
+●●●●●● 1mm □
+'Normal text\x00\x01\x02with control chars\x03\x04'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nOriginal text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_text2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cleaned2
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+test_text2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Cleaned text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cleaned2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+null_char
+●●●●●● 1mm □
+'\x00'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Result: '
+'Normal'
+cleaned2
+null_char
+cleaned2
+'PASS'
+'FAIL'
+●●●●●● 2mm □△
+test_text3
+●●●●●● 1mm □
+'He said \x93hello\x94 with \x92quotes\x92 and em\x97dashes'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nOriginal text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_text3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cleaned3
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+test_text3
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Cleaned text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cleaned3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+quote_char
+●●●●●● 1mm □
+'"'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Result: '
+'hello'
+cleaned3
+quote_char
+cleaned3
+'PASS'
+'FAIL'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_text_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test the text validation functionality.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 2: Text Validation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+valid_text
+●●●●●● 1mm □
+'This is a normal, readable paragraph of text. It contains multiple sentences.'
+is_valid
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+valid_text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nValid text: '
+is_valid
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"Text: '"
+valid_text
+50
+"...'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Result: '
+is_valid
+'PASS'
+'FAIL'
+●●●●●● 2mm □△
+garbage_text
+●●●●●● 1mm □
+'\x80ëL\x93NÎº\x82l\x1e\x87ý\x14²\x1fz[\x9d\x87=\x08\x84:¡`\x8eç'
+●●●●●● 2mm □△
+5
+is_invalid
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+garbage_text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nGarbage text should be invalid: '
+is_invalid
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Text: '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+garbage_text
+50
+●●●●●● 2mm □△
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Result: '
+is_invalid
+'PASS'
+'FAIL'
+●●●●●● 2mm □△
+mixed_text
+●●●●●● 1mm □
+'This is mostly valid text '
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+'\x80\x93\x94'
+●●●●●● 2mm □△
+2
+is_valid_mixed
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+mixed_text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nMixed text (70%+ valid) should be valid: '
+is_valid_mixed
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Result: '
+is_valid_mixed
+'PASS'
+'FAIL'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pdf_extraction_if_available
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test PDF extraction with actual PDF if available.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 3: PDF Extraction (if test PDF available)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_files
+●●●●●● 1mm □
+'/tmp/test.pdf'
+'./test.pdf'
+os
+●●●●●● 1mm □△
+'~/test.pdf'
+●●●●●● 2mm □△
+found_pdf
+●●●●●● 1mm □
+●●●●●● 2mm □
+pdf_path
+test_files
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+pdf_path
+●●●●●● 2mm □△
+found_pdf
+●●●●●● 1mm □
+pdf_path
+●●●●●● 2mm □
+found_pdf
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nNo test PDF found. To test with a real PDF:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  1. Place a test PDF at /tmp/test.pdf or ./test.pdf'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  2. Re-run this test'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nExample: cp your_pdf.pdf /tmp/test.pdf'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTesting with PDF: '
+found_pdf
+●●●●●● 2mm □△
+text
+error
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+found_pdf
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Error: '
+error
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Extracted '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'First 200 chars: '
+text
+200
+●●●●●● 2mm □△
+●●●●●● 3mm □
+artifact_patterns
+●●●●●● 1mm □
+'\x80'
+'\x93'
+'\x94'
+'\x97'
+'\x96'
+●●●●●● 3mm □
+artifacts_found
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+pattern
+artifact_patterns
+pattern
+text
+●●●●●● 2mm □△
+●●●●●● 1mm △
+artifacts_found
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ Found '
+artifacts_found
+' encoding artifact types in output'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ No encoding artifacts detected'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'PDF TEXT EXTRACTION FIX VERIFICATION'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_text_cleaning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_text_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_pdf_extraction_if_available
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ All core text cleaning and validation functions working'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ PDF extraction with fallback mechanisms implemented'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nKey improvements:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Added character encoding artifact detection and removal'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Implemented text validity checking (70% readability threshold)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Added PyPDF2 fallback for problematic PDFs'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Improved control character handling'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nYou can now safely ingest PDFs with:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  text, error = FileHandler.extract_text('document.pdf')"
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Test error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+0
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

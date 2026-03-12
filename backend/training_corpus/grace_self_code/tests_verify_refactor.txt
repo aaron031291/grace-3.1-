@@ -1,0 +1,520 @@
+## verify_refactor.py
+'\nComplete System Verification Script\n===================================\nVerifies all components after the provider-agnostic refactor:\n1. LLM Factory and Client\n2. Librarian Engine/Analyzer\n3. Health API\n4. Diagnostic Sensors\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'VERIFY'
+●●●●●● 2mm □△
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_header
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_result
+●●●●●● 1mm □△
+name
+success
+message
+●●●●●● 2mm □△
+''
+status
+●●●●●● 1mm □
+success
+'[PASS]'
+'[FAIL]'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+status
+' '
+name
+': '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+verify_llm_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_header
+●●●●●● 1mm □△
+'1. VERIFYING LLM FACTORY & CLIENT'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+provider
+●●●●●● 1mm □
+settings
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Configured Provider: '
+provider
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'Factory instantiation'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+is_running
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'Client connectivity check'
+is_running
+'Service '
+is_running
+'responding'
+'unreachable'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_running
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Testing simple chat completion...'
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+"Say 'System Ready'"
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'LLM Chat interaction'
+●●●●●● 3mm □△○
+'Response: '
+response
+30
+'...'
+●●●●●● 2mm □△
+Exception
+print_result
+●●●●●● 1mm □△
+'LLM Chat interaction'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+is_running
+Exception
+print_result
+●●●●●● 1mm □△
+'LLM Factory verify'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+verify_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_header
+●●●●●● 1mm □△
+'2. VERIFYING LIBRARIAN SYSTEM'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+librarian.engine
+●●●●●● 2mm □△○
+LibrarianEngine
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 2mm □
+get_embedding_model
+●●●●●● 2mm □
+print_result
+●●●●●● 1mm □△
+'Embedding model check'
+●●●●●● 1mm □
+'get_embedding_model is None (dependencies missing?)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embedding_model
+●●●●●● 2mm □
+print_result
+●●●●●● 1mm □△
+'Embedding model load'
+●●●●●● 1mm □
+'get_embedding_model() returned None'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Initializing LibrarianEngine...'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+LibrarianEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'Engine initialization'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+is_ready
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'AI Analyzer availability'
+is_ready
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_result
+●●●●●● 1mm □△
+'Librarian verify'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+verify_health_api
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_header
+●●●●●● 1mm □△
+'3. VERIFYING HEALTH API'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.health
+●●●●●● 2mm □△○
+check_llm
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Calling internal health check function...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+check_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'Internal Health check'
+result
+'healthy'
+result
+'OK'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+'healthy'
+Exception
+print_result
+●●●●●● 1mm □△
+'Health API verify'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+verify_sensors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_header
+●●●●●● 1mm □△
+'4. VERIFYING DIAGNOSTIC SENSORS'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorLayer
+sensor_layer
+●●●●●● 1mm □
+SensorLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Collecting system metrics...'
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+sensor_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_result
+●●●●●● 1mm □△
+'LLM Health Sensor'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+metrics
+'llm_health'
+●●●●●● 2mm □△
+'Health: '
+metrics
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_result
+●●●●●● 1mm □△
+'Sensors verify'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'#'
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  GRACE SYSTEM VERIFICATION POST-REFACOR'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Initializing environment...'
+●●●●●● 2mm □△
+db_type
+●●●●●● 1mm □
+settings
+DatabaseType
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+DatabaseType
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Database initialized'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [FAIL] Environment initialization failed: '
+e
+●●●●●● 2mm □△
+v1
+●●●●●● 1mm □
+verify_llm_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v2
+●●●●●● 1mm □
+verify_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v3
+●●●●●● 1mm □
+verify_health_api
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v4
+●●●●●● 1mm □
+verify_sensors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+v1
+v2
+v3
+v4
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  SUCCESS: System is fully operational and provider-agnostic.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  WARNING: Some components encountered issues. See logs above.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,135 @@
+## check_gpu.py
+'Quick check: is the GPU available for embeddings? Run from backend: python scripts/check_gpu.py'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+os
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+device_env
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'EMBEDDING_DEVICE'
+'cpu'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'EMBEDDING_DEVICE in .env:'
+device_env
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+torch
+cuda_ok
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cuda_ok
+name
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1000000000.0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'PyTorch CUDA: OK -'
+name
+'('
+mem
+'.1f'
+' GB)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+device_env
+'cuda'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> Set EMBEDDING_DEVICE=cuda in backend/.env to use GPU for embeddings.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> Embeddings will use GPU.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'PyTorch CUDA: not available (CPU-only PyTorch or no GPU).'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+device_env
+'cuda'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> Run fix_embedding_gpu.bat (Python 3.12 + PyTorch CUDA), then set EMBEDDING_DEVICE=cuda.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> Embeddings use CPU (expected).'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Check failed:'
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Python:'
+sys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

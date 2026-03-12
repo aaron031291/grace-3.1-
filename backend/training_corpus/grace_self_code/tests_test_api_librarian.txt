@@ -1,0 +1,542 @@
+## test_api_librarian.py
+'\nTests for Librarian API endpoints.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestLibrarianStatus
+'Test librarian status endpoints.'
+●●●●●● 1mm □
+test_get_librarian_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting librarian system status via health endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/health'
+●●●●●● 2mm □△
+response
+200
+500
+503
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'overall_status'
+data
+'components'
+data
+●●●●●● 1mm □
+test_get_librarian_stats
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting librarian statistics.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/statistics'
+●●●●●● 2mm □△
+response
+200
+500
+503
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestLibrarianRules
+'Test librarian rules endpoints.'
+●●●●●● 1mm □
+test_get_rules
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting librarian rules.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/rules'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'rules'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_create_rule
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a librarian rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/rules'
+●●●●●● 2mm □△
+response
+200
+201
+500
+●●●●●● 1mm □
+test_get_rule_by_id
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting a specific rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/rules/999999'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_update_rule
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test updating a librarian rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/rules/999999'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_delete_rule
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test deleting a librarian rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/rules/999999'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+pytest
+●●●●●● 2mm △
+TestLibrarianTags
+'Test librarian tagging endpoints.'
+●●●●●● 1mm □
+test_get_all_tags
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting all tags.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/tags'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'tags'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_create_tag
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a new tag.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/tags'
+●●●●●● 2mm □△
+response
+200
+201
+500
+●●●●●● 1mm □
+test_assign_tag
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test assigning tags to a document via document endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/documents/1/tags'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_remove_tag
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test removing a tag from a document.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/documents/1/tags/test-tag'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_get_documents_by_tag
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test searching documents by tag.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/search/tags'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestLibrarianCategories
+'Test librarian category endpoints.'
+●●●●●● 1mm □
+test_get_categories
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting tag statistics which includes categories.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/tags/statistics'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_create_category
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a tag with category.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/tags'
+●●●●●● 2mm □△
+response
+200
+201
+500
+●●●●●● 1mm □
+test_assign_category
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test searching tags by category.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/tags?category=test-category'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestLibrarianRelationships
+'Test librarian relationship endpoints.'
+●●●●●● 1mm □
+test_detect_relationships
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test detecting document relationships.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/documents/1/detect-relationships'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_get_relationships
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting document relationships.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/documents/1/relationships'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_create_relationship
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a manual relationship.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/relationships'
+●●●●●● 2mm □△
+response
+200
+201
+404
+500
+pytest
+●●●●●● 2mm △
+TestLibrarianActions
+'Test librarian action endpoints.'
+●●●●●● 1mm □
+test_get_pending_actions
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting pending librarian actions.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/actions/pending'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'actions'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_approve_action
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test approving a librarian action.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/actions/999999/approve'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_reject_action
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test rejecting a librarian action.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/actions/999999/reject'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_get_action_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting action audit log.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/actions/audit'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestLibrarianAI
+'Test librarian AI analysis endpoints.'
+●●●●●● 1mm □
+test_analyze_document
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test AI analysis of a document via process endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/process/1'
+●●●●●● 2mm □△
+response
+200
+404
+500
+503
+●●●●●● 1mm □
+test_suggest_tags
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test popular tags suggestion.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/tags/popular?limit=10'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_suggest_category
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test rule statistics as category suggestion.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/librarian/rules/statistics'
+●●●●●● 2mm □△
+response
+200
+500
+pytest

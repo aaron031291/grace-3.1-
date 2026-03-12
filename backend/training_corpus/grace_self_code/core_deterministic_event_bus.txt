@@ -1,0 +1,1030 @@
+## deterministic_event_bus.py
+'\nDeterministic Event Bus\n========================\nEvent-driven lifecycle with multiple entry points, async triggers,\nand non-linear execution paths.\n\nInstead of a linear pipeline (probe → scan → fix → heal), problems\ncan enter at ANY stage. Like Kafka/RabbitMQ but in-process, integrated\nwith both the Layer 1 message bus and cognitive event bus.\n\nEntry Points (Topics):\n  deterministic.component_registered  → REGISTER stage\n  deterministic.probe_failed          → enters at PROBE → SCAN → FIX\n  deterministic.problem_detected      → enters at SCAN → FIX\n  deterministic.fix_needed            → enters at FIX → REASON → HEAL\n  deterministic.heal_needed           → enters at HEAL\n  deterministic.verify_needed         → enters at VERIFY → LOOP\n  deterministic.code_change           → enters at SCAN (targeted)\n  deterministic.service_down          → enters at HEAL (immediate)\n  deterministic.genesis_error         → enters at SCAN → FIX\n\nAny component can publish to any topic. The deterministic bus\nroutes to the correct handler and tracks everything via Genesis.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+queue
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Callable
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+EntryPoint
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Where a problem enters the deterministic lifecycle.'
+REGISTER
+●●●●●● 1mm □
+'register'
+PROBE
+●●●●●● 1mm □
+'probe'
+SCAN
+●●●●●● 1mm □
+'scan'
+FIX
+●●●●●● 1mm □
+'fix'
+REASON
+●●●●●● 1mm □
+'reason'
+HEAL
+●●●●●● 1mm □
+'heal'
+VERIFY
+●●●●●● 1mm □
+'verify'
+CODE_CHANGE
+●●●●●● 1mm □
+'code_change'
+SERVICE_DOWN
+●●●●●● 1mm □
+'service_down'
+GENESIS_ERROR
+●●●●●● 1mm □
+'genesis_error'
+●●●●●● 2mm △
+Priority
+●●●●●● 3mm □△
+int
+Enum
+●●●●●● 2mm ○
+Enum
+CRITICAL
+●●●●●● 1mm □
+1
+HIGH
+●●●●●● 1mm □
+3
+NORMAL
+●●●●●● 1mm □
+5
+LOW
+●●●●●● 1mm □
+7
+BACKGROUND
+●●●●●● 1mm □
+9
+●●●●●● 2mm △
+DeterministicTask
+'A task flowing through the deterministic event bus.'
+task_id
+●●●●●● 1mm ○
+entry_point
+●●●●●● 1mm ○
+component
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+priority
+●●●●●● 2mm ○
+Priority
+source
+●●●●●● 1mm ○
+'unknown'
+created_at
+●●●●●● 1mm ○
+''
+status
+●●●●●● 1mm ○
+'pending'
+result
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+_handlers
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_task_queue
+queue
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_task_log
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_log_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_MAX_LOG
+●●●●●● 1mm □
+1000
+_worker_running
+●●●●●● 1mm □
+●●●●●● 1mm □
+_worker_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TOPICS
+●●●●●● 1mm □
+'deterministic.component_registered'
+'deterministic.probe_failed'
+'deterministic.problem_detected'
+'deterministic.fix_needed'
+'deterministic.heal_needed'
+'deterministic.verify_needed'
+'deterministic.code_change'
+'deterministic.service_down'
+'deterministic.genesis_error'
+'deterministic.lifecycle_complete'
+'New component discovered — register + initial probe'
+'Probe found component dead — enter scan → fix chain'
+'Problem detected by any scanner — enter fix chain'
+'Deterministic fix failed — escalate to LLM reasoning'
+'LLM reasoning done — execute healing action'
+'Healing done — verify the fix worked'
+'Code changed — re-scan the affected component'
+'Service unreachable — immediate heal attempt'
+'Genesis Key with is_error=True — enter scan'
+'Full lifecycle finished — log and learn'
+●●●●●● 1mm □
+subscribe
+●●●●●● 1mm □△
+topic
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'Subscribe a handler to a deterministic topic.'
+_handlers
+topic
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Subscribed to '
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm □
+publish
+●●●●●● 1mm □△
+topic
+component
+payload
+priority
+source
+async_exec
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+Priority
+'unknown'
+●●●●●● 3mm □△○
+"\n    Publish a problem/event to the deterministic bus.\n\n    Problems enter at the appropriate lifecycle stage based on topic.\n    If async_exec=True, the task is queued for background processing.\n    If async_exec=False, it's processed immediately in the caller's thread.\n    "
+task
+●●●●●● 1mm □
+DeterministicTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_track_genesis
+●●●●●● 1mm □△
+task
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □
+async_exec
+_task_queue
+●●●●●● 1mm □△
+priority
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 2mm □△
+queue
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Queue full, dropping task '
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+_ensure_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+_process_task
+●●●●●● 1mm □△
+task
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+●●●●●● 1mm □
+cog_publish
+cog_publish
+●●●●●● 1mm □△
+topic
+'task_id'
+'component'
+'entry_point'
+'priority'
+task
+component
+task
+priority
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+task
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+task
+topic
+●●●●●● 2mm □△
+DeterministicTask
+●●●●●● 1mm ○
+'Process a single task — invoke all handlers for the topic.'
+task
+●●●●●● 1mm □
+'processing'
+handlers
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_handlers
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+handlers
+●●●●●● 1mm □△
+_handlers
+●●●●●● 1mm □△
+'deterministic.*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+handler
+handlers
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Handler error for '
+topic
+': '
+e
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+handlers
+result
+●●●●●● 1mm □
+_default_route
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'completed'
+task
+●●●●●● 1mm □
+'handler_results'
+'handlers_invoked'
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+handlers
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+handlers
+1
+0
+_log_lock
+_task_log
+●●●●●● 1mm □△
+asdict
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_task_log
+●●●●●● 2mm □△
+_MAX_LOG
+_task_log
+●●●●●● 1mm □
+_task_log
+_MAX_LOG
+●●●●●● 1mm □
+_default_route
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+DeterministicTask
+'\n    Default routing when no specific handler is registered.\n    Routes based on entry point to the appropriate lifecycle stage.\n    '
+entry
+●●●●●● 1mm □
+task
+●●●●●● 3mm □△○
+core.deterministic_lifecycle
+●●●●●● 2mm □△○
+probe_component
+scan_component
+fix_deterministic
+reason_with_llm
+heal_component
+run_lifecycle
+_registry
+register_component
+comp
+●●●●●● 1mm □
+task
+●●●●●● 2mm □
+comp
+_registry
+register_component
+●●●●●● 1mm □△
+comp
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+'component_registered'
+'probe'
+probe
+●●●●●● 1mm □
+probe_component
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+probe
+'alive'
+publish
+●●●●●● 1mm □△
+'deterministic.problem_detected'
+comp
+'probe_error'
+probe
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+probe
+●●●●●● 2mm □
+entry
+'probe_failed'
+'problem_detected'
+'scan'
+'code_change'
+'genesis_error'
+scan
+●●●●●● 1mm □
+scan_component
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+scan
+'total_problems'
+0
+det_fix
+●●●●●● 1mm □
+fix_deterministic
+●●●●●● 1mm □△
+comp
+scan
+'problems'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+det_fix
+'unfixed'
+publish
+●●●●●● 1mm □△
+'deterministic.fix_needed'
+comp
+'unfixed'
+det_fix
+'unfixed'
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'scan'
+'deterministic_fix'
+scan
+det_fix
+●●●●●● 3mm ○
+scan
+●●●●●● 2mm □
+entry
+'fix_needed'
+unfixed
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'unfixed'
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+reason_with_llm
+●●●●●● 1mm □△
+comp
+unfixed
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm
+●●●●●● 1mm □△
+'fix_suggestion'
+●●●●●● 2mm □△
+publish
+●●●●●● 1mm □△
+'deterministic.heal_needed'
+comp
+'llm_reasoning'
+'problems'
+llm
+unfixed
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+llm
+●●●●●● 2mm □
+entry
+'heal_needed'
+'service_down'
+problems
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'problems'
+'type'
+'message'
+'service_down'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'llm_reasoning'
+●●●●●● 2mm □△
+heal
+●●●●●● 1mm □
+heal_component
+●●●●●● 1mm □△
+comp
+problems
+llm
+●●●●●● 2mm □△
+publish
+●●●●●● 1mm □△
+'deterministic.verify_needed'
+comp
+'healed'
+heal
+●●●●●● 1mm □△
+'healed'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+heal
+●●●●●● 2mm □
+entry
+'verify_needed'
+probe
+●●●●●● 1mm □
+probe_component
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+probe
+'alive'
+task
+●●●●●● 1mm □△
+'healed'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+run_lifecycle
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+probe
+Exception
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Default route error for '
+entry
+'/'
+task
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_track_genesis
+●●●●●● 1mm □△
+task
+topic
+●●●●●● 2mm □△
+DeterministicTask
+●●●●●● 1mm ○
+'Track the task via Genesis Key.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+result
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'key_id'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+result
+Exception
+●●●●●● 1mm □
+_ensure_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the background worker if not already running.'
+_worker_lock
+●●●●●● 2mm □
+_worker_running
+_worker_running
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_worker_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Process tasks from the priority queue.'
+●●●●●● 3mm □△○
+priority
+ts
+task
+●●●●●● 1mm □
+_task_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic
+●●●●●● 1mm □
+'deterministic.'
+task
+_process_task
+●●●●●● 1mm □△
+task
+topic
+●●●●●● 2mm □△
+_task_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+_worker_lock
+●●●●●● 2mm □
+_task_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_worker_running
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+bridge_to_cognitive_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Subscribe to existing cognitive event bus topics and route\n    relevant events into the deterministic bus.\n    '
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+●●●●●● 1mm □
+cog_subscribe
+●●●●●● 1mm □
+_on_genesis_error
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'key_type'
+●●●●●● 2mm □△
+'error'
+publish
+●●●●●● 1mm □△
+'deterministic.genesis_error'
+data
+●●●●●● 1mm □△
+'component'
+data
+●●●●●● 1mm □△
+'who_actor'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_health_changed
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'new_status'
+●●●●●● 2mm □△
+'red'
+'critical'
+'dead'
+publish
+●●●●●● 1mm □△
+'deterministic.service_down'
+data
+●●●●●● 1mm □△
+'component_id'
+'unknown'
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_code_change
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+event
+publish
+●●●●●● 1mm □△
+'deterministic.code_change'
+data
+●●●●●● 1mm □△
+'component'
+data
+●●●●●● 1mm □△
+'file'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_healing_failed
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+event
+publish
+●●●●●● 1mm □△
+'deterministic.fix_needed'
+data
+●●●●●● 1mm □△
+'component'
+'unknown'
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □△
+cog_subscribe
+●●●●●● 1mm □△
+'genesis.error'
+_on_genesis_error
+●●●●●● 2mm □△
+cog_subscribe
+●●●●●● 1mm □△
+'genesis.ERROR'
+_on_genesis_error
+●●●●●● 2mm □△
+cog_subscribe
+●●●●●● 1mm □△
+'system.health_changed'
+_on_health_changed
+●●●●●● 2mm □△
+cog_subscribe
+●●●●●● 1mm □△
+'file.changed'
+_on_code_change
+●●●●●● 2mm □△
+cog_subscribe
+●●●●●● 1mm □△
+'healing.failed'
+_on_healing_failed
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Bridged to cognitive event bus'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Cognitive bus bridge failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+bridge_to_genesis_realtime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Subscribe to Genesis realtime engine for error key events.'
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+engine
+●●●●●● 1mm □
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'__error__'
+publish
+●●●●●● 1mm □△
+'deterministic.genesis_error'
+key_data
+●●●●●● 1mm □△
+'who_actor'
+'unknown'
+●●●●●● 2mm □△
+key_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Bridged to Genesis realtime engine'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DET-BUS] Genesis realtime bridge failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+initialize_bridges
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Initialize all bridges to external event sources.'
+bridge_to_cognitive_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bridge_to_genesis_realtime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DET-BUS] All bridges initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_task_log
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Get recent task log.'
+_log_lock
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_task_log
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_bus_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get deterministic event bus statistics.'
+_log_lock
+tasks
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_task_log
+●●●●●● 2mm □△
+by_entry
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+by_component
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+by_status
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+t
+tasks
+by_entry
+t
+●●●●●● 1mm □△
+'entry_point'
+'unknown'
+●●●●●● 2mm □△
+1
+by_component
+t
+●●●●●● 1mm □△
+'component'
+'unknown'
+●●●●●● 2mm □△
+1
+by_status
+t
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+1
+●●●●●● 3mm ○
+'total_tasks'
+'queue_size'
+'worker_running'
+'topics_registered'
+'by_entry_point'
+'by_component'
+'by_status'
+'available_topics'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+_task_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_worker_running
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_handlers
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+by_entry
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+by_component
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+by_status
+●●●●●● 2mm □△
+TOPICS
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

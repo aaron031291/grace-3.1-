@@ -1,0 +1,656 @@
+## examples.py
+'\nPractical examples of cognitive blueprint integration with Grace.\n\nThese examples show how to apply the 12 invariants to real operations.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+decorators
+●●●●●● 2mm □△○
+cognitive_operation
+blast_radius
+enforce_reversibility
+●●●●●● 1mm □
+ingest_single_file
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Ingest a single file with cognitive enforcement.\n\n    Demonstrates basic invariant application.\n    '
+●●●●●● 3mm ○
+'status'
+'filepath'
+'chunks_created'
+'success'
+filepath
+10
+cognitive_operation
+●●●●●● 1mm □△
+'ingest_single_file'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+rag_query_with_cognitive
+●●●●●● 1mm □△
+query
+chat_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'\n    Execute RAG query with full cognitive enforcement.\n\n    Demonstrates:\n    - Invariant 1: OODA Loop\n    - Invariant 2: Ambiguity Accounting\n    - Invariant 4: Determinism (probabilistic zone)\n    - Invariant 6: Observability\n    - Invariant 12: Forward Simulation\n    '
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observations
+●●●●●● 1mm □
+'query'
+'query_length'
+'chat_id'
+'timestamp'
+query
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+chat_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+observations
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'query'
+query
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'chat_id'
+chat_id
+●●●●●● 2mm □△
+constraints
+●●●●●● 1mm □
+'safety_critical'
+'impact_scope'
+'max_context_length'
+'min_confidence_score'
+●●●●●● 1mm □
+'local'
+4096
+0.3
+context_info
+●●●●●● 1mm □
+'rag_available'
+'vector_db_connected'
+'model_loaded'
+'determinism_required'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+constraints
+context_info
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 1mm □
+context
+●●●●●● 1mm □
+'local'
+context
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'strategy'
+'semantic_search_only'
+0.8
+0.7
+1.0
+1.0
+0.2
+'vector_search'
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'strategy'
+'hybrid_search'
+1.0
+0.8
+0.7
+1.0
+0.4
+'vector + keyword'
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'strategy'
+'rerank_results'
+0.9
+0.9
+0.6
+1.0
+0.5
+'vector + rerank'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+selected_path
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+selected_path
+●●●●●● 1mm □△
+'strategy'
+'vector_search'
+●●●●●● 2mm □△
+retrieved_docs
+●●●●●● 1mm □
+'text'
+'score'
+'Document 1 content'
+0.85
+'text'
+'score'
+'Document 2 content'
+0.72
+context
+●●●●●● 1mm □△
+'retrieved_doc_count'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+retrieved_docs
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+'Based on '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+retrieved_docs
+●●●●●● 2mm □△
+' documents: [Generated response]'
+●●●●●● 3mm ○
+'response'
+'sources'
+'strategy_used'
+'confidence'
+response
+retrieved_docs
+strategy
+0.85
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+action
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+migrate_database
+●●●●●● 1mm □△
+migration_name
+dry_run
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n    Execute database migration with strict cognitive enforcement.\n\n    Demonstrates:\n    - Invariant 3: Reversibility justification\n    - Invariant 4: Deterministic execution\n    - Invariant 5: Blast radius awareness\n    - Invariant 6: Observability\n    '
+●●●●●● 2mm □
+dry_run
+●●●●●● 3mm ○
+'status'
+'migration'
+'would_execute'
+'dry_run'
+migration_name
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'status'
+'migration'
+'tables_affected'
+'success'
+migration_name
+3
+cognitive_operation
+●●●●●● 1mm □△
+'migrate_database'
+●●●●●● 2mm □△
+enforce_reversibility
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+blast_radius
+●●●●●● 1mm □△
+'systemic'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+batch_process_documents
+●●●●●● 1mm □△
+directory
+max_depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Process documents in directory with recursion bounds.\n\n    Demonstrates:\n    - Invariant 9: Bounded Recursion\n    - Invariant 11: Time-Bounded Reasoning\n    '
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+max_depth
+context
+●●●●●● 1mm □
+100
+context
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_directory_recursive
+●●●●●● 1mm □△
+path
+depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+0
+●●●●●● 2mm □
+depth
+context
+context
+'recursion_limit_hit'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+context
+'time_limit_hit'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+context
+context
+context
+'iteration_limit_hit'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+context
+1
+context
+●●●●●● 1mm □
+depth
+results
+●●●●●● 1mm □
+●●●●●● 3mm ○
+results
+engine
+●●●●●● 1mm □△
+context
+'directory'
+'max_depth'
+directory
+max_depth
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'recursive_processing'
+1.0
+1.0
+0.8
+1.0
+0.3
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+process_directory_recursive
+●●●●●● 1mm □△
+directory
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'recursion_limit_hit'
+●●●●●● 2mm □△
+result
+'warning'
+●●●●●● 1mm □
+'Recursion depth limit ('
+max_depth
+') reached'
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'time_limit_hit'
+●●●●●● 2mm □△
+result
+'warning'
+●●●●●● 1mm □
+'Time limit (30 minutes) reached'
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+select_embedding_strategy
+●●●●●● 1mm □△
+document_type
+document_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'\n    Select optimal embedding strategy using forward simulation.\n\n    Demonstrates:\n    - Invariant 10: Optionality > Optimization\n    - Invariant 12: Forward Simulation (Chess Mode)\n    '
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+'document_type'
+'document_size'
+document_type
+document_size
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'model'
+'dimensions'
+'speed'
+'small_model_fast'
+0.6
+1.0
+1.0
+1.0
+0.1
+'all-MiniLM-L6-v2'
+384
+'fast'
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'model'
+'dimensions'
+'speed'
+'medium_model_balanced'
+0.8
+0.9
+0.8
+1.0
+0.3
+'all-mpnet-base-v2'
+768
+'medium'
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'model'
+'dimensions'
+'speed'
+'large_model_quality'
+1.0
+0.7
+0.6
+0.8
+0.6
+'BAAI/bge-large-en-v1.5'
+1024
+'slow'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+selected_path
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'strategy'
+'model'
+'dimensions'
+'reasoning'
+selected_path
+'name'
+selected_path
+'model'
+selected_path
+'dimensions'
+'Selected for optimal balance of quality and flexibility'
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+action
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+resolve_user_query_ambiguity
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Handle ambiguous user queries with explicit tracking.\n\n    Demonstrates:\n    - Invariant 2: Explicit Ambiguity Accounting\n    '
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ambiguous_terms
+●●●●●● 1mm □
+'it'
+'that'
+'this'
+'them'
+found_ambiguity
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+term
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+term
+ambiguous_terms
+●●●●●● 2mm □△
+●●●●●● 2mm □
+found_ambiguity
+context
+●●●●●● 1mm □△
+'query_referent'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+context
+●●●●●● 1mm □△
+'query_referent'
+'clear'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'query'
+'unknowns'
+'suggestion'
+'needs_clarification'
+query
+e
+e
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Please rephrase with specific nouns'
+●●●●●● 3mm ○
+'status'
+'query'
+'can_proceed'
+'clear'
+query
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

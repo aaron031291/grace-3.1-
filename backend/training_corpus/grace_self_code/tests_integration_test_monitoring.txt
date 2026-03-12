@@ -1,0 +1,172 @@
+## test_monitoring.py
+'\nIntegration tests for the unified monitoring system.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm △
+TestHealthEndpoints
+●●●●●● 1mm □
+test_root_returns_200
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+r
+200
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'name'
+'Grace API'
+●●●●●● 1mm □
+test_health_returns_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+data
+●●●●●● 1mm □
+test_runtime_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/runtime/status'
+●●●●●● 2mm □△
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'paused'
+data
+'diagnostic_engine'
+data
+'self_healing'
+data
+●●●●●● 1mm □
+test_resilience_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/runtime/resilience'
+●●●●●● 2mm □△
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'degradation_level'
+data
+'circuit_breakers'
+data
+●●●●●● 2mm △
+TestBrainDirectory
+●●●●●● 1mm □
+test_brain_v1_directory
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/brain/directory'
+●●●●●● 2mm □△
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'total_brains'
+8
+●●●●●● 1mm □
+test_brain_v2_directory
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/directory'
+●●●●●● 2mm □△
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'total_domains'
+8
+●●●●●● 2mm △
+TestGenesisKeys
+●●●●●● 1mm □
+test_genesis_stats
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/stats'
+●●●●●● 2mm □△
+r
+200
+500
+●●●●●● 1mm □
+test_genesis_keys_list
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/genesis/keys?limit=5'
+●●●●●● 2mm □△
+r
+200
+500

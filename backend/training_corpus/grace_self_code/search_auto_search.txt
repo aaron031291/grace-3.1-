@@ -1,0 +1,438 @@
+## auto_search.py
+'\nAuto-search orchestrator service.\n\nCoordinates the workflow of searching Google via SerpAPI and scraping results\nwhen no documents are found in the vector database.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+serpapi_service
+●●●●●● 2mm □△○
+SerpAPIService
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapingJob
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AutoSearchService
+'Service for orchestrating auto-search and scrape workflow.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+serpapi_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Initialize auto-search service.\n        \n        Args:\n            serpapi_key: SerpAPI API key\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+SerpAPIService
+●●●●●● 1mm □△
+serpapi_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+3
+'United States'
+●●●●●● 2mm □
+'\n        Search Google and scrape top results.\n        \n        Workflow:\n        1. Search Google using SerpAPI\n        2. Extract top N URLs\n        3. Create scraping jobs for each URL\n        4. Return job IDs and URLs\n        \n        Args:\n            query: Search query\n            max_urls: Maximum number of URLs to scrape (default: 3)\n            location: Geographic location for search\n            \n        Returns:\n            Dictionary with:\n            {\n                "success": bool,\n                "query": str,\n                "urls": List[str],\n                "job_ids": List[int],\n                "message": str\n            }\n        '
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Starting auto-search for query: '
+query
+●●●●●● 2mm □△
+search_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+search_results
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] No search results found for: '
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'query'
+'urls'
+'job_ids'
+'message'
+●●●●●● 1mm □
+query
+'No search results found'
+urls
+●●●●●● 1mm □
+result
+'link'
+result
+search_results
+result
+●●●●●● 1mm □△
+'link'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+urls
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] No valid URLs extracted from search results'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'query'
+'urls'
+'job_ids'
+'message'
+●●●●●● 1mm □
+query
+'No valid URLs found in search results'
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+' URLs to scrape'
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+folder_path
+base_save_dir
+●●●●●● 1mm □
+folder_path
+'/auto_search/'
+timestamp
+●●●●●● 3mm □
+base_save_dir
+●●●●●● 1mm □
+'auto_search/'
+timestamp
+job_ids
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+SessionLocal
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] SessionLocal not initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'query'
+'urls'
+'job_ids'
+'message'
+●●●●●● 1mm □
+query
+'Database session not available'
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+idx
+url
+●●●●●● 2mm □
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+ScrapingJob
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job_ids
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Created scraping job '
+job
+' for: '
+url
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+db
+●●●●●● 2mm □△
+job_id
+url
+●●●●●● 3mm □
+●●●●●● 1mm □△
+job_ids
+urls
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Started scraping job '
+job_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Failed to start job '
+job_id
+': '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] [OK] Successfully created '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+job_ids
+●●●●●● 2mm □△
+' scraping jobs'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'query'
+'urls'
+'job_ids'
+'search_results'
+'message'
+●●●●●● 3mm □△○
+query
+urls
+job_ids
+search_results
+'Started scraping '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+' websites'
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Error in search_and_scrape: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'query'
+'urls'
+'job_ids'
+'message'
+●●●●●● 1mm □
+query
+'Error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_scraping_status
+●●●●●● 1mm □△
+self
+job_ids
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+'\n        Get status of scraping jobs.\n        \n        Args:\n            job_ids: List of job IDs to check\n            \n        Returns:\n            Dictionary with job statuses\n        '
+SessionLocal
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 3mm ○
+'overall_status'
+'jobs'
+'error'
+'error'
+'Database session not available'
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+jobs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ScrapingJob
+●●●●●● 1mm □△
+job_ids
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+statuses
+●●●●●● 1mm □
+job
+jobs
+statuses
+●●●●●● 1mm □△
+'job_id'
+'url'
+'status'
+'pages_scraped'
+'pages_failed'
+job
+job
+job
+job
+0
+job
+0
+●●●●●● 2mm □△
+all_completed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+j
+'completed'
+j
+jobs
+●●●●●● 2mm □△
+any_failed
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+j
+'failed'
+j
+jobs
+●●●●●● 2mm □△
+any_running
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+j
+'pending'
+'running'
+j
+jobs
+●●●●●● 2mm □△
+overall_status
+●●●●●● 1mm □
+all_completed
+'completed'
+any_failed
+any_running
+'failed'
+'running'
+●●●●●● 3mm ○
+'overall_status'
+'jobs'
+'total_jobs'
+'completed'
+'failed'
+'running'
+overall_status
+statuses
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+jobs
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+j
+jobs
+j
+'completed'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+j
+jobs
+j
+'failed'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+j
+jobs
+j
+'pending'
+'running'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTO-SEARCH] Error getting scraping status: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'overall_status'
+'jobs'
+'error'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

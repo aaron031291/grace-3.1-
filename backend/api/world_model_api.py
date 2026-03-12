@@ -140,6 +140,56 @@ async def world_model_state():
     return state
 
 
+from pydantic import BaseModel
+
+class IngestRequest(BaseModel):
+    payload: str
+    source: str = "api"
+
+@router.post("/ingest")
+async def ingest_external_data(request: IngestRequest):
+    """
+    Ingests raw external data, extracts semantic meaning, and permanently writes
+    any detected real-world physics constraints into Magma's Causal Graph.
+    """
+    try:
+        from cognitive.world_model.ingestor import get_world_model_ingestor
+        ingestor = get_world_model_ingestor()
+        
+        result = ingestor.ingest_event_stream(
+            data_payload=request.payload,
+            source=request.source
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Failed to route ingestion: {e}")
+        return {"status": "error", "message": str(e)}
+
+@router.get("/causal-graph")
+async def get_causal_graph():
+    """
+    Returns the currently understood state of the world based on 
+    all external sensor data ever ingested into the Magma Causal Graph.
+    """
+    try:
+        from cognitive.magma_bridge import get_magma_graphs
+        graphs = get_magma_graphs()
+        
+        # Serialize the Magma Causal Graph
+        nodes = [{"id": n.id, "content": n.content, "type": n.node_type} for n in graphs.causal.nodes.values()]
+        edges = [{"id": e.id, "source": e.source_id, "target": e.target_id, "relation": e.relation_type.value, "confidence": e.confidence} for e in graphs.causal.edges.values()]
+        
+        return {
+            "node_count": len(nodes),
+            "edge_count": len(edges),
+            "nodes": nodes,
+            "edges": edges
+        }
+    except Exception as e:
+        logger.error(f"Failed to load causal graph: {e}")
+        return {"status": "error", "message": str(e)}
+
+
 @router.get("/subsystems")
 async def world_model_subsystems():
     """List all subsystems with their health status."""

@@ -1,0 +1,347 @@
+## system_service.py
+'System domain service — direct function calls for health, runtime, monitoring.'
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+●●●●●● 2mm □△○
+gc
+●●●●●● 1mm □
+get_runtime_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 3mm ○
+'paused'
+'diagnostic_engine'
+'self_healing'
+'uptime_seconds'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'runtime_paused'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+'running'
+●●●●●● 3mm □△○
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'_start_time'
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'paused'
+'diagnostic_engine'
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+hot_reload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+load_dotenv
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+results
+'settings'
+●●●●●● 1mm □
+'reloaded'
+Exception
+results
+'settings'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+_build_model_registry
+get_available_models
+●●●●●● 2mm □△○
+cognitive.consensus_engine
+●●●●●● 1mm □
+ce
+ce
+●●●●●● 1mm □
+_build_model_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'consensus_models'
+●●●●●● 1mm □
+m
+'id'
+m
+'available'
+m
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+results
+'consensus_models'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'database'
+●●●●●● 1mm □
+'pool refreshed'
+Exception
+results
+'database'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm ○
+'status'
+'results'
+'hot-reload complete'
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+pause_runtime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+app
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+diag
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'diagnostic_engine'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+diag
+diag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'paused'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+resume_runtime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+app
+●●●●●● 1mm □
+●●●●●● 1mm □
+diag
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'diagnostic_engine'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+diag
+diag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'resumed'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_health_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+●●●●●● 3mm ○
+'cpu_percent'
+'memory_percent'
+'disk_percent'
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_bi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+get_llm_usage_stats
+●●●●●● 3mm ○
+get_llm_usage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'total_calls'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_diagnostics_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+get_diagnostics
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'get_status'
+●●●●●● 2mm □△
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+'running'
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_health_map
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+health_map
+●●●●●● 2mm □△○
+asyncio
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+health_map
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+'window_minutes'
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+problems_list
+●●●●●● 2mm □△○
+asyncio
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+problems_list
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_consensus_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_available_models
+●●●●●● 3mm ○
+'models'
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+gc_collect
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collected
+●●●●●● 1mm □
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'collected'
+collected
+●●●●●● 2mm □△

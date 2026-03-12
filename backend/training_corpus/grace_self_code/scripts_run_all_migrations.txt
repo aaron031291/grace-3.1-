@@ -1,0 +1,538 @@
+## run_all_migrations.py
+'\nMaster migration script to run all database migrations in the correct order.\nThis script ensures all database schema changes are applied.\n\nUsage:\n    python run_all_migrations.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_migration_create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Step 1: Create base tables from SQLAlchemy models.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'STEP 1: Creating base database tables'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Base tables created successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Failed to create base tables: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+run_migration_add_metadata_columns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Step 2: Add metadata columns to documents table.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'STEP 2: Adding metadata columns to documents table'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+migrate_add_metadata_columns
+●●●●●● 2mm □△○
+migrate
+●●●●●● 1mm □
+migrate_metadata
+success
+●●●●●● 1mm □
+migrate_metadata
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'✓ Metadata columns migration completed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'⚠ Metadata columns migration had issues but continuing'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+ImportError
+logger
+●●●●●● 1mm □△
+'⚠ Metadata migration module not found, skipping'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Failed to add metadata columns: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+run_migration_add_folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Step 3: Add folder_path column to documents table.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'STEP 3: Adding folder_path column to documents table'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+migrate_add_folder_path
+●●●●●● 2mm □△○
+migrate
+●●●●●● 1mm □
+migrate_folder_path
+success
+●●●●●● 1mm □
+migrate_folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'✓ Folder path migration completed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'⚠ Folder path migration had issues but continuing'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+ImportError
+logger
+●●●●●● 1mm □△
+'⚠ Folder path migration module not found, skipping'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Failed to add folder_path column: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+run_migration_add_confidence_scoring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Step 4: Add confidence scoring columns.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'STEP 4: Adding confidence scoring columns'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migrate_add_confidence_scoring
+●●●●●● 2mm □△○
+migrate
+●●●●●● 1mm □
+migrate_confidence
+success
+●●●●●● 1mm □
+migrate_confidence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'✓ Confidence scoring migration completed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'⚠ Confidence scoring migration had issues but continuing'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+ImportError
+logger
+●●●●●● 1mm □△
+'⚠ Confidence scoring migration module not found, skipping'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Failed to add confidence scoring columns: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+verify_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify database connection and basic setup.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'VERIFICATION: Checking database connection'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connection
+logger
+●●●●●● 1mm □△
+'✓ Database connection successful'
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+'sqlalchemy'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n✓ Database contains '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+' table(s):'
+●●●●●● 2mm □△
+table
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+num_columns
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+inspector
+●●●●●● 1mm □△
+table
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'   - '
+table
+' ('
+num_columns
+' columns)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Database verification failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all migrations in order.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'╔'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+58
+●●●●●● 3mm ○
+'╗'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'║'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+'GRACE DATABASE MIGRATION SCRIPT'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+18
+●●●●●● 3mm ○
+'║'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'╚'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+58
+●●●●●● 3mm ○
+'╝'
+●●●●●● 2mm □△
+migrations
+●●●●●● 1mm □
+'Base Tables'
+run_migration_create_tables
+'Metadata Columns'
+run_migration_add_metadata_columns
+'Folder Path'
+run_migration_add_folder_path
+'Confidence Scoring'
+run_migration_add_confidence_scoring
+'Database Verification'
+verify_database
+results
+●●●●●● 1mm □
+migration_name
+migration_func
+migrations
+success
+●●●●●● 1mm □
+migration_func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+migration_name
+success
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Unexpected error in '
+migration_name
+': '
+e
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+migration_name
+●●●●●● 1mm □
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'MIGRATION SUMMARY'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+all_success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+migration_name
+success
+results
+status
+●●●●●● 1mm □
+success
+'✓ PASSED'
+'✗ FAILED'
+logger
+●●●●●● 1mm □△
+status
+': '
+migration_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+all_success
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_success
+logger
+●●●●●● 1mm □△
+'\n✓ All migrations completed successfully!'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nYour database is ready for use.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'\n✗ Some migrations failed. Please check the logs above.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+exit_code
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+exit_code
+●●●●●● 2mm □△

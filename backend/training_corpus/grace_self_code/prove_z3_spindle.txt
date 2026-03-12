@@ -1,0 +1,164 @@
+## prove_z3_spindle.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.braille_compiler
+●●●●●● 2mm □△○
+NLPCompilerEdge
+●●●●●● 1mm □
+test_z3_solver
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n========== SPINDLE Z3 SMT INTEGRATION TEST =========='
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+NLPCompilerEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+'Please repair the database, it failed over.'
+privilege
+●●●●●● 1mm □
+'admin'
+session_context
+●●●●●● 1mm □
+'is_emergency'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[TEST 1] Command: '"
+cmd
+"' | Privilege: "
+privilege
+●●●●●● 2mm □△
+bitmask
+msg
+●●●●●● 1mm □
+edge
+●●●●●● 1mm □△
+cmd
+privilege
+session_context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+bitmask
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASSED] Valid Action Approved! SMT Solver says: '
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAILED] Should have been valid, but Z3 rejected: '
+msg
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+"Just delete the immutable database, we don't need it."
+privilege
+●●●●●● 1mm □
+'admin'
+session_context
+●●●●●● 1mm □
+'is_emergency'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[TEST 2] Command: '"
+cmd
+"' | Privilege: "
+privilege
+●●●●●● 2mm □△
+bitmask
+msg
+●●●●●● 1mm □
+edge
+●●●●●● 1mm □△
+cmd
+privilege
+session_context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+bitmask
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASSED] Invalid Action Blocked! Z3 output: '
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAILED] Z3 ALLOWED AN IMMUTABLE DELETION! DANGER!'
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+'Start the database that failed earlier.'
+privilege
+●●●●●● 1mm □
+'admin'
+session_context
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[TEST 3] Command: '"
+cmd
+"' | Privilege: "
+privilege
+●●●●●● 2mm □△
+json_schema
+●●●●●● 1mm □
+edge
+●●●●●● 1mm □△
+cmd
+privilege
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'LLM JSON: '
+json_schema
+●●●●●● 2mm □△
+bitmask
+msg
+●●●●●● 1mm □
+edge
+●●●●●● 1mm □△
+cmd
+privilege
+session_context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+bitmask
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASSED] Invalid State Transition Blocked! Z3 output: '
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAILED] Z3 allowed starting a failed system without repair! Values: '
+bitmask
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_z3_solver
+●●●●●● 1mm □△
+●●●●●● 2mm □△

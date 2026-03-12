@@ -37,7 +37,6 @@ def _get_kpi_snapshot() -> Dict[str, Any]:
         components = [
             "coding_agent.verification",
             "verification_pass",
-            "context_evolution",
             "brain_code",
             "brain_ai",
             "brain_system",
@@ -160,7 +159,6 @@ async def get_trust_scores():
         "scores": {
             "coding_agent":     _t("coding_agent.verification"),
             "verification":     _t("verification_pass"),
-            "self_optimization":_t("context_evolution"),
             "self_healing":     _t("error_pipeline"),
             "intelligence":     _t("brain_ai"),
             "code_brain":       _t("brain_code"),

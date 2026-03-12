@@ -1,0 +1,2102 @@
+## test_core_comprehensive.py
+'\nComprehensive Test Suite for Core Module\n=========================================\nTests for BaseComponent, ComponentRegistry, and GraceLoopOutput.\n\nCoverage:\n- ComponentState and ComponentRole enums\n- ComponentManifest dataclass\n- BaseComponent lifecycle management\n- ComponentRegistry registration and lookup\n- GraceLoopOutput reasoning chains\n- Loop lifecycle management\n- Serialization/deserialization\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+AsyncMock
+MagicMock
+patch
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.base_component
+●●●●●● 2mm □△○
+ComponentState
+ComponentRole
+ComponentManifest
+BaseComponent
+●●●●●● 3mm □△○
+core.registry
+●●●●●● 2mm □△○
+RegistryEntry
+ComponentRegistry
+get_component_registry
+reset_registry
+●●●●●● 3mm □△○
+core.loop_output
+●●●●●● 2mm □△○
+LoopType
+LoopStatus
+ReasoningStep
+LoopMetadata
+GraceLoopOutput
+●●●●●● 2mm △
+TestComponentState
+'Test ComponentState enum.'
+●●●●●● 1mm □
+test_all_states_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected states are defined.'
+expected
+●●●●●● 1mm □
+'UNINITIALIZED'
+'INITIALIZING'
+'ACTIVE'
+'PAUSED'
+'DEGRADED'
+'ERROR'
+'STOPPING'
+'STOPPED'
+state
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ComponentState
+state
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_state_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test state string values.'
+ComponentState
+'uninitialized'
+ComponentState
+'initializing'
+ComponentState
+'active'
+ComponentState
+'paused'
+ComponentState
+'degraded'
+ComponentState
+'error'
+ComponentState
+'stopping'
+ComponentState
+'stopped'
+●●●●●● 1mm □
+test_state_iteration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test iterating over states.'
+states
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+states
+●●●●●● 2mm □△
+8
+●●●●●● 2mm △
+TestComponentRole
+'Test ComponentRole enum.'
+●●●●●● 1mm □
+test_all_roles_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected roles are defined.'
+expected
+●●●●●● 1mm □
+'COGNITIVE'
+'MEMORY'
+'EXECUTION'
+'LEARNING'
+'GOVERNANCE'
+'ORCHESTRATION'
+'INTEGRATION'
+'INFRASTRUCTURE'
+role
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ComponentRole
+role
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_role_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test role string values.'
+ComponentRole
+'cognitive'
+ComponentRole
+'memory'
+ComponentRole
+'execution'
+ComponentRole
+'learning'
+ComponentRole
+'governance'
+ComponentRole
+'orchestration'
+ComponentRole
+'integration'
+ComponentRole
+'infrastructure'
+●●●●●● 2mm △
+TestComponentManifest
+'Test ComponentManifest dataclass.'
+●●●●●● 1mm □
+test_basic_manifest
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test basic manifest creation.'
+manifest
+●●●●●● 1mm □
+ComponentManifest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+'test-001'
+manifest
+'TestComponent'
+manifest
+'1.0.0'
+manifest
+ComponentRole
+manifest
+'A test component'
+●●●●●● 1mm □
+test_default_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default manifest values.'
+manifest
+●●●●●● 1mm □
+ComponentManifest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+0.5
+manifest
+●●●●●● 1mm □
+manifest
+●●●●●● 3mm □△○
+manifest
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_manifest_with_capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test manifest with capabilities.'
+manifest
+●●●●●● 1mm □
+ComponentManifest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'vector_store'
+manifest
+'embeddings'
+manifest
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manifest
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_manifest_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test manifest serialization.'
+manifest
+●●●●●● 1mm □
+ComponentManifest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+manifest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'component_id'
+'test-001'
+data
+'name'
+'TestComponent'
+data
+'role'
+'cognitive'
+data
+'trust_level'
+0.8
+data
+'is_trusted'
+●●●●●● 3mm □△○
+'analyze'
+data
+'capabilities'
+'core'
+data
+'tags'
+'created_at'
+data
+●●●●●● 2mm △
+ConcreteComponent
+●●●●●● 3mm □△
+BaseComponent
+BaseComponent
+'Concrete implementation for testing.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestBaseComponent
+'Test BaseComponent class.'
+●●●●●● 1mm □
+test_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test component initialization.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+'TestComponent'
+component
+ComponentState
+component
+component
+0.5
+●●●●●● 1mm □
+test_component_id_generation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test component ID is generated.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'my_component'
+component
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+component
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_initialization_with_capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test initialization with capabilities.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'store'
+component
+'database'
+component
+'core'
+component
+'Test component activation.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+ComponentState
+component
+●●●●●● 3mm □△○
+component
+●●●●●● 3mm □△○
+component
+'activations'
+1
+pytest
+'Test activating already active component.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+'activations'
+1
+pytest
+'Test component deactivation.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+ComponentState
+component
+●●●●●● 1mm □
+component
+●●●●●● 3mm □△○
+component
+'deactivations'
+1
+pytest
+'Test pause and resume.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+ComponentState
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+ComponentState
+pytest
+'Test pause when not active.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test resume when not paused.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test marking component as degraded.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'Partial functionality'
+●●●●●● 2mm □△
+component
+ComponentState
+component
+●●●●●● 3mm □△○
+component
+'Partial functionality'
+pytest
+●●●●●● 1mm □
+test_trust_adjustment
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trust level adjustment.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+0.5
+component
+●●●●●● 1mm □△
+0.2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+component
+●●●●●● 1mm □△
+0.7
+●●●●●● 2mm □△
+0.01
+component
+●●●●●● 1mm □△
+0.2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+component
+●●●●●● 1mm □△
+0.9
+●●●●●● 2mm □△
+0.01
+component
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_trust_clamping
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trust level is clamped to 0-1.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+component
+1.0
+component
+●●●●●● 1mm □△
+2.0
+●●●●●● 2mm □△
+component
+0.0
+●●●●●● 1mm □
+test_set_trusted
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test explicitly setting trusted status.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+component
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_record_operation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test recording operations.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+'operations'
+3
+component
+'successes'
+2
+component
+'failures'
+1
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△
+3
+●●●●●● 1mm □
+test_get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test status retrieval.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'component_id'
+status
+status
+'name'
+'TestComponent'
+status
+'state'
+'uninitialized'
+'stats'
+status
+'manifest'
+status
+'Test health check.'
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'healthy'
+●●●●●● 3mm □△○
+health
+'state'
+'active'
+'uptime_seconds'
+health
+pytest
+'Test activation error handling.'
+●●●●●● 2mm △
+FailingComponent
+●●●●●● 3mm □△
+BaseComponent
+BaseComponent
+Exception
+●●●●●● 1mm □△
+'Activation failed'
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+FailingComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+component
+ComponentState
+component
+'errors'
+1
+pytest
+●●●●●● 2mm △
+TestComponentRegistry
+'Test ComponentRegistry class.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Reset registry before each test.'
+reset_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_registry_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test registry initialization.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+registry
+●●●●●● 2mm □△
+0
+registry
+'total_registered'
+0
+●●●●●● 1mm □
+test_register_component
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test component registration.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_id
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+component_id
+component
+component_id
+registry
+registry
+'total_registered'
+1
+●●●●●● 1mm □
+test_register_with_priority
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test registration with priority.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+registry
+component
+entry
+8
+entry
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_register_duplicate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test registering same component twice.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+registry
+'total_registered'
+1
+●●●●●● 1mm □
+test_unregister_component
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test component unregistration.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+registry
+●●●●●● 1mm □
+test_get_component
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting component by ID.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+retrieved
+component
+missing
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+missing
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_by_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting component by name.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+'TestComponent'
+●●●●●● 2mm □△
+retrieved
+component
+●●●●●● 1mm □
+test_get_by_role
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting components by role.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp2
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp3
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp2
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp3
+●●●●●● 2mm □△
+cognitive
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+ComponentRole
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cognitive
+●●●●●● 2mm □△
+2
+memory
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+ComponentRole
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+memory
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_by_capability
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting components by capability.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp2
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp2
+●●●●●● 2mm □△
+vector
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+'vector_store'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vector
+●●●●●● 2mm □△
+1
+search
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+'search'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+search
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_get_by_tag
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting components by tag.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp2
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp2
+●●●●●● 2mm □△
+core
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+'core'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+core
+●●●●●● 2mm □△
+2
+critical
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+'critical'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critical
+●●●●●● 2mm □△
+1
+'Test starting all components.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp2
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp2
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp1
+comp2
+pytest
+'Test stopping all components.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp2
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp2
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp1
+ComponentState
+comp2
+ComponentState
+pytest
+'Test restarting a component.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+result
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+component
+pytest
+'Test health check on all components.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp2
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp2
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+cid
+health
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'healthy'
+●●●●●● 3mm □△○
+pytest
+●●●●●● 1mm □
+test_get_system_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test system health summary.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'total_components'
+1
+'health_score'
+health
+health
+'status'
+'healthy'
+'degraded'
+'critical'
+●●●●●● 1mm □
+test_get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test registry statistics.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'total_registered'
+1
+'components_by_role'
+stats
+stats
+'capabilities_registered'
+1
+●●●●●● 1mm □
+test_get_manifests
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting all manifests.'
+registry
+●●●●●● 1mm □
+ComponentRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp1
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+comp1
+●●●●●● 2mm □△
+manifests
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manifests
+●●●●●● 2mm □△
+1
+manifests
+0
+'name'
+'Component1'
+manifests
+0
+'priority'
+8
+●●●●●● 1mm □
+test_global_registry
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test global registry singleton.'
+reset_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reg1
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reg2
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reg1
+reg2
+●●●●●● 2mm △
+TestLoopEnums
+'Test loop-related enums.'
+●●●●●● 1mm □
+test_loop_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LoopType enum.'
+expected
+●●●●●● 1mm □
+'OODA'
+'REFLECTION'
+'LEARNING'
+'PLANNING'
+'EXECUTION'
+'GOVERNANCE'
+'MEMORY'
+'REASONING'
+loop_type
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LoopType
+loop_type
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_loop_statuses
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LoopStatus enum.'
+expected
+●●●●●● 1mm □
+'PENDING'
+'RUNNING'
+'COMPLETED'
+'FAILED'
+'INTERRUPTED'
+'TIMEOUT'
+status
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LoopStatus
+status
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestReasoningStep
+'Test ReasoningStep dataclass.'
+●●●●●● 1mm □
+test_default_step
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default reasoning step.'
+step
+●●●●●● 1mm □
+ReasoningStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □△
+'step-'
+●●●●●● 2mm □△
+step
+0
+step
+''
+step
+''
+step
+0.5
+step
+0.0
+●●●●●● 1mm □
+test_step_with_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test step with custom values.'
+step
+●●●●●● 1mm □
+ReasoningStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+step
+1
+step
+'Analyze input'
+step
+0.95
+step
+'tokens'
+100
+●●●●●● 1mm □
+test_step_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test step serialization.'
+step
+●●●●●● 1mm □
+ReasoningStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+step
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'step_number'
+1
+data
+'description'
+'Test step'
+data
+'confidence'
+0.8
+'step_id'
+data
+●●●●●● 2mm △
+TestLoopMetadata
+'Test LoopMetadata dataclass.'
+●●●●●● 1mm □
+test_default_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default metadata values.'
+meta
+●●●●●● 1mm □
+LoopMetadata
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+meta
+'system'
+meta
+●●●●●● 2mm □
+meta
+●●●●●● 3mm □△○
+meta
+'tier_0_supervised'
+meta
+●●●●●● 3mm □△○
+meta
+0
+meta
+0
+●●●●●● 1mm □
+test_metadata_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test metadata serialization.'
+meta
+●●●●●● 1mm □
+LoopMetadata
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+meta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'triggered_by'
+'user'
+data
+'governance_decision_id'
+'GOV-123'
+data
+'tokens_used'
+500
+'important'
+data
+'tags'
+●●●●●● 2mm △
+TestGraceLoopOutput
+'Test GraceLoopOutput dataclass.'
+●●●●●● 1mm □
+test_default_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test default loop output.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+'loop-'
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+'chain-'
+●●●●●● 2mm □△
+output
+LoopType
+output
+LoopStatus
+output
+0.0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_output_with_type
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test output with specific loop type.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+LoopType
+output
+'query'
+'What is the status?'
+●●●●●● 1mm □
+test_add_reasoning_step
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding reasoning steps.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+step1
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+step2
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+2
+step1
+1
+step2
+2
+output
+2
+●●●●●● 1mm □
+test_get_reasoning_trace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting human-readable trace.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trace
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'ooda'
+trace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Step 1'
+trace
+'Step 2'
+trace
+'0.90'
+trace
+●●●●●● 1mm □
+test_lifecycle_start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test loop start.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+LoopStatus
+●●●●●● 1mm □
+test_lifecycle_complete
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test loop completion.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+LoopStatus
+output
+'status'
+'healthy'
+output
+0.95
+output
+'Determined system is healthy'
+output
+●●●●●● 2mm □
+output
+0
+output
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_lifecycle_fail
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test loop failure.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+LoopStatus
+output
+'Processing failed'
+output
+'code'
+500
+output
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_lifecycle_interrupt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test loop interruption.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+'User cancelled'
+●●●●●● 2mm □△
+output
+LoopStatus
+'User cancelled'
+output
+●●●●●● 1mm □
+test_average_step_confidence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test average confidence calculation.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+output
+●●●●●● 1mm □△
+0.8
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □
+test_average_step_confidence_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test average confidence with no steps.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+0.0
+●●●●●● 1mm □
+test_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test output serialization.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'loop_id'
+data
+data
+'loop_type'
+'ooda'
+data
+'status'
+'completed'
+data
+'input_context'
+'query'
+'test'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+'reasoning_steps'
+●●●●●● 2mm □△
+1
+data
+'result'
+'answer'
+'yes'
+data
+'confidence'
+0.85
+'metadata'
+data
+●●●●●● 1mm □
+test_from_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test output deserialization.'
+data
+●●●●●● 1mm □
+'loop_id'
+'reasoning_chain_id'
+'loop_type'
+'status'
+'input_context'
+'reasoning_steps'
+'result'
+'result_summary'
+'confidence'
+'started_at'
+'completed_at'
+'duration_ms'
+'metadata'
+'loop-test123'
+'chain-test'
+'ooda'
+'completed'
+'query'
+'test'
+'step_id'
+'step_number'
+'description'
+'output'
+'confidence'
+'duration_ms'
+'metadata'
+'step-1'
+1
+'Observe'
+'System OK'
+0.9
+100
+'status'
+'healthy'
+'All systems operational'
+0.95
+'2024-01-01T12:00:00'
+'2024-01-01T12:00:01'
+1000
+'triggered_by'
+'tokens_used'
+'user'
+500
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+output
+'loop-test123'
+output
+LoopType
+output
+LoopStatus
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+1
+output
+0
+'Observe'
+output
+0.95
+output
+'user'
+output
+500
+●●●●●● 1mm □
+test_repr
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test string representation.'
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repr_str
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+'GraceLoopOutput'
+repr_str
+'ooda'
+repr_str
+'completed'
+repr_str
+●●●●●● 2mm △
+TestCoreIntegration
+'Integration tests for core module.'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Reset state before each test.'
+reset_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test complete component lifecycle through registry.'
+registry
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base_component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dependent_component
+●●●●●● 1mm □
+ConcreteComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+base_component
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □△
+dependent_component
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+h
+'healthy'
+h
+health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pytest
+'Test using GraceLoopOutput in component operations.'
+●●●●●● 2mm △
+LoopComponent
+●●●●●● 3mm □△
+BaseComponent
+BaseComponent
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm ○
+output
+●●●●●● 1mm □
+GraceLoopOutput
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+output
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+output
+GraceLoopOutput
+component
+●●●●●● 1mm □
+LoopComponent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+'test query'
+●●●●●● 2mm □△
+output
+output
+2
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1.0
+pytest
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

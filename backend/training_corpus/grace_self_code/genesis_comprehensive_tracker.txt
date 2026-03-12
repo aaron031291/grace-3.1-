@@ -1,0 +1,706 @@
+## comprehensive_tracker.py
+'\nComprehensive Genesis Key Tracker\n\nTracks ALL inputs and actions in the Grace system:\n- User inputs (messages, commands)\n- AI responses (decisions, code generation)\n- Coding agent actions\n- External API calls\n- File uploads\n- HTML/web fetches\n- Database changes\n- System events\n\nEvery action gets a Genesis Key for complete audit trail.\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+GenesisKeyStatus
+UserProfile
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_deterministic_key_id
+●●●●●● 1mm □△
+key_type
+what
+who
+where
+why
+how
+when_ts
+input_data
+parent_key_id
+●●●●●● 2mm □△
+'Single deterministic key ID formula (no random, no model).'
+inp_hash
+●●●●●● 1mm □
+input_data
+hashlib
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+payload
+●●●●●● 1mm □
+key_type
+'|'
+what
+'|'
+who
+''
+'|'
+where
+''
+'|'
+why
+''
+'|'
+how
+''
+'|'
+when_ts
+'|'
+inp_hash
+'|'
+parent_key_id
+''
+●●●●●● 3mm ○
+'GK-'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+32
+●●●●●● 1mm ○
+●●●●●● 2mm △
+ComprehensiveTracker
+'\n    Comprehensive tracker for all system inputs and actions.\n\n    Creates Genesis Keys for:\n    - User interactions\n    - AI/agent actions\n    - External API calls\n    - File operations\n    - Database changes\n    - System events\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+user_id
+session_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize comprehensive tracker.\n\n        Args:\n            db_session: Database session\n            user_id: User identifier (optional)\n            session_id: Session identifier (optional)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+●●●●●● 1mm □
+user_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+session_id
+'SS-'
+hashlib
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □△
+db_session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm □
+_generate_user_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate deterministic user ID (no random).'
+●●●●●● 3mm ○
+'user_'
+hashlib
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_genesis_key
+●●●●●● 1mm □△
+self
+key_type
+what_description
+where_location
+why_reason
+who_actor
+how_method
+input_data
+output_data
+context_data
+tags
+parent_key_id
+●●●●●● 2mm □△
+GenesisKeyType
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Create a Genesis Key with comprehensive metadata.\n\n        Args:\n            key_type: Type of Genesis Key\n            what_description: What happened\n            where_location: Where it happened\n            why_reason: Why it happened\n            who_actor: Who performed the action\n            how_method: How it was done\n            input_data: Input data (structured)\n            output_data: Output data (structured)\n            context_data: Additional context\n            tags: Searchable tags\n            parent_key_id: Parent key for chaining\n            **kwargs: Additional fields\n\n        Returns:\n            Created GenesisKey instance\n        '
+when_ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_id
+●●●●●● 1mm □
+_deterministic_key_id
+●●●●●● 1mm □△
+key_type
+what_description
+who_actor
+●●●●●● 3mm △
+where_location
+why_reason
+how_method
+when_ts
+input_data
+parent_key_id
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS] Created '
+key_type
+' key: '
+key
+' - '
+what_description
+50
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Failed to create key: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_user_input
+●●●●●● 1mm □△
+self
+message
+message_type
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'text'
+●●●●●● 2mm □
+'\n        Track user input (messages, commands).\n\n        Args:\n            message: User message content\n            message_type: Type of message (text, command, etc.)\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for user input\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_user_upload
+●●●●●● 1mm □△
+self
+filename
+file_path
+file_size
+file_type
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Track user file upload.\n\n        Args:\n            filename: Name of uploaded file\n            file_path: Path where file was saved\n            file_size: Size of file in bytes\n            file_type: MIME type or extension\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for file upload\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_ai_response
+●●●●●● 1mm □△
+self
+prompt
+response
+model
+tokens_used
+metadata
+parent_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Track AI-generated response.\n\n        Args:\n            prompt: Input prompt to AI\n            response: AI\'s response\n            model: Model used (e.g., "claude-sonnet-4.5")\n            tokens_used: Number of tokens consumed\n            metadata: Additional metadata\n            parent_key_id: Parent key (e.g., user input that triggered this)\n\n        Returns:\n            GenesisKey for AI response\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_ai_code_generation
+●●●●●● 1mm □△
+self
+file_path
+code_generated
+language
+purpose
+model
+metadata
+parent_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Track AI-generated code.\n\n        Args:\n            file_path: Path to file where code was generated\n            code_generated: Generated code content\n            language: Programming language\n            purpose: Purpose of generated code\n            model: AI model used\n            metadata: Additional metadata\n            parent_key_id: Parent key\n\n        Returns:\n            GenesisKey for code generation\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_coding_agent_action
+●●●●●● 1mm □△
+self
+action_type
+action_description
+files_affected
+result
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Track autonomous coding agent action.\n\n        Args:\n            action_type: Type of action (refactor, test, fix, etc.)\n            action_description: Description of what agent did\n            files_affected: List of files modified\n            result: Result of action\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for agent action\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_external_api_call
+●●●●●● 1mm □△
+self
+api_name
+endpoint
+method
+request_data
+response_data
+status_code
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Track external API call.\n\n        Args:\n            api_name: Name of external API\n            endpoint: API endpoint called\n            method: HTTP method\n            request_data: Request payload\n            response_data: Response data\n            status_code: HTTP status code\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for API call\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_web_fetch
+●●●●●● 1mm □△
+self
+url
+content
+content_type
+status_code
+purpose
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Track HTML/web content fetch.\n\n        Args:\n            url: URL fetched\n            content: Fetched content\n            content_type: Content type (text/html, etc.)\n            status_code: HTTP status code\n            purpose: Purpose of fetch\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for web fetch\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_file_ingestion
+●●●●●● 1mm □△
+self
+filename
+file_path
+document_id
+chunks_created
+embeddings_created
+metadata
+parent_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Track file ingestion into knowledge base.\n\n        Args:\n            filename: Name of file\n            file_path: Path to file\n            document_id: Document ID created\n            chunks_created: Number of chunks created\n            embeddings_created: Number of embeddings created\n            metadata: Additional metadata\n            parent_key_id: Parent key (e.g., upload key)\n\n        Returns:\n            GenesisKey for ingestion\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_librarian_action
+●●●●●● 1mm □△
+self
+document_id
+action_type
+tags_assigned
+relationships_detected
+rules_matched
+metadata
+parent_key_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Track librarian auto-categorization.\n\n        Args:\n            document_id: Document processed\n            action_type: Type of librarian action\n            tags_assigned: Tags assigned to document\n            relationships_detected: Number of relationships found\n            rules_matched: Rules that matched\n            metadata: Additional metadata\n            parent_key_id: Parent key\n\n        Returns:\n            GenesisKey for librarian action\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_database_change
+●●●●●● 1mm □△
+self
+table_name
+operation
+record_id
+data_before
+data_after
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Track database change.\n\n        Args:\n            table_name: Database table\n            operation: Operation (INSERT, UPDATE, DELETE)\n            record_id: Record ID affected\n            data_before: Data before change\n            data_after: Data after change\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for database change\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+track_system_event
+●●●●●● 1mm □△
+self
+event_type
+event_description
+severity
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'info'
+●●●●●● 2mm □
+'\n        Track system event.\n\n        Args:\n            event_type: Type of event\n            event_description: Description of event\n            severity: Severity level (info, warning, error)\n            metadata: Additional metadata\n\n        Returns:\n            GenesisKey for system event\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKey
+●●●●●● 1mm □
+get_session_timeline
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get complete timeline of actions for current session.\n\n        Returns:\n            List of GenesisKeys in chronological order\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm □
+get_user_history
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+"\n        Get user's action history.\n\n        Args:\n            limit: Maximum number of records to return\n\n        Returns:\n            List of GenesisKeys for user\n        "
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm □
+search_by_tags
+●●●●●● 1mm □△
+self
+tags
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Search Genesis Keys by tags.\n\n        Args:\n            tags: List of tags to search for\n\n        Returns:\n            List of matching GenesisKeys\n        '
+all_keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matching_keys
+●●●●●● 1mm □
+key
+all_keys
+●●●●●● 2mm □
+key
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+tag
+key
+tag
+tags
+●●●●●● 2mm □△
+matching_keys
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+matching_keys
+●●●●●● 3mm □△
+GenesisKey

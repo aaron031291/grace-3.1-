@@ -1,0 +1,191 @@
+## test_memory_facade.py
+'\nTests for Unified Memory facade.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm △
+TestUnifiedMemoryImport
+●●●●●● 1mm □
+test_import_unified_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.memory.unified_memory
+●●●●●● 2mm □△○
+UnifiedMemory
+UnifiedMemory
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_import_learning_example
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.memory.unified_memory
+●●●●●● 2mm □△○
+LearningExample
+LearningExample
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_import_episode
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.memory.unified_memory
+●●●●●● 2mm □△○
+Episode
+Episode
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestJsonSerialization
+●●●●●● 1mm □
+test_to_json_str_with_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_to_json_str
+result
+●●●●●● 1mm □
+_to_json_str
+●●●●●● 1mm □△
+'key'
+'value'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+parsed
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+parsed
+'key'
+'value'
+●●●●●● 1mm □
+test_to_json_str_with_none
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_to_json_str
+result
+●●●●●● 1mm □
+_to_json_str
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+result
+'{}'
+●●●●●● 1mm □
+test_to_json_str_with_string
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_to_json_str
+result
+●●●●●● 1mm □
+_to_json_str
+●●●●●● 1mm □△
+'already a string'
+●●●●●● 2mm □△
+result
+'already a string'
+●●●●●● 1mm □
+test_to_json_str_with_nested_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_to_json_str
+result
+●●●●●● 1mm □
+_to_json_str
+●●●●●● 1mm □△
+'a'
+'b'
+1
+2
+3
+●●●●●● 2mm □△
+parsed
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+parsed
+'a'
+'b'
+1
+2
+3
+●●●●●● 1mm □
+test_from_json_str_with_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_from_json_str
+result
+●●●●●● 1mm □
+_from_json_str
+●●●●●● 1mm □△
+'{"key": "value"}'
+●●●●●● 2mm □△
+result
+'key'
+'value'
+●●●●●● 1mm □
+test_from_json_str_with_none
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_from_json_str
+result
+●●●●●● 1mm □
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+test_from_json_str_with_dict_passthrough
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_from_json_str
+result
+●●●●●● 1mm □
+_from_json_str
+●●●●●● 1mm □△
+'key'
+'value'
+●●●●●● 2mm □△
+result
+'key'
+'value'

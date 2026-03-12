@@ -1,0 +1,142 @@
+## test_postgres_connection.py
+'\nTest Grace\'s database connection (SQLite or PostgreSQL).\n\nRun from project root:  ..\test_postgres_connection.ps1   (PowerShell)\nOr from backend dir:   python scripts/test_postgres_connection.py  (with venv active)\n\nUses .env by default. To test PostgreSQL without changing .env, set env vars first:\n\n  PowerShell:\n    $env:DATABASE_TYPE="postgresql"; $env:DATABASE_HOST="localhost"; $env:DATABASE_PORT="5432"\n    $env:DATABASE_USER="postgres"; $env:DATABASE_PASSWORD="your_password"; $env:DATABASE_NAME="grace"\n    $env:DATABASE_SSLMODE=""\n    python scripts/test_postgres_connection.py\n\n  Cmd:\n    set DATABASE_TYPE=postgresql & set DATABASE_HOST=localhost & ... & python scripts/test_postgres_connection.py\n\nIf you see "password authentication failed", fix DATABASE_USER/DATABASE_PASSWORD (use the same as pgAdmin/stGIS).\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+sys
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db_type
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+config
+'value'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Database type: '
+db_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db_type
+'postgresql'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Host: '
+config
+':'
+config
+5432
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  User: '
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Database: '
+config
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Path: '
+config
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+ok
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Connection successful.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Health check returned False.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

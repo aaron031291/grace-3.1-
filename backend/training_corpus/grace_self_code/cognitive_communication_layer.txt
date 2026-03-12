@@ -1,0 +1,718 @@
+## communication_layer.py
+"\nNLP Communication Layer — Adaptive Communication Routing\n\nGrace communicates differently depending on who she's talking to:\n  - Human → Natural Language (NLP), conversational, clear\n  - System/API → JSON, structured, machine-readable\n  - Component → Internal protocol, minimal overhead\n  - LLM → Prompt-optimized, context-rich\n\nThe system autonomously chooses the best communication format\nfor each interaction, optimizing for:\n  - Least resistance (fastest path to understanding)\n  - No loss of intelligence or formulation quality\n  - Context-appropriate formatting\n\nGrace can also test different communication strategies in the\nsandbox environment and adopt the most effective approach.\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Union
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CommunicationTarget
+HUMAN
+●●●●●● 1mm □
+'human'
+SYSTEM
+●●●●●● 1mm □
+'system'
+COMPONENT
+●●●●●● 1mm □
+'component'
+LLM
+●●●●●● 1mm □
+'llm'
+API
+●●●●●● 1mm □
+'api'
+●●●●●● 1mm □
+format_for_target
+●●●●●● 1mm □△
+data
+target
+context
+detail_level
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+CommunicationTarget
+''
+'normal'
+'\n    Format data for the appropriate target.\n    Grace decides the best format automatically.\n    '
+●●●●●● 2mm □
+target
+CommunicationTarget
+●●●●●● 3mm ○
+_format_human
+●●●●●● 1mm □△
+data
+context
+detail_level
+●●●●●● 2mm □△
+●●●●●● 1mm △
+target
+CommunicationTarget
+●●●●●● 3mm ○
+_format_system
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+CommunicationTarget
+●●●●●● 3mm ○
+_format_component
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm △
+target
+CommunicationTarget
+●●●●●● 3mm ○
+_format_llm
+●●●●●● 1mm □△
+data
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+CommunicationTarget
+●●●●●● 3mm ○
+_format_api
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_format_human
+●●●●●● 1mm □△
+data
+context
+detail_level
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'normal'
+'Format for human consumption — natural language, clear, conversational.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+●●●●●● 2mm □
+'health_score'
+data
+'status'
+data
+score
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'health_score'
+data
+●●●●●● 1mm □△
+'trust_score'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+score
+lines
+●●●●●● 1mm □△
+'System health is at '
+score
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+'%'
+''
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+lines
+●●●●●● 1mm □△
+'Current status: '
+status
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'improvements'
+data
+●●●●●● 2mm □
+data
+'improvements'
+lines
+●●●●●● 1mm □△
+"\nWhat's going well:"
+●●●●●● 2mm □△
+item
+data
+'improvements'
+lines
+●●●●●● 1mm □△
+'  + '
+item
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'problems'
+data
+●●●●●● 2mm □
+data
+'problems'
+lines
+●●●●●● 1mm □△
+'\nAreas needing attention:'
+●●●●●● 2mm □△
+item
+data
+'problems'
+lines
+●●●●●● 1mm □△
+'  - '
+item
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'metrics'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'metrics'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'\nKey numbers:'
+●●●●●● 2mm □△
+key
+val
+data
+'metrics'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nice_key
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+nice_key
+': '
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'steps'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'steps'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'\nPlan:'
+●●●●●● 2mm □△
+i
+step
+●●●●●● 2mm □
+●●●●●● 1mm □△
+data
+'steps'
+1
+●●●●●● 2mm □△
+desc
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+step
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □△
+'description'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+step
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+step
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+i
+'. '
+desc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+data
+lines
+●●●●●● 1mm □△
+'\nThere was an issue: '
+data
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lines
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+k
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+': '
+v
+k
+v
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+v
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 3mm ○
+'No items found.'
+●●●●●● 2mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+item
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+item
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'  - '
+item
+item
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'  '
+i
+●●●●●● 3mm ○
+1
+'. '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+200
+i
+item
+●●●●●● 2mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_format_system
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Any
+'Format for system consumption — JSON, structured.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'message'
+data
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'items'
+'count'
+data
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'value'
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_format_component
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Any
+'Format for component-to-component — minimal overhead JSON.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+k
+v
+k
+v
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'data'
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_format_llm
+●●●●●● 1mm □△
+data
+context
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm ○
+''
+'Format for LLM consumption — prompt-optimized, context-rich.'
+parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+context
+parts
+●●●●●● 1mm □△
+'Context: '
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Data:'
+●●●●●● 2mm □△
+k
+v
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'  '
+k
+': '
+json
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 3mm □
+parts
+●●●●●● 1mm □△
+'  '
+k
+': '
+v
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Items:'
+●●●●●● 2mm □△
+item
+data
+20
+parts
+●●●●●● 1mm □△
+'  - '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_format_api
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Any
+'Format for API response — REST conventions.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'data'
+●●●●●● 3mm □△○
+data
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'data'
+'count'
+●●●●●● 3mm □△○
+data
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+data
+●●●●●● 3mm ○
+'success'
+'data'
+●●●●●● 3mm □△○
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+detect_best_target
+●●●●●● 1mm □△
+recipient
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Auto-detect the best communication target type.'
+r
+●●●●●● 1mm □
+recipient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+r
+w
+'user'
+'human'
+'aaron'
+'person'
+'client'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CommunicationTarget
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+r
+w
+'api'
+'endpoint'
+'rest'
+'http'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CommunicationTarget
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+r
+w
+'llm'
+'kimi'
+'opus'
+'model'
+'prompt'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CommunicationTarget
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+r
+w
+'pipeline'
+'engine'
+'module'
+'cognitive'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CommunicationTarget
+●●●●●● 3mm ○
+CommunicationTarget
+●●●●●● 1mm ○
+●●●●●● 1mm □
+smart_format
+●●●●●● 1mm □△
+data
+recipient
+context
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'human'
+''
+'\n    Smart formatting — auto-detects target and formats appropriately.\n    The path of least resistance for communication.\n    '
+target
+●●●●●● 1mm □
+detect_best_target
+●●●●●● 1mm □△
+recipient
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+format_for_target
+●●●●●● 1mm □△
+data
+target
+context
+●●●●●● 2mm □△
+Any

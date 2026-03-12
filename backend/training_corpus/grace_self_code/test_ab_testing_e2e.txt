@@ -1,0 +1,134 @@
+## test_ab_testing_e2e.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.comparative_testing
+●●●●●● 2mm □△○
+run_ab_optimization_test
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 1mm □
+verify_ab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'📈 INITIATING A/B COMPARATIVE OPTIMIZATION TEST 📈'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DB Init error (handled): '
+e
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Create a new FastAPI endpoint for testing the system health.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[Test Prompt]: '"
+prompt
+"'"
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+run_ab_optimization_test
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[Comparative Metrics]:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+'optimization_gain_ms'
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ VERIFICATION SUCCESS: Sandbox execution was '
+results
+'optimization_gain_ms'
+'ms faster than standard.'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+results
+'optimization_gain_ms'
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ VERIFICATION SUCCESS: Testing framework works. Standard execution was '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+results
+'optimization_gain_ms'
+●●●●●● 2mm □△
+'ms faster.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ VERIFICATION SUCCESS: Both pathways completed with identical latency.'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Verification failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+verify_ab
+●●●●●● 1mm □△
+●●●●●● 2mm □△

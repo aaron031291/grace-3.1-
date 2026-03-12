@@ -1,0 +1,1957 @@
+## relation_graphs.py
+'\nMagma Memory - Relation Graphs\n\nFour interconnected graph types for rich memory relationships:\n1. Semantic Graph - Meaning relationships between concepts\n2. Temporal Graph - Time-based relationships and sequences\n3. Causal Graph - Cause-effect relationships\n4. Entity Graph - Entity relationships and co-occurrences\n\nThese graphs work together with the existing Memory Mesh to provide\ngraph-based retrieval and relationship traversal.\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Set
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RelationType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of relationships in the graphs.'
+SEMANTIC_SIMILAR
+●●●●●● 1mm □
+'semantic_similar'
+SEMANTIC_RELATED
+●●●●●● 1mm □
+'semantic_related'
+SEMANTIC_PARENT
+●●●●●● 1mm □
+'semantic_parent'
+SEMANTIC_CHILD
+●●●●●● 1mm □
+'semantic_child'
+SEMANTIC_SYNONYM
+●●●●●● 1mm □
+'semantic_synonym'
+SEMANTIC_ANTONYM
+●●●●●● 1mm □
+'semantic_antonym'
+TEMPORAL_BEFORE
+●●●●●● 1mm □
+'temporal_before'
+TEMPORAL_AFTER
+●●●●●● 1mm □
+'temporal_after'
+TEMPORAL_CONCURRENT
+●●●●●● 1mm □
+'temporal_concurrent'
+TEMPORAL_SEQUENCE
+●●●●●● 1mm □
+'temporal_sequence'
+TEMPORAL_CAUSED_BY
+●●●●●● 1mm □
+'temporal_caused_by'
+CAUSAL_CAUSES
+●●●●●● 1mm □
+'causal_causes'
+CAUSAL_CAUSED_BY
+●●●●●● 1mm □
+'causal_caused_by'
+CAUSAL_ENABLES
+●●●●●● 1mm □
+'causal_enables'
+CAUSAL_PREVENTS
+●●●●●● 1mm □
+'causal_prevents'
+CAUSAL_CORRELATES
+●●●●●● 1mm □
+'causal_correlates'
+ENTITY_INSTANCE_OF
+●●●●●● 1mm □
+'entity_instance_of'
+ENTITY_PART_OF
+●●●●●● 1mm □
+'entity_part_of'
+ENTITY_RELATED_TO
+●●●●●● 1mm □
+'entity_related_to'
+ENTITY_CO_OCCURS
+●●●●●● 1mm □
+'entity_co_occurs'
+ENTITY_REFERENCES
+●●●●●● 1mm □
+'entity_references'
+●●●●●● 2mm △
+GraphNode
+'A node in a relation graph.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+node_type
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+embedding
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+trust_score
+●●●●●● 3mm ○
+0.5
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+updated_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__hash__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__eq__
+●●●●●● 1mm □△
+self
+other
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+other
+GraphNode
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+other
+●●●●●● 3mm ○
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+GraphEdge
+'An edge connecting two nodes in a relation graph.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+source_id
+●●●●●● 1mm ○
+target_id
+●●●●●● 1mm ○
+relation_type
+RelationType
+weight
+●●●●●● 3mm ○
+1.0
+confidence
+●●●●●● 3mm ○
+0.5
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__hash__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+BaseRelationGraph
+'\n    Base class for relation graphs.\n\n    Provides common graph operations:\n    - Add/remove nodes and edges\n    - Traverse relationships\n    - Find paths between nodes\n    - Calculate graph metrics\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graph_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+graph_type
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GraphNode
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GraphEdge
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-'
+graph_type
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_node
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+GraphNode
+'Add a node to the graph.'
+●●●●●● 3mm △
+node
+●●●●●● 1mm □
+node
+logger
+●●●●●● 1mm □△
+'[MAGMA-'
+●●●●●● 3mm △
+'] Added node: '
+node
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+●●●●●● 1mm ○
+●●●●●● 1mm □
+add_edge
+●●●●●● 1mm □△
+self
+edge
+●●●●●● 2mm □△
+GraphEdge
+'Add an edge to the graph.'
+●●●●●● 2mm □
+edge
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Source node '
+edge
+' not found'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+edge
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Target node '
+edge
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+edge
+●●●●●● 1mm □
+edge
+●●●●●● 3mm △
+edge
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 3mm △
+edge
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-'
+●●●●●● 3mm △
+'] Added edge: '
+edge
+' -> '
+edge
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+edge
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_node
+●●●●●● 1mm □△
+self
+node_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a node by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GraphNode
+●●●●●● 1mm □
+get_edge
+●●●●●● 1mm □△
+self
+edge_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get an edge by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GraphEdge
+●●●●●● 1mm □
+get_neighbors
+●●●●●● 1mm □△
+self
+node_id
+relation_types
+direction
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+RelationType
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'outgoing'
+'\n        Get neighboring nodes with their connecting edges.\n\n        Args:\n            node_id: Source node ID\n            relation_types: Filter by relation types (None = all)\n            direction: outgoing, incoming, or both\n\n        Returns:\n            List of (neighbor_node, connecting_edge) tuples\n        '
+neighbors
+●●●●●● 1mm □
+●●●●●● 2mm □
+direction
+'outgoing'
+'both'
+edge_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+●●●●●● 3mm △
+edge_id
+●●●●●● 2mm □
+relation_types
+●●●●●● 2mm □
+edge
+relation_types
+neighbor
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neighbor
+neighbors
+●●●●●● 1mm □△
+neighbor
+edge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+direction
+'incoming'
+'both'
+edge_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+●●●●●● 3mm △
+edge_id
+●●●●●● 2mm □
+relation_types
+●●●●●● 2mm □
+edge
+relation_types
+neighbor
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neighbor
+neighbors
+●●●●●● 1mm □△
+neighbor
+edge
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+neighbors
+●●●●●● 3mm □△
+Tuple
+GraphNode
+GraphEdge
+●●●●●● 1mm □
+find_path
+●●●●●● 1mm □△
+self
+source_id
+target_id
+max_depth
+relation_types
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+RelationType
+5
+●●●●●● 2mm □
+'\n        Find shortest path between two nodes using BFS.\n\n        Returns:\n            List of (node, edge) tuples representing the path, or None if no path\n        '
+●●●●●● 2mm □
+source_id
+●●●●●● 3mm △
+target_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+source_id
+target_id
+●●●●●● 3mm ○
+●●●●●● 3mm △
+source_id
+●●●●●● 2mm □
+visited
+●●●●●● 1mm □
+source_id
+queue
+●●●●●● 1mm □
+source_id
+queue
+current_id
+path
+●●●●●● 1mm □
+queue
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+max_depth
+neighbor
+edge
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_id
+relation_types
+'both'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neighbor
+target_id
+●●●●●● 3mm ○
+path
+●●●●●● 3mm ○
+●●●●●● 3mm △
+current_id
+edge
+neighbor
+●●●●●● 2mm □
+●●●●●● 2mm □
+neighbor
+visited
+visited
+●●●●●● 1mm □△
+neighbor
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □△
+neighbor
+path
+●●●●●● 3mm ○
+●●●●●● 3mm △
+current_id
+edge
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+Tuple
+GraphNode
+GraphEdge
+●●●●●● 1mm □
+get_subgraph
+●●●●●● 1mm □△
+self
+center_node_id
+depth
+relation_types
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+RelationType
+2
+●●●●●● 2mm □
+'\n        Extract a subgraph centered on a node.\n\n        Returns:\n            Tuple of (nodes_dict, edges_dict) for the subgraph\n        '
+subgraph_nodes
+●●●●●● 1mm □
+subgraph_edges
+●●●●●● 1mm □
+to_visit
+●●●●●● 1mm □
+center_node_id
+0
+visited
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+to_visit
+node_id
+current_depth
+●●●●●● 1mm □
+to_visit
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node_id
+visited
+current_depth
+depth
+visited
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+subgraph_nodes
+node_id
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+current_depth
+depth
+neighbor
+edge
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+relation_types
+'both'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+edge
+subgraph_edges
+edge
+●●●●●● 1mm □
+edge
+to_visit
+●●●●●● 1mm □△
+neighbor
+current_depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+subgraph_nodes
+subgraph_edges
+Tuple
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GraphNode
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GraphEdge
+●●●●●● 1mm □
+calculate_node_importance
+●●●●●● 1mm □△
+self
+node_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Calculate importance score based on connectivity and trust.\n\n        Combines:\n        - Degree centrality (number of connections)\n        - Trust score\n        - Edge weights\n        '
+node
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 3mm ○
+0.0
+outgoing
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+incoming
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_nodes
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+degree_centrality
+●●●●●● 1mm □
+outgoing
+●●●●●● 3mm ○
+incoming
+●●●●●● 3mm □△
+2
+●●●●●● 2mm □△
+total_nodes
+all_edges
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+avg_weight
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+e
+e
+all_edges
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_edges
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+importance
+●●●●●● 1mm □
+0.4
+●●●●●● 2mm □△
+degree_centrality
+●●●●●● 3mm ○
+0.4
+●●●●●● 2mm □△
+node
+●●●●●● 3mm ○
+0.2
+●●●●●● 2mm □△
+avg_weight
+●●●●●● 3mm ○
+importance
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get graph statistics.'
+●●●●●● 3mm ○
+'graph_type'
+'total_nodes'
+'total_edges'
+'avg_degree'
+'relation_type_counts'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+adj
+●●●●●● 2mm □△
+adj
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_count_relation_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Count edges by relation type.'
+counts
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+edge
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+counts
+edge
+1
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm △
+SemanticGraph
+●●●●●● 3mm □△
+BaseRelationGraph
+BaseRelationGraph
+'\n    Semantic Graph - Meaning relationships between concepts.\n\n    Captures:\n    - Similarity (cosine similarity > threshold)\n    - Related concepts (co-occurrence, context)\n    - Hierarchical relationships (parent/child)\n    - Synonyms/Antonyms\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'semantic'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.7
+●●●●●● 1mm □
+add_concept
+●●●●●● 1mm □△
+self
+content
+embedding
+genesis_key_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Add a concept node with automatic similarity linking.'
+node_id
+●●●●●● 1mm □
+'sem-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_link_similar_concepts
+●●●●●● 1mm □△
+self
+new_node
+●●●●●● 2mm □△
+GraphNode
+'Link new node to similar existing concepts.'
+●●●●●● 2mm □
+new_node
+●●●●●● 3mm ○
+existing_id
+existing_node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing_id
+new_node
+existing_node
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+new_node
+existing_node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+similarity
+●●●●●● 3mm △
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_cosine_similarity
+●●●●●● 1mm □△
+self
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+'Calculate cosine similarity between two vectors.'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+dot_product
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+b
+a
+b
+●●●●●● 3mm □
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+norm1
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+a
+a
+vec1
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+0.5
+norm2
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+b
+b
+vec2
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+0.5
+●●●●●● 2mm □
+norm1
+0
+norm2
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+dot_product
+●●●●●● 3mm □△
+norm1
+●●●●●● 2mm □△
+norm2
+●●●●●● 3mm ○
+●●●●●● 1mm □
+find_related_concepts
+●●●●●● 1mm □△
+self
+concept_id
+max_results
+min_similarity
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+10
+0.5
+'Find concepts related to a given concept.'
+neighbors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+concept_id
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+node
+edge
+node
+edge
+neighbors
+edge
+min_similarity
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+max_results
+●●●●●● 3mm □△
+Tuple
+GraphNode
+●●●●●● 3mm ○
+●●●●●● 2mm △
+TemporalGraph
+●●●●●● 3mm □△
+BaseRelationGraph
+BaseRelationGraph
+'\n    Temporal Graph - Time-based relationships and sequences.\n\n    Captures:\n    - Before/After relationships\n    - Concurrent events\n    - Sequences of events\n    - Time-based causation\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'temporal'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_event
+●●●●●● 1mm □△
+self
+content
+timestamp
+genesis_key_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+datetime
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Add a temporal event node.'
+node_id
+●●●●●● 1mm □
+'temp-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+timestamp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_link_temporal_relationships
+●●●●●● 1mm □△
+self
+new_node
+timestamp
+●●●●●● 2mm □△
+GraphNode
+datetime
+'Link new event to existing events based on time.'
+existing_id
+existing_node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing_id
+new_node
+existing_time_str
+●●●●●● 1mm □
+existing_node
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing_time_str
+existing_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+existing_time_str
+●●●●●● 2mm □△
+time_diff
+●●●●●● 1mm □
+timestamp
+●●●●●● 1mm □△
+existing_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+time_diff
+●●●●●● 2mm □△
+60
+relation
+●●●●●● 1mm □
+RelationType
+weight
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm △
+time_diff
+0
+relation
+●●●●●● 1mm □
+RelationType
+weight
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+1.0
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+time_diff
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+86400
+●●●●●● 2mm □△
+relation
+●●●●●● 1mm □
+RelationType
+weight
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+1.0
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+time_diff
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+86400
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+time_diff
+●●●●●● 2mm □△
+86400
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_events_in_range
+●●●●●● 1mm □△
+self
+start_time
+end_time
+●●●●●● 2mm □△
+datetime
+datetime
+'Get all events within a time range.'
+events
+●●●●●● 1mm □
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp_str
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+timestamp_str
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timestamp_str
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_time
+timestamp
+end_time
+events
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+events
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 1mm □
+get_event_sequence
+●●●●●● 1mm □△
+self
+start_node_id
+max_length
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+'Get sequence of events following a start event.'
+sequence
+●●●●●● 1mm □
+current_id
+●●●●●● 1mm □
+start_node_id
+visited
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sequence
+●●●●●● 2mm □△
+max_length
+current_id
+visited
+visited
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+sequence
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neighbors
+neighbors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current_id
+●●●●●● 1mm □
+neighbors
+0
+0
+●●●●●● 3mm ○
+sequence
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 2mm △
+CausalGraph
+●●●●●● 3mm □△
+BaseRelationGraph
+BaseRelationGraph
+'\n    Causal Graph - Cause-effect relationships.\n\n    Captures:\n    - Direct causation (A causes B)\n    - Enabling conditions (A enables B)\n    - Preventing conditions (A prevents B)\n    - Correlations (A correlates with B)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'causal'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_causal_link
+●●●●●● 1mm □△
+self
+cause_id
+effect_id
+relation
+confidence
+evidence
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+RelationType
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0.5
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Add a causal relationship between nodes.'
+●●●●●● 2mm □
+relation
+RelationType
+RelationType
+RelationType
+RelationType
+RelationType
+ValueError
+●●●●●● 1mm □△
+'Invalid causal relation type: '
+relation
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_causes
+●●●●●● 1mm □△
+self
+effect_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get all causes of an effect.'
+neighbors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+effect_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+edge
+node
+edge
+neighbors
+●●●●●● 3mm □△
+Tuple
+GraphNode
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_effects
+●●●●●● 1mm □△
+self
+cause_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get all effects of a cause.'
+neighbors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cause_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+edge
+node
+edge
+neighbors
+●●●●●● 3mm □△
+Tuple
+GraphNode
+●●●●●● 3mm ○
+●●●●●● 1mm □
+trace_causal_chain
+●●●●●● 1mm □△
+self
+start_id
+direction
+max_depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'effects'
+5
+'\n        Trace causal chains from a starting node.\n\n        Returns list of causal chains (each chain is a list of nodes).\n        '
+chains
+●●●●●● 1mm □
+●●●●●● 1mm □
+trace
+●●●●●● 1mm □△
+current_id
+current_chain
+depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 2mm ○
+●●●●●● 2mm □
+depth
+max_depth
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_chain
+●●●●●● 2mm □△
+1
+chains
+●●●●●● 1mm □△
+current_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 3mm ○
+current_chain
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+direction
+'effects'
+next_nodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+●●●●●● 3mm □
+next_nodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+next_nodes
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_chain
+●●●●●● 2mm □△
+1
+chains
+●●●●●● 1mm □△
+current_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+next_node
+confidence
+next_nodes
+●●●●●● 2mm □
+next_node
+n
+n
+current_chain
+trace
+●●●●●● 1mm □△
+next_node
+current_chain
+depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+current_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trace
+●●●●●● 1mm □△
+start_id
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chains
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 2mm △
+EntityGraph
+●●●●●● 3mm □△
+BaseRelationGraph
+BaseRelationGraph
+'\n    Entity Graph - Entity relationships and co-occurrences.\n\n    Captures:\n    - Instance-of relationships\n    - Part-of relationships\n    - Entity co-occurrences\n    - References between entities\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'entity'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_entity
+●●●●●● 1mm □△
+self
+name
+entity_type
+attributes
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Add an entity node.'
+node_id
+●●●●●● 1mm □
+'ent-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+link_entities
+●●●●●● 1mm □△
+self
+entity1_id
+entity2_id
+relation
+confidence
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+RelationType
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0.5
+●●●●●● 2mm □
+'Link two entities with a relationship.'
+●●●●●● 2mm □
+relation
+RelationType
+RelationType
+RelationType
+RelationType
+RelationType
+ValueError
+●●●●●● 1mm □△
+'Invalid entity relation type: '
+relation
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+record_co_occurrence
+●●●●●● 1mm □△
+self
+entity1_id
+entity2_id
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Record that two entities co-occurred in a context.'
+existing_edge
+●●●●●● 1mm □
+●●●●●● 2mm □
+edge_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entity1_id
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+●●●●●● 3mm △
+edge_id
+●●●●●● 2mm □
+edge
+entity2_id
+edge
+RelationType
+existing_edge
+●●●●●● 1mm □
+edge
+●●●●●● 2mm □
+existing_edge
+existing_edge
+0.1
+contexts
+●●●●●● 1mm □
+existing_edge
+●●●●●● 1mm □△
+'contexts'
+●●●●●● 2mm □△
+contexts
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+existing_edge
+'contexts'
+●●●●●● 1mm □
+contexts
+10
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entity1_id
+entity2_id
+RelationType
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_entity_cluster
+●●●●●● 1mm □△
+self
+entity_id
+min_co_occurrence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.3
+'Get cluster of frequently co-occurring entities.'
+neighbors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entity_id
+●●●●●● 2mm □△
+cluster
+●●●●●● 1mm □
+node
+node
+edge
+neighbors
+edge
+min_co_occurrence
+cluster
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cluster
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 2mm △
+MagmaRelationGraphs
+'\n    Unified interface for all Magma relation graphs.\n\n    Coordinates:\n    - Semantic Graph\n    - Temporal Graph\n    - Causal Graph\n    - Entity Graph\n\n    Provides cross-graph queries and unified retrieval.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+SemanticGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TemporalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CausalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EntityGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA] Relation Graphs initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all_graphs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all relation graphs.'
+●●●●●● 3mm ○
+'semantic'
+'temporal'
+'causal'
+'entity'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+BaseRelationGraph
+●●●●●● 1mm □
+cross_graph_search
+●●●●●● 1mm □△
+self
+query_node_id
+source_graph
+target_graphs
+max_depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+2
+'\n        Search across multiple graphs starting from a node.\n\n        Uses genesis_key_id to link nodes across graphs.\n        '
+●●●●●● 2mm □
+target_graphs
+●●●●●● 2mm □
+target_graphs
+●●●●●● 1mm □
+'semantic'
+'temporal'
+'causal'
+'entity'
+results
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+source_graph
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+●●●●●● 3mm ○
+results
+node
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+query_node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+node
+●●●●●● 3mm ○
+results
+graph_name
+target_graphs
+●●●●●● 2mm □
+graph_name
+source_graph
+graph
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □△
+graph_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+graph
+related
+●●●●●● 1mm □
+other_node
+graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+other_node
+node
+related
+●●●●●● 1mm □△
+other_node
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+other_node
+●●●●●● 2mm □△
+related
+●●●●●● 1mm □△
+n
+n
+e
+neighbors
+●●●●●● 2mm □△
+results
+graph_name
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+related
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 1mm □
+get_unified_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get statistics for all graphs.'
+●●●●●● 3mm ○
+'semantic'
+'temporal'
+'causal'
+'entity'
+'total_nodes'
+'total_edges'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+g
+●●●●●● 2mm □△
+g
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+g
+●●●●●● 2mm □△
+g
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

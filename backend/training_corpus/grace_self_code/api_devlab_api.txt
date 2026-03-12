@@ -1,0 +1,300 @@
+## devlab_api.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+BackgroundTasks
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+●●●●●● 3mm □△○
+sse_starlette.sse
+●●●●●● 2mm □△○
+EventSourceResponse
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_tasks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+AgentTaskRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+artifact_path
+●●●●●● 1mm ○
+intent
+●●●●●● 1mm ○
+domain
+●●●●●● 1mm ○
+'Global'
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Simulates an autonomous LLM agent working on a file, yielding logs over time.'
+active_tasks
+task_id
+'status'
+●●●●●● 1mm □
+'running'
+steps
+●●●●●● 1mm □
+'[SYSTEM] Booting Dev Agent for workspace task: '
+intent
+'[SYSTEM] Target artifact: '
+artifact_path
+'[RAG] Querying Magma Memory for related context...'
+'[RAG] Found 3 related schema definitions and 1 governance constraint.'
+'[AGENT] Analyzing AST of '
+artifact_path
+'...'
+'[AGENT] Identifying optimization targets...'
+'[AGENT] Generating proposed refactor...'
+'[VERIFY] Running static analysis on proposed changes...'
+'[VERIFY] ✅ Lint passed. No regressions detected.'
+'[SYSTEM] Packaging results for human review.'
+'[SYSTEM] Task complete.'
+step
+steps
+asyncio
+●●●●●● 1mm □△
+1.5
+●●●●●● 2mm □△
+log_entry
+●●●●●● 1mm □
+'['
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%H:%M:%S'
+●●●●●● 2mm □△
+'] '
+step
+active_tasks
+task_id
+'logs'
+●●●●●● 1mm □△
+log_entry
+●●●●●● 2mm □△
+active_tasks
+task_id
+'status'
+●●●●●● 1mm □
+'completed'
+Exception
+active_tasks
+task_id
+'status'
+●●●●●● 1mm □
+'failed'
+active_tasks
+task_id
+'logs'
+●●●●●● 1mm □△
+'[ERROR] Agent crashed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+AgentTaskRequest
+BackgroundTasks
+'Spawns a background agent to handle a request from the Context Menu.'
+task_id
+●●●●●● 1mm □
+'TASK-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+active_tasks
+task_id
+●●●●●● 1mm □
+'status'
+'logs'
+'artifact'
+'intent'
+'pending'
+req
+req
+background_tasks
+●●●●●● 1mm □△
+mock_agent_worker
+task_id
+req
+req
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task_id'
+'status'
+task_id
+'pending'
+router
+●●●●●● 1mm □△
+'/task'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'SSE endpoint to stream live python terminal logs to the frontend.'
+●●●●●● 2mm □
+task_id
+active_tasks
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_index
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+task
+●●●●●● 1mm □
+active_tasks
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+current_logs
+●●●●●● 1mm □
+task
+'logs'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_logs
+●●●●●● 2mm □△
+last_index
+log
+current_logs
+last_index
+'data'
+log
+last_index
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_logs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'status'
+'completed'
+'failed'
+'data'
+'[END OF STREAM] Status: '
+task
+'status'
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+EventSourceResponse
+●●●●●● 1mm □△
+log_generator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/stream/{task_id}'
+●●●●●● 2mm □△
+'Returns the list of active agents (completed, failed, or running) for the Dev Tab Swimlane.'
+tasks
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+random
+t_id
+t_info
+active_tasks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t_info
+●●●●●● 1mm □△
+'logs'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+11
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □
+t_info
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'completed'
+'failed'
+progress
+●●●●●● 1mm □
+100
+tasks
+●●●●●● 1mm □△
+'id'
+'name'
+'status'
+'progress'
+'layer'
+t_id
+'Agent: '
+t_info
+●●●●●● 1mm □△
+'intent'
+'Unknown task'
+●●●●●● 2mm □△
+20
+'...'
+t_info
+●●●●●● 1mm □△
+'status'
+'queued'
+●●●●●● 2mm □△
+progress
+random
+●●●●●● 1mm □△
+1
+9
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'tasks'
+tasks
+router
+●●●●●● 1mm □△
+'/swarm'
+●●●●●● 2mm □△

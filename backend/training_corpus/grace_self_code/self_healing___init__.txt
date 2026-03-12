@@ -1,0 +1,11 @@
+## __init__.py
+"self_healing package — Grace's autonomous error detection and repair system."
+●●●●●● 3mm □△○
+self_healing.error_pipeline
+●●●●●● 2mm □△○
+get_error_pipeline
+report_error
+__all__
+●●●●●● 1mm □
+'get_error_pipeline'
+'report_error'

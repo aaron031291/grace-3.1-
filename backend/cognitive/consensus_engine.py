@@ -412,16 +412,7 @@ def layer3_align(
     alignment_prompt += (
         f"Original query: {prompt[:1000]}\n\n"
         f"Consensus:\n{consensus[:4000]}\n\n"
-        f"Produce the final aligned response.\n\n"
-        f"IF an explicit system action is warranted (e.g. running a shell command, submitting a coding fix, "
-        f"restarting a service), output a JSON block inside ```json ... ``` with this exact structure:\n"
-        f"```json\n"
-        f"{{\n"
-        f"  \"action_type\": \"execute_shell_command\" | \"submit_coding_task\" | \"restart_service\" | \"update_knowledge_base\",\n"
-        f"  \"params\": {{ ... specific params based on action type ... }},\n"
-        f"  \"rationale\": \"Brief explanation of why this action is necessary\"\n"
-        f"}}\n"
-        f"```"
+        f"Produce the final aligned response."
     )
 
     client = _get_client("kimi") or _get_client("opus") or _get_client("qwen")
@@ -497,6 +488,49 @@ def layer4_verify(aligned_output: str, prompt: str) -> dict:
 
 # ── Full Pipeline ─────────────────────────────────────────────────────
 
+def query_braille_sandbox(intent: str) -> str:
+    """
+    Query the new deterministic Braille Sandbox nodes to provide raw AST code 
+    to Spindle exactly as requested via the new genesis keys.
+    """
+    try:
+        from database.config import DatabaseConfig
+        from database.connection import DatabaseConnection
+        from database.session import get_session_factory
+        from database.models.braille_node import BrailleSandboxNode
+        
+        try:
+            DatabaseConnection.get_engine()
+        except RuntimeError:
+            config = DatabaseConfig.from_env()
+            DatabaseConnection.initialize(config)
+            
+        SessionLocal = get_session_factory()
+        db = SessionLocal()
+        # For autonomous/context injection, we pull a few relevant Nodes 
+        # (This will be improved with pgvector embeddings in the future)
+        keywords = intent.lower().split()
+        nodes = db.query(BrailleSandboxNode).filter(BrailleSandboxNode.is_active == True).limit(10).all()
+        
+        matches = []
+        for n in nodes:
+            if any(k in n.ast_content.lower() or k in n.genesis_key.lower() for k in keywords):
+                matches.append(n)
+        
+        db.close()
+        
+        if not matches:
+            return ""
+            
+        ctx = "[Braille Sandbox Deterministic Code Context]\n"
+        for m in matches[:3]:
+            ctx += f"--- {m.genesis_key} ({m.braille_encoding}) | {m.master_loop} ---\n{m.ast_content[:1500]}\n\n"
+        return ctx
+    except Exception as e:
+        logger.warning(f"Braille Sandbox offline: {e}")
+        return ""
+
+
 def run_consensus(
     prompt: str,
     models: List[str] = None,
@@ -529,9 +563,51 @@ def run_consensus(
         from cognitive.trust_engine import get_trust_engine
         te = get_trust_engine()
         kpis = te.get_dashboard()
-        system_context = f"System trust: {kpis.get('overall_trust', 'unknown')}"
+        system_context = f"System trust: {kpis.get('overall_trust', 'unknown')}\n"
     except Exception:
         pass
+
+    # Inject Unified Memory Context
+    try:
+        from cognitive.unified_memory import get_unified_memory
+        um_results = get_unified_memory().search_all(prompt, top_k=3)
+        if um_results:
+            system_context += "\n[Unified Memory]\n"
+            for res in um_results:
+                system_context += f"- {res.get('memory_type', 'unknown')}: {res.get('content', '')}\n"
+    except Exception:
+        pass
+
+    # Inject Braille Sandbox Context
+    sandbox_context = query_braille_sandbox(prompt)
+    if sandbox_context:
+        system_context += "\n" + sandbox_context
+
+    # Inject Dynamic Semantic Braille Dictionary
+    try:
+        from core.dynamic_dictionary import get_dynamic_dictionary
+        semantic_dict = get_dynamic_dictionary().get_full_dictionary()
+        if semantic_dict:
+            system_context += "\n[Semantic Braille Dictionary Mapping]\n"
+            for item in semantic_dict:
+                system_context += f"- Word: '{item['word']}' = Braille: '{item['encoding']}' | Meaning: {item['meaning']}\n"
+    except Exception as e:
+        logger.warning(f"Semantic Dictionary offline Context injection failed: {e}")
+
+    # Inject Workspace Global Topological Context natively
+    try:
+        import os
+        from pathlib import Path
+        workspace_root = Path(os.getcwd())
+        tree = []
+        for p in workspace_root.rglob('*.py'):
+            if 'node_modules' not in str(p) and 'venv' not in str(p):
+                tree.append(str(p.relative_to(workspace_root)))
+        if tree:
+            system_context += "\n[Workspace Topology Tracker (Native Sandbox)]\n"
+            system_context += "Active Scripts:\n" + "\n".join(tree[:50]) + ("\n...truncated" if len(tree) > 50 else "")
+    except Exception as e:
+        logger.warning(f"Workspace Topology Context injection failed: {e}")
 
     # Layer 1
     responses = layer1_deliberate(prompt, models, system_prompt, context)
@@ -576,15 +652,6 @@ def run_consensus(
         source=source,
     )
 
-    # Extract potential JSON actuation block
-    actuation_intent = None
-    if "```json" in final_output:
-        try:
-            json_str = final_output.split("```json")[1].split("```")[0].strip()
-            actuation_intent = json.loads(json_str)
-        except Exception as e:
-            logger.warning(f"Failed to parse actuation JSON from consensus: {e}")
-
     # Route disagreements to governance approval queue + ML reward buffer
     if disagreements:
         try:
@@ -621,25 +688,6 @@ def run_consensus(
             })
         except Exception:
             pass
-            
-    # Execute Actuation if verified and intended
-    actuation_result = None
-    if actuation_intent and verification["passed"]:
-        try:
-            from cognitive.consensus_actuation import get_actuation_gateway
-            gateway = get_actuation_gateway()
-            actuation_result = gateway.execute_action(
-                action_payload=actuation_intent,
-                decision_context=prompt[:200],
-                trust_score=result.confidence
-            )
-            logger.info(f"Consensus directed actuation completed: {actuation_result}")
-        except Exception as e:
-            logger.error(f"Failed to execute consensus actuation: {e}")
-            actuation_result = {"status": "error", "error": str(e)}
-            
-    if actuation_result:
-        result.final_output += f"\n\n--- Actuation Result ---\n{json.dumps(actuation_result, indent=2)}"
 
     # Log to reporting engine
     try:

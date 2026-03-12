@@ -1,0 +1,1366 @@
+## thread_learning_orchestrator.py
+'\nThread-Based Learning Subagent System\n\nWindows-compatible version using threading instead of multiprocessing.\n\nArchitecture:\n- Master Thread: Orchestrates learning subagents\n- Study Subagents: Autonomous concept extraction (multi-thread)\n- Practice Subagents: Skill execution and validation (multi-thread)\n- Mirror Subagent: Self-reflection and gap identification (dedicated thread)\n- Result Collector Thread: Collects results from all subagents\n\nAll subagents run independently in background threads with IPC via queues.\n'
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+queue
+●●●●●● 2mm □△○
+Queue
+Empty
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+asdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+learning_subagent_system
+●●●●●● 2mm □△○
+TaskType
+MessageType
+LearningTask
+Message
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BaseThreadSubagent
+'\n    Base class for all learning subagents (thread-based).\n\n    Each subagent runs in its own thread with:\n    - Input queue for tasks\n    - Output queue for results\n    - Shared state for coordination\n    - Independent execution loop\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+agent_id
+task_queue
+result_queue
+shared_state
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Queue
+Queue
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+agent_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+task_queue
+●●●●●● 3mm △
+●●●●●● 1mm □
+result_queue
+●●●●●● 3mm △
+●●●●●● 1mm □
+shared_state
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start subagent in separate thread.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Subagent started (Thread: '
+●●●●●● 3mm △
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+timeout
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'Stop subagent gracefully.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Thread still alive after timeout'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Subagent stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Main execution loop (runs in separate thread).'
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Execution loop started'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Initializing resources'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Initialization complete'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+msg_dict
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+MessageType
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Shutdown signal received'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+MessageType
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Unhandled message type: '
+msg
+●●●●●● 2mm □△
+Empty
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Error in loop'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Cleaning up resources'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Cleanup complete'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Cleanup failed'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Execution loop ended'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize resources (override in subclass).'
+●●●●●● 1mm □
+_cleanup
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Cleanup resources (override in subclass).'
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Process a task (override in subclass).'
+task
+●●●●●● 1mm □
+'failed'
+task
+●●●●●● 1mm □
+'Unhandled task type for base subagent: '
+task
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+task
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] '
+task
+' | task_id='
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Failed to send result for unhandled task | task_id='
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_send_result
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Send task result back to master.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_send_heartbeat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Send heartbeat to master.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ThreadStudySubagent
+●●●●●● 3mm □△
+BaseThreadSubagent
+BaseThreadSubagent
+'\n    Autonomous study subagent (thread-based).\n\n    Runs independently to:\n    - Extract concepts from training materials\n    - Store in Layer 1 with trust scores\n    - Identify focus areas\n    '
+●●●●●● 1mm □
+_initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize database, retriever, and active learning system.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+cognitive.active_learning_system
+●●●●●● 2mm □△○
+GraceActiveLearningSystem
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Study subagent initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_learning_system
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+'Get or create learning system instance.'
+●●●●●● 3mm □△○
+cognitive.active_learning_system
+●●●●●● 2mm □△○
+GraceActiveLearningSystem
+●●●●●● 3mm ○
+GraceActiveLearningSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Process study task.'
+●●●●●● 2mm □
+task
+TaskType
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Received non-study task: '
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 1mm □
+'processing'
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Processing study task: '
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_system
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+file_topic
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+learning_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+task
+result
+●●●●●● 1mm □
+learning_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Task must have file_path or topic'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'completed'
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'concepts_extracted'
+'materials_studied'
+'focus_areas'
+'examples_stored'
+'prefetched_topics'
+result
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'materials_studied'
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'focus_areas'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'examples_stored'
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'prefetched_topics'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Study completed: '
+result
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+' concepts, '
+result
+●●●●●● 1mm □△
+'examples_stored'
+0
+●●●●●● 2mm □△
+' examples stored'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Task failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'failed'
+task
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ThreadPracticeSubagent
+●●●●●● 3mm □△
+BaseThreadSubagent
+BaseThreadSubagent
+'\n    Autonomous practice subagent (thread-based).\n\n    Runs independently to:\n    - Execute practice tasks\n    - Validate skills\n    - Update trust scores\n    '
+●●●●●● 1mm □
+_initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize database, retriever, and learning system.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Practice subagent initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_learning_system
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+'Get or create learning system instance.'
+●●●●●● 3mm □△○
+cognitive.active_learning_system
+●●●●●● 2mm □△○
+GraceActiveLearningSystem
+●●●●●● 3mm ○
+GraceActiveLearningSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Process practice task.'
+●●●●●● 2mm □
+task
+TaskType
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Received non-practice task: '
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 1mm □
+'processing'
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Processing practice task: '
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_system
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+practice_task
+●●●●●● 1mm □
+'description'
+'complexity'
+'requirements'
+task
+'Practice '
+task
+task
+0.5
+result
+●●●●●● 1mm □
+learning_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'completed'
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'outcome'
+'success'
+'approach'
+'feedback'
+result
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'approach'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'feedback'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Practice completed: '
+result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+'SUCCESS'
+'NEEDS_WORK'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Task failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'failed'
+task
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ThreadMirrorSubagent
+●●●●●● 3mm □△
+BaseThreadSubagent
+BaseThreadSubagent
+'\n    Mirror subagent for self-reflection (thread-based).\n\n    Runs independently to:\n    - Analyze learning patterns\n    - Identify gaps\n    - Generate improvement suggestions\n    '
+●●●●●● 1mm □
+_initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize mirror system.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Mirror subagent initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Process mirror task.'
+task
+●●●●●● 1mm □
+'processing'
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Processing reflection task'
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+'behavioral_patterns'
+'learning_progress'
+'improvement_suggestions'
+'self_awareness_score'
+'operations_observed'
+self_model
+●●●●●● 1mm □△
+'behavioral_patterns'
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □△
+'learning_progress'
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □△
+'improvement_suggestions'
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □△
+'self_awareness_score'
+0.0
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □△
+'operations_observed'
+0
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'completed'
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+analysis
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+Exception
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Task failed: '
+e
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'failed'
+task
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ThreadLearningOrchestrator
+'\n    Master thread-based orchestrator that coordinates all learning subagents.\n\n    Architecture:\n    - Spawns multiple study subagents (multi-thread)\n    - Spawns multiple practice subagents (multi-thread)\n    - Spawns mirror subagent (dedicated thread)\n    - Manages task distribution\n    - Collects results\n    - Monitors health\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+knowledge_base_path
+num_study_agents
+num_practice_agents
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+3
+2
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+ThreadStudySubagent
+●●●●●● 3mm △
+●●●●●● 3mm □△
+ThreadPracticeSubagent
+●●●●●● 3mm △
+●●●●●● 2mm □○
+ThreadMirrorSubagent
+●●●●●● 2mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_study_agents
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadStudySubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_practice_agents
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ThreadPracticeSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadMirrorSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Initialized with '
+num_study_agents
+' study agents, '
+num_practice_agents
+' practice agents, 1 mirror agent (thread-based)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start all subagents.'
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Starting all subagents (thread-based)...'
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] All subagents started (thread-based)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop all subagents.'
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Stopping all subagents...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] All subagents stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+submit_study_task
+●●●●●● 1mm □△
+self
+topic
+learning_objectives
+priority
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Submit study task to available study subagent.'
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Study task submitted: '
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 1mm ○
+●●●●●● 1mm □
+submit_practice_task
+●●●●●● 1mm □△
+self
+skill_name
+task_description
+complexity
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.5
+'Submit practice task to available practice subagent.'
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Practice task submitted: '
+skill_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_collect_results
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect results from all subagents (runs in separate thread).'
+logger
+●●●●●● 1mm □△
+'[RESULT-COLLECTOR] Started'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+msg_dict
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+msg_dict
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+MessageType
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'[RESULT-COLLECTOR] Task completed: '
+task
+' (status='
+task
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+TaskType
+task
+'completed'
+●●●●●● 2mm □
+task
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+reflect_task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+MessageType
+Empty
+Exception
+logger
+●●●●●● 1mm □△
+'[RESULT-COLLECTOR] Error: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[RESULT-COLLECTOR] Stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get orchestrator status.'
+●●●●●● 3mm ○
+'total_subagents'
+'study_agents'
+'practice_agents'
+'study_queue_size'
+'practice_queue_size'
+'mirror_queue_size'
+'total_tasks_submitted'
+'total_tasks_completed'
+'implementation'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+'thread-based'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

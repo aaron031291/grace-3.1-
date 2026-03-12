@@ -1,0 +1,1275 @@
+## test_connection_validation.py
+'\nTest Connection Status Validation\n==================================\nValidates that the connection validator itself works correctly,\nand that every connection action is tested and reported accurately.\n\nThis test suite ensures:\n1. Every connection category has validators\n2. Each validator produces properly structured reports\n3. Action validations cover expected functionality\n4. The full system report aggregates correctly\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+ConnectionCategory
+ConnectionStatus
+ValidationResult
+ActionValidation
+ConnectionReport
+SystemConnectionReport
+validate_database
+validate_qdrant
+validate_llm_provider
+validate_embedding_model
+validate_serpapi
+validate_kimi
+validate_opus
+validate_layer1_connectors
+validate_diagnostic_engine
+validate_autonomous_loop
+validate_continuous_learning
+validate_file_watcher
+validate_ml_intelligence
+validate_genesis_tracking
+validate_websocket_manager
+validate_all_connections
+●●●●●● 2mm △
+TestDataStructures
+'Verify core data structures are well-formed.'
+●●●●●● 1mm □
+test_action_validation_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+av
+●●●●●● 1mm □
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+av
+'test_action'
+av
+ValidationResult
+av
+5.2
+●●●●●● 1mm □
+test_connection_report_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'test_conn'
+report
+●●●●●● 3mm □△○
+report
+0
+report
+0
+report
+0
+●●●●●● 1mm □
+test_connection_report_with_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+4
+report
+2
+report
+1
+●●●●●● 1mm □
+test_connection_report_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+'name'
+'test'
+d
+'category'
+'external_api'
+d
+'status'
+'degraded'
+d
+'connected'
+●●●●●● 1mm □
+d
+'latency_ms'
+42.5
+'actions_passing'
+d
+'actions_failing'
+d
+'actions_total'
+d
+●●●●●● 1mm □
+test_system_report_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+SystemConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+'status'
+'all_connected'
+d
+'total_connections'
+3
+d
+'connected_count'
+3
+'categories'
+d
+'infrastructure'
+d
+'categories'
+●●●●●● 1mm □
+test_all_status_enums
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ConnectionStatus
+'connected'
+ConnectionStatus
+'disconnected'
+ConnectionStatus
+'degraded'
+ConnectionStatus
+'not_configured'
+ConnectionStatus
+'unknown'
+●●●●●● 1mm □
+test_all_category_enums
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ConnectionCategory
+'infrastructure'
+ConnectionCategory
+'external_api'
+ConnectionCategory
+'layer1_connector'
+ConnectionCategory
+'background_service'
+ConnectionCategory
+'websocket'
+●●●●●● 1mm □
+test_all_validation_result_enums
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ValidationResult
+'pass'
+ValidationResult
+'fail'
+ValidationResult
+'skip'
+ValidationResult
+'warn'
+●●●●●● 2mm △
+TestInfrastructureValidators
+'Test each infrastructure validator produces valid reports.'
+●●●●●● 1mm □
+test_validate_database_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'database'
+report
+ConnectionCategory
+report
+ConnectionStatus
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+'Import/init error'
+report
+''
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_validate_database_checks_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'health_check'
+action_names
+●●●●●● 1mm □
+test_validate_qdrant_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'qdrant'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_llm_provider_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_llm_provider
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'llm_provider'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_embedding_model_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'embedding_model'
+report
+ConnectionCategory
+●●●●●● 2mm △
+TestExternalAPIValidators
+'Test each external API validator produces valid reports.'
+●●●●●● 1mm □
+test_validate_serpapi_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_serpapi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'serpapi'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_kimi_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'kimi'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_opus_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_opus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'opus'
+report
+ConnectionCategory
+●●●●●● 2mm △
+TestLayer1Validators
+'Test Layer 1 connector validation.'
+●●●●●● 1mm □
+test_validate_layer1_connectors_returns_list
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+reports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+reports
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_layer1_reports_have_correct_category
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+reports
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_layer1_expected_connectors
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+names
+●●●●●● 1mm □
+r
+r
+reports
+expected_prefixes
+●●●●●● 1mm □
+'layer1_memory_mesh'
+'layer1_genesis_keys'
+'layer1_rag'
+'layer1_ingestion'
+'layer1_llm_orchestration'
+'layer1_version_control'
+prefix
+expected_prefixes
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+prefix
+name
+name
+names
+●●●●●● 2mm □△
+"Expected connector '"
+prefix
+"' not found in "
+names
+●●●●●● 1mm □
+test_layer1_connector_actions_validated
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+reports
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+1
+'Connector '
+report
+' has no action validations'
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'bus_registration'
+action_names
+'Connector '
+report
+' missing bus_registration check'
+●●●●●● 2mm △
+TestBackgroundServiceValidators
+'Test background service validators.'
+●●●●●● 1mm □
+test_validate_diagnostic_engine_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'diagnostic_engine'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_autonomous_loop_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_autonomous_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'autonomous_loop'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_continuous_learning_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'continuous_learning'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_file_watcher_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_file_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'file_watcher'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_ml_intelligence_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'ml_intelligence'
+report
+ConnectionCategory
+●●●●●● 1mm □
+test_validate_genesis_tracking_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_genesis_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'genesis_tracking'
+report
+ConnectionCategory
+●●●●●● 2mm △
+TestWebSocketValidators
+'Test WebSocket validators.'
+●●●●●● 1mm □
+test_validate_websocket_manager_returns_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_websocket_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+ConnectionReport
+●●●●●● 2mm □△
+report
+'websocket_manager'
+report
+ConnectionCategory
+●●●●●● 2mm △
+TestFullSystemValidation
+'Test the full system validation aggregation.'
+●●●●●● 1mm □
+test_validate_all_returns_system_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+SystemConnectionReport
+●●●●●● 2mm □△
+report
+0
+report
+'all_connected'
+'partial'
+'degraded'
+'critical'
+●●●●●● 1mm □
+test_validate_all_has_all_categories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+categories_found
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+report
+categories_found
+●●●●●● 1mm □△
+conn
+●●●●●● 2mm □△
+'infrastructure'
+categories_found
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+categories_found
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_validate_all_counts_are_consistent
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+report
+c
+●●●●●● 2mm □△
+disconnected
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+report
+c
+ConnectionStatus
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+total
+report
+connected
+report
+disconnected
+●●●●●● 1mm □
+test_validate_all_action_counts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_actions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+report
+●●●●●● 2mm □△
+total_passing
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+report
+●●●●●● 2mm □△
+total_failing
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+report
+●●●●●● 2mm □△
+report
+total_actions
+report
+total_passing
+report
+total_failing
+●●●●●● 1mm □
+test_validate_all_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+d
+'timestamp'
+d
+'total_connections'
+d
+'connected_count'
+d
+'disconnected_count'
+d
+'degraded_count'
+d
+'connections'
+d
+'categories'
+d
+'total_actions_validated'
+d
+'total_actions_passing'
+d
+'total_actions_failing'
+d
+●●●●●● 1mm □
+test_validate_all_minimum_connections
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Ensure we're checking a reasonable number of connections."
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+10
+'Expected at least 10 connections to validate, got '
+report
+●●●●●● 1mm □
+test_validate_with_filters
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report_no_layer1
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report_full
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report_full
+report_no_layer1
+●●●●●● 1mm □
+test_every_connection_has_at_least_one_action
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Every connection should validate at least one action to prove\n        the connection is actually doing its job.\n        '
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+report
+conn
+0
+'Connection '
+conn
+" has no action validations — we can't verify it's doing its job"
+●●●●●● 1mm □
+test_infrastructure_connections_are_validated
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Infrastructure connections should have deep validation.'
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+infra
+●●●●●● 1mm □
+c
+c
+report
+c
+ConnectionCategory
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+infra
+●●●●●● 2mm □△
+4
+'Expected 4 infrastructure connections, got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+infra
+●●●●●● 2mm □△
+infra_names
+●●●●●● 1mm □
+c
+c
+infra
+'database'
+infra_names
+'qdrant'
+infra_names
+'llm_provider'
+infra_names
+'embedding_model'
+infra_names
+●●●●●● 2mm △
+TestActionCompleteness
+'\n    Verify that key connections validate all the actions they should\n    be performing — ensuring each connection does its job.\n    '
+●●●●●● 1mm □
+test_database_validates_all_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'health_check'
+action_names
+'session_factory'
+action_names
+'tables_exist'
+action_names
+●●●●●● 1mm □
+test_qdrant_validates_all_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Import/init error'
+report
+''
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'is_connected'
+action_names
+●●●●●● 2mm □
+report
+'list_collections'
+action_names
+●●●●●● 1mm □
+test_llm_validates_all_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_llm_provider
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Import/init error'
+report
+''
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'is_running'
+action_names
+●●●●●● 2mm □
+report
+'get_all_models'
+action_names
+●●●●●● 1mm □
+test_layer1_connectors_validate_registrations
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+reports
+●●●●●● 2mm □
+'message_bus'
+report
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'bus_registration'
+action_names
+report
+': missing bus_registration validation'
+'autonomous_actions'
+action_names
+report
+': missing autonomous_actions validation'
+'request_handlers'
+action_names
+report
+': missing request_handlers validation'
+●●●●●● 1mm □
+test_websocket_validates_all_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_websocket_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+action_names
+●●●●●● 1mm □
+a
+a
+report
+'manager_operational'
+action_names
+'client_listing'
+action_names
+'event_history'
+action_names
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests and print comprehensive results.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'CONNECTION STATUS VALIDATION - COMPREHENSIVE TEST'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nOverall Status: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total Connections: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Connected: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Disconnected: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Degraded: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nActions Validated: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Actions Passing: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Actions Failing: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DETAILED RESULTS'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+current_category
+●●●●●● 1mm □
+●●●●●● 2mm □
+conn
+report
+●●●●●● 2mm □
+conn
+current_category
+current_category
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  ['
+current_category
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+']'
+●●●●●● 2mm □△
+status_icon
+●●●●●● 1mm □
+ConnectionStatus
+ConnectionStatus
+ConnectionStatus
+ConnectionStatus
+ConnectionStatus
+'[OK]'
+'[FAIL]'
+'[WARN]'
+'[SKIP]'
+'[?]'
+●●●●●● 1mm □△
+conn
+'[?]'
+●●●●●● 2mm □△
+latency_str
+●●●●●● 1mm □
+conn
+' ('
+conn
+'.0f'
+'ms)'
+''
+actions_str
+●●●●●● 1mm □
+conn
+0
+' ['
+conn
+'/'
+conn
+' actions]'
+''
+msg_str
+●●●●●● 1mm □
+conn
+' - '
+conn
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    '
+status_icon
+' '
+conn
+latency_str
+actions_str
+msg_str
+●●●●●● 2mm □△
+action
+conn
+result_icon
+●●●●●● 1mm □
+ValidationResult
+ValidationResult
+ValidationResult
+ValidationResult
+'  +'
+'  X'
+'  !'
+'  -'
+●●●●●● 1mm □△
+action
+'  ?'
+●●●●●● 2mm □△
+a_latency
+●●●●●● 1mm □
+action
+' ('
+action
+'.0f'
+'ms)'
+''
+a_msg
+●●●●●● 1mm □
+action
+' - '
+action
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      '
+result_icon
+' '
+action
+': '
+action
+a_latency
+a_msg
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+'all_connected'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'ALL CONNECTIONS VERIFIED AND VALIDATED'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+report
+'partial'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'PARTIAL CONNECTIVITY - '
+report
+' connection(s) need attention'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+'critical'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'CRITICAL - Infrastructure connections failing'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'STATUS: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+'all_connected'
+0
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

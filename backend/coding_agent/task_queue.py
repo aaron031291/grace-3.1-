@@ -50,7 +50,6 @@ def submit(
     priority: int = 5,
     origin: str = "unknown",
     error_class: str = "",
-    explain_fix: str = "",
 ) -> str:
     """
     Submit a task to the coding agent queue.
@@ -86,7 +85,6 @@ def submit(
         "priority": priority,
         "origin": origin,
         "error_class": error_class,
-        "explain_fix": explain_fix,
         "status": "pending",
         "attempts": 0,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -131,10 +129,7 @@ def _persist_task(task: Dict) -> None:
                 "task_id": task["task_id"],
                 "task_type": task["task_type"],
                 "instructions": task["instructions"][:2000],
-                "context_data": json.dumps({
-                    **task["context"],
-                    "explain_fix": task.get("explain_fix", "")
-                })[:4000],
+                "context_data": json.dumps(task["context"])[:4000],
                 "priority": task["priority"],
                 "origin": task["origin"],
                 "error_class": task["error_class"],
@@ -144,7 +139,7 @@ def _persist_task(task: Dict) -> None:
                 "updated_at": task["updated_at"],
             })
     except Exception as e:
-        logger.error("[CODING-AGENT] Task persistence skipped (table may not exist yet): %s", e)
+        logger.debug("[CODING-AGENT] Task persistence skipped (table may not exist yet): %s", e)
 
 
 def poll() -> Optional[Dict]:
@@ -316,23 +311,6 @@ def _build_memory_context(instructions: str, error_class: str = "") -> str:
     except Exception:
         pass
 
-    # 4. Recent Successful Validations (from MongoDB validation_results)
-    try:
-        from database.mongo_client import get_db
-        db = get_db()
-        if db is not None:
-            collection = db["validation_results"]
-            successes = collection.find({"status": "success"}).sort("completed_at", -1).limit(3)
-            val_lines = []
-            for doc in successes:
-                target = doc.get("target", "unknown")
-                duration = doc.get("duration_sec", 0)
-                val_lines.append(f"  - {target} passed in {duration:.1f}s")
-            if val_lines:
-                sections.append("[RECENT SUCCESSFUL VALIDATIONS]\n" + "\n".join(val_lines))
-    except Exception:
-        pass
-
     if not sections:
         return ""
 
@@ -480,12 +458,8 @@ def _default_handler(task: Dict) -> Dict:
         enriched_instructions += (
             f"[Self-healing task — {error_class} error "
             f"from {ctx.get('location', ctx.get('file', 'unknown'))}]\n"
-            f"Error: {ctx.get('sql_error', ctx.get('error', ''))}\n"
+            f"Error: {ctx.get('sql_error', ctx.get('error', ''))}\n\n"
         )
-        if ctx.get("existing_code"):
-            enriched_instructions += f"\n[EXISTING SOURCE CODE OF {ctx.get('file', 'target_file')}]\n```python\n{ctx.get('existing_code')}\n```\n\n"
-        else:
-            enriched_instructions += "\n"
     enriched_instructions += instructions
 
     # ── 4. Ghost Memory — start tracking this task ──────────────────────
@@ -495,17 +469,8 @@ def _default_handler(task: Dict) -> Dict:
     except Exception:
         pass
 
-    # ── 4b. Context-Aware Prompt Override ────────────────────────────────
-    system_prompt = (
-        "You are a surgical self-healing AI. You must analyze the error trace, identify the logical fault, "
-        "and output ONLY the complete patched target file. Do not invent new features; surgically fix the error."
-    ) if error_class else (
-        "You are Grace's elite coding agent. Write elegant, robust, and cleanly documented Python code. "
-        "Output the full file contents of the requested file."
-    )
-
     # ── 5. Call Qwen ─────────────────────────────────────────────────────
-    code_result = net.execute_task(enriched_instructions, use_consensus=False, system_prompt=system_prompt)
+    code_result = net.execute_task(enriched_instructions, use_consensus=False)
     generated_code = code_result.get("code", "")
 
     # ── 5b. Verification Pass — trust gate before anything touches disk ──
@@ -566,79 +531,54 @@ def _default_handler(task: Dict) -> Dict:
         except Exception as ve:
             logger.debug("[CODING-AGENT] Verification pass skipped: %s", ve)
 
-    # ── 6. Quarantine and Verify (Context Shadowing) ───────────────────────
+    # ── 6. Apply to disk if we have a target file ───────────────────────
     target_file = ctx.get("target_file") or ctx.get("file") or ctx.get("location")
     if generated_code and target_file and target_file.endswith(".py"):
         try:
-            from verification.context_shadower import shadower
-            
-            # Use the shadower to write to __grACE_shadow, verify via VVT, and atomic swap if perfect
-            shadow_result = shadower.propose_module_update(
-                target_file_path=target_file,
-                new_code_content=generated_code,
-                module_name_to_test=target_file.split("/")[-1].replace(".py", "") # Simple heuristic
+            from coding_agent.fix_applier import get_fix_applier
+            apply_result = get_fix_applier().apply(
+                file_path=target_file,
+                generated_code=generated_code,
+                task_id=task["task_id"],
+                task_description=task["instructions"][:200],
             )
-            
             code_result["apply_result"] = {
-                "success": shadow_result.get("success", False),
-                "file": target_file,
-                "lines": len(generated_code.splitlines()) if shadow_result.get("success") else 0,
-                "status": shadow_result.get("status", "UNKNOWN_SHADOW_ERROR"),
-                "trust_coin": shadow_result.get("trust_coin", "DENIED"),
-                "error": shadow_result.get("error", "")[:150]
+                "success": apply_result.success,
+                "file": apply_result.file_path,
+                "lines": apply_result.lines_written,
+                "rolled_back": apply_result.rolled_back,
+                "reloaded": apply_result.module_reloaded,
+                "error": apply_result.error[:150] if apply_result.error else "",
             }
-            
-            if shadow_result.get("success"):
+            if apply_result.success:
                 logger.info(
-                    "[CODING-AGENT] ✅ Code verified in quarantine and HOT-SWAPPED: %s (%s)",
-                    target_file, shadow_result.get("trust_coin")
+                    "[CODING-AGENT] ✅ Fix applied to disk: %s (%d lines)",
+                    target_file, apply_result.lines_written,
                 )
             else:
                 logger.warning(
-                    "[CODING-AGENT] ⚠️ Context Shadowing blocked mutation on VVT Failure: %s",
-                    target_file
+                    "[CODING-AGENT] ⚠️ Apply failed for %s: %s",
+                    target_file, apply_result.error[:100],
                 )
         except Exception as e:
-            logger.error("[CODING-AGENT] Context shadower error: %s", e)
+            logger.error("[CODING-AGENT] fix_applier error: %s", e)
             code_result["apply_result"] = {"success": False, "error": str(e)[:200]}
     else:
         code_result["apply_result"] = {
             "success": False,
-            "reason": "no valid python target_file in task context — manual review needed",
+            "reason": "no target_file in task context — manual review needed",
             "code_preview": generated_code[:200] if generated_code else "",
         }
 
     # ── 7. Store outcome into all 3 memory layers ───────────────────────
     apply_ok = code_result["apply_result"].get("success", False)
-    trust_coin = code_result.get("apply_result", {}).get("trust_coin")
-
-    # Only pass trust_coin downstream if the shadower minted one
-    if apply_ok and trust_coin:
-        from cognitive.unified_memory import get_unified_memory
-        # By passing the trust coin, we prove to the TrustGate we belong in episodic/procedural memory
-        _store_memory_outcome(
-            instructions=instructions,
-            error_class=error_class,
-            success=True,
-            result=code_result,
-            task_id=task["task_id"],
-        )
-        get_unified_memory().store_episode(
-            problem=instructions[:200],
-            action=f"coding_agent.{error_class or 'general'}",
-            outcome=f"success: Hot-swapped {target_file}",
-            trust=0.9,
-            source="context_shadower",
-            trust_coin=trust_coin
-        )
-    else:
-        _store_memory_outcome(
-            instructions=instructions,
-            error_class=error_class,
-            success=False,
-            result=code_result,
-            task_id=task["task_id"],
-        )
+    _store_memory_outcome(
+        instructions=instructions,
+        error_class=error_class,
+        success=apply_ok or bool(generated_code),
+        result=code_result,
+        task_id=task["task_id"],
+    )
 
     return code_result
 

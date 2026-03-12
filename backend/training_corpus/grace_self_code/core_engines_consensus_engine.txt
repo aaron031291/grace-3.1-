@@ -1,0 +1,37 @@
+## consensus_engine.py
+'\nConsensus Engine — re-export from cognitive.consensus_engine.\n\nThis is the canonical import path going forward.\nAll consensus logic stays in cognitive/consensus_engine.py (the real implementation).\nThis module provides the clean import path for the new architecture.\n'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+layer1_deliberate
+layer2_consensus
+layer3_align
+layer4_verify
+get_available_models
+queue_autonomous_query
+get_batch_queue
+run_batch
+MODEL_REGISTRY
+ModelResponse
+ConsensusResult
+_check_model_available
+_get_client
+_build_model_registry
+__all__
+●●●●●● 1mm □
+'run_consensus'
+'layer1_deliberate'
+'layer2_consensus'
+'layer3_align'
+'layer4_verify'
+'get_available_models'
+'queue_autonomous_query'
+'get_batch_queue'
+'run_batch'
+'MODEL_REGISTRY'
+'ModelResponse'
+'ConsensusResult'
+'_check_model_available'
+'_get_client'
+'_build_model_registry'

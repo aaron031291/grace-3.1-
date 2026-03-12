@@ -1,0 +1,143 @@
+## raw_ask.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+requests
+sys
+●●●●●● 1mm □△
+'c:\\Users\\aaron\\Desktop\\grace-3.1\\backend'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+prompt
+●●●●●● 1mm □
+"\nWe have successfully implemented the 'Continual Context Evolution' architecture in the Grace system. \nThis includes:\n- Shadow Execution context (__grACE_shadow/) for sandboxing LLM-generated code.\n- Atomic hot-swapping into sys.modules.\n- TrustGate and VVT (Vision-Voice-Text) Platinum Coins for cryptographic-style proof of verification before mutating memory or code.\n- Memory Heat Circuit Breaker to drop the system into READ_ONLY mode if it modifies memory/code too rapidly.\n\nAs an AI architecture advisor, what should be the EXACT next step for the Grace architecture to achieve full autonomy, safety, and AGI-like capabilities? What new component or capability is missing now that the self-updating context loop is secure? Please give 1 clear recommendation.\n"
+●●●●●● 1mm □
+query_qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- Querying Qwen 3.5 (local) ---'
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'http://localhost:11434/api/chat'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+'qwen3:32b'
+'role'
+'content'
+'user'
+prompt
+●●●●●● 1mm □
+res
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+res
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cp1252'
+'ignore'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to query Qwen: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+query_kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Querying Kimi (cloud) ---'
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://api.moonshot.cn/v1/chat/completions'
+headers
+●●●●●● 1mm □
+'Authorization'
+'Content-Type'
+'Bearer '
+settings
+'application/json'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'moonshot-v1-auto'
+'role'
+'content'
+'user'
+prompt
+res
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+res
+'choices'
+0
+'message'
+'content'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cp1252'
+'ignore'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to query Kimi: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+query_qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,312 @@
+## config.py
+'\nSecurity Configuration for GRACE\n\nCentralized security settings loaded from environment variables.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 2mm △
+SecurityConfig
+'\n    Centralized security configuration.\n\n    All security-related settings in one place for easy management.\n    '
+CORS_ALLOWED_ORIGINS
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CORS_ALLOW_CREDENTIALS
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+CORS_ALLOWED_METHODS
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CORS_ALLOWED_HEADERS
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CORS_MAX_AGE
+●●●●●● 2mm ○
+600
+RATE_LIMIT_ENABLED
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+RATE_LIMIT_DEFAULT
+●●●●●● 1mm ○
+'100/minute'
+RATE_LIMIT_AUTH
+●●●●●● 1mm ○
+'10/minute'
+RATE_LIMIT_UPLOAD
+●●●●●● 1mm ○
+'20/minute'
+RATE_LIMIT_AI
+●●●●●● 1mm ○
+'30/minute'
+RATE_LIMIT_BURST
+●●●●●● 2mm ○
+10
+SESSION_COOKIE_SECURE
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+SESSION_COOKIE_HTTPONLY
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+SESSION_COOKIE_SAMESITE
+●●●●●● 1mm ○
+'lax'
+SESSION_MAX_AGE_HOURS
+●●●●●● 2mm ○
+24
+GENESIS_ID_MAX_AGE_DAYS
+●●●●●● 2mm ○
+30
+CSP_DEFAULT_SRC
+●●●●●● 1mm ○
+"'self'"
+CSP_SCRIPT_SRC
+●●●●●● 1mm ○
+"'self' 'unsafe-inline'"
+CSP_STYLE_SRC
+●●●●●● 1mm ○
+"'self' 'unsafe-inline'"
+CSP_IMG_SRC
+●●●●●● 1mm ○
+"'self' data: blob:"
+CSP_CONNECT_SRC
+●●●●●● 1mm ○
+"'self'"
+CSP_FRAME_ANCESTORS
+●●●●●● 1mm ○
+"'none'"
+X_CONTENT_TYPE_OPTIONS
+●●●●●● 1mm ○
+'nosniff'
+X_FRAME_OPTIONS
+●●●●●● 1mm ○
+'DENY'
+X_XSS_PROTECTION
+●●●●●● 1mm ○
+'1; mode=block'
+REFERRER_POLICY
+●●●●●● 1mm ○
+'strict-origin-when-cross-origin'
+PERMISSIONS_POLICY
+●●●●●● 1mm ○
+'geolocation=(), microphone=(), camera=()'
+HSTS_ENABLED
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+HSTS_MAX_AGE
+●●●●●● 2mm ○
+31536000
+HSTS_INCLUDE_SUBDOMAINS
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+HSTS_PRELOAD
+●●●●●● 3mm △
+●●●●●● 1mm □
+MAX_REQUEST_SIZE_MB
+●●●●●● 2mm ○
+50
+MAX_FILE_UPLOAD_SIZE_MB
+●●●●●● 2mm ○
+5120
+MAX_STRING_LENGTH
+●●●●●● 2mm ○
+10000
+MAX_ARRAY_LENGTH
+●●●●●● 2mm ○
+1000
+ALLOWED_FILE_EXTENSIONS
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LOG_SECURITY_EVENTS
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+LOG_FAILED_AUTH
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+LOG_RATE_LIMIT_EXCEEDED
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+LOG_SUSPICIOUS_REQUESTS
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+PRODUCTION_MODE
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+__post_init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load overrides from environment variables.'
+env_origins
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'CORS_ALLOWED_ORIGINS'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+env_origins
+●●●●●● 3mm △
+●●●●●● 1mm □
+o
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+o
+env_origins
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'PRODUCTION_MODE'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'SESSION_COOKIE_SECURE'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'RATE_LIMIT_ENABLED'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'RATE_LIMIT_DEFAULT'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'RATE_LIMIT_AUTH'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'LOG_SECURITY_EVENTS'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+●●●●●● 1mm □
+get_csp_header
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Build Content-Security-Policy header value.'
+directives
+●●●●●● 1mm □
+'default-src '
+●●●●●● 3mm △
+'script-src '
+●●●●●● 3mm △
+'style-src '
+●●●●●● 3mm △
+'img-src '
+●●●●●● 3mm △
+'connect-src '
+●●●●●● 3mm △
+'frame-ancestors '
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'; '
+●●●●●● 1mm □△
+directives
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_hsts_header
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Build Strict-Transport-Security header value.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+''
+value
+●●●●●● 1mm □
+'max-age='
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+value
+'; includeSubDomains'
+●●●●●● 2mm □
+●●●●●● 3mm △
+value
+'; preload'
+●●●●●● 3mm ○
+value
+●●●●●● 1mm ○
+dataclass
+_security_config
+●●●●●● 2mm □○
+SecurityConfig
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the security configuration singleton.'
+●●●●●● 2mm □
+_security_config
+●●●●●● 2mm □
+_security_config
+●●●●●● 1mm □
+SecurityConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_security_config
+SecurityConfig

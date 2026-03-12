@@ -1,0 +1,1707 @@
+## dynamic_test_generator.py
+'\nDynamic Test Generator for Grace\n\nEnables Grace to automatically generate and execute tests for any new logic,\ncode, or implementations. Works with the sandbox for safe execution.\n\nFeatures:\n- Parse Python code to understand structure\n- Generate appropriate unit tests\n- Generate integration tests\n- Execute in sandbox environment\n- Validate and report results\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+importlib.util
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CodeAnalysis
+'Analysis of a code module.'
+module_name
+●●●●●● 1mm ○
+file_path
+●●●●●● 1mm ○
+classes
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+functions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+imports
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docstring
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+GeneratedTest
+'A generated test case.'
+test_name
+●●●●●● 1mm ○
+test_code
+●●●●●● 1mm ○
+test_type
+●●●●●● 1mm ○
+target_function
+●●●●●● 1mm ○
+target_class
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+description
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+TestExecutionResult
+'Result of test execution.'
+test_name
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+duration
+●●●●●● 3mm ○
+output
+●●●●●● 1mm ○
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+CodeAnalyzer
+'Analyzes Python code structure for test generation.'
+●●●●●● 1mm □
+analyze_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Analyze a Python file to extract testable components.\n\n        Args:\n            file_path: Path to the Python file\n\n        Returns:\n            CodeAnalysis with extracted information\n        '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+source_code
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source_code
+●●●●●● 2mm □△
+module_name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+CodeAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+alias
+node
+analysis
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+module
+●●●●●● 1mm □
+node
+''
+alias
+node
+analysis
+●●●●●● 1mm □△
+module
+'.'
+alias
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+class_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+class_info
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+0
+func_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+func_info
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+CodeAnalysis
+●●●●●● 1mm □
+analyze_code
+●●●●●● 1mm □△
+self
+source_code
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'dynamic_module'
+'\n        Analyze Python source code string.\n\n        Args:\n            source_code: Python source code\n            module_name: Name for the module\n\n        Returns:\n            CodeAnalysis with extracted information\n        '
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source_code
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+CodeAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+class_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+class_info
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+func_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+func_info
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+CodeAnalysis
+●●●●●● 1mm □
+_analyze_class
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+'Analyze a class definition.'
+methods
+●●●●●● 1mm □
+item
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+item
+ast
+●●●●●● 2mm □△
+methods
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'docstring'
+'methods'
+'bases'
+'decorators'
+node
+ast
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+methods
+●●●●●● 3mm △
+●●●●●● 1mm □△
+base
+●●●●●● 2mm □△
+base
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+d
+node
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_analyze_function
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+ast
+'Analyze a function definition.'
+args
+●●●●●● 1mm □
+arg
+node
+arg_info
+●●●●●● 1mm □
+'name'
+arg
+●●●●●● 2mm □
+arg
+arg_info
+'type'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+arg
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □△
+arg_info
+●●●●●● 2mm □△
+return_type
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+node
+return_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'docstring'
+'args'
+'return_type'
+'decorators'
+'is_async'
+node
+ast
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+args
+return_type
+●●●●●● 3mm △
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+d
+node
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_name
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+'Get name from AST node.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+'.'
+node
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_decorator_name
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+'Get decorator name.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+'.'
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_annotation
+●●●●●● 1mm □△
+self
+node
+●●●●●● 2mm □△
+'Get type annotation as string.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+'['
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+']'
+●●●●●● 3mm ○
+'Any'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+DynamicTestGenerator
+'\n    Generates tests dynamically for any Python code.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CodeAnalyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+generate_tests_for_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Generate tests for a Python file.\n\n        Args:\n            file_path: Path to the Python file\n\n        Returns:\n            List of generated tests\n        '
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+generate_tests_for_code
+●●●●●● 1mm □△
+self
+source_code
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'dynamic_module'
+'\n        Generate tests for Python source code.\n\n        Args:\n            source_code: Python source code\n            module_name: Name for the module\n\n        Returns:\n            List of generated tests\n        '
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+source_code
+module_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+_generate_tests_from_analysis
+●●●●●● 1mm □△
+self
+analysis
+●●●●●● 2mm □△
+CodeAnalysis
+'Generate tests from code analysis.'
+tests
+●●●●●● 1mm □
+func
+analysis
+●●●●●● 2mm □
+func
+'name'
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+tests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+analysis
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cls
+analysis
+tests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cls
+analysis
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tests
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tests
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+_generate_function_tests
+●●●●●● 1mm □△
+self
+func
+analysis
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+CodeAnalysis
+'Generate tests for a function.'
+tests
+●●●●●● 1mm □
+func_name
+●●●●●● 1mm □
+func
+'name'
+tests
+●●●●●● 1mm □△
+GeneratedTest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'args'
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+a
+'name'
+'self'
+a
+func
+'args'
+●●●●●● 2mm □△
+tests
+●●●●●● 1mm □△
+GeneratedTest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'args'
+tests
+●●●●●● 1mm □△
+GeneratedTest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+●●●●●● 1mm □△
+'return_type'
+●●●●●● 2mm □△
+tests
+●●●●●● 1mm □△
+GeneratedTest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tests
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+_generate_class_tests
+●●●●●● 1mm □△
+self
+cls
+analysis
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+CodeAnalysis
+'Generate tests for a class.'
+tests
+●●●●●● 1mm □
+class_name
+●●●●●● 1mm □
+cls
+'name'
+tests
+●●●●●● 1mm □△
+GeneratedTest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+method
+cls
+'methods'
+●●●●●● 2mm □
+method
+'name'
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+tests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+method
+cls
+analysis
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tests
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+_generate_method_tests
+●●●●●● 1mm □△
+self
+method
+cls
+analysis
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+CodeAnalysis
+'Generate tests for a class method.'
+tests
+●●●●●● 1mm □
+method_name
+●●●●●● 1mm □
+method
+'name'
+class_name
+●●●●●● 1mm □
+cls
+'name'
+tests
+●●●●●● 1mm □△
+GeneratedTest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tests
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm □
+_create_existence_test
+●●●●●● 1mm □△
+self
+func_name
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Create test that checks function existence.'
+●●●●●● 3mm ○
+'\ndef test_'
+func_name
+'_exists():\n    """Test that '
+func_name
+' exists and is callable."""\n    from '
+module_name
+' import '
+func_name
+'\n    assert callable('
+func_name
+'), "'
+func_name
+' should be callable"\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_no_args_test
+●●●●●● 1mm □△
+self
+func_name
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Create test for function with no args.'
+●●●●●● 3mm ○
+'\ndef test_'
+func_name
+'_no_args():\n    """Test '
+func_name
+' can be called without arguments."""\n    from '
+module_name
+' import '
+func_name
+'\n    try:\n        result = '
+func_name
+'()\n        assert result is not None or result is None  # Just check it doesn\'t crash\n    except TypeError as e:\n        # If it requires args, that\'s expected\n        if "required" in str(e) or "argument" in str(e):\n            pass\n        else:\n            raise\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_none_args_test
+●●●●●● 1mm □△
+self
+func
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+'Create test with None arguments.'
+func_name
+●●●●●● 1mm □
+func
+'name'
+args
+●●●●●● 1mm □
+func
+'args'
+none_args
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+'None'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\ndef test_'
+func_name
+'_handles_none():\n    """Test '
+func_name
+' handles None arguments gracefully."""\n    from '
+module_name
+' import '
+func_name
+'\n    try:\n        result = '
+func_name
+'('
+none_args
+')\n        # If it accepts None, that\'s fine\n    except (TypeError, ValueError, AttributeError) as e:\n        # Expected - function doesn\'t accept None\n        pass\n    except Exception as e:\n        # Unexpected error type - might indicate a bug\n        raise AssertionError(f"Unexpected error type: {type(e).__name__}: {e}")\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_return_type_test
+●●●●●● 1mm □△
+self
+func
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+'Create return type test.'
+func_name
+●●●●●● 1mm □
+func
+'name'
+return_type
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+'return_type'
+'Any'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\ndef test_'
+func_name
+'_return_type():\n    """Test '
+func_name
+' returns expected type."""\n    from '
+module_name
+' import '
+func_name
+'\n    # This is a placeholder - actual implementation depends on function signature\n    pass\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_class_instantiation_test
+●●●●●● 1mm □△
+self
+cls
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+'Create class instantiation test.'
+class_name
+●●●●●● 1mm □
+cls
+'name'
+●●●●●● 3mm ○
+'\ndef test_'
+class_name
+'_instantiation():\n    """Test '
+class_name
+' can be instantiated."""\n    from '
+module_name
+' import '
+class_name
+'\n    try:\n        instance = '
+class_name
+'()\n        assert instance is not None\n    except TypeError as e:\n        # If __init__ requires args, try to detect and handle\n        if "required" in str(e) or "argument" in str(e):\n            # Class requires arguments - this test just validates import works\n            assert '
+class_name
+' is not None\n        else:\n            raise\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_method_existence_test
+●●●●●● 1mm □△
+self
+method_name
+cls
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+'Create method existence test.'
+class_name
+●●●●●● 1mm □
+cls
+'name'
+●●●●●● 3mm ○
+'\ndef test_'
+class_name
+'_'
+method_name
+'_exists():\n    """Test '
+class_name
+'.'
+method_name
+' exists."""\n    from '
+module_name
+' import '
+class_name
+'\n    assert hasattr('
+class_name
+", '"
+method_name
+'\'), "'
+class_name
+' should have '
+method_name
+' method"\n    assert callable(getattr('
+class_name
+", '"
+method_name
+'\')), "'
+method_name
+' should be callable"\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_test_file
+●●●●●● 1mm □△
+self
+tests
+output_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GeneratedTest
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Generate a complete test file from generated tests.\n\n        Args:\n            tests: List of generated tests\n            output_path: Optional path to write the file\n\n        Returns:\n            Generated test file content\n        '
+header
+●●●●●● 1mm □
+'"""\nAuto-generated tests by Grace Dynamic Test Generator.\nGenerated at: {timestamp}\n"""\n\nimport pytest\nfrom typing import Any\n\n'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_code
+●●●●●● 1mm □
+header
+test
+tests
+test_code
+test
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 2mm □
+output_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+test_code
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Generated test file: '
+output_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+test_code
+●●●●●● 1mm ○
+●●●●●● 2mm △
+SandboxTestExecutor
+'\n    Executes tests in a sandbox environment for safe testing.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+sandbox_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Initialize the sandbox executor.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+sandbox_dir
+Path
+●●●●●● 1mm □△
+sandbox_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+TestExecutionResult
+●●●●●● 1mm □
+execute_test_code
+●●●●●● 1mm □△
+self
+test_code
+module_code
+module_name
+timeout
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'test_module'
+60
+'\n        Execute test code in sandbox.\n\n        Args:\n            test_code: Test code to execute\n            module_code: Optional module code being tested\n            module_name: Name for the module\n            timeout: Execution timeout in seconds\n\n        Returns:\n            List of test execution results\n        '
+results
+●●●●●● 1mm □
+test_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_code
+module_path
+●●●●●● 1mm □
+test_dir
+●●●●●● 3mm □△
+module_name
+'.py'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+module_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+module_code
+●●●●●● 2mm □△
+test_path
+●●●●●● 1mm □
+test_dir
+●●●●●● 3mm □△
+'test_'
+module_name
+'.py'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+test_code
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+sys
+'-m'
+'pytest'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+test_path
+●●●●●● 2mm □△
+'-v'
+'--tb=short'
+'--timeout='
+timeout
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+proc
+proc
+duration
+●●●●●● 2mm □△
+subprocess
+results
+●●●●●● 1mm □△
+TestExecutionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+results
+●●●●●● 1mm □△
+TestExecutionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+test_dir
+●●●●●● 2mm □△
+OSError
+●●●●●● 3mm △
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+TestExecutionResult
+●●●●●● 1mm □
+_parse_pytest_output
+●●●●●● 1mm □△
+self
+stdout
+stderr
+duration
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Parse pytest output into results.'
+results
+●●●●●● 1mm □
+line
+stdout
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'::'
+line
+●●●●●● 2mm □
+' PASSED'
+line
+test_name
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+'::'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+' PASSED'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+TestExecutionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+' FAILED'
+line
+test_name
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+'::'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+' FAILED'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+TestExecutionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+' ERROR'
+line
+test_name
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+'::'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+' ERROR'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+TestExecutionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+TestExecutionResult
+●●●●●● 2mm △
+AutonomousTestBuilder
+'\n    Main class for autonomous test building and execution.\n\n    Combines code analysis, test generation, and sandbox execution.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DynamicTestGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+SandboxTestExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+build_and_test
+●●●●●● 1mm □△
+self
+source_code
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'test_module'
+'\n        Build tests for code and execute them.\n\n        Args:\n            source_code: Python source code to test\n            module_name: Name for the module\n\n        Returns:\n            Dict with generated tests and execution results\n        '
+logger
+●●●●●● 1mm □△
+'Building and testing module: '
+module_name
+●●●●●● 2mm □△
+tests
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+source_code
+module_name
+●●●●●● 2mm □△
+test_code
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tests
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Generated '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tests
+●●●●●● 2mm □△
+' tests'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'passed'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'failed'
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'module_name'
+'tests_generated'
+'tests_run'
+'passed'
+'failed'
+'errors'
+'success_rate'
+'tests'
+'results'
+module_name
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tests
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+passed
+failed
+errors
+results
+passed
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+0
+'name'
+'type'
+'target'
+'description'
+t
+t
+t
+t
+t
+tests
+'name'
+'status'
+'duration'
+'error'
+r
+r
+r
+r
+r
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+build_tests_for_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Build tests for an existing file.\n\n        Args:\n            file_path: Path to Python file\n\n        Returns:\n            Dict with generated tests\n        '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+source_code
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+module_name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+source_code
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+validate_implementation
+●●●●●● 1mm □△
+self
+implementation_code
+expected_behavior
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Validate that implementation matches expected behavior.\n\n        Args:\n            implementation_code: Code to validate\n            expected_behavior: Dict describing expected behavior\n                - functions: List of function names that should exist\n                - classes: List of class names that should exist\n                - patterns: List of patterns that should be present\n\n        Returns:\n            Validation results\n        '
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+implementation_code
+●●●●●● 2mm □△
+validation
+●●●●●● 1mm □
+'valid'
+'issues'
+'analysis'
+●●●●●● 3mm □△○
+'functions_found'
+'classes_found'
+f
+'name'
+f
+analysis
+c
+'name'
+c
+analysis
+expected_func
+expected_behavior
+●●●●●● 1mm □△
+'functions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+expected_func
+validation
+'analysis'
+'functions_found'
+validation
+'valid'
+●●●●●● 1mm □
+●●●●●● 1mm □
+validation
+'issues'
+●●●●●● 1mm □△
+'Missing function: '
+expected_func
+●●●●●● 2mm □△
+expected_class
+expected_behavior
+●●●●●● 1mm □△
+'classes'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+expected_class
+validation
+'analysis'
+'classes_found'
+validation
+'valid'
+●●●●●● 1mm □
+●●●●●● 1mm □
+validation
+'issues'
+●●●●●● 1mm □△
+'Missing class: '
+expected_class
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+validation
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_test_builder
+●●●●●● 2mm □○
+AutonomousTestBuilder
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_test_builder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the autonomous test builder instance.'
+●●●●●● 2mm □
+_test_builder
+●●●●●● 2mm □
+_test_builder
+●●●●●● 1mm □
+AutonomousTestBuilder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_test_builder
+AutonomousTestBuilder
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm □△○
+argparse
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--file'
+'-f'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--code'
+'-c'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--execute'
+'-e'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--output'
+'-o'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+builder
+●●●●●● 1mm □
+get_test_builder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 2mm □
+args
+result
+●●●●●● 1mm □
+builder
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTest Results for '
+args
+':'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Generated: '
+result
+'tests_generated'
+' tests'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Passed: '
+result
+'passed'
+'/'
+result
+'tests_run'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success Rate: '
+result
+'success_rate'
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+args
+'r'
+●●●●●● 2mm □△
+f
+code
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+tests
+●●●●●● 1mm □
+builder
+●●●●●● 1mm □△
+code
+Path
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+test_code
+●●●●●● 1mm □
+builder
+●●●●●● 1mm □△
+tests
+args
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Generated '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tests
+●●●●●● 2mm □△
+' tests'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+test_code
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+result
+●●●●●● 1mm □
+builder
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△

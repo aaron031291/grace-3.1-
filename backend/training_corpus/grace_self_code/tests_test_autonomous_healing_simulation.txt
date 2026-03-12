@@ -1,0 +1,65 @@
+## test_autonomous_healing_simulation.py
+'Simulation mode sanity checks for AutonomousHealingSystem.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+AutonomousHealingSystem
+HealingAction
+TrustLevel
+●●●●●● 1mm □
+test_simulation_mode_stubbed_actions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system
+●●●●●● 1mm □
+AutonomousHealingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anomaly
+●●●●●● 1mm □
+'type'
+'evidence'
+HealingAction
+'FILE-123'
+actions
+●●●●●● 1mm □
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+action
+actions
+result
+●●●●●● 1mm □
+system
+●●●●●● 1mm □△
+action
+anomaly
+●●●●●● 2mm □△
+result
+'status'
+'simulated'
+result
+'mode'
+'simulate'
+result
+'action'
+action
+●●●●●● 2mm □
+__name__
+'__main__'
+test_simulation_mode_stubbed_actions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'OK'
+●●●●●● 2mm □△

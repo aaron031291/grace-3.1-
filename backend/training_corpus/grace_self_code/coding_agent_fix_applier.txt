@@ -1,0 +1,653 @@
+## fix_applier.py
+'\ncoding_agent/fix_applier.py\n─────────────────────────────────────────────────────────────────────────────\nFix Applier — Writes generated code to disk and verifies it works.\n\nThis is the "last mile" of the coding agent loop:\n  Generated code → Backup original → Write to disk → Syntax check\n  → Hot-reload module → Verify import → If fail → Rollback\n  → Record outcome as episode + learning event\n\nWithout this, the coding agent generates fixes that sit in memory and\nnever affect the actual codebase. This module closes the loop.\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+importlib.util
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_SAFE_BASE_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_BACKUP_DIR
+●●●●●● 1mm □
+_SAFE_BASE_DIR
+●●●●●● 3mm □△
+'.fix_backups'
+●●●●●● 2mm △
+ApplyResult
+'Result of a fix application attempt.'
+success
+●●●●●● 3mm △
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm ○
+''
+backup_path
+●●●●●● 1mm ○
+''
+error
+●●●●●● 1mm ○
+''
+rolled_back
+●●●●●● 3mm △
+●●●●●● 1mm □
+module_reloaded
+●●●●●● 3mm △
+●●●●●● 1mm □
+syntax_valid
+●●●●●● 3mm △
+●●●●●● 1mm □
+lines_written
+●●●●●● 2mm ○
+0
+applied_at
+●●●●●● 1mm ○
+''
+●●●●●● 1mm □
+summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'✅ Applied to '
+●●●●●● 3mm △
+' ('
+●●●●●● 3mm △
+' lines) | reload='
+●●●●●● 3mm △
+'OK'
+'skipped'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'⏪ Rolled back '
+●●●●●● 3mm △
+' — '
+●●●●●● 3mm △
+80
+●●●●●● 3mm ○
+'❌ Failed to apply to '
+●●●●●● 3mm △
+' — '
+●●●●●● 3mm △
+80
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+FixApplier
+'\n    Applies generated code fixes to the filesystem with full safety guarantees.\n\n    Safety chain:\n    1. Validate file is within backend/ (no path traversal)\n    2. AST-parse the generated code (reject on syntax error)\n    3. Backup original file to .fix_backups/\n    4. Write new code\n    5. AST-parse the written file (double-check)\n    6. Attempt hot-reload of the affected module\n    7. If reload fails → rollback from backup\n    8. Record outcome as episode + genesis key\n    '
+●●●●●● 1mm □
+apply
+●●●●●● 1mm □△
+self
+file_path
+generated_code
+task_id
+task_description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'\n        Apply a generated fix to a file.\n\n        Args:\n            file_path: Absolute or relative (to backend/) path of file to fix\n            generated_code: The new code to write\n            task_id: Coding agent task ID for traceability\n            task_description: Human-readable description for learning records\n\n        Returns:\n            ApplyResult with full details of what happened\n        '
+result
+●●●●●● 1mm □
+ApplyResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+'Unsafe or non-existent path: '
+file_path
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] %s'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+task_description
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+generated_code
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+SyntaxError
+result
+●●●●●● 1mm □
+'Syntax error in generated code: line '
+se
+': '
+se
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Rejected — %s'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+task_description
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+backup
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 2mm □
+backup
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+'Failed to create backup — aborting for safety'
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] %s'
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+task_description
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backup
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+generated_code
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+generated_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Wrote %d lines to %s'
+result
+target
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+'Write failed: '
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+backup
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+task_description
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ast
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SyntaxError
+result
+●●●●●● 1mm □
+'Post-write syntax check failed: '
+se
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+backup
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+task_description
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Module reload failed for %s — file written but not active until next restart'
+target
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] ✅ %s'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'fix.applied'
+'file'
+'task_id'
+'lines'
+'reloaded'
+result
+task_id
+result
+result
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+task_description
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ApplyResult
+●●●●●● 1mm □
+_resolve_safe_path
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Validate and resolve to an absolute path within backend/.'
+p
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □
+_SAFE_BASE_DIR
+●●●●●● 3mm □△
+p
+resolved
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+resolved
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+_SAFE_BASE_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Path traversal rejected: %s is outside %s'
+resolved
+_SAFE_BASE_DIR
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+resolved
+'.py'
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Only .py files can be patched: %s'
+resolved
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+resolved
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] File does not exist: %s'
+resolved
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+resolved
+Exception
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Path resolution error: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Path
+●●●●●● 1mm □
+_backup
+●●●●●● 1mm □△
+self
+target
+●●●●●● 2mm □△
+Path
+'Back up the original file. Returns backup path or None on failure.'
+_BACKUP_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+safe_name
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+_SAFE_BASE_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'_'
+●●●●●● 2mm □△
+backup
+●●●●●● 1mm □
+_BACKUP_DIR
+●●●●●● 3mm □△
+safe_name
+'.'
+ts
+'.bak'
+shutil
+●●●●●● 1mm □△
+target
+backup
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Backed up %s → %s'
+target
+backup
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+backup
+Exception
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Backup failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Path
+●●●●●● 1mm □
+_rollback
+●●●●●● 1mm □△
+self
+target
+backup
+result
+●●●●●● 2mm □△
+Path
+Path
+ApplyResult
+'Restore original file from backup.'
+shutil
+●●●●●● 1mm □△
+backup
+target
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] ⏪ Rolled back %s from backup'
+target
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Rollback failed: %s — MANUAL RECOVERY NEEDED from %s'
+e
+backup
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_hot_reload
+●●●●●● 1mm □△
+self
+target
+●●●●●● 2mm □△
+Path
+'Attempt to hot-reload the module corresponding to the changed file.'
+rel
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+_SAFE_BASE_DIR
+●●●●●● 2mm □△
+module_name
+●●●●●● 1mm □
+'.'
+●●●●●● 1mm □△
+rel
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_name
+sys
+module
+●●●●●● 1mm □
+sys
+module_name
+importlib
+●●●●●● 1mm □△
+module
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] 🔄 Reloaded module: %s'
+module_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Module %s not live — no reload needed'
+module_name
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[FIX-APPLY] Hot-reload failed for %s: %s'
+target
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_record
+●●●●●● 1mm □△
+self
+task_id
+description
+result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+ApplyResult
+'Record apply outcome as episode + genesis key.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+_applier
+●●●●●● 2mm □○
+FixApplier
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_fix_applier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_applier
+●●●●●● 2mm □
+_applier
+●●●●●● 1mm □
+FixApplier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_applier
+FixApplier

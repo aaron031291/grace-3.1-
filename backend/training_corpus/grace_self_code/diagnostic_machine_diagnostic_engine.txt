@@ -1,0 +1,1542 @@
+## diagnostic_engine.py
+'\nDiagnostic Engine - Main Orchestrator for 4-Layer Diagnostic Machine\n\nCoordinates:\n- Layer 1: Sensors (data collection)\n- Layer 2: Interpreters (pattern analysis)\n- Layer 3: Judgement (decision making)\n- Layer 4: Action Routing (response execution)\n\nFeatures:\n- 60-second heartbeat for continuous monitoring\n- Event-driven sensor triggering\n- CI/CD pipeline integration\n- Forensic analysis and AVN/AVM\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+signal
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sensors
+●●●●●● 2mm □△○
+SensorLayer
+SensorData
+●●●●●● 3mm □△○
+interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+InterpretedData
+●●●●●● 3mm □△○
+judgement
+●●●●●● 2mm □△○
+JudgementLayer
+JudgementResult
+HealthStatus
+●●●●●● 3mm □△○
+action_router
+●●●●●● 2mm □△○
+ActionRouter
+ActionDecision
+ActionType
+CICDConfig
+AlertConfig
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+EngineState
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'State of the diagnostic engine.'
+STOPPED
+●●●●●● 1mm □
+'stopped'
+STARTING
+●●●●●● 1mm □
+'starting'
+RUNNING
+●●●●●● 1mm □
+'running'
+PAUSED
+●●●●●● 1mm □
+'paused'
+ERROR
+●●●●●● 1mm □
+'error'
+●●●●●● 2mm △
+TriggerSource
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Source of diagnostic trigger.'
+HEARTBEAT
+●●●●●● 1mm □
+'heartbeat'
+SENSOR_FLAG
+●●●●●● 1mm □
+'sensor_flag'
+CICD_PIPELINE
+●●●●●● 1mm □
+'cicd_pipeline'
+MANUAL
+●●●●●● 1mm □
+'manual'
+API
+●●●●●● 1mm □
+'api'
+WEBHOOK
+●●●●●● 1mm □
+'webhook'
+●●●●●● 2mm △
+DiagnosticCycle
+'Result of a complete diagnostic cycle.'
+cycle_id
+●●●●●● 1mm ○
+trigger_source
+TriggerSource
+sensor_data
+●●●●●● 2mm □○
+SensorData
+●●●●●● 2mm □
+interpreted_data
+●●●●●● 2mm □○
+InterpretedData
+●●●●●● 2mm □
+judgement
+●●●●●● 2mm □○
+JudgementResult
+●●●●●● 2mm □
+action_decision
+●●●●●● 2mm □○
+ActionDecision
+●●●●●● 2mm □
+cycle_start
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_end
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+total_duration_ms
+●●●●●● 3mm ○
+0.0
+success
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+error_message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+EngineStats
+'Statistics for the diagnostic engine.'
+total_cycles
+●●●●●● 2mm ○
+0
+successful_cycles
+●●●●●● 2mm ○
+0
+failed_cycles
+●●●●●● 2mm ○
+0
+total_alerts
+●●●●●● 2mm ○
+0
+total_healing_actions
+●●●●●● 2mm ○
+0
+total_freeze_events
+●●●●●● 2mm ○
+0
+average_cycle_duration_ms
+●●●●●● 3mm ○
+0.0
+last_cycle_timestamp
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+uptime_seconds
+●●●●●● 3mm ○
+0.0
+dataclass
+●●●●●● 2mm △
+DiagnosticEngine
+'\n    Main orchestrator for the 4-Layer Diagnostic Machine.\n\n    Runs a continuous 60-second heartbeat to monitor system health,\n    with event-driven triggers for immediate response to issues.\n\n    Architecture:\n        Sensors → Interpreters → Judgement → Action Router\n\n    Features:\n        - 60-second heartbeat monitoring\n        - Event-driven sensor triggers\n        - CI/CD pipeline integration\n        - AVN (Anomaly Violation Notification)\n        - AVM (Anomaly Violation Monitor)\n        - Forensic analysis for root cause\n    '
+DEFAULT_HEARTBEAT_INTERVAL
+●●●●●● 1mm □
+60
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+heartbeat_interval
+enable_heartbeat
+enable_cicd
+enable_healing
+enable_freeze
+enable_forensics
+dry_run
+log_dir
+diagnostic_report_path
+session
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+DEFAULT_HEARTBEAT_INTERVAL
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Initialize the diagnostic engine.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+heartbeat_interval
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_heartbeat
+●●●●●● 3mm △
+●●●●●● 1mm □
+dry_run
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_dir
+Path
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+SensorLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineStats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+DiagnosticCycle
+●●●●●● 3mm △
+●●●●●● 1mm □
+100
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'DiagnosticEngine initialized (heartbeat: '
+heartbeat_interval
+'s)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current engine state.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+EngineState
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get engine statistics.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+EngineStats
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start the diagnostic engine with heartbeat.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+EngineState
+logger
+●●●●●● 1mm □△
+'Engine already running'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Starting DiagnosticEngine...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Heartbeat started ('
+●●●●●● 3mm △
+'s interval)'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+logger
+●●●●●● 1mm □△
+'DiagnosticEngine started successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+logger
+●●●●●● 1mm □△
+'Failed to start DiagnosticEngine: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the diagnostic engine.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+EngineState
+logger
+●●●●●● 1mm □△
+'Engine already stopped'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'Stopping DiagnosticEngine...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'DiagnosticEngine stopped'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Error stopping DiagnosticEngine: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+pause
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Pause the heartbeat (still allows manual triggers).'
+●●●●●● 2mm □
+●●●●●● 3mm △
+EngineState
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+logger
+●●●●●● 1mm □△
+'DiagnosticEngine paused'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+resume
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Resume the heartbeat.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+EngineState
+●●●●●● 3mm △
+●●●●●● 1mm □
+EngineState
+logger
+●●●●●● 1mm □△
+'DiagnosticEngine resumed'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_cycle
+●●●●●● 1mm □△
+self
+trigger_source
+●●●●●● 2mm □△
+TriggerSource
+TriggerSource
+'Run a complete diagnostic cycle.'
+●●●●●● 3mm △
+1
+cycle
+●●●●●● 1mm □
+DiagnosticCycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Layer 1: Collecting sensor data...'
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Layer 2: Interpreting patterns...'
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Layer 3: Making judgement...'
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+cycle
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Layer 4: Routing actions...'
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+cycle
+cycle
+●●●●●● 2mm □△
+cycle_end
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+cycle_end
+cycle
+●●●●●● 1mm □
+cycle_end
+●●●●●● 1mm □△
+cycle_start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+cycle
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+cycle_end
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+●●●●●● 2mm □
+cycle
+ActionType
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 1mm △
+cycle
+ActionType
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+ActionType
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cycle '
+cycle
+' completed: health='
+cycle
+', action='
+cycle
+', duration='
+cycle
+'.1f'
+'ms'
+●●●●●● 2mm □△
+Exception
+cycle
+●●●●●● 1mm □
+●●●●●● 1mm □
+cycle
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'Cycle '
+cycle
+' failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Hot-reload after cycle failure skipped: '
+hr_err
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cycle
+DiagnosticCycle
+●●●●●● 1mm □
+trigger_from_sensor
+●●●●●● 1mm □△
+self
+sensor_type
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Trigger diagnostic cycle from sensor flag.'
+logger
+●●●●●● 1mm □△
+'Sensor trigger: '
+sensor_type
+' - '
+reason
+'no reason provided'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+DiagnosticCycle
+●●●●●● 1mm □
+trigger_from_cicd
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Trigger diagnostic cycle from CI/CD pipeline.'
+logger
+●●●●●● 1mm □△
+'CI/CD trigger: '
+pipeline_id
+'unknown pipeline'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+DiagnosticCycle
+●●●●●● 1mm □
+trigger_from_webhook
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'Trigger diagnostic cycle from external webhook.'
+logger
+●●●●●● 1mm □△
+'Webhook trigger: '
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+DiagnosticCycle
+●●●●●● 1mm □
+_heartbeat_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Main heartbeat loop running at configured interval.'
+logger
+●●●●●● 1mm □△
+'Heartbeat loop started ('
+●●●●●● 3mm △
+'s)'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+EngineState
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+cycle
+HealthStatus
+logger
+●●●●●● 1mm □△
+'Critical health - running accelerated monitoring'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Heartbeat error: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Heartbeat loop stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_average_duration
+●●●●●● 1mm □△
+self
+new_duration
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Update rolling average cycle duration.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+new_duration
+●●●●●● 3mm □
+alpha
+●●●●●● 1mm □
+0.1
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+alpha
+●●●●●● 2mm □△
+new_duration
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△
+alpha
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+_log_cycle
+●●●●●● 1mm □△
+self
+cycle
+●●●●●● 2mm □△
+DiagnosticCycle
+'Log diagnostic cycle to file.'
+cycle_log
+●●●●●● 1mm □
+'cycle_id'
+'trigger_source'
+'cycle_start'
+'cycle_end'
+'total_duration_ms'
+'success'
+'error_message'
+cycle
+cycle
+cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+cycle
+cycle
+●●●●●● 2mm □
+cycle
+cycle_log
+'sensors_available'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+cycle_log
+'sensors_failed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+cycle_log
+'patterns_detected'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+cycle_log
+'anomalies_detected'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+cycle_log
+'clarity_level'
+●●●●●● 1mm □
+cycle
+●●●●●● 2mm □
+cycle
+cycle_log
+'health_status'
+●●●●●● 1mm □
+cycle
+cycle_log
+'health_score'
+●●●●●● 1mm □
+cycle
+cycle_log
+'confidence'
+●●●●●● 1mm □
+cycle
+cycle_log
+'recommended_action'
+●●●●●● 1mm □
+cycle
+●●●●●● 2mm □
+cycle
+cycle_log
+'action_taken'
+●●●●●● 1mm □
+cycle
+cycle_log
+'action_priority'
+●●●●●● 1mm □
+cycle
+cycle_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'diagnostic_cycles.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycle_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+cycle_log
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to log cycle: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save engine statistics to file.'
+stats_dict
+●●●●●● 1mm □
+'timestamp'
+'total_cycles'
+'successful_cycles'
+'failed_cycles'
+'total_alerts'
+'total_healing_actions'
+'total_freeze_events'
+'average_cycle_duration_ms'
+'uptime_seconds'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+stats_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'engine_stats.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stats_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+stats_dict
+f
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to save stats: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_cycle_complete
+●●●●●● 1mm □△
+self
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+'Register callback for cycle completion.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_alert
+●●●●●● 1mm □△
+self
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+'Register callback for alert actions.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_heal
+●●●●●● 1mm □△
+self
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+'Register callback for healing actions.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_freeze
+●●●●●● 1mm □△
+self
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+'Register callback for freeze actions.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fire_cycle_callbacks
+●●●●●● 1mm □△
+self
+cycle
+●●●●●● 2mm □△
+DiagnosticCycle
+'Fire cycle completion callbacks.'
+callback
+●●●●●● 3mm △
+callback
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Callback error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fire_alert_callbacks
+●●●●●● 1mm □△
+self
+cycle
+●●●●●● 2mm □△
+DiagnosticCycle
+'Fire alert callbacks.'
+callback
+●●●●●● 3mm △
+callback
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Alert callback error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fire_heal_callbacks
+●●●●●● 1mm □△
+self
+cycle
+●●●●●● 2mm □△
+DiagnosticCycle
+'Fire healing callbacks.'
+callback
+●●●●●● 3mm △
+callback
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Heal callback error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_deterministic_fix_and_reload
+●●●●●● 1mm □△
+self
+cycle
+●●●●●● 2mm □△
+DiagnosticCycle
+'\n        Run brains that fix: (1) deterministic bridge auto-fix, (2) self-healing (scan_heal + heal),\n        (3) self-learning (govern/learn), (4) coding agent (deterministic code scan).\n        If any fix applied, hot-reload so the running process picks up changes immediately.\n        '
+fixes_applied
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+DeterministicAutoFixer
+report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+problems
+fixer
+●●●●●● 1mm □
+DeterministicAutoFixer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □
+fixer
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+fixes_applied
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fixes
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fixes
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Deterministic auto-fix applied %s fix(es).'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fixes
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Deterministic fix skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.migrations.add_learning_example_columns
+●●●●●● 2mm □△○
+ensure_learning_examples_columns
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+●●●●●● 1mm □
+ensure_learning_examples_columns
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+n
+0
+fixes_applied
+n
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Schema sync: added %s column(s) to learning_examples'
+n
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Schema sync skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.unified_trigger_brain
+●●●●●● 2mm □△○
+run_triggers_sync
+●●●●●● 3mm □△○
+core.async_parallel
+●●●●●● 2mm □△○
+run_parallel
+categories
+●●●●●● 1mm □
+'self_heal'
+'self_learning'
+'coding_agent'
+'self_heal'
+'self_learning'
+thunks
+●●●●●● 1mm □
+c
+run_triggers_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+categories
+parallel_results
+●●●●●● 1mm □
+run_parallel
+●●●●●● 1mm □△
+thunks
+●●●●●● 2mm □△
+i
+res
+●●●●●● 2mm □
+●●●●●● 1mm □△
+parallel_results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+res
+Exception
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Category %s failed: %s'
+categories
+i
+res
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+res
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+ok_count
+●●●●●● 1mm □
+summary
+●●●●●● 1mm □△
+'ok'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok_count
+0
+fixes_applied
+ok_count
+run_count
+●●●●●● 1mm □
+summary
+●●●●●● 1mm □△
+'run'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_count
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Unified triggers category=%s run=%s ok=%s'
+categories
+i
+run_count
+ok_count
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Unified triggers (self_heal/self_learning/coding_agent) skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fixes_applied
+0
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+hr
+●●●●●● 1mm □
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reloaded
+●●●●●● 1mm □
+hr
+●●●●●● 1mm □△
+'reloaded'
+0
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Fix(es) applied (self-heal/learn/coding-agent) — hot reload: %s module(s).'
+reloaded
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DIAGNOSTIC] Hot reload after fix failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fire_freeze_callbacks
+●●●●●● 1mm □△
+self
+cycle
+●●●●●● 2mm □△
+DiagnosticCycle
+'Fire freeze callbacks.'
+callback
+●●●●●● 3mm △
+callback
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Freeze callback error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_recent_cycles
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'Get recent diagnostic cycles.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+DiagnosticCycle
+●●●●●● 1mm □
+get_health_summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current health summary.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'status'
+'message'
+'unknown'
+'No diagnostic cycles completed yet'
+latest
+●●●●●● 1mm □
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+latest
+●●●●●● 3mm ○
+'status'
+'message'
+'unknown'
+'Latest cycle has no judgement'
+●●●●●● 3mm ○
+'status'
+'health_score'
+'confidence'
+'last_check'
+'degraded_components'
+'critical_components'
+'avm_level'
+'recommended_action'
+latest
+latest
+latest
+latest
+latest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latest
+latest
+latest
+latest
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert engine state to dictionary.'
+●●●●●● 3mm ○
+'state'
+'heartbeat_interval'
+'stats'
+'health_summary'
+'recent_cycles_count'
+●●●●●● 3mm △
+●●●●●● 3mm △
+'total_cycles'
+'successful_cycles'
+'failed_cycles'
+'total_alerts'
+'total_healing_actions'
+'total_freeze_events'
+'average_cycle_duration_ms'
+'uptime_seconds'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_engine_instance
+●●●●●● 2mm □○
+DiagnosticEngine
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+heartbeat_interval
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+60
+'Get or create the global diagnostic engine instance.'
+●●●●●● 2mm □
+_engine_instance
+●●●●●● 2mm □
+_engine_instance
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_engine_instance
+DiagnosticEngine
+●●●●●● 1mm □
+start_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the global diagnostic engine.'
+engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+engine
+DiagnosticEngine
+●●●●●● 1mm □
+stop_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Stop the global diagnostic engine.'
+●●●●●● 2mm □
+_engine_instance
+_engine_instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_engine_instance
+●●●●●● 1mm □
+●●●●●● 2mm □

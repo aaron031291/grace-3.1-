@@ -1,0 +1,721 @@
+## test_grace_training.py
+"\nTest Grace's Active Learning Workflow\n\nTests the complete Study → Practice → Learn cycle:\n1. Grace studies a topic from training materials\n2. Grace practices the skill\n3. Check skill assessment to see improvement\n"
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+BASE_URL
+●●●●●● 1mm □
+'http://localhost:5001'
+●●●●●● 1mm □
+print_section
+●●●●●● 1mm □△
+title
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Print a formatted section header.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+title
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_study_phase
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Grace studying a topic.'
+print_section
+●●●●●● 1mm □△
+'PHASE 1: STUDY - Grace learns from training materials'
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+'topic'
+'learning_objectives'
+'max_materials'
+'Python programming'
+'Learn function syntax'
+'Understand parameters and return values'
+'Learn about decorators'
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Request:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSending POST /training/study...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/training/study'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Study phase completed!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nMaterials studied: '
+result
+●●●●●● 1mm □△
+'materials_studied'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Concepts learned: '
+result
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Examples stored: '
+result
+●●●●●● 1mm □△
+'examples_stored'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Average trust score: '
+result
+●●●●●● 1mm □△
+'average_trust_score'
+0
+●●●●●● 2mm □△
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'focus_areas'
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFocus areas identified:'
+●●●●●● 2mm □△
+area
+result
+'focus_areas'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+area
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Study failed: '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Could not connect to Grace API. Is the server running?'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Start the server with: python app.py'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Study phase failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_practice_phase
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Grace practicing a skill.'
+print_section
+●●●●●● 1mm □△
+'PHASE 2: PRACTICE - Grace applies knowledge in sandbox'
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+'skill_name'
+'task_description'
+'task_requirements'
+'complexity'
+'sandbox_context'
+'Python programming'
+'Write a simple function to calculate factorial'
+'Handle edge cases (0 and 1)'
+'Use recursion or iteration'
+0.4
+'language'
+'allow_imports'
+'python'
+'math'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Request:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSending POST /training/practice...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/training/practice'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Practice phase completed!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTask: '
+result
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'description'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Approach: '
+result
+●●●●●● 1mm □△
+'approach'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'strategy'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Outcome: '
+result
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+'SUCCESS'
+'FAILED'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Feedback: '
+result
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'feedback'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'learned'
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nWhat Grace learned:'
+●●●●●● 2mm □△
+item
+result
+'learned'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+item
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Practice failed: '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Practice phase failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_skill_assessment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Test getting Grace's skill assessment."
+print_section
+●●●●●● 1mm □△
+"PHASE 3: ASSESSMENT - Check Grace's proficiency"
+●●●●●● 2mm □△
+skill_name
+●●●●●● 1mm □
+'Python programming'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Getting skill assessment for: '
+skill_name
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSending GET /training/skills/'
+skill_name
+'...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/training/skills/'
+skill_name
+●●●●●● 1mm □△
+' '
+'%20'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Skill assessment retrieved!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSkill: '
+result
+●●●●●● 1mm □△
+'skill'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Level: '
+result
+●●●●●● 1mm □△
+'level'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Proficiency score: '
+result
+●●●●●● 1mm □△
+'proficiency_score'
+0
+●●●●●● 2mm □△
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Success rate: '
+result
+●●●●●● 1mm □△
+'success_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tasks completed: '
+result
+●●●●●● 1mm □△
+'tasks_completed'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Practice hours: '
+result
+●●●●●● 1mm □△
+'practice_hours'
+0
+●●●●●● 2mm □△
+'.1f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Operational confidence: '
+result
+●●●●●● 1mm □△
+'operational_confidence'
+0
+●●●●●● 2mm □△
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Assessment failed: '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Assessment failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_learning_progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test getting overall learning progress.'
+print_section
+●●●●●● 1mm □△
+"OVERALL PROGRESS - Grace's learning statistics"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Sending GET /training/analytics/progress...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+BASE_URL
+'/training/analytics/progress'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Learning progress retrieved!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTotal skills: '
+result
+●●●●●● 1mm □△
+'total_skills'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total tasks completed: '
+result
+●●●●●● 1mm □△
+'total_tasks_completed'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Overall success rate: '
+result
+●●●●●● 1mm □△
+'overall_success_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'skills'
+result
+result
+'skills'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSkill breakdown:'
+●●●●●● 2mm □△
+skill
+result
+'skills'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+skill
+'skill'
+': '
+skill
+'level'
+' (proficiency: '
+skill
+'proficiency'
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Progress check failed: '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Progress check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run complete training workflow test.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  GRACE ACTIVE LEARNING SYSTEM - Workflow Test'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Testing Study > Practice > Learn Cycle'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTimestamp: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'API URL: '
+BASE_URL
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'study'
+'practice'
+'assessment'
+'progress'
+test_study_phase
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_practice_phase
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_skill_assessment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_learning_progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_section
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Results:'
+●●●●●● 2mm □△
+phase
+success
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+success
+'[OK]'
+'[FAILED]'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+status
+' '
+phase
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_tests
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+passed_tests
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+success
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTests passed: '
+passed_tests
+'/'
+total_tests
+●●●●●● 2mm □△
+●●●●●● 2mm □
+passed_tests
+total_tests
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[SUCCESS] All tests passed! Grace's learning system is operational."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[PARTIAL] '
+total_tests
+●●●●●● 1mm □△
+passed_tests
+' test(s) failed. Check errors above.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

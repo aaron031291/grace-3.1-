@@ -1,0 +1,287 @@
+## test_reranker_improvements.py
+'\nTest the reranker with half precision and singleton behavior.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+torch
+backend_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.reranker
+●●●●●● 2mm □△○
+get_reranker
+●●●●●● 1mm □
+test_reranker_singleton_and_half_precision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that reranker is loaded only once and uses half precision.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Reranker: Singleton + Half Precision'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vram_before
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+512
+●●●●●● 3mm □○
+2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nVRAM before loading reranker: '
+vram_before
+'.2f'
+' MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1] First call to get_reranker()...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reranker1
+●●●●●● 1mm □
+get_reranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+load_time_1
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Reranker loaded in '
+load_time_1
+'.2f'
+' seconds'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Device: '
+reranker1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Using half precision: '
+reranker1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vram_after
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+512
+●●●●●● 3mm □○
+2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  VRAM usage: '
+vram_after
+'.2f'
+' MB (delta: '
+vram_after
+●●●●●● 1mm □△
+vram_before
+'.2f'
+' MB)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2] Second call to get_reranker()...'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reranker2
+●●●●●● 1mm □
+get_reranker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+load_time_2
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Returned in '
+load_time_2
+'.4f'
+' seconds (should be instant)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3] Singleton check:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Same instance? '
+reranker1
+reranker2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+reranker1
+reranker2
+'  ✓ Reranker is loaded only ONCE'
+'  ✗ Multiple instances created!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4] Testing reranking with FP16...'
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+'What is machine learning?'
+chunks
+●●●●●● 1mm □
+'chunk_id'
+'text'
+1
+'Machine learning is a subset of artificial intelligence.'
+'chunk_id'
+'text'
+2
+'The weather is sunny today.'
+'chunk_id'
+'text'
+3
+'Deep learning uses neural networks with multiple layers.'
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reranked
+●●●●●● 1mm □
+reranker1
+●●●●●● 1mm □△
+query
+chunks
+●●●●●● 2mm □△
+rerank_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Reranked in '
+rerank_time
+'.3f'
+' seconds'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Results (top 2):'
+●●●●●● 2mm □△
+chunk
+reranked
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+chunk
+'chunk_id'
+': '
+chunk
+'text'
+50
+'... (score: '
+chunk
+'rerank_score'
+'.4f'
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ All tests passed!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+reranker1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Reranker unloaded from VRAM'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_reranker_singleton_and_half_precision
+●●●●●● 1mm □△
+●●●●●● 2mm □△

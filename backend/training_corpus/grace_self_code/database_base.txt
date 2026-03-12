@@ -1,0 +1,123 @@
+## base.py
+'\nSQLAlchemy base classes and models.\nProvides declarative base and utility base model for all ORM models.\n'
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+declarative_base
+DeclarativeBase
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+DateTime
+Integer
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+●●●●●● 2mm △
+Base
+●●●●●● 3mm □△
+DeclarativeBase
+DeclarativeBase
+'Base class for all SQLAlchemy ORM models.'
+●●●●●● 2mm △
+BaseModel
+●●●●●● 3mm □△
+Base
+Base
+'\n    Abstract base model providing common fields and functionality.\n    \n    Provides:\n    - id: Primary key\n    - created_at: Timestamp of creation\n    - updated_at: Timestamp of last update\n    '
+__abstract__
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+updated_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Convert model instance to dictionary.\n        \n        Returns:\n            dict: Dictionary representation of the model\n        '
+●●●●●● 3mm ○
+column
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+column
+●●●●●● 2mm □△
+column
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Update model attributes.\n        \n        Args:\n            **kwargs: Attribute names and values to update\n        '
+key
+value
+kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+value
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'String representation of model.'
+class_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+id_val
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'id'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<'
+class_name
+'(id='
+id_val
+')>'
+●●●●●● 1mm ○

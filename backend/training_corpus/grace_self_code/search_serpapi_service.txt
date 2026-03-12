@@ -1,0 +1,293 @@
+## serpapi_service.py
+'\nSerpAPI service for Google Search integration.\n\nProvides interface to SerpAPI for searching Google and extracting organic results.\n'
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Optional
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SerpAPIService
+'Service for interacting with SerpAPI Google Search.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Initialize SerpAPI service.\n        \n        Args:\n            api_key: SerpAPI API key\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+'https://serpapi.com/search'
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+num_results
+location
+language
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+3
+●●●●●● 2mm □
+'en'
+'\n        Search Google using SerpAPI and return organic results.\n        \n        Args:\n            query: Search query\n            num_results: Maximum number of results to return\n            location: Geographic location for search (e.g., "United States")\n            language: Language code (default: "en")\n            \n        Returns:\n            List of search results with title, link, snippet\n            Example: [\n                {\n                    "title": "Python Tutorial",\n                    "link": "https://example.com/python",\n                    "snippet": "Learn Python programming...",\n                    "position": 1\n                }\n            ]\n        '
+params
+●●●●●● 1mm □
+'q'
+'api_key'
+'num'
+'hl'
+'engine'
+query
+●●●●●● 3mm △
+num_results
+language
+'google'
+●●●●●● 2mm □
+location
+params
+'location'
+●●●●●● 1mm □
+location
+logger
+●●●●●● 1mm □△
+'[SERPAPI] Searching Google for: '
+query
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SERPAPI] Parameters: num='
+num_results
+', location='
+location
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+logger
+●●●●●● 1mm □△
+'[SERPAPI] API error: '
+response
+' - '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+data
+logger
+●●●●●● 1mm □△
+'[SERPAPI] API returned error: '
+data
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+organic_results
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'organic_results'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+organic_results
+logger
+●●●●●● 1mm □△
+'[SERPAPI] No organic results found for query: '
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+formatted_results
+●●●●●● 1mm □
+idx
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+organic_results
+num_results
+●●●●●● 2mm □△
+formatted_results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'position'
+'displayed_link'
+result
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'position'
+idx
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'displayed_link'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SERPAPI] [OK] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+formatted_results
+●●●●●● 2mm □△
+' results'
+●●●●●● 2mm □△
+idx
+res
+●●●●●● 2mm □
+●●●●●● 1mm □△
+formatted_results
+1
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SERPAPI]   '
+idx
+'. '
+res
+'title'
+60
+'... - '
+res
+'link'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+res
+formatted_results
+●●●●●● 2mm □
+res
+●●●●●● 1mm □△
+'link'
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+query
+' '
+res
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+' '
+res
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+formatted_results
+requests
+logger
+●●●●●● 1mm □△
+'[SERPAPI] Request timed out'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+requests
+logger
+●●●●●● 1mm □△
+'[SERPAPI] Request error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+Exception
+logger
+●●●●●● 1mm □△
+'[SERPAPI] Unexpected error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+test_connection
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Test SerpAPI connection with a simple query.\n        \n        Returns:\n            True if connection successful, False otherwise\n        '
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+0
+Exception
+logger
+●●●●●● 1mm □△
+'[SERPAPI] Connection test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △

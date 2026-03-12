@@ -1,0 +1,221 @@
+## layer_registry.py
+'\nGrace OS — Layer Registry\n\nDynamic discovery and health-checking for all layers.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LayerRegistration
+'Metadata about a registered layer.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+capabilities
+instance
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+capabilities
+●●●●●● 3mm △
+●●●●●● 1mm □
+instance
+●●●●●● 3mm △
+●●●●●● 1mm □
+'healthy'
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LayerRegistry
+'\n    Registry for Grace OS Layers.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+LayerRegistration
+●●●●●● 1mm □
+register
+●●●●●● 1mm □△
+self
+layer_name
+capabilities
+instance
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+Any
+'\n        Registers a layer with the system.\n        '
+●●●●●● 3mm △
+layer_name
+●●●●●● 1mm □
+LayerRegistration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LayerRegistry] Registered layer: '
+layer_name
+' with capabilities: '
+capabilities
+●●●●●● 2mm □△
+●●●●●● 1mm □
+deregister
+●●●●●● 1mm □△
+self
+layer_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Removes a layer from the registry.\n        '
+●●●●●● 2mm □
+layer_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+layer_name
+logger
+●●●●●● 1mm □△
+'[LayerRegistry] Deregistered layer: '
+layer_name
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_layer
+●●●●●● 1mm □△
+self
+layer_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Retrieve a layer instance by name.\n        '
+registration
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+registration
+registration
+'healthy'
+●●●●●● 3mm ○
+registration
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Any
+●●●●●● 1mm □
+query_capabilities
+●●●●●● 1mm □△
+self
+capability
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Find all layer names that support a specific capability.\n        '
+capable_layers
+●●●●●● 1mm □
+name
+reg
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+'healthy'
+capability
+reg
+capable_layers
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+capable_layers
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+set_status
+●●●●●● 1mm □△
+self
+layer_name
+status
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Update the health status of a layer.\n        '
+●●●●●● 2mm □
+layer_name
+●●●●●● 3mm △
+●●●●●● 2mm □
+status
+'healthy'
+'degraded'
+'offline'
+ValueError
+●●●●●● 1mm □△
+'Invalid status: '
+status
+●●●●●● 2mm □△
+●●●●●● 3mm △
+layer_name
+●●●●●● 1mm □
+status
+logger
+●●●●●● 1mm □△
+'[LayerRegistry] Layer '
+layer_name
+' status -> '
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □
+heartbeat
+●●●●●● 1mm □△
+self
+layer_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Record a heartbeat for a layer to mark it as healthy.\n        '
+●●●●●● 2mm □
+layer_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+layer_name
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+layer_name
+'healthy'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+layer_name
+'healthy'
+●●●●●● 2mm □△

@@ -1,0 +1,817 @@
+## telemetry_models.py
+'\nSelf-modeling telemetry models for Grace.\n\nThese models enable Grace to observe her own execution,\ntrack performance baselines, detect drift, and replay operations.\n'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Integer
+Float
+DateTime
+JSON
+Text
+Boolean
+Index
+Enum
+●●●●●● 1mm □
+SQLEnum
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm □△○
+enum
+●●●●●● 2mm △
+OperationType
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Types of operations Grace can perform.'
+INGESTION
+●●●●●● 1mm □
+'ingestion'
+RETRIEVAL
+●●●●●● 1mm □
+'retrieval'
+CHAT_GENERATION
+●●●●●● 1mm □
+'chat_generation'
+EMBEDDING
+●●●●●● 1mm □
+'embedding'
+VECTOR_SEARCH
+●●●●●● 1mm □
+'vector_search'
+CONFIDENCE_SCORING
+●●●●●● 1mm □
+'confidence_scoring'
+FILE_PROCESSING
+●●●●●● 1mm □
+'file_processing'
+DATABASE_QUERY
+●●●●●● 1mm □
+'database_query'
+API_REQUEST
+●●●●●● 1mm □
+'api_request'
+BACKGROUND_TASK
+●●●●●● 1mm □
+'background_task'
+●●●●●● 2mm △
+OperationStatus
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Status of an operation.'
+STARTED
+●●●●●● 1mm □
+'started'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+TIMEOUT
+●●●●●● 1mm □
+'timeout'
+CANCELLED
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 2mm △
+OperationLog
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Log of every operation Grace performs.\n\n    Each operation gets a unique run_id that can be used to correlate\n    related events and enable replay functionality.\n    '
+__tablename__
+●●●●●● 1mm □
+'operation_log'
+run_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parent_run_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+operation_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+OperationType
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+operation_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+started_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+completed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+OperationStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+error_traceback
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+cpu_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+memory_mb
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+gpu_memory_mb
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+input_tokens
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+output_tokens
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+input_size_bytes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+output_size_bytes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+confidence_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+contradiction_detected
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+input_hash
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+64
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+operation_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_operation_type_status'
+'operation_type'
+'status'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_started_at'
+'started_at'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_duration'
+'duration_ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<OperationLog(run_id='
+●●●●●● 3mm △
+', type='
+●●●●●● 3mm △
+', status='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+PerformanceBaseline
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Baseline performance metrics for each operation type.\n\n    Grace learns what "normal" looks like over time, enabling\n    drift detection when operations become slower or less reliable.\n    '
+__tablename__
+●●●●●● 1mm □
+'performance_baseline'
+operation_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+OperationType
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+operation_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sample_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+mean_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+median_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+p95_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+p99_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+std_dev_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+success_rate
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+failure_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+mean_cpu_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+mean_memory_mb
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+mean_confidence_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+contradiction_rate
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+last_updated
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+baseline_window_days
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_operation_baseline'
+'operation_type'
+'operation_name'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<PerformanceBaseline(type='
+●●●●●● 3mm △
+', mean='
+●●●●●● 3mm △
+'ms)>'
+●●●●●● 2mm △
+DriftAlert
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Alerts when operations drift from their baselines.\n\n    Captures when Grace detects abnormal behavior - slower performance,\n    higher failure rates, lower confidence scores, etc.\n    '
+__tablename__
+●●●●●● 1mm □
+'drift_alert'
+run_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+operation_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+OperationType
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+operation_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+drift_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+baseline_value
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+observed_value
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+deviation_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+severity
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+acknowledged
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+acknowledged_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+resolved
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+resolved_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+resolution_notes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+alert_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_drift_severity'
+'severity'
+'resolved'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_drift_type'
+'drift_type'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<DriftAlert(type='
+●●●●●● 3mm △
+', severity='
+●●●●●● 3mm △
+', resolved='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+OperationReplay
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Replay configuration and results for failed operations.\n\n    When an operation fails, Grace can rerun it with the same inputs\n    to debug and compare results.\n    '
+__tablename__
+●●●●●● 1mm □
+'operation_replay'
+original_run_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+replay_run_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+replay_reason
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+replayed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+original_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+replay_duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+original_status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+replay_status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+original_output_hash
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+64
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+replay_output_hash
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+64
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+outputs_match
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+differences
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+insights
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_replay_original'
+'original_run_id'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<OperationReplay(original='
+●●●●●● 3mm △
+', replay='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+SystemState
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+"\n    Periodic snapshots of Grace's overall system state.\n\n    Enables long-term trend analysis and capacity planning.\n    "
+__tablename__
+●●●●●● 1mm □
+'system_state'
+ollama_running
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+qdrant_connected
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+database_connected
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+db_size_bytes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+document_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chunk_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+message_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+vector_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+index_size_bytes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+average_confidence_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+contradiction_rate
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+cpu_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+memory_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+disk_usage_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+gpu_memory_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+operations_last_24h
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+failures_last_24h
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+average_latency_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+state_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_state_timestamp'
+'created_at'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<SystemState(timestamp='
+●●●●●● 3mm △
+', ollama='
+●●●●●● 3mm △
+')>'

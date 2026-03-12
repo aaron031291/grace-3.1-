@@ -1,0 +1,240 @@
+## demo_synergy.py
+'\ndemo_synergy.py\nDemonstrates the 3-Pillar Autonomous Synergy Upgrade:\n1. Cognitive: Trust-Driven Feedback Loop (Maker-Checker)\n2. Memory: Active Resilience (Auto-healing event trigger)\n3. Autonomy: Dynamic Resource Arbitration (Risk-based routing)\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+io
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+cognitive.consensus_pipeline
+●●●●●● 2mm □△○
+get_consensus_pipeline
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □
+io
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=============================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      GRACE 3.1 AUTONOMOUS SYNERGY DEMO       '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'==============================================\n'
+●●●●●● 2mm □△
+load_dotenv
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+backend_dir
+'.env'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- [DEMO 1] Dynamic Resource Arbitration ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Simulating LLM routing based on Task Risk...\n'
+●●●●●● 2mm □△
+low_risk
+●●●●●● 1mm □
+'Write a quick greeting message for a user login screen.'
+high_risk
+●●●●●● 1mm □
+'Analyze this firewall architecture schema for zero-day vulnerabilities.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Requesting LLM for LOW RISK task...'
+●●●●●● 2mm □△
+low_client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> Routed to: '
+low_client
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRequesting LLM for HIGH RISK task...'
+●●●●●● 2mm □△
+high_client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> Routed to: '
+high_client
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n\n--- [DEMO 2] Cognitive Trust-Driven Feedback Loop ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Simulating Qwen (Maker) drafting code and Opus (Checker) critiquing it...\n'
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+get_consensus_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instruction
+●●●●●● 1mm □
+'Write a python function that calculates the nth fibonacci number. Make it intentionally terrible and inefficient.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Instruction: '
+instruction
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Running Pipeline (this may take a minute). Watch the terminal logs for the back-and-forth critique!\n'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[Final Approved Draft]'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+result
+'final_output'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Pipeline error: '
+e
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n\n--- [DEMO 3] Active Memory Resilience ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"Simulating repeated failures of 'genesis_qdran' to trigger Active Resilience Auto-Healing.\n"
+●●●●●● 2mm □△
+memory
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Logging episode '
+i
+●●●●●● 3mm ○
+1
+": 'genesis_qdran' failure..."
+●●●●●● 2mm □△
+memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nMemory logged. The Active Resilience hook analyzed the memory and should have dispatched a self-healing event.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"Check grace.log for '[ACTIVE-RESILIENCE] Detected 3 repeated failures for module genesis_qdran. Dispatching self-healing event.'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=============================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'                  DEMO COMPLETE               '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'==============================================\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

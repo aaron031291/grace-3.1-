@@ -1,0 +1,825 @@
+## api_vault.py
+'\nAPI Key Vault — Central secure access point for all external API keys.\n\nSingle source of truth for:\n- Kimi 2.5 (Moonshot AI)\n- Opus 4.6 (Anthropic Claude)\n- Ollama (local)\n- SerpAPI (web search)\n- Any future provider\n\nSecurity features:\n- Keys loaded from environment variables only (never hardcoded)\n- Masked display for UI (shows first 8 + last 4 chars)\n- Connectivity verification per provider\n- Key rotation support\n- Genesis Key audit trail on every key access/change\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProviderConfig
+name
+●●●●●● 1mm ○
+env_key
+●●●●●● 1mm ○
+base_url_env
+●●●●●● 1mm ○
+model_env
+●●●●●● 1mm ○
+provider_type
+●●●●●● 1mm ○
+verify_fn
+●●●●●● 1mm ○
+dataclass
+PROVIDERS
+●●●●●● 1mm □
+'kimi'
+'opus'
+'ollama'
+'serpapi'
+ProviderConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ProviderConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ProviderConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ProviderConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_mask_key
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Show first 8 + last 4 chars, mask the rest.'
+●●●●●● 2mm □
+key
+●●●●●● 3mm ○
+'(not set)'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+key
+4
+●●●●●● 3mm ○
+'****'
+●●●●●● 3mm ○
+key
+8
+●●●●●● 3mm ○
+'...'
+●●●●●● 3mm ○
+key
+4
+●●●●●● 1mm ○
+●●●●●● 2mm △
+APIVault
+'Central secure access point for all API keys.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'APIVault'
+●●●●●● 1mm □
+get_key
+●●●●●● 1mm □△
+self
+provider
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the API key for a provider. Returns None if not set.'
+config
+●●●●●● 1mm □
+PROVIDERS
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+config
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+config
+''
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+config
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_base_url
+●●●●●● 1mm □△
+self
+provider
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+config
+●●●●●● 1mm □
+PROVIDERS
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+config
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+config
+''
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+config
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_model
+●●●●●● 1mm □△
+self
+provider
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+config
+●●●●●● 1mm □
+PROVIDERS
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+config
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+config
+''
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+config
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get status of all providers — key presence, masked key, model.'
+statuses
+●●●●●● 1mm □
+pid
+config
+PROVIDERS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+config
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+statuses
+●●●●●● 1mm □△
+'id'
+'name'
+'type'
+'key_configured'
+'key_masked'
+'base_url'
+'model'
+pid
+config
+config
+config
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+key
+_mask_key
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+config
+'local'
+'(local)'
+'(not set)'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pid
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pid
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+statuses
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_provider
+●●●●●● 1mm □△
+self
+provider
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Verify connectivity to a specific provider.'
+config
+●●●●●● 1mm □
+PROVIDERS
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+provider
+●●●●●● 1mm □
+'Unknown provider'
+verify_method
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+config
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verify_method
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+provider
+●●●●●● 1mm □
+'No verify method'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+verify_method
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'latency_ms'
+provider
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Verify connectivity to all providers.'
+results
+●●●●●● 1mm □
+pid
+PROVIDERS
+results
+pid
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pid
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'connected'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'providers'
+'total'
+'connected'
+'disconnected'
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+PROVIDERS
+●●●●●● 2mm □△
+connected
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+PROVIDERS
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+connected
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+rotate_key
+●●●●●● 1mm □△
+self
+provider
+new_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Rotate an API key — updates runtime config and .env file.'
+config
+●●●●●● 1mm □
+PROVIDERS
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+config
+●●●●●● 3mm ○
+'error'
+'Cannot rotate key for '
+provider
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+old_masked
+●●●●●● 1mm □
+_mask_key
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+config
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+settings
+config
+new_key
+●●●●●● 2mm □△
+os
+config
+●●●●●● 1mm □
+new_key
+env_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □
+env_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+env_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+found
+●●●●●● 1mm □
+●●●●●● 1mm □
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+config
+'='
+●●●●●● 2mm □△
+lines
+i
+●●●●●● 1mm □
+config
+'='
+new_key
+found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+found
+lines
+●●●●●● 1mm □△
+config
+'='
+new_key
+●●●●●● 2mm □△
+env_path
+●●●●●● 1mm □△
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to update .env: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'rotated'
+'provider'
+'old_key_masked'
+'new_key_masked'
+●●●●●● 3mm □△○
+provider
+old_masked
+_mask_key
+●●●●●● 1mm □△
+new_key
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_kimi
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'kimi'
+●●●●●● 1mm □
+'Key not configured'
+●●●●●● 2mm □△○
+requests
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+'/models'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+models
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'provider'
+'connected'
+'model_count'
+'models'
+'current_model'
+'kimi'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+m
+models
+10
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'kimi'
+●●●●●● 1mm □
+'HTTP '
+resp
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_opus
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'opus'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'opus'
+●●●●●● 1mm □
+'Key not configured'
+●●●●●● 2mm □△○
+requests
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'opus'
+●●●●●● 2mm □△
+'/messages'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+●●●●●● 3mm ○
+'provider'
+'connected'
+'model'
+'response_preview'
+'opus'
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'opus'
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+50
+●●●●●● 1mm △
+resp
+401
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'opus'
+●●●●●● 1mm □
+'Invalid API key'
+●●●●●● 3mm ○
+'provider'
+'connected'
+'status_code'
+'error'
+'opus'
+resp
+500
+resp
+resp
+400
+resp
+200
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_ollama
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+requests
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'ollama'
+●●●●●● 2mm □△
+'/api/tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+models
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'provider'
+'connected'
+'model_count'
+'models'
+'ollama'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'name'
+●●●●●● 2mm □△
+m
+models
+10
+Exception
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'ollama'
+●●●●●● 1mm □
+'Ollama not running'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_serpapi
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'serpapi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm ○
+'provider'
+'connected'
+'error'
+'serpapi'
+●●●●●● 1mm □
+'Key not configured'
+●●●●●● 3mm ○
+'provider'
+'connected'
+'note'
+'serpapi'
+●●●●●● 3mm □△○
+'Key configured (not verified)'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_vault
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+APIVault
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+APIVault

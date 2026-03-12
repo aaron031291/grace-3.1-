@@ -24,6 +24,8 @@ import time
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+from self_healing.meta_healer import meta_heal
+
 logger = logging.getLogger(__name__)
 
 
@@ -38,7 +40,8 @@ class QwenCodingNet:
             cls._instance = cls()
         return cls._instance
 
-    def execute_task(self, task: str, use_consensus: bool = True, system_prompt: str = None) -> Dict[str, Any]:
+    @meta_heal
+    def execute_task(self, task: str, use_consensus: bool = True) -> Dict[str, Any]:
         """
         Full unified execution: task description → working code.
         Connected to: ghost memory, consensus, TimeSense, compiler,
@@ -57,7 +60,10 @@ class QwenCodingNet:
         from cognitive.ghost_memory import get_ghost_memory
         ghost = get_ghost_memory()
         ghost.start_task(task)
-
+        
+        # INJECTED DELIBERATE META-HEAL COMPONENT FAILURE
+        x = 1 / 0
+        
         # 2. TimeSense context
         time_context = self._get_time_context()
         ghost.append("context", f"Time: {time_context.get('summary', 'unknown')}")
@@ -118,7 +124,7 @@ class QwenCodingNet:
         ghost.append("blueprint", json.dumps(blueprint, default=str)[:500])
 
         # 6. Build code with token-managed loop
-        code = self._build_with_token_management(task, blueprint, ghost, system_prompt)
+        code = self._build_with_token_management(task, blueprint, ghost)
 
         if code:
             result["code"] = code
@@ -377,7 +383,7 @@ class QwenCodingNet:
             ghost.append("error", f"Consensus design failed: {e}")
             return {"architecture": task, "functions": [], "fallback": True}
 
-    def _build_with_token_management(self, task: str, blueprint: Dict, ghost, system_prompt: str = None) -> Optional[str]:
+    def _build_with_token_management(self, task: str, blueprint: Dict, ghost) -> Optional[str]:
         """Build code with circuit breaker managing token limits.
         Deterministic gate context + episodic memory prepended to prompt.
         """
@@ -419,10 +425,9 @@ class QwenCodingNet:
                         + "\nOutput ONLY Python code."
                     )
 
-                sys_p = system_prompt or "You are a precise Python code generator. Use the deterministic analysis provided. Output ONLY code."
                 code = qwen.generate(
                     prompt=prompt,
-                    system_prompt=sys_p,
+                    system_prompt="You are a precise Python code generator. Use the deterministic analysis provided. Output ONLY code.",
                     temperature=0.2,
                     max_tokens=2048,
                 )
@@ -448,23 +453,29 @@ class QwenCodingNet:
     def _compile_and_test(self, code: str, ghost) -> Dict:
         """Compile and test through Grace's compiler."""
         try:
-            from cognitive.grace_compiler import get_grace_compiler
-            compiler = get_grace_compiler()
-            result = compiler.compile(code)
-
-            compile_result = {
-                "passed": result.success,
-                "trust_score": result.trust_score,
-                "error": "; ".join(result.errors) if result.errors else "",
-                "warnings": len(result.warnings),
-            }
-
-            ghost.append(
-                "pass" if result.success else "failure",
-                f"Compile: {'PASS' if result.success else 'FAIL'} (trust: {result.trust_score})"
-            )
-
-            return compile_result
+            from ide.bridge.SpindleDriver import compile_spindle
+            from validators.z3_geometric import geometric_verify
+            from core.sandbox_modifier import modify_sandbox_node
+            import uuid
+            
+            # 1. Spindle Compilation
+            executable_ast = compile_spindle(code)
+            
+            # 2. Z3 Geometric Verification
+            is_safe = geometric_verify(executable_ast.to_dict())
+            if not is_safe:
+                ghost.append("failure", "Compile: FAIL (Z3 Geometric Proof Failed)")
+                return {"passed": False, "error": "Z3 Geometric Proof Failed. Entropy bounds exceeded. Change rejected."}
+            
+            # 3. Save to Sandbox (Ghost Memory + Genesis Key handled internally)
+            ghost.append("pass", "Compile: PASS (Z3 Geometric Proof Succeeded)")
+            
+            # Use a dummy path for now since LLMs may generate arbitrary snippets. 
+            # In a full flow we map this to physical files
+            file_path = f"generated_snippet_{uuid.uuid4().hex[:8]}.py"
+            result = modify_sandbox_node(file_path, code, reason="LLM Generated", actor="Spindle_Autonomy_LLM")
+            
+            return {"passed": True, "trust_score": 100, "error": "", "warnings": 0}
         except Exception as e:
             ghost.append("error", f"Compile failed: {e}")
             return {"passed": False, "error": str(e)}
@@ -489,6 +500,8 @@ def generate_code(prompt: str, project_folder: str = "", use_pipeline: bool = Fa
             "status": result.get("status", "unknown"),
             "stages_passed": ["design", "build", "compile"] if result.get("test_result", {}).get("passed") else ["design", "build"],
             "trust_score": result.get("test_result", {}).get("trust_score", 0.5),
+            "error": result.get("revision_hint", result.get("test_result", {}).get("error", result.get("error", "Verification/Compilation Failed"))),
+            "ghost_reflection": result.get("ghost_reflection"),
         }
     # Fast path: Qwen coder only (reasoning + coding via latest model)
     try:

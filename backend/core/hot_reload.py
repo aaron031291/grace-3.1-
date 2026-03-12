@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 WATCH_ENABLED = os.getenv("HOT_RELOAD_WATCH", "").strip().lower() in ("1", "true", "yes")
 
 _state_store: Dict[str, Any] = {}
-_reload_lock = threading.RLock()
+_reload_lock = threading.Lock()
 _reload_history: list = []
 
 
@@ -213,8 +213,7 @@ def _reload_watcher_loop(backend_root: Path, interval: float = 2.0):
                 if prev is not None and mtime > prev:
                     mod = _file_path_to_module(backend_root, py)
                     if mod and mod in sys.modules and mod != "core.hot_reload":
-                        with _reload_lock:
-                            hot_reload_module(mod)
+                        hot_reload_module(mod)
                         logger.info("Hot-reload (watch): %s", mod)
         except Exception as e:
             logger.debug("Reload watcher: %s", e)

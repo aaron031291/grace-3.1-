@@ -1,0 +1,821 @@
+## symbiotic_version_control.py
+'\nSymbiotic Genesis Key Version Control System.\n\nGenesis Keys and version control work as ONE unified system:\n- Every Genesis Key IS a version control entry\n- Every version control entry IS a Genesis Key\n- File changes automatically create Genesis Keys\n- Genesis Keys automatically track versions\n- Complete bidirectional integration\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+List
+Any
+Tuple
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+GenesisKeyStatus
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+genesis.file_version_tracker
+●●●●●● 2mm □△○
+get_file_version_tracker
+●●●●●● 3mm □△○
+genesis.repo_scanner
+●●●●●● 2mm □△○
+get_repo_scanner
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+session_scope
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SymbioticVersionControl
+'\n    Unified Genesis Key + Version Control System.\n\n    In this symbiotic system:\n    - Genesis Keys ARE version entries\n    - Version entries ARE Genesis Keys\n    - They cannot exist separately\n    - Every change creates BOTH simultaneously\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_path
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_file_version_tracker
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_repo_scanner
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_default_base_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get default base path.'
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+backend_dir
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_file_change
+●●●●●● 1mm □△
+self
+file_path
+user_id
+change_description
+operation_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'modify'
+'\n        Track a file change symbiotically.\n\n        Creates a Genesis Key, then a file version, then links them.\n        Wrapped in session_scope for thread-safe atomicity.\n        '
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+abs_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+abs_path
+●●●●●● 1mm □
+file_path
+rel_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+●●●●●● 3mm △
+●●●●●● 2mm □△
+file_hash_id
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+rel_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+file_genesis_key
+●●●●●● 1mm □
+'FILE-'
+file_hash_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+operation_genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+operation_key_id
+●●●●●● 1mm □
+operation_genesis_key
+operation_context_data
+●●●●●● 1mm □
+operation_genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+operation_key_id
+●●●●●● 1mm □
+'UNKNOWN-'
+●●●●●● 1mm △
+●●●●●● 1mm □△
+operation_genesis_key
+●●●●●● 2mm □△
+operation_context_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_file_version_tracker
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+version_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+version_result
+●●●●●● 1mm □△
+'changed'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+operation_context_data
+'version_key_id'
+●●●●●● 1mm □
+version_result
+'version_key_id'
+operation_context_data
+'version_number'
+●●●●●● 1mm □
+version_result
+'version_number'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+operation_genesis_key
+●●●●●● 2mm □△
+Exception
+operation_genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+operation_genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+operation_genesis_key
+●●●●●● 2mm □△
+operation_genesis_key
+●●●●●● 1mm □
+operation_context_data
+●●●●●● 3mm ○
+'file_genesis_key'
+'operation_genesis_key'
+'version_key_id'
+'version_number'
+'changed'
+'file_path'
+'absolute_path'
+'timestamp'
+'symbiotic'
+file_genesis_key
+operation_key_id
+version_result
+●●●●●● 1mm □△
+'version_key_id'
+●●●●●● 2mm □△
+version_result
+●●●●●● 1mm □△
+'version_number'
+●●●●●● 2mm □△
+version_result
+●●●●●● 1mm □△
+'changed'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+rel_path
+abs_path
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_complete_history
+●●●●●● 1mm □△
+self
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Get complete history - UNIFIED view.\n\n        Returns both Genesis Keys AND versions in one timeline.\n        Shows how they're interconnected.\n        "
+version_history
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+genesis_keys
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+file_genesis_key
+●●●●●● 1mm ○
+GenesisKey
+●●●●●● 1mm □△
+'file_genesis_key'
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+keys
+genesis_keys
+●●●●●● 1mm □△
+'key_id'
+'timestamp'
+'what'
+'who'
+'why'
+'version_info'
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+key
+key
+key
+key
+●●●●●● 1mm □△
+'version_key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+timeline
+●●●●●● 1mm □
+●●●●●● 2mm □
+version_history
+'versions'
+version_history
+version
+version_history
+'versions'
+timeline
+●●●●●● 1mm □△
+'type'
+'timestamp'
+'version_number'
+'version_key_id'
+'genesis_key_id'
+'user_id'
+'note'
+'file_hash'
+'version'
+version
+'timestamp'
+version
+'version_number'
+version
+'version_key_id'
+version
+●●●●●● 1mm □△
+'genesis_key_db_id'
+●●●●●● 2mm □△
+version
+'user_id'
+version
+'version_note'
+version
+'file_hash'
+●●●●●● 2mm □△
+gk
+genesis_keys
+timeline
+●●●●●● 1mm □△
+'type'
+'timestamp'
+'key_id'
+'what'
+'who'
+'why'
+'linked_version'
+'genesis_key'
+gk
+'timestamp'
+gk
+'key_id'
+gk
+'what'
+gk
+'who'
+gk
+'why'
+gk
+'version_info'
+●●●●●● 2mm □△
+timeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_genesis_key'
+'file_info'
+'total_entries'
+'timeline'
+'symbiotic'
+'message'
+file_genesis_key
+version_history
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timeline
+●●●●●● 2mm □△
+timeline
+●●●●●● 3mm □△○
+'Unified Genesis Key + Version Control history'
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting complete history: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+rollback_to_version
+●●●●●● 1mm □△
+self
+file_genesis_key
+version_number
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Rollback to a specific version - SYMBIOTIC operation.\n\n        Creates:\n        1. Genesis Key for the rollback operation\n        2. New version entry (rollback IS a new version)\n        3. Links them together\n        '
+version_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+version_number
+●●●●●● 2mm □△
+●●●●●● 2mm □
+version_info
+ValueError
+●●●●●● 1mm □△
+'Version '
+version_number
+' not found'
+●●●●●● 2mm □△
+file_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_info
+ValueError
+●●●●●● 1mm □△
+'File '
+file_genesis_key
+' not found'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+file_info
+'file_path'
+rollback_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+version_info
+●●●●●● 1mm □△
+'genesis_key_db_id'
+●●●●●● 2mm □△
+original_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+original_key
+original_key
+abs_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+abs_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+original_key
+●●●●●● 2mm □△
+new_version
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'rollback_genesis_key'
+'rolled_back_to_version'
+'new_version_created'
+'new_version_key'
+'file_genesis_key'
+'symbiotic'
+'message'
+rollback_key
+version_number
+new_version
+'version_number'
+new_version
+'version_key_id'
+file_genesis_key
+●●●●●● 3mm □△○
+'Rolled back to version '
+version_number
+' - created new version '
+new_version
+'version_number'
+Exception
+logger
+●●●●●● 1mm □△
+'Error in symbiotic rollback: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_or_create_file_genesis_key
+●●●●●● 1mm □△
+self
+rel_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get or create FILE-prefix Genesis Key for a file.'
+file_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+rel_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'FILE-'
+file_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_compute_file_hash
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Compute SHA256 hash of file content.'
+sha256_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'rb'
+●●●●●● 2mm □△
+f
+byte_block
+iter
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+4096
+●●●●●● 2mm □△
+b''
+●●●●●● 2mm □△
+sha256_hash
+●●●●●● 1mm □△
+byte_block
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sha256_hash
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error computing hash for '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_read_file_content
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Read file content (text files only).'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UnicodeDecodeError
+logger
+●●●●●● 1mm □△
+'Binary file: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error reading '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+watch_file
+●●●●●● 1mm □△
+self
+file_path
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Start watching a file for changes - SYMBIOTIC.\n\n        Any change to the file will automatically:\n        1. Create Genesis Key\n        2. Create version entry\n        3. Link them together\n        '
+file_genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'watching'
+'file_genesis_key'
+'user_id'
+'auto_track'
+'symbiotic'
+'message'
+file_path
+file_genesis_key
+user_id
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'File changes will automatically create Genesis Keys and versions'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_symbiotic_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get statistics about symbiotic integration.\n\n        Shows how Genesis Keys and versions are interconnected.\n        '
+version_stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_stats
+●●●●●● 1mm □
+'total_file_operations'
+'symbiotic_operations'
+0
+0
+●●●●●● 2mm □
+●●●●●● 3mm △
+total_file_ops
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+GenesisKeyType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+symbiotic_ops
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+GenesisKeyType
+GenesisKey
+●●●●●● 1mm □△
+'symbiotic'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_stats
+'total_file_operations'
+●●●●●● 1mm □
+total_file_ops
+genesis_stats
+'symbiotic_operations'
+●●●●●● 1mm □
+symbiotic_ops
+●●●●●● 3mm ○
+'version_control'
+'genesis_keys'
+'integration_percentage'
+'message'
+version_stats
+genesis_stats
+genesis_stats
+'total_file_operations'
+0
+genesis_stats
+'symbiotic_operations'
+●●●●●● 3mm □△
+genesis_stats
+'total_file_operations'
+●●●●●● 2mm □△
+100
+0
+'Genesis Keys and Version Control working symbiotically'
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting symbiotic stats: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'message'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'Could not get symbiotic stats'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_symbiotic_version_control
+●●●●●● 1mm □△
+base_path
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get a symbiotic version control instance.'
+●●●●●● 3mm ○
+SymbioticVersionControl
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SymbioticVersionControl

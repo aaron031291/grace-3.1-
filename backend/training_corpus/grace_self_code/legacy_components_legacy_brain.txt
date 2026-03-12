@@ -1,0 +1,51 @@
+## legacy_brain.py
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LegacyBrain
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.genesis_key
+●●●●●● 2mm □△○
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LEGACY-BRAIN] Securely instantiated with Genesis Key: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+execute_legacy_heuristic
+●●●●●● 1mm □△
+self
+input_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n        An old heuristic rules engine running prior to Qwen integration.\n        Now tracked via the Genesis Key.\n        '
+logger
+●●●●●● 1mm □△
+'[LEGACY-BRAIN] Running heuristic tracking via key: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'decision'
+'confidence'
+'genesis_key'
+'heuristic_approve'
+0.45
+●●●●●● 3mm △
+●●●●●● 2mm □△

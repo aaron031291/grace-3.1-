@@ -1,0 +1,762 @@
+## kpi_tracker.py
+'\nKPI Tracking System - Component Performance Metrics\n\nTracks Key Performance Indicators (KPIs) for all components, aggregating\nperformance data into operational health signals that feed into trust scores.\n\nKey Features:\n- Action frequency tracking (every action increments KPI)\n- Component-level KPI aggregation\n- KPI-to-trust score conversion\n- System-wide trust aggregation\n- Time-windowed metrics (recent vs. historical)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+KPI
+'Key Performance Indicator for a component.'
+component_name
+●●●●●● 1mm ○
+metric_name
+●●●●●● 1mm ○
+value
+●●●●●● 3mm ○
+count
+●●●●●● 2mm ○
+1
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+increment
+●●●●●● 1mm □△
+self
+value
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+1.0
+●●●●●● 2mm □
+'Increment KPI value.'
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+value
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metadata
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ComponentKPIs
+'All KPIs for a single component.'
+component_name
+●●●●●● 1mm ○
+kpis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+KPI
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+updated_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_kpi
+●●●●●● 1mm □△
+self
+metric_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get or create KPI for metric.'
+●●●●●● 2mm □
+metric_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+metric_name
+●●●●●● 1mm □
+KPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+metric_name
+KPI
+●●●●●● 1mm □
+increment_kpi
+●●●●●● 1mm □△
+self
+metric_name
+value
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+1.0
+●●●●●● 2mm □
+'Increment a KPI.'
+kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □△
+value
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_trust_score
+●●●●●● 1mm □△
+self
+metric_weights
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Convert KPIs to trust score.\n        \n        Higher frequency and consistency = higher trust.\n        \n        Args:\n            metric_weights: Optional weights for different metrics\n            \n        Returns:\n            Trust score (0-1)\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.5
+●●●●●● 2mm □
+metric_weights
+●●●●●● 2mm □
+metric_weights
+●●●●●● 1mm □
+name
+1.0
+name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_weight
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+metric_weights
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_weight
+0
+●●●●●● 3mm ○
+0.5
+weighted_sum
+●●●●●● 1mm □
+0.0
+metric_name
+kpi
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+weight
+●●●●●● 1mm □
+metric_weights
+●●●●●● 1mm □△
+metric_name
+1.0
+●●●●●● 2mm □△
+normalized
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+kpi
+●●●●●● 3mm □△
+kpi
+●●●●●● 3mm ○
+10
+1.0
+●●●●●● 2mm □△
+weighted_sum
+weight
+●●●●●● 2mm □△
+normalized
+trust_score
+●●●●●● 1mm □
+weighted_sum
+●●●●●● 3mm □△
+total_weight
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+trust_score
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_recent_kpi
+●●●●●● 1mm □△
+self
+metric_name
+time_window
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get KPI if updated within time window.'
+●●●●●● 2mm □
+metric_name
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+metric_name
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+kpi
+time_window
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+kpi
+●●●●●● 2mm □○
+KPI
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert to dictionary.'
+●●●●●● 3mm ○
+'component_name'
+'kpis'
+'created_at'
+'updated_at'
+'trust_score'
+●●●●●● 3mm △
+name
+'value'
+'count'
+'timestamp'
+'metadata'
+kpi
+kpi
+kpi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpi
+name
+kpi
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+KPITracker
+'\n    Tracks KPIs for all components.\n    \n    Translates component performance metrics into trust scores.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize KPI tracker.'
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ComponentKPIs
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[KPI-TRACKER] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+register_component
+●●●●●● 1mm □△
+self
+component_name
+metric_weights
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Register a component for KPI tracking.\n        \n        Args:\n            component_name: Name of component\n            metric_weights: Optional weights for metrics\n        '
+●●●●●● 2mm □
+component_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+component_name
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[KPI-TRACKER] Registered component: '
+component_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metric_weights
+●●●●●● 3mm △
+component_name
+●●●●●● 1mm □
+metric_weights
+●●●●●● 1mm □
+increment_kpi
+●●●●●● 1mm □△
+self
+component_name
+metric_name
+value
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+1.0
+●●●●●● 2mm □
+'\n        Increment a KPI for a component.\n        \n        Every time a component does its job, this ticks up.\n        \n        Args:\n            component_name: Name of component\n            metric_name: Name of metric (e.g., "requests_handled", "successes")\n            value: Value to increment by\n            metadata: Optional metadata\n        '
+●●●●●● 2mm □
+component_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+component_name
+●●●●●● 1mm □△
+metric_name
+value
+metadata
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[KPI-TRACKER] '
+component_name
+'.'
+metric_name
+' += '
+value
+' (total: '
+●●●●●● 3mm △
+component_name
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_component_kpis
+●●●●●● 1mm □△
+self
+component_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get KPIs for a component.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+ComponentKPIs
+●●●●●● 1mm □
+get_component_trust_score
+●●●●●● 1mm □△
+self
+component_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get trust score for a component based on KPIs.\n        \n        Args:\n            component_name: Name of component\n            \n        Returns:\n            Trust score (0-1)\n        '
+●●●●●● 2mm □
+component_name
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.5
+component
+●●●●●● 1mm □
+●●●●●● 3mm △
+component_name
+weights
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+component
+●●●●●● 1mm □△
+weights
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_system_trust_score
+●●●●●● 1mm □△
+self
+component_weights
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Calculate system-wide trust score from all component trust scores.\n        \n        All component-level trust scores roll up into system-wide trust.\n        \n        Args:\n            component_weights: Optional weights for components\n            \n        Returns:\n            System-wide trust score (0-1)\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.5
+●●●●●● 2mm □
+component_weights
+●●●●●● 2mm □
+component_weights
+●●●●●● 1mm □
+name
+1.0
+name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_weight
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+component_weights
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_weight
+0
+●●●●●● 3mm ○
+0.5
+weighted_sum
+●●●●●● 1mm □
+0.0
+component_name
+component
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+weight
+●●●●●● 1mm □
+component_weights
+●●●●●● 1mm □△
+component_name
+1.0
+●●●●●● 2mm □△
+component_trust
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+weighted_sum
+weight
+●●●●●● 2mm □△
+component_trust
+system_trust
+●●●●●● 1mm □
+weighted_sum
+●●●●●● 3mm □△
+total_weight
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+system_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_health_signal
+●●●●●● 1mm □△
+self
+component_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get operational health signal for a component.\n        \n        Aggregates KPIs into health signal.\n        \n        Args:\n            component_name: Name of component\n            \n        Returns:\n            Health signal dictionary\n        '
+component
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component
+●●●●●● 3mm ○
+'component_name'
+'status'
+'trust_score'
+'kpi_count'
+component_name
+'unknown'
+0.5
+0
+trust_score
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust_score
+0.8
+status
+●●●●●● 1mm □
+'excellent'
+●●●●●● 1mm △
+trust_score
+0.6
+status
+●●●●●● 1mm □
+'good'
+●●●●●● 2mm □
+trust_score
+0.4
+status
+●●●●●● 1mm □
+'fair'
+●●●●●● 3mm □
+status
+●●●●●● 1mm □
+'poor'
+●●●●●● 3mm ○
+'component_name'
+'status'
+'trust_score'
+'kpi_count'
+'total_actions'
+'updated_at'
+component_name
+status
+trust_score
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kpi
+kpi
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_system_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get system-wide operational health.\n        \n        Returns:\n            System health dictionary\n        '
+system_trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_health
+●●●●●● 1mm □
+component_name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_health
+component_name
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+system_trust
+0.8
+status
+●●●●●● 1mm □
+'excellent'
+●●●●●● 1mm △
+system_trust
+0.6
+status
+●●●●●● 1mm □
+'good'
+●●●●●● 2mm □
+system_trust
+0.4
+status
+●●●●●● 1mm □
+'fair'
+●●●●●● 3mm □
+status
+●●●●●● 1mm □
+'poor'
+●●●●●● 3mm ○
+'system_trust_score'
+'status'
+'component_count'
+'components'
+system_trust
+status
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+component_health
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert tracker to dictionary.'
+●●●●●● 3mm ○
+'components'
+'system_trust_score'
+'system_health'
+name
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name
+component
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_kpi_tracker
+●●●●●● 2mm □○
+KPITracker
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get global KPI tracker instance.'
+●●●●●● 2mm □
+_kpi_tracker
+●●●●●● 2mm □
+_kpi_tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_kpi_tracker
+KPITracker
+●●●●●● 1mm □
+reset_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset global KPI tracker (for testing).'
+_kpi_tracker
+●●●●●● 1mm □
+●●●●●● 2mm □

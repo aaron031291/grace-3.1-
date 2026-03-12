@@ -1,0 +1,468 @@
+## utils.py
+'\nUtility functions for the Librarian System.\n\nProvides common helper functions used across librarian components.\n'
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+Dict
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+normalize_tag_name
+●●●●●● 1mm □△
+tag_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Normalize tag name to lowercase with consistent formatting.\n\n    Args:\n        tag_name: Raw tag name\n\n    Returns:\n        str: Normalized tag name (lowercase, trimmed)\n\n    Example:\n        >>> normalize_tag_name("  AI Research  ")\n        \'ai research\'\n        >>> normalize_tag_name("Python-Code")\n        \'python-code\'\n    '
+●●●●●● 3mm ○
+tag_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+validate_tag_name
+●●●●●● 1mm □△
+tag_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Validate that a tag name meets requirements.\n\n    Requirements:\n    - Length between 1 and 100 characters\n    - Contains only alphanumeric, spaces, hyphens, underscores\n    - No leading/trailing spaces after normalization\n\n    Args:\n        tag_name: Tag name to validate\n\n    Returns:\n        bool: True if valid, False otherwise\n\n    Example:\n        >>> validate_tag_name("ai-research")\n        True\n        >>> validate_tag_name("")\n        False\n        >>> validate_tag_name("tag with spaces")\n        True\n        >>> validate_tag_name("tag@invalid!")\n        False\n    '
+normalized
+●●●●●● 1mm □
+normalize_tag_name
+●●●●●● 1mm □△
+tag_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+normalized
+●●●●●● 2mm □△
+100
+●●●●●● 3mm ○
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □
+'^[a-z0-9\\s\\-_]+$'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+pattern
+normalized
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_hex_color
+●●●●●● 1mm □△
+color
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Validate that a string is a valid hex color code.\n\n    Args:\n        color: Color string to validate (e.g., "#3B82F6")\n\n    Returns:\n        bool: True if valid hex color, False otherwise\n\n    Example:\n        >>> validate_hex_color("#3B82F6")\n        True\n        >>> validate_hex_color("#FFF")\n        True\n        >>> validate_hex_color("blue")\n        False\n        >>> validate_hex_color("#GGGGGG")\n        False\n    '
+pattern
+●●●●●● 1mm □
+'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+pattern
+color
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+generate_default_color
+●●●●●● 1mm □△
+tag_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Generate a consistent color for a tag based on its name.\n\n    Uses hash of tag name to generate a consistent color.\n    This ensures the same tag always gets the same color.\n\n    Args:\n        tag_name: Tag name\n\n    Returns:\n        str: Hex color code\n\n    Example:\n        >>> color = generate_default_color("ai")\n        >>> len(color)\n        7\n        >>> color.startswith("#")\n        True\n    '
+hash_obj
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+tag_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+hash_hex
+●●●●●● 1mm □
+hash_obj
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+color
+●●●●●● 1mm □
+'#'
+hash_hex
+6
+●●●●●● 3mm ○
+color
+●●●●●● 1mm ○
+●●●●●● 1mm □
+sanitize_filename
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Sanitize filename by removing or replacing invalid characters.\n\n    Args:\n        filename: Original filename\n\n    Returns:\n        str: Sanitized filename safe for filesystem\n\n    Example:\n        >>> sanitize_filename("my file.txt")\n        \'my_file.txt\'\n        >>> sanitize_filename("file<>?.txt")\n        \'file.txt\'\n    '
+filename
+●●●●●● 1mm □
+filename
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+invalid_chars
+●●●●●● 1mm □
+'[<>:"/\\\\|?*]'
+filename
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+invalid_chars
+''
+filename
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filename
+●●●●●● 1mm ○
+●●●●●● 1mm □
+format_confidence_score
+●●●●●● 1mm □△
+score
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n    Format confidence score as percentage string.\n\n    Args:\n        score: Confidence score (0.0-1.0)\n\n    Returns:\n        str: Formatted percentage (e.g., "85%")\n\n    Example:\n        >>> format_confidence_score(0.856)\n        \'86%\'\n        >>> format_confidence_score(0.5)\n        \'50%\'\n    '
+percentage
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+score
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+percentage
+'%'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+parse_confidence_label
+●●●●●● 1mm □△
+label
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Parse confidence label to numeric score.\n\n    Args:\n        label: Confidence label ("low", "medium", "high")\n\n    Returns:\n        float: Numeric confidence score\n\n    Example:\n        >>> parse_confidence_label("high")\n        0.9\n        >>> parse_confidence_label("medium")\n        0.7\n        >>> parse_confidence_label("low")\n        0.4\n    '
+label_map
+●●●●●● 1mm □
+'low'
+'medium'
+'high'
+0.4
+0.7
+0.9
+●●●●●● 3mm ○
+label_map
+●●●●●● 1mm □△
+label
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+extract_file_extension
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Extract file extension from filename.\n\n    Args:\n        filename: File name or path\n\n    Returns:\n        Optional[str]: Extension without dot (e.g., "pdf") or None\n\n    Example:\n        >>> extract_file_extension("document.pdf")\n        \'pdf\'\n        >>> extract_file_extension("archive.tar.gz")\n        \'gz\'\n        >>> extract_file_extension("README")\n        None\n    '
+●●●●●● 2mm □
+'.'
+filename
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+filename
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+match_pattern
+●●●●●● 1mm □△
+text
+pattern
+case_sensitive
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n    Check if text matches regex pattern.\n\n    Args:\n        text: Text to match against\n        pattern: Regex pattern\n        case_sensitive: Whether to use case-sensitive matching\n\n    Returns:\n        bool: True if pattern matches, False otherwise\n\n    Example:\n        >>> match_pattern("document.pdf", r"\\.pdf$", case_sensitive=False)\n        True\n        >>> match_pattern("README.md", r"^README", case_sensitive=True)\n        True\n        >>> match_pattern("readme.md", r"^README", case_sensitive=True)\n        False\n    '
+flags
+●●●●●● 1mm □
+case_sensitive
+0
+re
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+pattern
+text
+flags
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+re
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+truncate_text
+●●●●●● 1mm □△
+text
+max_length
+suffix
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+100
+'...'
+'\n    Truncate text to maximum length with suffix.\n\n    Args:\n        text: Text to truncate\n        max_length: Maximum length including suffix\n        suffix: Suffix to append if truncated\n\n    Returns:\n        str: Truncated text\n\n    Example:\n        >>> truncate_text("This is a very long text", max_length=15)\n        \'This is a ve...\'\n        >>> truncate_text("Short", max_length=20)\n        \'Short\'\n    '
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+max_length
+●●●●●● 3mm ○
+text
+●●●●●● 3mm ○
+text
+max_length
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+suffix
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+suffix
+●●●●●● 1mm ○
+●●●●●● 1mm □
+safe_json_dumps
+●●●●●● 1mm □△
+obj
+default
+●●●●●● 2mm □△
+Any
+Any
+●●●●●● 2mm □
+'\n    Safely serialize object to JSON string.\n\n    Handles non-serializable types like datetime.\n\n    Args:\n        obj: Object to serialize\n        default: Default value for non-serializable types\n\n    Returns:\n        str: JSON string\n\n    Example:\n        >>> result = safe_json_dumps({"date": datetime(2024, 1, 1)})\n        >>> "2024-01-01" in result\n        True\n    '
+●●●●●● 1mm □
+json_default
+●●●●●● 1mm □△
+o
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+o
+datetime
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+o
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+o
+'__dict__'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+o
+●●●●●● 3mm ○
+default
+●●●●●● 2mm □
+default
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+o
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+safe_json_loads
+●●●●●● 1mm □△
+json_string
+default
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n    Safely deserialize JSON string.\n\n    Args:\n        json_string: JSON string to parse\n        default: Default value if parsing fails\n\n    Returns:\n        Any: Parsed object or default\n\n    Example:\n        >>> safe_json_loads(\'{"key": "value"}\')\n        {\'key\': \'value\'}\n        >>> safe_json_loads(\'invalid json\', default={})\n        {}\n    '
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+json_string
+●●●●●● 2mm □△
+json
+TypeError
+●●●●●● 3mm ○
+default
+●●●●●● 2mm □
+default
+Any
+●●●●●● 1mm □
+deduplicate_list
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Any
+'\n    Remove duplicates from list while preserving order.\n\n    Args:\n        items: List with potential duplicates\n\n    Returns:\n        List: List with duplicates removed\n\n    Example:\n        >>> deduplicate_list([1, 2, 2, 3, 1, 4])\n        [1, 2, 3, 4]\n        >>> deduplicate_list(["a", "b", "a", "c"])\n        [\'a\', \'b\', \'c\']\n    '
+seen
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+item
+items
+●●●●●● 2mm □
+item
+seen
+seen
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△
+Any
+●●●●●● 1mm □
+calculate_similarity_score
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Calculate simple similarity score between two texts.\n\n    Uses Jaccard similarity on word sets.\n\n    Args:\n        text1: First text\n        text2: Second text\n\n    Returns:\n        float: Similarity score (0.0-1.0)\n\n    Example:\n        >>> calculate_similarity_score("hello world", "hello there")\n        0.3333333333333333\n        >>> calculate_similarity_score("same", "same")\n        1.0\n    '
+words1
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+text1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+words2
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+text2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+words1
+words2
+●●●●●● 3mm ○
+0.0
+intersection
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words1
+●●●●●● 3mm △
+words2
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words1
+●●●●●● 1mm ○
+words2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm △○
+0
+intersection
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+batch_items
+●●●●●● 1mm □△
+items
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Any
+●●●●●● 2mm ○
+100
+'\n    Split list into batches of specified size.\n\n    Args:\n        items: List to batch\n        batch_size: Size of each batch\n\n    Returns:\n        List[List]: List of batches\n\n    Example:\n        >>> batch_items([1, 2, 3, 4, 5], batch_size=2)\n        [[1, 2], [3, 4], [5]]\n    '
+batches
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+batch_size
+●●●●●● 2mm □△
+batches
+●●●●●● 1mm □△
+items
+i
+i
+●●●●●● 3mm ○
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+batches
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Any

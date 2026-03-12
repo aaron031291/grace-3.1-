@@ -1,0 +1,1258 @@
+## cognitive_integration.py
+"\nCognitive Framework Integration for Diagnostic Machine\n\nConnects diagnostic insights to GRACE's cognitive systems:\n- Learning Memory: Store diagnostic patterns as learning examples\n- Memory Mesh: Index patterns for retrieval\n- Decision Log: Log all diagnostic decisions for observability\n- Procedural Memory: Extract reusable diagnostic procedures\n\nThis closes the learning loop: diagnostics inform learning,\nlearning improves diagnostics.\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DiagnosticInsightType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of diagnostic insights to feed into learning.'
+TEST_FAILURE_PATTERN
+●●●●●● 1mm □
+'test_failure_pattern'
+TEST_SUCCESS_PATTERN
+●●●●●● 1mm □
+'test_success_pattern'
+HEALING_SUCCESS
+●●●●●● 1mm □
+'healing_success'
+HEALING_FAILURE
+●●●●●● 1mm □
+'healing_failure'
+ANOMALY_DETECTED
+●●●●●● 1mm □
+'anomaly_detected'
+ANOMALY_RESOLVED
+●●●●●● 1mm □
+'anomaly_resolved'
+DRIFT_DETECTED
+●●●●●● 1mm □
+'drift_detected'
+INVARIANT_VIOLATION
+●●●●●● 1mm □
+'invariant_violation'
+FORENSIC_FINDING
+●●●●●● 1mm □
+'forensic_finding'
+PERFORMANCE_OPTIMIZATION
+●●●●●● 1mm □
+'performance_optimization'
+●●●●●● 2mm △
+DiagnosticInsight
+'An insight from diagnostics to store in learning memory.'
+insight_id
+●●●●●● 1mm ○
+insight_type
+DiagnosticInsightType
+description
+●●●●●● 1mm ○
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+outcome
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+confidence
+●●●●●● 3mm ○
+source_cycle_id
+●●●●●● 1mm ○
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tags
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+related_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+DiagnosticProcedure
+'A learned diagnostic procedure to store in procedural memory.'
+procedure_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+preconditions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+steps
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+expected_outcomes
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+success_rate
+●●●●●● 3mm ○
+0.0
+times_applied
+●●●●●● 2mm ○
+0
+source_insights
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+LearningMemoryIntegration
+"\n    Integrates diagnostic insights with GRACE's Learning Memory.\n\n    Converts diagnostic findings into learning examples that can be\n    used to improve future diagnostics and system behavior.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+store_pattern_insight
+●●●●●● 1mm □△
+self
+pattern_type
+pattern_data
+cycle_id
+confidence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Store a detected pattern as a learning example.'
+●●●●●● 3mm △
+1
+insight_id
+●●●●●● 1mm □
+'DIAG-INSIGHT-'
+●●●●●● 3mm △
+'06d'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+example
+●●●●●● 1mm □
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Stored pattern insight: '
+insight_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+insight_id
+Exception
+logger
+●●●●●● 1mm □△
+'Could not store to Learning Memory DB: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DiagnosticInsight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to store pattern insight: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+store_healing_insight
+●●●●●● 1mm □△
+self
+action_name
+target_component
+success
+details
+cycle_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'Store a healing action result as a learning example.'
+●●●●●● 3mm △
+1
+insight_id
+●●●●●● 1mm □
+'DIAG-INSIGHT-'
+●●●●●● 3mm △
+'06d'
+insight_type
+●●●●●● 1mm □
+success
+DiagnosticInsightType
+DiagnosticInsightType
+insight
+●●●●●● 1mm □
+DiagnosticInsight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+insight
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+store_anomaly_insight
+●●●●●● 1mm □△
+self
+anomaly_type
+severity
+description
+resolution
+cycle_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'Store an anomaly detection as a learning example.'
+●●●●●● 3mm △
+1
+insight_id
+●●●●●● 1mm □
+'DIAG-INSIGHT-'
+●●●●●● 3mm △
+'06d'
+insight_type
+●●●●●● 1mm □
+resolution
+DiagnosticInsightType
+DiagnosticInsightType
+insight
+●●●●●● 1mm □
+DiagnosticInsight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+insight
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+store_forensic_insight
+●●●●●● 1mm □△
+self
+finding_id
+category
+description
+evidence
+confidence
+cycle_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+'Store a forensic finding as a learning example.'
+●●●●●● 3mm △
+1
+insight_id
+●●●●●● 1mm □
+'DIAG-INSIGHT-'
+●●●●●● 3mm △
+'06d'
+insight
+●●●●●● 1mm □
+DiagnosticInsight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+insight
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_store_to_file
+●●●●●● 1mm □△
+self
+insight
+●●●●●● 2mm □△
+DiagnosticInsight
+'Store insight to file-based learning memory.'
+learning_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'learning_memory'
+●●●●●● 3mm □△
+'diagnostic_insights'
+learning_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+learning_dir
+●●●●●● 3mm □△
+insight
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+'insight_id'
+'insight_type'
+'description'
+'context'
+'outcome'
+'confidence'
+'source_cycle_id'
+'timestamp'
+'tags'
+'related_components'
+insight
+insight
+insight
+insight
+insight
+insight
+insight
+insight
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+insight
+insight
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Stored insight to file: '
+insight
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+insight
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to store insight to file: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+insight
+●●●●●● 1mm ○
+●●●●●● 2mm △
+DecisionLogIntegration
+"\n    Integrates diagnostic decisions with GRACE's Decision Log.\n\n    Ensures all diagnostic decisions are observable and auditable\n    per Invariant 6: Observability Is Mandatory.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+log_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_dir
+Path
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm □△
+'diagnostic_decisions'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.decision_log
+●●●●●● 2mm □△○
+DecisionLogger
+●●●●●● 3mm △
+●●●●●● 1mm □
+DecisionLogger
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'DecisionLogger not available, using file-based logging'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_diagnostic_decision
+●●●●●● 1mm □△
+self
+decision_id
+decision_type
+input_data
+alternatives
+selected_action
+rationale
+confidence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Log a diagnostic decision with full context.'
+decision_entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'decision_type'
+'input_summary'
+'alternatives_considered'
+'alternatives'
+'selected_action'
+'rationale'
+'confidence'
+'diagnostic_decision'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_type
+'health_status'
+'anomaly_count'
+'pattern_count'
+input_data
+●●●●●● 1mm □△
+'health_status'
+'unknown'
+●●●●●● 2mm □△
+input_data
+●●●●●● 1mm □△
+'anomaly_count'
+0
+●●●●●● 2mm □△
+input_data
+●●●●●● 1mm □△
+'pattern_count'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alternatives
+●●●●●● 2mm □△
+alternatives
+selected_action
+rationale
+confidence
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_entry
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_healing_decision
+●●●●●● 1mm □△
+self
+decision_id
+healing_action
+target_component
+justification
+risk_assessment
+reversible
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+'Log a self-healing decision.'
+decision_entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'healing_action'
+'target_component'
+'justification'
+'risk_assessment'
+'reversible'
+'invariant_4_compliant'
+'healing_decision'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healing_action
+target_component
+justification
+risk_assessment
+reversible
+reversible
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_entry
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_freeze_decision
+●●●●●● 1mm □△
+self
+decision_id
+reason
+affected_components
+severity
+human_override_available
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'Log a system freeze decision.'
+decision_entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'reason'
+'affected_components'
+'severity'
+'human_override_available'
+'invariant_2_compliant'
+'freeze_decision'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reason
+affected_components
+severity
+human_override_available
+human_override_available
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_entry
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_write_decision
+●●●●●● 1mm □△
+self
+entry
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Write decision to log file.'
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'diagnostic_decisions_'
+today
+'.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Logged decision: '
+entry
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to write decision log: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MemoryMeshIntegration
+"\n    Integrates diagnostic patterns with GRACE's Memory Mesh.\n\n    Stores diagnostic patterns in semantic memory for:\n    - Pattern retrieval during future diagnostics\n    - Cross-referencing with other system knowledge\n    - Building diagnostic expertise over time\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegrator
+●●●●●● 3mm △
+●●●●●● 1mm □
+MemoryMeshIntegrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'MemoryMeshIntegrator not available, using local storage'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store_diagnostic_pattern
+●●●●●● 1mm □△
+self
+pattern_id
+pattern_type
+description
+conditions
+actions
+effectiveness
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Store a diagnostic pattern in memory mesh.'
+pattern_data
+●●●●●● 1mm □
+'pattern_id'
+'pattern_type'
+'description'
+'conditions'
+'recommended_actions'
+'effectiveness'
+'source'
+'timestamp'
+pattern_id
+pattern_type
+description
+conditions
+actions
+effectiveness
+'diagnostic_machine'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern_data
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to store pattern in memory mesh: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+retrieve_similar_patterns
+●●●●●● 1mm □△
+self
+current_conditions
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+5
+'Retrieve similar diagnostic patterns from memory mesh.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_conditions
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_conditions
+limit
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to retrieve patterns: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_store_pattern_to_file
+●●●●●● 1mm □△
+self
+pattern_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Store pattern to file.'
+pattern_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'learning_memory'
+●●●●●● 3mm □△
+'diagnostic_patterns'
+pattern_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern_id
+●●●●●● 1mm □
+pattern_data
+'pattern_id'
+file_path
+●●●●●● 1mm □
+pattern_dir
+●●●●●● 3mm □△
+pattern_id
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+pattern_data
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pattern_id
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to store pattern to file: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pattern_data
+●●●●●● 1mm □△
+'pattern_id'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_retrieve_patterns_from_file
+●●●●●● 1mm □△
+self
+conditions
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+'Retrieve patterns from file storage.'
+patterns
+●●●●●● 1mm □
+pattern_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'learning_memory'
+●●●●●● 3mm □△
+'diagnostic_patterns'
+●●●●●● 2mm □
+pattern_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+file_path
+pattern_dir
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+pattern
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+Exception
+patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+limit
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to retrieve patterns from file: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+ProceduralMemoryIntegration
+'\n    Extracts and stores learned diagnostic procedures.\n\n    Converts repeated diagnostic patterns into reusable procedures.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+extract_procedure_from_pattern
+●●●●●● 1mm □△
+self
+pattern_type
+successful_actions
+context
+success_rate
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+'Extract a reusable procedure from a successful pattern.'
+●●●●●● 2mm □
+success_rate
+0.7
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+1
+procedure_id
+●●●●●● 1mm □
+'DIAG-PROC-'
+●●●●●● 3mm △
+'04d'
+procedure
+●●●●●● 1mm □
+DiagnosticProcedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+procedure
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedure
+●●●●●● 2mm □○
+DiagnosticProcedure
+●●●●●● 1mm □
+_store_procedure
+●●●●●● 1mm □△
+self
+procedure
+●●●●●● 2mm □△
+DiagnosticProcedure
+'Store extracted procedure.'
+proc_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'learning_memory'
+●●●●●● 3mm □△
+'diagnostic_procedures'
+proc_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+proc_dir
+●●●●●● 3mm □△
+procedure
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+'procedure_id'
+'name'
+'description'
+'preconditions'
+'steps'
+'expected_outcomes'
+'success_rate'
+'times_applied'
+'timestamp'
+procedure
+procedure
+procedure
+procedure
+procedure
+procedure
+procedure
+procedure
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Stored diagnostic procedure: '
+procedure
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to store procedure: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CognitiveIntegrationManager
+"\n    Main manager for all cognitive integrations.\n\n    Provides a unified interface for the diagnostic machine to\n    interact with GRACE's cognitive systems.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+log_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningMemoryIntegration
+●●●●●● 1mm □△
+db_session
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DecisionLogIntegration
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MemoryMeshIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ProceduralMemoryIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_diagnostic_cycle
+●●●●●● 1mm □△
+self
+cycle_id
+sensor_data
+interpreted_data
+judgement
+action_decision
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Process a completed diagnostic cycle for learning.'
+pattern
+interpreted_data
+●●●●●● 1mm □△
+'patterns'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+finding
+judgement
+●●●●●● 1mm □△
+'forensic_findings'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+judgement
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'healthy'
+pattern
+interpreted_data
+●●●●●● 1mm □△
+'patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'test_success_pattern'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Processed diagnostic cycle '
+cycle_id
+' for learning'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to process cycle for learning: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+retrieve_relevant_knowledge
+●●●●●● 1mm □△
+self
+current_context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Retrieve relevant knowledge for current diagnostic context.'
+similar_patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'similar_patterns'
+'suggested_actions'
+similar_patterns
+p
+●●●●●● 1mm □△
+'recommended_actions'
+●●●●●● 2mm □△
+p
+similar_patterns
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to retrieve knowledge: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'similar_patterns'
+'suggested_actions'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_cognitive_manager
+●●●●●● 2mm □○
+CognitiveIntegrationManager
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cognitive_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global cognitive integration manager.'
+●●●●●● 2mm □
+_cognitive_manager
+●●●●●● 2mm □
+_cognitive_manager
+●●●●●● 1mm □
+CognitiveIntegrationManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cognitive_manager
+CognitiveIntegrationManager

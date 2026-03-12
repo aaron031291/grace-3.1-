@@ -1,0 +1,379 @@
+## semantic_procedure_finder.py
+'\nSemantic Procedure Finder\n\nUses embedding similarity instead of text matching for finding procedures.\n\nPerformance Improvement: 5-10x more accurate, semantically aware matching\nGrace Alignment: Natural language understanding of goals and context\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Procedure
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SemanticProcedureFinder
+'\n    Find procedures using semantic similarity.\n\n    Replaces text-based LIKE queries with embedding-based similarity search.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+collection_name
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'procedures'
+'\n        Initialize semantic procedure finder.\n\n        Args:\n            session: Database session\n            collection_name: Qdrant collection for procedures\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+collection_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+find_procedure_semantic
+●●●●●● 1mm □△
+self
+goal
+context
+min_similarity
+min_success_rate
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.6
+0.7
+5
+'\n        Find procedures using semantic similarity.\n\n        Args:\n            goal: Goal description\n            context: Optional context for filtering\n            min_similarity: Minimum semantic similarity (0-1)\n            min_success_rate: Minimum procedure success rate\n            limit: Maximum procedures to return\n\n        Returns:\n            List of matching Procedure objects\n        '
+goal_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+●●●●●● 2mm □△
+0
+similar
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+similar
+logger
+●●●●●● 1mm □△
+'No semantic matches found for goal: '
+goal
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedure_ids
+●●●●●● 1mm □
+result
+'id'
+result
+similar
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+procedure_ids
+●●●●●● 2mm □△
+Procedure
+min_success_rate
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score_map
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+'id'
+●●●●●● 2mm □△
+r
+'score'
+r
+similar
+procedures
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+" procedures for goal '"
+goal
+50
+"...'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedures
+limit
+Exception
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Error finding procedures: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+goal
+min_success_rate
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Procedure
+●●●●●● 1mm □
+_find_procedure_fallback
+●●●●●● 1mm □△
+self
+goal
+min_success_rate
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+'\n        Fallback text-based procedure search.\n\n        Args:\n            goal: Goal description\n            min_success_rate: Minimum success rate\n            limit: Maximum results\n\n        Returns:\n            List of procedures\n        '
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Using fallback text search'
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+goal
+●●●●●● 2mm □△
+Procedure
+min_success_rate
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedures
+●●●●●● 3mm □△
+Procedure
+●●●●●● 1mm □
+index_procedure
+●●●●●● 1mm □△
+self
+procedure
+●●●●●● 2mm □△
+Procedure
+'\n        Index a procedure in vector database.\n\n        Args:\n            procedure: Procedure to index\n        '
+proc_text
+●●●●●● 1mm □
+procedure
+': '
+procedure
+●●●●●● 2mm □
+procedure
+proc_text
+' - '
+procedure
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+proc_text
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Indexed procedure: '
+procedure
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Error indexing procedure '
+procedure
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+index_all_procedures
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Index all procedures in vector database (bulk operation)'
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+procedures
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] No procedures to index'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+texts
+●●●●●● 1mm □
+ids
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+proc
+procedures
+proc_text
+●●●●●● 1mm □
+proc
+': '
+proc
+●●●●●● 2mm □
+proc
+proc_text
+' - '
+proc
+texts
+●●●●●● 1mm □△
+proc_text
+●●●●●● 2mm □△
+ids
+●●●●●● 1mm □△
+proc
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □△
+'procedure_id'
+'goal'
+'success_rate'
+'times_used'
+proc
+proc
+proc
+proc
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Indexed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+' procedures'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SEMANTIC-PROCEDURE] Error in bulk indexing: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+find_similar_procedures
+●●●●●● 1mm □△
+self
+procedure
+limit
+●●●●●● 2mm □△
+Procedure
+●●●●●● 2mm ○
+5
+'\n        Find procedures similar to given procedure.\n\n        Args:\n            procedure: Reference procedure\n            limit: Maximum similar procedures\n\n        Returns:\n            List of similar procedures\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Procedure
+●●●●●● 1mm □
+get_semantic_procedure_finder
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Get semantic procedure finder instance'
+●●●●●● 3mm ○
+SemanticProcedureFinder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SemanticProcedureFinder

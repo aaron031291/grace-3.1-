@@ -1,0 +1,760 @@
+## run_self_healing_consensus.py
+'\nForensic Deep Dive — Self-Healing System Consensus Analysis\n\nRuns through Kimi and Opus to determine:\n1. What subsystems need to be integrated into the self-healing module\n2. What APIs need to be connected\n3. What capabilities beyond the current 12 are needed\n4. How to make the system truly self-healing, self-learning, self-building\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+FORENSIC_PROMPT
+●●●●●● 1mm □
+"\nYou are conducting a forensic deep dive on Grace's self-healing system architecture.\n\nGrace is an autonomous AI assistant with a comprehensive backend. The self-healing system currently has 12 capabilities:\n1. database_reconnect\n2. qdrant_reconnect  \n3. llm_fallback (Ollama → Kimi)\n4. memory_pressure (GC, cache clear)\n5. connection_pool_reset\n6. config_reload\n7. embedding_model_reload\n8. log_rotation\n9. stub_detection\n10. import_validation\n11. kimi_diagnosis (AI-powered root cause analysis)\n12. trend_prediction (memory/error trend forecasting)\n\nHere is the COMPLETE inventory of Grace's subsystems that exist but are NOT yet integrated into the self-healing module:\n\n=== COGNITIVE SUBSYSTEMS ===\n- immune_system.py — GraceImmuneSystem: adaptive scan loop, anomaly detection (8 types), vaccination, healing playbook, rollback. Connected to TimeSense, OODA, Mirror, Trust, Kimi. Has API: /immune/scan, /immune/status, /immune/playbook\n- deep_test_engine.py — Logic tests, integration tests, stress tests. Has start_stress_test(), stop_stress_test(). Failed tests trigger autonomous healing. API: /test/stress/start, /test/stress/stop\n- ooda.py — OODALoop: observe/orient/decide/act cycle for system decisions\n- mirror_self_modeling.py — MirrorSelfModelingSystem: behavioral pattern analysis, self-awareness score, improvement suggestions\n- trust_engine.py — TrustEngine: trust scores for components, progressive autonomy\n- time_sense.py — TimeSense: temporal awareness, adaptive timing for healing windows\n- circuit_breaker.py — Circuit breaker with 41 named loops, depth limiting, loop detection\n- consensus_engine.py — Multi-model roundtable (Opus + Kimi + Qwen + Reasoning)\n- pipeline.py — Core cognitive pipeline\n- sandbox_engine.py — Sandbox experimentation engine\n- autonomous_sandbox_lab.py — AutonomousSandboxLab for safe testing\n- autonomous_healing_loop.py — Autonomous healing loop\n- autonomous_diagnostics.py — Autonomous startup diagnostics\n- loop_orchestrator.py — Loop orchestration\n- intelligence_layer.py — Intelligence layer\n- hunter_assimilator.py — Hunter assimilator pattern\n- reporting_engine.py — Report generation\n- central_orchestrator.py — Central orchestration\n- architecture_compass.py — Architecture guidance\n- active_learning_system.py — Active learning\n- idle_learner.py — Learning during idle time\n- proactive_learner.py — Proactive learning\n- system_registry.py — System component registry\n\n=== DIAGNOSTIC MACHINE (4-layer) ===\n- sensors.py — SensorLayer: system metrics, GraceMirrorData\n- interpreters.py — InterpreterLayer: pattern analysis\n- judgement.py — JudgementLayer: ForensicFinding, root cause\n- action_router.py — ActionRouter: routes to OODA, Mirror, Sandbox, healing\n- trend_analysis.py — TimeSeriesStore, TrendAnalyzer\n- cognitive_integration.py — Learning memory, forensic insights storage\n- notifications.py — Webhook, Slack, Email notification channels\n- realtime.py — WebSocket live streaming to UI\n\n=== GENESIS SYSTEM ===\n- healing_system.py — Genesis Key-based code scanning and auto-repair\n- autonomous_engine.py — AutonomousEngine: scheduled health checks, sandbox-first\n- autonomous_triggers.py — Trigger pipeline on Genesis Key creation\n- file_watcher.py — File system monitoring via watchdog\n\n=== GRACE OS ===\n- trust_scorekeeper.py — Trust score management\n- message_bus.py — Internal message bus\n- session_manager.py — Session management\n\n=== TELEMETRY ===\n- telemetry_service.py — Operation logging, performance baselines, drift detection\n- replay_service.py — Telemetry replay for debugging\n- decorators.py — Telemetry decorators\n\n=== ML INTELLIGENCE ===\n- ml_intelligence/ — ML features orchestrator\n\n=== API ENDPOINTS NOT CONNECTED TO SELF-HEALING ===\n- /immune/scan, /immune/status, /immune/playbook\n- /test/stress/start, /test/stress/stop, /test/stress/status\n- /diagnostic/* (full 4-layer diagnostic)\n- /monitoring/organs (12 organs of Grace)\n- /api/consensus/run (multi-model roundtable)\n- /api/system-health/* (system health checks)\n- /api/learn-heal/* (learning + healing triggers)\n- /api/audit/* (system audit, circuit breaker)\n- /api/telemetry/* (operation logs, baselines, drift)\n\n=== CURRENT LIMITATIONS ===\nThe proactive healing engine runs as a background thread but:\n- Does NOT integrate with the immune system's adaptive scan loop\n- Does NOT use the diagnostic machine's 4-layer sensor/interpreter/judgement/action pipeline\n- Does NOT leverage the OODA loop for decision-making\n- Does NOT use Mirror self-modeling for behavioral baselines\n- Does NOT connect to the stress test engine for load testing\n- Does NOT use TimeSense for optimal healing windows\n- Does NOT use the trust engine for progressive autonomy\n- Does NOT connect to telemetry for drift detection\n- Does NOT use the circuit breaker for loop prevention\n- Does NOT trigger the consensus mechanism for complex decisions\n- Does NOT feed healing outcomes to the learning memory system\n- Does NOT use the notification system (Slack, webhook, email)\n\nQUESTIONS TO ANSWER:\n\n1. What SPECIFIC subsystems from the inventory above need to be directly integrated into the self-healing module? For each one, explain exactly HOW it should connect and what data flows between them.\n\n2. What SPECIFIC API endpoints need to be connected, and what would the integration pattern look like?\n\n3. Beyond the current 12 capabilities, what ADDITIONAL capabilities should the self-healing system have? Be specific — name them, describe what they do, what risk level they carry, and whether they should be autonomous or require approval.\n\n4. What would a truly PROACTIVE (not reactive) self-healing architecture look like? How should the system prevent problems before they happen?\n\n5. How should the immune system, diagnostic machine, OODA loop, mirror self-modeling, stress testing, telemetry, and trust engine work TOGETHER as a unified self-healing organism?\n\n6. What are the critical data flows that need to exist between these systems for real-time healing?\n\n7. What capabilities would make this system truly SELF-BUILDING — able to expand its own healing capabilities over time?\n\nProvide a detailed, actionable architecture with specific integration points, data flows, and implementation priorities.\n"
+SYSTEM_PROMPT
+●●●●●● 1mm □
+"You are a senior systems architect specializing in autonomous self-healing systems. You are conducting a forensic deep dive on an AI assistant's self-healing architecture. Be extremely specific and technical. Name exact files, functions, data flows, and integration patterns. Your output will be used as an engineering specification to build the integration."
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run the forensic analysis through available models.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FORENSIC DEEP DIVE — Self-Healing System Consensus Analysis'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Started: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1/2] Running analysis through Kimi K2.5...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+client
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'kimi'
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Kimi response received ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' chars)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [SKIP] Kimi not available'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [FAIL] Kimi: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2/2] Running analysis through Opus (Claude)...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_opus_client
+client
+●●●●●● 1mm □
+get_opus_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'opus'
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Opus response received ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+' chars)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [SKIP] Opus not available'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [FAIL] Opus: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARN] No cloud models available. Generating analysis from codebase knowledge.\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+generate_local_analysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[CONSENSUS] Synthesizing Kimi + Opus responses...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+layer2_consensus
+ModelResponse
+responses
+●●●●●● 1mm □
+model_id
+text
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+consensus_text
+agreements
+disagreements
+●●●●●● 1mm □
+layer2_consensus
+●●●●●● 1mm □△
+FORENSIC_PROMPT
+responses
+●●●●●● 2mm □△
+results
+'consensus'
+●●●●●● 1mm □
+consensus_text
+results
+'agreements'
+●●●●●● 1mm □
+agreements
+results
+'disagreements'
+●●●●●● 1mm □
+disagreements
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Consensus formed ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreements
+●●●●●● 2mm □△
+' agreements, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+disagreements
+●●●●●● 2mm □△
+' disagreements)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] Consensus synthesis failed: '
+e
+●●●●●● 2mm □△
+output_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'self_healing_analysis'
+output_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_file
+●●●●●● 1mm □
+output_dir
+●●●●●● 3mm □△
+'forensic_analysis_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+'timestamp'
+'prompt'
+'results'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FORENSIC_PROMPT
+500
+●●●●●● 3mm ○
+'...'
+results
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SAVED] Full analysis saved to: '
+output_file
+●●●●●● 2mm □△
+model_id
+text
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_id
+'agreements'
+'disagreements'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+model_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' ANALYSIS'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+text
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+text
+json
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+generate_local_analysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Generate the analysis locally from codebase knowledge when no cloud models available.'
+analysis
+●●●●●● 1mm □
+build_comprehensive_analysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'self_healing_analysis'
+output_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_file
+●●●●●● 1mm □
+output_dir
+●●●●●● 3mm □△
+'forensic_analysis_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+'timestamp'
+'source'
+'results'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'codebase_forensic_analysis'
+analysis
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SAVED] Analysis saved to: '
+output_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+●●●●●● 1mm □
+build_comprehensive_analysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Build the comprehensive analysis from codebase knowledge.'
+●●●●●● 3mm ○
+'subsystem_integrations_required'
+'additional_capabilities_beyond_12'
+'unified_architecture'
+'implementation_priority'
+'priority_1_critical'
+'priority_2_important'
+'priority_3_enhancement'
+'subsystem'
+'integration'
+'data_flow'
+'api_connection'
+'files'
+'immune_system.py (GraceImmuneSystem)'
+"Merge proactive engine's monitoring loop WITH immune system's adaptive scan loop. The immune system already has anomaly detection (8 types), vaccination, healing playbook, and rollback. The proactive engine should DELEGATE health assessment to the immune system rather than duplicating it."
+'ProactiveEngine → ImmuneSystem.scan() → AnomalyResult → ProactiveEngine.handle_anomaly()'
+'/immune/scan, /immune/status, /immune/playbook'
+'cognitive/immune_system.py'
+'api/system_health_api.py'
+'subsystem'
+'integration'
+'data_flow'
+'api_connection'
+'files'
+'diagnostic_machine (4-layer pipeline)'
+'Feed diagnostic machine sensor data into proactive engine trend analysis. Use interpreter layer for pattern detection, judgement layer for forensic findings, action router for healing dispatch.'
+'Sensors → Interpreters → Judgement → ActionRouter → HealingEngine'
+'/diagnostic/*, /diagnostic/forensics'
+'diagnostic_machine/sensors.py'
+'diagnostic_machine/interpreters.py'
+'diagnostic_machine/judgement.py'
+'diagnostic_machine/action_router.py'
+'subsystem'
+'integration'
+'data_flow'
+'api_connection'
+'files'
+'deep_test_engine.py (Stress Testing)'
+'Stress test results should feed directly into self-healing. When stress tests fail, the healing system should be notified immediately and attempt remediation. Stress test should also run AFTER healing to verify the fix worked.'
+'StressTest.fail → ProactiveEngine.handle_issue() → heal → StressTest.verify()'
+'/test/stress/start, /test/stress/stop, /test/stress/status'
+'cognitive/deep_test_engine.py'
+'api/system_audit_api.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'ooda.py (OODALoop)'
+'Use OODA for healing decision-making. Observe: collect metrics. Orient: compare against baselines. Decide: select healing action. Act: execute. This replaces the simple if/else logic in handle_issue().'
+'Metrics → OODA.observe() → orient() → decide() → act() → HealingAction'
+'cognitive/ooda.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'mirror_self_modeling.py'
+"Use mirror's behavioral baselines as the NORMAL against which anomalies are detected. Mirror should observe healing patterns and suggest improvements."
+'Mirror.build_self_model() → baseline → ProactiveEngine.compare(current, baseline)'
+'cognitive/mirror_self_modeling.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'trust_engine.py'
+'Use trust scores to gate autonomous healing. High-trust actions execute automatically. Low-trust actions require governance approval. Trust should increase on successful heals, decrease on failures.'
+'HealingAction → TrustEngine.check_permission() → execute/defer → TrustEngine.record_outcome()'
+'cognitive/trust_engine.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'time_sense.py (TimeSense)'
+'Use temporal awareness to schedule healing at optimal times. Avoid healing during peak usage. Detect time-based patterns (e.g., memory leak every 2 hours).'
+'TimeSense.best_window() → schedule_healing() | TimeSense.detect_temporal_pattern()'
+'cognitive/time_sense.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'circuit_breaker.py'
+'Wrap healing actions in circuit breakers to prevent healing loops (healing that causes more damage). 41 named loops already exist — add healing-specific ones.'
+"CircuitBreaker.enter_loop('healing:db_reconnect') → heal → exit_loop()"
+'cognitive/circuit_breaker.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'consensus_engine.py'
+'For CRITICAL healing decisions (state rollback, isolation, emergency shutdown), run through multi-model consensus before executing.'
+"CriticalAction → consensus.run(models=['kimi','opus']) → approve/deny → execute"
+'cognitive/consensus_engine.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'telemetry (telemetry_service.py)'
+'Log every healing action to telemetry. Use performance baselines for drift detection. Replay telemetry to debug failed healings.'
+'HealingAction → TelemetryService.log_operation() | TelemetryService.check_drift() → alert'
+'telemetry/telemetry_service.py'
+'telemetry/replay_service.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'notifications.py'
+'Send notifications on critical healing events via configured channels (Slack, webhook, email).'
+'CriticalHealing → NotificationManager.notify() → Slack/Email/Webhook'
+'diagnostic_machine/notifications.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'learning_memory / LearningExample'
+'Store every healing outcome as a learning example. Build a healing playbook that improves over time.'
+"HealingOutcome → LearningExample(topic='healing:action', outcome=success/fail) → DB"
+'cognitive/learning_memory.py'
+'subsystem'
+'integration'
+'data_flow'
+'files'
+'realtime.py (WebSocket)'
+'Broadcast healing events to connected UI clients in real-time.'
+'HealingEvent → DiagnosticEventEmitter.emit_healing_*() → WebSocket clients'
+'diagnostic_machine/realtime.py'
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+13
+'immune_adaptive_scan'
+'Delegate to GraceImmuneSystem for adaptive interval scanning with anomaly type detection (8 types: performance degradation, memory leak, resource exhaustion, cascade failure, pattern drift, security anomaly, service down, code error)'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+14
+'stress_test_verification'
+'Run targeted stress tests after healing to verify the fix holds under load. Failed verification triggers re-healing with escalated strategy.'
+'medium'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+15
+'forensic_root_cause'
+"Use diagnostic machine's 4-layer pipeline (sensors → interpreters → judgement → action) for deep forensic root cause analysis before healing."
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+16
+'ooda_decision_loop'
+'Route healing decisions through OODA (observe/orient/decide/act) for structured decision-making rather than simple threshold checks.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+17
+'behavioral_baseline_comparison'
+'Use mirror self-modeling to maintain behavioral baselines and detect anomalies as deviations from normal patterns.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+18
+'vaccination_proactive_hardening'
+"After healing a recurring issue, apply the immune system's vaccination mechanism to proactively harden against recurrence."
+'medium'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+19
+'temporal_pattern_healing'
+'Use TimeSense to detect time-based failure patterns (e.g., memory leak every 2 hours) and schedule preemptive healing.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+20
+'cascade_failure_prevention'
+'Detect cascade failure patterns where one service failure triggers others. Isolate affected components before cascade propagates.'
+'high'
+●●●●●● 1mm □
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+21
+'drift_detection_healing'
+"Use telemetry's drift detection to identify when system behavior drifts from established baselines and trigger corrective healing."
+'medium'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+22
+'consensus_critical_decisions'
+'For critical/destructive healing actions (rollback, isolation, shutdown), run through multi-model consensus (Kimi + Opus) before executing.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+23
+'healing_playbook_learning'
+'Build a structured healing playbook from outcomes. Each healing attempt creates a learning example. Over time, the playbook becomes the primary decision source.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+24
+'circuit_breaker_loop_prevention'
+'Wrap all healing actions in circuit breakers to prevent healing loops where a fix causes new damage that triggers more healing.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+25
+'sandbox_safe_testing'
+'Before applying risky healing actions to production, test them in the sandbox first. Only apply if sandbox verification passes.'
+'low'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+26
+'realtime_ui_broadcast'
+'Broadcast all healing events, predictions, and decisions to the UI via WebSocket for real-time visibility.'
+'none'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+27
+'notification_escalation'
+'Send Slack/webhook/email notifications for critical healing events. Escalation ladder: log → UI → Slack → email based on severity.'
+'none'
+●●●●●● 3mm □△○
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+28
+'self_capability_expansion'
+'When the system encounters a problem it cannot heal, it creates a capability gap report, uses Kimi to design a healing strategy, tests it in sandbox, and if governance approves, adds it as a new capability.'
+'high'
+●●●●●● 1mm □
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+29
+'code_repair_via_coding_agent'
+'For code-level issues (broken imports, syntax errors, stub code), delegate to the unified coding agent for automated repair with genesis key tracking.'
+'high'
+●●●●●● 1mm □
+'id'
+'name'
+'description'
+'risk'
+'autonomous'
+30
+'autonomous_rollback'
+'Maintain state snapshots before healing. If healing makes things worse (verified by stress test), automatically rollback to pre-healing state.'
+'medium'
+●●●●●● 3mm □△○
+'description'
+'data_flow_diagram'
+'The Immune System should be the ORCHESTRATOR that coordinates all healing. The Proactive Engine provides the real-time monitoring loop. The Diagnostic Machine provides deep analysis. The OODA loop provides decision structure. Mirror provides baselines. Trust gates autonomy. TimeSense schedules windows. Stress tests verify fixes.'
+'ProactiveEngine (monitoring loop, every 30s)'
+'  → collects metrics (psutil, DB, Qdrant, LLM, error counts)'
+'  → feeds to DiagnosticMachine.sensors'
+'  → DiagnosticMachine.interpreters (pattern analysis)'
+'  → DiagnosticMachine.judgement (forensic findings, root cause)'
+'  → feeds anomalies to ImmuneSystem.scan()'
+'  → ImmuneSystem uses OODA: observe(metrics) → orient(baselines from Mirror) → decide(action) → act(heal)'
+'  → TrustEngine.check_permission(action) → allow/deny/escalate'
+'  → TimeSense.best_window() → schedule or execute now'
+"  → CircuitBreaker.enter_loop('healing:action') → prevent healing loops"
+'  → Execute healing action'
+'  → StressTest.verify(post_healing) → pass/fail'
+'  → If fail: rollback, escalate, try alternative'
+'  → If pass: TrustEngine.record_success(), LearningMemory.store(outcome)'
+'  → ImmuneSystem.vaccinate(pattern) → prevent recurrence'
+'  → TelemetryService.log(healing_operation)'
+'  → NotificationManager.notify(if critical)'
+'  → RealtimeEmitter.broadcast(healing_event) → UI'
+"  → If beyond capability: ConsensusEngine.run(models=['kimi','opus']) → governance approval"
+'  → If capability gap: create gap report → Kimi designs solution → sandbox test → governance approval → add capability'
+'Phase 1 (Immediate): Integrate immune system + diagnostic machine + stress test verification'
+'Phase 2 (Next): Add OODA decision-making + mirror baselines + trust gating + TimeSense scheduling'
+'Phase 3 (Enhancement): Circuit breaker + consensus for critical decisions + telemetry drift detection'
+'Phase 4 (Self-Building): Healing playbook learning + self-capability expansion + autonomous rollback + sandbox safe testing'
+'Phase 5 (Full Autonomy): Real-time UI broadcast + notification escalation + code repair via coding agent'
+●●●●●● 2mm □
+__name__
+'__main__'
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△

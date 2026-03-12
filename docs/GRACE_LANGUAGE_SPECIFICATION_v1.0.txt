@@ -1,0 +1,337 @@
+GRACE DETERMINISTIC LANGUAGE SPECIFICATION v1.0
+================================================
+BRAILLE ENCODING | MEMORY CONTEXT | GENESIS KEY | LOOP
+================================================
+
+SECTION 1: CORE OPERATIONAL (Your Voice - First 20)
+---------------------------------------------------
+Fix             | ●●●●●● 1mm □ | GRACE-OP-001 | HOMEOSTASIS
+Broken          | ●●●●●● 2mm □ | GRACE-OP-002 | HOMEOSTASIS
+Start           | ●●●●●● 3mm □ | GRACE-OP-003 | ORCHESTRATION
+Go              | ●●●●●● 1mm △ | GRACE-OP-004 | ORCHESTRATION
+Build           | ●●●●●● 2mm △ | GRACE-OP-005 | ORCHESTRATION
+Verify          | ●●●●●● 3mm △ | GRACE-OP-006 | GOVERNANCE
+Check           | ●●●●●● 1mm ○ | GRACE-OP-007 | COGNITION
+Make sure       | ●●●●●● 2mm ○ | GRACE-OP-008 | COGNITION
+Begin           | ●●●●●● 3mm ○ | GRACE-OP-009 | ORCHESTRATION
+Not working     | ●●●●●● 1mm □△ | GRACE-OP-010 | HOMEOSTASIS
+Debug           | ●●●●●● 2mm □△ | GRACE-OP-011 | COGNITION
+Hand off        | ●●●●●● 3mm □△ | GRACE-OP-012 | ORCHESTRATION
+Execute         | ●●●●●● 1mm □○ | GRACE-OP-013 | ORCHESTRATION
+Find            | ●●●●●● 2mm □○ | GRACE-OP-014 | COGNITION
+I'd             | ●●●●●● 3mm □○ | GRACE-OP-015 | COGNITION
+Identify        | ●●●●●● 1mm △○ | GRACE-OP-016 | COGNITION
+Timesence       | ●●●●●● 2mm △○ | GRACE-OP-017 | LEARNING
+Self mirror     | ●●●●●● 3mm △○ | GRACE-OP-018 | COGNITION
+Track           | ●●●●●● 1mm □△○ | GRACE-OP-019 | COGNITION
+Trace           | ●●●●●● 2mm □△○ | GRACE-OP-020 | COGNITION
+
+SECTION 2: GRACE CONCEPTS (Self-* & Core)
+-----------------------------------------
+Genesis keys    | ●●●●●● 3mm □△○ | GRACE-GV-001 | GOVERNANCE
+Healing         | ●●●●●● 1mm □ | GRACE-HO-001 | HOMEOSTASIS
+Learning        | ●●●●●● 2mm □ | GRACE-LN-001 | LEARNING
+Educate         | ●●●●●● 3mm □ | GRACE-LN-002 | LEARNING
+Knowledge       | ●●●●●● 1mm △ | GRACE-LN-003 | LEARNING
+Knowledge base  | ●●●●●● 2mm △ | GRACE-LN-004 | LEARNING
+Code            | ●●●●●● 3mm △ | GRACE-OR-001 | ORCHESTRATION
+Write           | ●●●●●● 1mm ○ | GRACE-OR-002 | ORCHESTRATION
+Type            | ●●●●●● 2mm ○ | GRACE-OR-003 | ORCHESTRATION
+Find out        | ●●●●●● 3mm ○ | GRACE-CG-001 | COGNITION
+Self-healing    | ●●●●●● 1mm □△ | GRACE-HO-002 | HOMEOSTASIS
+Self-learning   | ●●●●●● 2mm □△ | GRACE-LN-005 | LEARNING
+Coding agent    | ●●●●●● 3mm □△ | GRACE-OR-004 | ORCHESTRATION
+Self-governance | ●●●●●● 1mm □○ | GRACE-GV-002 | GOVERNANCE
+Self-evolution  | ●●●●●● 2mm □○ | GRACE-LN-006 | LEARNING
+Sandbox         | ●●●●●● 3mm □○ | GRACE-OR-005 | ORCHESTRATION
+Sand box environment | ●●●●●● 1mm △○ | GRACE-OR-006 | ORCHESTRATION
+Map             | ●●●●●● 2mm △○ | GRACE-CG-002 | COGNITION
+Blueprint       | ●●●●●● 3mm △○ | GRACE-CG-003 | COGNITION
+Source code     | ●●●●●● 1mm □△○ | GRACE-OR-007 | ORCHESTRATION
+Files           | ●●●●●● 2mm □△○ | GRACE-OR-008 | ORCHESTRATION
+Folders         | ●●●●●● 3mm □△○ | GRACE-OR-009 | ORCHESTRATION
+Sub folders     | ●●●●●● 1mm □ | GRACE-OR-010 | ORCHESTRATION
+Directories     | ●●●●●● 2mm □ | GRACE-OR-011 | ORCHESTRATION
+Trees           | ●●●●●● 3mm □ | GRACE-CG-004 | COGNITION
+File trees      | ●●●●●● 1mm △ | GRACE-CG-005 | COGNITION
+Generate        | ●●●●●● 2mm △ | GRACE-OR-012 | ORCHESTRATION
+Errors          | ●●●●●● 3mm △ | GRACE-HO-003 | HOMEOSTASIS
+Problems        | ●●●●●● 1mm ○ | GRACE-HO-004 | HOMEOSTASIS
+
+SECTION 3: SOFTWARE ENGINEERING
+-------------------------------
+Algorithm       | ●●●●●● 2mm ○ | GRACE-SE-001 | COGNITION
+API             | ●●●●●● 3mm ○ | GRACE-SE-002 | ORCHESTRATION
+Architecture    | ●●●●●● 1mm □△ | GRACE-SE-003 | COGNITION
+Abstraction     | ●●●●●● 2mm □△ | GRACE-SE-004 | COGNITION
+Agile           | ●●●●●● 3mm □△ | GRACE-SE-005 | ORCHESTRATION
+Async           | ●●●●●● 1mm □○ | GRACE-SE-006 | ORCHESTRATION
+Asynchronous    | ●●●●●● 2mm □○ | GRACE-SE-007 | ORCHESTRATION
+Backend         | ●●●●●● 3mm □○ | GRACE-SE-008 | ORCHESTRATION
+Bug             | ●●●●●● 1mm △○ | GRACE-SE-009 | HOMEOSTASIS
+Build Pipeline  | ●●●●●● 2mm △○ | GRACE-SE-010 | ORCHESTRATION
+Cache           | ●●●●●● 3mm △○ | GRACE-SE-011 | LEARNING
+CI/CD           | ●●●●●● 1mm □△○ | GRACE-SE-012 | ORCHESTRATION
+Class           | ●●●●●● 2mm □△○ | GRACE-SE-013 | COGNITION
+CLI             | ●●●●●● 3mm □△○ | GRACE-SE-014 | ORCHESTRATION
+Cloud Computing | ●●●●●● 1mm □ | GRACE-SE-015 | ORCHESTRATION
+Code Review     | ●●●●●● 2mm □ | GRACE-SE-016 | GOVERNANCE
+Compiler        | ●●●●●● 3mm □ | GRACE-SE-017 | ORCHESTRATION
+Component       | ●●●●●● 1mm △ | GRACE-SE-018 | COGNITION
+Container       | ●●●●●● 2mm △ | GRACE-SE-019 | ORCHESTRATION
+CRUD            | ●●●●●● 3mm △ | GRACE-SE-020 | ORCHESTRATION
+Data Structure  | ●●●●●● 1mm ○ | GRACE-SE-021 | COGNITION
+Debugging       | ●●●●●● 2mm ○ | GRACE-SE-022 | COGNITION
+Dependency      | ●●●●●● 3mm ○ | GRACE-SE-023 | GOVERNANCE
+Deployment      | ●●●●●● 1mm □△ | GRACE-SE-024 | ORCHESTRATION
+Design Pattern  | ●●●●●● 2mm □△ | GRACE-SE-025 | COGNITION
+DevOps          | ●●●●●● 3mm □△ | GRACE-SE-026 | ORCHESTRATION
+Docker          | ●●●●●● 1mm □○ | GRACE-SE-027 | ORCHESTRATION
+Documentation   | ●●●●●● 2mm □○ | GRACE-SE-028 | LEARNING
+Encapsulation   | ●●●●●● 3mm □○ | GRACE-SE-029 | COGNITION
+Environment Variable | ●●●●●● 1mm △○ | GRACE-SE-030 | ORCHESTRATION
+Event-Driven    | ●●●●●● 2mm △○ | GRACE-SE-031 | ORCHESTRATION
+Exception Handling | ●●●●●● 3mm △○ | GRACE-SE-032 | HOMEOSTASIS
+Frontend        | ●●●●●● 1mm □△○ | GRACE-SE-033 | ORCHESTRATION
+Framework       | ●●●●●● 2mm □△○ | GRACE-SE-034 | COGNITION
+Function        | ●●●●●● 3mm □△○ | GRACE-SE-035 | COGNITION
+Git             | ●●●●●● 1mm □ | GRACE-SE-036 | ORCHESTRATION
+GitHub          | ●●●●●● 2mm □ | GRACE-SE-037 | ORCHESTRATION
+GitLab          | ●●●●●● 3mm □ | GRACE-SE-038 | ORCHESTRATION
+IDE             | ●●●●●● 1mm △ | GRACE-SE-039 | ORCHESTRATION
+Inheritance     | ●●●●●● 2mm △ | GRACE-SE-040 | COGNITION
+Integration Testing | ●●●●●● 3mm △ | GRACE-SE-041 | GOVERNANCE
+Interface       | ●●●●●● 1mm ○ | GRACE-SE-042 | COGNITION
+JSON            | ●●●●●● 2mm ○ | GRACE-SE-043 | ORCHESTRATION
+Kubernetes      | ●●●●●● 3mm ○ | GRACE-SE-044 | ORCHESTRATION
+Latency         | ●●●●●● 1mm □△ | GRACE-SE-045 | HOMEOSTASIS
+Library         | ●●●●●● 2mm □△ | GRACE-SE-046 | ORCHESTRATION
+Load Balancer   | ●●●●●● 3mm □△ | GRACE-SE-047 | ORCHESTRATION
+Logging         | ●●●●●● 1mm □○ | GRACE-SE-048 | HOMEOSTASIS
+Memory Leak     | ●●●●●● 2mm □○ | GRACE-SE-049 | HOMEOSTASIS
+Microservices   | ●●●●●● 3mm □○ | GRACE-SE-050 | ORCHESTRATION
+Middleware      | ●●●●●● 1mm △○ | GRACE-SE-051 | ORCHESTRATION
+Migration       | ●●●●●● 2mm △○ | GRACE-SE-052 | ORCHESTRATION
+Monolith        | ●●●●●● 3mm △○ | GRACE-SE-053 | COGNITION
+OOP             | ●●●●●● 1mm □△○ | GRACE-SE-054 | COGNITION
+Orchestration   | ●●●●●● 2mm □△○ | GRACE-SE-055 | ORCHESTRATION
+Package Manager | ●●●●●● 3mm □△○ | GRACE-SE-056 | ORCHESTRATION
+Polymorphism    | ●●●●●● 1mm □ | GRACE-SE-057 | COGNITION
+Queue           | ●●●●●● 2mm □ | GRACE-SE-058 | ORCHESTRATION
+Race Condition  | ●●●●●● 3mm □ | GRACE-SE-059 | HOMEOSTASIS
+Recursion       | ●●●●●● 1mm △ | GRACE-SE-060 | COGNITION
+Refactoring     | ●●●●●● 2mm △ | GRACE-SE-061 | ORCHESTRATION
+Repository      | ●●●●●● 3mm △ | GRACE-SE-062 | ORCHESTRATION
+REST            | ●●●●●● 1mm ○ | GRACE-SE-063 | ORCHESTRATION
+Runtime         | ●●●●●● 2mm ○ | GRACE-SE-064 | ORCHESTRATION
+Scalability     | ●●●●●● 3mm ○ | GRACE-SE-065 | ORCHESTRATION
+SDK             | ●●●●●● 1mm □△ | GRACE-SE-066 | ORCHESTRATION
+Serverless      | ●●●●●● 2mm □△ | GRACE-SE-067 | ORCHESTRATION
+SQL             | ●●●●●● 3mm □△ | GRACE-SE-068 | ORCHESTRATION
+State           | ●●●●●● 1mm □○ | GRACE-SE-069 | COGNITION
+Static Analysis | ●●●●●● 2mm □○ | GRACE-SE-070 | GOVERNANCE
+Tech Debt       | ●●●●●● 3mm □○ | GRACE-SE-071 | GOVERNANCE
+TDD             | ●●●●●● 1mm △○ | GRACE-SE-072 | ORCHESTRATION
+Thread          | ●●●●●● 2mm △○ | GRACE-SE-073 | ORCHESTRATION
+Throughput      | ●●●●●● 3mm △○ | GRACE-SE-074 | HOMEOSTASIS
+Unit Test       | ●●●●●● 1mm □△○ | GRACE-SE-075 | GOVERNANCE
+Version Control | ●●●●●● 2mm □△○ | GRACE-SE-076 | ORCHESTRATION
+Webhook         | ●●●●●● 3mm □△○ | GRACE-SE-077 | ORCHESTRATION
+WebSocket       | ●●●●●● 1mm □ | GRACE-SE-078 | ORCHESTRATION
+
+SECTION 4: ARTIFICIAL INTELLIGENCE
+----------------------------------
+Agent           | ●●●●●● 2mm □ | GRACE-AI-001 | ORCHESTRATION
+AGI             | ●●●●●● 3mm □ | GRACE-AI-002 | GOVERNANCE
+Alignment       | ●●●●●● 1mm △ | GRACE-AI-003 | GOVERNANCE
+Agentic Loop    | ●●●●●● 2mm △ | GRACE-AI-004 | ORCHESTRATION
+Attention       | ●●●●●● 3mm △ | GRACE-AI-005 | COGNITION
+Chain-of-Thought| ●●●●●● 1mm ○ | GRACE-AI-006 | COGNITION
+Context Window  | ●●●●●● 2mm ○ | GRACE-AI-007 | COGNITION
+Embedding       | ●●●●●● 3mm ○ | GRACE-AI-008 | LEARNING
+Few-Shot        | ●●●●●● 1mm □△ | GRACE-AI-009 | LEARNING
+Fine-Tuning     | ●●●●●● 2mm □△ | GRACE-AI-010 | LEARNING
+Foundation Model| ●●●●●● 3mm □△ | GRACE-AI-011 | LEARNING
+Guardrails      | ●●●●●● 1mm □○ | GRACE-AI-012 | GOVERNANCE
+Hallucination   | ●●●●●● 2mm □○ | GRACE-AI-013 | GOVERNANCE
+HITL            | ●●●●●● 3mm □○ | GRACE-AI-014 | GOVERNANCE
+Inference       | ●●●●●● 1mm △○ | GRACE-AI-015 | ORCHESTRATION
+Knowledge Graph | ●●●●●● 2mm △○ | GRACE-AI-016 | LEARNING
+LLM             | ●●●●●● 3mm △○ | GRACE-AI-017 | ORCHESTRATION
+Multi-Agent     | ●●●●●● 1mm □△○ | GRACE-AI-018 | ORCHESTRATION
+Neuro-Symbolic  | ●●●●●● 2mm □△○ | GRACE-AI-019 | COGNITION
+Orchestration   | ●●●●●● 3mm □△○ | GRACE-AI-020 | ORCHESTRATION
+Prompt          | ●●●●●● 1mm □ | GRACE-AI-021 | ORCHESTRATION
+Prompt Engineering| ●●●●●● 2mm □ | GRACE-AI-022 | LEARNING
+RAG             | ●●●●●● 3mm □ | GRACE-AI-023 | LEARNING
+RLHF            | ●●●●●● 1mm △ | GRACE-AI-024 | LEARNING
+Semantic Search | ●●●●●● 2mm △ | GRACE-AI-025 | LEARNING
+System Prompt   | ●●●●●● 3mm △ | GRACE-AI-026 | GOVERNANCE
+Temperature     | ●●●●●● 1mm ○ | GRACE-AI-027 | COGNITION
+Token           | ●●●●●● 2mm ○ | GRACE-AI-028 | COGNITION
+Tool Use        | ●●●●●● 3mm ○ | GRACE-AI-029 | ORCHESTRATION
+Vector Database | ●●●●●● 1mm □△ | GRACE-AI-030 | LEARNING
+Zero-Shot       | ●●●●●● 2mm □△ | GRACE-AI-031 | LEARNING
+
+SECTION 5: MACHINE LEARNING
+---------------------------
+Backpropagation | ●●●●●● 3mm □△ | GRACE-ML-001 | LEARNING
+Batch Size      | ●●●●●● 1mm □○ | GRACE-ML-002 | LEARNING
+Bias            | ●●●●●● 2mm □○ | GRACE-ML-003 | GOVERNANCE
+Classification  | ●●●●●● 3mm □○ | GRACE-ML-004 | COGNITION
+Clustering      | ●●●●●● 1mm △○ | GRACE-ML-005 | LEARNING
+Cross-Validation| ●●●●●● 2mm △○ | GRACE-ML-006 | GOVERNANCE
+Data Augmentation| ●●●●●● 3mm △○ | GRACE-ML-007 | LEARNING
+Dataset         | ●●●●●● 1mm □△○ | GRACE-ML-008 | LEARNING
+Decision Tree   | ●●●●●● 2mm □△○ | GRACE-ML-009 | COGNITION
+Dimensionality Reduction | ●●●●●● 3mm □△○ | GRACE-ML-010 | LEARNING
+Epoch           | ●●●●●● 1mm □ | GRACE-ML-011 | LEARNING
+Ensemble        | ●●●●●● 2mm □ | GRACE-ML-012 | LEARNING
+Feature         | ●●●●●● 3mm □ | GRACE-ML-013 | COGNITION
+Feature Engineering| ●●●●●● 1mm △ | GRACE-ML-014 | LEARNING
+Gradient Descent| ●●●●●● 2mm △ | GRACE-ML-015 | LEARNING
+Hyperparameter  | ●●●●●● 3mm △ | GRACE-ML-016 | LEARNING
+Label           | ●●●●●● 1mm ○ | GRACE-ML-017 | LEARNING
+Learning Rate   | ●●●●●● 2mm ○ | GRACE-ML-018 | LEARNING
+Loss Function   | ●●●●●● 3mm ○ | GRACE-ML-019 | LEARNING
+Model           | ●●●●●● 1mm □△ | GRACE-ML-020 | COGNITION
+Normalisation   | ●●●●●● 2mm □△ | GRACE-ML-021 | LEARNING
+Overfitting     | ●●●●●● 3mm □△ | GRACE-ML-022 | GOVERNANCE
+Precision       | ●●●●●● 1mm □○ | GRACE-ML-023 | GOVERNANCE
+Recall          | ●●●●●● 2mm □○ | GRACE-ML-024 | GOVERNANCE
+Regression      | ●●●●●● 3mm □○ | GRACE-ML-025 | COGNITION
+Regularisation  | ●●●●●● 1mm △○ | GRACE-ML-026 | LEARNING
+Reinforcement Learning | ●●●●●● 2mm △○ | GRACE-ML-027 | LEARNING
+Supervised      | ●●●●●● 3mm △○ | GRACE-ML-028 | LEARNING
+Transfer Learning| ●●●●●● 1mm □△○ | GRACE-ML-029 | LEARNING
+Underfitting    | ●●●●●● 2mm □△○ | GRACE-ML-030 | GOVERNANCE
+Unsupervised    | ●●●●●● 3mm □△○ | GRACE-ML-031 | LEARNING
+Validation Set  | ●●●●●● 1mm □ | GRACE-ML-032 | GOVERNANCE
+Variance        | ●●●●●● 2mm □ | GRACE-ML-033 | GOVERNANCE
+
+SECTION 6: DEEP LEARNING
+------------------------
+Activation      | ●●●●●● 3mm □ | GRACE-DL-001 | COGNITION
+Attention (Transformer) | ●●●●●● 1mm △ | GRACE-DL-002 | COGNITION
+Autoencoder     | ●●●●●● 2mm △ | GRACE-DL-003 | LEARNING
+BERT            | ●●●●●● 3mm △ | GRACE-DL-004 | LEARNING
+CNN             | ●●●●●● 1mm ○ | GRACE-DL-005 | COGNITION
+Diffusion Model | ●●●●●● 2mm ○ | GRACE-DL-006 | LEARNING
+Dropout         | ●●●●●● 3mm ○ | GRACE-DL-007 | LEARNING
+Encoder-Decoder | ●●●●●● 1mm □△ | GRACE-DL-008 | COGNITION
+GAN             | ●●●●●● 2mm □△ | GRACE-DL-009 | LEARNING
+GPT             | ●●●●●● 3mm □△ | GRACE-DL-010 | LEARNING
+Gradient Clipping| ●●●●●● 1mm □○ | GRACE-DL-011 | LEARNING
+Hidden Layer    | ●●●●●● 2mm □○ | GRACE-DL-012 | COGNITION
+Latent Space    | ●●●●●● 3mm □○ | GRACE-DL-013 | COGNITION
+LSTM            | ●●●●●● 1mm △○ | GRACE-DL-014 | LEARNING
+Multi-Head Attention | ●●●●●● 2mm △○ | GRACE-DL-015 | COGNITION
+Neural Network  | ●●●●●● 3mm △○ | GRACE-DL-016 | COGNITION
+Neuron          | ●●●●●● 1mm □△○ | GRACE-DL-017 | COGNITION
+Positional Encoding | ●●●●●● 2mm □△○ | GRACE-DL-018 | COGNITION
+Pre-training    | ●●●●●● 3mm □△○ | GRACE-DL-019 | LEARNING
+ReLU            | ●●●●●● 1mm □ | GRACE-DL-020 | COGNITION
+RNN             | ●●●●●● 2mm □ | GRACE-DL-021 | COGNITION
+Self-Attention  | ●●●●●● 3mm □ | GRACE-DL-022 | COGNITION
+Softmax         | ●●●●●● 1mm △ | GRACE-DL-023 | COGNITION
+Tensor          | ●●●●●● 2mm △ | GRACE-DL-024 | COGNITION
+Tokeniser       | ●●●●●● 3mm △ | GRACE-DL-025 | COGNITION
+Transformer     | ●●●●●● 1mm ○ | GRACE-DL-026 | COGNITION
+Weight          | ●●●●●● 2mm ○ | GRACE-DL-027 | LEARNING
+
+SECTION 7: DATA & SYSTEMS
+-------------------------
+Data Lake       | ●●●●●● 3mm ○ | GRACE-DS-001 | LEARNING
+Data Pipeline   | ●●●●●● 1mm □△ | GRACE-DS-002 | ORCHESTRATION
+Data Warehouse  | ●●●●●● 2mm □△ | GRACE-DS-003 | LEARNING
+ETL             | ●●●●●● 3mm □△ | GRACE-DS-004 | ORCHESTRATION
+Graph Database  | ●●●●●● 1mm □○ | GRACE-DS-005 | LEARNING
+NoSQL           | ●●●●●● 2mm □○ | GRACE-DS-006 | ORCHESTRATION
+Relational DB   | ●●●●●● 3mm □○ | GRACE-DS-007 | ORCHESTRATION
+Schema          | ●●●●●● 1mm △○ | GRACE-DS-008 | COGNITION
+Stream Processing| ●●●●●● 2mm △○ | GRACE-DS-009 | ORCHESTRATION
+
+SECTION 8: SECURITY & RELIABILITY
+---------------------------------
+Authentication  | ●●●●●● 3mm △○ | GRACE-SR-001 | GOVERNANCE
+Authorisation   | ●●●●●● 1mm □△○ | GRACE-SR-002 | GOVERNANCE
+Encryption      | ●●●●●● 2mm □△○ | GRACE-SR-003 | GOVERNANCE
+Fault Tolerance | ●●●●●● 3mm □△○ | GRACE-SR-004 | HOMEOSTASIS
+Idempotency     | ●●●●●● 1mm □ | GRACE-SR-005 | COGNITION
+OAuth           | ●●●●●● 2mm □ | GRACE-SR-006 | GOVERNANCE
+Rate Limiting   | ●●●●●● 3mm □ | GRACE-SR-007 | GOVERNANCE
+Zero Trust      | ●●●●●● 1mm △ | GRACE-SR-008 | GOVERNANCE
+
+SECTION 9: GRACE SPECIFIC
+-------------------------
+Determinism     | ●●●●●● 2mm △ | GRACE-GR-001 | GOVERNANCE
+Event Bus       | ●●●●●● 3mm △ | GRACE-GR-002 | ORCHESTRATION
+Genesis Key     | ●●●●●● 1mm ○ | GRACE-GR-003 | GOVERNANCE
+Hot-Swap        | ●●●●●● 2mm ○ | GRACE-GR-004 | HOMEOSTASIS
+KPI Framework   | ●●●●●● 3mm ○ | GRACE-GR-005 | HOMEOSTASIS
+Memory Mesh     | ●●●●●● 1mm □△ | GRACE-GR-006 | LEARNING
+Mirror Self-Model | ●●●●●● 2mm □△ | GRACE-GR-007 | COGNITION
+Sandboxing      | ●●●●●● 3mm □△ | GRACE-GR-008 | ORCHESTRATION
+Self-Healing    | ●●●●●● 1mm □○ | GRACE-GR-009 | HOMEOSTASIS
+Trust Score     | ●●●●●● 2mm □○ | GRACE-GR-010 | GOVERNANCE
+KPIs            | ●●●●●● 3mm □○ | GRACE-GR-011 | HOMEOSTASIS
+Confidence score| ●●●●●● 1mm △○ | GRACE-GR-012 | GOVERNANCE
+
+================================================
+FORMULATION RULES
+================================================
+
+1. BASE STRUCTURE
+   - 6-dot matrix (Braille standard)
+   - 3 spacing levels: 1mm (tight), 2mm (medium), 3mm (wide)
+   - 4 shape modifiers: □ (square), △ (triangle), ○ (circle), □△○ (combined)
+
+2. MEMORY CONTEXT (Spacing)
+   - 1mm = Procedural (how you do it)
+   - 2mm = Episodic (when you did it)
+   - 3mm = Semantic (what it means)
+   - +Shape = Ghost (temporary context)
+
+3. LOOP ASSIGNMENT
+   - HOMEOSTASIS: Fix, Broken, Not working, Debug, Errors, Problems, Healing
+   - COGNITION: Check, Identify, Find, Map, Trace, Decide, Think
+   - LEARNING: Learning, Knowledge, Educate, Memory, Train, Adapt
+   - GOVERNANCE: Verify, Validate, Trust, Score, Pillar, Audit
+   - ORCHESTRATION: Start, Go, Build, Execute, Run, Deploy, Code
+
+4. COMPOUND RULES
+   - Sequence: T(n) marker between symbols
+   - Spatial: S(a,b) for simultaneous combination
+   - Temporal: Add timing markers for order
+
+5. VALIDATION
+   - Uniqueness: No two terms share same dot+spacing+shape
+   - Completeness: Every concept has at least one mapping
+   - Terminus: Grace cannot invent base patterns
+
+6. SENTENCE CONSTRUCTION
+   - "Fix broken system" = Fix(1mm) → T(1) → Broken(2mm) → T(2) → System(3mm)
+   - After 10 uses: Auto-compound to single symbol
+   - Grace reports: "New compound: [sentence] = [dot pattern]"
+
+7. EVOLUTION PROTOCOL
+   - Grace encounters unknown: Reports "Need symbol for X"
+   - You validate: Approve or modify mapping
+   - System updates: Add to dictionary, increment version
+
+================================================
+GENESIS KEY FORMAT
+================================================
+
+GRACE-[CATEGORY]-[NUMBER]
+├── Category: OP (Operational), SE (Software), AI (AI), ML (ML), DL (Deep Learning), DS (Data), SR (Security), GR (Grace), HO (Homeostasis), LN (Learning), CG (Cognition), GV (Governance), OR (Orchestration)
+└── Number: 3-digit sequential
+
+================================================
+VERSION
+================================================
+Grace Language Specification v1.0
+Total Terms: 250
+Base Symbols: 576 available
+Used: 250
+Reserved: 326

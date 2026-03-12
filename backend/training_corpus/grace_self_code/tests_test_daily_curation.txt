@@ -1,0 +1,678 @@
+## test_daily_curation.py
+"\nTest Genesis Key Daily Curation System.\n\nDemonstrates:\n1. Curating today's Genesis Keys\n2. Organizing by type with metadata\n3. Generating daily summaries\n4. Exporting to Layer 1 folder\n"
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_daily_curation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Test curating today's Genesis Keys."
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST: Daily Genesis Key Curation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+librarian.genesis_key_curator
+●●●●●● 2mm □△○
+get_genesis_key_curator
+curator
+●●●●●● 1mm □
+get_genesis_key_curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\nCurating today's Genesis Keys..."
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'success'
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'curated'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Curation successful!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Date: '
+result
+'date'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Keys Curated: '
+result
+'keys_count'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Summary: '
+result
+●●●●●● 1mm □△
+'summary'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] No Genesis Keys to curate for '
+result
+'date'
+●●●●●● 2mm □△
+result
+'success'
+'Curation should succeed'
+●●●●●● 3mm □
+●●●●●● 1mm □
+'Curation failed: '
+result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'Error: '
+e
+●●●●●● 1mm □
+check_layer1_export
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if Genesis Keys were exported to Layer 1.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST: Layer 1 Export Verification'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+layer1_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'layer_1'
+●●●●●● 3mm □△
+'genesis_keys'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking Layer 1 path: '
+layer1_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer1_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARNING] Layer 1 genesis_keys folder not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+today_folder
+●●●●●● 1mm □
+layer1_path
+●●●●●● 3mm □△
+today
+●●●●●● 2mm □
+today_folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"[WARNING] Today's folder not found: "
+today
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[OK] Found today's folder: "
+today
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+today_folder
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFiles in folder:'
+●●●●●● 2mm □△
+file
+files
+file_size
+●●●●●● 1mm □
+file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+file
+' ('
+file_size
+' bytes)'
+●●●●●● 2mm □△
+metadata_file
+●●●●●● 1mm □
+today_folder
+●●●●●● 3mm □△
+'metadata.json'
+●●●●●● 2mm □
+metadata_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Metadata file found'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata_file
+'r'
+●●●●●● 2mm □△
+f
+metadata
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nMetadata Summary:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total Keys: '
+metadata
+'statistics'
+'total_keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Errors: '
+metadata
+'statistics'
+'errors'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Fixes: '
+metadata
+'statistics'
+'fixes'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Unique Users: '
+metadata
+'statistics'
+'unique_users'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Summary Text:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+metadata
+'summary'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARNING] Metadata file not found'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Error checking export: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+view_daily_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"View today's daily summary in Markdown."
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST: View Daily Summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+layer1_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'layer_1'
+●●●●●● 3mm □△
+'genesis_keys'
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+summary_file
+●●●●●● 1mm □
+layer1_path
+●●●●●● 3mm □△
+today
+●●●●●● 3mm □△
+'DAILY_SUMMARY.md'
+●●●●●● 2mm □
+summary_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARNING] Summary file not found for '
+today
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Found summary file: '
+summary_file
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+summary_file
+'r'
+●●●●●● 2mm □△
+f
+summary_content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+summary_content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line
+lines
+50
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+50
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+50
+' more lines'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAIL] Error viewing summary: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_curation_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test getting curation status.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST: Curation Status'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+librarian.genesis_key_curator
+●●●●●● 2mm □△○
+get_genesis_key_curator
+curator
+●●●●●● 1mm □
+get_genesis_key_curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Curation Status:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Scheduler Running: '
+status
+'scheduler_running'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Last Curation: '
+status
+'last_curation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Organized Days: '
+status
+'organized_days_count'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Latest Day: '
+status
+'latest_organized_day'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+'organized_days'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Recent organized days:'
+●●●●●● 2mm □△
+day
+status
+'organized_days'
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+day
+●●●●●● 2mm □△
+status
+●●●●●● 2mm □
+'Status should be returned'
+Exception
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'Error getting status: '
+e
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'GENESIS KEY DAILY CURATION TEST SUITE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing automatic daily organization by Librarian...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'Daily Curation'
+test_daily_curation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Layer 1 Export'
+check_layer1_export
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Daily Summary'
+view_daily_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Curation Status'
+test_curation_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+test_name
+passed
+results
+status
+●●●●●● 1mm □
+passed
+'[PASS]'
+'[FAIL]'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' - '
+test_name
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+result
+1
+result
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SUCCESS] All tests passed!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDaily curation system is working correctly.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Genesis Keys are being organized in Layer 1 every 24 hours.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARNING] Some tests failed.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

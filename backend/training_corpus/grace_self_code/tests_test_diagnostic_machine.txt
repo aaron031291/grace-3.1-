@@ -1,0 +1,1957 @@
+## test_diagnostic_machine.py
+'\nTests for the 4-Layer Diagnostic Machine.\n\nTests cover:\n- Layer 1: Sensors (data collection)\n- Layer 2: Interpreters (pattern analysis)\n- Layer 3: Judgement (decision making)\n- Layer 4: Action Routing (response execution)\n- DiagnosticEngine (orchestration)\n- API endpoints\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+patch
+MagicMock
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm △
+TestSensorLayer
+'Tests for Layer 1 - Sensors.'
+●●●●●● 1mm □
+test_sensor_layer_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test sensor layer initializes correctly.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorLayer
+sensor
+●●●●●● 1mm □
+SensorLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor
+●●●●●● 2mm □
+sensor
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_sensor_data_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test SensorData dataclass structure.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+LogData
+MetricsData
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 2mm □
+sensor_data
+●●●●●● 2mm □
+sensor_data
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_collect_all_returns_sensor_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test collect_all returns SensorData.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorLayer
+SensorData
+sensor
+●●●●●● 1mm □
+SensorLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+sensor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+SensorData
+●●●●●● 2mm □△
+result
+0
+●●●●●● 1mm □
+test_test_result_data_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TestResultData dataclass.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+TestResultData
+test_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_data
+100
+test_data
+85
+test_data
+0.85
+●●●●●● 1mm □
+test_metrics_data_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test MetricsData dataclass.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+MetricsData
+metrics
+●●●●●● 1mm □
+MetricsData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+45.0
+metrics
+60.0
+●●●●●● 1mm □
+test_sensor_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test sensor data serialization.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorLayer
+SensorData
+TestResultData
+sensor
+●●●●●● 1mm □
+SensorLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+sensor
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+'collection_timestamp'
+result
+'sensors_available'
+result
+●●●●●● 2mm △
+TestInterpreterLayer
+'Tests for Layer 2 - Interpreters.'
+●●●●●● 1mm □
+test_interpreter_layer_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test interpreter layer initializes correctly.'
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreter
+●●●●●● 2mm □△
+12
+●●●●●● 1mm □
+test_pattern_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test PatternType enum values.'
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+PatternType
+PatternType
+'test_failure_pattern'
+PatternType
+'learning_opportunity'
+●●●●●● 1mm □
+test_anomaly_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test AnomalyType enum values.'
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+AnomalyType
+AnomalyType
+'test_pass_rate_drop'
+AnomalyType
+'resource_exhaustion'
+●●●●●● 1mm □
+test_clarity_levels
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ClarityLevel enum values.'
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+ClarityLevel
+ClarityLevel
+'clear'
+ClarityLevel
+'opaque'
+●●●●●● 1mm □
+test_interpret_returns_interpreted_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test interpret method returns InterpretedData.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+InterpretedData
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+InterpretedData
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+12
+●●●●●● 1mm □
+test_pattern_detection_with_failures
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test pattern detection with test failures.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+PatternType
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+pattern_types
+●●●●●● 1mm □
+p
+p
+result
+PatternType
+pattern_types
+●●●●●● 1mm □
+test_anomaly_detection_low_pass_rate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test anomaly detection for low pass rate.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+AnomalyType
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+anomaly_types
+●●●●●● 1mm □
+a
+a
+result
+AnomalyType
+anomaly_types
+●●●●●● 1mm □
+test_invariant_checks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all 12 invariants are checked.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+12
+invariant_ids
+●●●●●● 1mm □
+c
+c
+result
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+13
+●●●●●● 2mm □△
+'INV-'
+i
+invariant_ids
+●●●●●● 1mm □
+test_clarity_classification
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test clarity classification.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+ClarityLevel
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+result
+ClarityLevel
+ClarityLevel
+ClarityLevel
+ClarityLevel
+0.0
+result
+1.0
+●●●●●● 2mm △
+TestJudgementLayer
+'Tests for Layer 3 - Judgement.'
+●●●●●● 1mm □
+test_judgement_layer_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test judgement layer initializes correctly.'
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+judgement
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_health_status_enum
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test HealthStatus enum values.'
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+HealthStatus
+HealthStatus
+'healthy'
+HealthStatus
+'critical'
+●●●●●● 1mm □
+test_risk_level_enum
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RiskLevel enum values.'
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+RiskLevel
+RiskLevel
+'low'
+RiskLevel
+'critical'
+●●●●●● 1mm □
+test_judge_returns_judgement_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test judge method returns JudgementResult.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+JudgementResult
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+JudgementResult
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_health_score_calculation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test health score calculation.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+MetricsData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+HealthStatus
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+MetricsData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+0.5
+result
+HealthStatus
+●●●●●● 1mm □
+test_risk_vector_identification
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test risk vector identification.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_drift_analysis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test drift analysis.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+DriftType
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_avn_alerts_generation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test AVN alerts generation.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_avm_status_update
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test AVM status update.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+result
+'avm-001'
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_recommended_action_determination
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test recommended action determination.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+'none'
+'monitor'
+'alert'
+●●●●●● 2mm △
+TestActionRouter
+'Tests for Layer 4 - Action Router.'
+●●●●●● 1mm □
+test_action_router_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test action router initializes correctly.'
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_action_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ActionType enum values.'
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionType
+ActionType
+'alert_human'
+ActionType
+'freeze_system'
+ActionType
+'trigger_cicd'
+●●●●●● 1mm □
+test_route_returns_action_decision
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test route method returns ActionDecision.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+ActionDecision
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+action_router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+action_router
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+ActionDecision
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_dry_run_mode
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Test dry run mode doesn't execute actions."
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+action_router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+action_router
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_healing_disabled
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test healing can be disabled.'
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_action_decision_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test action decision serialization.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+action_router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+action_router
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+action_router
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+'decision_id'
+result
+'action_type'
+result
+●●●●●● 2mm △
+TestDiagnosticEngine
+'Tests for DiagnosticEngine orchestrator.'
+●●●●●● 1mm □
+test_engine_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test engine initializes correctly.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+EngineState
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 2mm □
+engine
+EngineState
+●●●●●● 1mm □
+test_run_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test running a diagnostic cycle.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+TriggerSource
+DiagnosticCycle
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+cycle
+DiagnosticCycle
+●●●●●● 2mm □△
+cycle
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_engine_start_stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test starting and stopping engine.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+EngineState
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 3mm □△○
+engine
+EngineState
+success
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 3mm □△○
+engine
+EngineState
+●●●●●● 1mm □
+test_engine_pause_resume
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test pausing and resuming engine.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+EngineState
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+EngineState
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+EngineState
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_trigger_from_sensor
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test triggering from sensor flag.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+TriggerSource
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'test_sensor'
+'test reason'
+●●●●●● 2mm □△
+cycle
+TriggerSource
+cycle
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_trigger_from_cicd
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test triggering from CI/CD pipeline.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+TriggerSource
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'pipeline-123'
+●●●●●● 2mm □△
+cycle
+TriggerSource
+cycle
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_get_health_summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting health summary.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+summary
+'health_score'
+summary
+'message'
+summary
+●●●●●● 1mm □
+test_get_recent_cycles
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting recent cycles.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycles
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycles
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_engine_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test engine statistics.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+engine
+stats
+2
+stats
+2
+●●●●●● 1mm □
+test_callback_registration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test callback registration and firing.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+callback_fired
+●●●●●● 1mm □
+'value'
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_callback
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+callback_fired
+'value'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+test_callback
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+callback_fired
+'value'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_engine_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test engine state serialization.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'state'
+result
+'heartbeat_interval'
+result
+'stats'
+result
+●●●●●● 2mm △
+TestDiagnosticAPI
+'Tests for Diagnostic Machine API endpoints.'
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create test client.'
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 3mm ○
+TestClient
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+ImportError
+pytest
+●●●●●● 1mm □△
+'App not available for testing'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_health_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/health endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/health'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+data
+●●●●●● 1mm □
+test_status_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/status endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/status'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'state'
+data
+●●●●●● 1mm □
+test_trigger_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/trigger endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/trigger'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cycle_id'
+data
+●●●●●● 1mm □
+test_history_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/history endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/history?limit=5'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cycles'
+data
+●●●●●● 1mm □
+test_cicd_webhook_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/webhook/cicd endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/webhook/cicd'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_sensor_flag_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/sensor/flag endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/sensor/flag'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_avn_alerts_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/avn/alerts endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/avn/alerts'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'alerts'
+data
+●●●●●● 1mm □
+test_avm_status_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/avm/status endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/avm/status'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_forensics_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/forensics endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/forensics'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'findings'
+data
+●●●●●● 1mm □
+test_full_report_endpoint
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test /diagnostic/full-report endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/diagnostic/full-report'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'report_id'
+data
+●●●●●● 2mm △
+TestDiagnosticIntegration
+'Integration tests for the complete diagnostic pipeline.'
+●●●●●● 1mm □
+test_full_diagnostic_pipeline
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete pipeline from sensors to action.'
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorLayer
+SensorData
+TestResultData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementLayer
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 1mm □
+interpreter
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+action_router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+action_router
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+judgement
+●●●●●● 2mm □△
+interpreted_data
+●●●●●● 2mm □
+judgement
+●●●●●● 2mm □
+decision
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_engine_full_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test engine running complete cycle.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 2mm □
+cycle
+●●●●●● 2mm □
+cycle
+●●●●●● 2mm □
+cycle
+●●●●●● 2mm □
+cycle
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

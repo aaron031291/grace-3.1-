@@ -1,0 +1,473 @@
+## trust_aware_retriever.py
+'\nTrust-Aware Document Retriever - Neuro-Symbolic Integration\n\nExtends DocumentRetriever with trust-aware embeddings and trust-weighted similarity.\nThis creates a neuro-symbolic retrieval system where neural embeddings respect\nsymbolic trust scores from the knowledge base.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+get_embedding_model
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TrustAwareDocumentRetriever
+'\n    Trust-aware document retriever that incorporates symbolic trust scores.\n    \n    This creates neuro-symbolic retrieval where:\n    - Neural component: Semantic similarity (from embeddings)\n    - Symbolic component: Trust scores (from confidence_score fields)\n    - Integrated: Trust-weighted retrieval that respects knowledge confidence\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_retriever
+trust_weight
+min_trust_threshold
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+DocumentRetriever
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □
+0.3
+0.3
+●●●●●● 2mm □
+'\n        Initialize trust-aware document retriever.\n        \n        Args:\n            base_retriever: Base DocumentRetriever instance (creates new if None)\n            trust_weight: Weight of trust in similarity (0-1)\n            min_trust_threshold: Minimum trust to include in results\n            embedding_model: Base EmbeddingModel (uses singleton if None)\n        '
+●●●●●● 2mm □
+base_retriever
+●●●●●● 2mm □
+base_embedding_model
+●●●●●● 1mm □
+embedding_model
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base_retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_weight
+●●●●●● 3mm △
+●●●●●● 1mm □
+min_trust_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_trust_aware_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TRUST-AWARE RETRIEVER] Initialized with trust_weight='
+trust_weight
+', min_trust='
+min_trust_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm □
+retrieve
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+include_metadata
+use_trust_weighting
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+5
+0.3
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n        Retrieve documents with trust-aware weighting.\n        \n        Args:\n            query: Query text\n            limit: Maximum results\n            score_threshold: Minimum similarity score\n            include_metadata: Include metadata\n            use_trust_weighting: Apply trust weighting (if False, uses base retriever)\n            \n        Returns:\n            List of chunks with trust-weighted scores\n        '
+●●●●●● 2mm □
+use_trust_weighting
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+base_results
+●●●●●● 3mm ○
+trust_weighted_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+base_results
+●●●●●● 2mm □△
+filtered_results
+●●●●●● 1mm □
+r
+r
+trust_weighted_results
+r
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+r
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+score_threshold
+filtered_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filtered_results
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_apply_trust_weighting
+●●●●●● 1mm □△
+self
+query
+results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Apply trust weighting to retrieval results.\n        \n        Combines neural similarity with symbolic trust scores.\n        '
+weighted_results
+●●●●●● 1mm □
+result
+results
+confidence_score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'confidence_score'
+0.5
+●●●●●● 2mm □△
+0.5
+trust_context
+●●●●●● 1mm □
+TrustContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+original_score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+trust_weighted_score
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+original_score
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+trust_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_copy
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_copy
+'trust_score'
+●●●●●● 1mm □
+trust_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_copy
+'trust_weighted_score'
+●●●●●● 1mm □
+trust_weighted_score
+result_copy
+'original_score'
+●●●●●● 1mm □
+original_score
+●●●●●● 2mm □
+'metadata'
+result_copy
+result_copy
+'metadata'
+'trust_score'
+●●●●●● 1mm □
+trust_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_copy
+'metadata'
+'trust_weighted_score'
+●●●●●● 1mm □
+trust_weighted_score
+weighted_results
+●●●●●● 1mm □△
+result_copy
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+weighted_results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+retrieve_hybrid
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+include_metadata
+keyword_weight
+use_trust_weighting
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+5
+0.3
+●●●●●● 3mm □△○
+0.3
+●●●●●● 3mm □△○
+'\n        Hybrid retrieval with trust-aware weighting.\n        \n        Combines semantic search + keyword matching + trust weighting.\n        '
+hybrid_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hybrid_results
+●●●●●● 3mm ○
+●●●●●● 2mm □
+use_trust_weighting
+trust_weighted_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+hybrid_results
+●●●●●● 2mm □△
+●●●●●● 3mm □
+trust_weighted_results
+●●●●●● 1mm □
+hybrid_results
+●●●●●● 3mm □
+r
+trust_weighted_results
+r
+'trust_score'
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'confidence_score'
+0.5
+●●●●●● 2mm □△
+0.5
+r
+'trust_weighted_score'
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+filtered_results
+●●●●●● 1mm □
+r
+r
+trust_weighted_results
+r
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+r
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+score_threshold
+filtered_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filtered_results
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+retrieve_by_document
+●●●●●● 1mm □△
+self
+document_id
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'Delegate to base retriever.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document_id
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+retrieve_by_source
+●●●●●● 1mm □△
+self
+source
+limit
+include_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+20
+●●●●●● 3mm □△○
+'Delegate to base retriever.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+source
+limit
+include_text
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+build_context
+●●●●●● 1mm □△
+self
+chunks
+max_length
+include_sources
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'Delegate to base retriever.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunks
+max_length
+include_sources
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+collection_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get collection name from base retriever.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+embedding_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get embedding model (trust-aware version).'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+close
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clean up resources.'
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'close'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_trust_aware_retriever
+●●●●●● 1mm □△
+base_retriever
+trust_weight
+min_trust_threshold
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+DocumentRetriever
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □
+0.3
+0.3
+●●●●●● 2mm □
+'\n    Get trust-aware document retriever instance.\n    \n    Args:\n        base_retriever: Base DocumentRetriever (creates new if None)\n        trust_weight: Weight of trust in similarity (0-1)\n        min_trust_threshold: Minimum trust to include\n        embedding_model: Base EmbeddingModel (uses singleton if None)\n        \n    Returns:\n        TrustAwareDocumentRetriever instance\n    '
+●●●●●● 3mm ○
+TrustAwareDocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TrustAwareDocumentRetriever

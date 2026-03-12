@@ -1,0 +1,601 @@
+## deterministic_gate.py
+'\ncoding_agent/deterministic_gate.py\n─────────────────────────────────────────────────────────────────────────────\nDeterministic Pre-LLM Gate\n\nPhilosophy: "Deterministic checks up — LLM takes over"\n\nBefore Qwen ever sees a coding task, this gate:\n  1. AST-parses any existing code in context (finds syntax errors, imports,\n     function signatures, complexity)\n  2. Identifies risky patterns (DB writes, network calls, file deletions)\n  3. Checks if similar work already exists in the knowledge base\n  4. Produces a structured GateReport passed as context INTO the LLM prompt\n\nThis means Qwen starts reasoning from a factual foundation, not from scratch.\nIt knows: what\'s already there, what imports are available, what the risk\nsurface is, and what similar code looked like.\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_HIGH_RISK_PATTERNS
+●●●●●● 1mm □
+'os.remove'
+'shutil.rmtree'
+'DROP TABLE'
+'DELETE FROM'
+'TRUNCATE'
+'subprocess.call'
+'os.system'
+'eval('
+'__import__('
+'socket.connect'
+'requests.post'
+'urllib.request'
+_MEDIUM_RISK_PATTERNS
+●●●●●● 1mm □
+'open('
+'write('
+'session.commit'
+'session.delete'
+'time.sleep'
+'threading.Thread'
+●●●●●● 2mm △
+GateReport
+'Structured output from the deterministic gate — fed into LLM prompt.'
+syntax_valid
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+syntax_errors
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+imports_found
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+functions_found
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classes_found
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+high_risk_patterns
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+medium_risk_patterns
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+risk_score
+●●●●●● 3mm ○
+0.0
+similar_knowledge
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+complexity_score
+●●●●●● 2mm ○
+0
+recommendations
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gate_passed
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+as_prompt_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Format as a compact LLM-readable context block.'
+lines
+●●●●●● 1mm □
+'=== DETERMINISTIC PRE-ANALYSIS ==='
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'⚠️ SYNTAX ERRORS: '
+'; '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'Available imports: '
+', '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'Existing functions: '
+', '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'⛔ HIGH RISK patterns detected: '
+', '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  → Wrap in try/except, add governance approval, log to Genesis'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'⚠️ Medium risk patterns: '
+', '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'📚 Similar code in KB: '
+●●●●●● 3mm △
+0
+150
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+lines
+●●●●●● 1mm □△
+'Recommendations:'
+●●●●●● 2mm □△
+r
+●●●●●● 3mm △
+3
+lines
+●●●●●● 1mm □△
+'  • '
+r
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'Risk score: '
+●●●●●● 3mm △
+'.2f'
+' | Complexity: '
+●●●●●● 3mm △
+' nodes'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'================================='
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+DeterministicGate
+'\n    Runs fast, deterministic checks before any LLM call.\n    Produces a GateReport that enriches the Qwen prompt.\n    '
+●●●●●● 1mm □
+analyze
+●●●●●● 1mm □△
+self
+task
+existing_code
+file_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'\n        Full deterministic analysis.\n        Always returns a GateReport — never raises.\n        '
+report
+●●●●●● 1mm □
+GateReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+existing_code
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_context
+report
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+task
+'\n'
+existing_code
+'\n'
+file_context
+●●●●●● 3mm △
+●●●●●● 1mm □△
+combined
+report
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.1
+●●●●●● 3mm ○
+report
+0.2
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+0.9
+report
+●●●●●● 1mm □
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'BLOCKED: Risk score too high. Requires governance approval.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GATE] Analysis complete — risk=%.2f, syntax=%s, gate=%s'
+report
+report
+report
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GATE] Analysis error (non-fatal): %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+GateReport
+●●●●●● 1mm □
+_parse_code
+●●●●●● 1mm □△
+self
+code
+report
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+GateReport
+'AST parse code to extract structure.'
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+report
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+alias
+node
+●●●●●● 2mm □
+alias
+report
+report
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+mod
+●●●●●● 1mm □
+node
+''
+●●●●●● 2mm □
+mod
+report
+report
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+sig
+●●●●●● 1mm □
+node
+'('
+', '
+●●●●●● 1mm □△
+a
+a
+node
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □
+sig
+report
+report
+●●●●●● 1mm □△
+sig
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+report
+report
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+SyntaxError
+report
+●●●●●● 1mm □
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'Line '
+e
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_scan_risk_patterns
+●●●●●● 1mm □△
+self
+text
+report
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+GateReport
+'Scan for risky code patterns.'
+pattern
+_HIGH_RISK_PATTERNS
+●●●●●● 2mm □
+pattern
+text
+pattern
+report
+report
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+pattern
+_MEDIUM_RISK_PATTERNS
+●●●●●● 2mm □
+pattern
+text
+pattern
+report
+report
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_add_recommendations
+●●●●●● 1mm □△
+self
+report
+●●●●●● 2mm □△
+GateReport
+'Add targeted recommendations based on findings.'
+●●●●●● 2mm □
+report
+report
+●●●●●● 1mm □△
+'Fix syntax errors before adding new logic'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'os.remove'
+report
+'shutil.rmtree'
+report
+report
+●●●●●● 1mm □△
+'Add dry_run=True parameter for destructive file ops'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'session'
+p
+p
+report
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+'Use session_scope() context manager, not bare sessions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+500
+report
+●●●●●● 1mm □△
+'High complexity — consider splitting into smaller functions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_search_kb
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search knowledge base for similar existing code.'
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vec
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+task
+200
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+200
+r
+results
+r
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+_gate
+●●●●●● 2mm □○
+DeterministicGate
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_gate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_gate
+●●●●●● 2mm □
+_gate
+●●●●●● 1mm □
+DeterministicGate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_gate
+DeterministicGate

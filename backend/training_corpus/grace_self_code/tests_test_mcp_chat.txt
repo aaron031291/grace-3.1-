@@ -1,0 +1,206 @@
+## test_mcp_chat.py
+'\nScript to test the Grace OS MCP chat endpoint (/api/mcp/chat).\nThis demonstrates the full multi-turn tool-calling loop where the LLM\nuses MCP tools to perform actions on the local file system.\n'
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+API_BASE_URL
+●●●●●● 1mm □
+'http://localhost:8000/api/mcp'
+●●●●●● 1mm □
+test_mcp_chat
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[USER] '
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+API_BASE_URL
+'/chat'
+payload
+●●●●●● 1mm □
+'messages'
+'temperature'
+'role'
+'content'
+'user'
+prompt
+0.3
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Sending request to Grace API (this may take a moment if multiple tool calls are needed)...'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □
+response
+200
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error '
+response
+': '
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tool_calls
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'tool_calls_made'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tool_calls
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[AI used '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tool_calls
+●●●●●● 2mm □△
+' tools]:'
+●●●●●● 2mm □△
+i
+tc
+●●●●●● 2mm □
+●●●●●● 1mm □△
+tool_calls
+1
+●●●●●● 2mm □△
+success_icon
+●●●●●● 1mm □
+tc
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+'✅'
+'❌'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+i
+'. '
+success_icon
+' '
+tc
+'tool'
+'('
+json
+●●●●●● 1mm □△
+tc
+'arguments'
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[AI used no tools]'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ASSISTANT] ('
+duration
+'.1f'
+'s, turns: '
+data
+●●●●●● 1mm □△
+'turns'
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+requests
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error: Could not connect to Grace API. Is the server running? (npm run dev/start.bat)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Unexpected error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Grace OS — MCP Chat Verification Test'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_mcp_chat
+●●●●●● 1mm □△
+"Create a file named 'mcp_chat_test.md' in the current directory with a short poem about Grace OS, then read it back to verify."
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Test script finished.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△

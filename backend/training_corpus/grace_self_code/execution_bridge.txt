@@ -1,0 +1,1251 @@
+## bridge.py
+"\nGrace Execution Bridge\n\nBridges Grace's cognitive layer with code execution capabilities.\nProvides safe, sandboxed execution with full audit trail.\n"
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+actions
+●●●●●● 2mm □△○
+GraceAction
+ActionRequest
+ActionResult
+ActionStatus
+create_action
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ExecutionConfig
+'Configuration for the execution environment.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+workspace_dir
+timeout
+use_docker
+docker_image
+max_output_size
+allowed_commands
+blocked_commands
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+300
+●●●●●● 1mm □
+'grace-sandbox:latest'
+100000
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+workspace_dir
+os
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_docker
+●●●●●● 3mm △
+●●●●●● 1mm □
+docker_image
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_output_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+allowed_commands
+●●●●●● 3mm △
+●●●●●● 1mm □
+blocked_commands
+'rm -rf /'
+'mkfs'
+'dd if=/dev/zero'
+':(){:|:&};:'
+●●●●●● 2mm △
+ExecutionBridge
+"\n    Main bridge between Grace's cognitive systems and code execution.\n\n    Provides:\n    - Sandboxed code execution (Python, Bash)\n    - File operations (read, write, edit)\n    - Git operations\n    - Test execution\n    - Full audit trail via Genesis Keys\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+config
+genesis_tracker
+●●●●●● 2mm □△
+ExecutionConfig
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+config
+ExecutionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_tracker
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Tuple
+ActionRequest
+ActionResult
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+ActionRequest
+'\n        Execute an action and return the result.\n\n        This is the main entry point for all execution requests.\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Executing action: '
+action
+' ['
+action
+']'
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+result
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Action '
+action
+' completed: '
+result
+' in '
+result
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+asyncio
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Action '
+action
+' failed with error'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ActionResult
+●●●●●● 1mm □
+_get_handler
+●●●●●● 1mm □△
+self
+action_type
+●●●●●● 2mm □△
+GraceAction
+'Get the handler function for an action type.'
+handlers
+●●●●●● 1mm □
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+handlers
+●●●●●● 1mm □△
+action_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+ActionRequest
+'Read contents of a file.'
+path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+start_line
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'start_line'
+●●●●●● 2mm □△
+end_line
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'end_line'
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_line
+●●●●●● 2mm □
+start_idx
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+start_line
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+end_idx
+●●●●●● 1mm □
+end_line
+end_line
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+lines
+start_idx
+end_idx
+content
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Write content to a file.'
+path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+overwrite
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'overwrite'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+overwrite
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+was_new
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Edit a file by replacing content.'
+path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+old_content
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'old_content'
+●●●●●● 2mm □△
+new_content
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'new_content'
+●●●●●● 2mm □△
+replace_all
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'replace_all'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+old_content
+content
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+replace_all
+new_file_content
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+old_content
+new_content
+●●●●●● 2mm □△
+●●●●●● 3mm □
+new_file_content
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+old_content
+new_content
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+new_file_content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Delete a file.'
+path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Execute Python code.'
+code
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+timeout
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'timeout'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+temp_path
+●●●●●● 1mm □
+f
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sys
+temp_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+temp_path
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Execute a bash command.'
+command
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'command'
+●●●●●● 2mm □△
+working_dir
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'working_dir'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+timeout
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'timeout'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+blocked
+●●●●●● 3mm △
+●●●●●● 2mm □
+blocked
+command
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+command
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Run tests using detected framework.'
+test_path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'test_path'
+'.'
+●●●●●● 2mm □△
+framework
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'test_framework'
+'auto'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+framework
+'auto'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'pytest.ini'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'pyproject.toml'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+framework
+●●●●●● 1mm □
+'pytest'
+●●●●●● 1mm △
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'package.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+framework
+●●●●●● 1mm □
+'jest'
+framework
+●●●●●● 1mm □
+'pytest'
+●●●●●● 2mm □
+framework
+'pytest'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 1mm △
+framework
+'jest'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Run pytest tests.'
+test_path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'test_path'
+'.'
+●●●●●● 2mm □△
+verbose
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'verbose'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+sys
+'-m'
+'pytest'
+test_path
+'--tb=short'
+●●●●●● 2mm □
+verbose
+cmd
+●●●●●● 1mm □△
+'-v'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+result
+'stdout'
+passed
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+' passed'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+' failed'
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+' error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Run jest tests.'
+test_path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'test_path'
+'.'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'npx'
+'jest'
+test_path
+'--json'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Get git status.'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'git'
+'status'
+'--porcelain'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Get git diff.'
+staged
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'staged'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+'git'
+'diff'
+●●●●●● 2mm □
+staged
+cmd
+●●●●●● 1mm □△
+'--staged'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Stage files for commit.'
+files
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'files'
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+files
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+files
+cmd
+●●●●●● 1mm □
+'git'
+'add'
+●●●●●● 3mm ○
+files
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Create a git commit.'
+message
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+full_message
+●●●●●● 1mm □
+message
+'\n\nCo-Authored-By: Grace AI <grace@ai.local>'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'git'
+'commit'
+'-m'
+full_message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Search code using ripgrep or grep.'
+pattern
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'pattern'
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'path'
+'.'
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'file_type'
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+'rg'
+pattern
+path
+'-n'
+'--color=never'
+●●●●●● 2mm □
+file_type
+cmd
+●●●●●● 1mm □△
+'-t'
+file_type
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'returncode'
+127
+cmd
+●●●●●● 1mm □
+'grep'
+'-rn'
+pattern
+path
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Alias for search_code.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Find files matching a pattern.'
+pattern
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'pattern'
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'path'
+'.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+glob
+●●●●●● 2mm □△○
+glob
+full_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+glob
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+full_path
+'**'
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+m
+●●●●●● 3mm △
+●●●●●● 2mm □△
+m
+matches
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Record a thought (no execution).'
+thought
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'thought'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Record a plan (no execution).'
+goal
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'goal'
+●●●●●● 2mm □△
+steps
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'steps'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Mark task as finished.'
+result
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'summary'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+ActionRequest
+'Handle unknown action types.'
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_resolve_path
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Resolve a path relative to workspace.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+path
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Run a subprocess and capture output.'
+timeout
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+cwd
+●●●●●● 1mm □
+cwd
+●●●●●● 3mm △
+●●●●●● 2mm □
+shell
+process
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 3mm □
+process
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+stdout
+stderr
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+process
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'stdout'
+'stderr'
+'returncode'
+stdout
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+stderr
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+process
+asyncio
+process
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'stdout'
+'stderr'
+'returncode'
+''
+'Process timed out after '
+timeout
+'s'
+1
+Exception
+●●●●●● 3mm ○
+'stdout'
+'stderr'
+'returncode'
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+ActionRequest
+ActionResult
+'Track action in Genesis Keys.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to track Genesis key: '
+e
+●●●●●● 2mm □△
+_bridge_instance
+●●●●●● 2mm □○
+ExecutionBridge
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_execution_bridge
+●●●●●● 1mm □△
+config
+genesis_tracker
+●●●●●● 2mm □△
+ExecutionConfig
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create the execution bridge singleton.'
+●●●●●● 2mm □
+_bridge_instance
+●●●●●● 2mm □
+_bridge_instance
+●●●●●● 1mm □
+ExecutionBridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_bridge_instance
+ExecutionBridge

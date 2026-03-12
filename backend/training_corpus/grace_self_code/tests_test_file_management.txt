@@ -1,0 +1,685 @@
+## test_file_management.py
+'\nIntegration test for file management and ingestion system.\nTests the complete workflow: upload, ingest, view in directory, delete.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+file_manager.knowledge_base_manager
+●●●●●● 2mm □△○
+KnowledgeBaseManager
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+FileHandler
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 1mm □
+test_file_upload_and_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test uploading files and viewing directory structure.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 1: File Upload and Directory Browsing'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+KnowledgeBaseManager
+●●●●●● 1mm □△
+'backend/knowledge_base'
+●●●●●● 2mm □△
+success
+msg
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'test_documents'
+●●●●●● 2mm □△
+success
+'Failed to create folder: '
+msg
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created test folder'
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+'introduction.txt'
+b'This is an introduction to our knowledge base system.'
+'guide.md'
+b'# User Guide\n\nThis is a comprehensive guide for using the system.'
+filename
+content
+files
+success
+msg
+path
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+content
+'test_documents'
+filename
+●●●●●● 2mm □△
+success
+'Failed to save '
+filename
+': '
+msg
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Saved file: '
+filename
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+' bytes)'
+●●●●●● 2mm □△
+structure
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'test_documents'
+●●●●●● 2mm □△
+structure
+'total_items'
+2
+'Expected 2 items, got '
+structure
+'total_items'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Directory has '
+structure
+'total_items'
+' items'
+●●●●●● 2mm □△
+item
+structure
+'items'
+'name'
+item
+'path'
+item
+'type'
+item
+'size'
+item
+item
+'type'
+'folder'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'size'
+item
+'  - '
+item
+'name'
+' ('
+item
+'size'
+' bytes)'
+'  - '
+item
+'name'
+'/'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+manager
+structure
+●●●●●● 1mm □
+test_text_extraction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test text extraction from different file types.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 2: Text Extraction from Files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+KnowledgeBaseManager
+●●●●●● 1mm □△
+'backend/knowledge_base'
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_files
+●●●●●● 1mm □
+'test_documents/test_sample.txt'
+'test_documents/test_notes.md'
+b'Machine learning is a subset of artificial intelligence.'
+b'# Notes\n\n## Section 1\nSome important information here.'
+filepath
+content
+test_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△
+'/'
+1
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+1
+parts
+0
+''
+filename
+●●●●●● 1mm □
+parts
+1
+success
+_
+saved_path
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+content
+folder
+filename
+●●●●●● 2mm □△
+success
+'Failed to save '
+filename
+abs_path
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+saved_path
+●●●●●● 2mm □△
+text
+error
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+error
+●●●●●● 2mm □
+'Error extracting text: '
+error
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+0
+'No text extracted from '
+filename
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Extracted text from '
+filename
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+' chars'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Preview: '
+text
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_file_deletion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test file and folder deletion.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 3: File and Folder Deletion'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+KnowledgeBaseManager
+●●●●●● 1mm □△
+'backend/knowledge_base'
+●●●●●● 2mm □△
+success
+_
+path
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+b'Test content'
+'test_documents'
+'delete_me.txt'
+●●●●●● 2mm □△
+success
+'Failed to create test file'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created test file: '
+path
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+'File was not created'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ File exists in directory'
+●●●●●● 2mm □△
+success
+msg
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+success
+'Failed to delete file: '
+msg
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Deleted file: '
+path
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+'File was not deleted'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ File is no longer in directory'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test text ingestion into vector database.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 4: Ingestion Service Integration'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Initializing embedding model...'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Embedding model loaded'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Initializing ingestion service...'
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Ingestion service initialized'
+●●●●●● 2mm □△
+test_text
+●●●●●● 1mm □
+'\n        Artificial intelligence (AI) is transforming industries worldwide.\n        Machine learning enables systems to learn from data without explicit programming.\n        Deep learning uses neural networks to process complex patterns.\n        These technologies power modern applications and continue to evolve rapidly.\n        '
+document_id
+message
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document_id
+●●●●●● 2mm □
+'Ingestion failed: '
+message
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Ingested document: ID '
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Message: '
+message
+●●●●●● 2mm □△
+doc_info
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+document_id
+●●●●●● 2mm □△
+doc_info
+●●●●●● 2mm □
+'Could not retrieve document info'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Retrieved document info:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - Filename: '
+doc_info
+●●●●●● 1mm □△
+'filename'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - Chunks: '
+doc_info
+●●●●●● 1mm □△
+'total_chunks'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - Status: '
+doc_info
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - Text length: '
+doc_info
+●●●●●● 1mm □△
+'text_length'
+●●●●●● 2mm □△
+' chars'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Search results: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' chunks found'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - Top result score: '
+results
+0
+●●●●●● 1mm □△
+'score'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+success
+del_msg
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Cleaned up test document: '
+del_msg
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ Ingestion test skipped (service may not be available): '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+cleanup_test_files
+●●●●●● 1mm □△
+manager
+●●●●●● 2mm □△
+'Clean up test files created during testing.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'CLEANUP: Removing Test Files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+success
+msg
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'test_documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Deleted test folder: '
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ Could not delete test folder: '
+msg
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ Error during cleanup: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all integration tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'█'
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  FILE MANAGEMENT & INGESTION INTEGRATION TESTS'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'█'
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+manager
+structure
+●●●●●● 1mm □
+test_file_upload_and_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_text_extraction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_file_deletion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cleanup_test_files
+●●●●●● 1mm □△
+manager
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'█'
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ ALL TESTS PASSED'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'█'
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+AssertionError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✗ TEST FAILED: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✗ UNEXPECTED ERROR: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+exit_code
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+exit_code
+●●●●●● 2mm □△

@@ -1,0 +1,964 @@
+## orchestrator.py
+'\nGrace OS — Unified Orchestrator.\n\nManages the multi-turn interaction loop between the LLM and ALL tools:\n- MCP tools (file I/O, terminal, search) → routed to DesktopCommanderMCP server\n- Builtin tools (RAG, web search, web fetch) → executed locally in Python\n\nThe LLM receives all tools at once and decides which to use at each step.\nNo keyword routing or pre-classification — the LLM is the router.\n\nCompatible with both OpenAI and Ollama (via tool-calling API).\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Callable
+●●●●●● 3mm □△○
+grace_mcp.client
+●●●●●● 2mm □△○
+MCPClient
+●●●●●● 3mm □△○
+grace_mcp.audit_logger
+●●●●●● 2mm □△○
+AuditLogger
+●●●●●● 3mm □△○
+grace_mcp.builtin_tools
+●●●●●● 2mm □△○
+get_builtin_tools
+BuiltinTool
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MAX_TOOL_TURNS
+●●●●●● 1mm □
+10
+●●●●●● 2mm △
+MCPOrchestrator
+'\n    Orchestrates multi-turn tool-calling conversations.\n    \n    This is the central nervous system for Grace OS MCP integration.\n    It connects the LLM (OpenAI / Ollama) with MCP tools (file I/O, terminal, git).\n    \n    Usage:\n        orchestrator = MCPOrchestrator()\n        await orchestrator.initialize()\n        response = await orchestrator.chat(\n            messages=[{"role": "user", "content": "Read the file app.py"}],\n            model="gpt-4o"\n        )\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+mcp_client
+llm_provider
+llm_api_key
+llm_base_url
+llm_model
+max_tool_turns
+system_prompt
+enable_rag
+enable_web
+●●●●●● 2mm □△
+MCPClient
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+MAX_TOOL_TURNS
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+mcp_client
+MCPClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_provider
+os
+●●●●●● 1mm □△
+'LLM_PROVIDER'
+'openai'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_api_key
+os
+●●●●●● 1mm □△
+'LLM_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_model
+os
+●●●●●● 1mm □△
+'LLM_MODEL'
+'gpt-4o'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_base_url
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_tool_turns
+●●●●●● 3mm △
+●●●●●● 1mm □
+system_prompt
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+BuiltinTool
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_rag
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_web
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+_get_default_base_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get the default base URL for the configured LLM provider.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+'openai'
+●●●●●● 3mm ○
+'https://api.openai.com/v1'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_URL'
+'http://localhost:11434'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'/v1'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_default_system_prompt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+platform
+cwd
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+os_info
+●●●●●● 1mm □
+platform
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'You are Grace OS, an AI coding assistant running on '
+os_info
+'. You have direct access to the local file system, terminal, knowledge base, and the internet.\n\nYour current working directory is: '
+cwd
+'\n\nYou have the following capabilities:\n- **File Operations**: read, write, edit, move, search files and directories\n- **Terminal**: execute commands, manage processes\n- **Knowledge Base**: search ingested documents via rag_search\n- **Web**: search Google via web_search, fetch page content via web_fetch\n- **Resources**: read real-time data streams via read_resource (e.g., logs://{pid} for process output)\n\nThe LLM decides which tools to use based on context. For example, a single request might require web_search followed by write_file.\n\nRules:\n- Use logs://{pid} with read_resource to monitor the real-time output of a process without starting a new one\n- Use rag_search when the user asks about their project or knowledge base\n- Use web_search for current information not in the knowledge base\n- Use web_fetch to read the full content of a specific URL\n- Always read a file before editing it\n- Use edit_block for surgical edits (search/replace)\n- Use write_file only for creating new files or full rewrites\n- Use paths relative to the current directory\n- Use delete_file or delete_directory to delete files/folders, but NEVER do this without explicit user confirmation first.\n- Use execute_command for quick shell commands and start_process for long-running servers or persistent sessions.\n'
+●●●●●● 1mm ○
+'Initialize the orchestrator by connecting to the MCP server and registering builtin tools.'
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Initializing MCP connection...'
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+connected
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Failed to connect to MCP server'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'function'
+'function'
+'name'
+'description'
+'parameters'
+'read_resource'
+'Read a real-time data resource from the system via a URI. Currently supports Process Logs using the logs://{pid} format. Use this to monitor the output of a running process or check logs without repeatedly calling tools.'
+'type'
+'properties'
+'required'
+'object'
+'uri'
+'type'
+'description'
+'string'
+'The URI of the resource to read (e.g., logs://1234)'
+'uri'
+●●●●●● 2mm □△
+mcp_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+builtin_tools
+●●●●●● 1mm □
+get_builtin_tools
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tool
+builtin_tools
+●●●●●● 2mm □
+tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+tool
+●●●●●● 1mm □
+tool
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Registered builtin tool: '
+tool
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"[ORCHESTRATOR] Builtin tool '"
+tool
+"' unavailable (missing env)"
+●●●●●● 2mm □△
+builtin_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+total_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] ✅ Ready with '
+total_count
+' tools ('
+mcp_count
+' MCP + '
+builtin_count
+' builtin)'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Initialization failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+'Shutdown the orchestrator and disconnect from MCP.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Shut down'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm △○
+●●●●●● 2mm □
+0.3
+4096
+'user'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n        Run a multi-turn tool-calling conversation.\n        \n        Args:\n            messages: Conversation messages (OpenAI format)\n            model: LLM model to use\n            temperature: Sampling temperature\n            max_tokens: Max response tokens\n            calling_layer: Which Grace OS layer is calling\n            session_id: Session tracking ID\n            on_tool_call: Optional callback for each tool call start (for streaming updates)\n            on_tool_result: Optional callback for each tool call finish (for streaming updates)\n            \n        Returns:\n            Dict with 'content', 'tool_calls_made', 'turns', 'model'\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+success
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm ○
+'content'
+'tool_calls_made'
+'turns'
+'success'
+'Error: MCP server is not available. Please check the server.'
+0
+●●●●●● 1mm □
+model
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+session_id
+●●●●●● 1mm □
+session_id
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+full_messages
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+full_messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+full_messages
+●●●●●● 1mm □△
+messages
+●●●●●● 2mm □△
+all_tool_calls
+●●●●●● 1mm □
+all_sources
+●●●●●● 1mm □
+turn
+●●●●●● 1mm □
+0
+turn
+●●●●●● 3mm △
+turn
+1
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Turn '
+turn
+'/'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm_response
+'success'
+●●●●●● 3mm ○
+'content'
+'tool_calls_made'
+'turns'
+'success'
+'LLM Error: '
+llm_response
+●●●●●● 1mm □△
+'error'
+'Unknown error'
+●●●●●● 2mm □△
+all_tool_calls
+turn
+●●●●●● 1mm □
+response_message
+●●●●●● 1mm □
+llm_response
+'message'
+tool_calls
+●●●●●● 1mm □
+response_message
+●●●●●● 1mm □△
+'tool_calls'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tool_calls
+final_content
+●●●●●● 1mm □
+response_message
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'tool_calls_made'
+'sources'
+'turns'
+'model'
+'success'
+final_content
+all_tool_calls
+all_sources
+turn
+model
+●●●●●● 3mm □△○
+full_messages
+●●●●●● 1mm □△
+response_message
+●●●●●● 2mm □△
+tc
+tool_calls
+func_name
+●●●●●● 1mm □
+tc
+'function'
+'name'
+func_args_str
+●●●●●● 1mm □
+tc
+'function'
+'arguments'
+tool_call_id
+●●●●●● 1mm □
+tc
+'id'
+func_args
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func_args_str
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+func_args_str
+●●●●●● 2mm □△
+func_args_str
+json
+func_args
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] 🔧 Tool call: '
+func_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+on_tool_call
+on_tool_call
+●●●●●● 1mm □△
+func_name
+func_args
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func_name
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+func_name
+●●●●●● 1mm □△
+func_args
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+result
+'duration_ms'
+●●●●●● 1mm □
+duration_ms
+logger
+●●●●●● 1mm □△
+"[ORCHESTRATOR] Builtin '"
+func_name
+"' completed in "
+duration_ms
+'.0f'
+'ms'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+func_name
+'read_resource'
+uri
+●●●●●● 1mm □
+func_args
+●●●●●● 1mm □△
+'uri'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+uri
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+result
+'duration_ms'
+●●●●●● 1mm □
+duration_ms
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[ORCHESTRATOR] Resource read '"
+uri
+"' completed in "
+duration_ms
+'.0f'
+'ms'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+on_tool_result
+on_tool_result
+●●●●●● 1mm □△
+func_name
+result
+●●●●●● 2mm □△
+tool_result_content
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+tool_result_content
+'\n\n[TOOL EXECUTION FAILED]\nError details: '
+error_msg
+all_tool_calls
+●●●●●● 1mm □△
+'tool'
+'arguments'
+'result_preview'
+'success'
+'duration_ms'
+func_name
+func_args
+tool_result_content
+200
+result
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'duration_ms'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'sources'
+result
+all_sources
+●●●●●● 1mm □△
+result
+'sources'
+●●●●●● 2mm □△
+full_messages
+●●●●●● 1mm □△
+'role'
+'tool_call_id'
+'content'
+'tool'
+tool_call_id
+tool_result_content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'tool_calls_made'
+'sources'
+'turns'
+'model'
+'success'
+'Reached maximum tool-calling turns ('
+●●●●●● 3mm △
+'). The operation may be incomplete.'
+all_tool_calls
+all_sources
+turn
+model
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Call the LLM with tool definitions.\n        Supports both OpenAI and Ollama (via OpenAI-compatible API).\n        '
+headers
+●●●●●● 1mm □
+'Content-Type'
+'application/json'
+●●●●●● 2mm □
+●●●●●● 3mm △
+'openai'
+headers
+'Authorization'
+●●●●●● 1mm □
+'Bearer '
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+build_governance_prefix
+gov_prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gov_prefix
+messages
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+messages
+●●●●●● 2mm □△
+●●●●●● 2mm □
+messages
+messages
+0
+●●●●●● 1mm □△
+'role'
+●●●●●● 2mm □△
+'system'
+messages
+0
+●●●●●● 1mm □
+'content'
+messages
+0
+messages
+0
+'content'
+●●●●●● 3mm ○
+gov_prefix
+●●●●●● 3mm □
+messages
+●●●●●● 1mm □△
+0
+'role'
+'content'
+'system'
+gov_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'temperature'
+'max_tokens'
+model
+messages
+temperature
+max_tokens
+●●●●●● 2mm □
+tools
+payload
+'tools'
+●●●●●● 1mm □
+tools
+payload
+'tool_choice'
+●●●●●● 1mm □
+'auto'
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/chat/completions'
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] LLM request to '
+url
+' with model '
+model
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+error_text
+●●●●●● 1mm □
+response
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] LLM error ('
+response
+'): '
+error_text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+'message'
+●●●●●● 1mm □
+'LLM API error '
+response
+': '
+error_text
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+result
+'choices'
+0
+'message'
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+message
+requests
+●●●●●● 3mm ○
+'success'
+'error'
+'message'
+●●●●●● 1mm □
+'LLM request timed out after 120s'
+Exception
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] LLM call failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Read an MCP resource by URI.\n        \n        Args:\n            uri: The resource URI to read.\n            session_id: Optional session identifier for auditing.\n            \n        Returns:\n            Dict containing the resource content or error details.\n        '
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+uri
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get orchestrator status.'
+●●●●●● 3mm ○
+'initialized'
+'llm_provider'
+'llm_model'
+'tools_total'
+'tools_mcp'
+'tools_builtin'
+'max_tool_turns'
+'mcp_client'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_orchestrator
+●●●●●● 2mm □○
+MCPOrchestrator
+●●●●●● 2mm □
+'Get or create the global MCPOrchestrator instance.'
+●●●●●● 2mm □
+_orchestrator
+●●●●●● 2mm □
+_orchestrator
+●●●●●● 1mm □
+MCPOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_orchestrator
+MCPOrchestrator
+●●●●●● 1mm □
+get_mcp_orchestrator_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global MCPOrchestrator instance without initializing (for sync code).'
+●●●●●● 2mm □
+_orchestrator
+●●●●●● 2mm □
+_orchestrator
+●●●●●● 1mm □
+MCPOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_orchestrator
+MCPOrchestrator

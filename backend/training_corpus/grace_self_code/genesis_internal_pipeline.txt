@@ -1,0 +1,670 @@
+## internal_pipeline.py
+'\nGrace Internal Pipeline Runner\n===============================\nReplaces GitHub Actions — no third-party CI/CD dependency.\n\nRuns pipelines defined in YAML or code, scoped to workspaces.\nGrace triggers pipelines autonomously (on file change, on schedule,\non healing events) or manually via API.\n\nPipeline stages execute in subprocess with timeout and artifact capture.\nResults are tracked via Genesis Keys and stored in the database.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+yaml
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+models.workspace_models
+●●●●●● 2mm □△○
+PipelineRun
+Workspace
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+StageResult
+name
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+'pending'
+exit_code
+●●●●●● 2mm ○
+0
+stdout
+●●●●●● 1mm ○
+''
+stderr
+●●●●●● 1mm ○
+''
+duration_seconds
+●●●●●● 3mm ○
+0
+started_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+PipelineConfig
+name
+●●●●●● 1mm ○
+stages
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+trigger
+●●●●●● 1mm ○
+'manual'
+working_dir
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+environment
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeout_seconds
+●●●●●● 2mm ○
+600
+dataclass
+●●●●●● 2mm △
+InternalPipelineRunner
+'\n    Runs CI/CD pipelines internally — no GitHub Actions needed.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+workspace_id
+●●●●●● 1mm □
+_get_workspace
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Workspace
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ws
+ValueError
+●●●●●● 1mm □△
+"Workspace '"
+●●●●●● 3mm △
+"' not found"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ws
+Workspace
+●●●●●● 1mm □
+load_pipeline_yaml
+●●●●●● 1mm □△
+self
+yaml_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Load a pipeline definition from a YAML file.'
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+yaml_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileNotFoundError
+●●●●●● 1mm □△
+'Pipeline file not found: '
+yaml_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+yaml
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □
+stage_def
+data
+●●●●●● 1mm □△
+'stages'
+data
+●●●●●● 1mm □△
+'pipeline'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'stages'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □△
+'name'
+'commands'
+'working_dir'
+'timeout'
+'continue_on_error'
+stage_def
+●●●●●● 1mm □△
+'name'
+'unnamed'
+●●●●●● 2mm □△
+stage_def
+●●●●●● 1mm □△
+'commands'
+stage_def
+●●●●●● 1mm □△
+'script'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stage_def
+●●●●●● 1mm □△
+'working_dir'
+●●●●●● 2mm □△
+stage_def
+●●●●●● 1mm □△
+'timeout'
+300
+●●●●●● 2mm □△
+stage_def
+●●●●●● 1mm □△
+'continue_on_error'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+PipelineConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PipelineConfig
+PipelineConfig
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'manual'
+'grace'
+●●●●●● 2mm □
+'Execute a full pipeline. Returns the run result.'
+run_id
+●●●●●● 1mm □
+'run-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+working_dir
+●●●●●● 1mm □
+config
+ws
+pr
+●●●●●● 1mm □
+PipelineRun
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+pr
+●●●●●● 2mm □△
+ws
+●●●●●● 1mm □
+ws
+0
+●●●●●● 3mm ○
+1
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pr_id
+●●●●●● 1mm □
+pr
+stage_results
+●●●●●● 1mm □
+overall_status
+●●●●●● 1mm □
+'success'
+stage_def
+config
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+stage_def
+●●●●●● 2mm □△
+stage_results
+●●●●●● 1mm □△
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'failed'
+stage_def
+●●●●●● 1mm □△
+'continue_on_error'
+●●●●●● 2mm □△
+overall_status
+●●●●●● 1mm □
+'failed'
+completed_at
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+pr
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineRun
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pr
+pr
+●●●●●● 1mm □
+overall_status
+pr
+●●●●●● 1mm □
+completed_at
+pr
+●●●●●● 1mm □
+stage_results
+●●●●●● 2mm □
+pr
+started
+●●●●●● 1mm □
+pr
+pr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pr
+pr
+●●●●●● 1mm □
+completed_at
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+started
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+overall_status
+'failed'
+failed
+●●●●●● 1mm □
+s
+s
+stage_results
+s
+'status'
+'failed'
+●●●●●● 2mm □
+failed
+pr
+●●●●●● 1mm □
+failed
+0
+●●●●●● 1mm □△
+'stderr'
+''
+●●●●●● 2mm □△
+2000
+logger
+●●●●●● 1mm □△
+'[Pipeline] '
+●●●●●● 3mm △
+'/'
+config
+' run='
+run_id
+' status='
+overall_status
+' stages='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stage_results
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_id'
+'pipeline'
+'workspace'
+'status'
+'stages'
+'trigger'
+run_id
+config
+●●●●●● 3mm △
+overall_status
+stage_results
+trigger
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Run a single pipeline stage.'
+name
+●●●●●● 1mm □
+stage_def
+●●●●●● 1mm □△
+'name'
+'unnamed'
+●●●●●● 2mm □△
+commands
+●●●●●● 1mm □
+stage_def
+●●●●●● 1mm □△
+'commands'
+●●●●●● 2mm □△
+stage_dir
+●●●●●● 1mm □
+stage_def
+●●●●●● 1mm □△
+'working_dir'
+●●●●●● 2mm □△
+working_dir
+timeout
+●●●●●● 1mm □
+stage_def
+●●●●●● 1mm □△
+'timeout'
+300
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+commands
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+commands
+●●●●●● 1mm □
+commands
+result
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+combined_cmd
+●●●●●● 1mm □
+' && '
+●●●●●● 1mm □△
+commands
+●●●●●● 2mm □△
+●●●●●● 2mm □
+combined_cmd
+result
+●●●●●● 1mm □
+'skipped'
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+env
+●●●●●● 1mm □
+os
+environment
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+asyncio
+●●●●●● 1mm □△
+combined_cmd
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stdout
+stderr
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+proc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+proc
+0
+result
+●●●●●● 1mm □
+stdout
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+10000
+result
+●●●●●● 1mm □
+stderr
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+10000
+result
+●●●●●● 1mm □
+result
+0
+'success'
+'failed'
+asyncio
+result
+●●●●●● 1mm □
+'failed'
+result
+●●●●●● 1mm □
+'Stage timed out after '
+timeout
+'s'
+result
+●●●●●● 1mm □
+1
+Exception
+result
+●●●●●● 1mm □
+'failed'
+result
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+2000
+result
+●●●●●● 1mm □
+1
+end
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+end
+●●●●●● 1mm □△
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+end
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+StageResult
+●●●●●● 1mm □
+get_run_history
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Get pipeline run history for this workspace.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+runs
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineRun
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+PipelineRun
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_id'
+'pipeline'
+'status'
+'trigger'
+'triggered_by'
+'duration_seconds'
+'started_at'
+'completed_at'
+'stages'
+r
+r
+r
+r
+r
+r
+r
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+r
+runs
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_pipeline_runner
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the pipeline runner for a workspace.'
+●●●●●● 3mm ○
+InternalPipelineRunner
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+InternalPipelineRunner

@@ -1,0 +1,119 @@
+## grace_client.py
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+GRACE_API_URL
+●●●●●● 1mm □
+'http://localhost:8000/brain'
+●●●●●● 1mm □
+send
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n    Send an event or notification to Grace.\n    Used by IDE triggers (like on_save) to update Grace's context passively.\n    "
+payload
+●●●●●● 1mm □
+'action'
+'payload'
+'live'
+'event'
+message
+requests
+●●●●●● 1mm □△
+GRACE_API_URL
+'/tasks'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to send event to Grace API: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process
+●●●●●● 1mm □△
+user_input
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Send a natural language command to Grace.\n    Grace\'s brain handles the deterministic translations internally.\n    \n    Returns standard IDE bridge format: {"files": [...], "code": "..."}\n    '
+payload
+●●●●●● 1mm □
+'action'
+'payload'
+'generate'
+'prompt'
+'use_pipeline'
+user_input
+●●●●●● 3mm □△○
+res
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+GRACE_API_URL
+'/code'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+res
+200
+data
+●●●●●● 1mm □
+res
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+result_data
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'files'
+'code'
+result_data
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+result_data
+●●●●●● 1mm □△
+'code'
+'Done.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'error'
+data
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'HTTP '
+res
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to process command via Grace API: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△

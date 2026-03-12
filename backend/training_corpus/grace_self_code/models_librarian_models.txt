@@ -1,0 +1,727 @@
+## librarian_models.py
+"\nLibrarian System Models\n\nDatabase models for the Grace Librarian System, which provides:\n- Automatic file categorization and tagging\n- Document relationship tracking\n- Rule-based pattern matching\n- Approval workflow for sensitive operations\n- Complete audit trail\n\nThe librarian system automatically organizes and indexes all files from:\n- User uploads\n- Human-created content\n- Grace's autonomous actions\n"
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Text
+Float
+Boolean
+ForeignKey
+Index
+Integer
+DateTime
+JSON
+CheckConstraint
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm △
+LibrarianTag
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Tag definitions for document categorization.\n\n    Supports flat tag system where documents can have multiple tags.\n    Tags are case-insensitive and normalized (lowercase).\n\n    Examples:\n        - "AI", "research", "technical"\n        - "python", "code", "documentation"\n        - "tutorial", "beginner-friendly"\n    '
+__tablename__
+●●●●●● 1mm □
+'librarian_tags'
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+color
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+7
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+category
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+usage_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+parent_tag_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'librarian_tags.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tag_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+parent_tag
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'LibrarianTag'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_tag_name'
+'name'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_tag_category'
+'category'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_tag_usage'
+'usage_count'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<LibrarianTag(id='
+●●●●●● 3mm △
+', name='
+●●●●●● 3mm △
+', usage_count='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+DocumentTag
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Many-to-many junction table for document-tag relationships.\n\n    Tracks WHO assigned each tag and with what confidence level.\n    '
+__tablename__
+●●●●●● 1mm □
+'document_tags'
+document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tag_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'librarian_tags.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assigned_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+assigned_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+assignment_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+tag
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'LibrarianTag'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_document_tags_unique'
+'document_id'
+'tag_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_document_id'
+'document_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_tag_id'
+'tag_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_assigned_by'
+'assigned_by'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<DocumentTag(document_id='
+●●●●●● 3mm △
+', tag_id='
+●●●●●● 3mm △
+', assigned_by='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+DocumentRelationship
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Typed relationships between documents for knowledge graph.\n\n    Relationship Types:\n        - citation: Source document references target\n        - prerequisite: Target must be read before source\n        - related: Similar topic or content\n        - version: Source is newer/older version of target\n        - supersedes: Source replaces target\n        - part_of: Source is part of target collection\n        - duplicate: Source is duplicate of target\n\n    Properties:\n        - confidence: How certain we are about this relationship (0.0-1.0)\n        - strength: Semantic similarity or relevance strength (0.0-1.0)\n        - bidirectional: If True, relationship applies both ways\n    '
+__tablename__
+●●●●●● 1mm □
+'document_relationships'
+source_document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+target_document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+relationship_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+strength
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+detected_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+bidirectional
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+relationship_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+CheckConstraint
+●●●●●● 1mm □△
+'source_document_id != target_document_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_source_document'
+'source_document_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_target_document'
+'target_document_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_relationship_type'
+'relationship_type'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_source_target_type'
+'source_document_id'
+'target_document_id'
+'relationship_type'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<DocumentRelationship(source='
+●●●●●● 3mm △
+', target='
+●●●●●● 3mm △
+', type='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+LibrarianRule
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Pattern matching rules for automatic categorization.\n\n    Rules execute in priority order (higher priority first).\n    Multiple rules can match the same document.\n\n    Pattern Types:\n        - extension: Match file extension (e.g., r"\\.pdf$")\n        - filename: Match filename (e.g., r"^README.*")\n        - path: Match file path (e.g., r"ai research")\n        - mime_type: Match MIME type\n        - content: Match text content (expensive, opt-in)\n\n    Action Types:\n        - assign_tag: Assign one or more tags\n        - set_category: Set document category\n        - move_to_folder: Move to specific folder (requires approval)\n\n    Example:\n        {\n            "name": "PDF Documents",\n            "pattern_type": "extension",\n            "pattern_value": r"\\.pdf$",\n            "action_type": "assign_tag",\n            "action_params": {"tag_names": ["document", "pdf"]},\n            "priority": 10\n        }\n    '
+__tablename__
+●●●●●● 1mm □
+'librarian_rules'
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+enabled
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+priority
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+pattern_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pattern_value
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+case_sensitive
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+action_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action_params
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+matches_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+last_matched_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_enabled_priority'
+'enabled'
+'priority'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_pattern_type'
+'pattern_type'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_action_type'
+'action_type'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<LibrarianRule(id='
+●●●●●● 3mm △
+', name='
+●●●●●● 3mm △
+', priority='
+●●●●●● 3mm △
+', enabled='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+LibrarianAction
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Approval workflow queue for librarian actions.\n\n    Actions are classified into permission tiers:\n        - Auto-commit: Execute immediately (tag assignment, metadata updates, indexing)\n        - Approval required: Wait for human approval (folder creation, file deletion, moves)\n\n    Status Flow:\n        pending → approved/rejected → executed (if approved)\n\n    Actions can be reviewed by humans before execution.\n    All actions are logged to audit trail.\n    '
+__tablename__
+●●●●●● 1mm □
+'librarian_actions'
+document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action_params
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+permission_tier
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+triggered_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+reason
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+reviewed_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+reviewed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+review_notes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+executed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+execution_error
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_libaction_status_tier'
+'status'
+'permission_tier'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaction_document_status'
+'document_id'
+'status'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaction_type'
+'action_type'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaction_triggered_by'
+'triggered_by'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<LibrarianAction(id='
+●●●●●● 3mm △
+', action_type='
+●●●●●● 3mm △
+', status='
+●●●●●● 3mm △
+', tier='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+LibrarianAudit
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Complete audit trail for all librarian actions.\n\n    Records:\n        - What action was taken\n        - When it was executed\n        - Who triggered it\n        - Result (success/failure)\n        - Rollback data for undo operations\n\n    Enables:\n        - Debugging failed operations\n        - Compliance and accountability\n        - Rollback/undo functionality\n        - Performance analysis\n    '
+__tablename__
+●●●●●● 1mm □
+'librarian_audit'
+action_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'librarian_actions.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'documents.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action_details
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+executed_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+execution_time_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+error_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+rollback_data
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_libaudit_action_id'
+'action_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaudit_document_id'
+'document_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaudit_action_type'
+'action_type'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaudit_status_created'
+'status'
+'created_at'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_libaudit_executed_by'
+'executed_by'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<LibrarianAudit(id='
+●●●●●● 3mm △
+', action_type='
+●●●●●● 3mm △
+', status='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○

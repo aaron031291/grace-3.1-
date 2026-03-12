@@ -1,0 +1,216 @@
+## verify_genesis_sql.py
+'\nVerify Genesis Key + SQL (SQLite/PostgreSQL) are working.\n\nRun from backend directory:\n  python scripts/verify_genesis_sql.py\n\nChecks: DISABLE_GENESIS_TRACKING, DB connection, genesis_key table, create one key.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+_backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+_backend_dir
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+_backend_dir
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+_backend_dir
+'.env'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Genesis Key + SQL verification'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+50
+●●●●●● 2mm □△
+disable
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DISABLE_GENESIS_TRACKING'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+●●●●●● 2mm □
+disable
+errors
+●●●●●● 1mm □△
+'DISABLE_GENESIS_TRACKING is true in .env - set to false or remove it'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Genesis tracking enabled (DISABLE_GENESIS_TRACKING not true)'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+cfg
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+cfg
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1 FROM genesis_key LIMIT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Database connected, genesis_key table exists'
+●●●●●● 2mm □△
+Exception
+err
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'no such table'
+err
+'genesis_key'
+err
+'does not exist'
+err
+errors
+●●●●●● 1mm □△
+'Table genesis_key not found - run: python run_all_migrations.py'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+errors
+●●●●●● 1mm □△
+'Database error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+svc
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+svc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Created Genesis Key: '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+key
+'key_id'
+'created'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+errors
+●●●●●● 1mm □△
+'Genesis Key creation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED:'
+●●●●●● 2mm □△
+e
+errors
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  -'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'All checks passed. Genesis Key + SQL are working.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

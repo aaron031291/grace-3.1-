@@ -1,0 +1,454 @@
+## project_ops.py
+'\nProject Operations — export, import, rollback, cross-project file ops.\n\nHandles: export project as ZIP, import from ZIP, per-project rollback,\nmove/copy files between projects, cross-project search.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+zipfile
+●●●●●● 2mm □△○
+io
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+PROJECTS_DIR
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'projects'
+●●●●●● 1mm □
+export_project
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Export a project as a ZIP file.'
+project_dir
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 2mm □
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Project not found'
+export_dir
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'exports'
+export_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+zip_name
+●●●●●● 1mm □
+project_id
+'_'
+timestamp
+'.zip'
+zip_path
+●●●●●● 1mm □
+export_dir
+●●●●●● 3mm □△
+zip_name
+zipfile
+●●●●●● 1mm □△
+zip_path
+'w'
+zipfile
+●●●●●● 2mm □△
+zf
+f
+project_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+zf
+●●●●●● 1mm □△
+f
+f
+●●●●●● 1mm □△
+project_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+size_mb
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+zip_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+light_track
+light_track
+●●●●●● 1mm □△
+'system_event'
+'Project exported: '
+project_id
+' ('
+size_mb
+'MB)'
+'project_ops'
+'export'
+project_id
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'exported'
+'file'
+'size_mb'
+'path'
+●●●●●● 3mm □△○
+zip_name
+size_mb
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+zip_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+import_project
+●●●●●● 1mm □△
+project_id
+zip_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Import a project from a ZIP file.'
+zp
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+zip_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+zp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'ZIP file not found'
+project_dir
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+zipfile
+●●●●●● 1mm □△
+zp
+'r'
+●●●●●● 2mm □△
+zf
+zf
+●●●●●● 1mm □△
+project_dir
+●●●●●● 2mm □△
+file_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+project_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'imported'
+'project_id'
+'files'
+●●●●●● 3mm □△○
+project_id
+file_count
+●●●●●● 2mm □△
+●●●●●● 1mm □
+copy_file_between_projects
+●●●●●● 1mm □△
+source_project
+source_path
+dest_project
+dest_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Copy a file from one project to another.'
+src
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+source_project
+●●●●●● 3mm □△
+source_path
+●●●●●● 2mm □
+src
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Source not found: '
+source_project
+'/'
+source_path
+dst_path
+●●●●●● 1mm □
+dest_path
+source_path
+dst
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+dest_project
+●●●●●● 3mm □△
+dst_path
+dst
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+src
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dst
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+ingest_document
+content
+●●●●●● 1mm □
+dst
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingest_document
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dst
+●●●●●● 1mm □△
+PROJECTS_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+dest_project
+'cross_project_copy'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'copied'
+'from'
+'to'
+●●●●●● 3mm □△○
+source_project
+'/'
+source_path
+dest_project
+'/'
+dst_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+move_file_between_projects
+●●●●●● 1mm □△
+source_project
+source_path
+dest_project
+dest_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Move a file from one project to another.'
+result
+●●●●●● 1mm □
+copy_file_between_projects
+●●●●●● 1mm □△
+source_project
+source_path
+dest_project
+dest_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'copied'
+●●●●●● 2mm □△
+src
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+source_project
+●●●●●● 3mm □△
+source_path
+src
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'moved'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'copied'
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+project_rollback
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"Rollback a project to its last snapshot (per-project, doesn't affect others)."
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+list_snapshots
+rollback_to
+snapshots
+●●●●●● 1mm □
+list_snapshots
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_snaps
+●●●●●● 1mm □
+s
+s
+snapshots
+project_id
+s
+●●●●●● 1mm □△
+'label'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+project_snaps
+●●●●●● 3mm ○
+rollback_to
+●●●●●● 1mm □△
+project_snaps
+1
+'id'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'No snapshots found for this project'
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_exports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all exported project ZIPs.'
+export_dir
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'exports'
+●●●●●● 2mm □
+export_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'file'
+'size_mb'
+'created'
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+export_dir
+●●●●●● 1mm □△
+'*.zip'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△

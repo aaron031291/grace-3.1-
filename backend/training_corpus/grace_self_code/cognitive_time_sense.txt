@@ -1,0 +1,676 @@
+## time_sense.py
+"\nTimeSense — Grace's Temporal Awareness Layer\n\nProvides time-based intelligence across the system:\n- Current time context awareness\n- Deadline tracking and urgency scoring\n- Time-based task prioritisation\n- Activity pattern analysis (busiest hours, days)\n- Overdue detection\n- Time-until estimates\n- Daily/weekly/monthly rhythm detection\n"
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TimeSense
+"Grace's sense of time — temporal awareness for the entire system."
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Alias for now_context() — used by mirror, qwen-net, and component health.'
+●●●●●● 3mm ○
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+now_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'What does Grace know about RIGHT NOW.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hour
+●●●●●● 1mm □
+now
+dow
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+day_names
+●●●●●● 1mm □
+'Monday'
+'Tuesday'
+'Wednesday'
+'Thursday'
+'Friday'
+'Saturday'
+'Sunday'
+●●●●●● 2mm □
+hour
+6
+period
+●●●●●● 1mm □
+'late_night'
+period_label
+●●●●●● 1mm □
+'Late Night'
+●●●●●● 1mm △
+hour
+12
+period
+●●●●●● 1mm □
+'morning'
+period_label
+●●●●●● 1mm □
+'Morning'
+●●●●●● 2mm □
+hour
+17
+period
+●●●●●● 1mm □
+'afternoon'
+period_label
+●●●●●● 1mm □
+'Afternoon'
+●●●●●● 1mm △
+hour
+21
+period
+●●●●●● 1mm □
+'evening'
+period_label
+●●●●●● 1mm □
+'Evening'
+period
+●●●●●● 1mm □
+'night'
+period_label
+●●●●●● 1mm □
+'Night'
+●●●●●● 3mm ○
+'timestamp'
+'date'
+'time'
+'day_of_week'
+'day_number'
+'is_weekend'
+'is_business_hours'
+'period'
+'period_label'
+'hour'
+'week_number'
+'month'
+'year'
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □△
+'%H:%M:%S'
+●●●●●● 2mm □△
+day_names
+dow
+dow
+dow
+5
+9
+hour
+17
+dow
+5
+period
+period_label
+hour
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1
+now
+●●●●●● 1mm □△
+'%B'
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+urgency_score
+●●●●●● 1mm □△
+deadline_iso
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Calculate urgency based on how close the deadline is.'
+deadline
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+deadline_iso
+●●●●●● 1mm □△
+'Z'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ValueError
+TypeError
+●●●●●● 3mm ○
+'urgency'
+'label'
+0
+'no_deadline'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+delta
+●●●●●● 1mm □
+deadline
+●●●●●● 1mm □△
+now
+hours_left
+●●●●●● 1mm □
+delta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+●●●●●● 2mm □
+hours_left
+0
+●●●●●● 3mm ○
+'urgency'
+'label'
+'overdue_by'
+'hours_overdue'
+1.0
+'overdue'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+delta
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+1
+●●●●●● 2mm □△
+●●●●●● 1mm △
+hours_left
+1
+●●●●●● 3mm ○
+'urgency'
+'label'
+'hours_left'
+0.95
+'critical'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hours_left
+4
+●●●●●● 3mm ○
+'urgency'
+'label'
+'hours_left'
+0.85
+'urgent'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+1
+●●●●●● 2mm □△
+●●●●●● 1mm △
+hours_left
+24
+●●●●●● 3mm ○
+'urgency'
+'label'
+'hours_left'
+0.7
+'today'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hours_left
+72
+●●●●●● 3mm ○
+'urgency'
+'label'
+'days_left'
+0.5
+'soon'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+●●●●●● 3mm □△
+24
+1
+●●●●●● 2mm □△
+●●●●●● 1mm △
+hours_left
+168
+●●●●●● 3mm ○
+'urgency'
+'label'
+'days_left'
+0.3
+'this_week'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+●●●●●● 3mm □△
+24
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'urgency'
+'label'
+'days_left'
+0.1
+'later'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+hours_left
+●●●●●● 3mm □△
+24
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+time_until
+●●●●●● 1mm □△
+target_iso
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Human-readable time until a target.'
+target
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+target_iso
+●●●●●● 1mm □△
+'Z'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ValueError
+TypeError
+●●●●●● 3mm ○
+'text'
+'seconds'
+'unknown'
+0
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+delta
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+now
+secs
+●●●●●● 1mm □
+delta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+secs
+0
+●●●●●● 3mm ○
+'text'
+'seconds'
+'is_past'
+_fmt_duration
+●●●●●● 1mm □△
+secs
+●●●●●● 2mm □△
+' ago'
+secs
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'text'
+'seconds'
+'is_past'
+'in '
+_fmt_duration
+●●●●●● 1mm □△
+secs
+●●●●●● 2mm □△
+secs
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+activity_patterns
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Analyse a list of timestamps to find activity patterns.'
+●●●●●● 2mm □
+timestamps
+●●●●●● 3mm ○
+'total'
+'patterns'
+0
+hours
+●●●●●● 1mm □
+0
+●●●●●● 2mm □△
+24
+days
+●●●●●● 1mm □
+0
+●●●●●● 2mm □△
+7
+ts
+timestamps
+dt
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+ts
+●●●●●● 1mm □△
+'Z'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+hours
+dt
+1
+days
+dt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1
+ValueError
+TypeError
+day_names
+●●●●●● 1mm □
+'Mon'
+'Tue'
+'Wed'
+'Thu'
+'Fri'
+'Sat'
+'Sun'
+peak_hour
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+24
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+peak_day
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+7
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+quiet_hour
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+24
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'by_hour'
+'by_day'
+'peak_hour'
+'peak_day'
+'quiet_hour'
+'busiest_period'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+h
+'02d'
+':00'
+hours
+h
+h
+●●●●●● 1mm □
+●●●●●● 1mm □△
+24
+●●●●●● 2mm □△
+hours
+h
+0
+day_names
+d
+days
+d
+d
+●●●●●● 1mm □
+●●●●●● 1mm □△
+7
+●●●●●● 2mm □△
+peak_hour
+'02d'
+':00'
+day_names
+peak_day
+quiet_hour
+'02d'
+':00'
+peak_hour
+12
+'morning'
+peak_hour
+17
+'afternoon'
+'evening'
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+prioritise_by_time
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'Re-prioritise tasks based on temporal urgency.'
+scored
+●●●●●● 1mm □
+task
+tasks
+deadline
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'scheduled_for'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'deadline'
+●●●●●● 2mm □△
+urgency
+●●●●●● 1mm □
+deadline
+TimeSense
+●●●●●● 1mm □△
+deadline
+●●●●●● 2mm □△
+'urgency'
+'label'
+0
+'no_deadline'
+priority_weight
+●●●●●● 1mm □
+'critical'
+'high'
+'medium'
+'low'
+0.4
+0.3
+0.2
+0.1
+●●●●●● 1mm □△
+task
+●●●●●● 1mm □△
+'priority'
+'medium'
+●●●●●● 2mm □△
+0.2
+●●●●●● 2mm □△
+combined_score
+●●●●●● 1mm □
+urgency
+'urgency'
+●●●●●● 2mm □△
+0.6
+●●●●●● 3mm ○
+priority_weight
+●●●●●● 2mm □△
+0.4
+scored
+●●●●●● 1mm □△
+'time_urgency'
+'combined_score'
+task
+urgency
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+combined_score
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scored
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_fmt_duration
+●●●●●● 1mm □△
+secs
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Format seconds into human-readable duration.'
+●●●●●● 2mm □
+secs
+60
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+secs
+●●●●●● 2mm □△
+'s'
+●●●●●● 2mm □
+secs
+3600
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+secs
+●●●●●● 3mm □△
+60
+●●●●●● 2mm □△
+'m'
+●●●●●● 2mm □
+secs
+86400
+h
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+secs
+●●●●●● 3mm □△
+3600
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+secs
+●●●●●● 2mm □○
+3600
+●●●●●● 3mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+m
+h
+'h '
+m
+'m'
+h
+'h'
+d
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+secs
+●●●●●● 3mm □△
+86400
+●●●●●● 2mm □△
+h
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+secs
+●●●●●● 2mm □○
+86400
+●●●●●● 3mm □△
+3600
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+h
+d
+'d '
+h
+'h'
+d
+'d'
+●●●●●● 1mm ○

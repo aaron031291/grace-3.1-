@@ -1,0 +1,908 @@
+## client.py
+'\nOllama client module for detecting running models and generating responses.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Optional
+Any
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+USE_SETTINGS
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+USE_SETTINGS
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm △
+ModelStatus
+●●●●●● 3mm □△
+Enum
+Enum
+'Status of a model.'
+RUNNING
+●●●●●● 1mm □
+'running'
+AVAILABLE
+●●●●●● 1mm □
+'available'
+NOT_INSTALLED
+●●●●●● 1mm □
+'not_installed'
+●●●●●● 2mm △
+Model
+'Represents an Ollama model.'
+name
+●●●●●● 1mm ○
+digest
+●●●●●● 1mm ○
+size
+●●●●●● 2mm ○
+modified_at
+●●●●●● 1mm ○
+status
+ModelStatus
+ModelStatus
+●●●●●● 1mm □
+__str__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+' ('
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+')'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_format_size
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Format size in human-readable format.'
+unit
+'B'
+'KB'
+'MB'
+'GB'
+●●●●●● 2mm □
+●●●●●● 3mm △
+512
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'.2f'
+unit
+●●●●●● 3mm △
+512
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'.2f'
+'TB'
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+OllamaClient
+'Client for interacting with Ollama service.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Initialize Ollama client.\n        \n        Args:\n            base_url: The base URL of the Ollama service. If None, uses settings or default\n        '
+●●●●●● 2mm □
+base_url
+●●●●●● 2mm □
+●●●●●● 2mm □
+USE_SETTINGS
+base_url
+●●●●●● 1mm □
+settings
+●●●●●● 3mm □
+base_url
+●●●●●● 1mm □
+'http://localhost:11434'
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+'/api/tags'
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+'/api/generate'
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+'/api/show'
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+'/api/ps'
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if Ollama service is running.\n        \n        Returns:\n            bool: True if service is accessible, False otherwise\n        '
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+200
+requests
+requests
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get all available models from Ollama.\n        \n        Returns:\n            List[Model]: List of all installed models\n            \n        Raises:\n            ConnectionError: If unable to connect to Ollama service\n            requests.RequestException: If API request fails\n        '
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+●●●●●● 2mm □
+'models'
+data
+model_data
+data
+'models'
+model
+●●●●●● 1mm □
+Model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+models
+requests
+ConnectionError
+●●●●●● 1mm □△
+'Failed to connect to Ollama service at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+requests
+requests
+●●●●●● 1mm □△
+'Failed to fetch models: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Model
+●●●●●● 1mm □
+get_running_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get list of models currently running in memory.\n        \n        Returns:\n            List[str]: List of model names that are currently running\n            \n        Raises:\n            ConnectionError: If unable to connect to Ollama service\n            requests.RequestException: If API request fails\n        '
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+running_models
+●●●●●● 1mm □
+●●●●●● 2mm □
+'models'
+data
+running_models
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+model
+data
+'models'
+●●●●●● 3mm ○
+running_models
+requests
+ConnectionError
+●●●●●● 1mm □△
+'Failed to connect to Ollama service at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+requests
+requests
+●●●●●● 1mm □△
+'Failed to fetch running models: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if a model is installed.\n        \n        Args:\n            model_name: The name of the model to check\n            \n        Returns:\n            bool: True if model exists, False otherwise\n        '
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+m
+model_name
+m
+models
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+is_model_running
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if a specific model is currently running.\n        \n        Args:\n            model_name: The name of the model to check\n            \n        Returns:\n            bool: True if model is running, False otherwise\n        '
+running_models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+model_name
+running_models
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_model_info
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Get detailed information about a specific model.\n        \n        Args:\n            model_name: The name of the model\n            \n        Returns:\n            Dict: Model information including parameters, template, etc.\n            \n        Raises:\n            ConnectionError: If unable to connect to Ollama service\n            ValueError: If model doesn't exist\n            requests.RequestException: If API request fails\n        "
+params
+●●●●●● 1mm □
+'name'
+model_name
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+requests
+ConnectionError
+●●●●●● 1mm □△
+'Failed to connect to Ollama service at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+requests
+●●●●●● 2mm □
+e
+404
+ValueError
+●●●●●● 1mm □△
+"Model '"
+model_name
+"' not found"
+●●●●●● 2mm □△
+requests
+●●●●●● 1mm □△
+'Failed to fetch model info: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+generate_response
+●●●●●● 1mm □△
+self
+model
+prompt
+stream
+temperature
+top_p
+top_k
+num_predict
+context
+system_prompt
+system
+options
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+0.7
+0.9
+40
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n        Generate a response from a model.\n        \n        Args:\n            model: The model name to use\n            prompt: The prompt/question to send\n            stream: Whether to stream the response\n            temperature: Controls randomness (0-1, higher = more random)\n            top_p: Nucleus sampling parameter\n            top_k: Top-k sampling parameter\n            num_predict: Maximum tokens to generate\n            context: Context tokens from previous interactions\n            system_prompt: Optional system prompt (alias: system)\n            system: Optional system prompt (alias for system_prompt)\n            options: Optional dict merged into request options (e.g. temperature, num_predict)\n            \n        Returns:\n            str: The generated response\n            \n        Raises:\n            ValueError: If model doesn't exist\n            ConnectionError: If unable to connect to Ollama service\n            requests.RequestException: If API request fails\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+"Model '"
+model
+"' not found. Available models: "
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+'model'
+'prompt'
+'stream'
+'options'
+model
+prompt
+stream
+'temperature'
+'top_p'
+'top_k'
+temperature
+top_p
+top_k
+●●●●●● 2mm □
+system_prompt
+●●●●●● 2mm □
+system
+●●●●●● 2mm □
+payload
+'system'
+●●●●●● 1mm □
+system_prompt
+system
+''
+●●●●●● 2mm □
+options
+payload
+'options'
+●●●●●● 1mm □
+payload
+'options'
+options
+●●●●●● 2mm □
+num_predict
+●●●●●● 2mm □
+payload
+'options'
+'num_predict'
+●●●●●● 1mm □
+num_predict
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+payload
+'context'
+●●●●●● 1mm □
+context
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stream
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+requests
+ConnectionError
+●●●●●● 1mm □△
+'Failed to connect to Ollama service at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+requests
+requests
+●●●●●● 1mm □△
+'Failed to generate response: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_process_streamed_response
+●●●●●● 1mm □△
+self
+response
+●●●●●● 2mm □△
+requests
+'\n        Process a streamed response from Ollama.\n        \n        Args:\n            response: The response object with streaming enabled\n            \n        Returns:\n            str: The complete response text\n        '
+full_response
+●●●●●● 1mm □
+''
+line
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+chunk
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+full_response
+chunk
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+json
+Exception
+requests
+●●●●●● 1mm □△
+'Error processing streamed response: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+full_response
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_response_with_context
+●●●●●● 1mm □△
+self
+model
+prompt
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □
+"\n        Generate a response and return both response and context for follow-up.\n        \n        Args:\n            model: The model name to use\n            prompt: The prompt/question to send\n            context: Previous context tokens\n            **kwargs: Additional arguments to pass to generate_response\n            \n        Returns:\n            Dict with 'response' and 'context' keys for multi-turn conversations\n            \n        Raises:\n            ValueError: If model doesn't exist\n            ConnectionError: If unable to connect to Ollama service\n            requests.RequestException: If API request fails\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+"Model '"
+model
+"' not found"
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+'model'
+'prompt'
+'stream'
+model
+prompt
+●●●●●● 1mm □
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+payload
+'context'
+●●●●●● 1mm □
+context
+payload
+'options'
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'options'
+●●●●●● 2mm □△
+key
+'temperature'
+'top_p'
+'top_k'
+'num_predict'
+●●●●●● 2mm □
+key
+kwargs
+payload
+'options'
+key
+●●●●●● 1mm □
+kwargs
+key
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'context'
+data
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+requests
+ConnectionError
+●●●●●● 1mm □△
+'Failed to connect to Ollama service at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+requests
+requests
+●●●●●● 1mm □△
+'Failed to generate response with context: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+pull_model
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Pull/download a model from registry.\n        \n        Args:\n            model_name: The model to pull\n            \n        Returns:\n            bool: True if successful, False otherwise\n        '
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'ollama'
+'pull'
+model_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+0
+FileNotFoundError
+ConnectionError
+●●●●●● 1mm □△
+'Ollama CLI not found'
+●●●●●● 2mm □△
+subprocess
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+Exception
+●●●●●● 1mm □△
+'Failed to pull model: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+delete_model
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Delete a model.\n        \n        Args:\n            model_name: The model to delete\n            \n        Returns:\n            bool: True if successful, False otherwise\n        '
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'ollama'
+'rm'
+model_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+0
+FileNotFoundError
+ConnectionError
+●●●●●● 1mm □△
+'Ollama CLI not found'
+●●●●●● 2mm □△
+Exception
+Exception
+●●●●●● 1mm □△
+'Failed to delete model: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+model
+messages
+stream
+temperature
+top_p
+top_k
+num_predict
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+0.7
+0.9
+40
+●●●●●● 2mm □
+'\n        Generate a response using Ollama\'s chat endpoint.\n        \n        Args:\n            model: The model name to use\n            messages: List of message dicts with \'role\' and \'content\' keys.\n                     Roles can be \'user\', \'assistant\', or \'system\'\n                     Example: [\n                         {"role": "system", "content": "You are a helpful assistant"},\n                         {"role": "user", "content": "Hello"},\n                         {"role": "assistant", "content": "Hi! How can I help?"},\n                         {"role": "user", "content": "Tell me a joke"}\n                     ]\n            stream: Whether to stream the response\n            temperature: Controls randomness (0-1, higher = more random)\n            top_p: Nucleus sampling parameter\n            top_k: Top-k sampling parameter\n            num_predict: Maximum tokens to generate\n            \n        Returns:\n            str: The generated response\n            \n        Raises:\n            ValueError: If model doesn\'t exist\n            ConnectionError: If unable to connect to Ollama service\n            requests.RequestException: If API request fails\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+"Model '"
+model
+"' not found. Available models: "
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+'options'
+model
+messages
+stream
+'temperature'
+'top_p'
+'top_k'
+temperature
+top_p
+top_k
+●●●●●● 2mm □
+num_predict
+●●●●●● 2mm □
+payload
+'options'
+'num_predict'
+●●●●●● 1mm □
+num_predict
+api_chat_url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/api/chat'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+api_chat_url
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stream
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+requests
+ConnectionError
+●●●●●● 1mm □△
+'Failed to connect to Ollama service at '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+requests
+requests
+●●●●●● 1mm □△
+'Failed to generate chat response: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_model_info_detailed
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get detailed model information in a user-friendly format.\n        \n        Args:\n            model_name: The name of the model\n            \n        Returns:\n            Dict with formatted model info or None if not found\n        '
+info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_name
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+m
+m
+models
+m
+model_name
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+info
+'size_formatted'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+info
+'status'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_name
+●●●●●● 2mm □△
+'running'
+'available'
+●●●●●● 3mm ○
+info
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_ollama_client
+●●●●●● 1mm □△
+base_url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n    Factory function to create an Ollama client.\n    \n    Args:\n        base_url: The base URL of the Ollama service. If None, uses settings or default\n    '
+●●●●●● 2mm □
+base_url
+●●●●●● 2mm □
+USE_SETTINGS
+base_url
+●●●●●● 1mm □
+settings
+●●●●●● 3mm ○
+OllamaClient
+●●●●●● 1mm □△
+base_url
+●●●●●● 2mm □△
+OllamaClient

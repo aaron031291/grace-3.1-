@@ -1,0 +1,409 @@
+## test_hybrid_search.py
+'\nTest script demonstrating hybrid search benefit for short queries.\nShows why semantic search alone fails with single-word queries.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 1mm □
+demonstrate_hybrid_search
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Demonstrate semantic vs hybrid search with mock data.'
+semantic_results
+●●●●●● 1mm □
+'id'
+'filename'
+'chunk_index'
+'text'
+'semantic_score'
+'keywords'
+1
+'knowledge_base/text.txt'
+2
+'Deep Learning and Neural Networks. Deep learning models are powered by neural networks, which consist of interconnected nodes organized in layers. These networks...'
+0.6023
+'deep'
+'learning'
+'neural'
+'networks'
+'id'
+'filename'
+'chunk_index'
+'text'
+'semantic_score'
+'keywords'
+2
+'knowledge_base/bio_text.txt'
+1
+'The Economic Value of Biological Diversity. Biodiversity supports ecosystem services that are critical to human survival and economic development...'
+0.4712
+'economic'
+'biodiversity'
+'ecosystem'
+'id'
+'filename'
+'chunk_index'
+'text'
+'semantic_score'
+'keywords'
+3
+'knowledge_base/gdp_volatility.pdf'
+0
+'GDP volatility in Pakistan: An analysis of economic growth rates, inflation, and foreign exchange reserve dynamics. The Pakistani economy has experienced...'
+0.4388
+'gdp'
+'volatility'
+'pakistan'
+'economic'
+'growth'
+query
+●●●●●● 1mm □
+'GDP'
+query_keywords
+●●●●●● 1mm □
+w
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+90
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"QUERY: '"
+query
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Query keywords: '
+query_keywords
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+90
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📊 SEMANTIC SEARCH ONLY (problems highlighted):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+90
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+semantic_results
+1
+●●●●●● 2mm □△
+relevance
+●●●●●● 1mm □
+'GDP'
+result
+'text'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'❌ WRONG'
+'✅ CORRECT'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Rank '
+i
+'. ['
+result
+'semantic_score'
+'.4f'
+'] '
+result
+'filename'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'         Text: '
+result
+'text'
+70
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'         '
+relevance
+" - Contains 'GDP'? "
+'GDP'
+result
+'text'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🎯 HYBRID SEARCH (semantic + keyword boost):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+90
+●●●●●● 2mm □△
+keyword_weight
+●●●●●● 1mm □
+0.4
+result
+semantic_results
+chunk_text_lower
+●●●●●● 1mm □
+result
+'text'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keyword_matches
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+kw
+query_keywords
+kw
+chunk_text_lower
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query_keywords
+keyword_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+keyword_matches
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query_keywords
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+keyword_score
+●●●●●● 1mm □
+0.0
+combined_score
+●●●●●● 1mm □
+result
+'semantic_score'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+keyword_weight
+●●●●●● 3mm ○
+keyword_score
+●●●●●● 2mm □△
+keyword_weight
+result
+'keyword_matches'
+●●●●●● 1mm □
+keyword_matches
+result
+'keyword_score'
+●●●●●● 1mm □
+keyword_score
+result
+'combined_score'
+●●●●●● 1mm □
+combined_score
+semantic_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+semantic_results
+1
+●●●●●● 2mm □△
+relevance
+●●●●●● 1mm □
+'GDP'
+result
+'text'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'✅ CORRECT'
+'❌ WRONG'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Rank '
+i
+'. ['
+result
+'combined_score'
+'.4f'
+'] '
+result
+'filename'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'         Semantic: '
+result
+'semantic_score'
+'.4f'
+' | Keywords: '
+result
+'keyword_score'
+'.4f'
+' | Matches: '
+result
+'keyword_matches'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'         Text: '
+result
+'text'
+70
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'         '
+relevance
+" - Contains 'GDP'? "
+'GDP'
+result
+'text'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+90
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📌 KEY FINDINGS:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'─'
+●●●●●● 2mm □△
+90
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'1. SEMANTIC SEARCH FAILURE:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   • 'GDP' query returns text.txt (score 0.6023) despite ZERO GDP mentions"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • GDP document (0.4388) ranks 3rd - the correct document is buried!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • Root cause: Short queries produce unreliable semantic embeddings'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'2. HYBRID SEARCH SUCCESS:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   • Keyword boost identifies documents containing 'GDP'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • GDP document (0.5591) now ranks #1'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • Irrelevant text.txt (0.6018) penalized for missing keywords'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'3. CONFIGURATION:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • Keyword weight: '
+keyword_weight
+●●●●●● 2mm □△
+100
+'.0f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • Semantic weight: '
+1
+●●●●●● 1mm □△
+keyword_weight
+●●●●●● 2mm □△
+100
+'.0f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • Can be tuned based on query length and use case'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'4. RECOMMENDED APPROACH:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • For short queries (1-3 words): Use hybrid search with 30-40% keyword weight'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • For longer queries (4+ words): Use pure semantic search (keyword weight ~0%)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   • Fallback: Default to hybrid to ensure keyword-relevant docs appear'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+demonstrate_hybrid_search
+●●●●●● 1mm □△
+●●●●●● 2mm □△

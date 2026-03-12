@@ -1,0 +1,502 @@
+## replay_service.py
+"\nReplay service for Grace's self-modeling mechanism.\n\nEnables replaying failed or anomalous operations with the same inputs\nto debug issues and compare results.\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+Callable
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+OperationReplay
+OperationStatus
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ReplayService
+'\n    Service for replaying operations with stored inputs.\n\n    This enables debugging of failures and performance regressions\n    by rerunning the exact same operation.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+replay_operation
+●●●●●● 1mm □△
+self
+original_run_id
+operation_func
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Replay an operation using its stored inputs.\n\n        Args:\n            original_run_id: Run ID of the operation to replay\n            operation_func: Function to execute for replay\n            reason: Why we\'re replaying (e.g., "debug_failure", "verify_fix")\n\n        Returns:\n            OperationReplay object with comparison results\n        '
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+original_op
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+original_run_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+original_op
+ValueError
+●●●●●● 1mm □△
+'Operation '
+original_run_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+original_op
+'inputs'
+original_op
+ValueError
+●●●●●● 1mm □△
+'Operation '
+original_run_id
+' does not have stored inputs. Cannot replay.'
+●●●●●● 2mm □△
+inputs
+●●●●●● 1mm □
+original_op
+'inputs'
+logger
+●●●●●● 1mm □△
+'Replaying operation: '
+original_op
+' (original run: '
+original_run_id
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+telemetry.telemetry_service
+●●●●●● 2mm □△○
+get_telemetry_service
+telemetry
+●●●●●● 1mm □
+get_telemetry_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+telemetry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+replay_run_id
+replay_result
+●●●●●● 1mm □
+operation_func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+replay_op
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+replay_run_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+outputs_match
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+original_op
+●●●●●● 1mm □△
+'outputs'
+●●●●●● 2mm □△
+replay_result
+●●●●●● 2mm □△
+replay_output_hash
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+replay_result
+●●●●●● 2mm □
+output_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+replay_result
+●●●●●● 2mm □△
+replay_output_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+output_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+replay_record
+●●●●●● 1mm □
+OperationReplay
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+replay_record
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Replay complete. Status: '
+replay_record
+', Outputs match: '
+outputs_match
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+replay_record
+Exception
+logger
+●●●●●● 1mm □△
+'Replay failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OperationReplay
+●●●●●● 1mm □
+get_replayable_failures
+●●●●●● 1mm □△
+self
+limit
+operation_type
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+20
+●●●●●● 2mm □
+'\n        Get recent failed operations that can be replayed.\n\n        Args:\n            limit: Maximum number of failures to return\n            operation_type: Filter by operation type\n\n        Returns:\n            List of failed operations with stored inputs\n        '
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+query
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+OperationStatus
+OperationLog
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation_type
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+OperationLog
+operation_type
+●●●●●● 2mm □△
+failures
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+replayable
+●●●●●● 1mm □
+f
+f
+failures
+f
+'inputs'
+f
+●●●●●● 3mm ○
+replayable
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 1mm □
+_compare_outputs
+●●●●●● 1mm □△
+self
+original_output
+replay_output
+●●●●●● 2mm □△
+Any
+Any
+'Compare original and replay outputs for equality.'
+original_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+original_output
+●●●●●● 2mm □△
+replay_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+replay_output
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+original_str
+replay_str
+TypeError
+ValueError
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_compute_differences
+●●●●●● 1mm □△
+self
+original_op
+replay_op
+replay_result
+●●●●●● 2mm □△
+OperationLog
+●●●●●● 2mm □○
+OperationLog
+Any
+'Compute differences between original and replay.'
+differences
+●●●●●● 1mm □
+●●●●●● 2mm □
+replay_op
+●●●●●● 2mm □
+original_op
+replay_op
+duration_diff_percent
+●●●●●● 1mm □
+replay_op
+●●●●●● 1mm □△
+original_op
+●●●●●● 3mm □△
+original_op
+●●●●●● 2mm □△
+100
+differences
+'duration_diff_percent'
+●●●●●● 1mm □
+duration_diff_percent
+●●●●●● 2mm □
+original_op
+replay_op
+differences
+'status_changed'
+●●●●●● 1mm □
+'original'
+'replay'
+original_op
+replay_op
+●●●●●● 2mm □
+original_op
+replay_op
+differences
+'cpu_diff_percent'
+●●●●●● 1mm □
+replay_op
+●●●●●● 1mm □△
+original_op
+●●●●●● 2mm □
+original_op
+replay_op
+differences
+'memory_diff_mb'
+●●●●●● 1mm □
+replay_op
+●●●●●● 1mm □△
+original_op
+●●●●●● 3mm ○
+differences
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_insights
+●●●●●● 1mm □△
+self
+original_op
+replay_op
+●●●●●● 2mm □△
+OperationLog
+●●●●●● 2mm □○
+OperationLog
+'Generate human-readable insights from replay comparison.'
+insights
+●●●●●● 1mm □
+●●●●●● 2mm □
+replay_op
+●●●●●● 3mm ○
+'Replay operation not found in database.'
+●●●●●● 2mm □
+original_op
+OperationStatus
+●●●●●● 2mm □
+replay_op
+OperationStatus
+insights
+●●●●●● 1mm □△
+'✓ Issue appears to be resolved - replay succeeded where original failed.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+insights
+●●●●●● 1mm □△
+'✗ Issue persists - replay also failed with same error pattern.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+original_op
+replay_op
+diff_percent
+●●●●●● 1mm □
+replay_op
+●●●●●● 1mm □△
+original_op
+●●●●●● 3mm □△
+original_op
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+diff_percent
+●●●●●● 2mm □△
+20
+●●●●●● 2mm □
+diff_percent
+0
+insights
+●●●●●● 1mm □△
+'⚠ Replay was '
+diff_percent
+'.1f'
+'% slower - possible performance regression.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+insights
+●●●●●● 1mm □△
+'✓ Replay was '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+diff_percent
+●●●●●● 2mm □△
+'.1f'
+'% faster - performance improved.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+original_op
+replay_op
+●●●●●● 2mm □
+original_op
+replay_op
+insights
+●●●●●● 1mm □△
+'⚠ Identical error message - root cause likely unchanged.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+insights
+●●●●●● 1mm □△
+'⚡ Different error message - error behavior has changed.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+insights
+'\n'
+●●●●●● 1mm □△
+insights
+●●●●●● 2mm □△
+'No significant differences detected.'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_replay_service
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get replay service instance.'
+●●●●●● 3mm ○
+ReplayService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ReplayService

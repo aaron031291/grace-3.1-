@@ -1,0 +1,240 @@
+## realtime_sync.py
+'\nReal-Time Sync — WebSocket-based live updates across all views.\n\nWhen a file changes in one view, ALL other views update instantly.\nUses an in-process pub/sub with SSE fallback for browsers.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Set
+Any
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+WebSocket
+WebSocketDisconnect
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_subscribers
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+_event_buffer
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_sub_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+publish_change
+●●●●●● 1mm □△
+event_type
+path
+project_id
+user_id
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+''
+''
+●●●●●● 2mm □
+'Publish a change event to all subscribers.'
+event
+●●●●●● 1mm □
+'type'
+'path'
+'project_id'
+'user_id'
+'data'
+'ts'
+event_type
+path
+project_id
+user_id
+data
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_sub_lock
+_event_buffer
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'sync.'
+event_type
+event
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+event
+●●●●●● 1mm □
+get_recent_events
+●●●●●● 1mm □△
+since_ts
+project_id
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+50
+'Get recent sync events, optionally filtered.'
+_sub_lock
+events
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_event_buffer
+●●●●●● 2mm □△
+●●●●●● 2mm □
+since_ts
+events
+●●●●●● 1mm □
+e
+e
+events
+e
+'ts'
+since_ts
+●●●●●● 2mm □
+project_id
+events
+●●●●●● 1mm □
+e
+e
+events
+e
+'project_id'
+project_id
+e
+'project_id'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+events
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_sync_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get sync system statistics.'
+_sub_lock
+●●●●●● 3mm ○
+'buffer_size'
+'buffer_capacity'
+'total_events'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_event_buffer
+●●●●●● 2mm □△
+_event_buffer
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_event_buffer
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_file_write
+●●●●●● 1mm □△
+path
+source
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Called by workspace_bridge on every file write.'
+publish_change
+●●●●●● 1mm □△
+'file_changed'
+path
+project_id
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_file_delete
+●●●●●● 1mm □△
+path
+source
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Called by workspace_bridge on every file delete.'
+publish_change
+●●●●●● 1mm □△
+'file_deleted'
+path
+project_id
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_project_switch
+●●●●●● 1mm □△
+user_id
+old_project
+new_project
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Called when a user switches projects.'
+publish_change
+●●●●●● 1mm □△
+'project_switched'
+''
+new_project
+user_id
+'from'
+'to'
+old_project
+new_project
+●●●●●● 2mm □△

@@ -1,0 +1,720 @@
+## component_validator.py
+'\nComponent Validator — deterministic input/output testing.\n\nTests each component with known inputs and verifies the output\nmatches expected results. Not just "is it alive" but "does it\nactually work correctly."\n\nReport Cards — each component gets a score card linked to Genesis key.\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_report_cards
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+validate_component
+●●●●●● 1mm □△
+component_id
+test_fn
+test_cases
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+'\n    Run deterministic tests on a component.\n    test_cases: [{"input": {...}, "expected": {...}}, ...]\n    '
+results
+●●●●●● 1mm □
+'component_id'
+'total'
+'passed'
+'failed'
+'errors'
+'tested_at'
+component_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_cases
+●●●●●● 2mm □△
+0
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+case
+●●●●●● 2mm □
+●●●●●● 1mm □△
+test_cases
+●●●●●● 2mm □△
+actual
+●●●●●● 1mm □
+test_fn
+●●●●●● 1mm □△
+case
+'input'
+●●●●●● 2mm □△
+expected
+●●●●●● 1mm □
+case
+'expected'
+●●●●●● 2mm □
+_outputs_match
+●●●●●● 1mm □△
+actual
+expected
+●●●●●● 2mm □△
+results
+'passed'
+1
+●●●●●● 3mm □
+results
+'failed'
+1
+●●●●●● 3mm □
+results
+'errors'
+●●●●●● 1mm □△
+'case'
+'input'
+'expected'
+'actual'
+i
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+case
+'input'
+●●●●●● 2mm □△
+100
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+expected
+●●●●●● 2mm □△
+100
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+actual
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+Exception
+results
+'failed'
+1
+results
+'errors'
+●●●●●● 1mm □△
+'case'
+'error'
+i
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+results
+'pass_rate'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+results
+'passed'
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+results
+'total'
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+_update_report_card
+●●●●●● 1mm □△
+component_id
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_outputs_match
+●●●●●● 1mm □△
+actual
+expected
+●●●●●● 2mm □△
+Any
+Any
+'Check if actual output matches expected.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+expected
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+actual
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key
+val
+expected
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+actual
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+actual
+key
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 3mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+actual
+key
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+actual
+expected
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_all_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run validation on all core Grace components.'
+results
+●●●●●● 1mm □
+tests
+●●●●●● 1mm □
+'brain_api'
+'files_service'
+'govern_service'
+'time_sense'
+'resilience'
+'security'
+'librarian'
+'hebbian'
+_test_brain_api
+_test_files
+_test_govern
+_test_time_sense
+_test_resilience
+_test_security
+_test_librarian
+_test_hebbian
+comp_id
+test_fn
+tests
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+comp_id
+●●●●●● 1mm □
+test_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+results
+comp_id
+●●●●●● 1mm □
+'component_id'
+'error'
+'passed'
+'failed'
+comp_id
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+0
+1
+total_passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'passed'
+0
+●●●●●● 2mm □△
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'components_tested'
+'total_passed'
+'total_failed'
+'pass_rate'
+'results'
+'validated_at'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+total_passed
+total_failed
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_passed
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+total_passed
+●●●●●● 3mm ○
+total_failed
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+results
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_brain_api
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'brain_api'
+call_brain
+●●●●●● 1mm □△
+i
+'domain'
+i
+'action'
+i
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'input'
+'expected'
+'domain'
+'action'
+'tasks'
+'time_sense'
+'ok'
+●●●●●● 3mm □△○
+'input'
+'expected'
+'domain'
+'action'
+'fake'
+'nope'
+'ok'
+●●●●●● 1mm □
+'input'
+'expected'
+'domain'
+'action'
+'system'
+'runtime'
+'ok'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.files_service
+●●●●●● 2mm □△○
+stats
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'files_service'
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'input'
+'expected'
+'total_files'
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_govern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+get_persona
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'govern_service'
+get_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'input'
+'expected'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_time_sense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'time_sense'
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'input'
+'expected'
+'period'
+'is_business_hours'
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_resilience
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+●●●●●● 1mm □
+test
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_val'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'state'
+cb
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'resilience'
+test
+'input'
+'expected'
+'state'
+'closed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_security
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+check_sql_injection
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'security'
+'blocked'
+check_sql_injection
+●●●●●● 1mm □△
+i
+'text'
+●●●●●● 2mm □△
+'input'
+'expected'
+'text'
+"'; DROP TABLE--"
+'blocked'
+●●●●●● 3mm □△○
+'input'
+'expected'
+'text'
+'normal text'
+'blocked'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+get_document_stats
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'librarian'
+get_document_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'input'
+'expected'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_hebbian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+●●●●●● 3mm ○
+validate_component
+●●●●●● 1mm □△
+'hebbian'
+'weights'
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'input'
+'expected'
+'weights'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_report_card
+●●●●●● 1mm □△
+component_id
+validation
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+"Update a component's report card."
+_report_cards
+component_id
+●●●●●● 1mm □
+'component_id'
+'last_validated'
+'pass_rate'
+'total_tests'
+'passed'
+'failed'
+'errors'
+'status'
+component_id
+validation
+●●●●●● 1mm □△
+'tested_at'
+●●●●●● 2mm □△
+validation
+●●●●●● 1mm □△
+'pass_rate'
+0
+●●●●●● 2mm □△
+validation
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+validation
+●●●●●● 1mm □△
+'passed'
+0
+●●●●●● 2mm □△
+validation
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+validation
+●●●●●● 1mm □△
+'errors'
+●●●●●● 2mm □△
+5
+validation
+●●●●●● 1mm □△
+'pass_rate'
+0
+●●●●●● 2mm □△
+80
+'healthy'
+validation
+●●●●●● 1mm □△
+'pass_rate'
+0
+●●●●●● 2mm □△
+50
+'degraded'
+'failing'
+●●●●●● 1mm □
+get_report_card
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"Get a component's report card."
+card
+●●●●●● 1mm □
+_report_cards
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+card
+●●●●●● 3mm ○
+card
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+COMPONENTS
+comp
+●●●●●● 1mm □
+COMPONENTS
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+●●●●●● 3mm ○
+'component_id'
+'purpose'
+'file'
+'connects_to'
+'status'
+'note'
+component_id
+comp
+'purpose'
+comp
+'file'
+comp
+'connects'
+'not_validated'
+'Run validate_all_components() to generate report card'
+Exception
+●●●●●● 3mm ○
+'error'
+'Component '
+component_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_all_report_cards
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get all report cards.'
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+COMPONENTS
+all_cards
+●●●●●● 1mm □
+cid
+info
+COMPONENTS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cid
+_report_cards
+all_cards
+cid
+●●●●●● 1mm □
+_report_cards
+cid
+●●●●●● 3mm □
+all_cards
+cid
+●●●●●● 1mm □
+'component_id'
+'purpose'
+'status'
+cid
+info
+'purpose'
+'not_validated'
+●●●●●● 3mm ○
+'report_cards'
+'total'
+'validated'
+all_cards
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_cards
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_report_cards
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'report_cards'
+'total'
+_report_cards
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_report_cards
+●●●●●● 2mm □△
+●●●●●● 2mm □△

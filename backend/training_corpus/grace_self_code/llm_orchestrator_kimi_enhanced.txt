@@ -1,0 +1,705 @@
+## kimi_enhanced.py
+'\nEnhanced Kimi Integration — Full tool-like capacity connected to Magma Memory.\n\nKimi capabilities now used:\n1. Cross-model verification (generate local → verify with Kimi)\n2. Continuous learning teacher (idle time knowledge generation)\n3. Real-time healing consultant (instant diagnosis on critical alerts)\n4. Code review (second opinion on generated code)\n5. Document understanding (pre-process governance/agent rules)\n6. Long-context project analysis (128K+ token codebase reasoning)\n7. Magma memory enrichment (causal inference, semantic linking)\n8. Memory consolidation (synthesise scattered knowledge)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+KimiEnhanced
+'Enhanced Kimi with Magma memory integration and full tool capacity.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_call
+●●●●●● 1mm □△
+self
+prompt
+system
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+''
+0.3
+4096
+client
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 3mm ○
+●●●●●● 2mm □
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+prompt
+●●●●●● 2mm □
+system
+messages
+●●●●●● 1mm □△
+0
+'role'
+'content'
+'system'
+system
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Kimi call failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+verify_output
+●●●●●● 1mm □△
+self
+prompt
+local_output
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Verify locally-generated output with Kimi as second opinion.\n        Two independent models agreeing = high confidence.\n        '
+verification_prompt
+●●●●●● 1mm □
+'A local AI generated this output for the following request. Review it for: accuracy, completeness, potential issues, hallucinations.\n\nOriginal request: '
+prompt
+1000
+'\n\nGenerated output:\n'
+local_output
+3000
+'\n\nProvide your assessment as JSON:\n{"agrees": true/false, "confidence": 0.0-1.0, "issues": ["..."], "improvements": ["..."]}'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+verification_prompt
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'verified'
+'kimi_available'
+●●●●●● 1mm □
+response
+●●●●●● 2mm □
+●●●●●● 2mm □
+response
+●●●●●● 2mm □△○
+json
+parsed
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```json'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+parsed
+●●●●●● 2mm □△
+result
+'verified'
+●●●●●● 1mm □
+parsed
+●●●●●● 1mm □△
+'agrees'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+parsed
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+0.6
+Exception
+result
+'raw_review'
+●●●●●● 1mm □
+response
+500
+result
+'verified'
+●●●●●● 1mm □
+'no issues'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'looks correct'
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+teach_topic
+●●●●●● 1mm □△
+self
+topic
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n        Generate structured knowledge on a topic for ingestion into\n        learning memory and Magma.\n        '
+prompt
+●●●●●● 1mm □
+'Teach me comprehensively about: '
+topic
+'\n'
+context
+'Context: '
+●●●●●● 3mm ○
+context
+''
+'\n\nStructure your response as:\n1. Key concepts (facts Grace should know)\n2. Causal relationships (what causes what)\n3. Procedures (step-by-step how-to)\n4. Common mistakes (what to avoid)\n5. Connections to other topics\n'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'topic'
+'generated'
+topic
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+result
+'knowledge'
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+response
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+diagnose_realtime
+●●●●●● 1mm □△
+self
+error_events
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'\n        Instant diagnosis when critical alert fires.\n        Connected to genesis realtime engine.\n        '
+error_summary
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+'- ['
+e
+●●●●●● 1mm □△
+'error_type'
+'?'
+●●●●●● 2mm □△
+'] '
+e
+●●●●●● 1mm □△
+'what'
+'?'
+●●●●●● 2mm □△
+' at '
+e
+●●●●●● 1mm □△
+'where'
+'?'
+●●●●●● 2mm □△
+e
+error_events
+10
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Grace AI has detected these errors in rapid succession:\n\n'
+error_summary
+'\n\nDiagnose:\n1. Root cause\n2. Severity (1-10)\n3. Immediate fix\n4. Prevention strategy'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'diagnosis'
+'error_count'
+response
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+error_events
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+review_code
+●●●●●● 1mm □△
+self
+code
+project_context
+rules
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'\n        Review generated code before applying.\n        Checks: bugs, security, style, compliance with rules.\n        '
+prompt
+●●●●●● 1mm □
+'Review this code for bugs, security issues, and best practices:\n\n```\n'
+code
+5000
+'\n```\n'
+●●●●●● 2mm □
+project_context
+prompt
+'\nProject context: '
+project_context
+1000
+●●●●●● 2mm □
+rules
+prompt
+'\nMust comply with: '
+rules
+1000
+prompt
+'\n\nProvide:\n1. Issues found (critical/warning/info)\n2. Security concerns\n3. Suggested improvements\n4. Overall quality (1-10)'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'review'
+'reviewed'
+response
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_rule_document
+●●●●●● 1mm □△
+self
+content
+doc_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Pre-process a governance or agent rule document.\n        Extracts structured rules, identifies conflicts, creates summary.\n        '
+prompt
+●●●●●● 1mm □
+'Analyse this governance/compliance document and extract:\n\nDocument: '
+doc_name
+'\nContent:\n'
+content
+10000
+'\n\nExtract as JSON:\n{"summary": "...", "rules": [{"rule": "...", "severity": "must/should/may", "category": "..."}], "conflicts": ["any conflicts with common practices"], "key_obligations": ["..."]}'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'document'
+'processed'
+doc_name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 2mm □△○
+json
+result
+'structured'
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```json'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+result
+'raw_analysis'
+●●●●●● 1mm □
+response
+2000
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+analyse_project
+●●●●●● 1mm □△
+self
+project_files
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+"\n        Send entire project to Kimi for holistic analysis.\n        Uses Kimi's 128K+ token context for codebase-level reasoning.\n        "
+file_contents
+●●●●●● 1mm □
+''
+path
+content
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+project_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+file_contents
+'\n--- '
+path
+' ---\n'
+content
+3000
+'\n'
+prompt
+●●●●●● 1mm □
+'Analyse this entire project holistically:\n\n'
+file_contents
+50000
+'\n\nProvide:\n1. Architecture overview\n2. Code quality assessment\n3. Potential issues\n4. Security concerns\n5. Improvement recommendations\n6. Missing components\n7. Technical debt'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'analysis'
+'files_analysed'
+response
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+project_files
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+enrich_magma
+●●●●●● 1mm □△
+self
+query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n        Use Kimi to generate causal inferences and semantic links\n        for Magma memory graphs.\n        '
+prompt
+●●●●●● 1mm □
+'For this knowledge:\n\n'
+query
+'\n'
+context
+'Context: '
+●●●●●● 3mm ○
+context
+''
+'\n\nGenerate:\n1. Causal relationships (X causes Y because Z)\n2. Semantic connections (X is related to Y via Z)\n3. Temporal patterns (X happens before/after Y)\n4. Entity relationships (X uses/contains/depends-on Y)\nFormat as JSON arrays.'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'enriched'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+result
+'relationships'
+●●●●●● 1mm □
+response
+2000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+100
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+consolidate_memory
+●●●●●● 1mm □△
+self
+memories
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'\n        Synthesise scattered knowledge into consolidated understanding.\n        Takes multiple memory fragments and produces a coherent summary.\n        '
+memory_text
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+'- ['
+m
+●●●●●● 1mm □△
+'type'
+'?'
+●●●●●● 2mm □△
+'] '
+m
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+200
+m
+memories
+20
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'These are scattered memory fragments from an AI system:\n\n'
+memory_text
+'\n\nConsolidate into:\n1. Key themes\n2. Unified understanding\n3. Contradictions to resolve\n4. Knowledge gaps identified'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'consolidated'
+'fragment_count'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+memories
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+result
+'synthesis'
+●●●●●● 1mm □
+response
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'memory_consolidation'
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_ingest_to_magma
+●●●●●● 1mm □△
+self
+topic
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Ingest Kimi-generated knowledge into Magma memory.'
+●●●●●● 3mm □△○
+cognitive.magma.grace_magma_system
+●●●●●● 2mm □△○
+GraceMagmaSystem
+magma
+●●●●●● 1mm □
+GraceMagmaSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+magma
+'ingest'
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+topic
+content
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+magma
+'store'
+●●●●●● 2mm □△
+magma
+●●●●●● 1mm □△
+topic
+content
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+SemanticGraph
+graph
+●●●●●● 1mm □
+SemanticGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph
+●●●●●● 1mm □△
+topic
+'content'
+'source'
+content
+500
+'kimi'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_store_learning
+●●●●●● 1mm □△
+self
+topic
+knowledge
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Store Kimi-generated knowledge as learning example.'
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_kimi
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_kimi
+●●●●●● 2mm □
+_kimi
+●●●●●● 1mm □
+KimiEnhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_kimi
+KimiEnhanced

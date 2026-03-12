@@ -1,0 +1,4328 @@
+## app.py
+'\nGrace API - FastAPI application for Ollama-based chat and embeddings.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+FastAPI
+HTTPException
+Depends
+●●●●●● 3mm □△○
+fastapi.middleware.cors
+●●●●●● 2mm □△○
+CORSMiddleware
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+contextlib
+●●●●●● 2mm □△○
+asynccontextmanager
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+logging_config
+●●●●●● 2mm □△○
+setup_logging
+setup_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+security.config
+●●●●●● 2mm □△○
+get_security_config
+●●●●●● 3mm □△○
+security.middleware
+●●●●●● 2mm □△○
+SecurityHeadersMiddleware
+RateLimitMiddleware
+RequestValidationMiddleware
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+get_session
+initialize_session_factory
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+ChatHistoryRepository
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Chat
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+brain_router
+●●●●●● 3mm □△○
+api.core.brain_controller
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+brain_v2_router
+●●●●●● 3mm □△○
+api.health
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+health_router
+●●●●●● 3mm □△○
+api.auth
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+auth_router
+●●●●●● 3mm □△○
+api.voice_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+voice_router
+●●●●●● 3mm □△○
+api.stream_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+stream_router
+●●●●●● 3mm □△○
+api.completion_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+completion_router
+●●●●●● 3mm □△○
+api.runtime_triggers_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+runtime_triggers_router
+●●●●●● 3mm □△○
+api.qdrant_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+qdrant_router
+●●●●●● 3mm □△○
+api.genesis_daily_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+genesis_daily_router
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+autonomous_loop_router
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+component_health_router
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+ingest_router
+●●●●●● 3mm □△○
+api.retrieve
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+retrieve_router
+●●●●●● 3mm □△○
+api.learning_memory_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+learning_memory_router
+●●●●●● 3mm □△○
+api.admin_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+admin_router
+●●●●●● 3mm □△○
+api.validation_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+validation_router
+●●●●●● 3mm □△○
+genesis.middleware
+●●●●●● 2mm □△○
+GenesisKeyMiddleware
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+build_rag_system_prompt
+●●●●●● 3mm □△○
+search.serpapi_service
+●●●●●● 2mm □△○
+SerpAPIService
+●●●●●● 3mm □△○
+api.codebase_hub_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+codebase_hub_router
+●●●●●● 3mm □△○
+api.whitelist_hub_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+whitelist_hub_router
+●●●●●● 3mm □△○
+api.devlab_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+devlab_router
+●●●●●● 3mm □△○
+api.sandbox_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+sandbox_router
+●●●●●● 3mm □△○
+api.tasks_hub_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+tasks_hub_router
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+ImportError
+settings
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △
+Message
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Represents a single message in a conversation.'
+role
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+content
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChatRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request model for chat endpoint.'
+messages
+●●●●●● 3mm □△
+Message
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+temperature
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+0.7
+●●●●●● 2mm □△
+top_p
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+0.9
+●●●●●● 2mm □△
+top_k
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChatResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for chat endpoint.'
+message
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+model
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+generation_time
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+prompt_tokens
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+response_tokens
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+sources
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+tier
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+confidence
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+knowledge_gaps
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+warnings
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealthResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Health response model.'
+status
+●●●●●● 1mm ○
+llm_running
+●●●●●● 3mm △
+models_available
+●●●●●● 2mm ○
+●●●●●● 2mm △
+ChatCreateRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request model for creating a new chat.'
+title
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+model
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+temperature
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+0.7
+●●●●●● 2mm □△
+folder_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChatResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for chat operations.'
+●●●●●● 1mm △
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+title
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+model
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+temperature
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+is_active
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+created_at
+datetime
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+updated_at
+datetime
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+last_message_at
+●●●●●● 2mm □○
+datetime
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+folder_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChatListResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for chat list.'
+chats
+●●●●●● 3mm □△
+ChatResponse
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+total
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+skip
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+limit
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MessageCreateRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request model for adding a message to chat.'
+content
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+role
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+'user'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChatMessageResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for chat message.'
+●●●●●● 1mm △
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+chat_id
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+role
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+content
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+tokens
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+is_edited
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+created_at
+datetime
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+edited_at
+●●●●●● 2mm □○
+datetime
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChatHistoryResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for chat history.'
+messages
+●●●●●● 3mm □△
+ChatMessageResponse
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+total
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+model
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+created_at
+datetime
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PromptRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request model for sending a prompt to a chat.'
+content
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+temperature
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+top_p
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+0.9
+●●●●●● 2mm □△
+top_k
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PromptResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for prompt generation.'
+chat_id
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+user_message_id
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+assistant_message_id
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+message
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+model
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+generation_time
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+tokens_used
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+total_tokens_in_chat
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+sources
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+FastAPI
+'Manage app startup and shutdown events.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace API starting up...'
+●●●●●● 2mm □△
+db_type
+●●●●●● 1mm □
+settings
+DatabaseType
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+DatabaseType
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Database connection initialized'
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Database session factory initialized'
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Database tables created/verified'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.auto_migrate
+●●●●●● 2mm □△○
+run_auto_migrate
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □
+run_auto_migrate
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+changes
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Schema auto-migrate: applied '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+' fix(es) -> '
+changes
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Schema auto-migrate: schema is up to date'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Schema auto-migrate: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migrations.add_learning_example_columns
+●●●●●● 2mm □△○
+ensure_learning_examples_columns
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+●●●●●● 1mm □
+ensure_learning_examples_columns
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+n
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Schema sync: added '
+n
+' column(s) to learning_examples'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Learning examples schema sync: '
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Database initialization error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Grace will continue with limited functionality (DB features may be unavailable). Fix: check backend/.env DATABASE_PATH and run backend/database/migration if needed.'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+threading
+●●●●●● 1mm □
+_background_init
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Heavy init tasks run in background so server starts fast.'
+●●●●●● 3mm □△○
+self_healing.error_pipeline
+●●●●●● 2mm □△○
+get_error_pipeline
+pipe
+●●●●●● 1mm □
+get_error_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Self-healing error pipeline started'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Error pipeline: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+coding_agent.task_queue
+●●●●●● 2mm □△○
+start_worker
+start_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Coding agent worker started'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Coding agent worker: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+self_healing.trigger_fabric
+●●●●●● 2mm □△○
+start
+●●●●●● 1mm □
+start_fabric
+start_fabric
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Multi-trigger fabric started (12 trigger sources)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Trigger fabric: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM episodes LIMIT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key LIMIT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Startup health: core tables queryable'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Startup health check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+AutonomousDiagnostics
+diag
+●●●●●● 1mm □
+AutonomousDiagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+threading
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Autonomous diagnostics boot scan started'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Autonomous diagnostics: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+threading
+time
+●●●●●● 1mm □
+_probe_pulse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+30
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+_probe_endpoint
+_track_probe
+_ROUTES
+sample
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_ROUTES
+●●●●●● 2mm □△
+5
+results
+●●●●●● 1mm □
+_probe_endpoint
+●●●●●● 1mm □△
+r
+'path'
+r
+'method'
+●●●●●● 2mm □△
+r
+sample
+_track_probe
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+Exception
+time
+●●●●●● 1mm □△
+600
+●●●●●● 2mm □△
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Probe agent maintenance pulse started (light every 10min)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Probe pulse: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.execution_registry
+●●●●●● 2mm □△○
+init_registry
+init_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Execution registry initialized'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Registry init: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.training_ingest
+●●●●●● 2mm □△○
+ingest_training_corpus
+result
+●●●●●● 1mm □
+ingest_training_corpus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'ingested'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Training corpus: '
+result
+'ingested'
+' files ingested'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Training ingest: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+get_diagnostics
+diag
+●●●●●● 1mm □
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+startup_result
+●●●●●● 1mm □
+diag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Startup diagnostic: '
+startup_result
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Diagnostic: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Embedding model loaded'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Embedding: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.voice_api
+●●●●●● 2mm □△○
+voice_manager
+voice_manager
+●●●●●● 1mm □△
+'hello'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] NLP pipeline ready (voice/intent)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] NLP warm: '
+e
+●●●●●● 2mm □△
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Background init started (training, diagnostics, embedding)'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+start_reload_watcher
+start_reload_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'SKIP_LLM_CHECK'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+provider_name
+●●●●●● 1mm □
+settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] '
+provider_name
+' is running and reachable'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] '
+provider_name
+' is not responding - chat features may be limited'
+●●●●●● 2mm □△
+Exception
+provider
+●●●●●● 1mm □
+settings
+settings
+'LLM'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Could not connect to LLM provider ('
+provider
+'): '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SKIP] LLM check skipped'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Qdrant is running with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+collections
+●●●●●● 2mm □△
+' collection(s)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Qdrant is not running - document ingestion will be unavailable'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Could not connect to Qdrant: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SKIP] Qdrant check skipped (SKIP_QDRANT_CHECK=true)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+●●●●●● 3mm □△○
+genesis.file_watcher
+●●●●●● 2mm □△○
+start_watching_workspace
+●●●●●● 2mm □△○
+threading
+●●●●●● 1mm □
+run_file_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run file watcher in background thread'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FILE-WATCHER] Starting file system monitoring...'
+●●●●●● 2mm □△
+start_watching_workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FILE-WATCHER] [WARN] Error: '
+e
+●●●●●● 2mm □△
+watcher_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+watcher_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] File watcher started - automatic version tracking enabled'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Could not start file watcher: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SKIP] File watcher disabled (DISABLE_GENESIS_TRACKING=true)'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.ml_intelligence_api
+●●●●●● 2mm □△○
+get_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] ML Intelligence initialized with features: '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] ML Intelligence not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+threading
+auto_ingest_task
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+run_auto_ingestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run auto-ingestion in a background thread.'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+api.file_ingestion
+●●●●●● 2mm □△○
+get_file_manager
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[AUTO-INGEST] Verifying database connection...'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+engine
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [OK] Database engine verified'
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [WARN] Database not initialized yet: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Waiting 2 seconds...'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Initializing session factory...'
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_factory
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [OK] Session factory initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [FAIL] Failed to initialize session factory'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Starting auto-ingestion monitor...'
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □
+get_file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] File manager initialized'
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Git tracker initialized'
+●●●●●● 2mm □△
+max_retries
+●●●●●● 1mm □
+3
+results
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Starting directory scan...'
+●●●●●● 2mm □△
+retry_count
+●●●●●● 1mm □
+●●●●●● 1mm □△
+max_retries
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Scan completed with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' results'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+retry_count
+max_retries
+●●●●●● 1mm □△
+1
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm △
+settings
+results
+●●●●●● 1mm □
+●●●●●● 2mm □
+results
+fail_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fail_count
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Excluded '
+fail_count
+' files (Genesis/already ingested)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success_count
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] Ingested '
+success_count
+' new files'
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+settings
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [WARN] Error in continuous monitoring (suppressed): '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [FAIL] Error in auto-ingestion: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+auto_ingest_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+auto_ingest_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[AUTO-INGEST] [FAIL] Failed to start auto-ingestion: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SKIP] Auto-ingestion disabled (SKIP_AUTO_INGESTION=true)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+start_continuous_learning
+orchestrator
+●●●●●● 1mm □
+start_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Continuous learning activated'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Could not start continuous learning: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SKIP] Continuous learning disabled (DISABLE_CONTINUOUS_LEARNING=true)'
+●●●●●● 2mm □△
+_diag_engine
+●●●●●● 1mm □
+●●●●●● 2mm □
+_diag_session
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database
+●●●●●● 2mm □△○
+session
+●●●●●● 1mm □
+db_session
+session_factory
+●●●●●● 1mm □
+db_session
+_diag_session
+●●●●●● 1mm □
+session_factory
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_kb_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+_diag_engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+started
+●●●●●● 1mm □
+_diag_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+started
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Diagnostic engine started — self-healing active (60s heartbeat)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Diagnostic engine already running'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Diagnostic engine not started: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_background_loop
+_stop_event
+_loop_state
+_run_cycle
+●●●●●● 2mm □△○
+threading
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_state
+'running'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_delayed_start_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+_time
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+_run_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Autonomous first cycle: '
+_e
+●●●●●● 2mm □△
+_background_loop
+●●●●●● 1mm □△
+30
+●●●●●● 2mm □△
+_auto_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_auto_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Autonomous loop started (first cycle in 5s, then 30s: heal->learn->verify->composite)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Autonomous loop not started: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+register_auto_probe
+register_auto_probe
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Auto-probe registered (triggers on code changes)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Auto-probe: '
+e
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □
+●●●●●● 1mm □
+app
+●●●●●● 1mm □
+_diag_engine
+app
+●●●●●● 1mm □
+_diag_session
+app
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace API shutting down...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_stop_event
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Autonomous loop stop signaled'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DISABLE_CONTINUOUS_LEARNING'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+stop_continuous_learning
+stop_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Continuous learning stopped'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DISABLE_GENESIS_TRACKING'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.file_watcher
+●●●●●● 2mm □△○
+get_file_watcher_service
+get_file_watcher_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] File watcher stopped'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+stop_reload_watcher
+stop_reload_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Hot-reload watcher stopped'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+_diag_engine
+_diag_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Diagnostic engine stopped'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'_diag_session'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+app
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Diagnostic engine session closed'
+●●●●●● 2mm □△
+Exception
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Database connection closed'
+●●●●●● 2mm □△
+Exception
+asynccontextmanager
+app
+●●●●●● 1mm □
+FastAPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_config
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+SecurityHeadersMiddleware
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+RateLimitMiddleware
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+RequestValidationMiddleware
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+CORSMiddleware
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+brain_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+brain_v2_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+health_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+auth_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+voice_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+stream_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+completion_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+runtime_triggers_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+qdrant_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+genesis_daily_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+autonomous_loop_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+component_health_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+ingest_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+retrieve_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+learning_memory_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+admin_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+validation_router
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.codebase_hub_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+codebase_hub_router
+●●●●●● 3mm □△○
+api.tasks_hub_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+tasks_hub_router
+●●●●●● 3mm □△○
+api.schema_evolution_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+schema_evolution_router
+●●●●●● 3mm □△○
+api.oracle_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+oracle_router
+●●●●●● 3mm □△○
+api.learn_heal_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+learn_heal_router
+●●●●●● 3mm □△○
+api.system_health_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+system_health_router
+●●●●●● 3mm □△○
+api.bi_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+bi_router
+●●●●●● 3mm □△○
+api.kpi_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+kpi_router
+●●●●●● 3mm □△○
+api.planner_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+planner_router
+●●●●●● 3mm □△○
+api.scrape_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+scrape_router
+●●●●●● 3mm □△○
+api.version_control_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+version_control_router
+app
+●●●●●● 1mm □△
+codebase_hub_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+whitelist_hub_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+devlab_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+sandbox_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+tasks_hub_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+schema_evolution_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+oracle_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+learn_heal_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+system_health_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+bi_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+kpi_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+planner_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+scrape_router
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+version_control_router
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+docs_library_router
+app
+●●●●●● 1mm □△
+docs_library_router
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.chunked_upload_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □
+chunked_upload_router
+app
+●●●●●● 1mm □△
+chunked_upload_router
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+settings
+app
+●●●●●● 1mm □△
+GenesisKeyMiddleware
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GENESIS] Genesis Key tracking enabled'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)'
+●●●●●● 2mm □△
+'\n    Health check endpoint.\n    \n    Returns:\n        HealthResponse: Status of the API and Ollama service\n    '
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status_info
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status_info
+models
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'healthy'
+●●●●●● 3mm □
+models_available
+●●●●●● 1mm □
+0
+●●●●●● 3mm □
+status
+●●●●●● 1mm □
+'unhealthy'
+●●●●●● 3mm ○
+HealthResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+HealthResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TitleGenerationRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request model for title generation.'
+text
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TitleGenerationResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response model for title generation.'
+title
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+TitleGenerationRequest
+'\n    Generate a concise title from text without storing it in chat history.\n    \n    Args:\n        request: TitleGenerationRequest with text to generate title from\n        \n    Returns:\n        TitleGenerationResponse: The generated title\n    '
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+title_prompt
+●●●●●● 1mm □
+'Generate a short title (max 5 words) for: '
+●●●●●● 3mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TitleGenerationResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/generate-title'
+●●●●●● 2mm □△
+ChatRequest
+'\n    Chat endpoint using Ollama models with RAG enforcement.\n    ENFORCES RAG-FIRST: Only responds if relevant knowledge is found in the knowledge base.\n    \n    Accepts a list of messages and generates a response using the specified model.\n    Uses RAG retrieval to augment responses with knowledge base content.\n    \n    Args:\n        request: ChatRequest containing messages and generation parameters\n        \n    Returns:\n        ChatResponse: The generated response with metadata\n        \n    Raises:\n        HTTPException: 404 if no relevant knowledge found, 503 if services unavailable\n    '
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_name
+●●●●●● 1mm □
+settings
+●●●●●● 2mm □
+settings
+'ollama'
+client
+●●●●●● 1mm □△
+model_name
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_query
+●●●●●● 1mm □
+''
+msg
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+'user'
+user_query
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_query
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+greeting_pattern
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+"^(hi|hello|hey|hola|yo|sup|what'?s\\s+up|wassup|howdy|greetings|good\\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye|see\\s+ya)\\b"
+re
+●●●●●● 2mm □△
+●●●●●● 2mm □
+greeting_pattern
+●●●●●● 1mm □△
+user_query
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+'You are a concise, friendly assistant. Keep casual greetings short and do not cite sources.'
+'role'
+'content'
+'user'
+user_query
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.multi_tier_integration
+●●●●●● 2mm □△○
+create_multi_tier_handler
+log_query_handling
+format_chat_response
+handler
+●●●●●● 1mm □
+create_multi_tier_handler
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tier_result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+generation_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+log_query_handling
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response_data
+●●●●●● 1mm □
+format_chat_response
+●●●●●● 1mm □△
+tier_result
+model_name
+generation_time
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+ChatCreateRequest
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Create a new chat session.\n    \n    Args:\n        request: ChatCreateRequest with optional title, description, model, temperature, and folder_path\n        session: Database session\n        \n    Returns:\n        ChatResponse: The created chat\n    '
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+●●●●●● 3mm □△
+settings
+settings
+'mistral:7b'
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+'ollama'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+client
+'model_exists'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'SKIP_LLM_CHECK'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats'
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    List all unique folder paths from chats.\n    Returns folder names with chat counts for the folder selector UI.\n    '
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+distinct
+results
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Chat
+func
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'chat_count'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'last_updated'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □
+Chat
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folders
+●●●●●● 1mm □
+row
+results
+folder_path
+●●●●●● 1mm □
+row
+row
+0
+chat_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+row
+'chat_count'
+●●●●●● 2mm □△
+row
+row
+1
+last_updated
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+row
+'last_updated'
+●●●●●● 2mm □△
+row
+row
+2
+parts
+●●●●●● 1mm □
+'/'
+folder_path
+folder_path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+folder_path
+●●●●●● 1mm □△
+'\\'
+●●●●●● 2mm □△
+folder_name
+●●●●●● 1mm □
+parts
+parts
+1
+parts
+1
+folder_path
+folders
+●●●●●● 1mm □△
+'path'
+'name'
+'chat_count'
+'last_updated'
+folder_path
+folder_name
+chat_count
+last_updated
+last_updated
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+general_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □
+●●●●●● 1mm ○
+Chat
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'folders'
+'general_chat_count'
+'total_folders'
+folders
+general_count
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+folders
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/folders'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0
+50
+●●●●●● 1mm □
+●●●●●● 2mm □
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    List all chats with optional filtering.\n    \n    Args:\n        skip: Number of chats to skip\n        limit: Maximum number of chats to return\n        active_only: If True, only return active chats\n        folder_path: If specified, only return chats for this folder\n        session: Database session\n        \n    Returns:\n        ChatListResponse: List of chats with metadata\n    '
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+filter_kwargs
+●●●●●● 1mm □
+●●●●●● 2mm □
+folder_path
+●●●●●● 2mm □
+filter_kwargs
+'folder_path'
+●●●●●● 1mm □
+folder_path
+●●●●●● 2mm □
+active_only
+filter_kwargs
+'is_active'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+filter_kwargs
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+and_
+inspect
+query
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+columns
+●●●●●● 1mm □
+column
+column
+mapper
+key
+value
+filter_kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+columns
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+Chat
+key
+●●●●●● 2mm □△
+value
+●●●●●● 2mm □△
+chats
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+Chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+active_only
+chats
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chats
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatListResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Get a specific chat by ID.\n    \n    Args:\n        chat_id: ID of the chat\n        session: Database session\n        \n    Returns:\n        ChatResponse: The chat details\n    '
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+ChatCreateRequest
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+"\n    Update a chat's settings.\n    \n    Args:\n        chat_id: ID of the chat\n        request: Updated chat settings\n        session: Database session\n        \n    Returns:\n        ChatResponse: The updated chat\n    "
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+update_data
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+update_data
+'title'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+update_data
+'description'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+'ollama'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+client
+'model_exists'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+update_data
+'model'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+update_data
+'temperature'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+update_data
+'folder_path'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+updated_chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Delete a chat and all its messages.\n    \n    Args:\n        chat_id: ID of the chat\n        session: Database session\n        \n    Returns:\n        dict: Confirmation message\n    '
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'message'
+'Chat '
+chat_id
+' deleted successfully'
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+MessageCreateRequest
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Add a message to a chat (typically for manual message storage).\n    \n    Args:\n        chat_id: ID of the chat\n        request: Message content and role\n        session: Database session\n        \n    Returns:\n        ChatMessageResponse: The created message\n    '
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatMessageResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}/messages'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Get message history for a chat.\n    \n    Args:\n        chat_id: ID of the chat\n        skip: Number of messages to skip\n        limit: Maximum number of messages to return\n        session: Database session\n        \n    Returns:\n        ChatHistoryResponse: Chat messages and metadata\n    '
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatHistoryResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}/messages'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+PromptRequest
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Send a prompt/message to a chat and get an AI-generated response.\n    ENFORCES RAG-FIRST RETRIEVAL: Rejects queries if no relevant knowledge is found.\n    Only uses information from the knowledge base, does not add external knowledge.\n    \n    Args:\n        chat_id: ID of the chat\n        request: PromptRequest with message content and generation parameters\n        session: Database session\n        \n    Returns:\n        PromptResponse: The generated response with metadata\n        \n    Raises:\n        HTTPException: 404 if no relevant knowledge found, 503 if services unavailable\n    '
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_query
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+greeting_pattern
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'^(hi|hello|hey|hola|yo|sup|good\\s+(morning|afternoon|evening)|thanks|thank you|bye|goodbye)\\b'
+re
+●●●●●● 2mm □△
+●●●●●● 2mm □
+greeting_pattern
+●●●●●● 1mm □△
+user_query
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_messages
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+small_talk_messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+'You are a concise, friendly assistant with conversation memory. Keep casual greetings short and remember what the user told you earlier. Do not cite sources.'
+msg
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+recent_messages
+●●●●●● 2mm □△
+small_talk_messages
+●●●●●● 1mm □△
+'role'
+'content'
+msg
+msg
+●●●●●● 2mm □△
+small_talk_messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+user_query
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+temperature
+●●●●●● 1mm □
+●●●●●● 3mm □△
+chat
+0.4
+chat_kwargs
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+'temperature'
+'top_p'
+'max_tokens'
+chat
+small_talk_messages
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+temperature
+0.7
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+0.8
+settings
+settings
+256
+●●●●●● 2mm □
+settings
+'ollama'
+chat_kwargs
+'top_k'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+40
+response_text
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+generation_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+assistant_message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+total_tokens
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+PromptResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.multi_tier_integration
+●●●●●● 2mm □△○
+create_multi_tier_handler
+log_query_handling
+recent_messages
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conversation_context
+●●●●●● 1mm □
+msg
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+recent_messages
+●●●●●● 2mm □△
+conversation_context
+●●●●●● 1mm □△
+'role'
+'content'
+msg
+msg
+●●●●●● 2mm □△
+conversation_context
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTEXT] Built conversation context with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+conversation_context
+●●●●●● 2mm □△
+' messages'
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+create_multi_tier_handler
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tier_result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+generation_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+log_query_handling
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tier_result
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response_text
+●●●●●● 1mm □
+tier_result
+sources
+●●●●●● 1mm □
+tier_result
+response_text
+●●●●●● 1mm □
+response_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assistant_message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+total_tokens
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+PromptResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}/prompt'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+MessageCreateRequest
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Edit a message in a chat.\n    \n    Args:\n        chat_id: ID of the chat\n        message_id: ID of the message to edit\n        request: New message content\n        session: Database session\n        \n    Returns:\n        ChatMessageResponse: The edited message\n    '
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edited_message
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+message_id
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+edited_message
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ChatMessageResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}/messages/{message_id}'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Delete a message from a chat.\n    \n    Args:\n        chat_id: ID of the chat\n        message_id: ID of the message to delete\n        session: Database session\n        \n    Returns:\n        dict: Confirmation message\n    '
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+chat_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+deleted
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+message_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+deleted
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'message'
+'Message '
+message_id
+' deleted successfully'
+HTTPException
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chats/{chat_id}/messages/{message_id}'
+●●●●●● 2mm □△
+'Full runtime status: diagnostic engine, self-healing, pause state.'
+diag
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'diagnostic_engine'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+diag_status
+●●●●●● 1mm □
+'unavailable'
+●●●●●● 2mm □
+diag
+diag_status
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+diag
+'value'
+●●●●●● 2mm □△
+diag
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+diag
+●●●●●● 2mm □△
+Exception
+diag_status
+●●●●●● 1mm □
+'unknown'
+●●●●●● 3mm ○
+'paused'
+'diagnostic_engine'
+'self_healing'
+'uptime_seconds'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'runtime_paused'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+diag_status
+diag_status
+'unavailable'
+'stopped'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'_start_time'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/api/runtime/status'
+●●●●●● 2mm □△
+'Pause the runtime — stops diagnostic heartbeat and self-healing without killing the process.'
+app
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+diag
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'diagnostic_engine'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+diag
+diag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'message'
+'paused'
+'Runtime paused — heartbeat and self-healing suspended'
+app
+●●●●●● 1mm □△
+'/api/runtime/pause'
+●●●●●● 2mm □△
+'Resume a paused runtime.'
+app
+●●●●●● 1mm □
+●●●●●● 1mm □
+diag
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+app
+'diagnostic_engine'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+diag
+diag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'message'
+'resumed'
+'Runtime resumed — heartbeat and self-healing active'
+app
+●●●●●● 1mm □△
+'/api/runtime/resume'
+●●●●●● 2mm □△
+'\n    Full hot-reload: apply updates immediately without restart.\n    Re-reads .env, refreshes model registry, reconnects DB, reloads all\n    hot-reloadable modules (brain, pipeline, triggers, etc.).\n    '
+results
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+results
+'settings'
+●●●●●● 1mm □
+'reloaded'
+Exception
+results
+'settings'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+_build_model_registry
+get_available_models
+●●●●●● 2mm □△○
+cognitive.consensus_engine
+●●●●●● 1mm □
+ce
+ce
+●●●●●● 1mm □
+_build_model_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'consensus_models'
+●●●●●● 1mm □
+m
+'id'
+m
+'available'
+m
+models
+Exception
+results
+'consensus_models'
+●●●●●● 1mm □
+'error: '
+e
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'database'
+●●●●●● 1mm □
+'pool refreshed'
+Exception
+results
+'database'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+code_reload
+●●●●●● 1mm □
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'code_reload'
+●●●●●● 1mm □
+code_reload
+Exception
+results
+'code_reload'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+get_diagnostics
+diag
+●●●●●● 1mm □
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diag_result
+●●●●●● 1mm □
+diag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'diagnostic'
+●●●●●● 1mm □
+diag_result
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+Exception
+results
+'diagnostic'
+●●●●●● 1mm □
+'error: '
+e
+●●●●●● 3mm ○
+'status'
+'results'
+'hot-reload complete'
+results
+app
+●●●●●● 1mm □△
+'/api/runtime/hot-reload'
+●●●●●● 2mm □△
+'Rate limit status and security configuration.'
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+get_rate_limit_status
+MAX_REQUEST_SIZE
+●●●●●● 3mm ○
+'rate_limits'
+'max_request_size_mb'
+get_rate_limit_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+MAX_REQUEST_SIZE
+●●●●●● 3mm □△
+1048576
+1
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/api/runtime/security'
+●●●●●● 2mm □△
+'Create a database backup.'
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+backup_database
+path
+●●●●●● 1mm □
+backup_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'backup_path'
+path
+app
+●●●●●● 1mm □△
+'/api/runtime/backup'
+●●●●●● 2mm □△
+'Circuit breaker and degradation status.'
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+all_breaker_statuses
+GracefulDegradation
+●●●●●● 3mm ○
+'degradation_level'
+'circuit_breakers'
+GracefulDegradation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_breaker_statuses
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/api/runtime/resilience'
+●●●●●● 2mm □△
+'Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus.'
+checks
+●●●●●● 1mm □
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checks
+'ollama'
+●●●●●● 1mm □
+'connected'
+'url'
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+settings
+Exception
+checks
+'ollama'
+●●●●●● 1mm □
+'connected'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qdrant_loc
+●●●●●● 1mm □
+settings
+settings
+settings
+':'
+settings
+checks
+'qdrant'
+●●●●●● 1mm □
+'connected'
+'url'
+connected
+qdrant_loc
+Exception
+checks
+'qdrant'
+●●●●●● 1mm □
+'connected'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+checks
+'kimi'
+●●●●●● 1mm □
+'configured'
+'model'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+settings
+checks
+'opus'
+●●●●●● 1mm □
+'configured'
+'model'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+settings
+checks
+'database'
+●●●●●● 1mm □
+'connected'
+'type'
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+settings
+Exception
+checks
+'database'
+●●●●●● 1mm □
+'connected'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+torch
+device
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_DEVICE'
+'cpu'
+●●●●●● 2mm □△
+cuda_available
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+torch
+'cuda'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checks
+'embedding'
+●●●●●● 1mm □
+'connected'
+'device'
+'cuda_available'
+'using_gpu'
+●●●●●● 3mm □△○
+device
+cuda_available
+device
+'cuda'
+cuda_available
+Exception
+checks
+'embedding'
+●●●●●● 1mm □
+'connected'
+'device'
+'cuda_available'
+'using_gpu'
+'error'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+all_ok
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'connected'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'configured'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+c
+checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'services'
+all_ok
+'all_connected'
+'partial'
+checks
+app
+●●●●●● 1mm □△
+'/api/runtime/connectivity'
+●●●●●● 2mm □△
+'\n    Root endpoint with API information.\n    \n    Returns:\n        dict: API name and version\n    '
+●●●●●● 3mm ○
+'name'
+'version'
+'description'
+'docs'
+'health'
+'Grace API'
+'0.1.0'
+'API for Ollama-based chat and embeddings'
+'/docs'
+'/health'
+app
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DirectoryPromptRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request for directory-scoped chat.'
+query
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+directory_path
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+temperature
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+0.7
+●●●●●● 2mm □△
+top_p
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+0.9
+●●●●●● 2mm □△
+top_k
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DirectoryPromptResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response for directory-scoped chat.'
+message
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+message_id
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+directory_path
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+generation_time
+●●●●●● 3mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+sources
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+DirectoryPromptRequest
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+"\n    Send a prompt/message and get a response using only context from files in a specific directory.\n    This is a stateless chat endpoint that doesn't save to chat history.\n    \n    Args:\n        request: DirectoryPromptRequest with query and directory path\n        session: Database session\n        \n    Returns:\n        DirectoryPromptResponse: The generated response with source attribution\n        \n    Raises:\n        HTTPException: 404 if no documents found in directory, 503 if services unavailable\n    "
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rag_context
+●●●●●● 1mm □
+''
+sources
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+api.retrieve
+●●●●●● 2mm □△○
+get_document_retriever
+retriever
+●●●●●● 1mm □
+get_document_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_result
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+retrieval_result
+filtered_chunks
+●●●●●● 1mm □
+target_dir
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+''
+chunk
+retrieval_result
+file_path
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+file_path
+file_path
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □
+target_dir
+''
+●●●●●● 2mm □
+file_path
+'/'
+file_path
+filtered_chunks
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm △
+file_path
+file_path
+●●●●●● 1mm □△
+target_dir
+●●●●●● 3mm ○
+'/'
+●●●●●● 2mm □△
+file_path
+target_dir
+filtered_chunks
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+filtered_chunks
+●●●●●● 1mm □
+filtered_chunks
+5
+●●●●●● 2mm □
+filtered_chunks
+context_parts
+●●●●●● 1mm □
+chunk
+filtered_chunks
+filename
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'filename'
+'Unknown'
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'created_at'
+'Unknown'
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'confidence_score'
+0.0
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+chunk
+'text'
+chunk_index
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'chunk_index'
+0
+●●●●●● 2mm □△
+enriched_chunk
+●●●●●● 1mm □
+'[Source: '
+filename
+' | Date: '
+created_at
+' | Confidence: '
+confidence
+'.1%'
+' | Chunk '
+chunk_index
+']\n'
+chunk_text
+context_parts
+●●●●●● 1mm □△
+enriched_chunk
+●●●●●● 2mm □△
+rag_context
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+rag_context
+●●●●●● 1mm □
+rag_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □
+'text'
+'score'
+'chunk_id'
+'document_id'
+'filename'
+'source'
+'chunk_index'
+'confidence_score'
+'created_at'
+chunk
+'text'
+chunk
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'chunk_id'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'filename'
+'Unknown'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'source'
+'Unknown'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'chunk_index'
+0
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'confidence_score'
+0.0
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'created_at'
+●●●●●● 2mm □△
+chunk
+filtered_chunks
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Directory RAG retrieval error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rag_context
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+build_rag_system_prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+augmented_content
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+rag_context
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+augmented_content
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+temperature
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+0.7
+0.3
+●●●●●● 2mm □△
+max_num_predict
+●●●●●● 1mm □
+settings
+settings
+512
+chat_kwargs
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+'temperature'
+'top_p'
+'max_tokens'
+settings
+settings
+'llama2'
+messages
+●●●●●● 1mm □
+temperature
+●●●●●● 3mm □△
+0.5
+max_num_predict
+●●●●●● 2mm □
+settings
+'ollama'
+chat_kwargs
+'top_k'
+●●●●●● 1mm □
+●●●●●● 3mm □△
+10
+response_text
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+generation_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+response_text
+●●●●●● 1mm □
+response_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+DirectoryPromptResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+●●●●●● 2mm □△○
+traceback
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error in directory chat: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/chat/directory-prompt'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm □△○
+uvicorn
+uvicorn
+●●●●●● 1mm □△
+'app:app'
+●●●●●● 2mm □△

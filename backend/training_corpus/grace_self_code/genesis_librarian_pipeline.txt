@@ -1,0 +1,1878 @@
+## librarian_pipeline.py
+'\nLibrarian Ingestion Pipeline\n============================\nFull data ingestion flow with Genesis Key tracking.\nData comes in → Genesis Key → Indexed → Files created/named → Saved in memory → Shows in UI\n\nIntegrations:\n- Genesis Key Service: Every ingestion gets a properly tracked Genesis Key\n- Mirror Self-Modeling: Ingestions are observed for pattern learning\n- Cognitive Framework: Decisions about filing and categorization\n- Trust Scores: Ingestion reliability tracking\n- Version Control: All ingestions are version controlled\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+shutil
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_genesis_key_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the Genesis Key Service for proper key creation.'
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+GenesisKeyService
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GenesisKeyService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Genesis Key Service not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the Mirror Self-Modeling System for observation.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Mirror System not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+IngestionStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Status of ingestion process.'
+PENDING
+●●●●●● 1mm □
+'pending'
+RECEIVING
+●●●●●● 1mm □
+'receiving'
+GENESIS_ASSIGNED
+●●●●●● 1mm □
+'genesis_assigned'
+INDEXING
+●●●●●● 1mm □
+'indexing'
+INDEXED
+●●●●●● 1mm □
+'indexed'
+FILING
+●●●●●● 1mm □
+'filing'
+FILED
+●●●●●● 1mm □
+'filed'
+MEMORIZING
+●●●●●● 1mm □
+'memorizing'
+COMPLETE
+●●●●●● 1mm □
+'complete'
+FAILED
+●●●●●● 1mm □
+'failed'
+●●●●●● 2mm △
+ContentType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of content that can be ingested.'
+DOCUMENT
+●●●●●● 1mm □
+'document'
+CODE
+●●●●●● 1mm □
+'code'
+IMAGE
+●●●●●● 1mm □
+'image'
+DATA
+●●●●●● 1mm □
+'data'
+CONFIG
+●●●●●● 1mm □
+'config'
+KNOWLEDGE
+●●●●●● 1mm □
+'knowledge'
+CONVERSATION
+●●●●●● 1mm □
+'conversation'
+LOG
+●●●●●● 1mm □
+'log'
+UNKNOWN
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm △
+IngestionRecord
+'Record of an ingestion operation.'
+ingestion_id
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 1mm ○
+status
+IngestionStatus
+content_type
+ContentType
+source
+●●●●●● 1mm ○
+destination
+●●●●●● 1mm ○
+filename
+●●●●●● 1mm ○
+file_size
+●●●●●● 2mm ○
+content_hash
+●●●●●● 1mm ○
+index_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+memory_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+created_at
+●●●●●● 1mm ○
+updated_at
+●●●●●● 1mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeline
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+IngestionResult
+'Result of an ingestion operation.'
+success
+●●●●●● 3mm △
+ingestion_id
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 1mm ○
+status
+IngestionStatus
+destination
+●●●●●● 1mm ○
+index_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+memory_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 2mm ○
+message
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+LibrarianPipeline
+'\n    The Librarian handles all data ingestion for GRACE.\n\n    Flow:\n    1. RECEIVE - Accept incoming data\n    2. GENESIS - Assign Genesis Key for tracking\n    3. INDEX - Add to vector index for retrieval\n    4. FILE - Create/name files in organized structure\n    5. MEMORIZE - Store in learning memory\n    6. PUBLISH - Make visible in UI\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+storage_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+storage_dir
+'/tmp/grace/library'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'documents'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'code'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'knowledge'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'index'
+d
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+IngestionRecord
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_key_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Pipeline initialized with core integrations'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN]   ✓ Genesis Key Service connected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN]   ✓ Mirror Self-Modeling connected'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_registry
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load ingestion registry from disk.'
+registry_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'registry.json'
+●●●●●● 2mm □
+registry_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+registry_file
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+record_data
+data
+●●●●●● 1mm □△
+'records'
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+IngestionRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+record
+●●●●●● 1mm □
+record
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Loaded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' ingestion records'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Failed to load registry: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_registry
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save ingestion registry to disk.'
+registry_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'registry.json'
+data
+●●●●●● 1mm □
+'records'
+'updated_at'
+asdict
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+registry_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+content_type
+content_hash
+filename
+metadata
+●●●●●● 2mm □△
+ContentType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Generate Genesis Key for ingestion using proper Genesis Key Service.\n\n        Every ingestion gets a tracked Genesis Key for:\n        - Full audit trail\n        - Version control\n        - Mirror observation\n        - Pattern learning\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Created tracked Genesis Key: '
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_key
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Genesis Key Service error, falling back: '
+e
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_data
+●●●●●● 1mm □
+'librarian:ingest:'
+content_type
+':'
+content_hash
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'gk-lib-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_track_ingestion_version
+●●●●●● 1mm □△
+self
+ingestion_id
+record
+mutation_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+IngestionRecord
+●●●●●● 1mm ○
+'Track version/mutation of an ingestion for audit trail.'
+●●●●●● 2mm □
+ingestion_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+ingestion_id
+●●●●●● 1mm □
+version_entry
+●●●●●● 1mm □
+'version'
+'mutation_type'
+'timestamp'
+'status'
+'genesis_key'
+'snapshot'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+ingestion_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+mutation_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+record
+'content_type'
+'filename'
+'file_size'
+'content_hash'
+record
+record
+record
+record
+●●●●●● 3mm △
+ingestion_id
+●●●●●● 1mm □△
+version_entry
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Tracked version '
+version_entry
+'version'
+' for ingestion '
+ingestion_id
+': '
+mutation_type
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_detect_content_type
+●●●●●● 1mm □△
+self
+filename
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Detect content type from filename and content.'
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_extensions
+●●●●●● 1mm □
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.java'
+'.go'
+'.rs'
+'.cpp'
+'.c'
+'.h'
+'.cs'
+'.rb'
+'.php'
+'.swift'
+●●●●●● 2mm □
+ext
+code_extensions
+●●●●●● 3mm ○
+ContentType
+doc_extensions
+●●●●●● 1mm □
+'.md'
+'.txt'
+'.pdf'
+'.doc'
+'.docx'
+'.rst'
+'.html'
+●●●●●● 2mm □
+ext
+doc_extensions
+●●●●●● 3mm ○
+ContentType
+data_extensions
+●●●●●● 1mm □
+'.json'
+'.yaml'
+'.yml'
+'.xml'
+'.csv'
+'.parquet'
+●●●●●● 2mm □
+ext
+data_extensions
+●●●●●● 3mm ○
+ContentType
+config_extensions
+●●●●●● 1mm □
+'.ini'
+'.cfg'
+'.conf'
+'.toml'
+'.env'
+●●●●●● 2mm □
+ext
+config_extensions
+●●●●●● 3mm ○
+ContentType
+image_extensions
+●●●●●● 1mm □
+'.png'
+'.jpg'
+'.jpeg'
+'.gif'
+'.svg'
+'.webp'
+●●●●●● 2mm □
+ext
+image_extensions
+●●●●●● 3mm ○
+ContentType
+●●●●●● 2mm □
+ext
+'.log'
+'log'
+filename
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContentType
+●●●●●● 3mm ○
+ContentType
+ContentType
+●●●●●● 1mm □
+_compute_hash
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Compute content hash.'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_filename
+●●●●●● 1mm □△
+self
+original_name
+content_type
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ContentType
+●●●●●● 1mm ○
+'Generate organized filename and path.'
+type_dirs
+●●●●●● 1mm □
+ContentType
+ContentType
+ContentType
+ContentType
+ContentType
+ContentType
+ContentType
+ContentType
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'images'
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'misc'
+base_dir
+●●●●●● 1mm □
+type_dirs
+●●●●●● 1mm □△
+content_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+base_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+date_dir
+●●●●●● 1mm □
+base_dir
+●●●●●● 3mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y/%m/%d'
+●●●●●● 2mm □△
+date_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stem
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+original_name
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+original_name
+●●●●●● 2mm □△
+safe_stem
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'-_'
+c
+'_'
+c
+stem
+●●●●●● 2mm □△
+gk_suffix
+●●●●●● 1mm □
+genesis_key
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+1
+6
+new_filename
+●●●●●● 1mm □
+safe_stem
+'_'
+gk_suffix
+ext
+●●●●●● 3mm ○
+new_filename
+date_dir
+●●●●●● 3mm □△
+new_filename
+Tuple
+●●●●●● 1mm ○
+Path
+●●●●●● 1mm □
+_update_status
+●●●●●● 1mm □△
+self
+record
+status
+message
+●●●●●● 2mm □△
+IngestionRecord
+IngestionStatus
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Update ingestion status and add to timeline.'
+record
+●●●●●● 1mm □
+status
+record
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □△
+'status'
+'timestamp'
+'message'
+status
+record
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] '
+record
+' -> '
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_notify_listeners
+●●●●●● 1mm □△
+self
+record
+●●●●●● 2mm □△
+IngestionRecord
+'Notify UI listeners of status change.'
+listener
+●●●●●● 3mm △
+listener
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Listener error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_listener
+●●●●●● 1mm □△
+self
+callback
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+'Add a listener for ingestion updates.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm □
+remove_listener
+●●●●●● 1mm □△
+self
+callback
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+'Remove a listener.'
+●●●●●● 2mm □
+callback
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Ingest a file into the library.\n\n        Args:\n            file_path: Path to file to ingest\n            metadata: Optional metadata\n\n        Returns:\n            IngestionResult with status and IDs\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+IngestionResult
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'upload'
+●●●●●● 2mm □
+'\n        Ingest raw content into the library.\n\n        Args:\n            content: Raw bytes to ingest\n            filename: Original filename\n            source: Source identifier\n            metadata: Optional metadata\n\n        Returns:\n            IngestionResult with status and IDs\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_id
+●●●●●● 1mm □
+'ing-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+content_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+content_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+filename
+content
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+IngestionRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+ingestion_id
+●●●●●● 1mm □
+record
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Starting ingestion '
+ingestion_id
+': '
+filename
+' ('
+content_type
+')'
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content_type
+content_hash
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Genesis Key: '
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ingestion_id
+record
+'create'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Adding to search index'
+●●●●●● 2mm □△
+index_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+index_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+filename
+content_type
+genesis_key
+metadata
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+index_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Index ID: '
+index_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Indexing skipped: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Indexing skipped: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Creating file'
+●●●●●● 2mm □△
+new_filename
+destination
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+filename
+content_type
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+destination
+'wb'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+destination
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+new_filename
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Filed: '
+destination
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Storing in memory'
+●●●●●● 2mm □△
+memory_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+memory_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+filename
+content_type
+genesis_key
+destination
+metadata
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+memory_id
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Memory storage skipped: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+'Ingestion complete'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ingestion_id
+record
+'complete'
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Completed '
+ingestion_id
+' in '
+duration_ms
+'ms -> '
+destination
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Ingestion failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ingestion_id
+●●●●●● 3mm △
+record
+●●●●●● 1mm □
+●●●●●● 3mm △
+ingestion_id
+record
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+IngestionStatus
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+IngestionResult
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ContentType
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Index content for search/retrieval.'
+●●●●●● 3mm □△○
+genesis.embedder
+●●●●●● 2mm □△○
+get_embedder
+embedder
+●●●●●● 1mm □
+get_embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content_type
+ContentType
+ContentType
+ContentType
+ContentType
+text_content
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+UnicodeDecodeError
+text_content
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'latin-1'
+●●●●●● 2mm □△
+doc_id
+●●●●●● 1mm □
+'lib_'
+genesis_key
+embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+doc_id
+●●●●●● 3mm ○
+●●●●●● 2mm □
+ImportError
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Embedder not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Indexing failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ContentType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Store in learning memory system.'
+●●●●●● 3mm □△○
+learning_memory_api
+●●●●●● 2mm □△○
+get_memory_manager
+memory_manager
+●●●●●● 1mm □
+get_memory_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content_type
+ContentType
+ContentType
+ContentType
+ContentType
+ContentType
+text_content
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+UnicodeDecodeError
+text_content
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'latin-1'
+●●●●●● 2mm □△
+memory_entry
+●●●●●● 1mm □
+memory_manager
+●●●●●● 1mm □△
+'type'
+'filename'
+'content_type'
+'genesis_key'
+'destination'
+'content_preview'
+'full_content'
+'metadata'
+'ingested_content'
+filename
+content_type
+genesis_key
+destination
+text_content
+1000
+text_content
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+memory_entry
+●●●●●● 1mm □△
+'memory_id'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+ImportError
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Learning memory not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[LIBRARIAN] Memory storage failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n        Ingest all files in a directory.\n\n        Args:\n            directory_path: Path to directory\n            recursive: Include subdirectories\n            patterns: File patterns to match (e.g., ['*.py', '*.md'])\n            metadata: Metadata for all files\n\n        Returns:\n            Summary of ingestion results\n        "
+directory
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+directory_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+'results'
+●●●●●● 1mm □
+'Directory not found: '
+directory_path
+files
+●●●●●● 1mm □
+●●●●●● 2mm □
+recursive
+●●●●●● 2mm □
+patterns
+pattern
+patterns
+files
+●●●●●● 1mm □△
+directory
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+files
+●●●●●● 1mm □
+f
+f
+directory
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+patterns
+pattern
+patterns
+files
+●●●●●● 1mm □△
+directory
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+f
+f
+directory
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exclude_patterns
+●●●●●● 1mm □
+'.git'
+'__pycache__'
+'node_modules'
+'.env'
+'.venv'
+files
+●●●●●● 1mm □
+f
+f
+files
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+p
+exclude_patterns
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+success_count
+●●●●●● 1mm □
+0
+fail_count
+●●●●●● 1mm □
+0
+file_path
+files
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+metadata
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+asdict
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+success_count
+1
+●●●●●● 3mm □
+fail_count
+1
+●●●●●● 3mm ○
+'success'
+'directory'
+'total_files'
+'successful'
+'failed'
+'results'
+fail_count
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+directory
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+success_count
+fail_count
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_ingestion
+●●●●●● 1mm □△
+self
+ingestion_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get an ingestion record by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ingestion_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+IngestionRecord
+●●●●●● 1mm □
+get_ingestions_by_genesis_key
+●●●●●● 1mm □△
+self
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get all ingestions with a specific Genesis Key.'
+●●●●●● 3mm ○
+r
+r
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+genesis_key
+●●●●●● 3mm □△
+IngestionRecord
+●●●●●● 1mm □
+list_ingestions
+●●●●●● 1mm □△
+self
+status
+content_type
+limit
+offset
+●●●●●● 2mm □△
+IngestionStatus
+ContentType
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+100
+0
+'List ingestion records with optional filters.'
+records
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+records
+●●●●●● 1mm □
+r
+r
+records
+r
+status
+●●●●●● 2mm □
+content_type
+records
+●●●●●● 1mm □
+r
+r
+records
+r
+content_type
+records
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+records
+offset
+offset
+●●●●●● 3mm ○
+limit
+●●●●●● 3mm □△
+IngestionRecord
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get ingestion statistics.'
+records
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+status_counts
+●●●●●● 1mm □
+status
+IngestionStatus
+status_counts
+status
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+r
+records
+r
+status
+●●●●●● 2mm □△
+type_counts
+●●●●●● 1mm □
+ct
+ContentType
+type_counts
+ct
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+r
+records
+r
+ct
+●●●●●● 2mm □△
+total_size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+r
+records
+●●●●●● 2mm □△
+recent
+●●●●●● 1mm □
+records
+records
+10
+●●●●●● 3mm ○
+'total_ingestions'
+'by_status'
+'by_type'
+'total_size_bytes'
+'total_size_mb'
+'recent'
+'storage_path'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+records
+●●●●●● 2mm □△
+status_counts
+type_counts
+total_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_size
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+2
+●●●●●● 2mm □△
+'ingestion_id'
+'genesis_key'
+'filename'
+'status'
+'content_type'
+'created_at'
+r
+r
+r
+r
+r
+r
+r
+recent
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+search_library
+●●●●●● 1mm □△
+self
+query
+content_type
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ContentType
+●●●●●● 2mm ○
+●●●●●● 2mm □
+20
+'Search the library for matching content.'
+results
+●●●●●● 1mm □
+record
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+record
+IngestionStatus
+●●●●●● 2mm □
+content_type
+record
+content_type
+search_text
+●●●●●● 1mm □
+record
+' '
+json
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+search_text
+results
+●●●●●● 1mm □△
+'ingestion_id'
+'genesis_key'
+'filename'
+'content_type'
+'destination'
+'created_at'
+'metadata'
+record
+record
+record
+record
+record
+record
+record
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_librarian_pipeline
+●●●●●● 2mm □○
+LibrarianPipeline
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global librarian pipeline instance.'
+●●●●●● 2mm □
+_librarian_pipeline
+●●●●●● 2mm □
+_librarian_pipeline
+●●●●●● 1mm □
+LibrarianPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_librarian_pipeline
+LibrarianPipeline
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Convenience function to ingest a file.'
+pipeline
+●●●●●● 1mm □
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pipeline
+●●●●●● 1mm □△
+file_path
+metadata
+●●●●●● 2mm □△
+IngestionResult
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'upload'
+●●●●●● 2mm □
+'Convenience function to ingest raw content.'
+pipeline
+●●●●●● 1mm □
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pipeline
+●●●●●● 1mm □△
+content
+filename
+source
+metadata
+●●●●●● 2mm □△
+IngestionResult
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Convenience function to ingest a directory.'
+pipeline
+●●●●●● 1mm □
+get_librarian_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pipeline
+●●●●●● 1mm □△
+directory_path
+recursive
+patterns
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

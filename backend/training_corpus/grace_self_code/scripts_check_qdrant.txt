@@ -1,0 +1,138 @@
+## check_qdrant.py
+'\nCheck Qdrant connectivity. Run from project root: python backend/scripts/check_qdrant.py\nOr from backend: python scripts/check_qdrant.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+BACKEND
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+BACKEND
+sys
+sys
+●●●●●● 1mm □△
+0
+BACKEND
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+BACKEND
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+host
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_HOST'
+'localhost'
+●●●●●● 2mm □△
+port
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'QDRANT_PORT'
+'6333'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+url
+'http://'
+host
+':'
+port
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Checking Qdrant at '
+target
+' ...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'OK  Qdrant connection successful.'
+●●●●●● 2mm □△
+colls
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Collections: '
+colls
+'(none)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+0
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAIL Connection failure: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'To fix:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  1. Start Qdrant:  .\\start_services.bat qdrant'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  2. Or manually:   docker start qdrant   (or  docker run -d -p 6333:6333 -p 6334:6334 --name qdrant qdrant/qdrant:latest)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  3. Verify:       curl http://localhost:6333/health'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

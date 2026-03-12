@@ -1,0 +1,1161 @@
+## multi_armed_bandit.py
+'\nMulti-Armed Bandit System - Intelligent Exploration/Exploitation\n\nOptimizes learning topic selection using bandit algorithms.\nBalances exploring new topics vs exploiting known high-value topics.\n\nAlgorithms Implemented:\n- UCB1 (Upper Confidence Bound)\n- Thompson Sampling (Bayesian)\n- Epsilon-Greedy\n- Contextual Bandits\n- Exp3 (Exponential-weight algorithm for Exploration and Exploitation)\n'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm △
+BanditAlgorithm
+●●●●●● 3mm □△
+Enum
+Enum
+'Available bandit algorithms'
+UCB1
+●●●●●● 1mm □
+'ucb1'
+THOMPSON_SAMPLING
+●●●●●● 1mm □
+'thompson_sampling'
+EPSILON_GREEDY
+●●●●●● 1mm □
+'epsilon_greedy'
+CONTEXTUAL
+●●●●●● 1mm □
+'contextual'
+EXP3
+●●●●●● 1mm □
+'exp3'
+●●●●●● 2mm △
+TopicArm
+'A bandit arm representing a learning topic'
+topic_id
+●●●●●● 1mm ○
+topic_name
+●●●●●● 1mm ○
+pulls
+●●●●●● 2mm ○
+0
+total_reward
+●●●●●● 3mm ○
+0.0
+mean_reward
+●●●●●● 3mm ○
+0.0
+successes
+●●●●●● 2mm ○
+1
+failures
+●●●●●● 2mm ○
+1
+features
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_pulled
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+BanditContext
+'Context for contextual bandits'
+knowledge_gaps
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+recent_failures
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+user_interests
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+time_of_day
+●●●●●● 2mm ○
+learning_velocity
+●●●●●● 3mm ○
+dataclass
+●●●●●● 2mm △
+MultiArmedBandit
+'\n    Multi-Armed Bandit for learning topic selection\n\n    Optimally balances exploration (trying new topics) with\n    exploitation (focusing on proven valuable topics)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+algorithm
+epsilon
+ucb_c
+exp3_gamma
+context_weight
+save_path
+●●●●●● 2mm □△
+BanditAlgorithm
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+BanditAlgorithm
+0.1
+2.0
+0.1
+0.3
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+algorithm
+●●●●●● 3mm △
+●●●●●● 1mm □
+epsilon
+●●●●●● 3mm △
+●●●●●● 1mm □
+ucb_c
+●●●●●● 3mm △
+●●●●●● 1mm □
+exp3_gamma
+●●●●●● 3mm △
+●●●●●● 1mm □
+context_weight
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TopicArm
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+save_path
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+'models'
+'bandit_state.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_arm
+●●●●●● 1mm □△
+self
+topic_id
+topic_name
+features
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Add a new arm (learning topic)\n\n        Args:\n            topic_id: Unique topic identifier\n            topic_name: Human-readable topic name\n            features: Contextual features for this topic\n        '
+●●●●●● 2mm □
+topic_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+topic_id
+●●●●●● 1mm □
+TopicArm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+topic_id
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □
+select_arm
+●●●●●● 1mm □△
+self
+context
+exclude_topics
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+BanditContext
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Select which topic to learn next\n\n        Args:\n            context: Optional context for contextual bandits\n            exclude_topics: Topics to exclude from selection\n\n        Returns:\n            Selected topic_id\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'No arms available'
+●●●●●● 2mm □△
+available_arms
+●●●●●● 1mm □
+topic_id
+arm
+topic_id
+arm
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic_id
+exclude_topics
+●●●●●● 2mm □
+available_arms
+ValueError
+●●●●●● 1mm □△
+'No available arms after exclusions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+BanditAlgorithm
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+BanditAlgorithm
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+BanditAlgorithm
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+BanditAlgorithm
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+BanditAlgorithm
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+●●●●●● 3mm □
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+selected_id
+1
+●●●●●● 3mm △
+selected_id
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'topic_id'
+'timestamp'
+'algorithm'
+selected_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_select_ucb1
+●●●●●● 1mm □△
+self
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TopicArm
+'\n        UCB1 algorithm: Upper Confidence Bound\n\n        Formula: mean_reward + c * sqrt(ln(total_pulls) / arm_pulls)\n        '
+ucb_scores
+●●●●●● 1mm □
+topic_id
+arm
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+arm
+0
+ucb_scores
+topic_id
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+exploration_bonus
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+arm
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ucb_scores
+topic_id
+●●●●●● 1mm □
+arm
+●●●●●● 3mm ○
+exploration_bonus
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+ucb_scores
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_select_thompson_sampling
+●●●●●● 1mm □△
+self
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TopicArm
+'\n        Thompson Sampling: Bayesian approach\n\n        Sample from Beta distribution for each arm, select highest sample\n        '
+samples
+●●●●●● 1mm □
+topic_id
+arm
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sample
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+arm
+arm
+●●●●●● 2mm □△
+samples
+topic_id
+●●●●●● 1mm □
+sample
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+samples
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_select_epsilon_greedy
+●●●●●● 1mm □△
+self
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TopicArm
+'\n        Epsilon-Greedy: Explore with probability epsilon, else exploit\n        '
+●●●●●● 2mm □
+np
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+np
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_select_contextual
+●●●●●● 1mm □△
+self
+available_arms
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TopicArm
+●●●●●● 2mm □○
+BanditContext
+'\n        Contextual Bandit: Use context to inform selection\n\n        Combines base reward with context-weighted features\n        '
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+topic_id
+arm
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base_score
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+arm
+arm
+●●●●●● 2mm □△
+context_score
+●●●●●● 1mm □
+0.0
+●●●●●● 2mm □
+topic_id
+context
+context_score
+context
+topic_id
+●●●●●● 2mm □△
+0.4
+●●●●●● 2mm □
+topic_id
+context
+context_score
+0.3
+●●●●●● 2mm □
+topic_id
+context
+context_score
+context
+topic_id
+●●●●●● 2mm □△
+0.2
+context_score
+1.0
+●●●●●● 3mm ○
+context
+●●●●●● 2mm □△
+0.1
+scores
+topic_id
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+base_score
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+context_score
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_select_exp3
+●●●●●● 1mm □△
+self
+available_arms
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TopicArm
+'\n        Exp3: Exponential-weight algorithm for Exploration and Exploitation\n\n        Good for adversarial/non-stationary environments\n        '
+total_weight
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+topic_id
+topic_id
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+probabilities
+●●●●●● 1mm □
+topic_id
+1
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+topic_id
+●●●●●● 3mm □△
+total_weight
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+available_arms
+●●●●●● 2mm □△
+topic_id
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic_ids
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+probabilities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+probs
+●●●●●● 1mm □
+probabilities
+tid
+tid
+topic_ids
+selected_id
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+topic_ids
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+update_reward
+●●●●●● 1mm □△
+self
+topic_id
+reward
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+BanditContext
+●●●●●● 2mm □
+'\n        Update arm statistics based on observed reward\n\n        Args:\n            topic_id: Topic that was selected\n            reward: Observed reward (0.0 to 1.0)\n            context: Optional context used during selection\n        '
+●●●●●● 2mm □
+topic_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+arm
+●●●●●● 1mm □
+●●●●●● 3mm △
+topic_id
+arm
+reward
+arm
+●●●●●● 1mm □
+arm
+●●●●●● 3mm □△
+arm
+●●●●●● 2mm □
+reward
+0.5
+arm
+1
+●●●●●● 3mm □
+arm
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+BanditAlgorithm
+prob
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+topic_id
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+estimated_reward
+●●●●●● 1mm □
+reward
+●●●●●● 3mm □△
+prob
+●●●●●● 3mm △
+topic_id
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+estimated_reward
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+BanditAlgorithm
+context
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic_id
+reward
+context
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'topic_id'
+'reward'
+'timestamp'
+topic_id
+reward
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+10
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_contextual_weights
+●●●●●● 1mm □△
+self
+topic_id
+reward
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+BanditContext
+'Update contextual bandit weights (simple online learning)'
+lr
+●●●●●● 1mm □
+0.01
+arm
+●●●●●● 1mm □
+●●●●●● 3mm △
+topic_id
+prediction
+●●●●●● 1mm □
+arm
+error
+●●●●●● 1mm □
+reward
+●●●●●● 1mm □△
+prediction
+feature_name
+feature_value
+arm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+feature_name
+lr
+●●●●●● 2mm □△
+error
+●●●●●● 2mm □△
+feature_value
+●●●●●● 1mm □
+get_arm_stats
+●●●●●● 1mm □△
+self
+topic_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get statistics for a specific arm'
+●●●●●● 2mm □
+topic_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+arm
+●●●●●● 1mm □
+●●●●●● 3mm △
+topic_id
+●●●●●● 3mm ○
+'topic_id'
+'topic_name'
+'pulls'
+'mean_reward'
+'total_reward'
+'success_rate'
+'last_pulled'
+arm
+arm
+arm
+arm
+arm
+arm
+●●●●●● 3mm □△
+arm
+●●●●●● 3mm ○
+arm
+arm
+arm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_all_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get statistics for all arms'
+●●●●●● 3mm ○
+'total_pulls'
+'num_arms'
+'algorithm'
+'arms'
+'top_performers'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+topic_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic_id
+●●●●●● 2mm □△
+topic_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_get_top_performers
+●●●●●● 1mm □△
+self
+k
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+5
+'Get top k performing arms'
+sorted_arms
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'topic_id'
+'topic_name'
+'mean_reward'
+'pulls'
+arm
+arm
+arm
+arm
+arm
+sorted_arms
+k
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+recommend_next_topics
+●●●●●● 1mm □△
+self
+k
+context
+exclude_topics
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+BanditContext
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+3
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Recommend top k topics to learn next\n\n        Args:\n            k: Number of recommendations\n            context: Optional context\n            exclude_topics: Topics to exclude\n\n        Returns:\n            List of (topic_id, score) tuples\n        '
+available_arms
+●●●●●● 1mm □
+topic_id
+arm
+topic_id
+arm
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic_id
+exclude_topics
+●●●●●● 2mm □
+available_arms
+●●●●●● 3mm ○
+scores
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+BanditAlgorithm
+topic_id
+arm
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+arm
+0
+scores
+topic_id
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+exploration_bonus
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+arm
+●●●●●● 2mm □△
+●●●●●● 3mm □
+scores
+topic_id
+●●●●●● 1mm □
+arm
+●●●●●● 3mm ○
+exploration_bonus
+●●●●●● 1mm △
+●●●●●● 3mm △
+BanditAlgorithm
+topic_id
+arm
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+samples
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+arm
+arm
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+scores
+topic_id
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+samples
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+topic_id
+arm
+topic_id
+arm
+available_arms
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sorted_topics
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sorted_topics
+k
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+save_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save bandit state to disk'
+state
+●●●●●● 1mm □
+'algorithm'
+'total_pulls'
+'arms'
+'exp3_weights'
+'contextual_weights'
+'selection_history'
+'reward_history'
+●●●●●● 3mm △
+●●●●●● 3mm △
+topic_id
+'topic_id'
+'topic_name'
+'pulls'
+'total_reward'
+'mean_reward'
+'successes'
+'failures'
+'features'
+'last_pulled'
+'created_at'
+arm
+arm
+arm
+arm
+arm
+arm
+arm
+arm
+arm
+arm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+arm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic_id
+arm
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1000
+●●●●●● 3mm △
+1000
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+state
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+load_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load bandit state from disk'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+state
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+'total_pulls'
+0
+●●●●●● 2mm □△
+topic_id
+arm_data
+state
+●●●●●● 1mm □△
+'arms'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+arm
+●●●●●● 1mm □
+TopicArm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+topic_id
+●●●●●● 1mm □
+arm
+●●●●●● 3mm △
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+'exp3_weights'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+state
+●●●●●● 1mm □△
+'contextual_weights'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+'selection_history'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+'reward_history'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+_bandit_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_bandit
+●●●●●● 1mm □△
+algorithm
+●●●●●● 2mm □△
+BanditAlgorithm
+BanditAlgorithm
+'Get singleton bandit instance'
+●●●●●● 2mm □
+_bandit_instance
+●●●●●● 2mm □
+_bandit_instance
+●●●●●● 1mm □
+MultiArmedBandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_bandit_instance
+MultiArmedBandit

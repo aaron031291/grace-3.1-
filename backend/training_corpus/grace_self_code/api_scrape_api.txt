@@ -1,0 +1,113 @@
+## scrape_api.py
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+jobs_db
+●●●●●● 1mm □
+●●●●●● 2mm □△
+'Submit a scraping job.'
+url
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'url'
+●●●●●● 2mm □△
+job_id
+●●●●●● 1mm □
+'JOB-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+jobs_db
+job_id
+●●●●●● 1mm □
+'id'
+'url'
+'status'
+'markdown'
+job_id
+url
+'completed'
+'# Scraped Content for '
+url
+'\n\nThis is mocked data.'
+●●●●●● 3mm ○
+'id'
+'status'
+job_id
+'processing'
+router
+●●●●●● 1mm □△
+'/submit'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get status of a scraping job.'
+●●●●●● 2mm □
+job_id
+jobs_db
+●●●●●● 3mm ○
+'id'
+'status'
+'progress'
+job_id
+jobs_db
+job_id
+'status'
+100
+●●●●●● 3mm ○
+'status'
+'not_found'
+router
+●●●●●● 1mm □△
+'/status/{job_id}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the markdown results.'
+●●●●●● 2mm □
+●●●●●● 1mm △
+jobs_db
+●●●●●● 3mm ○
+'id'
+'markdown'
+'metadata'
+●●●●●● 1mm △
+jobs_db
+●●●●●● 1mm △
+'markdown'
+'title'
+'language'
+'Mock Title'
+'en'
+●●●●●● 3mm ○
+'error'
+'Not found'
+router
+●●●●●● 1mm □△
+'/results/{id}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Cancel a scraping job.'
+●●●●●● 2mm □
+job_id
+jobs_db
+jobs_db
+job_id
+'status'
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 3mm ○
+'status'
+'cancelled'
+router
+●●●●●● 1mm □△
+'/cancel/{job_id}'
+●●●●●● 2mm □△

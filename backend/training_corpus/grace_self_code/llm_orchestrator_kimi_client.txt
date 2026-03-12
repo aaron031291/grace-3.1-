@@ -1,0 +1,469 @@
+## kimi_client.py
+'\nKimi 2.5 (Moonshot AI) LLM Client implementation.\n\nUses the OpenAI-compatible API at https://api.moonshot.cn/v1\nKimi 2.5 supports long-context reasoning and is well-suited for\ndocument analysis and system-level reasoning tasks.\n'
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+KIMI_BASE_URL
+●●●●●● 1mm □
+'https://api.moonshot.ai/v1'
+KIMI_DEFAULT_MODEL
+●●●●●● 1mm □
+'kimi-k2.5'
+●●●●●● 2mm △
+KimiLLMClient
+●●●●●● 3mm □△
+BaseLLMClient
+BaseLLMClient
+"\n    Client for Moonshot AI's Kimi 2.5 API.\n    OpenAI-compatible interface with extended context and reasoning.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+base_url
+model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+settings
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_BASE_URL'
+KIMI_BASE_URL
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_MODEL'
+KIMI_DEFAULT_MODEL
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Authorization'
+'Content-Type'
+'Bearer '
+●●●●●● 3mm △
+'application/json'
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+temperature
+max_tokens
+stream
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+messages
+●●●●●● 1mm □
+●●●●●● 2mm □
+system_prompt
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+system_prompt
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/chat/completions'
+model_name
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 2mm □
+'k2'
+model_name
+'thinking'
+model_name
+temp
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm □
+temp
+●●●●●● 1mm □
+temperature
+●●●●●● 2mm □
+temperature
+0.7
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'temperature'
+'stream'
+model_name
+messages
+temp
+stream
+●●●●●● 2mm □
+max_tokens
+payload
+'max_tokens'
+●●●●●● 1mm □
+max_tokens
+payload
+●●●●●● 1mm □△
+kwargs
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Kimi request to '
+url
+' with model '
+payload
+'model'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+logger
+●●●●●● 1mm □△
+'Kimi error ('
+response
+'): '
+response
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stream
+●●●●●● 3mm ○
+response
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+'choices'
+0
+'message'
+'content'
+Exception
+logger
+●●●●●● 1mm □△
+'Kimi API request failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/models'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error fetching Kimi models: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+model_name
+m
+models
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+reason_about_document
+●●●●●● 1mm □△
+self
+document_content
+instruction
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+"\n        Use Kimi's long-context capability to reason about a document.\n        Ideal for librarian document classification and organization.\n        "
+system
+●●●●●● 1mm □
+"You are Grace's Librarian intelligence. You analyze documents to determine their category, topic, relationships, and optimal organization within a knowledge base directory structure. Be precise and structured in your analysis."
+●●●●●● 2mm □
+context
+system
+'\n\nCurrent knowledge base context:\n'
+context
+user_message
+●●●●●● 1mm □
+instruction
+'\n\n---\nDocument content:\n'
+document_content
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+system_analysis
+●●●●●● 1mm □△
+self
+system_state
+query
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+"\n        Analyze the entire system state and provide bird's eye perspective.\n        Used by the Chat tab's world model view.\n        "
+system
+●●●●●● 1mm □
+"You are Grace, an autonomous AI system. You have full awareness of your own architecture, subsystems, and current state. When asked about your system, provide insightful analysis from a bird's eye perspective. Reference specific subsystems, their health, and how they interact."
+state_summary
+●●●●●● 1mm □
+_format_system_state
+●●●●●● 1mm □△
+system_state
+●●●●●● 2mm □△
+user_message
+●●●●●● 1mm □
+'Current system state:\n'
+state_summary
+'\n\nQuery: '
+query
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_format_system_state
+●●●●●● 1mm □△
+state
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Format system state dict into a readable summary for the LLM.'
+lines
+●●●●●● 1mm □
+section
+data
+state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'\n## '
+section
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+k
+v
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  - '
+k
+': '
+v
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+data
+20
+lines
+●●●●●● 1mm □△
+'  - '
+item
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○

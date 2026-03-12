@@ -1,0 +1,1074 @@
+## async_consolidation.py
+'\nMagma Memory - Async Consolidation Pipeline\n\nAsynchronous processing for:\n1. Async Queue - Buffer for pending operations\n2. Neighbor Retrieval - Graph-based neighbor fetching\n3. Context Synthesizer - Linearized context generation for LLM\n4. Background Consolidation - Periodic graph optimization\n\nThis handles the "Asynchronous Consolidation" box in the Magma architecture.\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+Tuple
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+GraphNode
+●●●●●● 3mm □△○
+cognitive.magma.rrf_fusion
+●●●●●● 2mm □△○
+RetrievalResult
+FusedResult
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+OperationType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of operations in the queue.'
+INGEST
+●●●●●● 1mm □
+'ingest'
+LINK
+●●●●●● 1mm □
+'link'
+UPDATE
+●●●●●● 1mm □
+'update'
+DELETE
+●●●●●● 1mm □
+'delete'
+CONSOLIDATE
+●●●●●● 1mm □
+'consolidate'
+INFERENCE
+●●●●●● 1mm □
+'inference'
+●●●●●● 2mm △
+OperationPriority
+●●●●●● 3mm □△
+Enum
+Enum
+'Priority levels for operations.'
+LOW
+●●●●●● 1mm □
+1
+MEDIUM
+●●●●●● 1mm □
+2
+HIGH
+●●●●●● 1mm □
+3
+CRITICAL
+●●●●●● 1mm □
+4
+●●●●●● 2mm △
+QueuedOperation
+'An operation waiting in the queue.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+operation_type
+OperationType
+priority
+OperationPriority
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+callback
+●●●●●● 2mm □○
+●●●●●● 1mm △○
+●●●●●● 2mm □
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retries
+●●●●●● 2mm ○
+0
+max_retries
+●●●●●● 2mm ○
+3
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+OperationResult
+'Result of a processed operation.'
+operation_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+result
+Any
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+processed_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+AsyncOperationQueue
+'\n    Async queue for Magma operations.\n\n    Features:\n    - Priority-based ordering\n    - Retry handling\n    - Callback support\n    - Thread-safe operations\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10000
+'\n        Initialize async queue.\n\n        Args:\n            max_size: Maximum queue size\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_size
+●●●●●● 3mm △
+●●●●●● 1mm □○
+OperationPriority
+●●●●●● 3mm □△○
+priority
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+priority
+OperationPriority
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+OperationResult
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-QUEUE] AsyncOperationQueue initialized (max_size='
+max_size
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+enqueue
+●●●●●● 1mm □△
+self
+operation_type
+payload
+priority
+callback
+genesis_key_id
+●●●●●● 2mm □△
+OperationType
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+OperationPriority
+●●●●●● 2mm □○
+●●●●●● 1mm △○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+OperationPriority
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Add operation to queue.\n\n        Returns:\n            Operation ID\n        '
+operation
+●●●●●● 1mm □
+QueuedOperation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+priority
+●●●●●● 1mm □△
+operation
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-QUEUE] Enqueued '
+operation_type
+' (priority='
+priority
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+operation
+●●●●●● 1mm ○
+●●●●●● 1mm □
+dequeue
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get next operation (highest priority first).\n\n        Returns:\n            QueuedOperation or None if queue is empty\n        '
+●●●●●● 3mm △
+priority
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+OperationPriority
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+priority
+●●●●●● 3mm ○
+●●●●●● 3mm △
+priority
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+QueuedOperation
+●●●●●● 1mm □
+peek
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Peek at next operation without removing.'
+●●●●●● 3mm △
+priority
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+OperationPriority
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+priority
+●●●●●● 3mm ○
+●●●●●● 3mm △
+priority
+0
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+QueuedOperation
+●●●●●● 1mm □
+store_result
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+OperationResult
+'Store operation result.'
+●●●●●● 3mm △
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+get_result
+●●●●●● 1mm □△
+self
+operation_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get result for an operation.'
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+operation_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+OperationResult
+●●●●●● 1mm □
+get_queue_sizes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current queue sizes by priority.'
+●●●●●● 3mm △
+●●●●●● 3mm ○
+priority
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+queue
+●●●●●● 2mm □△
+priority
+queue
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+total_pending
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get total pending operations.'
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+q
+●●●●●● 2mm □△
+q
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+NeighborRetriever
+'\n    Graph-based neighbor retrieval.\n\n    Retrieves neighbors from relation graphs with configurable strategies.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+●●●●●● 2mm □△
+MagmaRelationGraphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □
+get_neighbors
+●●●●●● 1mm □△
+self
+node_id
+graph_name
+max_neighbors
+min_weight
+direction
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+20
+0.1
+'both'
+'\n        Get neighbors of a node.\n\n        Args:\n            node_id: Source node ID\n            graph_name: Target graph\n            max_neighbors: Maximum neighbors to return\n            min_weight: Minimum edge weight\n            direction: outgoing, incoming, or both\n\n        Returns:\n            List of (neighbor_node, edge_weight) tuples\n        '
+graph_map
+●●●●●● 1mm □
+'semantic'
+'temporal'
+'causal'
+'entity'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+graph
+●●●●●● 1mm □
+graph_map
+●●●●●● 1mm □△
+graph_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+graph
+●●●●●● 3mm ○
+neighbors
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+filtered
+●●●●●● 1mm □
+node
+edge
+node
+edge
+neighbors
+edge
+min_weight
+filtered
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filtered
+max_neighbors
+●●●●●● 3mm □△
+Tuple
+GraphNode
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_multi_hop_neighbors
+●●●●●● 1mm □△
+self
+node_id
+graph_name
+hops
+max_per_hop
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+2
+10
+'\n        Get neighbors at multiple hop distances.\n\n        Returns:\n            Dict mapping hop distance to list of nodes\n        '
+graph_map
+●●●●●● 1mm □
+'semantic'
+'temporal'
+'causal'
+'entity'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+graph
+●●●●●● 1mm □
+graph_map
+●●●●●● 1mm □△
+graph_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+graph
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+visited
+●●●●●● 1mm □
+node_id
+current_level
+●●●●●● 1mm □
+node_id
+hop
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+hops
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+next_level
+●●●●●● 1mm □
+current_id
+current_level
+neighbors
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+node
+edge
+neighbors
+●●●●●● 2mm □
+node
+visited
+visited
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+next_level
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+results
+hop
+●●●●●● 1mm □
+next_level
+max_per_hop
+current_level
+●●●●●● 1mm □
+n
+n
+next_level
+max_per_hop
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+GraphNode
+●●●●●● 2mm △
+ContextSynthesizer
+'\n    Synthesizes context for LLM consumption.\n\n    Converts graph retrieval results into linearized, structured context.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_context_length
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+4000
+'\n        Initialize context synthesizer.\n\n        Args:\n            max_context_length: Maximum context length in characters\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_context_length
+●●●●●● 1mm □
+synthesize
+●●●●●● 1mm □△
+self
+results
+query
+include_metadata
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+RetrievalResult
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Synthesize context from retrieval results.\n\n        Args:\n            results: List of retrieval results\n            query: Optional original query\n            include_metadata: Whether to include metadata\n\n        Returns:\n            Linearized context string\n        '
+parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+query
+parts
+●●●●●● 1mm □△
+'Query: '
+query
+'\n'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Retrieved Context:\n'
+●●●●●● 2mm □△
+remaining_length
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+parts
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+entry_parts
+●●●●●● 1mm □
+'\n['
+i
+'] '
+result
+●●●●●● 2mm □
+include_metadata
+result
+meta_str
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+meta_str
+entry_parts
+●●●●●● 1mm □△
+'  ('
+meta_str
+')'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+entry_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+remaining_length
+entry
+●●●●●● 1mm □
+entry
+remaining_length
+●●●●●● 1mm □△
+3
+●●●●●● 3mm ○
+'...'
+parts
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+remaining_length
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+synthesize_with_structure
+●●●●●● 1mm □△
+self
+results
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+RetrievalResult
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Synthesize context with structured output.\n\n        Returns:\n            Dict with structured context information\n        '
+by_source
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+RetrievalResult
+result
+results
+source
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+source
+by_source
+by_source
+source
+●●●●●● 1mm □
+by_source
+source
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+structured
+●●●●●● 1mm □
+'query'
+'total_results'
+'sources'
+'by_source'
+'linearized'
+query
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+by_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source
+'id'
+'content'
+'score'
+'rank'
+r
+r
+r
+r
+r
+source_results
+source
+source_results
+by_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+results
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+structured
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_format_metadata
+●●●●●● 1mm □△
+self
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Format metadata for display.'
+important_keys
+●●●●●● 1mm □
+'node_type'
+'trust_score'
+'genesis_key_id'
+parts
+●●●●●● 1mm □
+key
+important_keys
+●●●●●● 2mm □
+key
+metadata
+value
+●●●●●● 1mm □
+metadata
+key
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+key
+'='
+value
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+parts
+●●●●●● 1mm □△
+key
+'='
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+', '
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+ConsolidationWorker
+'\n    Background worker for graph consolidation.\n\n    Performs periodic optimization tasks:\n    - Prune low-weight edges\n    - Merge similar nodes\n    - Update importance scores\n    - Clean stale data\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+queue
+interval_seconds
+●●●●●● 2mm □△
+MagmaRelationGraphs
+AsyncOperationQueue
+●●●●●● 2mm ○
+300
+'\n        Initialize consolidation worker.\n\n        Args:\n            graphs: MagmaRelationGraphs instance\n            queue: Operation queue\n            interval_seconds: Consolidation interval\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+queue
+●●●●●● 3mm △
+●●●●●● 1mm □
+interval_seconds
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Worker initialized (interval='
+interval_seconds
+'s)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start background consolidation.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Background worker started'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop background consolidation.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Background worker stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Main worker loop.'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Error: '
+e
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+time
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_consolidate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Perform consolidation tasks.'
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Starting consolidation cycle'
+●●●●●● 2mm □△
+processed
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+operation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation
+operation
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+processed
+1
+Exception
+●●●●●● 2mm □
+operation
+operation
+operation
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+operation
+operation
+operation
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+OperationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+processed
+0
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Processed '
+processed
+' operations'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_operation
+●●●●●● 1mm □△
+self
+operation
+●●●●●● 2mm □△
+QueuedOperation
+'Process a single operation.'
+●●●●●● 3mm ○
+OperationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OperationResult
+●●●●●● 1mm □
+_prune_weak_edges
+●●●●●● 1mm □△
+self
+threshold
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.05
+'Remove edges below weight threshold.'
+graph_name
+graph
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+weak_edges
+●●●●●● 1mm □
+edge_id
+edge_id
+edge
+graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge
+threshold
+edge_id
+weak_edges
+edge
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+edge_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+edge
+graph
+edge
+●●●●●● 1mm □△
+edge_id
+●●●●●● 2mm □△
+graph
+edge
+●●●●●● 1mm □△
+edge_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+weak_edges
+logger
+●●●●●● 1mm □△
+'[MAGMA-CONSOLIDATE] Pruned '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+weak_edges
+●●●●●● 2mm □△
+' weak edges from '
+graph_name
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_importance_scores
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Update node importance scores.'
+graph_name
+graph
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+importance
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+node
+'importance'
+●●●●●● 1mm □
+importance

@@ -1,0 +1,373 @@
+## evaluator_layer.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MINIMUM_PROPOSAL_SCORE
+●●●●●● 1mm □
+70
+●●●●●● 2mm △
+EvaluatorLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 4: Solution Evaluator & Ranker.\n    Scores and ranks proposals from L3, selects the best one.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L4_Evaluator'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'evaluate_proposals'
+'comparative_scoring'
+'tradeoff_analysis'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'EVALUATE_PROPOSALS'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 2mm □
+message
+'EVALUATE_PROPOSALS'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Score proposals and select the best one.'
+proposals
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'proposals'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+proposals
+logger
+●●●●●● 1mm □△
+'[L4] No proposals to evaluate.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'No proposals received'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L4] Evaluating '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+proposals
+●●●●●● 2mm □△
+' proposals...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L4 Evaluator of Grace OS. Score each proposal on 4 criteria (0-100 each): correctness, performance, maintainability, risk. Respond ONLY with a JSON array where each element has: "proposal_id" (string), "correctness" (int), "performance" (int), "maintainability" (int), "risk" (int), "total" (int average of the 4). Then add a final key \'selected\' with the proposal_id of the best one.'
+proposals_text
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+proposals
+●●●●●● 2mm □△
+task_desc
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+evaluation
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+evaluation
+●●●●●● 1mm □
+●●●●●● 1mm □△
+evaluation
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+evaluation
+●●●●●● 1mm □△
+'scores'
+evaluation
+●●●●●● 1mm □△
+'evaluations'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+selected_id
+●●●●●● 1mm □
+evaluation
+●●●●●● 1mm □△
+'selected'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm △
+evaluation
+●●●●●● 1mm □
+●●●●●● 1mm □△
+evaluation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+evaluation
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'proposal_id'
+''
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+selected_id
+●●●●●● 1mm □
+''
+json
+Exception
+logger
+●●●●●● 1mm □△
+'[L4] LLM parse failed, using heuristic scoring: '
+e
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+selected_id
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+scores
+selected_id
+scores
+●●●●●● 1mm □
+p
+proposals
+risk
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'risk_score'
+50
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+'proposal_id'
+'correctness'
+'performance'
+'maintainability'
+'risk'
+'total'
+p
+●●●●●● 1mm □△
+'id'
+'unknown'
+●●●●●● 2mm □△
+80
+75
+80
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+100
+●●●●●● 1mm □△
+risk
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+80
+●●●●●● 3mm ○
+75
+●●●●●● 3mm ○
+80
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+100
+●●●●●● 1mm □△
+risk
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+4
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □△
+score
+●●●●●● 2mm □△
+selected_id
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+'proposal_id'
+best_score
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+s
+s
+scores
+s
+●●●●●● 1mm □△
+'proposal_id'
+●●●●●● 2mm □△
+selected_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+best_score
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+MINIMUM_PROPOSAL_SCORE
+logger
+●●●●●● 1mm □△
+'[L4] Best score '
+best_score
+●●●●●● 1mm □△
+'total'
+●●●●●● 2mm □△
+' below threshold '
+MINIMUM_PROPOSAL_SCORE
+'. Requesting more proposals.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'partial'
+'message'
+'scores'
+'All proposals below threshold. Requested more from L3.'
+scores
+●●●●●● 2mm □△
+selected_proposal
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+p
+p
+proposals
+p
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+selected_id
+proposals
+0
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L4] Selected proposal: '
+selected_id
+' (score: '
+best_score
+●●●●●● 1mm □△
+'total'
+'N/A'
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'selected_proposal'
+'scores'
+'selected_id'
+'task'
+selected_proposal
+scores
+selected_id
+task
+●●●●●● 2mm □△
+LayerResponse

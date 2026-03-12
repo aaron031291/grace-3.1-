@@ -37,13 +37,13 @@ class TestBrainDirectory:
         r = client.get("/brain/directory")
         assert r.status_code == 200
         data = r.json()
-        assert data["total_brains"] == 9
+        assert data["total_brains"] == 8
 
     def test_brain_v2_directory(self, client):
         r = client.get("/api/v2/directory")
         assert r.status_code == 200
         data = r.json()
-        assert data["total_domains"] == 9
+        assert data["total_domains"] == 8
 
 
 class TestGenesisKeys:

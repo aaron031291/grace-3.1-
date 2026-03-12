@@ -1,0 +1,153 @@
+## update_scraping_tables.py
+'\nUpdate scraping tables to add filtering tracking.\nRun this with: ./venv/bin/python update_scraping_tables.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 1mm □
+update_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Add new columns to scraping tables.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Updating scraping tables...'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE scraping_jobs ADD COLUMN pages_filtered INTEGER DEFAULT 0'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Added pages_filtered column to scraping_jobs'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  pages_filtered column already exists'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE scraped_pages ADD COLUMN similarity_score TEXT'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Added similarity_score column to scraped_pages'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  similarity_score column already exists'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Migration completed successfully!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nYou can now restart your backend server.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Migration failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+update_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

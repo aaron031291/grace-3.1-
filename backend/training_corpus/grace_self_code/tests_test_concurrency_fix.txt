@@ -1,0 +1,255 @@
+## test_concurrency_fix.py
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+●●●●●● 3mm □△○
+genesis.kb_integration
+●●●●●● 2mm □△○
+GenesisKBIntegration
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+GenesisKeyStatus
+TEST_KB_PATH
+●●●●●● 1mm □
+'/tmp/test_kb_concurrency'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+TEST_KB_PATH
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+TEST_KB_PATH
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+TEST_KB_PATH
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_mock_key
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+worker
+●●●●●● 1mm □△
+kb_integration
+start_index
+count
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+start_index
+start_index
+●●●●●● 3mm ○
+count
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+create_mock_key
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+kb_integration
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_concurrent_writes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Starting concurrency test...'
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+GenesisKBIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threads
+●●●●●● 1mm □
+num_threads
+●●●●●● 1mm □
+10
+writes_per_thread
+●●●●●● 1mm □
+50
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_threads
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threads
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+threads
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Finished '
+num_threads
+●●●●●● 2mm □△
+writes_per_thread
+' writes in '
+end_time
+●●●●●● 1mm □△
+start_time
+'.2f'
+' seconds'
+●●●●●● 2mm □△
+user_folder
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+TEST_KB_PATH
+'layer_1'
+'genesis_key'
+'test_user_concurrency'
+●●●●●● 2mm □△
+json_files
+●●●●●● 1mm □
+f
+f
+os
+●●●●●● 1mm □△
+user_folder
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'.json'
+●●●●●● 2mm □△
+total_keys
+●●●●●● 1mm □
+0
+js_file
+json_files
+path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+user_folder
+js_file
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+keys_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'keys'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_keys
+keys_count
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'File '
+js_file
+': VALID JSON, contains '
+keys_count
+' keys'
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'File '
+js_file
+': CORRUPTED JSON! Error: '
+e
+●●●●●● 2mm □△
+exit
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+expected_keys
+●●●●●● 1mm □
+num_threads
+●●●●●● 2mm □△
+writes_per_thread
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total keys found: '
+total_keys
+'/'
+expected_keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_keys
+expected_keys
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SUCCESS: All keys written correctly, no corruption.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'WARNING: Key count mismatch (might be date rollover?), but JSON is valid.'
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+TEST_KB_PATH
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_concurrent_writes
+●●●●●● 1mm □△
+●●●●●● 2mm □△

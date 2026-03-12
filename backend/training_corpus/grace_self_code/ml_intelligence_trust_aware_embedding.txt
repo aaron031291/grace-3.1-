@@ -1,0 +1,667 @@
+## trust_aware_embedding.py
+'\nTrust-Aware Embedding Model - Neuro-Symbolic Integration\n\nEnhances neural embeddings with symbolic trust scores, creating embeddings\nthat respect knowledge trust and provenance.\n\nKey Features:\n- Trust-enhanced embeddings that incorporate confidence scores\n- Trust-weighted similarity search\n- Trust-guided clustering\n- Integration with symbolic knowledge base\n'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+Union
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+get_embedding_model
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TrustContext
+'Trust context for embedding generation'
+trust_score
+●●●●●● 3mm ○
+source_reliability
+●●●●●● 3mm ○
+validation_count
+●●●●●● 2mm ○
+invalidation_count
+●●●●●● 2mm ○
+age_days
+●●●●●● 3mm ○
+0.0
+confidence_score
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_effective_trust
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get effective trust score (trust_score or confidence_score)'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+dataclass
+●●●●●● 2mm △
+TrustAwareEmbeddingModel
+'\n    Wraps EmbeddingModel to incorporate symbolic trust scores.\n    \n    This creates neuro-symbolic embeddings where:\n    - Neural component: Semantic similarity (from base model)\n    - Symbolic component: Trust scores from knowledge base\n    - Integrated: Trust-enhanced embeddings and similarity\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_model
+trust_weight
+min_trust_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+0.3
+0.3
+'\n        Initialize trust-aware embedding model.\n        \n        Args:\n            base_model: Base EmbeddingModel instance (uses singleton if None)\n            trust_weight: Weight of trust in similarity (0-1)\n            min_trust_threshold: Minimum trust to include in results\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_model
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_weight
+●●●●●● 3mm △
+●●●●●● 1mm □
+min_trust_threshold
+logger
+●●●●●● 1mm □△
+'[TRUST-AWARE EMBEDDING] Initialized with trust_weight='
+trust_weight
+', min_trust='
+min_trust_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm □
+embed_text
+●●●●●● 1mm □△
+self
+text
+trust_context
+normalize
+instruction
+batch_size
+convert_to_numpy
+convert_to_tensor
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □○
+TrustContext
+●●●●●● 3mm □△
+TrustContext
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+32
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+'\n        Generate trust-enhanced embeddings for text.\n        \n        Args:\n            text: Single text or list of texts\n            trust_context: Trust context(s) for the text(s)\n            normalize: Override default normalization\n            instruction: Optional instruction for embedding\n            batch_size: Batch size for processing\n            convert_to_numpy: Convert to numpy array\n            convert_to_tensor: Convert to torch tensor\n            \n        Returns:\n            Embeddings (same format as base model)\n        '
+base_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust_context
+●●●●●● 2mm □
+●●●●●● 3mm ○
+base_embeddings
+is_single_text
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+text
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+is_single_context
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+trust_context
+TrustContext
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_single_text
+contexts
+●●●●●● 1mm □
+trust_context
+trust_context
+●●●●●● 3mm □
+contexts
+●●●●●● 1mm □
+trust_context
+trust_context
+●●●●●● 2mm □
+convert_to_tensor
+convert_to_numpy
+embeddings_np
+●●●●●● 1mm □
+base_embeddings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+embeddings_np
+●●●●●● 1mm □
+base_embeddings
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contexts
+●●●●●● 2mm □△
+0
+embeddings_np
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings_np
+contexts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+convert_to_tensor
+convert_to_numpy
+●●●●●● 2mm □△○
+torch
+●●●●●● 3mm ○
+torch
+●●●●●● 1mm □△
+embeddings_np
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_single_text
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings_np
+●●●●●● 2mm □△
+1
+embeddings_np
+0
+embeddings_np
+●●●●●● 3mm ○
+embeddings_np
+●●●●●● 3mm □○
+np
+●●●●●● 3mm □△
+np
+●●●●●● 1mm □
+_apply_trust_scaling
+●●●●●● 1mm □△
+self
+embeddings
+contexts
+●●●●●● 2mm □△
+np
+●●●●●● 3mm □△
+TrustContext
+'\n        Apply trust scaling to embeddings.\n        \n        Strategy: Scale embeddings based on trust scores\n        - High trust (0.8-1.0): Amplify by 1.0-1.2x\n        - Medium trust (0.5-0.8): No scaling\n        - Low trust (0.0-0.5): Dampen by 0.8-1.0x\n        \n        This makes high-trust embeddings more distinct in embedding space.\n        '
+embeddings
+●●●●●● 1mm □
+embeddings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+1
+embeddings
+●●●●●● 1mm □
+embeddings
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+i
+context
+●●●●●● 2mm □
+●●●●●● 1mm □△
+contexts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust
+0.8
+scale
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm ○
+trust
+●●●●●● 1mm □△
+0.8
+●●●●●● 2mm □△
+1.0
+●●●●●● 1mm △
+trust
+0.5
+scale
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm ○
+trust
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+0.33
+scale
+●●●●●● 1mm □
+0.8
+●●●●●● 3mm ○
+trust
+●●●●●● 2mm □△
+0.4
+embeddings
+i
+●●●●●● 1mm □
+embeddings
+i
+●●●●●● 2mm □△
+scale
+●●●●●● 3mm ○
+embeddings
+np
+●●●●●● 1mm □
+similarity_with_trust
+●●●●●● 1mm □△
+self
+query
+candidates
+candidate_trust
+top_k
+metric
+instruction
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+TrustContext
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+5
+'cosine'
+●●●●●● 2mm □
+'\n        Find most similar candidates with trust-weighted scoring.\n        \n        Returns:\n            List of (text, similarity_score, trust_score) tuples\n        '
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+candidate_trust
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'candidates and candidate_trust must have same length'
+●●●●●● 2mm □△
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+candidate_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sklearn.metrics.pairwise
+●●●●●● 2mm □△○
+cosine_similarity
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query_embedding
+●●●●●● 2mm □△
+1
+query_embedding
+●●●●●● 1mm □
+query_embedding
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+candidate_embeddings
+●●●●●● 2mm □△
+1
+candidate_embeddings
+●●●●●● 1mm □
+candidate_embeddings
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+query_embedding
+candidate_embeddings
+●●●●●● 2mm □△
+0
+trust_scores
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+candidate_trust
+combined_scores
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+similarities
+trust_scores
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+combined_scores
+●●●●●● 2mm □△
+1
+top_k
+results
+●●●●●● 1mm □
+candidates
+i
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+similarities
+i
+●●●●●● 2mm □△
+trust_scores
+i
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+combined_scores
+i
+●●●●●● 2mm □△
+i
+top_indices
+trust_scores
+i
+●●●●●● 3mm △
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_combine_similarity_trust
+●●●●●● 1mm □△
+self
+similarities
+trust_scores
+●●●●●● 2mm □△
+np
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+'\n        Combine neural similarity with symbolic trust.\n        \n        Formula: combined = (1 - trust_weight) * similarity + trust_weight * trust_score\n        \n        This creates a neuro-symbolic score that balances:\n        - Neural similarity (semantic match)\n        - Symbolic trust (knowledge confidence)\n        '
+similarities_np
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+trust_np
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+trust_scores
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+similarities_np
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+trust_np
+●●●●●● 3mm ○
+combined
+np
+●●●●●● 1mm □
+cluster_with_trust
+●●●●●● 1mm □△
+self
+texts
+trust_contexts
+num_clusters
+instruction
+trust_aware
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+TrustContext
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+5
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Cluster texts with trust-aware clustering.\n        \n        When trust_aware=True:\n        - High-trust texts form clusters more easily\n        - Low-trust texts are more isolated\n        - Trust influences cluster assignment\n        '
+valid_indices
+●●●●●● 1mm □
+i
+i
+ctx
+●●●●●● 2mm □
+●●●●●● 1mm □△
+trust_contexts
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+valid_indices
+●●●●●● 2mm □△
+num_clusters
+logger
+●●●●●● 1mm □△
+'Only '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+valid_indices
+●●●●●● 2mm □△
+' texts meet trust threshold, reducing clusters'
+●●●●●● 2mm □△
+num_clusters
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+valid_indices
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+valid_texts
+●●●●●● 1mm □
+texts
+i
+i
+valid_indices
+valid_contexts
+●●●●●● 1mm □
+trust_contexts
+i
+i
+valid_indices
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+valid_texts
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sklearn.cluster
+●●●●●● 2mm □△○
+KMeans
+kmeans
+●●●●●● 1mm □
+KMeans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cluster_labels
+●●●●●● 1mm □
+kmeans
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+clusters
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_clusters
+●●●●●● 2mm □△
+idx
+label
+●●●●●● 2mm □
+●●●●●● 1mm □△
+cluster_labels
+●●●●●● 2mm □△
+original_idx
+●●●●●● 1mm □
+valid_indices
+idx
+clusters
+label
+●●●●●● 1mm □△
+original_idx
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+c
+clusters
+c
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_embedding_dimension
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get embedding dimension from base model.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_model_info
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get model information.'
+info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □△
+'trust_aware'
+'trust_weight'
+'min_trust_threshold'
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_trust_aware_embedding_model
+●●●●●● 1mm □△
+base_model
+trust_weight
+min_trust_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+0.3
+0.3
+'\n    Get or create trust-aware embedding model instance.\n    \n    Note: This creates a new wrapper each time (lightweight).\n    The base model is a singleton.\n    \n    Args:\n        base_model: Base EmbeddingModel (uses singleton if None)\n        trust_weight: Weight of trust in similarity (0-1)\n        min_trust_threshold: Minimum trust to include\n        \n    Returns:\n        TrustAwareEmbeddingModel instance\n    '
+●●●●●● 3mm ○
+TrustAwareEmbeddingModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TrustAwareEmbeddingModel

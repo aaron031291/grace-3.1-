@@ -1,0 +1,168 @@
+## test_dynamic_dictionary.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+core.dynamic_dictionary
+●●●●●● 2mm □△○
+DynamicDictionaryManager
+●●●●●● 1mm □
+test_semantic_mapping
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🧠 INITIATING DYNAMIC SEMANTIC DICTIONARY TEST 🧠'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DB Init error (handled): '
+e
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+DynamicDictionaryManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1] Learning New Semantic Word-to-Braille Mappings...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'route'
+'●●●●●● 1mm □ | GRACE-OP-001'
+'Create an API FastApi routing point'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+'verify'
+'●●●●●● 3mm △ | GRACE-OP-006'
+'Validate deterministic logic via Z3 bounds'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+'heal'
+'●●●●●● 2mm ○ | GRACE-OP-011'
+'Trigger a Genesis self-repair loop'
+●●●●●● 2mm □△
+res
+results
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"    learned: '"
+res
+'word'
+"' -> "
+res
+'encoding'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2] Performing Semantic Traversal Lookup...'
+●●●●●● 2mm □△
+lookup_val
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'route'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"    Lookup for 'route': "
+lookup_val
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[3] Simulating Spindle's Pre-Execution Context Injection..."
+●●●●●● 2mm □△
+full_dict
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    [Spindle Native Context]:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+full_dict
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lookup_val
+'●●●●●● 1mm □ | GRACE-OP-001'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ VERIFICATION SUCCESS: Dynamic Dictionary is active and successfully saving/fetching Semantic Braille maps.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ VERIFICATION FAILED: Dictionary maps did not persist natively.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_semantic_mapping
+●●●●●● 1mm □△
+●●●●●● 2mm □△

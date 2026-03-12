@@ -1,0 +1,87 @@
+## test_braille_translator.py
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+backend.cognitive.braille_translator
+●●●●●● 2mm □△○
+BrailleTranslator
+●●●●●● 1mm □
+test_translate_simple_function
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+'def foo(a, b):\n    return a + b'
+translator
+●●●●●● 1mm □
+BrailleTranslator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+braille_output
+●●●●●● 1mm □
+translator
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+'●●●●●● 1mm □'
+braille_output
+'●●●●●● 3mm ○'
+braille_output
+'●●●●●● 3mm ○'
+braille_output
+●●●●●● 1mm □
+test_translate_assignment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+'x = 42'
+translator
+●●●●●● 1mm □
+BrailleTranslator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+braille_output
+●●●●●● 1mm □
+translator
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+'●●●●●● 1mm □'
+braille_output
+'x'
+braille_output
+'42'
+braille_output

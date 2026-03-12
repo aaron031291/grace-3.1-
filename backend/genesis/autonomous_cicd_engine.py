@@ -159,7 +159,7 @@ class AutonomousCICDEngine:
         self._scheduler_task: Optional[asyncio.Task] = None
 
         # Monitoring config
-        self.health_check_interval = 60  # 1 minute
+        self.health_check_interval = 300  # 5 minutes
         self.scheduled_ci_interval = 3600  # 1 hour
 
         logger.info(

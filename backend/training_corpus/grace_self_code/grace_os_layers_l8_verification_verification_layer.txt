@@ -1,0 +1,302 @@
+## verification_layer.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+VerificationLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 8: Verification & Fact-Checking.\n    Post-generation QA — validates requirements, security, consistency, and correctness.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L8_Verification'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'requirement_verification'
+'fact_checking'
+'security_scanning'
+'consistency_checking'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'VERIFY_OUTPUT'
+'FACT_CHECK'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 2mm □
+message
+'VERIFY_OUTPUT'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'FACT_CHECK'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Post-flight verification: requirements met? Security OK? Consistent?'
+task
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+codegen_result
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'codegen_result'
+●●●●●● 2mm □△
+test_result
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'test_result'
+●●●●●● 2mm □△
+task_desc
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L8] Verifying output for: '
+task_desc
+60
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L8 Verification Layer of Grace OS. Verify the generated output against the original requirements. Check: 1) Are ALL requirements from the task addressed? 2) Any security issues (injection, hardcoded secrets, unsafe deps)? 3) Is the code consistent with existing project patterns? 4) Is it readable and maintainable? Respond ONLY with JSON: {"verified": true/false, "requirements_met": ["..."], "requirements_missed": ["..."], "security_flags": ["..."], "consistency_issues": ["..."], "readability_score": 0-100, "overall_trust": 0-100}'
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+json
+Exception
+logger
+●●●●●● 1mm □△
+'[L8] Parse failed, using conservative defaults: '
+e
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □
+verified
+●●●●●● 1mm □
+verification
+●●●●●● 1mm □△
+'verified'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+security_flags
+●●●●●● 1mm □
+verification
+●●●●●● 1mm □△
+'security_flags'
+●●●●●● 2mm □△
+overall_trust
+●●●●●● 1mm □
+verification
+●●●●●● 1mm □△
+'overall_trust'
+75
+●●●●●● 2mm □△
+●●●●●● 2mm □
+security_flags
+overall_trust
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+overall_trust
+50
+●●●●●● 2mm □△
+verified
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+test_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'failure'
+verified
+●●●●●● 1mm □
+●●●●●● 1mm □
+overall_trust
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+overall_trust
+30
+●●●●●● 2mm □△
+result_payload
+●●●●●● 1mm □
+'verified'
+'requirements_met'
+'requirements_missed'
+'security_flags'
+'consistency_issues'
+'readability_score'
+'overall_trust'
+'task'
+verified
+verification
+●●●●●● 1mm □△
+'requirements_met'
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □△
+'requirements_missed'
+●●●●●● 2mm □△
+security_flags
+verification
+●●●●●● 1mm □△
+'consistency_issues'
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □△
+'readability_score'
+75
+●●●●●● 2mm □△
+overall_trust
+task
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+verified
+'success'
+'partial'
+result_payload
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Verify technical claims — API usage, library versions, syntax.'
+claim
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'claim'
+''
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'context'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L8] Fact-checking: '
+claim
+60
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L8 Fact-Checker. Verify the technical claim is accurate. Check API signatures, library versions, and syntax correctness. Respond with JSON: {"accurate": true/false, "corrections": ["..."], "confidence": 0-100}'
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+'accurate'
+'corrections'
+'confidence'
+●●●●●● 3mm □△○
+60
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+result
+●●●●●● 2mm □△
+LayerResponse

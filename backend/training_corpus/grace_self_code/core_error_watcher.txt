@@ -1,0 +1,230 @@
+## error_watcher.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Callable
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+backend.cognitive_framework.events
+●●●●●● 2mm □△○
+CognitiveEvent
+●●●●●● 3mm □△○
+backend.cognitive_framework.cognitive_framework
+●●●●●● 2mm □△○
+CognitiveFramework
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'error_watcher'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ErrorLogWatcher
+'\n    A daemon that tails log files looking for errors or stack traces.\n    When a failure signature is detected, it bundles it into a CognitiveEvent\n    and sends it to the CognitiveFramework.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+log_files
+framework
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+CognitiveFramework
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_files
+●●●●●● 3mm △
+●●●●●● 1mm □
+framework
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+_tail_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Started watching log file: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+'r'
+●●●●●● 2mm □△
+file
+file
+●●●●●● 1mm □△
+0
+os
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'ERROR'
+line
+'Traceback'
+line
+'Exception'
+line
+logger
+●●●●●● 1mm □△
+'Signature detected in '
+file_path
+': '
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+CognitiveEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to process event through CognitiveFramework: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Starts a background thread for each monitored log file.'
+file_path
+●●●●●● 3mm △
+thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+thread
+●●●●●● 2mm □△
+thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Signals all watcher threads to stop.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+thread
+●●●●●● 3mm △
+thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+test_log
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+root
+●●●●●● 3mm □△
+'crash.log'
+●●●●●● 2mm □△
+framework
+●●●●●● 1mm □
+CognitiveFramework
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+watcher
+●●●●●● 1mm □
+ErrorLogWatcher
+●●●●●● 1mm □△
+test_log
+framework
+●●●●●● 2mm □△
+watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Watching '
+test_log
+' for errors. Ctrl+C to stop.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+time
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+KeyboardInterrupt
+watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Watcher stopped.'
+●●●●●● 2mm □△

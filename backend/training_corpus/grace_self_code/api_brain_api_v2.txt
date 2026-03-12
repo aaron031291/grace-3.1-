@@ -1,0 +1,7703 @@
+## brain_api_v2.py
+'\nBrain API v2 — CLEAN version. No HTTP-to-localhost calls.\nAll business logic via direct Python function calls through core/services/.\n\n8 domains, 95+ actions, zero self-HTTP.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Request
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Optional
+Dict
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BrainRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+action
+●●●●●● 1mm ○
+payload
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+BrainResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+brain
+●●●●●● 1mm ○
+action
+●●●●●● 1mm ○
+ok
+●●●●●● 3mm △
+data
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+latency_ms
+●●●●●● 3mm ○
+0
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+BrainOrchestration
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+steps
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_run_coro_sync
+●●●●●● 1mm □△
+coro
+●●●●●● 2mm □△
+'Run an async coroutine from sync code. Safe when called from a thread with or without a running event loop.'
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+has_loop
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+RuntimeError
+has_loop
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+has_loop
+●●●●●● 3mm ○
+asyncio
+●●●●●● 1mm □△
+coro
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+concurrent.futures
+concurrent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pool
+future
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+asyncio
+coro
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_genesis_safe_payload
+●●●●●● 1mm □△
+obj
+max_items
+max_str
+●●●●●● 2mm □△
+50
+500
+'Trim and sanitize payload for Genesis input_data/output_data (observability without huge blobs).\n    Recursively replaces coroutines and other non-JSON-serializable values so DB insert never fails.'
+●●●●●● 2mm □
+obj
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<coroutine not awaited>'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+k
+v
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+obj
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+max_items
+out
+k
+●●●●●● 1mm □
+_genesis_safe_payload
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+obj
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_genesis_safe_payload
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+max_items
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+obj
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+max_str
+obj
+max_str
+●●●●●● 2mm □△○
+json
+json
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+obj
+TypeError
+ValueError
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+max_str
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'unknown'
+'Route action to handler with tracing, rate limiting, validation, Genesis tracking.'
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+new_trace
+add_span
+light_track
+trace_id
+●●●●●● 1mm □
+new_trace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+add_span
+●●●●●● 1mm □△
+'brain/'
+brain
+'/'
+action
+'client_ip'
+client_ip
+●●●●●● 2mm □△
+light_track
+●●●●●● 1mm □△
+'api_request'
+'brain/'
+brain
+'/'
+action
+'brain.'
+brain
+'brain'
+brain
+action
+●●●●●● 2mm □△
+Exception
+trace_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+check_rate_limit
+●●●●●● 2mm □
+check_rate_limit
+●●●●●● 1mm □△
+brain
+client_ip
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+BrainResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+check_sql_injection
+sanitize_string
+key
+val
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+check_sql_injection
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+BrainResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+payload
+key
+●●●●●● 1mm □
+sanitize_string
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+handlers
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+handler
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+BrainResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+data
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+gk
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+gk
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+BrainResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+BrainResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BrainResponse
+_calling_brain
+●●●●●● 1mm □
+'external'
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+brain_name
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Cross-brain call with Hebbian learning — every action gets a Genesis key.'
+source
+●●●●●● 1mm □
+_calling_brain
+brains
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+'deterministic'
+_chat
+_files
+_govern
+_ai
+_system
+_data
+_tasks
+_code
+_deterministic
+factory
+●●●●●● 1mm □
+brains
+●●●●●● 1mm □△
+brain_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+factory
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain_name
+action
+'unknown'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+'Unknown brain: '
+brain_name
+handler
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+handler
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain_name
+action
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+"Unknown action '"
+action
+"' in brain '"
+brain_name
+"'"
+old_caller
+●●●●●● 1mm □
+_calling_brain
+_calling_brain
+●●●●●● 1mm □
+brain_name
+data
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+_run_coro_sync
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+_calling_brain
+●●●●●● 1mm □
+old_caller
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+source
+brain_name
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain_name
+action
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'ok'
+'data'
+●●●●●● 3mm □△○
+data
+Exception
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+source
+brain_name
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_brain_kpi
+record_brain_kpi
+●●●●●● 1mm □△
+brain_name
+action
+●●●●●● 1mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_agentic_actions
+●●●●●● 1mm □△
+brain_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Shared agentic actions injected into every brain.\n    Allows any brain action to be spawned as a background task.\n\n    Usage: POST /brain/{domain} {"action": "spawn_task", "payload": {"action": "scan", "payload": {}}}\n    '
+●●●●●● 3mm □△○
+core.agentic_runner
+●●●●●● 2mm □△○
+spawn_task
+get_task
+list_tasks
+get_agent_runner
+●●●●●● 3mm ○
+'spawn_task'
+'task_status'
+'task_list'
+'task_cancel'
+'task_cleanup'
+spawn_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_task
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'task_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'tasks'
+list_tasks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cancelled'
+get_agent_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'task_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+get_agent_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cleaned'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.chat_service
+●●●●●● 2mm □△○
+list_chats
+create_chat
+get_chat
+delete_chat
+get_history
+send_prompt
+send_prompt_with_rag
+run_consensus
+get_world_model
+●●●●●● 3mm ○
+'list'
+'create'
+'get'
+'delete'
+'history'
+'send'
+'send_with_rag'
+'consensus'
+'world_model'
+list_chats
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+create_chat
+get_chat
+delete_chat
+get_history
+send_prompt
+send_prompt_with_rag
+run_consensus
+get_world_model
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'chat'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.files_service
+●●●●●● 2mm □△○
+tree
+browse
+read
+write
+create
+delete
+search
+stats
+docs_all
+save_file_agentic
+place_in_folder
+create_doc
+create_report
+categorize
+filing
+●●●●●● 3mm ○
+'tree'
+'browse'
+'read'
+'write'
+'create'
+'delete'
+'search'
+'docs_all'
+'stats'
+'save_file'
+'place_in_folder'
+'create_doc'
+'create_report'
+'categorize'
+'filing'
+tree
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'max_depth'
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+browse
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+read
+●●●●●● 1mm □△
+p
+'path'
+●●●●●● 2mm □△
+write
+●●●●●● 1mm □△
+p
+'path'
+p
+'content'
+●●●●●● 2mm □△
+create
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'directory'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+delete
+●●●●●● 1mm □△
+p
+'path'
+●●●●●● 2mm □△
+search
+●●●●●● 1mm □△
+p
+'query'
+p
+●●●●●● 1mm □△
+'limit'
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+docs_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+save_file_agentic
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+place_in_folder
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+create_doc
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+create_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+categorize
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+filing
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_govern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+dashboard
+get_approvals
+approve_action
+get_scores
+list_rules
+get_persona
+update_persona
+genesis_stats
+trigger_healing
+trigger_learning
+record_gap
+genesis_keys
+approvals_history
+adaptive_overrides
+approve_override
+●●●●●● 3mm ○
+'dashboard'
+'approvals'
+'approve'
+'scores'
+'rules'
+'persona'
+'update_persona'
+'genesis_stats'
+'heal'
+'learn'
+'record_gap'
+'genesis_keys'
+'approvals_history'
+'adaptive_overrides'
+'approve_override'
+'coding_contract'
+dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_approvals
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+approve_action
+●●●●●● 1mm □△
+p
+'id'
+p
+●●●●●● 1mm □△
+'action'
+'approved'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+get_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+update_persona
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'personal'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'professional'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record_gap
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'what'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_keys
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+approvals_history
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+30
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+adaptive_overrides
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+approve_override
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'override_id'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_governance_coding_contract
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'govern'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ai
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_consensus_models
+●●●●●● 3mm ○
+'models'
+'consensus'
+'quick'
+'fast'
+'console'
+'diagnose'
+'knowledge_gaps'
+'fill_knowledge_gaps'
+'learning_memory_expand'
+'integration_matrix'
+'logic_tests'
+'generate'
+'oracle'
+'training'
+'dl_predict'
+'dl_train'
+'pipeline'
+'pipeline_progress'
+'pipeline_bg'
+'ooda'
+'ambiguity'
+'invariants'
+'cognitive_report'
+'bandit_select'
+'knowledge_gaps_deep'
+'deterministic_scan'
+'deterministic_fix'
+'oracle_export'
+'governance_training_cycle'
+'governance_report'
+'propose_architecture'
+'build_architecture'
+get_consensus_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_run_consensus_full
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_consensus_quick
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_consensus_fast
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_console_ask
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_console_diagnose
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_fill_knowledge_gaps
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_learning_memory_expand
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_integration_matrix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_logic_tests
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_code_generate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_oracle_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_oracle_training
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_dl_predict
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_dl_train
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_pipeline
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_pipeline
+●●●●●● 1mm □△
+'progress'
+'run_id'
+●●●●●● 3mm □△○
+p
+●●●●●● 1mm □△
+'run_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_run_pipeline
+●●●●●● 1mm □△
+'background'
+'task'
+●●●●●● 3mm □△○
+p
+●●●●●● 1mm □△
+'task'
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_ooda
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_ambiguity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_invariants
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cognitive_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_bandit_select
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_knowledge_gaps_deep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_deterministic_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_deterministic_fix
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_oracle_export
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_governance_training_cycle
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_governance_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_propose_architecture
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_build_architecture
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'ai'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_propose_architecture
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.architecture_proposer
+●●●●●● 2mm □△○
+get_architecture_proposer
+●●●●●● 3mm ○
+get_architecture_proposer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'spec'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_build_architecture
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.architecture_proposer
+●●●●●● 2mm □△○
+get_architecture_proposer
+●●●●●● 3mm ○
+get_architecture_proposer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'proposal_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_runtime_status
+hot_reload
+pause_runtime
+resume_runtime
+get_health_dashboard
+get_bi_dashboard
+get_diagnostics_status
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_loop_state
+_loop_log
+●●●●●● 3mm ○
+'runtime'
+'hot_reload'
+'pause'
+'resume'
+'health'
+'bi'
+'diagnostics'
+'health_map'
+'problems'
+'baselines'
+'orphans'
+'correlate'
+'triggers'
+'scan_heal'
+'decide_autonomous_action'
+'model_version_check'
+'probe'
+'probe_models'
+'auto_status'
+'auto_start'
+'auto_stop'
+'auto_cycle'
+'auto_log'
+'consensus_fix'
+'connectivity'
+'synapses'
+'synapse_map'
+'traces'
+'trace_stats'
+'hot_reload_service'
+'hot_reload_all'
+'save_and_reload'
+'reload_history'
+'genesis_storage'
+'genesis_cleanup'
+'genesis_hot'
+'file_events'
+'scan_upload'
+'process_documents'
+'processing_status'
+'workspace_context'
+'undo'
+'redo'
+'profile'
+'update_profile'
+'notifications'
+'notify'
+'permissions'
+'set_permission'
+'shortcuts'
+'fuzzy_search'
+'set_environment'
+'get_environment'
+'list_environments'
+'env_write'
+'run_independent'
+'run_failover'
+'snapshot'
+'rollback'
+'snapshots'
+'security_scan'
+'budget_status'
+'set_budget'
+'provenance'
+'verify_ledger'
+'pool_stats'
+'cache_stats'
+'clear_cache'
+'reset_db'
+'reset_vector_db'
+'gc'
+'project_governance'
+'set_project_rules'
+'create_approval'
+'approval_list'
+'respond_approval'
+'kpi_scores'
+'kpi_dashboard'
+'compliance_presets'
+'apply_compliance'
+'orchestrate'
+'containers'
+'container_stats'
+'container_rules'
+'container_knowledge'
+'container_whitelist'
+'container_context'
+'clone_grace'
+'global_rules'
+'create_user'
+'list_users'
+'user_activity'
+'project_activity'
+'daily_summary'
+'switch_project'
+'active_session'
+'librarian_ingest'
+'librarian_search'
+'librarian_versions'
+'librarian_stats'
+'cross_search'
+'export_project'
+'import_project'
+'copy_file_cross'
+'move_file_cross'
+'project_rollback'
+'list_exports'
+'sync_events'
+'sync_stats'
+'dist_state'
+'dist_set'
+'dist_get'
+'dist_instances'
+'dist_session'
+'semantic_search'
+'component_registry'
+'component_profile'
+'validate_all'
+'validate_component'
+'report_cards'
+'report_card'
+'generate_report'
+'list_reports'
+'get_report'
+'intelligence'
+'trust'
+'mine_keys'
+'mine_episodes'
+'architecture_explain'
+'architecture_find'
+'architecture_connected'
+'architecture_diagnose'
+'architecture_map'
+'embedding_config'
+'brain_directory'
+'models_summary'
+'schema_info'
+'graphs_info'
+'deterministic_first_loop'
+'verify_built'
+'trigger_definitions'
+'run_unified_triggers'
+'grace_state'
+get_runtime_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hot_reload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pause_runtime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+resume_runtime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_health_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_bi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_diagnostics_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_health_map
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_baselines
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_orphans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_correlate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_trigger_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_scan_heal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_decide_autonomous_action
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_model_version_check
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_probe_sweep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_probe_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_loop_state
+●●●●●● 2mm □△
+_auto_start
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_auto_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_auto_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'log'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_loop_log
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_consensus_fix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_connectivity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_synapses
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_synapse_brain
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_recent_traces
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_trace_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_hot_reload_svc
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_hot_reload_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_save_reload
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_reload_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_genesis_storage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_genesis_cleanup
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_genesis_hot
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_file_events
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_scan_upload
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_process_docs
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_processing_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_workspace_ctx
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_undo
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_redo
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_profile
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_update_profile
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_notifications
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_notify
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_permissions
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_set_perm
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_shortcuts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_fuzzy
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_set_env
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_get_env
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_list_envs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_env_write
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_independent
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_failover
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_snapshot
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_rollback
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_list_snapshots
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_security_scan
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_budget_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_set_budget
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_provenance_entries
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_verify_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_pool_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_clear_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_reset_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_reset_vector_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_project_gov
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_set_proj_rules
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_create_approval
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_approval_list
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_respond_approval
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_kpi_scores
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_kpi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_compliance_presets
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_apply_compliance
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_orchestrate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_list_containers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_container_stats
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_container_rules
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_container_knowledge
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_container_whitelist
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_container_context
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_clone_grace
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'rules'
+__import__
+●●●●●● 1mm □△
+'core.project_container'
+●●●●●● 2mm □△
+_create_user
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_list_users
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_user_activity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_project_activity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_daily_summary
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_switch_project
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_active_session
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_librarian_ingest
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_librarian_search
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_librarian_versions
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_librarian_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cross_search
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_export_project
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_import_project
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_copy_cross
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_move_cross
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_project_rollback
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_list_exports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_sync_events
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_sync_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_dist_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_dist_set
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_dist_get
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_dist_instances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_dist_session
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_semantic_search
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_component_profile
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_validate_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_validate_one
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_report_cards
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_report_card
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_generate_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_list_reports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_get_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_intelligence_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_trust_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_mine_genesis_keys
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_mine_episodes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_architecture_explain
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_architecture_find
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_architecture_connected
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_architecture_diagnose
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_architecture_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_embedding_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_brain_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_models_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_schema_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_graphs_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_deterministic_first_loop
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_verify_built
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_trigger_definitions
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_run_unified_triggers
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_grace_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'system'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.data_service
+●●●●●● 2mm □△○
+api_sources
+web_sources
+add_api
+add_web
+delete_source
+stats
+●●●●●● 1mm □
+data_stats
+flash_cache_stats
+●●●●●● 3mm ○
+'api_sources'
+'web_sources'
+'add_api'
+'add_web'
+'delete'
+'stats'
+'flash_cache'
+'librarian_process'
+'librarian_organise_file'
+'librarian_suggest_folder'
+'librarian_categorize'
+'librarian_on_new_folder'
+'librarian_stats'
+'classify_entity'
+'entity_schema_map'
+api_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+web_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+add_api
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+add_web
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+delete_source
+●●●●●● 1mm □△
+p
+'source_id'
+●●●●●● 2mm □△
+data_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+flash_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_data_librarian_process
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_data_librarian_organise_file
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_data_librarian_suggest_folder
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_data_librarian_categorize
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_data_librarian_on_new_folder
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_data_librarian_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_classify_entity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_entity_schema_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_tasks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.tasks_service
+●●●●●● 2mm □△○
+live_activity
+task_history
+submit_task
+get_scheduled
+schedule_task
+delete_scheduled
+time_sense
+planner_sessions
+●●●●●● 3mm ○
+'live'
+'history'
+'submit'
+'scheduled'
+'schedule'
+'delete'
+'time_sense'
+'planner'
+live_activity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_history
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+40
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+submit_task
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+get_scheduled
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+schedule_task
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+delete_scheduled
+●●●●●● 1mm □△
+p
+'task_id'
+●●●●●● 2mm □△
+time_sense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+planner_sessions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'tasks'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_classify_entity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Classify raw data into a canonical semantic entity bucket.'
+●●●●●● 3mm □△○
+cognitive.semantic_entity_classifier
+●●●●●● 2mm □△○
+classify_entity
+●●●●●● 3mm ○
+classify_entity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_entity_schema_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return the full entity → db_table/vector_collection mapping.'
+●●●●●● 3mm □△○
+cognitive.semantic_entity_classifier
+●●●●●● 2mm □△○
+ENTITY_SCHEMA_MAP
+●●●●●● 3mm ○
+'entity_buckets'
+'schema_map'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+ENTITY_SCHEMA_MAP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+k
+'db_table'
+'vector_collection'
+v
+0
+v
+1
+k
+v
+ENTITY_SCHEMA_MAP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.code_service
+●●●●●● 2mm □△○
+list_projects
+project_tree
+read_file
+write_file
+create_file
+delete_file
+apply_code
+●●●●●● 3mm □△○
+core.services.code_service
+●●●●●● 2mm □△○
+generate_code
+●●●●●● 1mm □
+_code_service_generate
+●●●●●● 3mm □△○
+core.services.project_service
+●●●●●● 2mm □△○
+list_projects
+●●●●●● 1mm □
+list_visual_projects
+create_project
+get_project
+get_project_context
+write_project_file
+read_project_file
+●●●●●● 3mm ○
+'projects'
+'tree'
+'read'
+'write'
+'create'
+'delete'
+'generate'
+'generate_pipeline'
+'apply'
+'visual_projects'
+'create_project'
+'get_project'
+'project_context'
+'project_write'
+'project_read'
+'project_chat'
+'assimilate'
+list_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_tree
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'folder'
+'.'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'max_depth'
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+read_file
+●●●●●● 1mm □△
+p
+'path'
+●●●●●● 2mm □△
+write_file
+●●●●●● 1mm □△
+p
+'path'
+p
+'content'
+●●●●●● 2mm □△
+create_file
+●●●●●● 1mm □△
+p
+'path'
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+delete_file
+●●●●●● 1mm □△
+p
+'path'
+●●●●●● 2mm □△
+_code_service_generate
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_folder'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'use_pipeline'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_code_service_generate
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_folder'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+apply_code
+●●●●●● 1mm □△
+p
+'path'
+p
+'content'
+●●●●●● 2mm □△
+list_visual_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+create_project
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'type'
+'fullstack'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+get_project
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'id'
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'context'
+get_project_context
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+write_project_file
+●●●●●● 1mm □△
+p
+'project_id'
+p
+'path'
+p
+'content'
+●●●●●● 2mm □△
+read_project_file
+●●●●●● 1mm □△
+p
+'project_id'
+p
+'path'
+●●●●●● 2mm □△
+_project_scoped_chat
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_hunter_assimilate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_project_scoped_chat
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Chat scoped to a specific project — LLM sees project files as context.'
+●●●●●● 3mm □△○
+core.services.project_service
+●●●●●● 2mm □△○
+get_project_context
+project_id
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+get_project_context
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fast'
+'prompt'
+'models'
+'Project context:\n'
+context
+8000
+'\n\nUser question: '
+message
+p
+●●●●●● 1mm □△
+'models'
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_hunter_assimilate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Run HUNTER assimilation (code → analyse → integrate). Handshake runs on success.'
+●●●●●● 3mm □△○
+cognitive.hunter_assimilator
+●●●●●● 2mm □△○
+get_hunter
+code
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'code'
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'user'
+'brain'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'handshake_sent'
+'code or content required'
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+get_hunter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'handshake_sent'
+'trust_score'
+'files_created'
+'status'
+'success'
+result
+result
+result
+result
+result
+'complete'
+result
+60
+●●●●●● 1mm □
+_run_consensus_full
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+r
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'final_output'
+'confidence'
+'models_used'
+'agreements'
+'disagreements'
+r
+r
+r
+r
+r
+●●●●●● 1mm □
+_run_consensus_quick
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+r
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'final_output'
+'confidence'
+r
+r
+●●●●●● 1mm □
+_run_consensus_fast
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+layer1_deliberate
+_check_model_available
+models
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+m
+m
+'kimi'
+'opus'
+'qwen'
+'reasoning'
+_check_model_available
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □
+layer1_deliberate
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+models
+p
+●●●●●● 1mm □△
+'system_prompt'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'models_used'
+'individual_responses'
+models
+'model_id'
+'model_name'
+'response'
+'error'
+'latency_ms'
+r
+r
+r
+r
+r
+r
+responses
+●●●●●● 1mm □
+_console_ask
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.live_console_api
+●●●●●● 2mm □△○
+_ask
+●●●●●● 3mm ○
+_ask
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'use_consensus'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+_run_consensus_fast
+●●●●●● 1mm □△
+'prompt'
+'models'
+p
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+'kimi'
+'opus'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_console_diagnose
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.live_console_api
+●●●●●● 2mm □△○
+_diagnose
+●●●●●● 3mm ○
+_diagnose
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'diagnosis'
+'unavailable'
+●●●●●● 1mm □
+_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Neighbor-by-neighbor gap analysis (reverse kNN).'
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+scan_knowledge_gaps
+●●●●●● 3mm ○
+scan_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'gaps'
+●●●●●● 1mm □
+_fill_knowledge_gaps
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'After neighbor search, pull from API, web search, and FlashCache to fill gaps.'
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+fill_gaps_from_sources
+max_gaps
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'max_gaps'
+5
+●●●●●● 2mm □△
+auto_ingest
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'auto_ingest'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fill_gaps_from_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'topics_processed'
+'gaps_filled'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+0
+●●●●●● 1mm □
+_learning_memory_expand
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'From learning memory: run neighbor search then pull from API, web, FlashCache.'
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+scan_knowledge_gaps
+fill_gaps_from_sources
+gaps
+●●●●●● 1mm □
+scan_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+gaps
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_gaps'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total
+0
+●●●●●● 3mm ○
+'scan'
+'filled'
+'message'
+gaps
+●●●●●● 2mm □
+'no_gaps_to_fill'
+max_gaps
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'max_gaps'
+5
+●●●●●● 2mm □△
+filled
+●●●●●● 1mm □
+fill_gaps_from_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'scan'
+'filled'
+gaps
+filled
+Exception
+●●●●●● 3mm ○
+'error'
+'scan'
+'filled'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_oracle_export
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Push learning memory to Oracle (human-readable files for librarian and file management).'
+●●●●●● 3mm □△○
+cognitive.governance_training_loop
+●●●●●● 2mm □△○
+run_oracle_export
+●●●●●● 2mm □△○
+os
+kb_path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'kb_path'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'GRACE_KNOWLEDGE_BASE_PATH'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kb_path
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+run_oracle_export
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'exported'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+_governance_training_cycle
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Full cycle: KB → Learning memory → Oracle → Sandbox review; 60d trial, governance, report, +30% approval.'
+●●●●●● 3mm □△○
+cognitive.governance_training_loop
+●●●●●● 2mm □△○
+run_full_cycle
+●●●●●● 2mm □△○
+os
+kb_path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'kb_path'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'GRACE_KNOWLEDGE_BASE_PATH'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kb_path
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+run_full_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'cycle_at'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_governance_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'60-day governance report for user-in-loop approval; +30% → add to system.'
+●●●●●● 3mm □△○
+cognitive.governance_training_loop
+●●●●●● 2mm □△○
+get_governance_report
+●●●●●● 3mm ○
+get_governance_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_integration_matrix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.live_integration
+●●●●●● 2mm □△○
+get_integration_matrix
+●●●●●● 3mm ○
+get_integration_matrix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'matrix'
+●●●●●● 1mm □
+_logic_tests
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.deep_test_engine
+●●●●●● 2mm □△○
+get_deep_test_engine
+●●●●●● 3mm ○
+get_deep_test_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □
+_code_generate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Agentic code generation: Qwen latest (reasoning + coding) via pipeline or fast path.'
+●●●●●● 3mm □△○
+cognitive.qwen_coding_net
+●●●●●● 2mm □△○
+generate_code
+●●●●●● 3mm ○
+generate_code
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_folder'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_oracle_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.training_ingest
+●●●●●● 2mm □△○
+get_training_stats
+●●●●●● 3mm ○
+get_training_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unavailable'
+●●●●●● 1mm □
+_oracle_training
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+examples
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'data'
+'id'
+'type'
+'trust'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+e
+e
+e
+examples
+Exception
+●●●●●● 3mm ○
+'data'
+●●●●●● 1mm □
+_health_map
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+health_map
+●●●●●● 3mm ○
+health_map
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'window_minutes'
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+problems_list
+●●●●●● 3mm ○
+problems_list
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_baselines
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+learned_baselines
+●●●●●● 3mm ○
+learned_baselines
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_orphans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+detect_orphan_services
+●●●●●● 3mm ○
+detect_orphan_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_correlate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+correlate_failure
+●●●●●● 3mm ○
+_run_coro_sync
+●●●●●● 1mm □△
+correlate_failure
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_trigger_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.runtime_triggers_api
+●●●●●● 2mm □△○
+scan_triggers
+●●●●●● 3mm ○
+_run_coro_sync
+●●●●●● 1mm □△
+scan_triggers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_scan_heal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.runtime_triggers_api
+●●●●●● 2mm □△○
+scan_and_heal
+●●●●●● 3mm ○
+_run_coro_sync
+●●●●●● 1mm □△
+scan_and_heal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_decide_autonomous_action
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n    Agentic decision: given a problem, return which brain action to run.\n    Returns either {escalate: True, reason} or {escalate: False, brain, action, payload}.\n    Centralizes routing so the autonomous loop only executes what the brain decides.\n    '
+problem
+●●●●●● 1mm □
+p
+target
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+reason
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+severity
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'severity'
+'warning'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+reason
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+problem
+●●●●●● 1mm □△
+'flag_for_human'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'escalate'
+'reason'
+'type'
+●●●●●● 3mm □△○
+reason
+'escalate'
+●●●●●● 2mm □
+'unreachable'
+r
+'down'
+r
+'connection'
+r
+●●●●●● 3mm ○
+'escalate'
+'brain'
+'action'
+'payload'
+'type'
+●●●●●● 1mm □
+'system'
+'scan_heal'
+'heal'
+●●●●●● 2mm □
+'no activity'
+r
+severity
+'critical'
+●●●●●● 3mm ○
+'escalate'
+'brain'
+'action'
+'payload'
+'type'
+●●●●●● 1mm □
+'govern'
+'heal'
+'heal'
+●●●●●● 2mm □
+'cpu'
+r
+'ram'
+r
+'memory'
+r
+●●●●●● 3mm ○
+'escalate'
+'brain'
+'action'
+'payload'
+'type'
+●●●●●● 1mm □
+'govern'
+'heal'
+'heal'
+●●●●●● 2mm □
+'import'
+r
+'module'
+r
+'dependency'
+r
+●●●●●● 3mm ○
+'escalate'
+'brain'
+'action'
+'payload'
+'type'
+●●●●●● 1mm □
+'govern'
+'record_gap'
+'what'
+'target'
+'tags'
+'Code gap: '
+target
+' — '
+reason
+target
+'autonomous'
+'gap'
+'code-issue'
+'learn'
+●●●●●● 2mm □
+'test'
+r
+'failure'
+r
+●●●●●● 3mm ○
+'escalate'
+'brain'
+'action'
+'payload'
+'type'
+●●●●●● 1mm □
+'govern'
+'record_gap'
+'what'
+'target'
+'tags'
+'Test gap: '
+target
+' — '
+reason
+target
+'autonomous'
+'gap'
+'test-failure'
+'learn'
+●●●●●● 3mm ○
+'escalate'
+'reason'
+'type'
+●●●●●● 3mm □△○
+reason
+'escalate'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_model_version_check
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run model auto-update check (Kimi/Opus/Ollama).'
+●●●●●● 3mm □△○
+cognitive.model_updater
+●●●●●● 2mm □△○
+check_all_models
+●●●●●● 3mm ○
+check_all_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_probe_sweep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+probe_sweep
+●●●●●● 3mm ○
+probe_sweep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_probe_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+probe_models
+●●●●●● 3mm ○
+probe_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_auto_start
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_background_loop
+_stop_event
+_loop_state
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □
+_loop_state
+'running'
+●●●●●● 3mm ○
+'status'
+'already_running'
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_state
+'running'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'started'
+●●●●●● 1mm □
+_auto_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_stop_event
+_loop_state
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_state
+'running'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'status'
+'stopped'
+●●●●●● 1mm □
+_auto_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_run_cycle
+●●●●●● 3mm ○
+_run_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_consensus_fix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.consensus_fixer_api
+●●●●●● 2mm □△○
+_get_all_problems
+_consensus_diagnose_and_fix
+problems
+●●●●●● 1mm □
+_get_all_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+_consensus_diagnose_and_fix
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+problems
+5
+●●●●●● 3mm ○
+'problems'
+'diagnosed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_connectivity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_runtime_status
+●●●●●● 3mm ○
+get_runtime_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_architecture_explain
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'What does this component do? (Living architectural map.)'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+component
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'component'
+p
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component
+●●●●●● 3mm ○
+'error'
+"Provide 'component' or 'name' (e.g. pipeline, trust_engine)."
+text
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'component'
+'explanation'
+component
+text
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_architecture_find
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'What can handle this task? (Capability → components.)'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+capability
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'capability'
+p
+●●●●●● 1mm □△
+'task'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+capability
+●●●●●● 3mm ○
+'error'
+"Provide 'capability' or 'task' (e.g. code review, health monitoring)."
+components
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+capability
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'capability'
+'components'
+capability
+components
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_architecture_connected
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Trace path from one component to another (dependency/connection graph).'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+comp_a
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'from'
+p
+●●●●●● 1mm □△
+'comp_a'
+p
+●●●●●● 1mm □△
+'source'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp_b
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'to'
+p
+●●●●●● 1mm □△
+'comp_b'
+p
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp_a
+comp_b
+●●●●●● 3mm ○
+'error'
+"Provide 'from' and 'to' (or comp_a/comp_b, source/target)."
+path
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+comp_a
+comp_b
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'from'
+'to'
+'path'
+comp_a
+comp_b
+path
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_architecture_diagnose
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Bottlenecks, isolated modules, most-depended-on, capabilities list.'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+●●●●●● 3mm ○
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_architecture_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Full component map with an NLP-friendly narrative summary.'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+data
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'total'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'connected'
+0
+●●●●●● 2mm □△
+isolated_count
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'isolated'
+0
+●●●●●● 2mm □△
+top_hubs
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+5
+isolated
+●●●●●● 1mm □
+p
+p
+c
+components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'isolated'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+'Grace has '
+total
+' components ('
+connected
+' connected, '
+isolated_count
+' isolated).'
+●●●●●● 2mm □
+top_hubs
+hubs_str
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'/'
+'.'
+●●●●●● 2mm □△
+' ('
+c
+●●●●●● 1mm □△
+'connections_out'
+0
+●●●●●● 2mm □△
+' out, '
+c
+●●●●●● 1mm □△
+'connections_in'
+0
+●●●●●● 2mm □△
+' in)'
+p
+c
+top_hubs
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+' Top hubs: '
+hubs_str
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+isolated
+names
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'/'
+'.'
+●●●●●● 2mm □△
+p
+isolated
+8
+parts
+●●●●●● 1mm □△
+' Isolated modules: '
+', '
+●●●●●● 1mm □△
+names
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+isolated
+●●●●●● 2mm □△
+8
+'...'
+''
+'.'
+●●●●●● 2mm □△
+data
+'summary'
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+data
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_embedding_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'What embedding model are we using? (Model name, path, dimension if loaded.)'
+out
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+out
+'model_name'
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_DEFAULT'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+out
+'model_path'
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_MODEL_PATH'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+out
+'device'
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_DEVICE'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+out
+'model_name'
+●●●●●● 1mm □
+●●●●●● 2mm □
+out
+'model_path'
+●●●●●● 1mm □
+●●●●●● 2mm □
+out
+'device'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+●●●●●● 2mm □
+out
+'loaded'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+out
+'dimension'
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+model
+'get_embedding_dimension'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □
+out
+'loaded'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □
+out
+'dimension'
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+out
+'loaded'
+●●●●●● 1mm □
+●●●●●● 1mm □
+out
+'dimension'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+out
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_brain_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'All brains (domains) and their actions — queryable API map.'
+d
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+b
+'actions'
+●●●●●● 2mm □△
+b
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'brains'
+'total_brains'
+'total_actions'
+'usage'
+d
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+total
+"POST /brain/{domain} with { action: '...', payload: {...} }"
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_models_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'LLM models + embedding model in one place.'
+out
+●●●●●● 1mm □
+'embedding'
+_embedding_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_available_models
+out
+'llm_models'
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+out
+'llm_models'
+●●●●●● 1mm □
+out
+'llm_models_error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+out
+'llm_provider'
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_PROVIDER'
+'ollama'
+●●●●●● 2mm □△
+Exception
+out
+'llm_provider'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+out
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_schema_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Database type, name, Qdrant status — schema/storage overview.'
+out
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+out
+'database'
+●●●●●● 1mm □
+'type'
+'name'
+'path'
+'host'
+'port'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DATABASE_TYPE'
+'postgresql'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DATABASE_NAME'
+'grace'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DATABASE_PATH'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DATABASE_HOST'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DATABASE_PORT'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+out
+'database'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+out
+'database'
+'connected'
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+out
+'database'
+'connected'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+q
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'qdrant'
+●●●●●● 1mm □
+'connected'
+'url'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+q
+'is_connected'
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_URL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_HOST'
+'localhost'
+●●●●●● 2mm □△
+':'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_PORT'
+6333
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+q
+'list_collections'
+●●●●●● 2mm □△
+out
+'qdrant'
+'collections'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+q
+'get_collections'
+●●●●●● 2mm □△
+coll
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'qdrant'
+'collections'
+●●●●●● 1mm □
+coll
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+coll
+'collections'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+coll
+●●●●●● 2mm □△
+0
+out
+'qdrant'
+'collections'
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+out
+'qdrant'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_graphs_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Graphs in Grace: component graph, vector store, magma.'
+out
+●●●●●● 1mm □
+'graphs'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+m
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'component_graph'
+●●●●●● 1mm □
+'type'
+'total_components'
+'connected'
+'isolated'
+'architecture'
+m
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'connected'
+0
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'isolated'
+0
+●●●●●● 2mm □△
+out
+'graphs'
+●●●●●● 1mm □△
+'component_graph (architecture compass)'
+●●●●●● 2mm □△
+Exception
+out
+'component_graph'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+out
+'graphs'
+●●●●●● 1mm □△
+'qdrant (vector embeddings)'
+●●●●●● 2mm □△
+out
+'graphs'
+●●●●●● 1mm □△
+'magma (cognitive/memory graphs when enabled)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_deterministic_first_loop
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Run deterministic-first loop: Genesis keys → probe → AST/deterministic fix → handoff to LLM only when needed.'
+●●●●●● 3mm □△○
+core.deterministic_first_loop
+●●●●●● 2mm □△○
+run_deterministic_first_loop
+get_handoff_context
+result
+●●●●●● 1mm □
+run_deterministic_first_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'handoff_context'
+●●●●●● 1mm □
+get_handoff_context
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+_deterministic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Deterministic brain: rule-only scan and fix. No LLM until handoff.'
+●●●●●● 3mm ○
+'scan'
+'fix'
+'first_loop'
+'report'
+_deterministic_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_deterministic_fix
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_deterministic_first_loop
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+_deterministic_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_agentic_actions
+●●●●●● 1mm □△
+'deterministic'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_hot_reload_svc
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_service
+●●●●●● 3mm ○
+hot_reload_service
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'service'
+p
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_hot_reload_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+●●●●●● 3mm ○
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_reload
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+save_and_reload
+●●●●●● 3mm ○
+save_and_reload
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_reload_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+get_reload_history
+●●●●●● 3mm ○
+'history'
+get_reload_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_genesis_storage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+get_genesis_storage
+●●●●●● 3mm ○
+get_genesis_storage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_genesis_cleanup
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+get_genesis_storage
+●●●●●● 3mm ○
+get_genesis_storage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_file_events
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.workspace_bridge
+●●●●●● 2mm □△○
+get_recent_events
+●●●●●● 3mm ○
+'events'
+get_recent_events
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_docs
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.document_processor
+●●●●●● 2mm □△○
+process_documents
+●●●●●● 3mm ○
+process_documents
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'category'
+'general'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'workspace'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_processing_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.document_processor
+●●●●●● 2mm □△○
+get_processing_status
+●●●●●● 3mm ○
+get_processing_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_scan_upload
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.workspace_bridge
+●●●●●● 2mm □△○
+scan_upload
+●●●●●● 3mm ○
+scan_upload
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_undo
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+undo
+r
+●●●●●● 1mm □
+undo
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'undone'
+r
+●●●●●● 2mm □
+●●●●●● 1mm □
+_redo
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+redo
+r
+●●●●●● 1mm □
+redo
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'redone'
+r
+●●●●●● 2mm □
+●●●●●● 1mm □
+_profile
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+get_profile
+●●●●●● 3mm ○
+get_profile
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'user_id'
+'default'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_profile
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+update_profile
+uid
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'user_id'
+'default'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+update_profile
+●●●●●● 1mm □△
+uid
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_notifications
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+get_notifications
+●●●●●● 3mm ○
+'notifications'
+get_notifications
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'unread_only'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_notify
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+notify
+●●●●●● 3mm ○
+notify
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'type'
+'info'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_permissions
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+get_workspace_permissions
+●●●●●● 3mm ○
+get_workspace_permissions
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'workspace'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_set_perm
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+set_permission
+●●●●●● 3mm ○
+set_permission
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'workspace'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'user_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'level'
+'read'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_shortcuts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+get_shortcuts
+●●●●●● 3mm ○
+get_shortcuts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_set_env
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+set_environment
+●●●●●● 3mm ○
+set_environment
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'name'
+p
+●●●●●● 1mm □△
+'environment'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_env
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+get_environment
+get_environment_path
+env
+●●●●●● 1mm □
+get_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'environment'
+'path'
+env
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+get_environment_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_list_envs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+list_environments
+●●●●●● 3mm ○
+'environments'
+list_environments
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_env_write
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+route_file_write
+●●●●●● 3mm ○
+route_file_write
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'source'
+'dev_tab'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_snapshot
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+snapshot_state
+●●●●●● 3mm ○
+'snapshot_id'
+snapshot_state
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'label'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_rollback
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+rollback_to
+●●●●●● 3mm ○
+rollback_to
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'snapshot_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_list_snapshots
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+list_snapshots
+●●●●●● 3mm ○
+'snapshots'
+list_snapshots
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_security_scan
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+scan_code_security
+●●●●●● 3mm ○
+scan_code_security
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'file'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_budget_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+get_budget_status
+●●●●●● 3mm ○
+get_budget_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_set_budget
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+set_budget_limits
+●●●●●● 3mm ○
+set_budget_limits
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'calls_per_hour'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'tokens_per_hour'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_provenance_entries
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+get_ledger_entries
+●●●●●● 3mm ○
+'entries'
+get_ledger_entries
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_project_gov
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_project_rules
+●●●●●● 3mm ○
+get_project_rules
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_governance_coding_contract
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Return the governance coding contract (global + project rules) for the pipeline to enforce.'
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_governance_coding_contract
+●●●●●● 3mm ○
+get_governance_coding_contract
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_set_proj_rules
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+set_project_rules
+pid
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+set_project_rules
+●●●●●● 1mm □△
+pid
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_create_approval
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+create_approval
+●●●●●● 3mm ○
+create_approval
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'category'
+'general'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'severity'
+'medium'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_approval_list
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_approvals
+●●●●●● 3mm ○
+'approvals'
+get_approvals
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_respond_approval
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+respond_to_approval
+●●●●●● 3mm ○
+respond_to_approval
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'id'
+0
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'action'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_kpi_scores
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_kpi_scores
+●●●●●● 3mm ○
+get_kpi_scores
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'component'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_kpi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_kpi_dashboard
+●●●●●● 3mm ○
+get_kpi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compliance_presets
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_compliance_presets
+●●●●●● 3mm ○
+get_compliance_presets
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_apply_compliance
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+apply_compliance_preset
+●●●●●● 3mm ○
+apply_compliance_preset
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'preset'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_semantic_search
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+semantic_query
+●●●●●● 3mm ○
+semantic_query
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'query'
+p
+●●●●●● 1mm □△
+'question'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+get_component_registry
+●●●●●● 3mm ○
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_component_profile
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+get_component_profile
+●●●●●● 3mm ○
+get_component_profile
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'component_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_validate_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.component_validator
+●●●●●● 2mm □△○
+validate_all_components
+●●●●●● 3mm ○
+validate_all_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_validate_one
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.component_validator
+●●●●●● 2mm □△○
+get_report_card
+●●●●●● 3mm ○
+get_report_card
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'component_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_report_cards
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.component_validator
+●●●●●● 2mm □△○
+get_all_report_cards
+●●●●●● 3mm ○
+get_all_report_cards
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_report_card
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.component_validator
+●●●●●● 2mm □△○
+get_report_card
+●●●●●● 3mm ○
+get_report_card
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'component_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_sync_events
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.realtime_sync
+●●●●●● 2mm □△○
+get_recent_events
+●●●●●● 3mm ○
+'events'
+get_recent_events
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'since'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'limit'
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_sync_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.realtime_sync
+●●●●●● 2mm □△○
+get_sync_stats
+●●●●●● 3mm ○
+get_sync_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_dist_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.distributed_state
+●●●●●● 2mm □△○
+get_distributed_stats
+●●●●●● 3mm ○
+get_distributed_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_dist_set
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.distributed_state
+●●●●●● 2mm □△○
+set_state
+●●●●●● 3mm ○
+'set'
+set_state
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'key'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'value'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_dist_get
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.distributed_state
+●●●●●● 2mm □△○
+get_state
+●●●●●● 3mm ○
+'value'
+get_state
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'key'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_dist_instances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.distributed_state
+●●●●●● 2mm □△○
+list_instances
+●●●●●● 3mm ○
+'instances'
+list_instances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_dist_session
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.distributed_state
+●●●●●● 2mm □△○
+get_user_session
+●●●●●● 3mm ○
+get_user_session
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'user_id'
+'default'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_librarian_ingest
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+ingest_document
+●●●●●● 3mm ○
+ingest_document
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_data_librarian_process
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Data brain: process document through librarian (ingest, categorize, tag). Uses Qwen for analysis.'
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+ingest_document
+●●●●●● 3mm ○
+ingest_document
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'source'
+'brain'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_data_librarian_organise_file
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Data brain: move file to correct subfolder (agentic; Qwen suggests location).'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+cognitive.librarian_autonomous
+●●●●●● 2mm □△○
+get_autonomous_librarian
+path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+target_folder
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'target_folder'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+'path required'
+lib
+●●●●●● 1mm □
+get_autonomous_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target_folder
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kb
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KNOWLEDGE_BASE_PATH'
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 3mm □△
+path
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+target_folder
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dest
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+full
+●●●●●● 2mm □
+full
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full
+dest
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+full
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dest
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'from'
+'to'
+'moved'
+path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dest
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'action'
+'error'
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+lib
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_data_librarian_suggest_folder
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Data brain: suggest subfolder for a path (Qwen-backed when needed).'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+cognitive.librarian_autonomous
+●●●●●● 2mm □△○
+get_autonomous_librarian
+path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 3mm ○
+'suggestion'
+'error'
+●●●●●● 2mm □
+'path required'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kb
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KNOWLEDGE_BASE_PATH'
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 3mm □△
+path
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+Exception
+full
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+suggestion
+●●●●●● 1mm □
+get_autonomous_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+full
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'suggestion'
+path
+suggestion
+●●●●●● 1mm □
+_data_librarian_categorize
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Data brain: return category/tags for path (uses librarian engine + Qwen when available).'
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+ingest_document
+path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 3mm ○
+'category'
+'tags'
+'unknown'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kb
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KNOWLEDGE_BASE_PATH'
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 3mm □△
+path
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+full
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+50000
+''
+Exception
+content
+●●●●●● 1mm □
+''
+meta
+●●●●●● 1mm □
+ingest_document
+●●●●●● 1mm □△
+path
+content
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'category'
+'tags'
+'metadata'
+meta
+●●●●●● 1mm □△
+'category'
+'other'
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+_data_librarian_on_new_folder
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Data brain: notify librarian of new folder (triggers auto-research, taxonomy).'
+●●●●●● 3mm □△○
+cognitive.librarian_autonomous
+●●●●●● 2mm □△○
+get_autonomous_librarian
+●●●●●● 3mm ○
+get_autonomous_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'folder_path'
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_data_librarian_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Data brain: librarian index stats.'
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+get_document_stats
+●●●●●● 3mm ○
+get_document_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_librarian_search
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+search_documents
+●●●●●● 3mm ○
+'results'
+search_documents
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'category'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_librarian_versions
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+get_versions
+●●●●●● 3mm ○
+'versions'
+get_versions
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_librarian_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+get_document_stats
+●●●●●● 3mm ○
+get_document_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_cross_search
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+cross_project_search
+●●●●●● 3mm ○
+'results'
+cross_project_search
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'limit'
+30
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_export_project
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_ops
+●●●●●● 2mm □△○
+export_project
+●●●●●● 3mm ○
+export_project
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_import_project
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_ops
+●●●●●● 2mm □△○
+import_project
+●●●●●● 3mm ○
+import_project
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'zip_path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_copy_cross
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_ops
+●●●●●● 2mm □△○
+copy_file_between_projects
+●●●●●● 3mm ○
+copy_file_between_projects
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'from_project'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'from_path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'to_project'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'to_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_move_cross
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_ops
+●●●●●● 2mm □△○
+move_file_between_projects
+●●●●●● 3mm ○
+move_file_between_projects
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'from_project'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'from_path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'to_project'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'to_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_project_rollback
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_ops
+●●●●●● 2mm □△○
+project_rollback
+●●●●●● 3mm ○
+project_rollback
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_list_exports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_ops
+●●●●●● 2mm □△○
+list_exports
+●●●●●● 3mm ○
+'exports'
+list_exports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_create_user
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+create_user
+●●●●●● 3mm ○
+create_user
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'email'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_list_users
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+list_users
+●●●●●● 3mm ○
+'users'
+list_users
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_user_activity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+get_user_activity
+●●●●●● 3mm ○
+'activity'
+get_user_activity
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'user_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'hours'
+24
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_project_activity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+get_project_activity
+●●●●●● 3mm ○
+'activity'
+get_project_activity
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'hours'
+24
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_daily_summary
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+generate_daily_summary
+●●●●●● 3mm ○
+generate_daily_summary
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'hours'
+24
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_switch_project
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+switch_project
+●●●●●● 3mm ○
+switch_project
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'user_id'
+'default'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'project'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_active_session
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.multi_user
+●●●●●● 2mm □△○
+get_active_session
+●●●●●● 3mm ○
+get_active_session
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'user_id'
+'default'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_list_containers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+list_containers
+●●●●●● 3mm ○
+'containers'
+list_containers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_container_stats
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+get_container
+●●●●●● 3mm ○
+get_container
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_container_rules
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+get_container
+●●●●●● 3mm ○
+get_container
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_container_knowledge
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+get_container
+●●●●●● 3mm ○
+get_container
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_container_whitelist
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+get_container
+●●●●●● 3mm ○
+get_container
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_container_context
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+get_container
+●●●●●● 3mm ○
+'context'
+get_container
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_clone_grace
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+clone_grace_environment
+●●●●●● 3mm ○
+clone_grace_environment
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'project_id'
+p
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_orchestrate
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.brain_orchestrator
+●●●●●● 2mm □△○
+get_orchestrator
+●●●●●● 3mm ○
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'task_type'
+'analyze'
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_pool_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.worker_pool
+●●●●●● 2mm □△○
+get_pool_stats
+get_cache_stats
+●●●●●● 3mm ○
+'pool'
+'cache'
+get_pool_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.worker_pool
+●●●●●● 2mm □△○
+get_cache_stats
+●●●●●● 3mm ○
+get_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_clear_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.worker_pool
+●●●●●● 2mm □△○
+clear_cache
+clear_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cleared'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_reset_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset database connection (through brain).'
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'closed'
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 1mm □
+_reset_vector_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset vector DB client (through brain) by forcing a new connection.'
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'reset'
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 1mm □
+_gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Force garbage collection (through brain).'
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'ok'
+●●●●●● 1mm □
+_verify_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.safety
+●●●●●● 2mm □△○
+verify_ledger
+●●●●●● 3mm ○
+verify_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_independent
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.independent_models
+●●●●●● 2mm □△○
+run_independent
+●●●●●● 3mm ○
+run_independent
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'system_prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_failover
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.independent_models
+●●●●●● 2mm □△○
+run_with_failover
+●●●●●● 3mm ○
+run_with_failover
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'system_prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fuzzy
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.user_features
+●●●●●● 2mm □△○
+fuzzy_search
+●●●●●● 3mm ○
+'results'
+fuzzy_search
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'limit'
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_workspace_ctx
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.workspace_bridge
+●●●●●● 2mm □△○
+get_workspace_context
+●●●●●● 3mm ○
+'context'
+get_workspace_context
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'workspace'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_generate_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.reports
+●●●●●● 2mm □△○
+generate_daily_report
+●●●●●● 3mm ○
+generate_daily_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_list_reports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.reports
+●●●●●● 2mm □△○
+list_reports
+●●●●●● 3mm ○
+'reports'
+list_reports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.reports
+●●●●●● 2mm □△○
+get_report
+●●●●●● 3mm ○
+get_report
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'filename'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_genesis_hot
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+get_genesis_storage
+●●●●●● 3mm ○
+'keys'
+get_genesis_storage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'limit'
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_recent_traces
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+get_recent_keys
+●●●●●● 3mm ○
+'keys'
+get_recent_keys
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_trace_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+get_buffer_stats
+●●●●●● 3mm ○
+get_buffer_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_synapses
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+mesh
+●●●●●● 1mm □
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'weights'
+'strongest'
+mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mesh
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_synapse_brain
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+●●●●●● 3mm ○
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'brain'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_intelligence_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+get_intelligence_report
+●●●●●● 3mm ○
+get_intelligence_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_trust_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+●●●●●● 3mm ○
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_mine_genesis_keys
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+●●●●●● 3mm ○
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_mine_episodes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+EpisodicMiner
+●●●●●● 3mm ○
+EpisodicMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_pipeline
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.coding_pipeline
+●●●●●● 2mm □△○
+get_coding_pipeline
+get_pipeline_progress
+pipeline
+●●●●●● 1mm □
+get_coding_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+'background'
+●●●●●● 2mm □△
+run_id
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'task'
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'run_id'
+'status'
+'message'
+run_id
+'queued'
+'Pipeline running in background. Use ai/pipeline_progress to check status.'
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+'progress'
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □
+get_pipeline_progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run_id
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'run_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm ○
+progress
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'runs'
+progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'task'
+p
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'trust_score'
+'chunks'
+'duration_ms'
+'details'
+result
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+'chunk'
+'description'
+'status'
+'layers'
+c
+c
+100
+c
+'layer'
+'name'
+'status'
+'trust'
+'duration_ms'
+l
+l
+l
+l
+l
+l
+c
+c
+result
+●●●●●● 1mm □
+_dl_predict
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deep_learning
+●●●●●● 2mm □△○
+get_model
+●●●●●● 3mm ○
+get_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_dl_train
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deep_learning
+●●●●●● 2mm □△○
+get_model
+●●●●●● 3mm ○
+get_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ooda
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'observation'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ambiguity
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_invariants
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_cognitive_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_bandit_select
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'options'
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_deterministic_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+●●●●●● 3mm ○
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_deterministic_fix
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+deterministic_fix_cycle
+●●●●●● 3mm ○
+deterministic_fix_cycle
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'task'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_verify_built
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Deterministic verification that everything built has been built. Returns manifest.'
+●●●●●● 3mm □△○
+core.build_verification
+●●●●●● 2mm □△○
+run_verify_built_checks
+all_required_passed
+skip_script
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'skip_verify_script'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+manifest
+●●●●●● 1mm □
+run_verify_built_checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manifest
+'ok'
+●●●●●● 1mm □
+all_required_passed
+●●●●●● 1mm □△
+manifest
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+manifest
+●●●●●● 1mm □
+_trigger_definitions
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Return unified trigger registry (determinism, self_heal, diagnostics, self_learning, self_governance, coding_agent).'
+●●●●●● 3mm □△○
+core.unified_trigger_brain
+●●●●●● 2mm □△○
+get_trigger_definitions
+get_categories
+category
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+trigger_ids
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'trigger_ids'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'triggers'
+'categories'
+get_trigger_definitions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_categories
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_grace_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Single view of Grace state: Ouroboros, mirror, problems, health. For unified dashboard.'
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_loop_state
+_loop_log
+last_cycle
+●●●●●● 1mm □
+_loop_log
+_loop_log
+1
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_health_dashboard
+health
+●●●●●● 1mm □
+get_health_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+health
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+_get_genesis_keys
+_check_service_health
+COMPONENT_REGISTRY
+_classify_component
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+svc
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+cid
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+cid
+comp
+keys
+svc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+classified
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'red'
+'orange'
+problems
+●●●●●● 1mm □△
+'component'
+'reason'
+'status'
+classified
+●●●●●● 1mm □△
+'label'
+cid
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+classified
+'status'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+'problems_observed'
+'problems'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+problems
+10
+Exception
+mirror
+●●●●●● 1mm □
+'problems_observed'
+'problems'
+0
+●●●●●● 3mm ○
+'ouroboros'
+'last_cycle_detail'
+'mirror'
+'health'
+'running'
+'cycle_count'
+'last_cycle'
+'last_result'
+'actions_taken'
+_loop_state
+●●●●●● 1mm □△
+'running'
+●●●●●● 2mm □△
+_loop_state
+●●●●●● 1mm □△
+'cycle_count'
+●●●●●● 2mm □△
+_loop_state
+●●●●●● 1mm □△
+'last_cycle'
+●●●●●● 2mm □△
+_loop_state
+●●●●●● 1mm □△
+'last_result'
+●●●●●● 2mm □△
+_loop_state
+●●●●●● 1mm □△
+'actions_taken'
+●●●●●● 2mm □△
+last_cycle
+mirror
+health
+●●●●●● 1mm □
+_run_unified_triggers
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+'Run unified triggers (async loop); optionally filter by trigger_ids or category.'
+●●●●●● 3mm □△○
+core.unified_trigger_brain
+●●●●●● 2mm □△○
+run_triggers_sync
+●●●●●● 3mm ○
+run_triggers_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_knowledge_gaps_deep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+●●●●●● 3mm ○
+CognitiveMesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+'deterministic'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Conversations, prompts, consensus, world model'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Folders, documents, uploads, search, librarian'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_govern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Governance, approvals, rules, persona, genesis'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_ai
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Consensus, models, coding agent, oracle, testing'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Health, runtime, monitoring, autonomous loop'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Whitelist sources, flash cache'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_tasks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Scheduling, time sense, planner'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Codebase, projects, code generation'
+'actions'
+'description'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_deterministic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Rule-only scan and fix: AST, imports, DB, tests, services. No LLM until handoff. Verify-first cycle.'
+BRAIN_DIRECTORY
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'chat'
+req
+req
+_chat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'files'
+req
+req
+_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/files'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'govern'
+req
+req
+_govern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/govern'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'ai'
+req
+req
+_ai
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ai'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'system'
+req
+req
+_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/system'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'data'
+req
+req
+_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/data'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'tasks'
+req
+req
+_tasks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/tasks'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'code'
+req
+req
+_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/code'
+●●●●●● 2mm □△
+BrainRequest
+●●●●●● 3mm ○
+_call
+●●●●●● 1mm □△
+'deterministic'
+req
+req
+_deterministic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/deterministic'
+●●●●●● 2mm □△
+Request
+'\n    Smart routing — describe what you want in natural language.\n    Grace auto-routes to the optimal brain + action.\n\n    POST /brain/ask { "query": "what is the system health?" }\n    '
+body
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+body
+●●●●●● 1mm □
+query
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'query'
+body
+●●●●●● 1mm □△
+'message'
+body
+●●●●●● 1mm □△
+'q'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □
+query
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+phrase
+q
+phrase
+'which llm'
+'which models'
+'what llm'
+'what models'
+'list llm'
+'list models'
+'llm in the system'
+'models in the system'
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'models_summary'
+●●●●●● 2mm □△
+out
+'routing'
+●●●●●● 1mm □
+'query'
+'brain'
+'action'
+'confidence'
+'auto_routed'
+'direct_route'
+query
+'system'
+'models_summary'
+1.0
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+out
+●●●●●● 3mm □△○
+core.auto_router
+●●●●●● 2mm □△○
+smart_call
+●●●●●● 3mm ○
+smart_call
+●●●●●● 1mm □△
+query
+payload
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ask'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+d
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+b
+'actions'
+●●●●●● 2mm □△
+b
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'brains'
+'total_brains'
+'total_actions'
+'usage'
+d
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+total
+"POST /brain/{domain} { action: '...', payload: {...} }"
+router
+●●●●●● 1mm □△
+'/directory'
+●●●●●● 2mm □△
+BrainOrchestration
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+i
+step
+●●●●●● 2mm □
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+step
+●●●●●● 1mm □△
+'brain'
+''
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □△
+'action'
+''
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'step'
+'brain'
+'action'
+'ok'
+'data'
+'error'
+i
+step
+●●●●●● 1mm □△
+'brain'
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'steps'
+'total'
+'succeeded'
+'failed'
+'latency_ms'
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'ok'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/orchestrate'
+●●●●●● 2mm □△

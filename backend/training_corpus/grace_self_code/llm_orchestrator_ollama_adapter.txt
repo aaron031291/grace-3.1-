@@ -1,0 +1,272 @@
+## ollama_adapter.py
+'\nOllama LLM Client Adapter.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+ollama_client.client
+●●●●●● 2mm □△○
+OllamaClient
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm △
+OllamaLLMClient
+●●●●●● 3mm □△
+BaseLLMClient
+BaseLLMClient
+'\n    Adapter for OllamaClient to implement BaseLLMClient interface.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+OllamaClient
+●●●●●● 1mm □△
+base_url
+settings
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+temperature
+max_tokens
+stream
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+options
+●●●●●● 1mm □
+●●●●●● 2mm □
+temperature
+●●●●●● 2mm □
+options
+'temperature'
+●●●●●● 1mm □
+temperature
+●●●●●● 2mm □
+max_tokens
+●●●●●● 2mm □
+options
+'num_predict'
+●●●●●● 1mm □
+max_tokens
+options
+●●●●●● 1mm □△
+kwargs
+●●●●●● 1mm □△
+'options'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+model_id
+●●●●●● 3mm △
+settings
+settings
+'qwen3:14b'
+gen_method
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'generate'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'generate_response'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gen_method
+●●●●●● 3mm ○
+gen_method
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+requests
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+settings
+'/api/generate'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+●●●●●● 3mm ○
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Ollama error: '
+resp
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+chat_kwargs
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+model
+settings
+'mistral:7b'
+messages
+stream
+●●●●●● 2mm □
+temperature
+●●●●●● 2mm □
+chat_kwargs
+'temperature'
+●●●●●● 1mm □
+temperature
+●●●●●● 2mm □
+max_tokens
+●●●●●● 2mm □
+chat_kwargs
+'num_predict'
+●●●●●● 1mm □
+max_tokens
+●●●●●● 2mm □
+'top_p'
+kwargs
+chat_kwargs
+'top_p'
+●●●●●● 1mm □
+kwargs
+'top_p'
+●●●●●● 2mm □
+'top_k'
+kwargs
+chat_kwargs
+'top_k'
+●●●●●● 1mm □
+kwargs
+'top_k'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'id'
+'status'
+'size'
+m
+m
+m
+m
+m
+models
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_name
+●●●●●● 2mm □△
+●●●●●● 3mm △

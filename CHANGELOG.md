@@ -24,24 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI pipeline lint errors
 - Missing imports in various modules
 
-## [3.1.1] - 2026-03-12
-
-### Added
-- Created comprehensive `USAGE.md` client usage guide covering all 40+ UI tabs, MCP agentic tools, governance workflows, troubleshooting steps, and admin operations.
-- Documented 16 previously undocumented frontend components (`DevTab`, `FoldersTab`, `TasksTab`, `PlannerPanel`, `LabTab`, `OracleTab`, `LearningHealingTab`, `TerminalLogViewer`, `ActivityFeed`, `TabGuide`, `CrossTabNotifier`, `GenesisTimeline`, `GovernanceDiscussion`, `UndoManager`, `UploadProgress`, `BackendPanel`) in `README.md`.
-
-### Changed
-- Updated `README.md` Current State section to reflect v3.1.1 enterprise handoff detail with specific bug references (SQLite savepoint, Qwen pool, timezone fixes, lint cleanup).
-- Corrected frontend component count to 92 (from estimate of ~90) in `README.md`.
-- Migrated deprecated `datetime.utcnow()` to timezone-aware UTC timestamps (`datetime.now(timezone.utc)`) system-wide for Python 3.11+ compliance.
-- Hardened React 19 frontend by resolving all remaining linting warnings, dead code, and fast-refresh issues — frontend now builds with zero warnings.
-
-### Fixed
-- Resolved critical SQLite `sa_savepoint_4` database errors within the Genesis tracking system causing transaction loss under concurrent load.
-- Fixed 500 Internal Server Errors in multi-tier RAG retrieval and chat endpoints.
-- Patched Qwen Model Pool initialization parameters and write-permission enforcement logic.
-- Fixed test file docstring syntax errors causing pytest skips to silently bypass test execution.
-
 ## [3.1.0] - 2026-01-14
 
 ### Added
@@ -139,7 +121,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| 3.1.1 | 2026-03-12 | Enterprise stabilization, Genesis fixes, Lint cleanup |
 | 3.1.0 | 2026-01-14 | Production readiness (Docker, CI/CD, Security) |
 | 3.0.0 | 2026-01-01 | Major feature expansion (Cognitive, Learning, Agent) |
 | 2.0.0 | 2025-06-01 | RAG pipeline, Document ingestion |

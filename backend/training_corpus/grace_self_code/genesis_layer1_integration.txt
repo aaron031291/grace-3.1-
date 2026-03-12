@@ -1,0 +1,1219 @@
+## layer1_integration.py
+'\nLayer 1 Complete Integration: All Input Sources\n\nLayer 1 includes ALL input pathways:\n- User inputs (chat, commands, interactions)\n- File uploads\n- External APIs\n- Web scraping / HTML\n- Memory mesh\n- Learning memory\n- Whitelist operations\n- System events\n\nEverything flows through Layer 1 → Genesis Key → Version Control → Librarian → Immutable Memory → RAG → World Model\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+genesis.pipeline_integration
+●●●●●● 2mm □△○
+get_data_pipeline
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+GenesisKey
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegration
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_genesis_trigger_pipeline
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Lazy import to avoid circular dependency.'
+●●●●●● 2mm □
+_genesis_trigger_pipeline
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+_genesis_trigger_pipeline
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 3mm ○
+_genesis_trigger_pipeline
+●●●●●● 2mm △
+Layer1Integration
+'\n    Complete Layer 1 Integration - ALL input sources flow through here.\n\n    Input Sources:\n    1. User inputs (chat, commands, UI interactions)\n    2. File uploads (documents, images, code files)\n    3. External APIs (REST, GraphQL, webhooks)\n    4. Web scraping / HTML (crawled data, parsed content)\n    5. Memory mesh (system memory, knowledge graph)\n    6. Learning memory (AI learning, model training data)\n    7. Whitelist operations (approved sources, trusted data)\n    8. System events (errors, logs, telemetry)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_data_pipeline
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'knowledge_base/layer_1'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'.layer1_metadata.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+MemoryMeshIntegration
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_ensure_layer1_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure complete Layer 1 directory structure.'
+layer1_paths
+●●●●●● 1mm □
+'knowledge_base/layer_1'
+'knowledge_base/layer_1/genesis_key'
+'knowledge_base/layer_1/uploads'
+'knowledge_base/layer_1/external_apis'
+'knowledge_base/layer_1/web_scraping'
+'knowledge_base/layer_1/memory_mesh'
+'knowledge_base/layer_1/learning_memory'
+'knowledge_base/layer_1/whitelist'
+path
+layer1_paths
+os
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_or_create_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load or create Layer 1 metadata.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'version'
+'created_at'
+'input_sources'
+'total_inputs'
+'1.0'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'user_inputs'
+'file_uploads'
+'external_apis'
+'web_scraping'
+'memory_mesh'
+'learning_memory'
+'whitelist'
+'system_events'
+0
+0
+0
+0
+0
+0
+0
+0
+0
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save Layer 1 metadata.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+●●●●●● 3mm △
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_user_input
+●●●●●● 1mm □△
+self
+user_input
+user_id
+input_type
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+'chat'
+●●●●●● 2mm □
+"\n        Process user input through Layer 1.\n\n        Args:\n            user_input: User's input text\n            user_id: Genesis ID of user\n            input_type: Type of input (chat, command, ui_interaction)\n            metadata: Additional metadata\n\n        Returns:\n            Complete pipeline result\n        "
+logger
+●●●●●● 1mm □△
+'Layer 1: Processing user input from '
+user_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'user_inputs'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_file_upload
+●●●●●● 1mm □△
+self
+file_content
+file_name
+file_type
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Process file upload through Layer 1.\n\n        Args:\n            file_content: Raw file bytes\n            file_name: Name of file\n            file_type: MIME type or extension\n            user_id: Genesis ID of uploader\n            metadata: Additional file metadata\n\n        Returns:\n            Complete pipeline result\n        '
+logger
+●●●●●● 1mm □△
+"Layer 1: Processing file upload '"
+file_name
+"' from "
+user_id
+●●●●●● 2mm □△
+upload_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'uploads'
+user_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+upload_path
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+upload_path
+file_name
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'wb'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+file_content
+●●●●●● 2mm □△
+file_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+file_content
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'file_uploads'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_external_api
+●●●●●● 1mm □△
+self
+api_name
+api_endpoint
+api_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process external API data through Layer 1.\n\n        Args:\n            api_name: Name of API (e.g., "OpenAI", "GitHub")\n            api_endpoint: API endpoint called\n            api_data: Data received from API\n            user_id: Genesis ID if user-initiated\n            metadata: Additional API metadata\n\n        Returns:\n            Complete pipeline result\n        '
+logger
+●●●●●● 1mm □△
+"Layer 1: Processing external API '"
+api_name
+"' data"
+●●●●●● 2mm □△
+api_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'external_apis'
+api_name
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+api_path
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+api_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+api_path
+'api_response_'
+timestamp
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+api_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+api_data
+f
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'external_apis'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_web_scraping
+●●●●●● 1mm □△
+self
+url
+html_content
+parsed_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process web scraping data through Layer 1.\n\n        Args:\n            url: URL that was scraped\n            html_content: Raw HTML content\n            parsed_data: Parsed/extracted data\n            user_id: Genesis ID if user-initiated\n            metadata: Additional scraping metadata\n\n        Returns:\n            Complete pipeline result\n        '
+logger
+●●●●●● 1mm □△
+'Layer 1: Processing web scraping from '
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'://'
+url
+domain_part
+●●●●●● 1mm □
+url
+●●●●●● 1mm □△
+'://'
+●●●●●● 2mm □△
+1
+domain
+●●●●●● 1mm □
+domain_part
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'.'
+'_'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+domain
+●●●●●● 1mm □
+'/'
+url
+url
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'.'
+'_'
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □△
+'.'
+'_'
+●●●●●● 2mm □△
+IndexError
+AttributeError
+domain
+●●●●●● 1mm □
+'unknown_domain'
+scraping_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'web_scraping'
+domain
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+scraping_path
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+html_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+scraping_path
+'scrape_'
+timestamp
+'.html'
+●●●●●● 2mm □△
+data_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+scraping_path
+'parsed_'
+timestamp
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+html_file
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+html_content
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+parsed_data
+f
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'web_scraping'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_memory_mesh
+●●●●●● 1mm □△
+self
+memory_type
+memory_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process memory mesh data through Layer 1.\n\n        Args:\n            memory_type: Type of memory (system, knowledge_graph, context)\n            memory_data: Memory data\n            user_id: Genesis ID if user-specific\n            metadata: Additional memory metadata\n\n        Returns:\n            Complete pipeline result\n        '
+logger
+●●●●●● 1mm □△
+'Layer 1: Processing memory mesh ('
+memory_type
+')'
+●●●●●● 2mm □△
+memory_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'memory_mesh'
+memory_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+memory_path
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+memory_path
+'memory_'
+timestamp
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+memory_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+memory_data
+f
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'memory_mesh'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_learning_memory
+●●●●●● 1mm □△
+self
+learning_type
+learning_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process learning memory through Layer 1.\n\n        This now integrates with the memory mesh system:\n        1. Saves to Layer 1 learning_memory folder\n        2. Processes through Genesis pipeline\n        3. FEEDS INTO MEMORY MESH with trust scoring\n        4. High-trust data flows to episodic/procedural memory\n\n        Args:\n            learning_type: Type of learning (training, feedback, pattern, success, failure)\n            learning_data: Learning data with context, action, outcome\n            user_id: Genesis ID if user-specific\n            metadata: Additional learning metadata\n\n        Returns:\n            Complete pipeline result + memory mesh integration\n        '
+logger
+●●●●●● 1mm □△
+'Layer 1: Processing learning memory ('
+learning_type
+') → Memory Mesh'
+●●●●●● 2mm □△
+learning_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'learning_memory'
+learning_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+learning_path
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+learning_path
+'learning_'
+timestamp
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+learning_data
+f
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+context
+●●●●●● 1mm □
+learning_data
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+action_taken
+●●●●●● 1mm □
+learning_data
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □
+learning_data
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+expected_outcome
+●●●●●● 1mm □
+learning_data
+●●●●●● 1mm □△
+'expected_outcome'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning_type
+'feedback'
+source
+●●●●●● 1mm □
+outcome
+●●●●●● 1mm □△
+'positive'
+●●●●●● 2mm □△
+'user_feedback_positive'
+'user_feedback_negative'
+●●●●●● 1mm △
+learning_type
+'success'
+source
+●●●●●● 1mm □
+'system_observation_success'
+●●●●●● 2mm □
+learning_type
+'failure'
+source
+●●●●●● 1mm □
+'system_observation_failure'
+●●●●●● 1mm △
+learning_type
+'correction'
+source
+●●●●●● 1mm □
+'user_feedback_correction'
+source
+●●●●●● 1mm □
+'system_observation'
+learning_example_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'memory_mesh'
+●●●●●● 1mm □
+'learning_example_id'
+'integrated'
+'message'
+learning_example_id
+●●●●●● 3mm □△○
+'Learning data integrated into memory mesh with trust scoring'
+logger
+●●●●●● 1mm □△
+'Learning memory integrated into memory mesh: '
+learning_example_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error integrating with memory mesh: '
+e
+●●●●●● 2mm □△
+result
+'memory_mesh'
+●●●●●● 1mm □
+'integrated'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'learning_memory'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_whitelist
+●●●●●● 1mm □△
+self
+whitelist_type
+whitelist_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process whitelist operations through Layer 1.\n\n        Args:\n            whitelist_type: Type of whitelist (source, domain, api)\n            whitelist_data: Whitelist data\n            user_id: Genesis ID of admin\n            metadata: Additional whitelist metadata\n\n        Returns:\n            Complete pipeline result\n        '
+logger
+●●●●●● 1mm □△
+'Layer 1: Processing whitelist ('
+whitelist_type
+')'
+●●●●●● 2mm □△
+whitelist_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'whitelist'
+whitelist_type
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+whitelist_path
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+whitelist_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+whitelist_path
+'whitelist_'
+timestamp
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+whitelist_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+whitelist_data
+f
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'whitelist'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_system_event
+●●●●●● 1mm □△
+self
+event_type
+event_data
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Process system events through Layer 1.\n\n        Args:\n            event_type: Type of event (error, log, telemetry)\n            event_data: Event data\n            metadata: Additional event metadata\n\n        Returns:\n            Complete pipeline result\n        '
+logger
+●●●●●● 1mm □△
+'Layer 1: Processing system event ('
+event_type
+')'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'input_sources'
+'system_events'
+1
+●●●●●● 3mm △
+'total_inputs'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_layer1_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get Layer 1 statistics.'
+●●●●●● 3mm ○
+'total_inputs'
+'input_sources'
+'layer1_paths'
+'message'
+●●●●●● 3mm △
+'total_inputs'
+●●●●●● 3mm △
+'input_sources'
+'genesis_key'
+'uploads'
+'external_apis'
+'web_scraping'
+'memory_mesh'
+'learning_memory'
+'whitelist'
+●●●●●● 3mm △
+'/genesis_key'
+●●●●●● 3mm △
+'/uploads'
+●●●●●● 3mm △
+'/external_apis'
+●●●●●● 3mm △
+'/web_scraping'
+●●●●●● 3mm △
+'/memory_mesh'
+●●●●●● 3mm △
+'/learning_memory'
+●●●●●● 3mm △
+'/whitelist'
+'Complete Layer 1 statistics'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_layer1_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Verify Layer 1 directory structure is complete.'
+required_paths
+●●●●●● 1mm □
+'knowledge_base/layer_1'
+'knowledge_base/layer_1/genesis_key'
+'knowledge_base/layer_1/uploads'
+'knowledge_base/layer_1/external_apis'
+'knowledge_base/layer_1/web_scraping'
+'knowledge_base/layer_1/memory_mesh'
+'knowledge_base/layer_1/learning_memory'
+'knowledge_base/layer_1/whitelist'
+verification
+●●●●●● 1mm □
+path
+required_paths
+verification
+path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+all_exist
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+verification
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'layer1_complete'
+'paths'
+'message'
+all_exist
+verification
+all_exist
+'Layer 1 structure complete'
+'Some paths missing'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_trigger_autonomous_actions
+●●●●●● 1mm □△
+self
+pipeline_result
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Trigger autonomous actions based on Genesis Key created by pipeline.\n\n        This is the CENTRAL INTEGRATION POINT where Genesis Keys trigger\n        autonomous learning, practice, and self-improvement loops.\n\n        Args:\n            pipeline_result: Result from data pipeline containing genesis_key_id\n        '
+genesis_key_id
+●●●●●● 1mm □
+pipeline_result
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+logger
+●●●●●● 1mm □△
+'Genesis Key '
+genesis_key_id
+' not found for trigger'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_trigger
+●●●●●● 1mm □
+_get_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger_pipeline
+●●●●●● 1mm □
+get_trigger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger_result
+●●●●●● 1mm □
+trigger_pipeline
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trigger_result
+●●●●●● 1mm □△
+'triggered'
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+trigger_result
+●●●●●● 1mm □△
+'actions_triggered'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LAYER1-TRIGGER] Genesis Key '
+genesis_key_id
+' triggered '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+' autonomous actions'
+●●●●●● 2mm □△
+action
+actions
+logger
+●●●●●● 1mm □△
+'  → '
+action
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+': '
+action
+●●●●●● 1mm □△
+'topic'
+action
+●●●●●● 1mm □△
+'skill'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error triggering autonomous actions: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_layer1_integration
+●●●●●● 2mm □○
+Layer1Integration
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_layer1_integration
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get or create global Layer 1 integration instance.'
+●●●●●● 2mm □
+_layer1_integration
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+_layer1_integration
+●●●●●● 1mm □
+Layer1Integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_layer1_integration
+Layer1Integration

@@ -1,0 +1,643 @@
+## idle_learner.py
+'\nIdle Learner — Kimi teaches the coding agent during idle time.\n\nWhen Grace has no active user requests, Kimi proactively:\n1. Identifies knowledge gaps from failed code generations\n2. Teaches coding patterns, best practices, frameworks\n3. Reviews past outputs and suggests improvements\n4. Builds up procedural memory (learned skills)\n5. Enriches Magma with causal relationships about code\n\nControlled by TimeSense — only runs during off-hours or\nwhen no user activity for 5+ minutes.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+CODING_CURRICULUM
+●●●●●● 1mm □
+'topic'
+'category'
+'Python error handling best practices'
+'python'
+'topic'
+'category'
+'REST API design patterns and conventions'
+'api'
+'topic'
+'category'
+'SQL injection prevention techniques'
+'security'
+'topic'
+'category'
+'Git branching strategies for teams'
+'devops'
+'topic'
+'category'
+'Unit testing patterns and anti-patterns'
+'testing'
+'topic'
+'category'
+'Clean architecture principles with code examples'
+'architecture'
+'topic'
+'category'
+'Microservices vs monolith trade-offs'
+'architecture'
+'topic'
+'category'
+'Event-driven architecture patterns'
+'architecture'
+'topic'
+'category'
+'Database schema design best practices'
+'database'
+'topic'
+'category'
+'Caching strategies and cache invalidation'
+'performance'
+'topic'
+'category'
+'React component patterns and hooks best practices'
+'frontend'
+'topic'
+'category'
+'CSS layout techniques: flexbox and grid'
+'frontend'
+'topic'
+'category'
+'Frontend state management patterns'
+'frontend'
+'topic'
+'category'
+'Accessibility (a11y) in web applications'
+'frontend'
+'topic'
+'category'
+'Docker containerization best practices'
+'devops'
+'topic'
+'category'
+'CI/CD pipeline design patterns'
+'devops'
+'topic'
+'category'
+'Environment variable management and secrets'
+'devops'
+'topic'
+'category'
+'Authentication and authorization patterns (JWT, OAuth)'
+'security'
+'topic'
+'category'
+'Input validation and sanitization'
+'security'
+'topic'
+'category'
+'CORS configuration and security headers'
+'security'
+'topic'
+'category'
+'Database query optimization techniques'
+'performance'
+'topic'
+'category'
+'Async programming patterns in Python'
+'performance'
+'topic'
+'category'
+'Memory management and garbage collection'
+'performance'
+'topic'
+'category'
+'Prompt engineering best practices'
+'ai'
+'topic'
+'category'
+'RAG system optimization techniques'
+'ai'
+'topic'
+'category'
+'LLM output validation and hallucination detection'
+'ai'
+●●●●●● 2mm △
+IdleLearner
+'\n    Proactive learning system that runs during idle time.\n    Kimi teaches Grace coding skills autonomously.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+0
+●●●●●● 3mm △
+●●●●●● 3mm ○
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+mark_activity
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Call this on any user request to reset idle timer.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_idle
+●●●●●● 1mm □△
+self
+idle_threshold_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+300
+'Check if the system has been idle long enough to learn.'
+●●●●●● 3mm ○
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+idle_threshold_seconds
+●●●●●● 3mm △
+●●●●●● 1mm □
+should_learn
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if conditions are right for idle learning.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+600
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+learn_next
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Teach the next topic from the curriculum.\n        Returns the learning result or None if not ready.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+CODING_CURRICULUM
+●●●●●● 2mm □△
+gaps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gaps
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+gaps
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+topic_data
+●●●●●● 1mm □
+CODING_CURRICULUM
+●●●●●● 3mm △
+topic
+●●●●●● 1mm □
+topic_data
+'topic'
+●●●●●● 2mm □
+topic
+●●●●●● 3mm △
+20
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+topic_data
+●●●●●● 1mm □△
+'category'
+'general'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_teach
+●●●●●● 1mm □△
+self
+topic
+category
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Have Kimi teach a specific topic.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+'topic'
+'category'
+'timestamp'
+topic
+category
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+teaching
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+teaching
+●●●●●● 1mm □△
+'knowledge'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'knowledge_length'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+teaching
+'knowledge'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+store_procedure
+store_procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.librarian_autonomous
+●●●●●● 2mm □△○
+AutonomousLibrarian
+librarian
+●●●●●● 1mm □
+AutonomousLibrarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kb
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+research_dir
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+'research'
+●●●●●● 3mm □△
+category
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+research_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+safe_name
+●●●●●● 1mm □
+topic
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+40
+research_file
+●●●●●● 1mm □
+research_dir
+●●●●●● 3mm □△
+safe_name
+'.md'
+research_file
+●●●●●● 1mm □△
+'# '
+topic
+'\n\n'
+teaching
+'knowledge'
+●●●●●● 2mm □△
+librarian
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+research_file
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[IDLE LEARNER] Taught: '
+topic
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+teaching
+'knowledge'
+●●●●●● 2mm □△
+' chars)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'success'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □
+result
+'reason'
+●●●●●● 1mm □
+'Kimi returned no knowledge'
+Exception
+result
+'success'
+●●●●●● 1mm □
+●●●●●● 1mm □
+result
+'reason'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_identify_gaps
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Find knowledge gaps from failed generations.'
+gaps
+●●●●●● 1mm □
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"\n                    SELECT input_context FROM learning_examples\n                    WHERE example_type LIKE '%negative%' AND trust_score < 0.5\n                    ORDER BY created_at DESC LIMIT 5\n                "
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+rows
+●●●●●● 2mm □
+r
+0
+gaps
+●●●●●● 1mm □△
+r
+0
+200
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+gaps
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_learn_from_gap
+●●●●●● 1mm □△
+self
+gap_description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Learn specifically about a knowledge gap.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'How to handle: '
+gap_description
+100
+'gap_fill'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'topics_taught'
+'curriculum_progress'
+'is_learning'
+'is_idle'
+'last_activity_seconds_ago'
+'recent_topics'
+'total_sessions'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+CODING_CURRICULUM
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+5
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_log
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+20
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+_learner
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_idle_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_learner
+●●●●●● 2mm □
+_learner
+●●●●●● 1mm □
+IdleLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_learner
+IdleLearner

@@ -1,0 +1,421 @@
+## add_learning_example_columns.py
+'\nMigration: Add missing columns to learning_examples for cognitive/learning_memory schema.\n\nThe cognitive.learning_memory.LearningExample model expects columns that may be\nmissing when the table was created from models.database_models (different schema).\nThis migration adds outcome_quality, consistency_score, recency_weight, and\nother columns required by memory_mesh_learner and related cognitive code.\n\nError fixed: column learning_examples.outcome_quality does not exist\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+sys
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+COLUMNS_TO_ADD
+●●●●●● 1mm □
+'outcome_quality'
+'REAL DEFAULT 0.5 NOT NULL'
+'consistency_score'
+'REAL DEFAULT 0.5 NOT NULL'
+'recency_weight'
+'REAL DEFAULT 1.0 NOT NULL'
+'source_user_id'
+'VARCHAR'
+'genesis_key_id'
+'VARCHAR'
+'times_referenced'
+'INTEGER DEFAULT 0'
+'times_validated'
+'INTEGER DEFAULT 0'
+'times_invalidated'
+'INTEGER DEFAULT 0'
+'last_used'
+'TIMESTAMP'
+'episodic_episode_id'
+'VARCHAR'
+'procedure_id'
+'VARCHAR'
+'example_metadata'
+'TEXT'
+●●●●●● 1mm □
+get_existing_columns
+●●●●●● 1mm □△
+conn
+table_name
+is_postgres
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Return set of existing column names for the table.'
+●●●●●● 2mm □
+is_postgres
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n                SELECT column_name\n                FROM information_schema.columns\n                WHERE table_name = :tbl\n            '
+●●●●●● 2mm □△
+'tbl'
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'PRAGMA table_info('
+table_name
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_postgres
+●●●●●● 3mm ○
+row
+0
+row
+result
+●●●●●● 3mm ○
+row
+1
+row
+result
+●●●●●● 1mm □○
+●●●●●● 1mm □
+ensure_learning_examples_columns
+●●●●●● 1mm □△
+engine
+quiet
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n    Add any missing columns to learning_examples. Call at startup so the system\n    auto-aligns schema (e.g. after create_tables). Returns number of columns added.\n    '
+●●●●●● 3mm □△○
+sqlalchemy.engine
+●●●●●● 2mm □△○
+Engine
+is_postgres
+●●●●●● 1mm □
+engine
+'postgresql'
+added_count
+●●●●●● 1mm □
+0
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 2mm □
+is_postgres
+r
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'learning_examples')"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+exists
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+r
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table' AND name='learning_examples'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+exists
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+exists
+●●●●●● 2mm □
+quiet
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[SKIP] learning_examples table does not exist.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+existing
+●●●●●● 1mm □
+get_existing_columns
+●●●●●● 1mm □△
+conn
+'learning_examples'
+is_postgres
+●●●●●● 2mm □△
+col_name
+col_def
+COLUMNS_TO_ADD
+●●●●●● 2mm □
+col_name
+existing
+●●●●●● 2mm □
+is_postgres
+sql
+●●●●●● 1mm □
+'ALTER TABLE learning_examples ADD COLUMN IF NOT EXISTS "'
+col_name
+'" '
+col_def
+●●●●●● 3mm □
+sql
+●●●●●● 1mm □
+'ALTER TABLE learning_examples ADD COLUMN "'
+col_name
+'" '
+col_def
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+sql
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+added_count
+1
+●●●●●● 2mm □
+quiet
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  + '
+col_name
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'already exists'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+quiet
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ! '
+col_name
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+added_count
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Add missing columns to learning_examples (standalone script).'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Migration: Add learning_examples columns'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDatabase type: '
+config
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+is_postgres
+●●●●●● 1mm □
+engine
+'postgresql'
+●●●●●● 2mm □
+is_postgres
+r
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'learning_examples')"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+exists
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+r
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table' AND name='learning_examples'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+exists
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+exists
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SKIP] learning_examples table does not exist. Run create_all first.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+existing
+●●●●●● 1mm □
+get_existing_columns
+●●●●●● 1mm □△
+conn
+'learning_examples'
+is_postgres
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nExisting columns: '
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+existing
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_count
+●●●●●● 1mm □
+ensure_learning_examples_columns
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+added_count
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Added '
+added_count
+' column(s)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] No columns to add (all already exist)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Migration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△

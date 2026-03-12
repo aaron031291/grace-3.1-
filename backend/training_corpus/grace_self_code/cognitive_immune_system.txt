@@ -1,0 +1,2284 @@
+## immune_system.py
+"\nGrace Immune System (AVN) — Autonomous health monitoring, healing, and hardening.\n\nContinuous adaptive scan loop connected to ALL backend intelligence:\n- TimeSense: adaptive scan intervals, best timing for healing\n- OODA: observe system state, orient constraints, decide actions\n- Mirror Self-Model: behavioral pattern analysis for anomaly baseline\n- Trust Engine: trust-based autonomy levels for healing permissions\n- Coding Agent: fix broken code when healing can't handle it\n- Kimi: cloud reasoning for complex diagnoses\n- Ambiguity Ledger: doubt mechanism before destructive actions\n- Contradiction Detection: verify fix doesn't make things worse\n- Learning Memory: store healing outcomes as structured playbook\n- KPI Tracker: update component trust on healing success/failure\n- Genesis Keys: full provenance on every healing action\n- Diagnostic Machine: 4-layer sensor data\n\n8 improvements over base AVN:\n1. Adaptive scan interval (not fixed 60s)\n2. Learned baselines (not hardcoded thresholds)\n3. Healing cost model (disruption vs benefit)\n4. Doubt mechanism (ambiguity check before destructive fixes)\n5. Transactional healing with rollback\n6. Root cause identification (not just correlation)\n7. Structured healing playbook (queryable, not text)\n8. Vaccination — proactive hardening for recurring problems\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+gc
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+AnomalyType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+PERFORMANCE_DEGRADATION
+●●●●●● 1mm □
+'performance_degradation'
+MEMORY_LEAK
+●●●●●● 1mm □
+'memory_leak'
+RESOURCE_EXHAUSTION
+●●●●●● 1mm □
+'resource_exhaustion'
+CASCADE_FAILURE
+●●●●●● 1mm □
+'cascade_failure'
+PATTERN_DRIFT
+●●●●●● 1mm □
+'pattern_drift'
+SECURITY_ANOMALY
+●●●●●● 1mm □
+'security_anomaly'
+SERVICE_DOWN
+●●●●●● 1mm □
+'service_down'
+CODE_ERROR
+●●●●●● 1mm □
+'code_error'
+●●●●●● 2mm △
+HealthStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+HEALTHY
+●●●●●● 1mm □
+'healthy'
+STRESSED
+●●●●●● 1mm □
+'stressed'
+DEGRADED
+●●●●●● 1mm □
+'degraded'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+FAILING
+●●●●●● 1mm □
+'failing'
+●●●●●● 2mm △
+AutonomyLevel
+●●●●●● 3mm □△
+int
+Enum
+●●●●●● 2mm ○
+Enum
+READ_ONLY
+●●●●●● 1mm □
+0
+SUGGEST
+●●●●●● 1mm □
+1
+EXECUTE_SAFE
+●●●●●● 1mm □
+2
+EXECUTE_TRUSTED
+●●●●●● 1mm □
+3
+CRITICAL_OVERRIDE
+●●●●●● 1mm □
+9
+●●●●●● 2mm △
+ComponentSnapshot
+name
+●●●●●● 1mm ○
+health_score
+●●●●●● 3mm ○
+status
+●●●●●● 1mm ○
+metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anomalies
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+Anomaly
+anomaly_type
+AnomalyType
+severity
+●●●●●● 3mm ○
+component
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+root_cause
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+healing_actions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detected_at
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+HealingRecord
+'Structured healing playbook entry.'
+problem_type
+●●●●●● 1mm ○
+component
+●●●●●● 1mm ○
+healing_action
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+time_to_recover_ms
+●●●●●● 3mm ○
+0
+side_effects
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_before
+●●●●●● 3mm ○
+0
+trust_after
+●●●●●● 3mm ○
+0
+timestamp
+●●●●●● 1mm ○
+''
+recurring
+●●●●●● 3mm △
+●●●●●● 1mm □
+occurrence_count
+●●●●●● 2mm ○
+1
+dataclass
+●●●●●● 2mm △
+GraceImmuneSystem
+'\n    Autonomous immune system connected to all backend intelligence.\n    Continuously monitors, diagnoses, heals, and hardens Grace.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+300
+●●●●●● 3mm △
+●●●●●● 3mm □△
+HealingRecord
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+0
+●●●●●● 3mm △
+AutonomyLevel
+AutonomyLevel
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+rt
+●●●●●● 1mm □
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+'__error__'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+'__alert__'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[IMMUNE] Connected to genesis realtime engine'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+publish
+subscribe
+●●●●●● 1mm □△
+'llm.failed'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'trust.threshold_crossed'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[IMMUNE] Connected to event bus'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_on_realtime_error
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Called INSTANTLY when an error genesis key is created.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+5
+logger
+●●●●●● 1mm □△
+'[IMMUNE] Error threshold hit — triggering immediate scan'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_on_realtime_alert
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Called INSTANTLY when a genesis alert fires. Consults Kimi if critical.'
+logger
+●●●●●● 1mm □△
+'[IMMUNE] Alert received: '
+event
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+': '
+event
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event
+●●●●●● 1mm □△
+'severity'
+0
+●●●●●● 2mm □△
+0.8
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diagnosis
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+●●●●●● 3mm △
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □
+diagnosis
+●●●●●● 1mm □△
+'diagnosis'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[IMMUNE] Kimi real-time diagnosis: '
+diagnosis
+'diagnosis'
+200
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+scan
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Full immune system scan cycle.\n        Connected to: TimeSense, OODA, Mirror, Trust, everything.\n        '
+scan_start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'scan_id'
+'started_at'
+'scan_interval'
+'snapshots'
+'anomalies'
+'healing_actions'
+'learning'
+'scan_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+scan_start
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+time_ctx
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+time_ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'time_context'
+●●●●●● 1mm □
+'period'
+'business_hours'
+time_ctx
+●●●●●● 1mm □△
+'period_label'
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 2mm □△
+Exception
+snapshots
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'snapshots'
+●●●●●● 1mm □
+'name'
+'health'
+'status'
+'anomalies'
+s
+s
+s
+s
+s
+snapshots
+genesis_health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'genesis_analysis'
+●●●●●● 1mm □
+genesis_health
+●●●●●● 2mm □
+genesis_health
+●●●●●● 1mm □△
+'error_spike'
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+ComponentSnapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+anomalies
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+snapshots
+●●●●●● 2mm □△
+result
+'anomalies'
+●●●●●● 1mm □
+'type'
+'severity'
+'component'
+'description'
+'root_cause'
+a
+a
+a
+a
+a
+a
+anomalies
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+2
+root
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomalies
+snapshots
+●●●●●● 2mm □△
+●●●●●● 2mm □
+root
+result
+'root_cause'
+●●●●●● 1mm □
+root
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 2mm □△
+result
+'next_scan_interval'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+anomalies
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+anomaly
+anomalies
+prior_fix
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prior_fix
+prior_fix
+'success_rate'
+0.7
+heal_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+prior_fix
+'action'
+time_ctx
+●●●●●● 2mm □△
+result
+'healing_actions'
+●●●●●● 1mm □△
+heal_result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+heal_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'healing_actions'
+●●●●●● 1mm □△
+heal_result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+snapshots
+●●●●●● 2mm □△
+result
+'scan_duration_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+scan_start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+'overall_health'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+snapshots
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_observe_all_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'database'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'qdrant'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'llm'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'memory'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'disk'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'api_server'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshots
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'ingestion'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshots
+●●●●●● 3mm □△
+ComponentSnapshot
+●●●●●● 1mm □
+_check_component
+●●●●●● 1mm □△
+self
+name
+check_fn
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+health
+status
+metrics
+●●●●●● 1mm □
+check_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ComponentSnapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ComponentSnapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComponentSnapshot
+●●●●●● 1mm □
+_check_db
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+engine
+●●●●●● 2mm □
+●●●●●● 3mm ○
+0
+'down'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+95
+'healthy'
+'connected'
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+0
+'down'
+'connected'
+●●●●●● 1mm □
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+c
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+colls
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+90
+'healthy'
+'collections'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+colls
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+0
+'down'
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_llm
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+client
+●●●●●● 1mm □
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+90
+'healthy'
+'running'
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+0
+'down'
+'running'
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+0
+'down'
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+mem
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+100
+●●●●●● 1mm □△
+mem
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+mem
+80
+'healthy'
+mem
+90
+'stressed'
+'critical'
+●●●●●● 3mm ○
+health
+status
+'percent'
+'used_gb'
+mem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+mem
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+1
+●●●●●● 2mm □△
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_disk
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+disk
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+100
+●●●●●● 1mm □△
+disk
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+disk
+85
+'healthy'
+disk
+95
+'stressed'
+'critical'
+●●●●●● 3mm ○
+health
+status
+'percent'
+'free_gb'
+disk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+disk
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+1
+●●●●●● 2mm □△
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_api
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+95
+'healthy'
+'running'
+●●●●●● 3mm □△○
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_rag
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if RAG retrieval is working.'
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+85
+'healthy'
+'working'
+'results'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+0
+'down'
+'working'
+●●●●●● 1mm □
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_ingestion
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+50
+'unknown'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+pending
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'pending'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+failed
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'failed'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+completed
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'completed'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+pending
+●●●●●● 3mm ○
+failed
+●●●●●● 3mm ○
+completed
+●●●●●● 2mm □
+total
+0
+●●●●●● 3mm ○
+80
+'idle'
+'pending'
+'failed'
+0
+0
+fail_rate
+●●●●●● 1mm □
+failed
+●●●●●● 3mm □△
+total
+health
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+100
+●●●●●● 1mm □△
+fail_rate
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+fail_rate
+0.05
+'healthy'
+fail_rate
+0.15
+'stressed'
+'degraded'
+●●●●●● 3mm ○
+health
+status
+'pending'
+'failed'
+'completed'
+pending
+failed
+completed
+Exception
+●●●●●● 3mm ○
+50
+'unknown'
+Tuple
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_analyze_genesis_keys
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Read genesis keys to detect error spikes and patterns.'
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+'available'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :d'
+●●●●●● 2mm □△
+'d'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+errors
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key WHERE when_timestamp >= :d AND is_error = 1'
+●●●●●● 2mm □△
+'d'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+error_details
+●●●●●● 1mm □
+●●●●●● 2mm □
+errors
+0
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT what_description, where_location, error_type FROM genesis_key WHERE when_timestamp >= :d AND is_error = 1 ORDER BY when_timestamp DESC LIMIT 5'
+●●●●●● 2mm □△
+'d'
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_details
+●●●●●● 1mm □
+'what'
+'where'
+'error_type'
+r
+0
+r
+1
+r
+2
+r
+rows
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_rate
+●●●●●● 1mm □
+errors
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+total
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+'recent_total'
+'recent_errors'
+'error_rate'
+'error_spike'
+'error_details'
+●●●●●● 3mm □△○
+total
+errors
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+error_rate
+3
+●●●●●● 2mm □△
+error_rate
+0.2
+error_details
+Exception
+●●●●●● 3mm ○
+'available'
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_detect_anomalies
+●●●●●● 1mm □△
+self
+snapshots
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ComponentSnapshot
+anomalies
+●●●●●● 1mm □
+snap
+snapshots
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+snap
+'health'
+50
+●●●●●● 2mm □△
+baseline_health
+●●●●●● 1mm □
+baseline
+●●●●●● 1mm □△
+'health'
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snap
+0
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+snap
+baseline_health
+●●●●●● 2mm □△
+0.7
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snap
+●●●●●● 1mm □△
+'percent'
+0
+●●●●●● 2mm □△
+90
+snap
+'memory'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snap
+●●●●●● 1mm □△
+'percent'
+0
+●●●●●● 2mm □△
+95
+snap
+'disk'
+anomalies
+●●●●●● 1mm □△
+Anomaly
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 1mm □
+_identify_root_cause
+●●●●●● 1mm □△
+self
+anomalies
+snapshots
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Anomaly
+●●●●●● 3mm □△
+ComponentSnapshot
+down_components
+●●●●●● 1mm □
+a
+a
+anomalies
+a
+AnomalyType
+●●●●●● 2mm □
+down_components
+●●●●●● 3mm ○
+●●●●●● 2mm □
+down_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □
+down_components
+0
+dependency_map
+●●●●●● 1mm □
+'database'
+'llm'
+'qdrant'
+'qdrant'
+'api_server'
+'api_server'
+downstream
+●●●●●● 1mm □
+dependency_map
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+cascaded
+●●●●●● 1mm □
+a
+a
+down_components
+1
+a
+downstream
+●●●●●● 3mm ○
+'root_component'
+'cascade_count'
+'affected'
+'recommendation'
+root
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cascaded
+●●●●●● 2mm □△
+a
+a
+cascaded
+'Fix '
+root
+' first — '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cascaded
+●●●●●● 2mm □△
+' downstream components should recover automatically'
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_adapt_scan_interval
+●●●●●● 1mm □△
+self
+anomaly_count
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+anomaly_count
+3
+●●●●●● 3mm △
+●●●●●● 1mm □
+10
+●●●●●● 1mm △
+anomaly_count
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+30
+●●●●●● 2mm □
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+120
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+300
+●●●●●● 1mm □
+_diagnose_and_heal
+●●●●●● 1mm □△
+self
+anomaly
+time_ctx
+●●●●●● 2mm □△
+Anomaly
+●●●●●● 1mm □○
+'Full diagnosis chain: doubt → cost → heal → verify → learn.'
+result
+●●●●●● 1mm □
+'anomaly'
+'component'
+anomaly
+anomaly
+is_business
+●●●●●● 1mm □
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+healing_cost
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+is_business
+●●●●●● 2mm □△
+result
+'healing_cost'
+●●●●●● 1mm □
+healing_cost
+●●●●●● 2mm □
+healing_cost
+'disruption'
+anomaly
+anomaly
+0.8
+result
+'action'
+●●●●●● 1mm □
+'deferred'
+result
+'reason'
+●●●●●● 1mm □
+'Healing cost ('
+healing_cost
+'disruption'
+'.1f'
+') > problem severity ('
+anomaly
+'.1f'
+')'
+●●●●●● 3mm ○
+result
+trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+●●●●●● 2mm □△
+can_auto_heal
+●●●●●● 1mm □
+trust
+80
+anomaly
+0.5
+trust
+60
+anomaly
+0.3
+anomaly
+0.9
+●●●●●● 2mm □
+can_auto_heal
+result
+'action'
+●●●●●● 1mm □
+'requires_approval'
+result
+'trust'
+●●●●●● 1mm □
+trust
+●●●●●● 3mm ○
+result
+heal_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+anomaly
+anomaly
+0
+'gc_collect'
+time_ctx
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+heal_result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_execute_healing
+●●●●●● 1mm □△
+self
+anomaly
+action
+time_ctx
+●●●●●● 2mm □△
+Anomaly
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'Execute a healing action with rollback capability.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_before
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+●●●●●● 2mm □△
+pre_snapshot
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+'database'
+'qdrant'
+'llm'
+'memory'
+'disk'
+'api_server'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 1mm □
+side_effects
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.self_healing
+●●●●●● 2mm □△○
+get_healer
+healer
+●●●●●● 1mm □
+get_healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'reconnect'
+'restart'
+anomaly
+'database'
+success
+●●●●●● 1mm □
+healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+side_effects
+●●●●●● 1mm □△
+'session_factory_reset'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+action
+'reconnect'
+'restart'
+anomaly
+'qdrant'
+success
+●●●●●● 1mm □
+healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'reconnect'
+'restart'
+anomaly
+'llm'
+success
+●●●●●● 1mm □
+healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+side_effects
+●●●●●● 1mm □△
+'fallback_to_kimi'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+action
+'gc_collect'
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+action
+'cache_flush'
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+side_effects
+●●●●●● 1mm □△
+'cache_cold_start'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+anomaly
+'ingestion'
+●●●●●● 3mm □△○
+cognitive.ingestion_self_healing_integration
+●●●●●● 2mm □△○
+IngestionSelfHealingIntegration
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+side_effects
+●●●●●● 1mm □△
+'ingestion_pipeline_checked'
+●●●●●● 2mm □△
+Exception
+success
+●●●●●● 1mm □
+●●●●●● 1mm □
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Healing failed: '
+e
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+post_snapshot
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+'database'
+'qdrant'
+'llm'
+'memory'
+'disk'
+'api_server'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+improved
+●●●●●● 1mm □
+post_snapshot
+pre_snapshot
+●●●●●● 2mm □
+improved
+success
+success
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+success
+anomaly
+0.6
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+queue_autonomous_query
+queue_autonomous_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+trust_after
+●●●●●● 1mm □
+trust_before
+●●●●●● 2mm □
+success
+improved
+trust_after
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100
+trust_before
+●●●●●● 3mm ○
+5
+●●●●●● 2mm □△
+●●●●●● 1mm △
+success
+trust_after
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+trust_before
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+HealingRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+success
+improved
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+action
+success
+improved
+duration
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+store_pattern
+store_decision
+ingest
+ingest
+●●●●●● 1mm □△
+'Healing '
+anomaly
+': '
+action
+' → '
+success
+improved
+'success'
+'failed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+improved
+store_pattern
+●●●●●● 1mm □△
+'successful_healing'
+anomaly
+' on '
+anomaly
+' → '
+action
+●●●●●● 2mm □△
+store_decision
+●●●●●● 1mm □△
+'heal'
+anomaly
+'Applied '
+action
+' successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+store_pattern
+●●●●●● 1mm □△
+'failed_healing'
+anomaly
+' on '
+anomaly
+' → '
+action
+' FAILED'
+●●●●●● 2mm □△
+Exception
+occurrences
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+●●●●●● 3mm △
+r
+anomaly
+r
+anomaly
+●●●●●● 2mm □△
+vaccination_needed
+●●●●●● 1mm □
+occurrences
+3
+result
+●●●●●● 1mm □
+'action'
+'success'
+'duration_ms'
+'health_before'
+'health_after'
+'trust_before'
+'trust_after'
+'side_effects'
+'vaccination_needed'
+action
+success
+improved
+duration
+pre_snapshot
+post_snapshot
+trust_before
+trust_after
+side_effects
+vaccination_needed
+●●●●●● 2mm □
+vaccination_needed
+result
+'vaccination'
+●●●●●● 1mm □
+"Problem '"
+anomaly
+"' on '"
+anomaly
+"' has occurred "
+occurrences
+' times — needs root cause fix'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_playbook
+●●●●●● 1mm □△
+self
+anomaly
+●●●●●● 2mm □△
+Anomaly
+matching
+●●●●●● 1mm □
+r
+r
+●●●●●● 3mm △
+r
+anomaly
+r
+anomaly
+●●●●●● 2mm □
+matching
+●●●●●● 3mm ○
+●●●●●● 2mm □
+action_stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+r
+matching
+●●●●●● 2mm □
+r
+action_stats
+action_stats
+r
+●●●●●● 1mm □
+'attempts'
+'successes'
+0
+0
+action_stats
+r
+'attempts'
+1
+●●●●●● 2mm □
+r
+action_stats
+r
+'successes'
+1
+best_action
+●●●●●● 1mm □
+●●●●●● 2mm □
+best_rate
+●●●●●● 1mm □
+0
+action
+stats
+action_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rate
+●●●●●● 1mm □
+stats
+'successes'
+●●●●●● 3mm □△
+stats
+'attempts'
+●●●●●● 2mm □
+rate
+best_rate
+best_rate
+●●●●●● 1mm □
+rate
+best_action
+●●●●●● 1mm □
+action
+●●●●●● 2mm □
+best_action
+best_rate
+0
+●●●●●● 3mm ○
+'action'
+'success_rate'
+'attempts'
+best_action
+best_rate
+action_stats
+best_action
+'attempts'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_calculate_healing_cost
+●●●●●● 1mm □△
+self
+anomaly
+is_business
+●●●●●● 2mm □△
+Anomaly
+●●●●●● 3mm △
+base_cost
+●●●●●● 1mm □
+'gc_collect'
+'cache_flush'
+'reconnect'
+'restart'
+'recalibrate'
+0.1
+0.3
+0.4
+0.7
+0.2
+●●●●●● 1mm □△
+anomaly
+anomaly
+0
+'gc_collect'
+0.2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_business
+base_cost
+1.5
+●●●●●● 3mm ○
+'disruption'
+'recovery_seconds'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+base_cost
+2
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+base_cost
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_calculate_overall_health
+●●●●●● 1mm □△
+self
+snapshots
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ComponentSnapshot
+●●●●●● 2mm □
+snapshots
+●●●●●● 3mm ○
+'status'
+'score'
+'unknown'
+0
+avg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+snapshots
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snapshots
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+avg
+80
+'healthy'
+avg
+60
+'stressed'
+avg
+40
+'degraded'
+avg
+20
+'critical'
+'failing'
+●●●●●● 3mm ○
+'status'
+'score'
+'components'
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snapshots
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_update_baselines
+●●●●●● 1mm □△
+self
+snapshots
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ComponentSnapshot
+snap
+snapshots
+●●●●●● 2mm □
+snap
+0
+●●●●●● 2mm □
+snap
+●●●●●● 3mm △
+●●●●●● 3mm △
+snap
+●●●●●● 1mm □
+'health'
+snap
+●●●●●● 3mm □
+old
+●●●●●● 1mm □
+●●●●●● 3mm △
+snap
+'health'
+●●●●●● 3mm □
+●●●●●● 3mm △
+snap
+'health'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+old
+●●●●●● 2mm □△
+0.9
+●●●●●● 3mm ○
+snap
+●●●●●● 2mm □△
+0.1
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_component_trust
+●●●●●● 1mm □△
+self
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+comp
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'healing_'
+component
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+comp
+comp
+70
+Exception
+●●●●●● 3mm ○
+70
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_update_kpi
+●●●●●● 1mm □△
+self
+component
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+engine
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_store_learning
+●●●●●● 1mm □△
+self
+anomaly
+action
+success
+duration
+●●●●●● 2mm □△
+Anomaly
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'scan_interval'
+'autonomy_level'
+'baselines'
+'playbook_entries'
+'total_anomalies'
+'scan_count'
+'last_scan'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_playbook
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'problem'
+'component'
+'action'
+'success'
+'duration_ms'
+'trust_delta'
+'recurring'
+r
+r
+r
+r
+r
+r
+●●●●●● 1mm □△
+r
+r
+r
+●●●●●● 3mm △
+50
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+_immune
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_immune_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_immune
+●●●●●● 2mm □
+_immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_immune
+GraceImmuneSystem

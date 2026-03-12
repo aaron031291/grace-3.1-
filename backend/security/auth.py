@@ -12,7 +12,6 @@ import hashlib
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 from fastapi import Request, Response, HTTPException, Depends, Cookie
-from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 
 from .config import get_security_config
 from .logging import get_security_logger

@@ -1,0 +1,194 @@
+## add_document_download_fields.py
+'\nDatabase migration: Add document download fields\n\nThis migration adds support for tracking downloaded documents in the scraping system.\n\nNew fields:\n- scraping_jobs.pages_downloaded: Count of downloaded documents\n- scraped_pages.file_path: Path to downloaded document file\n- scraped_pages.file_size: Size of downloaded document in bytes\n- scraped_pages.file_type: File extension (pdf, docx, etc.)\n'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run the migration to add document download fields.'
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+db_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database not found at '
+db_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Starting migration: add_document_download_fields'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n                ALTER TABLE scraping_jobs \n                ADD COLUMN pages_downloaded INTEGER DEFAULT 0\n            '
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added pages_downloaded to scraping_jobs'
+●●●●●● 2mm □△
+sqlite3
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'⚠ pages_downloaded already exists in scraping_jobs'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+cursor
+●●●●●● 1mm □△
+'\n                ALTER TABLE scraped_pages \n                ADD COLUMN file_path VARCHAR(1024)\n            '
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added file_path to scraped_pages'
+●●●●●● 2mm □△
+sqlite3
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'⚠ file_path already exists in scraped_pages'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+cursor
+●●●●●● 1mm □△
+'\n                ALTER TABLE scraped_pages \n                ADD COLUMN file_size INTEGER\n            '
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added file_size to scraped_pages'
+●●●●●● 2mm □△
+sqlite3
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'⚠ file_size already exists in scraped_pages'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+cursor
+●●●●●● 1mm □△
+'\n                ALTER TABLE scraped_pages \n                ADD COLUMN file_type VARCHAR(50)\n            '
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added file_type to scraped_pages'
+●●●●●● 2mm □△
+sqlite3
+●●●●●● 2mm □
+'duplicate column name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'⚠ file_type already exists in scraped_pages'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Migration completed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Migration failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exit
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

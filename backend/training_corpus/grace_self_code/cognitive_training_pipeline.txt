@@ -1,0 +1,769 @@
+## training_pipeline.py
+'\nTraining Data Pipeline — Terabyte-Scale Data Acquisition\n\nOpus is too expensive for raw data generation (30KB per call = $$$).\nInstead, this pipeline PULLS from free, massive open-source datasets\nand uses Opus to CURATE and VERIFY, not generate.\n\nData Sources (all free, all terabyte-scale):\n\n1. THE STACK (BigCode) — 6.4TB of permissively licensed code\n   https://huggingface.co/datasets/bigcode/the-stack-v2\n   Languages: Python, JS, TS, Rust, Go, Java, C++\n\n2. GITHUB CODE — 1TB+ of GitHub repositories\n   https://huggingface.co/datasets/codeparrot/github-code\n\n3. WIKIPEDIA — 22GB compressed, full knowledge base\n   https://dumps.wikimedia.org/\n\n4. COMMON CRAWL — 380TB of web content\n   https://commoncrawl.org/\n\n5. ARXIV — 1.7M+ scientific papers\n   https://www.kaggle.com/datasets/Cornell-University/arxiv\n\n6. STACK OVERFLOW — 50GB+ of Q&A\n   https://archive.org/details/stackexchange\n\n7. HUGGINGFACE DATASETS — thousands of curated datasets\n   https://huggingface.co/datasets\n\nPipeline:\n  Source → Download → Filter → Chunk → Verify (Opus) → Index → Store\n\nThe pipeline downloads in chunks, filters for relevant content,\nand uses Opus sparingly for quality verification only.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+PIPELINE_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'training_pipeline'
+DOWNLOAD_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'training_downloads'
+DATA_SOURCES
+●●●●●● 1mm □
+'the_stack_v2'
+'github_code'
+'stack_overflow'
+'arxiv_papers'
+'wikipedia'
+'common_crawl'
+'redpajama'
+'refinedweb'
+'openwebtext2'
+'dolma'
+'name'
+'url'
+'type'
+'hf_dataset'
+'size'
+'description'
+'relevance'
+'free'
+'languages'
+'The Stack v2 (BigCode)'
+'https://huggingface.co/datasets/bigcode/the-stack-v2'
+'huggingface'
+'bigcode/the-stack-v2'
+'6.4TB'
+'6.4TB of permissively licensed source code from GitHub. Python, JavaScript, TypeScript, and 300+ languages.'
+'critical'
+●●●●●● 3mm □△○
+'python'
+'javascript'
+'typescript'
+'rust'
+'go'
+'name'
+'url'
+'type'
+'hf_dataset'
+'size'
+'description'
+'relevance'
+'free'
+'languages'
+'GitHub Code (CodeParrot)'
+'https://huggingface.co/datasets/codeparrot/github-code'
+'huggingface'
+'codeparrot/github-code'
+'1TB+'
+'Large-scale GitHub code dataset filtered for quality.'
+'critical'
+●●●●●● 3mm □△○
+'python'
+'javascript'
+'name'
+'url'
+'type'
+'size'
+'description'
+'relevance'
+'free'
+'Stack Overflow Data Dump'
+'https://archive.org/details/stackexchange'
+'archive'
+'50GB+'
+'Complete Stack Overflow Q&A dump. Python, JavaScript, system design, architecture questions.'
+'high'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'size'
+'description'
+'relevance'
+'free'
+'ArXiv Papers (CS/AI)'
+'https://www.kaggle.com/datasets/Cornell-University/arxiv'
+'kaggle'
+'1.7M papers'
+'Scientific papers on AI, ML, software engineering, distributed systems.'
+'high'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'download_url'
+'size'
+'description'
+'relevance'
+'free'
+'Wikipedia English Dump'
+'https://dumps.wikimedia.org/enwiki/latest/'
+'direct'
+'https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2'
+'22GB compressed'
+'Full English Wikipedia. General knowledge, technology, CS articles.'
+'medium'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'size'
+'description'
+'relevance'
+'free'
+'Common Crawl'
+'https://commoncrawl.org/'
+'s3'
+'380TB total'
+'Web crawl data. Filter for tech blogs, documentation, tutorials.'
+'medium'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'hf_dataset'
+'size'
+'description'
+'relevance'
+'free'
+'RedPajama (Together AI)'
+'https://huggingface.co/datasets/togethercomputer/RedPajama-Data-V2'
+'huggingface'
+'togethercomputer/RedPajama-Data-V2'
+'30TB'
+'30TB web data curated for LLM training. High quality, deduplicated.'
+'high'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'hf_dataset'
+'size'
+'description'
+'relevance'
+'free'
+'RefinedWeb (Falcon)'
+'https://huggingface.co/datasets/tiiuae/falcon-refinedweb'
+'huggingface'
+'tiiuae/falcon-refinedweb'
+'600GB+'
+'High-quality filtered web data used to train Falcon models.'
+'high'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'hf_dataset'
+'size'
+'description'
+'relevance'
+'free'
+'OpenWebText2'
+'https://huggingface.co/datasets/openwebtext2'
+'huggingface'
+'openwebtext2'
+'65GB'
+'Curated web text dataset for language model training.'
+'medium'
+●●●●●● 3mm □△○
+'name'
+'url'
+'type'
+'hf_dataset'
+'size'
+'description'
+'relevance'
+'free'
+'Dolma (AI2)'
+'https://huggingface.co/datasets/allenai/dolma'
+'huggingface'
+'allenai/dolma'
+'3TB'
+'3TB curated dataset from AI2. Code, web, academic papers, books.'
+'high'
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+DownloadJob
+source_id
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+'pending'
+progress_percent
+●●●●●● 3mm ○
+0
+bytes_downloaded
+●●●●●● 2mm ○
+0
+total_bytes
+●●●●●● 2mm ○
+0
+chunks_processed
+●●●●●● 2mm ○
+0
+chunks_verified
+●●●●●● 2mm ○
+0
+started_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+output_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 1mm □
+list_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all available training data sources with sizes.'
+●●●●●● 3mm ○
+'id'
+'name'
+'url'
+'type'
+'size'
+'description'
+'relevance'
+'free'
+'languages'
+sid
+src
+'name'
+src
+'url'
+src
+'type'
+src
+'size'
+src
+'description'
+src
+'relevance'
+src
+'free'
+src
+●●●●●● 1mm □△
+'languages'
+●●●●●● 2mm □△
+sid
+src
+DATA_SOURCES
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_download_instructions
+●●●●●● 1mm □△
+source_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n    Get step-by-step instructions to download a specific dataset.\n    These are designed to run on the user's local machine with storage.\n    "
+source
+●●●●●● 1mm □
+DATA_SOURCES
+●●●●●● 1mm □△
+source_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+●●●●●● 3mm ○
+'error'
+'Unknown source: '
+source_id
+instructions
+●●●●●● 1mm □
+'source'
+'size'
+'url'
+source
+'name'
+source
+'size'
+source
+'url'
+●●●●●● 2mm □
+source
+'type'
+'huggingface'
+instructions
+'method'
+●●●●●● 1mm □
+'huggingface_datasets'
+instructions
+'steps'
+●●●●●● 1mm □
+'pip install datasets huggingface_hub'
+'# Python script to download:'
+'from datasets import load_dataset'
+"ds = load_dataset('"
+source
+●●●●●● 1mm □△
+'hf_dataset'
+''
+●●●●●● 2mm □△
+"', streaming=True)"
+'# Stream and save chunks:'
+"for i, batch in enumerate(ds['train'].iter(batch_size=10000)):"
+'    # Process and save batch to knowledge_base/training/'
+'    pass'
+instructions
+'python_script'
+●●●●●● 1mm □
+_generate_hf_download_script
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+●●●●●● 1mm △
+source
+'type'
+'archive'
+instructions
+'method'
+●●●●●● 1mm □
+'direct_download'
+instructions
+'steps'
+●●●●●● 1mm □
+'# Download from: '
+source
+'url'
+'# Extract and filter for relevant content'
+"# Process into Grace's training format"
+●●●●●● 2mm □
+source
+'type'
+'direct'
+instructions
+'method'
+●●●●●● 1mm □
+'wget'
+instructions
+'steps'
+●●●●●● 1mm □
+'wget '
+source
+●●●●●● 1mm □△
+'download_url'
+source
+'url'
+●●●●●● 2mm □△
+'# Extract and process'
+●●●●●● 1mm △
+source
+'type'
+'kaggle'
+instructions
+'method'
+●●●●●● 1mm □
+'kaggle_cli'
+instructions
+'steps'
+●●●●●● 1mm □
+'pip install kaggle'
+'kaggle datasets download -d Cornell-University/arxiv'
+●●●●●● 3mm ○
+instructions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_hf_download_script
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Generate a Python script to download and process a HuggingFace dataset.'
+dataset_id
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+'hf_dataset'
+''
+●●●●●● 2mm □△
+languages
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+'languages'
+'python'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'#!/usr/bin/env python3\n"""\nAuto-generated script to download '
+source
+'name'
+' for Grace training.\nRun this on your local machine with sufficient storage.\n\nDataset: '
+dataset_id
+'\nSize: '
+source
+'size'
+'\n"""\n\nimport os\nimport json\nimport hashlib\nfrom pathlib import Path\nfrom datasets import load_dataset\n\nOUTPUT_DIR = Path("training_data/'
+dataset_id
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+'")\nOUTPUT_DIR.mkdir(parents=True, exist_ok=True)\n\nLANGUAGES = '
+json
+●●●●●● 1mm □△
+languages
+●●●●●● 2mm □△
+'\nMAX_FILE_SIZE = 100_000  # Skip files larger than 100KB\nBATCH_SIZE = 5000\nMAX_BATCHES = 200  # ~1M samples\n\nprint(f"Downloading {dataset_id}...")\nprint(f"Output: {OUTPUT_DIR}")\nprint(f"Languages: {LANGUAGES}")\n\nds = load_dataset("'
+dataset_id
+'", streaming=True, split="train")\n\nbatch_num = 0\ntotal_samples = 0\ntotal_bytes = 0\n\nfor batch in ds.iter(batch_size=BATCH_SIZE):\n    if batch_num >= MAX_BATCHES:\n        break\n\n    samples = []\n    for i in range(len(batch.get("content", batch.get("text", [])))):\n        content = batch.get("content", batch.get("text", []))[i]\n        lang = batch.get("lang", batch.get("language", ["unknown"] * len(batch.get("content", []))))[i]\n\n        if lang not in LANGUAGES and LANGUAGES != ["all"]:\n            continue\n        if len(content) > MAX_FILE_SIZE:\n            continue\n        if len(content) < 50:\n            continue\n\n        samples.append({\n            "content": content,\n            "language": lang,\n            "hash": hashlib.sha256(content.encode()).hexdigest()[:16],\n        })\n\n    if samples:\n        output_file = OUTPUT_DIR / f"batch_{batch_num:06d}.jsonl"\n        with open(output_file, "w") as f:\n            for sample in samples:\n                f.write(json.dumps(sample) + "\\n")\n        total_samples += len(samples)\n        total_bytes += output_file.stat().st_size\n        print(f"Batch {batch_num}: {len(samples)} samples ({total_bytes/1024/1024:.1f} MB total)")\n\n    batch_num += 1\n\nprint(f"\\nDone! {total_samples} samples, {total_bytes/1024/1024:.1f} MB")\nprint(f"Copy {OUTPUT_DIR} to Grace\\\'s backend/knowledge_base/training/")\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_all_download_scripts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Generate download scripts for all sources.'
+PIPELINE_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scripts
+●●●●●● 1mm □
+sid
+source
+DATA_SOURCES
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+'type'
+'huggingface'
+script
+●●●●●● 1mm □
+_generate_hf_download_script
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+script_path
+●●●●●● 1mm □
+PIPELINE_DIR
+●●●●●● 3mm □△
+'download_'
+sid
+'.py'
+script_path
+●●●●●● 1mm □△
+script
+●●●●●● 2mm □△
+scripts
+sid
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+script_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scripts
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_recommended_plan
+●●●●●● 1mm □△
+available_storage_gb
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+1000
+'\n    Given available storage, recommend which datasets to download\n    and in what order for maximum training value.\n    '
+plan
+●●●●●● 1mm □
+'available_storage_gb'
+'recommended_order'
+'total_estimated_gb'
+available_storage_gb
+0
+●●●●●● 2mm □
+available_storage_gb
+1500
+priority
+●●●●●● 1mm □
+'the_stack_v2'
+500
+'FULL Python + JS + TS + Rust + Go (~500GB)'
+'dolma'
+500
+'FULL Dolma — code, web, academic, books (~500GB)'
+'refinedweb'
+300
+'FULL RefinedWeb — high-quality web text (~300GB)'
+'redpajama'
+300
+'FULL RedPajama subset — curated web data (~300GB)'
+'stack_overflow'
+50
+'FULL Stack Overflow dump — all Q&A (~50GB)'
+'github_code'
+200
+'FULL GitHub Code — all languages (~200GB)'
+'arxiv_papers'
+50
+'FULL ArXiv CS/AI/ML papers (~50GB)'
+'openwebtext2'
+65
+'FULL OpenWebText2 (~65GB)'
+'wikipedia'
+22
+'FULL English Wikipedia (~22GB)'
+●●●●●● 3mm □
+priority
+●●●●●● 1mm □
+'the_stack_v2'
+100
+'Start with Python subset only (~100GB)'
+'dolma'
+200
+"AI2's curated mix — code, web, academic (~200GB subset)"
+'stack_overflow'
+50
+'All Python/JS/architecture Q&A (~50GB)'
+'refinedweb'
+100
+'High-quality web text (~100GB subset)'
+'arxiv_papers'
+30
+'CS/AI papers (~30GB)'
+'redpajama'
+200
+'Web data for general knowledge (~200GB subset)'
+'github_code'
+100
+'Additional code samples (~100GB)'
+'wikipedia'
+22
+'General knowledge base (~22GB)'
+running_total
+●●●●●● 1mm □
+0
+source_id
+est_gb
+note
+priority
+●●●●●● 2mm □
+running_total
+●●●●●● 3mm ○
+est_gb
+available_storage_gb
+plan
+'recommended_order'
+●●●●●● 1mm □△
+'source'
+'estimated_gb'
+'note'
+'status'
+source_id
+est_gb
+'SKIP — exceeds storage ('
+running_total
+●●●●●● 3mm ○
+est_gb
+'GB > '
+available_storage_gb
+'GB)'
+'skip'
+●●●●●● 2mm □△
+plan
+'recommended_order'
+●●●●●● 1mm □△
+'source'
+'estimated_gb'
+'note'
+'status'
+'name'
+source_id
+est_gb
+note
+'recommended'
+DATA_SOURCES
+source_id
+'name'
+●●●●●● 2mm □△
+running_total
+est_gb
+plan
+'total_estimated_gb'
+●●●●●● 1mm □
+running_total
+●●●●●● 3mm ○
+plan
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+augment_training_with_spindle_feedback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"\n    Query Magma for UNSAT Z3 Spindle proofs to improve Qwen's mathematical alignment.\n    Any Z3 generation failures are appended to the training corpus.\n    "
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 2mm □
+magma_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Magma unavailable. Cannot augment training data with Spindle feedback.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+results
+●●●●●● 1mm □
+magma_bridge
+●●●●●● 1mm □△
+'verify_spindle_action'
+●●●●●● 2mm □△
+unsat_cases
+●●●●●● 1mm □
+r
+results
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'UNSAT'
+unsat_cases
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 2mm □
+unsat_cases
+●●●●●● 3mm ○
+0
+output_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'training_corpus/spindle_feedback'
+●●●●●● 2mm □△
+output_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+0
+case
+unsat_cases
+cid
+●●●●●● 1mm □
+case
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'constraint_id'
+'unknown'
+●●●●●● 2mm □△
+out_file
+●●●●●● 1mm □
+output_dir
+●●●●●● 3mm □△
+cid
+'.json'
+training_record
+●●●●●● 1mm □
+'instruction'
+'output'
+'source'
+'status'
+'Generate a formal Z3 SMT constraint for the Spindle topological physics engine based on this rule: '
+case
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+'# ERROR: The generated constraint resulted in an UNSAT proof and violated the Spindle topology.\\n# Mathematical Proof:\\n'
+case
+●●●●●● 1mm □△
+'rationale'
+''
+●●●●●● 2mm □△
+'magma_spindle_feedback'
+'UNSAT'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+training_record
+f
+●●●●●● 2mm □△
+count
+1
+logger
+●●●●●● 1mm □△
+'Augmented Qwen training corpus with '
+count
+' UNSAT Spindle proofs from Magma Memory.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count

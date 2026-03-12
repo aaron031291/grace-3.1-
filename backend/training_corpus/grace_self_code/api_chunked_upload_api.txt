@@ -1,0 +1,1035 @@
+## chunked_upload_api.py
+'\nChunked Upload API - Handles large file uploads in streaming chunks.\nIntegrates directly with docs_library_api.py to register assembled files.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+UploadFile
+File
+Form
+Request
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+List
+Set
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MAX_FILE_SIZE
+●●●●●● 1mm □
+5
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+DEFAULT_CHUNK_SIZE
+●●●●●● 1mm □
+5
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+MIN_CHUNK_SIZE
+●●●●●● 1mm □
+1
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+MAX_CHUNK_SIZE
+●●●●●● 1mm □
+50
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+ORPHAN_TTL_HOURS
+●●●●●● 1mm □
+24
+_upload_sessions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_session_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+temp_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.temp_uploads'
+temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+temp_dir
+Path
+●●●●●● 1mm □
+_fmt_size
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Format bytes into human-readable string (used by tests).'
+●●●●●● 2mm □
+b
+●●●●●● 3mm ○
+'0 B'
+●●●●●● 2mm □
+b
+1024
+●●●●●● 3mm ○
+b
+' B'
+k
+●●●●●● 1mm □
+1024
+s
+'KB'
+'MB'
+'GB'
+●●●●●● 2mm □
+b
+k
+●●●●●● 2mm □△
+1024
+s
+'GB'
+●●●●●● 2mm □
+s
+'KB'
+s
+'MB'
+●●●●●● 3mm ○
+b
+●●●●●● 3mm □△
+k
+'.1f'
+' '
+s
+●●●●●● 3mm ○
+b
+●●●●●● 3mm □△
+k
+'.2f'
+' '
+s
+k
+1024
+●●●●●● 3mm ○
+b
+●●●●●● 3mm □△
+k
+'.2f'
+' GB'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_session
+●●●●●● 1mm □△
+uid
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Create a new session in memory and on disk.'
+_session_lock
+_upload_sessions
+uid
+●●●●●● 1mm □
+data
+chunk_dir
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+uid
+chunk_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+disk_data
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+disk_data
+●●●●●● 1mm □△
+'received_chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □△
+disk_data
+'received_chunks'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+disk_data
+'received_chunks'
+●●●●●● 2mm □△
+chunk_dir
+●●●●●● 3mm □△
+'meta.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+disk_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+uid
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Retrieve session from memory, fallback to disk.'
+_session_lock
+●●●●●● 2mm □
+uid
+_upload_sessions
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_upload_sessions
+uid
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'received_chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+'received_chunks'
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+'received_chunks'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+meta_file
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+uid
+●●●●●● 3mm □△
+'meta.json'
+●●●●●● 2mm □
+meta_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+meta_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'received_chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'received_chunks'
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+data
+'received_chunks'
+●●●●●● 2mm □△
+_session_lock
+_upload_sessions
+uid
+●●●●●● 1mm □
+data
+●●●●●● 3mm ○
+data
+json
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_session
+●●●●●● 1mm □△
+uid
+updates
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Update active session in memory and disk.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+uid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+_session_lock
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+updates
+●●●●●● 2mm □△
+_upload_sessions
+uid
+●●●●●● 1mm □
+●●●●●● 3mm △○
+chunk_dir
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+uid
+●●●●●● 2mm □
+chunk_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+disk_data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+disk_data
+●●●●●● 1mm □△
+'received_chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □△
+disk_data
+'received_chunks'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+disk_data
+'received_chunks'
+●●●●●● 2mm □△
+chunk_dir
+●●●●●● 3mm □△
+'meta.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+disk_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_remove_session
+●●●●●● 1mm □△
+uid
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove session from memory tracking.'
+_session_lock
+_upload_sessions
+●●●●●● 1mm □△
+uid
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_cleanup_chunks
+●●●●●● 1mm □△
+uid
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove temporary chunk files and directory.'
+chunk_dir
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+uid
+●●●●●● 2mm □
+chunk_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+chunk_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □
+cleanup_orphaned_uploads
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear out sessions older than ORPHAN_TTL_HOURS. Returns exact count cleaned.'
+temp_dir
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+cutoff_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cleaned_count
+●●●●●● 1mm □
+0
+entry
+temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+uid
+●●●●●● 1mm □
+entry
+meta_file
+●●●●●● 1mm □
+entry
+●●●●●● 3mm □△
+'meta.json'
+should_delete
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+meta_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+meta_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'completed'
+should_delete
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+created_at_str
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'created_at'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+created_at_str
+●●●●●● 3mm □△○
+dateutil.parser
+●●●●●● 2mm □△○
+parse
+created_at
+●●●●●● 1mm □
+parse
+●●●●●● 1mm □△
+created_at_str
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+created_at
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+created_at
+cutoff_time
+should_delete
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+BaseException
+json
+should_delete
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+mtime
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mtime
+cutoff_time
+should_delete
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+OSError
+●●●●●● 2mm □
+should_delete
+shutil
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+_remove_session
+●●●●●● 1mm □△
+uid
+●●●●●● 2mm □△
+cleaned_count
+1
+●●●●●● 3mm ○
+cleaned_count
+●●●●●● 2mm ○
+●●●●●● 2mm △
+InitiateUploadRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+filename
+●●●●●● 1mm ○
+file_size
+●●●●●● 2mm ○
+folder
+●●●●●● 1mm ○
+''
+auto_ingest
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+source
+●●●●●● 1mm ○
+'docs_library'
+InitiateUploadRequest
+'Start a new chunked upload session.'
+●●●●●● 2mm □
+req
+MAX_FILE_SIZE
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 1mm □
+DEFAULT_CHUNK_SIZE
+total_chunks
+●●●●●● 1mm □
+req
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □○
+chunk_size
+chunk_size
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+MIN_CHUNK_SIZE
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk_size
+MAX_CHUNK_SIZE
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_chunks
+●●●●●● 1mm □
+req
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □○
+chunk_size
+uid
+●●●●●● 1mm □
+'upload_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+'_'
+hashlib
+●●●●●● 1mm □△
+req
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+_create_session
+●●●●●● 1mm □△
+uid
+'upload_id'
+'filename'
+'file_size'
+'chunk_size'
+'total_chunks'
+'folder'
+'auto_ingest'
+'source'
+'received_chunks'
+'chunk_hashes'
+'status'
+'created_at'
+uid
+req
+req
+chunk_size
+total_chunks
+req
+req
+req
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'in_progress'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'upload_id'
+'chunk_size'
+'total_chunks'
+'status'
+uid
+chunk_size
+total_chunks
+'in_progress'
+router
+●●●●●● 1mm □△
+'/initiate'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+UploadFile
+Form
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+File
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+'Receive and save a single chunk.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+upload_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+'status'
+'in_progress'
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_dir
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+upload_id
+●●●●●● 2mm □
+chunk_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_data
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actual_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+chunk_data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+actual_hash
+chunk_hash
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_path
+●●●●●● 1mm □
+chunk_dir
+●●●●●● 3mm □△
+'chunk_'
+chunk_index
+'06d'
+chunk_path
+●●●●●● 1mm □△
+chunk_data
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'received_chunks'
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+received
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □△
+chunk_index
+●●●●●● 2mm □△
+hashes
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'chunk_hashes'
+●●●●●● 2mm □△
+hashes
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+chunk_index
+●●●●●● 2mm □△
+●●●●●● 1mm □
+actual_hash
+_update_session
+●●●●●● 1mm □△
+upload_id
+'received_chunks'
+'chunk_hashes'
+received
+hashes
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'uploaded'
+'total'
+'ok'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+'total_chunks'
+router
+●●●●●● 1mm □△
+'/chunk'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CompleteUploadRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+upload_id
+●●●●●● 1mm ○
+CompleteUploadRequest
+'Assemble all chunks and register file in docs library.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'received_chunks'
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+received
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+'total_chunks'
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_update_session
+●●●●●● 1mm □△
+req
+'status'
+'assembling'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'folder'
+''
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+folder
+kb_path
+●●●●●● 3mm □△
+folder
+kb_path
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+final_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+●●●●●● 3mm △○
+'filename'
+chunk_dir
+●●●●●● 1mm □
+_get_temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+req
+file_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_size
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+final_path
+'wb'
+●●●●●● 2mm □△
+f_out
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+'total_chunks'
+●●●●●● 2mm □△
+chunk_path
+●●●●●● 1mm □
+chunk_dir
+●●●●●● 3mm □△
+'chunk_'
+i
+'06d'
+●●●●●● 2mm □
+chunk_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+chunk_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f_out
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+file_hash
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+total_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+register_document
+doc_id
+●●●●●● 1mm □
+register_document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_update_session
+●●●●●● 1mm □△
+req
+'status'
+'file_hash'
+'completed'
+file_hash
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_cleanup_chunks
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'document_id'
+'path'
+'size'
+'success'
+doc_id
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+final_path
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_size
+HTTPException
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to assemble chunks for '
+req
+': '
+e
+●●●●●● 2mm □△
+_update_session
+●●●●●● 1mm □△
+req
+'status'
+'failed_assembly'
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/complete'
+●●●●●● 2mm □△

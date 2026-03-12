@@ -1,0 +1,1137 @@
+## topological_retrieval.py
+'\nMagma Memory - Adaptive Topological Retrieval\n\nGraph-based retrieval with adaptive traversal policies:\n1. Starts from anchor nodes identified by Intent Router\n2. Traverses relation graphs based on retrieval policy\n3. Adapts traversal depth and breadth based on result quality\n4. Combines graph traversal with vector similarity\n\nTraversal Policies:\n- BFS (Breadth-First): Explore neighbors at each level\n- DFS (Depth-First): Deep exploration of single paths\n- Best-First: Follow highest-weight edges\n- Adaptive: Dynamically adjust based on results\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Set
+Tuple
+Callable
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 2mm □△○
+heapq
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+GraphNode
+GraphEdge
+RelationType
+BaseRelationGraph
+●●●●●● 3mm □△○
+cognitive.magma.intent_router
+●●●●●● 2mm □△○
+QueryAnalysis
+Anchor
+AnchorType
+●●●●●● 3mm □△○
+cognitive.magma.rrf_fusion
+●●●●●● 2mm □△○
+RetrievalResult
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TraversalPolicy
+●●●●●● 3mm □△
+Enum
+Enum
+'Graph traversal policies.'
+BFS
+●●●●●● 1mm □
+'bfs'
+DFS
+●●●●●● 1mm □
+'dfs'
+BEST_FIRST
+●●●●●● 1mm □
+'best_first'
+BIDIRECTIONAL
+●●●●●● 1mm □
+'bidirectional'
+ADAPTIVE
+●●●●●● 1mm □
+'adaptive'
+SEMANTIC_SPREAD
+●●●●●● 1mm □
+'semantic_spread'
+CAUSAL_CHAIN
+●●●●●● 1mm □
+'causal_chain'
+TEMPORAL_WINDOW
+●●●●●● 1mm □
+'temporal_window'
+●●●●●● 2mm △
+TraversalConfig
+'Configuration for graph traversal.'
+max_depth
+●●●●●● 2mm ○
+3
+max_nodes
+●●●●●● 2mm ○
+100
+min_edge_weight
+●●●●●● 3mm ○
+0.1
+min_node_trust
+●●●●●● 3mm ○
+0.3
+beam_width
+●●●●●● 2mm ○
+10
+adaptive_threshold
+●●●●●● 3mm ○
+0.5
+relation_types
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+RelationType
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+TraversalState
+'State during traversal.'
+visited
+Set
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+frontier
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 3mm □△
+Tuple
+GraphNode
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+GraphEdge
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+depth
+●●●●●● 2mm ○
+0
+total_explored
+●●●●●● 2mm ○
+0
+dataclass
+●●●●●● 2mm △
+TraversalResult
+'Result of a graph traversal.'
+nodes
+●●●●●● 3mm □△
+GraphNode
+edges
+●●●●●● 3mm □△
+GraphEdge
+paths
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Tuple
+GraphNode
+GraphEdge
+scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GraphTraverser
+'\n    Base graph traversal implementation.\n\n    Provides common traversal algorithms for relation graphs.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+●●●●●● 2mm □△
+MagmaRelationGraphs
+'\n        Initialize traverser.\n\n        Args:\n            graphs: MagmaRelationGraphs instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+logger
+●●●●●● 1mm □△
+'[MAGMA-TRAVERSAL] GraphTraverser initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+bfs_traverse
+●●●●●● 1mm □△
+self
+start_node_id
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+BaseRelationGraph
+TraversalConfig
+'\n        Breadth-first traversal from a starting node.\n\n        Args:\n            start_node_id: Starting node ID\n            graph: Graph to traverse\n            config: Traversal configuration\n\n        Returns:\n            TraversalResult with discovered nodes\n        '
+start_node
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+start_node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_node
+●●●●●● 3mm ○
+TraversalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+visited
+Set
+●●●●●● 1mm ○
+start_node_id
+queue
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+start_node_id
+0
+●●●●●● 2mm □△
+results_nodes
+●●●●●● 3mm □△
+GraphNode
+start_node
+results_edges
+●●●●●● 3mm □△
+GraphEdge
+all_paths
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Tuple
+GraphNode
+GraphEdge
+scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+start_node_id
+1.0
+queue
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results_nodes
+●●●●●● 2mm □△
+config
+current_id
+depth
+path
+●●●●●● 1mm □
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+depth
+config
+neighbors
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+neighbor
+edge
+neighbors
+●●●●●● 2mm □
+neighbor
+visited
+●●●●●● 2mm □
+edge
+config
+●●●●●● 2mm □
+neighbor
+config
+visited
+●●●●●● 1mm □△
+neighbor
+●●●●●● 2mm □△
+results_nodes
+●●●●●● 1mm □△
+neighbor
+●●●●●● 2mm □△
+results_edges
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm □△
+depth
+●●●●●● 3mm ○
+2
+●●●●●● 2mm □△
+edge
+●●●●●● 2mm □△
+neighbor
+scores
+neighbor
+●●●●●● 1mm □
+score
+new_path
+●●●●●● 1mm □
+path
+●●●●●● 3mm ○
+neighbor
+edge
+all_paths
+●●●●●● 1mm □△
+new_path
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □△
+neighbor
+depth
+●●●●●● 3mm ○
+1
+new_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TraversalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TraversalResult
+●●●●●● 1mm □
+best_first_traverse
+●●●●●● 1mm □△
+self
+start_node_id
+graph
+config
+score_fn
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+BaseRelationGraph
+TraversalConfig
+●●●●●● 2mm □○
+●●●●●● 1mm △○
+GraphNode
+GraphEdge
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Best-first traversal prioritizing highest-scoring paths.\n\n        Args:\n            start_node_id: Starting node ID\n            graph: Graph to traverse\n            config: Traversal configuration\n            score_fn: Optional custom scoring function\n\n        Returns:\n            TraversalResult with discovered nodes\n        '
+start_node
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+start_node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_node
+●●●●●● 3mm ○
+TraversalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+score_fn
+●●●●●● 2mm □
+score_fn
+●●●●●● 1mm □
+e
+e
+●●●●●● 2mm □△
+n
+n
+visited
+Set
+●●●●●● 1mm ○
+start_node_id
+heap
+●●●●●● 1mm □
+1.0
+start_node_id
+0
+results_nodes
+●●●●●● 3mm □△
+GraphNode
+results_edges
+●●●●●● 3mm □△
+GraphEdge
+all_paths
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Tuple
+GraphNode
+GraphEdge
+scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+heap
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results_nodes
+●●●●●● 2mm □△
+config
+neg_score
+current_id
+depth
+path
+●●●●●● 1mm □
+heapq
+●●●●●● 1mm □△
+heap
+●●●●●● 2mm □△
+current_score
+●●●●●● 1mm □
+neg_score
+current_node
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_node
+results_nodes
+●●●●●● 1mm □△
+current_node
+●●●●●● 2mm □△
+scores
+current_id
+●●●●●● 1mm □
+current_score
+●●●●●● 2mm □
+path
+all_paths
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+results_edges
+●●●●●● 1mm □△
+e
+_
+e
+path
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+depth
+config
+neighbors
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □△
+current_id
+●●●●●● 2mm □△
+scored_neighbors
+●●●●●● 1mm □
+neighbor
+edge
+neighbors
+●●●●●● 2mm □
+neighbor
+visited
+●●●●●● 2mm □
+edge
+config
+neighbor_score
+●●●●●● 1mm □
+score_fn
+●●●●●● 1mm □△
+neighbor
+edge
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_score
+scored_neighbors
+●●●●●● 1mm □△
+neighbor_score
+neighbor
+edge
+●●●●●● 2mm □△
+scored_neighbors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+neighbor_score
+neighbor
+edge
+scored_neighbors
+config
+visited
+●●●●●● 1mm □△
+neighbor
+●●●●●● 2mm □△
+new_path
+●●●●●● 1mm □
+path
+●●●●●● 3mm ○
+neighbor
+edge
+heapq
+●●●●●● 1mm □△
+heap
+neighbor_score
+neighbor
+depth
+●●●●●● 3mm ○
+1
+new_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TraversalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TraversalResult
+●●●●●● 1mm □
+bidirectional_traverse
+●●●●●● 1mm □△
+self
+anchor_ids
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+BaseRelationGraph
+TraversalConfig
+'\n        Bidirectional traversal from multiple anchor nodes.\n\n        Explores from all anchors simultaneously to find connecting paths.\n\n        Args:\n            anchor_ids: List of anchor node IDs\n            graph: Graph to traverse\n            config: Traversal configuration\n\n        Returns:\n            TraversalResult with discovered nodes and connecting paths\n        '
+all_nodes
+●●●●●● 3mm □△
+GraphNode
+all_edges
+●●●●●● 3mm □△
+GraphEdge
+all_paths
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Tuple
+GraphNode
+GraphEdge
+all_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+anchor_discoveries
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+aid
+aid
+aid
+anchor_ids
+anchor_id
+anchor_ids
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_id
+graph
+config
+●●●●●● 2mm □△
+all_nodes
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+all_edges
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+node
+result
+anchor_discoveries
+anchor_id
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+node_id
+score
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node_id
+all_scores
+all_scores
+node_id
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+all_scores
+node_id
+score
+●●●●●● 2mm □△
+●●●●●● 3mm □
+all_scores
+node_id
+●●●●●● 1mm □
+score
+intersection_nodes
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+aid1
+●●●●●● 2mm □
+●●●●●● 1mm □△
+anchor_ids
+●●●●●● 2mm □△
+aid2
+anchor_ids
+i
+●●●●●● 3mm ○
+1
+common
+●●●●●● 1mm □
+anchor_discoveries
+aid1
+●●●●●● 3mm △
+anchor_discoveries
+aid2
+intersection_nodes
+●●●●●● 1mm □△
+common
+●●●●●● 2mm □△
+node_id
+intersection_nodes
+●●●●●● 2mm □
+node_id
+all_scores
+all_scores
+node_id
+1.5
+seen_ids
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unique_nodes
+●●●●●● 1mm □
+node
+all_nodes
+●●●●●● 2mm □
+node
+seen_ids
+seen_ids
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+unique_nodes
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+seen_edge_ids
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unique_edges
+●●●●●● 1mm □
+edge
+all_edges
+●●●●●● 2mm □
+edge
+seen_edge_ids
+seen_edge_ids
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+unique_edges
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TraversalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TraversalResult
+●●●●●● 2mm △
+AdaptiveTopologicalRetriever
+'\n    Adaptive graph-based retrieval system.\n\n    Combines:\n    - Query analysis from Intent Router\n    - Graph traversal with adaptive policies\n    - Result ranking and fusion\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+●●●●●● 2mm □△
+MagmaRelationGraphs
+'\n        Initialize adaptive retriever.\n\n        Args:\n            graphs: MagmaRelationGraphs instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraphTraverser
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-RETRIEVAL] AdaptiveTopologicalRetriever initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+retrieve
+●●●●●● 1mm □△
+self
+analysis
+config
+●●●●●● 2mm □△
+QueryAnalysis
+●●●●●● 2mm □○
+TraversalConfig
+●●●●●● 2mm □
+'\n        Retrieve relevant nodes based on query analysis.\n\n        Args:\n            analysis: QueryAnalysis from Intent Router\n            config: Optional traversal configuration\n\n        Returns:\n            List of RetrievalResult objects\n        '
+config
+●●●●●● 1mm □
+config
+TraversalConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+policy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+target_graphs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+anchor_node_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+target_graphs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+anchor_node_ids
+logger
+●●●●●● 1mm □△
+'[MAGMA-RETRIEVAL] No anchor nodes found in graphs'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_results
+●●●●●● 3mm □△
+RetrievalResult
+graph_name
+graph
+target_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graph_anchors
+●●●●●● 1mm □
+anchor_node_ids
+●●●●●● 1mm □△
+graph_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+graph_anchors
+traversal_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+policy
+graph_anchors
+graph
+config
+analysis
+●●●●●● 2mm □△
+node
+traversal_result
+score
+●●●●●● 1mm □
+traversal_result
+●●●●●● 1mm □△
+node
+0.5
+●●●●●● 2mm □△
+all_results
+●●●●●● 1mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+all_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+all_results
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+i
+logger
+●●●●●● 1mm □△
+'[MAGMA-RETRIEVAL] Retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_results
+●●●●●● 2mm □△
+' results using '
+policy
+' policy'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_results
+●●●●●● 3mm □△
+RetrievalResult
+●●●●●● 1mm □
+_select_policy
+●●●●●● 1mm □△
+self
+analysis
+●●●●●● 2mm □△
+QueryAnalysis
+'Select traversal policy based on query analysis.'
+policy_map
+●●●●●● 1mm □
+'graph_traversal'
+'causal_chain'
+'temporal_window'
+'multi_graph_union'
+'multi_graph_intersection'
+'hybrid'
+TraversalPolicy
+TraversalPolicy
+TraversalPolicy
+TraversalPolicy
+TraversalPolicy
+TraversalPolicy
+●●●●●● 3mm ○
+policy_map
+●●●●●● 1mm □△
+analysis
+TraversalPolicy
+●●●●●● 2mm □△
+TraversalPolicy
+●●●●●● 1mm □
+_get_target_graphs
+●●●●●● 1mm □△
+self
+analysis
+●●●●●● 2mm □△
+QueryAnalysis
+'Get target graphs based on analysis.'
+graph_map
+●●●●●● 1mm □
+'semantic'
+'temporal'
+'causal'
+'entity'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+name
+graph
+name
+graph
+graph_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name
+analysis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+BaseRelationGraph
+●●●●●● 1mm □
+_find_anchor_nodes
+●●●●●● 1mm □△
+self
+anchors
+target_graphs
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Anchor
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+BaseRelationGraph
+"\n        Find nodes matching anchors in target graphs.\n\n        Uses content matching since we don't have embeddings here.\n        "
+anchor_node_ids
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+graph_name
+graph
+target_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matching_ids
+●●●●●● 1mm □
+anchor
+anchors
+anchor_lower
+●●●●●● 1mm □
+anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+node
+graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+anchor_lower
+node
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matching_ids
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matching_ids
+anchor_node_ids
+graph_name
+●●●●●● 1mm □
+matching_ids
+●●●●●● 3mm ○
+anchor_node_ids
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_execute_traversal
+●●●●●● 1mm □△
+self
+policy
+anchor_ids
+graph
+config
+analysis
+●●●●●● 2mm □△
+TraversalPolicy
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+BaseRelationGraph
+TraversalConfig
+QueryAnalysis
+'Execute traversal with selected policy.'
+●●●●●● 2mm □
+policy
+TraversalPolicy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 1mm △
+policy
+TraversalPolicy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □
+policy
+TraversalPolicy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 1mm △
+policy
+TraversalPolicy
+config
+●●●●●● 1mm □
+RelationType
+RelationType
+RelationType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □
+policy
+TraversalPolicy
+config
+●●●●●● 1mm □
+RelationType
+RelationType
+RelationType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 1mm △
+policy
+TraversalPolicy
+bfs_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+avg_score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+bfs_result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+bfs_result
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+avg_score
+config
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+bfs_result
+●●●●●● 2mm □△
+5
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+bfs_result
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor_ids
+0
+graph
+config
+●●●●●● 2mm □△
+TraversalResult
+●●●●●● 1mm □
+retrieve_neighbors
+●●●●●● 1mm □△
+self
+node_id
+graph_name
+max_depth
+max_neighbors
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+2
+20
+'\n        Simple neighbor retrieval for a specific node.\n\n        Args:\n            node_id: Source node ID\n            graph_name: Target graph name\n            max_depth: Maximum traversal depth\n            max_neighbors: Maximum neighbors to return\n\n        Returns:\n            List of RetrievalResult for neighbors\n        '
+graph_map
+●●●●●● 1mm □
+'semantic'
+'temporal'
+'causal'
+'entity'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+graph
+●●●●●● 1mm □
+graph_map
+●●●●●● 1mm □△
+graph_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+graph
+●●●●●● 3mm ○
+config
+●●●●●● 1mm □
+TraversalConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node_id
+graph
+config
+●●●●●● 2mm □△
+retrieval_results
+●●●●●● 1mm □
+i
+node
+●●●●●● 2mm □
+●●●●●● 1mm □△
+result
+1
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+node
+0.5
+●●●●●● 2mm □△
+retrieval_results
+●●●●●● 1mm □△
+RetrievalResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+retrieval_results
+●●●●●● 3mm □△
+RetrievalResult

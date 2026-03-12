@@ -1,0 +1,11 @@
+## __init__.py
+'\nText ingestion module for document processing and vector storage.\n'
+●●●●●● 3mm □△○
+service
+●●●●●● 2mm □△○
+TextIngestionService
+TextChunker
+__all__
+●●●●●● 1mm □
+'TextIngestionService'
+'TextChunker'

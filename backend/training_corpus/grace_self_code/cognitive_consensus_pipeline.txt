@@ -1,0 +1,217 @@
+## consensus_pipeline.py
+'\nconsensus_pipeline.py\nThe Trust-Driven Feedback Loop (Maker-Checker) for Grace.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+cognitive.synaptic_core
+●●●●●● 2mm □△○
+get_synaptic_core
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ConsensusPipeline
+'\n    Manages iterative, trust-driven feedback loops between models.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_synaptic_core
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_maker_checker
+●●●●●● 1mm □△
+self
+instruction
+maker_model
+checker_model
+max_iterations
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'qwen'
+'opus'
+3
+"\n        Runs a Maker-Checker loop.\n        - Maker (e.g., Qwen) generates an initial response.\n        - Checker (e.g., Opus) critiques the response.\n        - If Checker approves (outputs 'APPROVED'), the loop ends.\n        - Else, Maker refines based on the critique.\n        "
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Starting Maker-Checker loop ('
+maker_model
+' -> '
+checker_model
+') for '
+max_iterations
+' iterations max.'
+●●●●●● 2mm □△
+current_draft
+●●●●●● 1mm □
+''
+history
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Maker ('
+maker_model
+') drafting initial response...'
+●●●●●● 2mm □△
+maker_prompt
+●●●●●● 1mm □
+'INSTRUCTION:\n'
+instruction
+current_draft
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □△
+'iteration'
+'role'
+'model'
+'output'
+0
+'maker'
+maker_model
+current_draft
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+max_iterations
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Iteration '
+i
+': Checker ('
+checker_model
+') critiquing...'
+●●●●●● 2mm □△
+checker_prompt
+●●●●●● 1mm □
+'You are the Checker. Review the following draft for the given instruction.\nINSTRUCTION:\n'
+instruction
+'\n\nDRAFT TO REVIEW:\n'
+current_draft
+"\n\nIf the draft is excellent and requires no changes, reply with exactly the word 'APPROVED' and nothing else.\nIf it needs improvement, provide a detailed critique on what needs to be fixed. Do not rewrite the draft, just provide the critique."
+critique
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □△
+'iteration'
+'role'
+'model'
+'output'
+i
+'checker'
+checker_model
+critique
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'APPROVED'
+critique
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critique
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Draft APPROVED by checker.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Iteration '
+i
+': Maker ('
+maker_model
+') refining draft based on critique...'
+●●●●●● 2mm □△
+refine_prompt
+●●●●●● 1mm □
+'INSTRUCTION:\n'
+instruction
+'\n\nYOUR PREVIOUS DRAFT:\n'
+current_draft
+'\n\nCRITIQUE FROM EXPERT:\n'
+critique
+'\n\nPlease provide a revised draft that fully addresses the critique.'
+current_draft
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □△
+'iteration'
+'role'
+'model'
+'output'
+i
+'maker'
+maker_model
+current_draft
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Maker-Checker loop complete.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[ConsensusPipeline] Failed to log outcome to memory: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'final_output'
+'history'
+'iterations'
+current_draft
+history
+history
+history
+1
+'iteration'
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_consensus_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ConsensusPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConsensusPipeline

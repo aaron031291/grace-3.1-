@@ -1,0 +1,577 @@
+## builtin_tools.py
+'\nGrace OS — Builtin Tools for the Unified Orchestrator.\n\nThese are Python-native tools that run locally (no MCP server needed).\nThey wrap existing Grace services (RAG, web search, web fetch) and expose\nthem in OpenAI function-calling format so the LLM can use them alongside\nthe MCP file/terminal tools.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BuiltinTool
+'A single builtin tool with its schema and handler.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+description
+parameters
+handler
+required_env
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm △○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+description
+●●●●●● 3mm △
+●●●●●● 1mm □
+parameters
+●●●●●● 3mm △
+●●●●●● 1mm □
+handler
+●●●●●● 3mm △
+●●●●●● 1mm □
+required_env
+●●●●●● 1mm □
+is_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Check if this tool's dependencies are met."
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_openai_function
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert to OpenAI function-calling format.'
+●●●●●● 3mm ○
+'type'
+'function'
+'function'
+'name'
+'description'
+'parameters'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Search the Grace knowledge base using semantic + keyword hybrid search.'
+query
+●●●●●● 1mm □
+arguments
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+limit
+●●●●●● 1mm □
+arguments
+●●●●●● 1mm □△
+'limit'
+5
+●●●●●● 2mm □△
+score_threshold
+●●●●●● 1mm □
+arguments
+●●●●●● 1mm □△
+'score_threshold'
+0.3
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+"Error: 'query' parameter is required."
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+get_retriever
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+logger
+●●●●●● 1mm □△
+'[BUILTIN] Initializing database from environment...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+embedder
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retriever
+●●●●●● 1mm □
+get_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+"No relevant results found in the knowledge base for: '"
+query
+"'"
+results
+●●●●●● 1mm □
+i
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+1
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'text'
+chunk
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'['
+i
+'] (score: '
+score
+'.2f'
+', source: '
+source
+')\n'
+text
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' relevant results:\n\n'
+●●●●●● 3mm ○
+'\n\n---\n\n'
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+'sources'
+●●●●●● 3mm □△○
+content
+'source'
+'text'
+'score'
+'metadata'
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'text'
+chunk
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+chunk
+chunks
+Exception
+logger
+●●●●●● 1mm □△
+'[BUILTIN] rag_search error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'RAG search error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Search Google using SerpAPI.'
+query
+●●●●●● 1mm □
+arguments
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+num_results
+●●●●●● 1mm □
+arguments
+●●●●●● 1mm □△
+'num_results'
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+"Error: 'query' parameter is required."
+api_key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'SERPAPI_KEY'
+os
+●●●●●● 1mm □△
+'SERPAPI_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+api_key
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'Web search is not configured. Set SERPAPI_KEY in your .env file.'
+●●●●●● 3mm □△○
+search.serpapi_service
+●●●●●● 2mm □△○
+SerpAPIService
+service
+●●●●●● 1mm □
+SerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+"No web results found for: '"
+query
+"'"
+formatted
+●●●●●● 1mm □
+r
+results
+formatted
+●●●●●● 1mm □△
+'**'
+r
+'title'
+'**\nURL: '
+r
+'link'
+'\n'
+r
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+"Web search results for '"
+query
+"':\n\n"
+●●●●●● 3mm ○
+'\n\n---\n\n'
+●●●●●● 1mm □△
+formatted
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+'web_results'
+●●●●●● 3mm □△○
+content
+results
+Exception
+logger
+●●●●●● 1mm □△
+'[BUILTIN] web_search error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'Web search error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Fetch and extract text content from a URL.'
+url
+●●●●●● 1mm □
+arguments
+●●●●●● 1mm □△
+'url'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+url
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+"Error: 'url' parameter is required."
+●●●●●● 2mm □△○
+trafilatura
+logger
+●●●●●● 1mm □△
+'[BUILTIN] Fetching URL: '
+url
+●●●●●● 2mm □△
+downloaded
+●●●●●● 1mm □
+trafilatura
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+downloaded
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'Could not download content from: '
+url
+content
+●●●●●● 1mm □
+trafilatura
+●●●●●● 1mm □△
+downloaded
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'Could not extract text from: '
+url
+max_chars
+●●●●●● 1mm □
+8000
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+max_chars
+content
+●●●●●● 1mm □
+content
+max_chars
+●●●●●● 3mm ○
+'\n\n... [truncated, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+' total chars]'
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+'Content from '
+url
+':\n\n'
+content
+ImportError
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'trafilatura is not installed. Run: pip install trafilatura'
+Exception
+logger
+●●●●●● 1mm □△
+'[BUILTIN] web_fetch error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 1mm □
+'Web fetch error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_builtin_tools
+●●●●●● 1mm □△
+enable_rag
+enable_web
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n    Get all available builtin tools.\n\n    Args:\n        enable_rag: Include RAG knowledge search tool\n        enable_web: Include web search and fetch tools\n    '
+tools
+●●●●●● 1mm □
+●●●●●● 2mm □
+enable_rag
+tools
+●●●●●● 1mm □△
+BuiltinTool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_web
+tools
+●●●●●● 1mm □△
+BuiltinTool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tools
+●●●●●● 1mm □△
+BuiltinTool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tools
+●●●●●● 3mm □△
+BuiltinTool

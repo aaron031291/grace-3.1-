@@ -1,0 +1,509 @@
+## self_healing.py
+'\nSelf-Healing System — Real service detection, recovery, and fallback.\n\nDetects:   service failures, resource exhaustion, error spikes\nRecovers:  reconnects DB, restarts Qdrant client, reloads models\nFalls back: Qdrant down → keyword search, Ollama down → Kimi, DB down → file-based\nTracks:    every healing action via genesis keys\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+gc
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SelfHealer
+'Autonomous healing with real recovery actions.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_and_heal
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Run full health check and heal what's broken."
+results
+●●●●●● 1mm □
+'timestamp'
+'checks'
+'healed'
+'failed'
+'fallbacks_active'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db_ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'checks'
+'database'
+●●●●●● 1mm □
+db_ok
+●●●●●● 2mm □
+db_ok
+healed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healed
+results
+'healed'
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'failed'
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+qdrant_ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'checks'
+'qdrant'
+●●●●●● 1mm □
+qdrant_ok
+●●●●●● 2mm □
+qdrant_ok
+healed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healed
+results
+'healed'
+●●●●●● 1mm □△
+'qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'failed'
+●●●●●● 1mm □△
+'qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'fallbacks_active'
+●●●●●● 1mm □△
+'qdrant→keyword_search'
+●●●●●● 2mm □△
+llm_ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'checks'
+'llm'
+●●●●●● 1mm □
+llm_ok
+●●●●●● 2mm □
+llm_ok
+healed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healed
+results
+'healed'
+●●●●●● 1mm □△
+'llm'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'failed'
+●●●●●● 1mm □△
+'llm'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+results
+'fallbacks_active'
+●●●●●● 1mm □△
+'ollama→kimi'
+●●●●●● 2mm □△
+Exception
+mem_ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'checks'
+'memory'
+●●●●●● 1mm □
+mem_ok
+●●●●●● 2mm □
+mem_ok
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'healed'
+●●●●●● 1mm □△
+'memory_gc'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_log
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+20
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+engine
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_check_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_check_llm
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+client
+●●●●●● 1mm □
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_check_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+●●●●●● 3mm ○
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+90
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Attempt to reinitialise the database connection.'
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+DatabaseConnection
+●●●●●● 1mm □
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □
+●●●●●● 2mm □
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[HEALING] Database reconnected successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[HEALING] Database reconnect failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Attempt to reconnect to Qdrant.'
+●●●●●● 3mm □△○
+vector_db
+●●●●●● 2mm □△○
+client
+●●●●●● 1mm □
+vdb_client
+vdb_client
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+c
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[HEALING] Qdrant reconnected'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[HEALING] Qdrant reconnect failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_llm
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Attempt to reconnect to LLM or fallback to Kimi.'
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+r
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+settings
+'/api/tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+logger
+●●●●●● 1mm □△
+'[HEALING] Ollama reconnected'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+client
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[HEALING] Falling back to Kimi 2.5'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_heal_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Force garbage collection.'
+collected
+●●●●●● 1mm □
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[HEALING] GC collected '
+collected
+' objects'
+●●●●●● 2mm □△
+_healer
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_healer
+●●●●●● 2mm □
+_healer
+●●●●●● 1mm □
+SelfHealer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_healer
+SelfHealer

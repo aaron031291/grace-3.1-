@@ -1,0 +1,2310 @@
+## hallucination_guard.py
+'\nHallucination Mitigation Pipeline\n\nMulti-layered approach to minimize LLM hallucinations:\n\nLayer 1: Repository Grounding - Claims must reference actual files/code\nLayer 2: Cross-Model Consensus - Multiple LLMs must agree\nLayer 3: Contradiction Detection - Check against existing knowledge\nLayer 4: Confidence Scoring - Trust score calculation\nLayer 5: Trust System Verification - Validate against learning memory\nLayer 6: External Verification - Web search and documentation lookup\n\nAll operations are tracked and logged.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+difflib
+●●●●●● 2mm □△○
+SequenceMatcher
+●●●●●● 3mm □△○
+urllib.parse
+●●●●●● 2mm □△○
+quote_plus
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+multi_llm_client
+●●●●●● 2mm □△○
+MultiLLMClient
+TaskType
+●●●●●● 3mm □△○
+repo_access
+●●●●●● 2mm □△○
+RepositoryAccessLayer
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ExternalVerifier
+'\n    External verification system for LLM outputs.\n\n    Verifies claims against:\n    1. Official documentation (Python, JS, framework docs)\n    2. Web search results (for factual claims)\n    3. Known API references\n    '
+DOCUMENTATION_SOURCES
+●●●●●● 1mm □
+'python'
+'javascript'
+'typescript'
+'react'
+'fastapi'
+'django'
+'flask'
+'sqlalchemy'
+'pytorch'
+'tensorflow'
+'https://docs.python.org/3/search.html?q={query}'
+'https://developer.mozilla.org/en-US/search?q={query}'
+'https://www.typescriptlang.org/docs/handbook/'
+'https://react.dev/reference/'
+'https://fastapi.tiangolo.com/'
+'https://docs.djangoproject.com/en/stable/search/?q={query}'
+'https://flask.palletsprojects.com/en/latest/search/?q={query}'
+'https://docs.sqlalchemy.org/en/20/search.html?q={query}'
+'https://pytorch.org/docs/stable/search.html?q={query}'
+'https://www.tensorflow.org/s/results?q={query}'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+enable_web_search
+enable_doc_lookup
+search_timeout
+cache_results
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+10.0
+●●●●●● 3mm □△○
+'\n        Initialize external verifier.\n\n        Args:\n            enable_web_search: Enable web search verification\n            enable_doc_lookup: Enable documentation lookup\n            search_timeout: Timeout for external requests\n            cache_results: Cache verification results\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_web_search
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_doc_lookup
+●●●●●● 3mm △
+●●●●●● 1mm □
+search_timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+cache_results
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_technical_claim
+●●●●●● 1mm □△
+self
+claim
+context
+technologies
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+''
+●●●●●● 2mm □
+'\n        Verify a technical claim against external sources.\n\n        Args:\n            claim: The technical claim to verify\n            context: Additional context about the claim\n            technologies: List of relevant technologies (python, react, etc.)\n\n        Returns:\n            Verification result with confidence and sources\n        '
+logger
+●●●●●● 1mm □△
+'[EXTERNAL VERIFY] Verifying claim: '
+claim
+100
+'...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'verified'
+'confidence'
+'sources'
+'details'
+●●●●●● 1mm □
+0.5
+cache_key
+●●●●●● 1mm □
+claim
+':'
+','
+●●●●●● 1mm □△
+technologies
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+cache_key
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[EXTERNAL VERIFY] Returning cached result'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+cache_key
+technical_patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+claim
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+technologies
+doc_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+claim
+technical_patterns
+technologies
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_result
+'found'
+result
+'verified'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'confidence'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+result
+'confidence'
+doc_result
+'confidence'
+●●●●●● 2mm □△
+result
+'sources'
+●●●●●● 1mm □△
+doc_result
+'sources'
+●●●●●● 2mm □△
+result
+'details'
+'documentation'
+●●●●●● 1mm □
+doc_result
+●●●●●● 2mm □
+technical_patterns
+●●●●●● 1mm □△
+'code_patterns'
+●●●●●● 2mm □△
+code_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+technical_patterns
+'code_patterns'
+technologies
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code_result
+'valid'
+result
+'confidence'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+result
+'confidence'
+0.7
+●●●●●● 2mm □△
+result
+'details'
+'code_patterns'
+●●●●●● 1mm □
+code_result
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+cache_key
+●●●●●● 1mm □
+result
+logger
+●●●●●● 1mm □△
+'[EXTERNAL VERIFY] Result: verified='
+result
+'verified'
+', confidence='
+result
+'confidence'
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_technical_patterns
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract technical patterns from text for verification.'
+patterns
+●●●●●● 1mm □
+'code_patterns'
+'function_names'
+'class_names'
+'imports'
+'api_endpoints'
+'config_values'
+code_blocks
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'```[\\w]*\\n?(.*?)```'
+text
+re
+●●●●●● 2mm □△
+patterns
+'code_patterns'
+●●●●●● 1mm □△
+code_blocks
+●●●●●● 2mm □△
+inline_code
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'`([^`]+)`'
+text
+●●●●●● 2mm □△
+patterns
+'code_patterns'
+●●●●●● 1mm □△
+inline_code
+●●●●●● 2mm □△
+patterns
+'function_names'
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b([a-z_][a-z0-9_]*)\\s*\\('
+text
+●●●●●● 2mm □△
+patterns
+'class_names'
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b([A-Z][a-zA-Z0-9]*)\\b'
+text
+●●●●●● 2mm □△
+patterns
+'imports'
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(?:import|from)\\s+([\\w.]+)'
+text
+●●●●●● 2mm □△
+patterns
+'api_endpoints'
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'["\\\']/([\\w/{}:-]+)["\\\']'
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_against_documentation
+●●●●●● 1mm □△
+self
+claim
+patterns
+technologies
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Verify claim against official documentation.'
+result
+●●●●●● 1mm □
+'found'
+'confidence'
+'sources'
+'matches'
+●●●●●● 1mm □
+0.0
+queries
+●●●●●● 1mm □
+func
+patterns
+●●●●●● 1mm □△
+'function_names'
+●●●●●● 2mm □△
+3
+queries
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+cls
+patterns
+●●●●●● 1mm □△
+'class_names'
+●●●●●● 2mm □△
+3
+queries
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+key_terms
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b((?:async|await|yield|return|class|def|function|const|let|var|import|export)\\s+\\w+)'
+claim
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+queries
+●●●●●● 1mm □△
+key_terms
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+queries
+words
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b([a-zA-Z_][a-zA-Z0-9_]{3,})\\b'
+claim
+●●●●●● 2mm □△
+queries
+●●●●●● 1mm □
+words
+3
+tech
+technologies
+●●●●●● 2mm □
+tech
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+query
+queries
+2
+doc_url
+●●●●●● 1mm □
+●●●●●● 3mm △
+tech
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'sources'
+●●●●●● 1mm □△
+'technology'
+'query'
+'url'
+'type'
+tech
+query
+doc_url
+'documentation'
+●●●●●● 2mm □△
+result
+'found'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'confidence'
+●●●●●● 1mm □
+0.6
+Exception
+logger
+●●●●●● 1mm □△
+'[EXTERNAL VERIFY] Doc lookup failed for '
+tech
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_code_patterns
+●●●●●● 1mm □△
+self
+code_patterns
+technologies
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Verify code patterns are syntactically valid.'
+result
+●●●●●● 1mm □
+'valid'
+'errors'
+'validated_patterns'
+●●●●●● 3mm □△○
+pattern
+code_patterns
+5
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'python'
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+technologies
+technologies
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+pattern
+'<string>'
+'exec'
+●●●●●● 2mm □△
+result
+'validated_patterns'
+●●●●●● 1mm □△
+'pattern'
+'language'
+'valid'
+pattern
+100
+'python'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+SyntaxError
+result
+'errors'
+●●●●●● 1mm □△
+'pattern'
+'error'
+pattern
+100
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'javascript'
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+technologies
+'typescript'
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+technologies
+js_valid
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+result
+'validated_patterns'
+●●●●●● 1mm □△
+'pattern'
+'language'
+'valid'
+pattern
+100
+'javascript'
+js_valid
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_validate_js_syntax
+●●●●●● 1mm □△
+self
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Basic JavaScript syntax validation.'
+bracket_balance
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'{'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+code
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+paren_balance
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'('
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+code
+●●●●●● 1mm □△
+')'
+●●●●●● 2mm □△
+square_balance
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'['
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+code
+●●●●●● 1mm □△
+']'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+bracket_balance
+0
+paren_balance
+0
+square_balance
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+verify_factual_claim
+●●●●●● 1mm □△
+self
+claim
+category
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'general'
+'\n        Verify a factual (non-code) claim.\n\n        Args:\n            claim: The factual claim to verify\n            category: Category of claim (general, technical, historical)\n\n        Returns:\n            Verification result\n        '
+logger
+●●●●●● 1mm □△
+'[EXTERNAL VERIFY] Verifying factual claim: '
+claim
+100
+'...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'verified'
+'confidence'
+'category'
+'details'
+●●●●●● 1mm □
+0.5
+category
+result
+'details'
+'note'
+●●●●●● 1mm □
+'Factual verification requires web search integration'
+result
+'confidence'
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_cache_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get cache statistics.'
+●●●●●● 3mm ○
+'cached_entries'
+'cache_enabled'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+clear_cache
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear the verification cache.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ConsensusResult
+'Result of cross-model consensus checking.'
+agreed
+●●●●●● 3mm △
+confidence
+●●●●●● 3mm ○
+responses
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+consensus_content
+●●●●●● 1mm ○
+disagreements
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+verification_details
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+VerificationResult
+'Result of hallucination verification.'
+is_verified
+●●●●●● 3mm △
+confidence_score
+●●●●●● 3mm ○
+verification_layers
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+sources
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+contradictions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+trust_score
+●●●●●● 3mm ○
+final_content
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+HallucinationGuard
+'\n    Multi-layer hallucination mitigation system.\n\n    Ensures LLM outputs are:\n    1. Grounded in actual repository data\n    2. Agreed upon by multiple models\n    3. Non-contradictory with existing knowledge\n    4. Trust-scored and verified\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+multi_llm_client
+repo_access
+confidence_scorer
+contradiction_detector
+external_verifier
+enable_external_verification
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □○
+ExternalVerifier
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Initialize hallucination guard.\n\n        Args:\n            multi_llm_client: Multi-LLM client\n            repo_access: Repository access layer\n            confidence_scorer: Confidence scoring system\n            contradiction_detector: Contradiction detection system\n            external_verifier: External verification system\n            enable_external_verification: Enable external verification layer\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+multi_llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_access
+●●●●●● 3mm △
+●●●●●● 1mm □
+confidence_scorer
+●●●●●● 3mm △
+●●●●●● 1mm □
+contradiction_detector
+●●●●●● 3mm △
+●●●●●● 1mm □
+external_verifier
+enable_external_verification
+ExternalVerifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_repository_grounding
+●●●●●● 1mm □△
+self
+content
+require_file_references
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Verify content is grounded in actual repository files.\n\n        Args:\n            content: Content to verify\n            require_file_references: Require explicit file references\n\n        Returns:\n            (is_grounded, referenced_files, verification_details)\n        '
+logger
+●●●●●● 1mm □△
+'[LAYER 1] Verifying repository grounding'
+●●●●●● 2mm □△
+file_patterns
+●●●●●● 1mm □
+'`([a-zA-Z0-9_/\\\\.-]+\\.(py|js|ts|md|json))`'
+'\\[([a-zA-Z0-9_/\\\\.-]+\\.(py|js|ts|md|json))\\]'
+'"([a-zA-Z0-9_/\\\\.-]+\\.(py|js|ts|md|json))"'
+"'([a-zA-Z0-9_/\\\\.-]+\\.(py|js|ts|md|json))'"
+referenced_files
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+file_patterns
+matches
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+content
+●●●●●● 2mm □△
+match
+matches
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+match
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+referenced_files
+●●●●●● 1mm □△
+match
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □
+referenced_files
+●●●●●● 1mm □△
+match
+●●●●●● 2mm □△
+verified_files
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+file_path
+referenced_files
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+result
+verified_files
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+is_grounded
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+require_file_references
+verified_files
+is_grounded
+●●●●●● 1mm □
+●●●●●● 1mm □
+details
+●●●●●● 1mm □
+'referenced_files'
+'verified_files'
+'unverified_files'
+'grounding_score'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+referenced_files
+●●●●●● 2mm □△
+verified_files
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+referenced_files
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+verified_files
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+verified_files
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+referenced_files
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+is_grounded
+verified_files
+details
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_cross_model_consensus
+●●●●●● 1mm □△
+self
+prompt
+task_type
+num_models
+similarity_threshold
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+3
+0.7
+●●●●●● 2mm □
+'\n        Get consensus from multiple LLM models.\n\n        Args:\n            prompt: Query prompt\n            task_type: Type of task\n            num_models: Number of models to query\n            similarity_threshold: Minimum similarity for consensus\n            system_prompt: System prompt\n\n        Returns:\n            ConsensusResult with consensus analysis\n        '
+logger
+●●●●●● 1mm □△
+'[LAYER 2] Checking cross-model consensus ('
+num_models
+' models)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+ConsensusResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+successful_responses
+●●●●●● 1mm □
+r
+r
+responses
+r
+'success'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successful_responses
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+ConsensusResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □
+contents
+●●●●●● 1mm □
+r
+'content'
+r
+successful_responses
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contents
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+j
+●●●●●● 1mm □
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contents
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+contents
+i
+contents
+j
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+avg_similarity
+●●●●●● 1mm □
+similarities
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+0.0
+agreed
+●●●●●● 1mm □
+avg_similarity
+similarity_threshold
+●●●●●● 2mm □
+agreed
+consensus_content
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+contents
+●●●●●● 2mm □△
+●●●●●● 3mm □
+consensus_content
+●●●●●● 1mm □
+contents
+0
+disagreements
+●●●●●● 1mm □
+●●●●●● 2mm □
+agreed
+i
+content
+●●●●●● 2mm □
+●●●●●● 1mm □△
+contents
+●●●●●● 2mm □△
+model_name
+●●●●●● 1mm □
+successful_responses
+i
+'model_name'
+disagreements
+●●●●●● 1mm □△
+model_name
+': '
+content
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ConsensusResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConsensusResult
+●●●●●● 1mm □
+_calculate_similarity
+●●●●●● 1mm □△
+self
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Calculate similarity between two texts.'
+●●●●●● 2mm □
+text1
+text2
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+SequenceMatcher
+●●●●●● 1mm □△
+●●●●●● 2mm □
+text1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+verify_external
+●●●●●● 1mm □△
+self
+content
+task_type
+technologies
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □
+'\n        Verify content against external sources (Layer 6).\n\n        Args:\n            content: Content to verify\n            task_type: Type of task (helps determine verification strategy)\n            technologies: List of relevant technologies\n\n        Returns:\n            External verification result\n        '
+logger
+●●●●●● 1mm □△
+'[LAYER 6] Running external verification'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'verified'
+'confidence'
+'enabled'
+'reason'
+●●●●●● 1mm □
+0.5
+●●●●●● 1mm □
+'External verifier not enabled'
+result
+●●●●●● 1mm □
+'verified'
+'confidence'
+'technical_verification'
+'code_syntax_valid'
+'sources'
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+technologies
+technologies
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task_type
+TaskType
+TaskType
+TaskType
+TaskType
+tech_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'technical_verification'
+●●●●●● 1mm □
+tech_result
+result
+'verified'
+●●●●●● 1mm □
+tech_result
+●●●●●● 1mm □△
+'verified'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+'confidence'
+●●●●●● 1mm □
+tech_result
+●●●●●● 1mm □△
+'confidence'
+0.5
+●●●●●● 2mm □△
+result
+'sources'
+●●●●●● 1mm □△
+tech_result
+●●●●●● 1mm □△
+'sources'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tech_result
+●●●●●● 1mm □△
+'details'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'code_patterns'
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+tech_result
+'details'
+'code_patterns'
+●●●●●● 1mm □△
+'errors'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors
+result
+'code_syntax_valid'
+●●●●●● 1mm □
+●●●●●● 1mm □
+result
+'confidence'
+0.7
+●●●●●● 1mm △
+task_type
+TaskType
+TaskType
+factual_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'factual_verification'
+●●●●●● 1mm □
+factual_result
+result
+'confidence'
+●●●●●● 1mm □
+factual_result
+●●●●●● 1mm □△
+'confidence'
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_detect_technologies
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Detect technologies mentioned in content.'
+technologies
+●●●●●● 1mm □
+tech_patterns
+●●●●●● 1mm □
+'python'
+'javascript'
+'typescript'
+'react'
+'fastapi'
+'django'
+'sqlalchemy'
+'pytorch'
+'tensorflow'
+'\\b(python|pip|pypi|django|flask|fastapi|pytorch|tensorflow|pandas|numpy)\\b'
+'\\b(javascript|js|node|npm|yarn|react|vue|angular|express)\\b'
+'\\b(typescript|ts|tsx)\\b'
+'\\b(react|jsx|redux|nextjs|next\\.js)\\b'
+'\\b(fastapi|uvicorn|starlette)\\b'
+'\\b(django)\\b'
+'\\b(sqlalchemy|alembic)\\b'
+'\\b(pytorch|torch)\\b'
+'\\b(tensorflow|keras|tf)\\b'
+content_lower
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tech
+pattern
+tech_patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+pattern
+content_lower
+re
+●●●●●● 2mm □△
+technologies
+●●●●●● 1mm □△
+tech
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+technologies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+check_contradictions
+●●●●●● 1mm □△
+self
+content
+context_documents
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Check for contradictions with existing knowledge.\n\n        Args:\n            content: Content to check\n            context_documents: Existing documents to check against\n\n        Returns:\n            (has_contradictions, contradiction_details)\n        '
+logger
+●●●●●● 1mm □△
+'[LAYER 3] Checking for contradictions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+contradictions
+●●●●●● 1mm □
+●●●●●● 2mm □
+context_documents
+i
+doc
+●●●●●● 2mm □
+●●●●●● 1mm □△
+context_documents
+●●●●●● 2mm □△
+is_contradiction
+score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_contradiction
+contradictions
+●●●●●● 1mm □△
+'document_index'
+'contradiction_score'
+'document_snippet'
+i
+score
+doc
+200
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error detecting contradiction: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+similar_docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+doc
+similar_docs
+doc_text
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_text
+is_contradiction
+score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+doc_text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_contradiction
+contradictions
+●●●●●● 1mm □△
+'document_id'
+'chunk_id'
+'contradiction_score'
+'source'
+doc
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □△
+'chunk_id'
+●●●●●● 2mm □△
+score
+doc
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'filename'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error checking RAG contradictions: '
+e
+●●●●●● 2mm □△
+has_contradictions
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradictions
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+has_contradictions
+contradictions
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+calculate_confidence_score
+●●●●●● 1mm □△
+self
+content
+source_type
+existing_chunks
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'llm_generated'
+●●●●●● 2mm □
+'\n        Calculate confidence score for content.\n\n        Args:\n            content: Content to score\n            source_type: Source type\n            existing_chunks: Existing chunks for consensus\n\n        Returns:\n            Confidence score details\n        '
+logger
+●●●●●● 1mm □△
+'[LAYER 4] Calculating confidence score'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'confidence_score'
+'source_reliability'
+'content_quality'
+'consensus_score'
+0.5
+0.5
+0.5
+0.5
+score_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+score_result
+Exception
+logger
+●●●●●● 1mm □△
+'Error calculating confidence: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'confidence_score'
+'error'
+0.5
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_against_trust_system
+●●●●●● 1mm □△
+self
+content
+min_trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.7
+'\n        Verify content against learning memory trust system.\n\n        Args:\n            content: Content to verify\n            min_trust_score: Minimum trust score threshold\n\n        Returns:\n            (is_verified, trust_score, supporting_examples)\n        '
+logger
+●●●●●● 1mm □△
+'[LAYER 5] Verifying against trust system'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+0.5
+learning_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning_examples
+●●●●●● 3mm ○
+●●●●●● 1mm □
+0.5
+avg_trust
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+'trust_score'
+ex
+learning_examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+learning_examples
+●●●●●● 2mm □△
+is_verified
+●●●●●● 1mm □
+avg_trust
+min_trust_score
+●●●●●● 3mm ○
+is_verified
+avg_trust
+learning_examples
+Exception
+logger
+●●●●●● 1mm □△
+'Error verifying trust system: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+0.5
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_content
+●●●●●● 1mm □△
+self
+prompt
+content
+task_type
+enable_consensus
+enable_grounding
+enable_contradiction_check
+enable_trust_verification
+enable_external_verification
+consensus_threshold
+confidence_threshold
+trust_threshold
+system_prompt
+context_documents
+max_retry_attempts
+auto_correct_low_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TaskType
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+TaskType
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+0.7
+0.6
+0.7
+●●●●●● 2mm □
+●●●●●● 2mm □
+3
+●●●●●● 3mm □△○
+'\n        Complete hallucination verification pipeline.\n\n        Runs all 6 layers of verification and returns comprehensive result.\n        When trust scores are low, automatically retries with stricter verification\n        and attempts to correct/refine the content.\n\n        Layers:\n        1. Repository Grounding - Claims must reference actual files/code\n        2. Cross-Model Consensus - Multiple LLMs must agree\n        3. Contradiction Detection - Check against existing knowledge\n        4. Confidence Scoring - Trust score calculation\n        5. Trust System Verification - Validate against learning memory\n        6. External Verification - Web search and documentation lookup\n\n        Args:\n            prompt: Original prompt\n            content: Generated content to verify\n            task_type: Type of task\n            enable_consensus: Enable cross-model consensus\n            enable_grounding: Enable repository grounding\n            enable_contradiction_check: Enable contradiction detection\n            enable_trust_verification: Enable trust system verification\n            enable_external_verification: Enable external verification (Layer 6)\n            consensus_threshold: Consensus similarity threshold\n            confidence_threshold: Minimum confidence score\n            trust_threshold: Minimum trust score\n            system_prompt: System prompt for consensus\n            context_documents: Context documents for contradiction check\n            max_retry_attempts: Maximum retry attempts for low-trust content\n            auto_correct_low_trust: Automatically attempt to correct low-trust content\n\n        Returns:\n            VerificationResult with complete analysis\n        '
+logger
+●●●●●● 1mm □△
+'Starting complete hallucination verification pipeline'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+VerificationResult
+●●●●●● 1mm □
+_verify_with_retry
+●●●●●● 1mm □△
+self
+prompt
+content
+task_type
+enable_consensus
+enable_grounding
+enable_contradiction_check
+enable_trust_verification
+consensus_threshold
+confidence_threshold
+trust_threshold
+system_prompt
+context_documents
+max_retry_attempts
+auto_correct_low_trust
+attempt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TaskType
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+'Internal verification with retry logic for low-trust content.'
+logger
+●●●●●● 1mm □△
+'[VERIFICATION] Attempt '
+attempt
+'/'
+max_retry_attempts
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LOW_TRUST_THRESHOLD
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+result
+LOW_TRUST_THRESHOLD
+result
+LOW_TRUST_THRESHOLD
+attempt
+max_retry_attempts
+auto_correct_low_trust
+logger
+●●●●●● 1mm □△
+'[VERIFICATION] Low trust detected (trust='
+result
+'.2f'
+', confidence='
+result
+'.2f'
+')'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VERIFICATION] Attempting correction and re-verification...'
+●●●●●● 2mm □△
+corrected_content
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+corrected_content
+corrected_content
+content
+logger
+●●●●●● 1mm □△
+'[VERIFICATION] Content corrected, re-verifying...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'layer'
+'attempt'
+'original_trust'
+'original_confidence'
+'correction_applied'
+'auto_correction'
+attempt
+result
+result
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'layer'
+'total_attempts'
+'final_trust'
+'final_confidence'
+'retry_status'
+attempt
+result
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+VerificationResult
+●●●●●● 1mm □
+_attempt_correction
+●●●●●● 1mm □△
+self
+prompt
+content
+verification_result
+task_type
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+VerificationResult
+TaskType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Attempt to correct low-trust content using LLM refinement.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+issues
+●●●●●● 1mm □
+layer
+passed
+verification_result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+passed
+issues
+●●●●●● 1mm □△
+'- '
+layer
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' failed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verification_result
+issues
+●●●●●● 1mm □△
+'- '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+verification_result
+●●●●●● 2mm □△
+' contradictions detected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issues
+●●●●●● 3mm ○
+●●●●●● 2mm □
+correction_prompt
+●●●●●● 1mm □
+'The following response has low trust/confidence and needs refinement:\n\nORIGINAL RESPONSE:\n'
+content
+'\n\nISSUES DETECTED:\n'
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+'\n\nORIGINAL QUESTION:\n'
+prompt
+'\n\nPlease provide a corrected, more accurate response that:\n1. Only states facts that can be verified\n2. Avoids speculation or assumptions\n3. Clearly indicates uncertainty where appropriate\n4. References specific files/code when making claims about code\n\nCORRECTED RESPONSE:'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CORRECTION] Failed to correct content: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_run_verification_pipeline
+●●●●●● 1mm □△
+self
+prompt
+content
+task_type
+enable_consensus
+enable_grounding
+enable_contradiction_check
+enable_trust_verification
+consensus_threshold
+confidence_threshold
+trust_threshold
+system_prompt
+context_documents
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TaskType
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Run the core verification pipeline (5 layers).'
+audit_trail
+●●●●●● 1mm □
+verification_layers
+●●●●●● 1mm □
+sources
+●●●●●● 1mm □
+contradictions
+●●●●●● 1mm □
+final_content
+●●●●●● 1mm □
+content
+overall_confidence
+●●●●●● 1mm □
+1.0
+●●●●●● 2mm □
+enable_grounding
+is_grounded
+verified_files
+grounding_details
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+verification_layers
+'repository_grounding'
+●●●●●● 1mm □
+is_grounded
+sources
+●●●●●● 1mm □△
+verified_files
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'layer'
+'passed'
+'details'
+'repository_grounding'
+is_grounded
+grounding_details
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_grounded
+overall_confidence
+0.8
+consensus_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+enable_consensus
+consensus_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_layers
+'cross_model_consensus'
+●●●●●● 1mm □
+consensus_result
+audit_trail
+●●●●●● 1mm □△
+'layer'
+'passed'
+'confidence'
+'details'
+'cross_model_consensus'
+consensus_result
+consensus_result
+consensus_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+consensus_result
+final_content
+●●●●●● 1mm □
+consensus_result
+●●●●●● 3mm □
+overall_confidence
+0.7
+●●●●●● 2mm □
+enable_contradiction_check
+has_contradictions
+contradiction_list
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_layers
+'contradiction_check'
+●●●●●● 1mm □
+has_contradictions
+contradictions
+●●●●●● 1mm □
+contradiction_list
+audit_trail
+●●●●●● 1mm □△
+'layer'
+'passed'
+'contradictions_found'
+'contradiction_detection'
+has_contradictions
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradiction_list
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+has_contradictions
+overall_confidence
+0.6
+confidence_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_layers
+'confidence_scoring'
+●●●●●● 1mm □
+confidence_result
+●●●●●● 1mm □△
+'confidence_score'
+0.0
+●●●●●● 2mm □△
+confidence_threshold
+audit_trail
+●●●●●● 1mm □△
+'layer'
+'passed'
+'score'
+'confidence_scoring'
+verification_layers
+'confidence_scoring'
+confidence_result
+●●●●●● 1mm □△
+'confidence_score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verification_layers
+'confidence_scoring'
+overall_confidence
+0.7
+trust_verified
+●●●●●● 1mm □
+●●●●●● 1mm □
+trust_score
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+enable_trust_verification
+trust_verified
+trust_score
+trust_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_layers
+'trust_system'
+●●●●●● 1mm □
+trust_verified
+audit_trail
+●●●●●● 1mm □△
+'layer'
+'passed'
+'trust_score'
+'supporting_examples'
+'trust_system_verification'
+trust_verified
+trust_score
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trust_examples
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust_verified
+overall_confidence
+0.8
+●●●●●● 2mm □
+●●●●●● 3mm △
+task_type
+TaskType
+TaskType
+TaskType
+TaskType
+external_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_layers
+'external_verification'
+●●●●●● 1mm □
+external_result
+●●●●●● 1mm □△
+'verified'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'layer'
+'passed'
+'confidence'
+'code_syntax_valid'
+'sources_checked'
+'external_verification'
+external_result
+●●●●●● 1mm □△
+'verified'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+external_result
+●●●●●● 1mm □△
+'confidence'
+0.5
+●●●●●● 2mm □△
+external_result
+●●●●●● 1mm □△
+'code_syntax_valid'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+external_result
+●●●●●● 1mm □△
+'sources'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+external_result
+●●●●●● 1mm □△
+'code_syntax_valid'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+overall_confidence
+0.6
+●●●●●● 1mm △
+external_result
+●●●●●● 1mm □△
+'verified'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+overall_confidence
+0.85
+source
+external_result
+●●●●●● 1mm □△
+'sources'
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □△
+source
+●●●●●● 1mm □△
+'url'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_verified
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+verification_layers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'prompt'
+'is_verified'
+'confidence'
+'layers'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt
+200
+is_verified
+overall_confidence
+verification_layers
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+VerificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+VerificationResult
+●●●●●● 1mm □
+get_verification_log
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent verification log entries.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_verification_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get verification statistics.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'total_verifications'
+'verification_rate'
+'avg_confidence'
+0
+0.0
+0.0
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+verified_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+v
+●●●●●● 3mm △
+v
+'is_verified'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_verifications'
+'verification_rate'
+'avg_confidence'
+'layer_success_rates'
+total
+verified_count
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+'confidence'
+v
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_layer_success_rates
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Calculate success rate for each verification layer.'
+layer_stats
+●●●●●● 1mm □
+entry
+●●●●●● 3mm △
+layers
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'layers'
+●●●●●● 2mm □△
+layer_name
+passed
+layers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer_name
+layer_stats
+layer_stats
+layer_name
+●●●●●● 1mm □
+'total'
+'passed'
+0
+0
+layer_stats
+layer_name
+'total'
+1
+●●●●●● 2mm □
+passed
+layer_stats
+layer_name
+'passed'
+1
+●●●●●● 3mm ○
+layer
+stats
+'total'
+0
+stats
+'passed'
+●●●●●● 3mm □△
+stats
+'total'
+0.0
+layer
+stats
+layer_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+_hallucination_guard
+●●●●●● 2mm □○
+HallucinationGuard
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_hallucination_guard
+●●●●●● 1mm □△
+multi_llm_client
+repo_access
+confidence_scorer
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create global hallucination guard instance.'
+●●●●●● 2mm □
+_hallucination_guard
+●●●●●● 2mm □
+_hallucination_guard
+●●●●●● 1mm □
+HallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_hallucination_guard
+HallucinationGuard

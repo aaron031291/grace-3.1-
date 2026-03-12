@@ -6,8 +6,8 @@
 const BASE = 'http://localhost:5173';
 const API = 'http://localhost:8000';
 
-describe('Grace System Capabilities', () => {
-
+describe('Grace UI Routes', () => {
+  
   it('Health endpoint responds', () => {
     cy.request(`${API}/health`).its('status').should('eq', 200);
   });

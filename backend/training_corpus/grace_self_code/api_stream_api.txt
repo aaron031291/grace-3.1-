@@ -1,0 +1,715 @@
+## stream_api.py
+'\nStreaming API — Server-Sent Events for token-by-token LLM responses.\nReplaces batch consensus with real-time streaming.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+Request
+●●●●●● 3mm □△○
+fastapi.responses
+●●●●●● 2mm □△○
+StreamingResponse
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stream_rag_and_memory_context
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Unified spine: RAG + episodic recall for stream. Returns prefix string for prompt.'
+●●●●●● 3mm □△○
+core.services.chat_service
+●●●●●● 2mm □△○
+_get_rag_context
+_get_episodic_recall
+rag
+●●●●●● 1mm □
+_get_rag_context
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+episode
+●●●●●● 1mm □
+_get_episodic_recall
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+rag
+parts
+●●●●●● 1mm □△
+'Relevant context from the knowledge base:\n'
+●●●●●● 3mm ○
+rag
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episode
+parts
+●●●●●● 1mm □△
+'Relevant past experience:\n'
+●●●●●● 3mm ○
+episode
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parts
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n---\n\nUser: '
+●●●●●● 3mm ○
+prompt
+●●●●●● 3mm ○
+prompt
+Exception
+●●●●●● 3mm ○
+prompt
+●●●●●● 1mm ○
+Request
+'Stream LLM response token-by-token via SSE. Supports use_rag + chat_id for unified RAG+memory context.'
+body
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'prompt'
+body
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'model'
+'kimi'
+●●●●●● 2mm □△
+context_files
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'context_files'
+●●●●●● 2mm □△
+mentions
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'mentions'
+●●●●●● 2mm □△
+use_rag
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'use_rag'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+chat_id
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'chat_id'
+●●●●●● 2mm □△
+file_context
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+mentions
+context_files
+file_context
+●●●●●● 1mm □
+_resolve_mentions
+●●●●●● 1mm □△
+mentions
+●●●●●● 3mm ○
+context_files
+●●●●●● 2mm □△
+full_prompt
+●●●●●● 1mm □
+prompt
+●●●●●● 2mm □
+file_context
+full_prompt
+●●●●●● 1mm □
+file_context
+'\n\n'
+full_prompt
+●●●●●● 2mm □
+use_rag
+full_prompt
+●●●●●● 1mm □
+_stream_rag_and_memory_context
+●●●●●● 1mm □△
+full_prompt
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+model
+'kimi'
+'consensus'
+chunk
+_stream_kimi
+●●●●●● 1mm □△
+full_prompt
+settings
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm △
+model
+'opus'
+chunk
+_stream_opus
+●●●●●● 1mm □△
+full_prompt
+settings
+●●●●●● 2mm □△
+chunk
+chunk
+_stream_ollama
+●●●●●● 1mm □△
+full_prompt
+model
+settings
+●●●●●● 2mm □△
+chunk
+Exception
+'data: '
+json
+●●●●●● 1mm □△
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\n'
+'data: [DONE]\n\n'
+●●●●●● 3mm ○
+StreamingResponse
+●●●●●● 1mm □△
+generate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+Request
+'Inline code completion — fast, single-model, context-aware.'
+body
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_before
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'code_before'
+''
+●●●●●● 2mm □△
+code_after
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'code_after'
+''
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+language
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'language'
+'python'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Complete the code. Return ONLY the completion, no explanation.\nLanguage: '
+language
+'\nFile: '
+file_path
+'\n\n```'
+language
+'\n'
+code_before
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+chunk
+_stream_ollama
+●●●●●● 1mm □△
+prompt
+'code'
+settings
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm △
+settings
+chunk
+_stream_kimi
+●●●●●● 1mm □△
+prompt
+settings
+●●●●●● 2mm □△
+chunk
+'data: '
+json
+●●●●●● 1mm □△
+'token'
+'# No model available'
+●●●●●● 2mm □△
+'\n\n'
+Exception
+'data: '
+json
+●●●●●● 1mm □△
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\n'
+'data: [DONE]\n\n'
+●●●●●● 3mm ○
+StreamingResponse
+●●●●●● 1mm □△
+generate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/complete'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_resolve_mentions
+●●●●●● 1mm □△
+mentions
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'Resolve @file, @symbol, @folder mentions into context.'
+context_parts
+●●●●●● 1mm □
+mention
+mentions
+●●●●●● 2mm □
+mention
+mention
+●●●●●● 1mm □
+mention
+●●●●●● 1mm □△
+'@'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'/'
+mention
+'.'
+mention
+●●●●●● 3mm □△○
+core.services.files_service
+●●●●●● 2mm □△○
+read
+result
+●●●●●● 1mm □
+read
+●●●●●● 1mm □△
+mention
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+context_parts
+●●●●●● 1mm □△
+'--- File: '
+mention
+' ---\n'
+result
+'content'
+5000
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.services.code_service
+●●●●●● 2mm □△○
+read_file
+result
+●●●●●● 1mm □
+read_file
+●●●●●● 1mm □△
+mention
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+context_parts
+●●●●●● 1mm □△
+'--- File: '
+mention
+' ---\n'
+result
+'content'
+5000
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+core.services.files_service
+●●●●●● 2mm □△○
+search
+result
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+mention
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+r
+result
+'results'
+context_parts
+●●●●●● 1mm □△
+'--- Found in: '
+r
+●●●●●● 1mm □△
+'path'
+'?'
+●●●●●● 2mm □△
+' ---'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_stream_kimi
+●●●●●● 1mm □△
+prompt
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Stream from Kimi API.'
+●●●●●● 2mm □△○
+requests
+url
+●●●●●● 1mm □
+settings
+'/chat/completions'
+headers
+●●●●●● 1mm □
+'Authorization'
+'Content-Type'
+'Bearer '
+settings
+'application/json'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'stream'
+'max_tokens'
+settings
+'role'
+'content'
+'user'
+prompt
+●●●●●● 3mm □△○
+4096
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+resp
+line
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'data: '
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+line
+6
+●●●●●● 2mm □
+data
+'[DONE]'
+chunk
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+delta
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'choices'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'delta'
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+delta
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+token
+'data: '
+json
+●●●●●● 1mm □△
+'token'
+token
+●●●●●● 2mm □△
+'\n\n'
+Exception
+●●●●●● 1mm □
+_stream_opus
+●●●●●● 1mm □△
+prompt
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Stream from Anthropic/Opus API.'
+●●●●●● 2mm □△○
+requests
+url
+●●●●●● 1mm □
+settings
+'/messages'
+headers
+●●●●●● 1mm □
+'x-api-key'
+'anthropic-version'
+'content-type'
+settings
+'2023-06-01'
+'application/json'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'max_tokens'
+'stream'
+settings
+'role'
+'content'
+'user'
+prompt
+4096
+●●●●●● 3mm □△○
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+resp
+line
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'data: '
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+line
+6
+chunk
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'content_block_delta'
+token
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'delta'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+token
+'data: '
+json
+●●●●●● 1mm □△
+'token'
+token
+●●●●●● 2mm □△
+'\n\n'
+Exception
+●●●●●● 1mm □
+_stream_ollama
+●●●●●● 1mm □△
+prompt
+task
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Stream from Ollama.'
+●●●●●● 2mm □△○
+requests
+model
+●●●●●● 1mm □
+task
+'code'
+settings
+settings
+url
+●●●●●● 1mm □
+settings
+'/api/generate'
+payload
+●●●●●● 1mm □
+'model'
+'prompt'
+'stream'
+model
+prompt
+●●●●●● 3mm □△○
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+resp
+line
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+chunk
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+token
+'data: '
+json
+●●●●●● 1mm □△
+'token'
+token
+●●●●●● 2mm □△
+'\n\n'
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+'done'
+●●●●●● 2mm □△
+Exception

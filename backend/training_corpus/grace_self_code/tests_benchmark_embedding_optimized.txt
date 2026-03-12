@@ -1,0 +1,1311 @@
+## benchmark_embedding_optimized.py
+'\nUltra-Optimized Embedding Benchmark - Direct Model Access\n\nBypasses wrapper classes and uses SentenceTransformer directly for maximum speed.\nTargets RTX 3090 with aggressive optimization: FP16, large batches, no progress bars.\n\nUsage:\n    python benchmark_embedding_optimized.py [--batch-size 256] [--precision fp16]\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Tuple
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+sentence_transformers
+●●●●●● 2mm □△○
+SentenceTransformer
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_sample_text
+●●●●●● 1mm □△
+target_tokens
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+5000
+'Generate sample text with approximately target_tokens tokens.'
+sample_paragraph
+●●●●●● 1mm □
+'\n    Machine learning is a subset of artificial intelligence that enables systems \n    to learn and improve from experience without explicit programming. The field has \n    seen remarkable growth in recent years, with applications spanning computer vision, \n    natural language processing, healthcare, finance, and numerous other domains. \n    \n    Deep learning, a subset of machine learning, uses artificial neural networks with \n    multiple layers to process data and extract increasingly abstract features at each layer. \n    These models have proven particularly effective for tasks like image recognition, \n    language translation, and text generation. The success of deep learning has driven \n    significant advances in artificial intelligence.\n    \n    Modern language models like transformers have revolutionized the field of natural \n    language processing. These models use attention mechanisms to weigh the importance \n    of different words in a sentence, allowing them to capture long-range dependencies \n    and contextual relationships. This architecture has become the foundation for most \n    state-of-the-art NLP systems today.\n    \n    Embeddings are numerical representations of text that capture semantic meaning. \n    By converting words or documents into high-dimensional vectors, machine learning \n    models can perform mathematical operations to measure similarity, classify content, \n    or retrieve relevant information. Embedding models have become essential tools in \n    modern NLP and recommendation systems.\n    \n    The transformer architecture, introduced in the "Attention Is All You Need" paper, \n    has become the dominant approach for sequence-to-sequence tasks. Self-attention \n    mechanisms allow the model to focus on different parts of the input simultaneously, \n    making it highly parallelizable and efficient for training on large datasets.\n    \n    Distributed computing enables processing large amounts of data across multiple machines.\n    The rise of cloud computing has made it easier for organizations to scale their ML systems.\n    Containerization with Docker and orchestration with Kubernetes have standardized deployment.\n    \n    Natural language understanding requires models to grasp context, nuance, and meaning.\n    Pre-trained models like BERT, GPT, and others have achieved state-of-the-art results.\n    Transfer learning allows these models to be fine-tuned for specific downstream tasks.\n    \n    Retrieval-augmented generation combines information retrieval with generative models.\n    This approach allows models to access external knowledge during generation.\n    RAG systems can provide more accurate and grounded responses than language models alone.\n    \n    Vector databases store and retrieve high-dimensional embeddings efficiently.\n    Approximate nearest neighbor search enables fast similarity queries at scale.\n    These systems power modern recommendation engines and semantic search applications.\n    '
+chars_per_token
+●●●●●● 1mm □
+6.5
+needed_chars
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+target_tokens
+●●●●●● 2mm □△
+chars_per_token
+●●●●●● 2mm □△
+repetitions
+●●●●●● 1mm □
+needed_chars
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sample_paragraph
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+full_text
+●●●●●● 1mm □
+sample_paragraph
+●●●●●● 2mm □△
+repetitions
+word_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+estimated_tokens
+●●●●●● 1mm □
+word_count
+●●●●●● 3mm □△
+1.3
+●●●●●● 2mm □
+estimated_tokens
+target_tokens
+trim_point
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+target_tokens
+●●●●●● 3mm □△
+estimated_tokens
+●●●●●● 2mm □△
+full_text
+●●●●●● 1mm □
+full_text
+trim_point
+●●●●●● 3mm ○
+full_text
+●●●●●● 1mm ○
+●●●●●● 1mm □
+split_text_into_chunks
+●●●●●● 1mm □△
+text
+num_chunks
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Split text into equal chunks.'
+chunk_size
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+num_chunks
+chunks
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_chunks
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+i
+●●●●●● 2mm □△
+chunk_size
+end
+●●●●●● 1mm □
+i
+num_chunks
+●●●●●● 1mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+i
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+chunk_size
+chunks
+●●●●●● 1mm □△
+text
+start
+end
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+c
+chunks
+c
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+combine_chunks_for_throughput
+●●●●●● 1mm □△
+chunks
+target_size
+max_size
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+512
+8192
+'\n    Combine small chunks into larger texts for better throughput.\n    Smaller texts have higher per-text overhead.\n    \n    Args:\n        chunks: List of small text chunks\n        target_size: Target size in characters for combined texts\n        max_size: Maximum size in characters (never exceed model context)\n        \n    Returns:\n        List of combined texts\n    '
+combined
+●●●●●● 1mm □
+current_combined
+●●●●●● 1mm □
+current_size
+●●●●●● 1mm □
+0
+chunk
+chunks
+chunk_size
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_size
+●●●●●● 3mm ○
+chunk_size
+max_size
+current_size
+●●●●●● 3mm ○
+chunk_size
+target_size
+current_combined
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_combined
+●●●●●● 2mm □△
+2
+combined
+●●●●●● 1mm □△
+' '
+●●●●●● 1mm □△
+current_combined
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_combined
+●●●●●● 1mm □
+chunk
+current_size
+●●●●●● 1mm □
+chunk_size
+●●●●●● 3mm □
+current_combined
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 3mm □
+current_size
+chunk_size
+●●●●●● 2mm □
+current_combined
+combined
+●●●●●● 1mm □△
+' '
+●●●●●● 1mm □△
+current_combined
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+combined
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+load_model_optimized
+●●●●●● 1mm □△
+model_path
+device
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'cuda'
+'Load model with optimizations for speed.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n⏳ Loading model: '
+model_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Device: '
+device
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   PyTorch version: '
+torch
+●●●●●● 2mm □△
+●●●●●● 2mm □
+device
+'cuda'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   GPU: '
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   CUDA Compute Capability: '
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+SentenceTransformer
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Model loaded successfully'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+device
+'cuda'
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+allocated
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1000000000.0
+reserved
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1000000000.0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   GPU Memory - Allocated: '
+allocated
+'.2f'
+'GB, Reserved: '
+reserved
+'.2f'
+'GB'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+model
+SentenceTransformer
+●●●●●● 1mm □
+benchmark_embedding_direct
+●●●●●● 1mm □△
+model
+texts
+batch_size
+precision
+show_progress
+chunk_group_size
+●●●●●● 2mm □△
+SentenceTransformer
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+128
+'fp32'
+●●●●●● 1mm □
+128
+'\n    Benchmark direct embedding using SentenceTransformer.encode()\n    \n    Args:\n        model: SentenceTransformer model instance\n        texts: List of texts to embed\n        batch_size: Batch size for encoding\n        precision: "fp32" or "fp16"\n        show_progress: Whether to show progress bar\n        chunk_group_size: Process texts in groups to avoid OOM\n        \n    Returns:\n        Tuple of (elapsed_time, total_tokens)\n    '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DIRECT EMBEDDING BENCHMARK'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nConfiguration:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Number of texts: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Batch size: '
+batch_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Group size: '
+chunk_group_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Precision: '
+precision
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total characters: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+texts
+●●●●●● 2mm □△
+','
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total words: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+t
+texts
+●●●●●● 2mm □△
+','
+●●●●●● 2mm □△
+total_tokens
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1.3
+t
+texts
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Estimated total tokens: '
+total_tokens
+',.0f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n⏳ Warming up model...'
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+'Warmup text'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🚀 Starting embedding benchmark...\n'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □
+num_groups
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunk_group_size
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □○
+chunk_group_size
+group_idx
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_groups
+●●●●●● 2mm □△
+group_start
+●●●●●● 1mm □
+group_idx
+●●●●●● 2mm □△
+chunk_group_size
+group_end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+group_idx
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+chunk_group_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+group_texts
+●●●●●● 1mm □
+texts
+group_start
+group_end
+●●●●●● 2mm □
+show_progress
+num_groups
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Processing group '
+group_idx
+●●●●●● 3mm ○
+1
+'/'
+num_groups
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+group_texts
+●●●●●● 2mm □△
+' texts)...'
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+precision
+'fp16'
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+group_embeddings
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+group_texts
+●●●●●● 2mm □△
+●●●●●● 3mm □
+group_embeddings
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+group_texts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+group_embeddings
+torch
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 2mm □
+'out of memory'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n⚠️  OOM with batch_size='
+batch_size
+', reducing...'
+●●●●●● 2mm □△
+smaller_batch_size
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+4
+batch_size
+●●●●●● 1mm □○
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Retrying with batch_size='
+smaller_batch_size
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+precision
+'fp16'
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+group_embeddings
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+group_texts
+●●●●●● 2mm □△
+●●●●●● 3mm □
+group_embeddings
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+group_texts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+group_embeddings
+torch
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+group_embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+all_embeddings
+0
+torch
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+all_embeddings
+●●●●●● 2mm □△
+●●●●●● 3mm □
+embeddings
+●●●●●● 1mm □
+all_embeddings
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Embedding complete!'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+embeddings
+torch
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Embeddings shape: '
+embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+embeddings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Embeddings: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+' vectors of dimension '
+embeddings
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+0
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Embeddings shape: '
+embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ⏱️  Time elapsed: '
+elapsed
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  📊 Throughput: '
+total_tokens
+●●●●●● 3mm □△
+elapsed
+',.0f'
+' tokens/sec'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  📊 Texts/sec: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+elapsed
+'.1f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+peak_memory
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1000000000.0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  🧠 Peak GPU Memory: '
+peak_memory
+'.2f'
+'GB'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed
+total_tokens
+Tuple
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main benchmark function.'
+●●●●●● 2mm □△○
+argparse
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--batch-size'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--tokens'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--num-texts'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--group-size'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--precision'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--device'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--model-path'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--progress'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 2mm □
+model_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+'qwen_4b'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model_path
+●●●●●● 1mm □
+args
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚡ ULTRA-OPTIMIZED EMBEDDING BENCHMARK'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nBenchmark Configuration:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model: '
+Path
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Device: '
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Precision: '
+args
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Batch size: '
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total tokens: ~'
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Number of texts: '
+args
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Number of texts: AUTO (1 large text for max throughput)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+'cuda'
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ CUDA requested but not available!'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  CUDA available: Yes'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  CUDA version: '
+torch
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+load_model_optimized
+●●●●●● 1mm □△
+model_path
+args
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ Failed to load model: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n⏳ Generating sample text (~'
+args
+' tokens)...'
+●●●●●● 2mm □△
+full_text
+●●●●●● 1mm □
+generate_sample_text
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Generated text: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_text
+●●●●●● 2mm □△
+','
+' characters'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 2mm □
+max_chars_per_text
+●●●●●● 1mm □
+20000
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_text
+●●●●●● 2mm □△
+max_chars_per_text
+num_texts
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+max_chars_per_text
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □○
+max_chars_per_text
+texts_to_embed
+●●●●●● 1mm □
+split_text_into_chunks
+●●●●●● 1mm □△
+full_text
+num_texts
+●●●●●● 2mm □△
+texts_to_embed
+●●●●●● 1mm □
+t
+t
+texts_to_embed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+50
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Auto-split into '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts_to_embed
+●●●●●● 2mm □△
+' texts (max '
+max_chars_per_text
+' chars each)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+texts_to_embed
+●●●●●● 1mm □
+full_text
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Using 1 text for maximum throughput'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+texts_to_embed
+●●●●●● 1mm □
+split_text_into_chunks
+●●●●●● 1mm □△
+full_text
+args
+●●●●●● 2mm □△
+●●●●●● 3mm □
+texts_to_embed
+●●●●●● 1mm □
+t
+t
+texts_to_embed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+50
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Split into '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts_to_embed
+●●●●●● 2mm □△
+' texts'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nText Statistics:'
+●●●●●● 2mm □△
+i
+text
+●●●●●● 2mm □
+●●●●●● 1mm □△
+texts_to_embed
+●●●●●● 2mm □△
+tokens
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1.3
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Text '
+i
+●●●●●● 3mm ○
+1
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+','
+' chars, ~'
+tokens
+',.0f'
+' tokens'
+●●●●●● 2mm □△
+elapsed
+total_tokens
+●●●●●● 1mm □
+benchmark_embedding_direct
+●●●●●● 1mm □△
+model
+texts_to_embed
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'📊 BENCHMARK RESULTS'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'configuration'
+'performance'
+'model'
+'device'
+'precision'
+'batch_size'
+'num_texts'
+'total_tokens'
+Path
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+args
+args
+args
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts_to_embed
+●●●●●● 2mm □△
+total_tokens
+'elapsed_seconds'
+'total_tokens'
+'tokens_per_second'
+'texts_per_second'
+elapsed
+total_tokens
+total_tokens
+●●●●●● 3mm □△
+elapsed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts_to_embed
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+elapsed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📈 Performance Metrics:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ⏱️  Total time: '
+elapsed
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  📊 Throughput: '
+total_tokens
+●●●●●● 3mm □△
+elapsed
+',.0f'
+' tokens/sec'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  📊 Speed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts_to_embed
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+elapsed
+'.2f'
+' texts/sec'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Tokens processed: '
+total_tokens
+',.0f'
+●●●●●● 2mm □△
+output_file
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'benchmark_optimized_results.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+results
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Results saved to: '
+output_file
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n⚠️  Failed to save results: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

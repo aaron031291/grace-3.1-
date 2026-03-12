@@ -1,0 +1,103 @@
+## escalation_manager.py
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 3mm □△○
+events
+●●●●●● 2mm □△○
+CognitiveEvent
+●●●●●● 2mm △
+EscalationManager
+'\n    Tiered response engine (Levels 0-4). Each level maps to playbooks, \n    research tasks, or user notifications.\n    '
+●●●●●● 1mm □
+determine_response
+●●●●●● 1mm □△
+self
+event
+risk_score
+●●●●●● 2mm □△
+CognitiveEvent
+●●●●●● 3mm ○
+'\n        Level 0 (auto-heal) - run predefined playbooks if low risk.\n        Level 1 (research) - spawn cognitive missions to gather context (logs, metrics, GitHub knowledge).\n        Level 2/3 - engage specialized agents (coding, learning, governance) or run deeper diagnostics.\n        Level 4 - notify humans with immutable log references; mark mission for manual approval.\n        '
+response
+●●●●●● 1mm □
+'risk_score'
+'playbook'
+'level'
+'action'
+risk_score
+●●●●●● 2mm □
+0
+'none'
+●●●●●● 2mm □
+risk_score
+0.3
+response
+'level'
+●●●●●● 1mm □
+0
+response
+'action'
+●●●●●● 1mm □
+'auto-heal'
+response
+'playbook'
+●●●●●● 1mm □
+'auto_'
+event
+●●●●●● 1mm □△
+'.'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+event
+'guardian.log_error'
+response
+'level'
+●●●●●● 1mm □
+2
+response
+'action'
+●●●●●● 1mm □
+'self_heal'
+response
+'playbook'
+●●●●●● 1mm □
+'log_error_remediation'
+●●●●●● 2mm □
+risk_score
+0.5
+response
+'level'
+●●●●●● 1mm □
+1
+response
+'action'
+●●●●●● 1mm □
+'research_mission'
+●●●●●● 1mm △
+risk_score
+0.7
+response
+'level'
+●●●●●● 1mm □
+2
+response
+'action'
+●●●●●● 1mm □
+'engage_agents'
+response
+'level'
+●●●●●● 1mm □
+4
+response
+'action'
+●●●●●● 1mm □
+'human_escalation'
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

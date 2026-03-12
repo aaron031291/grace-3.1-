@@ -240,7 +240,7 @@ class LLMCausalInferencer:
     def _enhance_with_llm(
         self,
         claims: List[CausalClaim],
-        original_text: str
+        text: str = ""
     ) -> List[CausalClaim]:
         """Enhance claims with LLM validation and scoring."""
         enhanced = []

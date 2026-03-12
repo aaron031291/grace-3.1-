@@ -297,7 +297,6 @@ class BaseSubagent:
             }
         ).to_dict())
 
-    def _signal_handler(self, signum, frame):
         """Handle shutdown signals."""
         logger.info(f"[{self.agent_id}] Signal {signum} received")
         self.is_running.value = False

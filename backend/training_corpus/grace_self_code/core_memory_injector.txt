@@ -1,0 +1,719 @@
+## memory_injector.py
+'\nMemory Injector — connects LLMs to ALL memory systems.\n\nBefore every LLM call, this module builds a rich context block\ncontaining unified memory, Genesis patterns, trust scores,\ngovernance rules, episodic recalls, and knowledge gaps.\n\nThis is THE missing piece. Without it, models fly blind.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MAX_CONTEXT_CHARS
+●●●●●● 1mm □
+8000
+●●●●●● 1mm □
+build_llm_context
+●●●●●● 1mm □△
+task
+project
+session_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+''
+'\n    Build a complete context block for LLM injection.\n    This gets prepended to every LLM system prompt.\n    '
+parts
+●●●●●● 1mm □
+char_budget
+●●●●●● 1mm □
+MAX_CONTEXT_CHARS
+rules
+●●●●●● 1mm □
+_get_governance_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rules
+parts
+●●●●●● 1mm □△
+'[GOVERNANCE RULES — MANDATORY]\n'
+rules
+2000
+●●●●●● 2mm □△
+char_budget
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 2mm □△
+2000
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+_get_trust_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust
+parts
+●●●●●● 1mm □△
+'[MODEL TRUST SCORES]\n'
+trust
+●●●●●● 2mm □△
+char_budget
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+trust
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+episodes
+●●●●●● 1mm □
+_get_episodic_context
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodes
+parts
+●●●●●● 1mm □△
+'[PAST EXPERIENCE]\n'
+episodes
+1500
+●●●●●● 2mm □△
+char_budget
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+1500
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+_get_genesis_patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+patterns
+parts
+●●●●●● 1mm □△
+'[SYSTEM ACTIVITY — LAST 24H]\n'
+patterns
+1000
+●●●●●● 2mm □△
+char_budget
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+gaps
+●●●●●● 1mm □
+_get_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gaps
+parts
+●●●●●● 1mm □△
+'[KNOWLEDGE GAPS]\n'
+gaps
+500
+●●●●●● 2mm □△
+char_budget
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+●●●●●● 2mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+prediction
+●●●●●● 1mm □
+_get_dl_prediction
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prediction
+parts
+●●●●●● 1mm □△
+'[AI PREDICTION]\n'
+prediction
+●●●●●● 2mm □△
+hebbian
+●●●●●● 1mm □
+_get_hebbian_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hebbian
+parts
+●●●●●● 1mm □△
+'[BRAIN SYNAPSE STRENGTHS]\n'
+hebbian
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+_get_mirror_observation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mirror
+parts
+●●●●●● 1mm □△
+'[SELF-OBSERVATION]\n'
+mirror
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parts
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+'\n\n---\n\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_governance_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+list_rules
+get_persona
+rules
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+persona
+●●●●●● 1mm □
+get_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+persona
+●●●●●● 1mm □△
+'personal'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Communication style: '
+persona
+'personal'
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+persona
+●●●●●● 1mm □△
+'professional'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Professional style: '
+persona
+'professional'
+200
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+rules
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+docs
+parts
+●●●●●● 1mm □△
+'Active governance documents: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+d
+docs
+5
+parts
+●●●●●● 1mm □△
+'  - '
+d
+●●●●●● 1mm □△
+'filename'
+'?'
+●●●●●● 2mm □△
+' ('
+d
+●●●●●● 1mm □△
+'category'
+'?'
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+parts
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+''
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_trust_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'  '
+m
+': '
+s
+'.2f'
+m
+s
+models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_episodic_context
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm □
+buf
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodes
+●●●●●● 3mm ○
+''
+parts
+●●●●●● 1mm □
+ep
+episodes
+problem
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ep
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ep
+100
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+100
+outcome
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ep
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ep
+100
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+100
+parts
+●●●●●● 1mm □△
+'  Past: '
+problem
+' → '
+outcome
+' (trust='
+ep
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_genesis_patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+miner
+●●●●●● 1mm □
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+miner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+keys
+●●●●●● 1mm □
+patterns
+●●●●●● 1mm □△
+'keys_analyzed'
+0
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Operations in last 24h: '
+keys
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+patterns
+●●●●●● 1mm □△
+'error_clusters'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors
+parts
+●●●●●● 1mm □△
+'Error clusters: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+e
+errors
+3
+parts
+●●●●●● 1mm □△
+'  - '
+e
+●●●●●● 1mm □△
+'error_type'
+'?'
+●●●●●● 2mm □△
+': '
+e
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+' occurrences'
+●●●●●● 2mm □△
+repeated
+●●●●●● 1mm □
+patterns
+●●●●●● 1mm □△
+'repeated_failures'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+repeated
+parts
+●●●●●● 1mm □△
+'Repeated failures: '
+', '
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'pattern'
+'?'
+●●●●●● 2mm □△
+30
+r
+repeated
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_knowledge_gaps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.cognitive_mesh
+●●●●●● 2mm □△○
+CognitiveMesh
+gaps
+●●●●●● 1mm □
+CognitiveMesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gaps
+gaps
+●●●●●● 1mm □△
+'knowledge_gaps'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+gap_list
+●●●●●● 1mm □
+gaps
+●●●●●● 1mm □△
+'knowledge_gaps'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gap_list
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+'Grace has '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gap_list
+●●●●●● 2mm □△
+' knowledge gaps in: '
+●●●●●● 3mm ○
+', '
+●●●●●● 1mm □△
+g
+●●●●●● 1mm □△
+'topic'
+'?'
+●●●●●● 2mm □△
+20
+g
+gap_list
+5
+●●●●●● 1mm □
+●●●●●● 1mm □△
+g
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_dl_prediction
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+core.deep_learning
+●●●●●● 2mm □△○
+get_model
+TORCH_AVAILABLE
+●●●●●● 2mm □
+TORCH_AVAILABLE
+●●●●●● 3mm ○
+''
+model
+●●●●●● 1mm □
+get_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+'key_type'
+'what'
+'who'
+'is_error'
+'code_change'
+task
+60
+'user'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pred
+●●●●●● 1mm □△
+'available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Success probability: '
+pred
+'success_probability'
+'.0%'
+'\nRisk component: '
+pred
+●●●●●● 1mm □△
+'risky_component'
+'?'
+●●●●●● 2mm □△
+'\nPredicted trust: '
+pred
+●●●●●● 1mm □△
+'predicted_trust'
+0
+●●●●●● 2mm □△
+'.2f'
+●●●●●● 3mm ○
+''
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_hebbian_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+strongest
+●●●●●● 1mm □
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □
+strongest
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'  '
+s
+'source'
+'→'
+s
+'target'
+': weight='
+s
+'weight'
+'.2f'
+' ('
+s
+'calls'
+' calls)'
+s
+strongest
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_mirror_observation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.awareness.self_model
+●●●●●● 2mm □△○
+SelfModel
+model
+●●●●●● 1mm □
+SelfModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Period: '
+ctx
+●●●●●● 1mm □△
+'period'
+'?'
+●●●●●● 2mm □△
+', Business hours: '
+ctx
+●●●●●● 1mm □△
+'is_business_hours'
+'?'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○

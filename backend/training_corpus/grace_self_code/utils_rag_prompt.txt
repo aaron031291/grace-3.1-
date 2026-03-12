@@ -1,0 +1,43 @@
+## rag_prompt.py
+'\nRAG prompt utilities for injecting retrieved context into chat prompts.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+user_query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n    Build a RAG-augmented prompt by injecting retrieved context.\n    \n    Args:\n        user_query: The original user message/query\n        context: Retrieved context from the RAG system (optional)\n        \n    Returns:\n        str: Formatted prompt with context injected\n    '
+●●●●●● 2mm □
+context
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 3mm ○
+user_query
+prompt
+●●●●●● 1mm □
+"Based on the following context, answer the user's question:\n\n<context>\n"
+context
+'\n</context>\n\nUser Question: '
+user_query
+●●●●●● 3mm ○
+prompt
+●●●●●● 1mm ○
+●●●●●● 1mm □
+build_rag_system_prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Build the system prompt for RAG-augmented responses.\n    Strict mode: Only use information from the provided context.\n    \n    Returns:\n        str: System prompt instructing the model to ONLY use provided context\n    '
+●●●●●● 3mm ○
+'You are a knowledge assistant that ONLY answers questions using the provided context.\n\nCRITICAL RULES:\n1. You MUST answer ONLY based on the information provided in the context below\n2. You MUST NOT add any information from your training data\n3. You MUST NOT make assumptions or inferences beyond what is explicitly stated in the context\n4. You MUST NOT provide general knowledge unless it appears in the context\n5. If the user\'s question cannot be directly answered from the context, you MUST say: "I cannot answer this question based on the available knowledge base."\n6. Be precise, factual, and cite the context when possible\n7. Do not add opinions, interpretations, or information not in the context\n\nRemember: Your role is to convey the knowledge base faithfully, not to generate information.'
+●●●●●● 1mm ○

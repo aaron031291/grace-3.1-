@@ -1,0 +1,1291 @@
+## test_mirror_self_modeling.py
+'\nComprehensive Component Tests for Mirror Self-Modeling System\n\nTests the Mirror Self-Modeling system that provides:\n- Self-observation via Genesis Keys\n- Behavioral pattern detection\n- Learning progress analysis\n- Improvement suggestions\n- Self-awareness scoring\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+PropertyMock
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPatternType
+'Test PatternType constants.'
+●●●●●● 1mm □
+test_pattern_type_constants
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all PatternType constants are defined.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+PatternType
+PatternType
+'repeated_failure'
+PatternType
+'success_sequence'
+PatternType
+'learning_plateau'
+PatternType
+'efficiency_drop'
+PatternType
+'anomalous_behavior'
+PatternType
+'improvement_opportunity'
+●●●●●● 2mm △
+TestMirrorSelfModelingSystem
+'Test MirrorSelfModelingSystem functionality.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create a mock database session.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create a mock memory mesh learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_mirror_system_initialization
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test MirrorSelfModelingSystem can be initialized.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+mock_session
+mirror
+24
+mirror
+3
+mirror
+mirror
+●●●●●● 1mm □
+test_mirror_system_observe_recent_operations
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test MirrorSelfModelingSystem observes recent operations.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+mock_gk1
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_gk1
+●●●●●● 1mm □
+GenesisKeyType
+mock_gk2
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_gk2
+●●●●●● 1mm □
+GenesisKeyType
+mock_session
+●●●●●● 1mm □
+mock_gk1
+mock_gk2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observation
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'timestamp'
+observation
+'total_operations'
+observation
+observation
+'total_operations'
+2
+'operations_by_type'
+observation
+●●●●●● 1mm □
+test_mirror_system_detect_behavioral_patterns
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test MirrorSelfModelingSystem detects behavioral patterns.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_mirror_system_build_self_model
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test MirrorSelfModelingSystem builds self-model.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+self_model
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'timestamp'
+self_model
+'operations_observed'
+self_model
+'behavioral_patterns'
+self_model
+'learning_progress'
+self_model
+'improvement_suggestions'
+self_model
+'self_awareness_score'
+self_model
+●●●●●● 2mm △
+TestLearningProgressAnalysis
+'Test learning progress analysis functionality.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_analyze_learning_progress_empty
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test _analyze_learning_progress with no examples.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+mock_session
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+'total_examples'
+0
+progress
+'avg_confidence'
+0.0
+progress
+'success_rate'
+0.0
+progress
+'topics_studied'
+0
+●●●●●● 1mm □
+test_analyze_learning_progress_with_examples
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test _analyze_learning_progress with learning examples.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+examples
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+ex
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ex
+●●●●●● 1mm □
+0.8
+ex
+●●●●●● 1mm □
+'type_'
+i
+●●●●●● 2mm □○
+2
+ex
+●●●●●● 1mm □
+0.7
+●●●●●● 3mm ○
+i
+●●●●●● 2mm □△
+0.05
+ex
+●●●●●● 1mm □
+i
+●●●●●● 2mm □○
+2
+0
+'success'
+●●●●●● 3mm □△○
+examples
+●●●●●● 1mm □△
+ex
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+examples
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+'total_examples'
+5
+progress
+'avg_confidence'
+0
+'topics_studied'
+progress
+●●●●●● 2mm △
+TestImprovementSuggestions
+'Test improvement suggestion generation.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_generate_improvement_suggestions_from_failures
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test improvement suggestions from repeated failures.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+PatternType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+'pattern_type'
+'topic'
+'occurrences'
+'recommendation'
+PatternType
+'error_handling'
+5
+'Review error handling approach'
+learning_analysis
+●●●●●● 1mm □
+'total_examples'
+10
+suggestions
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+patterns
+learning_analysis
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+suggestions
+●●●●●● 2mm □△
+1
+suggestions
+0
+'priority'
+'high'
+suggestions
+0
+'category'
+'failure_resolution'
+suggestions
+0
+'action'
+'restudy_and_practice'
+●●●●●● 1mm □
+test_generate_improvement_suggestions_from_plateaus
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test improvement suggestions from learning plateaus.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+PatternType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+'pattern_type'
+'topic'
+'occurrences'
+'recommendation'
+PatternType
+'advanced_python'
+3
+'Needs more practice'
+suggestions
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+suggestions
+●●●●●● 2mm □△
+1
+suggestions
+0
+'priority'
+'medium'
+suggestions
+0
+'category'
+'skill_development'
+suggestions
+0
+'action'
+'intensive_practice'
+●●●●●● 1mm □
+test_suggestions_sorted_by_priority
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test that suggestions are sorted by priority.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+PatternType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+'pattern_type'
+'topic'
+'occurrences'
+'recommendation'
+PatternType
+'optimization'
+2
+'Low priority'
+'pattern_type'
+'topic'
+'occurrences'
+'recommendation'
+PatternType
+'critical_bug'
+5
+'High priority'
+'pattern_type'
+'topic'
+'occurrences'
+'recommendation'
+PatternType
+'medium_issue'
+3
+'Medium priority'
+suggestions
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+suggestions
+0
+'priority'
+'high'
+suggestions
+1
+'priority'
+'medium'
+suggestions
+2
+'priority'
+'low'
+●●●●●● 2mm △
+TestSelfAwarenessScore
+'Test self-awareness score calculation.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_self_awareness_score_calculation
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test self-awareness score calculation.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+'type'
+'test'
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+learning_analysis
+●●●●●● 1mm □
+'total_examples'
+'success_rate'
+'topics_studied'
+50
+0.8
+10
+score
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+patterns
+learning_analysis
+●●●●●● 2mm □△
+0.0
+score
+1.0
+●●●●●● 1mm □
+test_self_awareness_score_increases_with_patterns
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test that more patterns increases self-awareness score.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_analysis
+●●●●●● 1mm □
+'total_examples'
+'success_rate'
+'topics_studied'
+50
+0.8
+10
+score_few
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+'type'
+'test'
+learning_analysis
+●●●●●● 2mm □△
+score_many
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+'type'
+'test'
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+15
+●●●●●● 2mm □△
+learning_analysis
+●●●●●● 2mm □△
+score_many
+score_few
+●●●●●● 2mm △
+TestAnalyzeRecentOperations
+'Test analyze_recent_operations method.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_analyze_recent_operations_returns_opportunities
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test analyze_recent_operations returns improvement opportunities.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+'priority'
+'category'
+'topic'
+'action'
+'reason'
+'evidence_count'
+'high'
+'failure_resolution'
+'error_handling'
+'study'
+'Multiple failures'
+5
+mirror
+●●●●●● 1mm □
+'type'
+'test'
+result
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'operations_analyzed'
+result
+'patterns_detected'
+result
+'improvement_opportunities'
+result
+'self_awareness_score'
+result
+●●●●●● 1mm □
+test_analyze_recent_operations_generates_seed_opportunities
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test that seed opportunities are generated when no patterns exist.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'improvement_opportunities'
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △
+TestTriggerImprovementActions
+'Test trigger_improvement_actions method.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_trigger_improvement_actions_with_orchestrator
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test trigger_improvement_actions with learning orchestrator.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+'priority'
+'action'
+'topic'
+'evidence_count'
+'high'
+'restudy_and_practice'
+'error_handling'
+5
+mock_orchestrator
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_orchestrator
+●●●●●● 1mm □
+'task-001'
+result
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'actions_triggered'
+1
+mock_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_trigger_improvement_actions_without_orchestrator
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test trigger_improvement_actions without orchestrator does nothing.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+'priority'
+'action'
+'topic'
+'evidence_count'
+'high'
+'restudy_and_practice'
+'error_handling'
+5
+result
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'actions_triggered'
+0
+●●●●●● 2mm △
+TestMirrorStatus
+'Test get_mirror_status method.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_get_mirror_status
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test get_mirror_status returns correct structure.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+'type'
+'test1'
+'type'
+'test2'
+mirror
+●●●●●● 1mm □
+'priority'
+'topic'
+'high'
+'t1'
+'priority'
+'topic'
+'medium'
+'t2'
+'priority'
+'topic'
+'high'
+'t3'
+status
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'patterns_detected'
+2
+status
+'improvement_suggestions'
+3
+status
+'observation_window_hours'
+48
+status
+'high_priority_suggestions'
+2
+●●●●●● 2mm △
+TestGlobalMirrorSystem
+'Test global mirror system singleton.'
+●●●●●● 1mm □
+test_get_mirror_system_creates_instance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_mirror_system creates instance.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+_mirror_system
+●●●●●● 2mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 1mm □
+mirror_module
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+mirror_module
+'_mirror_system'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestCountPatternsByType
+'Test _count_patterns_by_type helper method.'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock session.'
+●●●●●● 3mm ○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+mock_memory_learner
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock memory learner.'
+learner
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+'knowledge_gaps'
+'high_value_topics'
+●●●●●● 3mm ○
+learner
+pytest
+●●●●●● 1mm □
+test_count_patterns_by_type
+●●●●●● 1mm □△
+self
+mock_session
+mock_memory_learner
+●●●●●● 2mm □△
+'Test _count_patterns_by_type correctly counts pattern types.'
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModelingSystem
+PatternType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.mirror_self_modeling.get_memory_mesh_learner'
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+MirrorSelfModelingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+'pattern_type'
+PatternType
+'pattern_type'
+PatternType
+'pattern_type'
+PatternType
+'pattern_type'
+PatternType
+counts
+●●●●●● 1mm □
+mirror
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+counts
+PatternType
+2
+counts
+PatternType
+1
+counts
+PatternType
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

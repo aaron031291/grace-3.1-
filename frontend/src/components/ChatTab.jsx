@@ -3,6 +3,7 @@ import ChatList from "./ChatList";
 import ChatWindow from "./ChatWindow";
 import ConsensusChat from "./ConsensusChat";
 import ActivityFeed from "./ActivityFeed";
+import SpindleHitlChat from "./SpindleHitlChat";
 import { API_BASE_URL } from "../config/api";
 import "./ChatTab.css";
 
@@ -756,14 +757,26 @@ export default function ChatTab({ domain = "Global (All Domains)" }) {
         )}
 
         {showWorldModel && (
-          <div style={{ flex: "1 1 30%", borderLeft: "1px solid #262640", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0f0f1a" }}>
-            <WorldModelPanel onClose={() => setShowWorldModel(false)} />
-            <div style={{ flex: 1, borderTop: "1px solid #262640", position: "relative", minHeight: 400 }}>
-              <div style={{ padding: "8px 12px", background: "#1a1a2e", borderBottom: "1px solid #333", fontSize: 13, fontWeight: "bold", color: "#aaa" }}>
-                Live System Activity (Spindle / Grace)
+          <div style={{ flex: "1 1 30%", borderLeft: "1px solid #262640", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0f0f1a", minWidth: 350 }}>
+            {/* Top 40%: World Model State */}
+            <div style={{ flex: "0 0 35%", overflowY: "auto", display: "flex", flexDirection: "column" }}>
+              <WorldModelPanel onClose={() => setShowWorldModel(false)} />
+            </div>
+            
+            {/* Middle 35%: Spindle HITL Operations */}
+            <div style={{ flex: "0 0 40%", borderTop: "2px solid #262640", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+              <SpindleHitlChat />
+            </div>
+
+            {/* Bottom 25%: Feed */}
+            <div style={{ flex: "1", borderTop: "2px solid #262640", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+              <div style={{ padding: "6px 12px", background: "#1a1a2e", borderBottom: "1px solid #333", fontSize: 12, fontWeight: "bold", color: "#aaa", zIndex: 10 }}>
+                Live Stream
               </div>
-              <div style={{ position: "absolute", inset: 0, top: 35, zoom: 0.85 }}>
-                 <ActivityFeed docked={true} />
+              <div style={{ flex: 1, position: "relative" }}>
+                 <div style={{ position: "absolute", inset: 0, zoom: 0.85, paddingBottom: 10 }}>
+                   <ActivityFeed docked={true} />
+                 </div>
               </div>
             </div>
           </div>

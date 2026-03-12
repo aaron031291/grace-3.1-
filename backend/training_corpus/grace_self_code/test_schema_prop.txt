@@ -1,0 +1,29 @@
+## test_schema_prop.py
+●●●●●● 2mm □△○
+requests
+payload
+●●●●●● 1mm □
+'trigger_reason'
+'proposed_code'
+'Librarian agent detected a consistent pattern of User Location metadata across documents, proposing a new UserLocation tracking model.'
+'class UserLocation(BaseModel):\n    __tablename__ = "user_locations"\n    __table_args__ = {"extend_existing": True}\n\n    user_id = Column(String(255), nullable=False, index=True)\n    city = Column(String(255), nullable=True)\n    country = Column(String(255), nullable=True)\n    trust_score = Column(Float, default=0.5)\n'
+res
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+'http://127.0.0.1:8000/api/schema-evolution/proposals'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+res
+res
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error:'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△

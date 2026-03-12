@@ -1,0 +1,494 @@
+## actions.py
+'\nGrace Action Definitions\n\nDefines all actions Grace can take in the execution environment.\n'
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm △
+GraceAction
+●●●●●● 3mm □△
+Enum
+Enum
+'All actions Grace can perform.'
+WRITE_FILE
+●●●●●● 1mm □
+'write_file'
+EDIT_FILE
+●●●●●● 1mm □
+'edit_file'
+READ_FILE
+●●●●●● 1mm □
+'read_file'
+DELETE_FILE
+●●●●●● 1mm □
+'delete_file'
+RUN_PYTHON
+●●●●●● 1mm □
+'run_python'
+RUN_BASH
+●●●●●● 1mm □
+'run_bash'
+RUN_IPYTHON
+●●●●●● 1mm □
+'run_ipython'
+RUN_TESTS
+●●●●●● 1mm □
+'run_tests'
+RUN_PYTEST
+●●●●●● 1mm □
+'run_pytest'
+RUN_JEST
+●●●●●● 1mm □
+'run_jest'
+GIT_STATUS
+●●●●●● 1mm □
+'git_status'
+GIT_DIFF
+●●●●●● 1mm □
+'git_diff'
+GIT_ADD
+●●●●●● 1mm □
+'git_add'
+GIT_COMMIT
+●●●●●● 1mm □
+'git_commit'
+GIT_PUSH
+●●●●●● 1mm □
+'git_push'
+GIT_PULL
+●●●●●● 1mm □
+'git_pull'
+GIT_BRANCH
+●●●●●● 1mm □
+'git_branch'
+GIT_CHECKOUT
+●●●●●● 1mm □
+'git_checkout'
+GIT_CREATE_PR
+●●●●●● 1mm □
+'git_create_pr'
+SEARCH_CODE
+●●●●●● 1mm □
+'search_code'
+GREP_CODE
+●●●●●● 1mm □
+'grep_code'
+FIND_FILES
+●●●●●● 1mm □
+'find_files'
+ANALYZE_ERROR
+●●●●●● 1mm □
+'analyze_error'
+LINT_CODE
+●●●●●● 1mm □
+'lint_code'
+BUILD_PROJECT
+●●●●●● 1mm □
+'build_project'
+INSTALL_DEPS
+●●●●●● 1mm □
+'install_deps'
+BROWSE_URL
+●●●●●● 1mm □
+'browse_url'
+BROWSE_INTERACTIVE
+●●●●●● 1mm □
+'browse_interactive'
+RECORD_SUCCESS
+●●●●●● 1mm □
+'record_success'
+RECORD_FAILURE
+●●●●●● 1mm □
+'record_failure'
+EXTRACT_PATTERN
+●●●●●● 1mm □
+'extract_pattern'
+THINK
+●●●●●● 1mm □
+'think'
+PLAN
+●●●●●● 1mm □
+'plan'
+FINISH
+●●●●●● 1mm □
+'finish'
+ASK_USER
+●●●●●● 1mm □
+'ask_user'
+●●●●●● 2mm △
+ActionStatus
+●●●●●● 3mm □△
+Enum
+Enum
+'Status of an action execution.'
+PENDING
+●●●●●● 1mm □
+'pending'
+RUNNING
+●●●●●● 1mm □
+'running'
+SUCCESS
+●●●●●● 1mm □
+'success'
+FAILURE
+●●●●●● 1mm □
+'failure'
+TIMEOUT
+●●●●●● 1mm □
+'timeout'
+CANCELLED
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 2mm △
+ActionRequest
+'Request to execute an action.'
+action_id
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action_type
+GraceAction
+GraceAction
+parameters
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeout
+●●●●●● 2mm ○
+300
+requires_confirmation
+●●●●●● 3mm △
+●●●●●● 1mm □
+confidence
+●●●●●● 3mm ○
+0.5
+reasoning
+●●●●●● 1mm ○
+''
+related_memory_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action_id'
+'action_type'
+'parameters'
+'context'
+'created_at'
+'timeout'
+'requires_confirmation'
+'confidence'
+'reasoning'
+'related_memory_ids'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+ActionResult
+'Result of an action execution.'
+action_id
+●●●●●● 1mm ○
+action_type
+GraceAction
+status
+ActionStatus
+output
+●●●●●● 1mm ○
+''
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+exit_code
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+execution_time
+●●●●●● 3mm ○
+0.0
+completed_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_created
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_modified
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_deleted
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learnable
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+trust_delta
+●●●●●● 3mm ○
+0.0
+●●●●●● 1mm □
+success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ActionStatus
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+failed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ActionStatus
+ActionStatus
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action_id'
+'action_type'
+'status'
+'output'
+'error'
+'exit_code'
+'execution_time'
+'completed_at'
+'data'
+'files_created'
+'files_modified'
+'files_deleted'
+'success'
+'learnable'
+'trust_delta'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+ACTION_SCHEMAS
+●●●●●● 1mm □
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+'required'
+'optional'
+'path'
+'content'
+'overwrite'
+'required'
+'optional'
+'path'
+'old_content'
+'new_content'
+'replace_all'
+'required'
+'optional'
+'path'
+'start_line'
+'end_line'
+'required'
+'optional'
+'code'
+'timeout'
+'required'
+'optional'
+'command'
+'working_dir'
+'timeout'
+'required'
+'optional'
+'test_path'
+'test_framework'
+'verbose'
+'required'
+'optional'
+'message'
+'files'
+'required'
+'optional'
+'pattern'
+'path'
+'file_type'
+'required'
+'optional'
+'thought'
+'required'
+'optional'
+'goal'
+'steps'
+'required'
+'optional'
+'result'
+'summary'
+●●●●●● 1mm □
+validate_action_parameters
+●●●●●● 1mm □△
+action_type
+parameters
+●●●●●● 2mm □△
+GraceAction
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Validate that required parameters are present.'
+schema
+●●●●●● 1mm □
+ACTION_SCHEMAS
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+schema
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+required
+●●●●●● 1mm □
+schema
+●●●●●● 1mm □△
+'required'
+●●●●●● 2mm □△
+param
+required
+●●●●●● 2mm □
+param
+parameters
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+create_action
+●●●●●● 1mm □△
+action_type
+parameters
+confidence
+reasoning
+●●●●●● 2mm □△
+GraceAction
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+0.5
+''
+'Factory function to create validated action requests.'
+●●●●●● 2mm □
+validate_action_parameters
+●●●●●● 1mm □△
+action_type
+parameters
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Missing required parameters for '
+action_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionRequest

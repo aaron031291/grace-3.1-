@@ -1,0 +1,246 @@
+## project_conventions.py
+'\nGrace OS — Project Conventions\n\nLearned style rules, coding patterns, and anti-patterns.\nCaptures project-specific conventions from past sessions\nfor consistent code generation.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProjectConventions
+'\n    Stores and retrieves learned project conventions.\n    Used by L6 (Codegen) and L8 (Verification) to enforce consistency.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+record_convention
+●●●●●● 1mm □△
+self
+rule
+source
+confidence
+category
+examples
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'learned'
+0.8
+'general'
+●●●●●● 2mm □
+'\n        Record a style/pattern convention.\n        Returns the rule ID.\n        '
+●●●●●● 3mm △
+1
+rule_id
+●●●●●● 1mm □
+'conv_'
+●●●●●● 3mm △
+●●●●●● 3mm △
+rule_id
+●●●●●● 1mm □
+'rule_id'
+'rule'
+'source'
+'confidence'
+'category'
+'examples'
+'created'
+'enforced_count'
+'violated_count'
+rule_id
+rule
+source
+confidence
+category
+examples
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+0
+logger
+●●●●●● 1mm □△
+'[ProjectConventions] Recorded: '
+rule
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rule_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_conventions
+●●●●●● 1mm □△
+self
+category
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get all conventions, optionally filtered by category.'
+conventions
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category
+conventions
+●●●●●● 1mm □
+c
+c
+conventions
+c
+'category'
+category
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+conventions
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_convention
+●●●●●● 1mm □△
+self
+rule_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a specific convention by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_violation
+●●●●●● 1mm □△
+self
+code_snippet
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if a code snippet violates any known conventions.\n        Returns list of potentially violated conventions.\n        Simple keyword-based check — in production, use AST analysis.\n        '
+violations
+●●●●●● 1mm □
+conv
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rule_lower
+●●●●●● 1mm □
+conv
+'rule'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'never'
+rule_lower
+'avoid'
+rule_lower
+"don't"
+rule_lower
+example
+conv
+●●●●●● 1mm □△
+'examples'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+example
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_snippet
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+violations
+●●●●●● 1mm □△
+conv
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+violations
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_enforcement
+●●●●●● 1mm □△
+self
+rule_id
+was_violated
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Track when a convention was enforced or violated.'
+●●●●●● 2mm □
+rule_id
+●●●●●● 3mm △
+●●●●●● 2mm □
+was_violated
+●●●●●● 3mm △
+rule_id
+'violated_count'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+rule_id
+'enforced_count'
+1
+●●●●●● 1mm □
+get_categories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all convention categories.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+c
+'category'
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○

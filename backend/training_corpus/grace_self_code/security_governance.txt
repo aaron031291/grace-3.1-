@@ -1,0 +1,4700 @@
+## governance.py
+'\nGrace Governance - Constitutional AI Framework\n\nLayer-1 + Layer-2 runtime-wired governance system integrating with:\n- Layer1 Message Bus for component coordination\n- Cognitive Enforcer for OODA invariants\n- Genesis Keys for audit trails\n- Security Config for policy settings\n- KPI Tracker for metrics-driven governance\n- Telemetry for uptime and SLA enforcement\n\nConstitutional DNA provides immutable rules that cannot be overridden.\nPolicy Engine provides runtime-configurable governance checks.\nMetrics Engine tracks KPIs for governance decisions.\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+Set
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+ComponentType
+MessageType
+Message
+get_message_bus
+●●●●●● 3mm □△○
+security.config
+●●●●●● 2mm □△○
+SecurityConfig
+get_security_config
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ConstitutionalRule
+●●●●●● 3mm □△
+Enum
+Enum
+'Core constitutional rules that cannot be overridden.'
+HUMAN_CENTRICITY
+●●●●●● 1mm □
+'human_centricity'
+TRANSCENDENCE_MISSION
+●●●●●● 1mm □
+'transcendence_mission'
+TRUST_EARNED
+●●●●●● 1mm □
+'trust_earned'
+MONEY_BEFORE_TECH
+●●●●●● 1mm □
+'money_before_tech'
+PARTNERSHIP_EQUAL
+●●●●●● 1mm □
+'partnership_equal'
+SAFETY_FIRST
+●●●●●● 1mm □
+'safety_first'
+TRANSPARENCY_REQUIRED
+●●●●●● 1mm □
+'transparency_required'
+REVERSIBILITY_PREFERRED
+●●●●●● 1mm □
+'reversibility_preferred'
+●●●●●● 2mm △
+ConstitutionalRuleMeta
+'Metadata for constitutional rules.'
+rule
+ConstitutionalRule
+description
+●●●●●● 1mm ○
+required
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+severity
+●●●●●● 2mm ○
+10
+enforcement_mode
+●●●●●● 1mm ○
+'hard'
+dataclass
+CONSTITUTIONAL_RULES
+●●●●●● 1mm □○
+ConstitutionalRule
+ConstitutionalRuleMeta
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRule
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConstitutionalRuleMeta
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AutonomyTier
+●●●●●● 3mm □△
+Enum
+Enum
+'Trust-based autonomy tiers for graduated permissions.'
+TIER_0_SUPERVISED
+●●●●●● 1mm □
+'tier_0_supervised'
+TIER_1_MONITORED
+●●●●●● 1mm □
+'tier_1_monitored'
+TIER_2_AUDITED
+●●●●●● 1mm □
+'tier_2_audited'
+TIER_3_AUTONOMOUS
+●●●●●● 1mm □
+'tier_3_autonomous'
+●●●●●● 2mm △
+AutonomyTierConfig
+'Configuration for each autonomy tier.'
+tier
+AutonomyTier
+description
+●●●●●● 1mm ○
+requires_approval
+●●●●●● 3mm △
+requires_notification
+●●●●●● 3mm △
+max_impact_scope
+●●●●●● 1mm ○
+max_financial_impact
+●●●●●● 3mm ○
+reversibility_required
+●●●●●● 3mm △
+allowed_actions
+Set
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+AUTONOMY_TIERS
+●●●●●● 1mm □○
+AutonomyTier
+AutonomyTierConfig
+AutonomyTier
+AutonomyTier
+AutonomyTier
+AutonomyTier
+AutonomyTierConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AutonomyTierConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AutonomyTierConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AutonomyTierConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SLATier
+●●●●●● 3mm □△
+Enum
+Enum
+'Service Level Agreement tiers.'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+HIGH
+●●●●●● 1mm □
+'high'
+STANDARD
+●●●●●● 1mm □
+'standard'
+BEST_EFFORT
+●●●●●● 1mm □
+'best_effort'
+●●●●●● 2mm △
+SLAConfig
+'SLA configuration for a component or operation.'
+tier
+SLATier
+uptime_target
+●●●●●● 3mm ○
+max_latency_ms
+●●●●●● 2mm ○
+max_error_rate
+●●●●●● 3mm ○
+min_success_rate
+●●●●●● 3mm ○
+recovery_time_seconds
+●●●●●● 2mm ○
+escalation_threshold
+●●●●●● 2mm ○
+dataclass
+SLA_CONFIGS
+●●●●●● 1mm □○
+SLATier
+SLAConfig
+SLATier
+SLATier
+SLATier
+SLATier
+SLAConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SLAConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SLAConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SLAConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ActionCategory
+●●●●●● 3mm □△
+Enum
+Enum
+'Categories of actions with different trust requirements.'
+READ
+●●●●●● 1mm □
+'read'
+ANALYZE
+●●●●●● 1mm □
+'analyze'
+SUGGEST
+●●●●●● 1mm □
+'suggest'
+WRITE_LOCAL
+●●●●●● 1mm □
+'write_local'
+EXECUTE_SAFE
+●●●●●● 1mm □
+'execute_safe'
+WRITE_REMOTE
+●●●●●● 1mm □
+'write_remote'
+EXECUTE_EXTERNAL
+●●●●●● 1mm □
+'execute_external'
+GIT_COMMIT
+●●●●●● 1mm □
+'git_commit'
+GIT_PUSH_BRANCH
+●●●●●● 1mm □
+'git_push_branch'
+GIT_PUSH_MAIN
+●●●●●● 1mm □
+'git_push_main'
+FINANCIAL_TRANSACTION
+●●●●●● 1mm □
+'financial_transaction'
+SYSTEM_CONFIG
+●●●●●● 1mm □
+'system_config'
+DELETE_DATA
+●●●●●● 1mm □
+'delete_data'
+●●●●●● 2mm △
+ActionTrustRequirement
+'Trust and experience requirements for an action category.'
+action
+ActionCategory
+min_trust_score
+●●●●●● 3mm ○
+min_tier
+AutonomyTier
+prerequisite_actions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+success_count_required
+●●●●●● 2mm ○
+failure_penalty
+●●●●●● 3mm ○
+success_reward
+●●●●●● 3mm ○
+cooldown_on_failure_seconds
+●●●●●● 2mm ○
+requires_approval_override
+●●●●●● 3mm △
+max_daily_executions
+●●●●●● 2mm ○
+dataclass
+ACTION_TRUST_MATRIX
+●●●●●● 1mm □○
+ActionCategory
+ActionTrustRequirement
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionCategory
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionTrustRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CapabilityProgress
+'Tracks progress toward earning a capability.'
+action
+ActionCategory
+successful_executions
+●●●●●● 2mm ○
+0
+failed_executions
+●●●●●● 2mm ○
+0
+last_success
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+last_failure
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+cooldown_until
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+daily_execution_count
+●●●●●● 2mm ○
+0
+daily_reset_date
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+earned
+●●●●●● 3mm △
+●●●●●● 1mm □
+earned_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+revoked
+●●●●●● 3mm △
+●●●●●● 1mm □
+revoked_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+revocation_reason
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ApprovalRecord
+'Record of an approval decision with justification.'
+approval_id
+●●●●●● 1mm ○
+decision_id
+●●●●●● 1mm ○
+approver_id
+●●●●●● 1mm ○
+approved
+●●●●●● 3mm △
+justification
+●●●●●● 1mm ○
+risk_acknowledged
+●●●●●● 3mm △
+timestamp
+datetime
+context_snapshot
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+outcome
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+outcome_timestamp
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ViolationEscalation
+'Escalation record for governance violations.'
+escalation_id
+●●●●●● 1mm ○
+violation_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+escalation_type
+●●●●●● 1mm ○
+target_resource
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+acknowledged
+●●●●●● 3mm △
+●●●●●● 1mm □
+acknowledged_by
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+acknowledged_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+resolution
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+TrustDecayConfig
+'Configuration for trust score decay over time.'
+decay_half_life_days
+●●●●●● 2mm ○
+30
+min_trust_floor
+●●●●●● 3mm ○
+0.1
+activity_resets_decay
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+decay_check_interval_hours
+●●●●●● 2mm ○
+24
+tier_demotion_on_decay
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+dataclass
+●●●●●● 2mm △
+QuarantinedResource
+'A resource that has been quarantined due to governance violations.'
+resource_id
+●●●●●● 1mm ○
+quarantine_reason
+●●●●●● 1mm ○
+violation_count
+●●●●●● 2mm ○
+quarantined_at
+datetime
+quarantine_duration_hours
+●●●●●● 2mm ○
+release_at
+datetime
+released
+●●●●●● 3mm △
+●●●●●● 1mm □
+released_by
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+released_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ComplianceStandard
+●●●●●● 3mm □△
+Enum
+Enum
+'Compliance standards that can be enforced.'
+CODE_QUALITY
+●●●●●● 1mm □
+'code_quality'
+SECURITY_BASELINE
+●●●●●● 1mm □
+'security_baseline'
+DATA_INTEGRITY
+●●●●●● 1mm □
+'data_integrity'
+LEARNING_QUALITY
+●●●●●● 1mm □
+'learning_quality'
+AUDIT_COMPLETENESS
+●●●●●● 1mm □
+'audit_completeness'
+RESPONSE_QUALITY
+●●●●●● 1mm □
+'response_quality'
+●●●●●● 2mm △
+ComplianceRequirement
+'A specific compliance requirement.'
+standard
+ComplianceStandard
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+threshold
+●●●●●● 3mm ○
+measurement_period_hours
+●●●●●● 2mm ○
+enforcement_action
+●●●●●● 1mm ○
+enabled
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+dataclass
+COMPLIANCE_REQUIREMENTS
+●●●●●● 1mm □○
+ComplianceStandard
+●●●●●● 3mm □△
+ComplianceRequirement
+ComplianceStandard
+ComplianceStandard
+ComplianceStandard
+ComplianceStandard
+ComplianceStandard
+ComplianceStandard
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ComplianceRequirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MetricSample
+'A single metric sample.'
+value
+●●●●●● 3mm ○
+timestamp
+datetime
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GovernanceKPI
+'Key Performance Indicator for governance.'
+kpi_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+target_value
+●●●●●● 3mm ○
+warning_threshold
+●●●●●● 3mm ○
+critical_threshold
+●●●●●● 3mm ○
+current_value
+●●●●●● 3mm ○
+0.0
+samples
+●●●●●● 3mm □△○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_updated
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GovernanceMetrics
+'\n    Tracks governance-specific KPIs and metrics.\n\n    Categories:\n    - Uptime: System availability and reliability\n    - Latency: Response time metrics\n    - Quality: Output quality metrics\n    - Learning: Learning system effectiveness\n    - Compliance: Standards adherence\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GovernanceKPI
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □○
+ComplianceStandard
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-METRICS] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_default_kpis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize default governance KPIs.'
+●●●●●● 3mm △
+'system_uptime'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'component_availability'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'avg_response_time'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'p95_latency'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'success_rate'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'confidence_score'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'hallucination_rate'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'learning_success_rate'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'pattern_quality'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'knowledge_retention'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'audit_coverage'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'governance_approval_rate'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'trust_score'
+●●●●●● 1mm □
+GovernanceKPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_latency
+●●●●●● 1mm □△
+self
+latency_ms
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+'unknown'
+'Record a latency sample.'
+sample
+●●●●●● 1mm □
+MetricSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sample
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_operation
+●●●●●● 1mm □△
+self
+success
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'unknown'
+'Record an operation result.'
+sample
+●●●●●● 1mm □
+MetricSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sample
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sample
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_learning_event
+●●●●●● 1mm □△
+self
+success
+pattern_quality
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+'Record a learning event.'
+kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+'learning_success_rate'
+kpi
+●●●●●● 1mm □△
+MetricSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_samples
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kpi
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+recent_samples
+kpi
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+recent_samples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_samples
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_quality
+0
+pq_kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+'pattern_quality'
+pq_kpi
+●●●●●● 1mm □△
+MetricSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_pq
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+pq_kpi
+●●●●●● 2mm □△
+50
+●●●●●● 2mm □
+recent_pq
+pq_kpi
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+recent_pq
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_pq
+●●●●●● 2mm □△
+pq_kpi
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_confidence
+●●●●●● 1mm □△
+self
+confidence
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Record a confidence score.'
+kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+'confidence_score'
+kpi
+●●●●●● 1mm □△
+MetricSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_samples
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kpi
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+recent_samples
+kpi
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+recent_samples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_samples
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_hallucination
+●●●●●● 1mm □△
+self
+detected
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'Record hallucination detection.'
+kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+'hallucination_rate'
+kpi
+●●●●●● 1mm □△
+MetricSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_samples
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kpi
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+recent_samples
+kpi
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+recent_samples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_samples
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_component_health
+●●●●●● 1mm □△
+self
+component
+health
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Update component health score.'
+●●●●●● 3mm △
+component
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+health
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+avg_health
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'component_availability'
+●●●●●● 1mm □
+avg_health
+●●●●●● 3mm △
+'component_availability'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_trust_score
+●●●●●● 1mm □△
+self
+trust
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Update trust score KPI.'
+●●●●●● 3mm △
+'trust_score'
+●●●●●● 1mm □
+trust
+●●●●●● 3mm △
+'trust_score'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_sla_violation
+●●●●●● 1mm □△
+self
+component
+sla_tier
+violation_type
+current_value
+threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SLATier
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'Record an SLA violation.'
+violation
+●●●●●● 1mm □
+'timestamp'
+'component'
+'sla_tier'
+'violation_type'
+'current_value'
+'threshold'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+sla_tier
+violation_type
+current_value
+threshold
+●●●●●● 3mm △
+●●●●●● 1mm □△
+violation
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+1000
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-METRICS] SLA Violation: '
+violation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_latency_kpis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Update latency-related KPIs.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+recent
+●●●●●● 1mm □
+s
+s
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □
+recent
+●●●●●● 3mm ○
+avg_latency
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'avg_response_time'
+●●●●●● 1mm □
+avg_latency
+●●●●●● 3mm △
+'avg_response_time'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sorted_latencies
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+p95_idx
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_latencies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+p95_latency
+●●●●●● 1mm □
+p95_idx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_latencies
+●●●●●● 2mm □△
+sorted_latencies
+p95_idx
+sorted_latencies
+1
+●●●●●● 3mm △
+'p95_latency'
+●●●●●● 1mm □
+p95_latency
+●●●●●● 3mm △
+'p95_latency'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_quality_kpis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Update quality-related KPIs.'
+total_ops
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_ops
+0
+●●●●●● 3mm ○
+success_rate
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total_ops
+●●●●●● 3mm △
+'success_rate'
+●●●●●● 1mm □
+success_rate
+●●●●●● 3mm △
+'success_rate'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_kpi_health
+●●●●●● 1mm □△
+self
+kpi_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check health status of a KPI.\n\n        Returns:\n            Tuple of (status, message)\n            status: "healthy", "warning", "critical"\n        '
+●●●●●● 2mm □
+kpi_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'unknown'
+'KPI '
+kpi_id
+' not found'
+kpi
+●●●●●● 1mm □
+●●●●●● 3mm △
+kpi_id
+●●●●●● 2mm □
+kpi
+'latency'
+kpi_id
+'hallucination_rate'
+●●●●●● 2mm □
+kpi
+kpi
+●●●●●● 3mm ○
+'critical'
+kpi
+' at '
+kpi
+'.3f'
+' exceeds critical threshold '
+kpi
+●●●●●● 1mm △
+kpi
+kpi
+●●●●●● 3mm ○
+'warning'
+kpi
+' at '
+kpi
+'.3f'
+' exceeds warning threshold '
+kpi
+●●●●●● 3mm ○
+'healthy'
+kpi
+' at '
+kpi
+'.3f'
+' within target'
+●●●●●● 1mm △
+kpi
+kpi
+●●●●●● 3mm ○
+'critical'
+kpi
+' at '
+kpi
+'.3f'
+' below critical threshold '
+kpi
+●●●●●● 2mm □
+kpi
+kpi
+●●●●●● 3mm ○
+'warning'
+kpi
+' at '
+kpi
+'.3f'
+' below warning threshold '
+kpi
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'healthy'
+kpi
+' at '
+kpi
+'.3f'
+' within target'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_all_kpi_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get health status of all KPIs.'
+results
+●●●●●● 1mm □
+kpi_id
+●●●●●● 3mm △
+status
+message
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+kpi_id
+●●●●●● 2mm □△
+results
+kpi_id
+●●●●●● 1mm □
+'status'
+'message'
+'current_value'
+'target'
+'category'
+status
+message
+●●●●●● 3mm △
+kpi_id
+●●●●●● 3mm △
+kpi_id
+●●●●●● 3mm △
+kpi_id
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_compliance
+●●●●●● 1mm □△
+self
+standard
+●●●●●● 2mm □△
+ComplianceStandard
+'\n        Check compliance with a standard.\n\n        Returns:\n            Tuple of (compliant, violations)\n        '
+●●●●●● 2mm □
+standard
+COMPLIANCE_REQUIREMENTS
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+violations
+●●●●●● 1mm □
+requirements
+●●●●●● 1mm □
+COMPLIANCE_REQUIREMENTS
+standard
+req
+requirements
+●●●●●● 2mm □
+req
+current_value
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 2mm □
+req
+'Hallucination Rate'
+●●●●●● 2mm □
+current_value
+req
+violations
+●●●●●● 1mm □△
+req
+': '
+current_value
+'.2%'
+' exceeds max '
+req
+'.2%'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+current_value
+req
+violations
+●●●●●● 1mm □△
+req
+': '
+current_value
+'.2%'
+' below required '
+req
+'.2%'
+●●●●●● 2mm □△
+compliant
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+standard
+●●●●●● 1mm □
+compliant
+1.0
+1.0
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+requirements
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+compliant
+violations
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_compliance_metric
+●●●●●● 1mm □△
+self
+requirement
+●●●●●● 2mm □△
+ComplianceRequirement
+'Get current metric value for a compliance requirement.'
+mapping
+●●●●●● 1mm □
+'Learning Success Rate'
+'Pattern Quality'
+'Confidence Score'
+'Hallucination Rate'
+'Genesis Key Coverage'
+'Decision Traceability'
+'learning_success_rate'
+'pattern_quality'
+'confidence_score'
+'hallucination_rate'
+'audit_coverage'
+'audit_coverage'
+kpi_id
+●●●●●● 1mm □
+mapping
+●●●●●● 1mm □△
+requirement
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kpi_id
+kpi_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+kpi_id
+●●●●●● 3mm ○
+1.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_dashboard_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get comprehensive dashboard data.'
+●●●●●● 3mm ○
+'kpis'
+'component_health'
+'compliance_scores'
+'recent_sla_violations'
+'summary'
+kpi_id
+'name'
+'value'
+'target'
+'category'
+'status'
+'last_updated'
+kpi
+kpi
+kpi
+kpi
+●●●●●● 3mm △
+●●●●●● 1mm □△
+kpi_id
+●●●●●● 2mm □△
+0
+kpi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpi_id
+kpi
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+std
+score
+std
+score
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+10
+'healthy_kpis'
+'warning_kpis'
+'critical_kpis'
+'total_sla_violations'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+0
+'healthy'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+0
+'warning'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+0
+'critical'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+GovernanceContext
+'Context for governance evaluation.'
+context_id
+●●●●●● 1mm ○
+action_type
+●●●●●● 1mm ○
+actor_id
+●●●●●● 1mm ○
+actor_type
+●●●●●● 1mm ○
+target_resource
+●●●●●● 1mm ○
+impact_scope
+●●●●●● 1mm ○
+is_reversible
+●●●●●● 3mm △
+financial_impact
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GovernanceViolation
+'Record of a governance violation.'
+violation_id
+●●●●●● 1mm ○
+rule
+ConstitutionalRule
+severity
+●●●●●● 2mm ○
+description
+●●●●●● 1mm ○
+context
+GovernanceContext
+enforcement_action
+●●●●●● 1mm ○
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GovernanceDecision
+'Result of governance evaluation.'
+decision_id
+●●●●●● 1mm ○
+context
+GovernanceContext
+allowed
+●●●●●● 3mm △
+violations
+●●●●●● 3mm □△
+GovernanceViolation
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+required_approvals
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+autonomy_tier
+AutonomyTier
+reasoning_trace
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+PolicyRule
+'Configurable policy rule.'
+rule_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+condition
+●●●●●● 1mm △○
+GovernanceContext
+●●●●●● 3mm △
+action
+●●●●●● 1mm ○
+priority
+●●●●●● 2mm ○
+5
+enabled
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+expires_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+GovernanceEngine
+'\n    Core governance engine integrating constitutional rules and policy evaluation.\n\n    Provides:\n    - Constitutional rule enforcement (immutable)\n    - Configurable policy rules (runtime)\n    - Autonomy tier management\n    - Audit trail via Genesis Keys\n    - Layer1 message bus integration\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+message_bus
+security_config
+metrics
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □○
+SecurityConfig
+●●●●●● 2mm □○
+GovernanceMetrics
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+security_config
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+metrics
+GovernanceMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PolicyRule
+●●●●●● 3mm △
+●●●●●● 3mm □△
+GovernanceDecision
+●●●●●● 3mm △
+●●●●●● 1mm □
+10000
+●●●●●● 3mm △
+●●●●●● 3mm □△
+GovernanceViolation
+●●●●●● 3mm △
+●●●●●● 1mm □
+AutonomyTier
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+SLATier
+●●●●●● 3mm △
+●●●●●● 1mm □○
+ActionCategory
+CapabilityProgress
+action
+CapabilityProgress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+ActionCategory
+●●●●●● 3mm △
+●●●●●● 3mm □△
+ApprovalRecord
+●●●●●● 3mm △
+●●●●●● 3mm □△
+ViolationEscalation
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+QuarantinedResource
+●●●●●● 3mm △
+●●●●●● 1mm □
+TrustDecayConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_evaluations'
+'allowed'
+'denied'
+'warnings'
+'constitutional_violations'
+'sla_violations'
+'compliance_checks'
+'capabilities_earned'
+'capabilities_revoked'
+'escalations_triggered'
+'resources_quarantined'
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Initialized Governance Engine with Capability System'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_constitutional_rules
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+GovernanceContext
+'\n        Check all constitutional rules against context.\n\n        Constitutional rules cannot be overridden.\n        '
+violations
+●●●●●● 1mm □
+rule
+meta
+CONSTITUTIONAL_RULES
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+violation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rule
+meta
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+violation
+violations
+●●●●●● 1mm □△
+violation
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'constitutional_violations'
+1
+●●●●●● 3mm ○
+violations
+●●●●●● 3mm □△
+GovernanceViolation
+●●●●●● 1mm □
+_evaluate_constitutional_rule
+●●●●●● 1mm □△
+self
+rule
+meta
+context
+●●●●●● 2mm □△
+ConstitutionalRule
+ConstitutionalRuleMeta
+GovernanceContext
+'Evaluate a single constitutional rule.'
+●●●●●● 2mm □
+rule
+ConstitutionalRule
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'potential_harm_to_humans'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GovernanceViolation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+ConstitutionalRule
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'bypasses_safety_check'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GovernanceViolation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+ConstitutionalRule
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'audit_disabled'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GovernanceViolation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+ConstitutionalRule
+●●●●●● 2mm □
+context
+context
+'systemic'
+●●●●●● 3mm ○
+GovernanceViolation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+ConstitutionalRule
+●●●●●● 2mm □
+context
+'systemic'
+●●●●●● 3mm △
+0.8
+●●●●●● 3mm ○
+GovernanceViolation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+GovernanceViolation
+●●●●●● 1mm □
+_initialize_default_policies
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize default policy rules.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Initialized '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' default policies'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_kpi_policies
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize KPI-driven policy rules.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+PolicyRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Initialized KPI-driven policies'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_has_recent_sla_violations
+●●●●●● 1mm □△
+self
+component
+hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+1
+'Check if component has recent SLA violations.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_violations
+●●●●●● 1mm □
+v
+v
+●●●●●● 3mm △
+v
+●●●●●● 1mm □△
+'component'
+●●●●●● 2mm □△
+component
+datetime
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+'timestamp'
+'2000-01-01'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_violations
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+add_policy_rule
+●●●●●● 1mm □△
+self
+rule
+●●●●●● 2mm □△
+PolicyRule
+'Add a policy rule.'
+●●●●●● 3mm △
+rule
+●●●●●● 1mm □
+rule
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Added policy rule: '
+rule
+●●●●●● 2mm □△
+●●●●●● 1mm □
+remove_policy_rule
+●●●●●● 1mm □△
+self
+rule_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove a policy rule.'
+●●●●●● 2mm □
+rule_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+rule_id
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Removed policy rule: '
+rule_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_policy_rules
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+GovernanceContext
+'\n        Check all policy rules against context.\n\n        Returns:\n            Tuple of (denied_reasons, approval_required, warnings)\n        '
+denied_reasons
+●●●●●● 1mm □
+approval_required
+●●●●●● 1mm □
+warnings
+●●●●●● 1mm □
+sorted_rules
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rule
+sorted_rules
+●●●●●● 2mm □
+rule
+●●●●●● 2mm □
+rule
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rule
+●●●●●● 2mm □
+rule
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+'deny'
+denied_reasons
+●●●●●● 1mm □△
+rule
+': '
+rule
+●●●●●● 2mm □△
+●●●●●● 1mm △
+rule
+'require_approval'
+approval_required
+●●●●●● 1mm □△
+rule
+': '
+rule
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+'warn'
+warnings
+●●●●●● 1mm □△
+rule
+': '
+rule
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Policy rule evaluation error: '
+rule
+' - '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+denied_reasons
+approval_required
+warnings
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+check_autonomy_tier
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+GovernanceContext
+'\n        Check if action is allowed at current autonomy tier.\n\n        Returns:\n            Tuple of (allowed, tier, reasons)\n        '
+tier_config
+●●●●●● 1mm □
+AUTONOMY_TIERS
+●●●●●● 3mm △
+reasons
+●●●●●● 1mm □
+●●●●●● 2mm □
+context
+tier_config
+reasons
+●●●●●● 1mm □△
+"Action '"
+context
+"' not allowed at "
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+reasons
+scope_order
+●●●●●● 1mm □
+'local'
+'component'
+'systemic'
+current_scope_idx
+●●●●●● 1mm □
+scope_order
+●●●●●● 1mm □△
+tier_config
+●●●●●● 2mm □△
+action_scope_idx
+●●●●●● 1mm □
+scope_order
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action_scope_idx
+current_scope_idx
+reasons
+●●●●●● 1mm □△
+"Impact scope '"
+context
+"' exceeds tier limit '"
+tier_config
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+reasons
+●●●●●● 2mm □
+context
+tier_config
+reasons
+●●●●●● 1mm □△
+'Financial impact '
+context
+' exceeds tier limit '
+tier_config
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+reasons
+●●●●●● 2mm □
+tier_config
+context
+reasons
+●●●●●● 1mm □△
+'Reversibility required at current tier'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+reasons
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+reasons
+●●●●●● 3mm □△
+●●●●●● 3mm △
+AutonomyTier
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+set_autonomy_tier
+●●●●●● 1mm □△
+self
+tier
+●●●●●● 2mm □△
+AutonomyTier
+'Set current autonomy tier.'
+old_tier
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+tier
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Autonomy tier changed: '
+old_tier
+' -> '
+tier
+●●●●●● 2mm □△
+●●●●●● 1mm □
+adjust_trust_score
+●●●●●● 1mm □△
+self
+delta
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Adjust trust score (clamped to 0.0-1.0).'
+old_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+●●●●●● 3mm △
+●●●●●● 3mm ○
+delta
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Trust score adjusted: '
+old_score
+'.3f'
+' -> '
+●●●●●● 3mm △
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_auto_adjust_tier
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Auto-adjust autonomy tier based on trust score.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+0.3
+new_tier
+●●●●●● 1mm □
+AutonomyTier
+●●●●●● 1mm △
+●●●●●● 3mm △
+0.5
+new_tier
+●●●●●● 1mm □
+AutonomyTier
+●●●●●● 2mm □
+●●●●●● 3mm △
+0.8
+new_tier
+●●●●●● 1mm □
+AutonomyTier
+●●●●●● 3mm □
+new_tier
+●●●●●● 1mm □
+AutonomyTier
+●●●●●● 2mm □
+new_tier
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+new_tier
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assign_sla
+●●●●●● 1mm □△
+self
+component
+tier
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SLATier
+'Assign SLA tier to a component.'
+●●●●●● 3mm △
+component
+●●●●●● 1mm □
+tier
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Assigned SLA '
+tier
+' to component: '
+component
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_sla_compliance
+●●●●●● 1mm □△
+self
+component
+latency_ms
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Check if component is complying with its SLA.\n\n        Returns:\n            Tuple of (compliant, violations)\n        '
+●●●●●● 2mm □
+component
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sla_tier
+●●●●●● 1mm □
+●●●●●● 3mm △
+component
+sla_config
+●●●●●● 1mm □
+SLA_CONFIGS
+sla_tier
+violations
+●●●●●● 1mm □
+●●●●●● 2mm □
+latency_ms
+●●●●●● 2mm □
+●●●●●● 2mm □
+latency_ms
+sla_config
+violations
+●●●●●● 1mm □△
+'Latency '
+latency_ms
+'ms exceeds SLA max '
+sla_config
+'ms'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'sla_violations'
+1
+●●●●●● 2mm □
+success
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+success
+component
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+●●●●●● 3mm △
+'success_rate'
+●●●●●● 2mm □
+health
+sla_config
+violations
+●●●●●● 1mm □△
+'Success rate '
+health
+'.2%'
+' below SLA min '
+sla_config
+'.2%'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+0
+violations
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_component_sla_status
+●●●●●● 1mm □△
+self
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get SLA status for a component.'
+●●●●●● 2mm □
+component
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'error'
+'No SLA assigned to '
+component
+sla_tier
+●●●●●● 1mm □
+●●●●●● 3mm △
+component
+sla_config
+●●●●●● 1mm □
+SLA_CONFIGS
+sla_tier
+●●●●●● 3mm ○
+'component'
+'sla_tier'
+'uptime_target'
+'max_latency_ms'
+'min_success_rate'
+'recent_violations'
+component
+sla_tier
+sla_config
+sla_config
+sla_config
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+v
+●●●●●● 3mm △
+v
+●●●●●● 1mm □△
+'component'
+●●●●●● 2mm □△
+component
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_all_compliance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check compliance with all standards.'
+●●●●●● 3mm △
+'compliance_checks'
+1
+results
+●●●●●● 1mm □
+standard
+ComplianceStandard
+compliant
+violations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+standard
+●●●●●● 2mm □△
+results
+standard
+●●●●●● 1mm □
+'compliant'
+'violations'
+'enforcement_actions'
+compliant
+violations
+●●●●●● 3mm △
+●●●●●● 1mm □△
+standard
+violations
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_compliance_actions
+●●●●●● 1mm □△
+self
+standard
+violations
+●●●●●● 2mm □△
+ComplianceStandard
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Determine enforcement actions for compliance violations.'
+●●●●●● 2mm □
+violations
+●●●●●● 3mm ○
+actions
+●●●●●● 1mm □
+requirements
+●●●●●● 1mm □
+COMPLIANCE_REQUIREMENTS
+●●●●●● 1mm □△
+standard
+●●●●●● 2mm □△
+req
+requirements
+violation
+violations
+●●●●●● 2mm □
+req
+violation
+●●●●●● 2mm □
+req
+'block'
+actions
+●●●●●● 1mm □△
+'BLOCK: '
+req
+' - operations restricted'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+req
+'restrict'
+actions
+●●●●●● 1mm □△
+'RESTRICT: '
+req
+' - tier demotion recommended'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+req
+'escalate'
+actions
+●●●●●● 1mm □△
+'ESCALATE: '
+req
+' - human review required'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+req
+'warn'
+actions
+●●●●●● 1mm □△
+'WARN: '
+req
+' - monitoring increased'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+enforce_learning_standards
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check and enforce learning quality standards.\n\n        This integrates with the learning system to ensure quality.\n        '
+compliant
+violations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComplianceStandard
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'compliant'
+'violations'
+'actions_taken'
+compliant
+violations
+●●●●●● 2mm □
+compliant
+trust_penalty
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.02
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trust_penalty
+●●●●●● 2mm □△
+result
+'actions_taken'
+●●●●●● 1mm □△
+'Trust score reduced by '
+trust_penalty
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'learning_success_rate'
+0.5
+●●●●●● 2mm □
+●●●●●● 3mm △
+AutonomyTier
+●●●●●● 3mm △
+●●●●●● 1mm □△
+AutonomyTier
+●●●●●● 2mm □△
+result
+'actions_taken'
+●●●●●● 1mm □△
+'Autonomy tier demoted to TIER_1_MONITORED'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_capability
+●●●●●● 1mm □△
+self
+action_category
+context
+●●●●●● 2mm □△
+ActionCategory
+GovernanceContext
+'\n        Check if the system has earned the capability to perform an action.\n\n        Returns:\n            Tuple of (allowed, reasons)\n        '
+●●●●●● 2mm □
+action_category
+ACTION_TRUST_MATRIX
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+requirement
+●●●●●● 1mm □
+ACTION_TRUST_MATRIX
+action_category
+progress
+●●●●●● 1mm □
+●●●●●● 3mm △
+action_category
+reasons
+●●●●●● 1mm □
+●●●●●● 2mm □
+progress
+reasons
+●●●●●● 1mm □△
+'Capability revoked: '
+progress
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+●●●●●● 2mm □
+progress
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+remaining
+●●●●●● 1mm □
+progress
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reasons
+●●●●●● 1mm □△
+'Capability on cooldown for '
+remaining
+'.0f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+progress
+today
+progress
+●●●●●● 1mm □
+today
+progress
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+requirement
+0
+●●●●●● 2mm □
+progress
+requirement
+reasons
+●●●●●● 1mm □△
+'Daily limit reached: '
+progress
+'/'
+requirement
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+●●●●●● 2mm □
+●●●●●● 3mm △
+requirement
+reasons
+●●●●●● 1mm □△
+'Trust score '
+●●●●●● 3mm △
+'.2f'
+' below required '
+requirement
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+tier_order
+●●●●●● 1mm □
+AutonomyTier
+AutonomyTier
+AutonomyTier
+AutonomyTier
+current_tier_idx
+●●●●●● 1mm □
+tier_order
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+required_tier_idx
+●●●●●● 1mm □
+tier_order
+●●●●●● 1mm □△
+requirement
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_tier_idx
+required_tier_idx
+reasons
+●●●●●● 1mm □△
+'Autonomy tier '
+●●●●●● 3mm △
+' below required '
+requirement
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+prereq_action
+prereq_count
+requirement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prereq_category
+●●●●●● 1mm □
+ActionCategory
+●●●●●● 1mm □△
+prereq_action
+●●●●●● 2mm □△
+prereq_progress
+●●●●●● 1mm □
+●●●●●● 3mm △
+prereq_category
+●●●●●● 2mm □
+prereq_progress
+prereq_count
+reasons
+●●●●●● 1mm □△
+'Prerequisite not met: '
+prereq_action
+' needs '
+prereq_count
+' successful executions (have '
+prereq_progress
+')'
+●●●●●● 2mm □△
+ValueError
+●●●●●● 2mm □
+reasons
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+●●●●●● 2mm □
+context
+●●●●●● 3mm △
+quarantine
+●●●●●● 1mm □
+●●●●●● 3mm △
+context
+●●●●●● 2mm □
+quarantine
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quarantine
+reasons
+●●●●●● 1mm □△
+"Resource '"
+context
+"' is quarantined"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+reasons
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+reasons
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+record_action_outcome
+●●●●●● 1mm □△
+self
+action_category
+success
+context
+●●●●●● 2mm □△
+ActionCategory
+●●●●●● 3mm △
+●●●●●● 2mm □○
+GovernanceContext
+●●●●●● 2mm □
+'Record the outcome of an action execution.'
+●●●●●● 2mm □
+action_category
+●●●●●● 3mm △
+●●●●●● 3mm ○
+progress
+●●●●●● 1mm □
+●●●●●● 3mm △
+action_category
+requirement
+●●●●●● 1mm □
+ACTION_TRUST_MATRIX
+action_category
+●●●●●● 2mm □
+success
+progress
+1
+progress
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+requirement
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+progress
+●●●●●● 2mm □
+progress
+requirement
+progress
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+progress
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'capabilities_earned'
+1
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Capability earned: '
+action_category
+' after '
+progress
+' successful executions'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+progress
+1
+●●●●●● 3mm □
+progress
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+requirement
+●●●●●● 2mm □△
+●●●●●● 1mm △
+requirement
+0
+progress
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+recent_failures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_category
+●●●●●● 2mm □△
+●●●●●● 1mm △
+recent_failures
+5
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_category
+'Repeated failures: '
+recent_failures
+' in last 24 hours'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_count_recent_failures
+●●●●●● 1mm □△
+self
+action_category
+hours
+●●●●●● 2mm □△
+ActionCategory
+●●●●●● 2mm ○
+'Count recent failures for an action category.'
+progress
+●●●●●● 1mm □
+●●●●●● 3mm △
+action_category
+●●●●●● 2mm □
+progress
+●●●●●● 2mm □
+●●●●●● 3mm ○
+0
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+progress
+cutoff
+●●●●●● 3mm ○
+0
+●●●●●● 3mm ○
+progress
+●●●●●● 2mm ○
+●●●●●● 1mm □
+revoke_capability
+●●●●●● 1mm □△
+self
+action_category
+reason
+●●●●●● 2mm □△
+ActionCategory
+●●●●●● 1mm ○
+'Revoke a previously earned capability.'
+progress
+●●●●●● 1mm □
+●●●●●● 3mm △
+action_category
+progress
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+progress
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □
+reason
+●●●●●● 3mm △
+'capabilities_revoked'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Capability revoked: '
+action_category
+' - '
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm □
+reinstate_capability
+●●●●●● 1mm □△
+self
+action_category
+approver_id
+●●●●●● 2mm □△
+ActionCategory
+●●●●●● 1mm ○
+'Reinstate a revoked capability (requires human approval).'
+progress
+●●●●●● 1mm □
+●●●●●● 3mm △
+action_category
+●●●●●● 2mm □
+progress
+●●●●●● 3mm ○
+progress
+●●●●●● 1mm □
+●●●●●● 1mm □
+progress
+●●●●●● 1mm □
+●●●●●● 2mm □
+progress
+●●●●●● 1mm □
+●●●●●● 2mm □
+progress
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Capability reinstated: '
+action_category
+' by '
+approver_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_capability_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get status of all capabilities.'
+●●●●●● 3mm ○
+action
+'earned'
+'revoked'
+'successful_executions'
+'failed_executions'
+'requirements'
+'cooldown_until'
+'daily_count'
+'daily_limit'
+progress
+progress
+progress
+progress
+'min_trust'
+'min_tier'
+'prerequisites'
+'success_count_required'
+ACTION_TRUST_MATRIX
+action
+ACTION_TRUST_MATRIX
+action
+ACTION_TRUST_MATRIX
+action
+ACTION_TRUST_MATRIX
+action
+progress
+progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+progress
+ACTION_TRUST_MATRIX
+action
+action
+progress
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+apply_trust_decay
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Apply trust score decay based on inactivity.\n\n        Should be called periodically (e.g., daily).\n        '
+config
+●●●●●● 1mm □
+●●●●●● 3mm △
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hours_since_check
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+●●●●●● 2mm □
+hours_since_check
+config
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+now
+days_inactive
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+days_inactive
+0
+●●●●●● 3mm ○
+●●●●●● 2mm □△○
+math
+decay_factor
+●●●●●● 1mm □
+math
+●●●●●● 1mm □△
+0.5
+days_inactive
+●●●●●● 3mm □△
+config
+●●●●●● 2mm □△
+old_trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+new_trust
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+config
+●●●●●● 3mm △
+●●●●●● 2mm □△
+decay_factor
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_trust
+old_trust
+●●●●●● 3mm △
+●●●●●● 1mm □
+new_trust
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Trust decay applied: '
+old_trust
+'.3f'
+' -> '
+new_trust
+'.3f'
+' (inactive '
+days_inactive
+' days)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+reset_activity_timestamp
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Reset the activity timestamp (call on successful actions).'
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_trigger_escalation
+●●●●●● 1mm □△
+self
+violation_ids
+severity
+escalation_type
+target_resource
+message
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Trigger an escalation for governance violations.'
+escalation
+●●●●●● 1mm □
+ViolationEscalation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+escalation
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'escalations_triggered'
+1
+●●●●●● 2mm □
+escalation_type
+'tier_demotion'
+●●●●●● 2mm □
+●●●●●● 3mm △
+AutonomyTier
+tier_order
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+AutonomyTier
+●●●●●● 2mm □△
+current_idx
+●●●●●● 1mm □
+tier_order
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_idx
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tier_order
+current_idx
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm △
+escalation_type
+'quarantine'
+target_resource
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target_resource
+message
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+escalation
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Escalation triggered: '
+severity
+' - '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_and_escalate_violations
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check recent violations and trigger escalations if thresholds exceeded.\n        '
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff_1h
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff_24h
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+violations_1h
+●●●●●● 1mm □
+v
+v
+●●●●●● 3mm △
+v
+cutoff_1h
+violations_24h
+●●●●●● 1mm □
+v
+v
+●●●●●● 3mm △
+v
+cutoff_24h
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations_1h
+●●●●●● 2mm □△
+3
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations_24h
+●●●●●● 2mm □△
+10
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+safety_violations
+●●●●●● 1mm □
+v
+v
+violations_1h
+v
+ConstitutionalRule
+●●●●●● 2mm □
+safety_violations
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ViolationEscalation
+'Publish escalation event to message bus.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Failed to publish escalation: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+acknowledge_escalation
+●●●●●● 1mm □△
+self
+escalation_id
+acknowledger_id
+resolution
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Acknowledge and optionally resolve an escalation.'
+escalation
+●●●●●● 3mm △
+●●●●●● 2mm □
+escalation
+escalation_id
+escalation
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+escalation
+●●●●●● 1mm □
+acknowledger_id
+escalation
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resolution
+escalation
+●●●●●● 1mm □
+resolution
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Escalation acknowledged: '
+escalation_id
+' by '
+acknowledger_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_pending_escalations
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all unacknowledged escalations.'
+●●●●●● 3mm ○
+'escalation_id'
+'severity'
+'escalation_type'
+'message'
+'target_resource'
+'timestamp'
+e
+e
+e
+e
+e
+e
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+●●●●●● 3mm △
+e
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+quarantine_resource
+●●●●●● 1mm □△
+self
+resource_id
+reason
+duration_hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+24
+'Quarantine a resource due to governance violations.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quarantine
+●●●●●● 1mm □
+QuarantinedResource
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+resource_id
+●●●●●● 1mm □
+quarantine
+●●●●●● 3mm △
+'resources_quarantined'
+1
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Resource quarantined: '
+resource_id
+' for '
+duration_hours
+'h - '
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_count_resource_violations
+●●●●●● 1mm □△
+self
+resource_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Count violations for a specific resource.'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+v
+●●●●●● 3mm △
+v
+resource_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+release_quarantine
+●●●●●● 1mm □△
+self
+resource_id
+releaser_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Release a resource from quarantine (requires human approval).'
+●●●●●● 2mm □
+resource_id
+●●●●●● 3mm △
+quarantine
+●●●●●● 1mm □
+●●●●●● 3mm △
+resource_id
+quarantine
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+quarantine
+●●●●●● 1mm □
+releaser_id
+quarantine
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Quarantine released: '
+resource_id
+' by '
+releaser_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_resource_quarantined
+●●●●●● 1mm □△
+self
+resource_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if a resource is currently quarantined.'
+●●●●●● 2mm □
+resource_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+quarantine
+●●●●●● 1mm □
+●●●●●● 3mm △
+resource_id
+●●●●●● 2mm □
+quarantine
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quarantine
+quarantine
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+quarantine
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_quarantined_resources
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all currently quarantined resources.'
+●●●●●● 3mm ○
+'resource_id'
+'reason'
+'quarantined_at'
+'release_at'
+'violation_count'
+q
+q
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+q
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+GovernanceDecision
+●●●●●● 1mm ○
+'\n        Request human approval with full context.\n\n        Returns approval_id to track the request.\n        '
+approval_id
+●●●●●● 1mm □
+'approval-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+context_snapshot
+●●●●●● 1mm □
+'trust_score'
+'autonomy_tier'
+'kpi_health'
+'recent_violations'
+'capability_status'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+v
+●●●●●● 3mm △
+v
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action
+progress
+action
+progress
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+approval_id
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n        Process an approval decision with justification.\n\n        Re-validates constitutional rules before allowing execution.\n        '
+pending_decision
+●●●●●● 1mm □
+●●●●●● 2mm □
+d
+●●●●●● 3mm △
+●●●●●● 2mm □
+d
+decision_id
+pending_decision
+●●●●●● 1mm □
+d
+●●●●●● 2mm □
+pending_decision
+●●●●●● 3mm ○
+'error'
+'Decision '
+decision_id
+' not found'
+record
+●●●●●● 1mm □
+ApprovalRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 2mm □
+approved
+record
+●●●●●● 1mm □
+'rejected'
+record
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'approval_id'
+'approved'
+'message'
+approval_id
+●●●●●● 1mm □
+'Rejected by '
+approver_id
+': '
+justification
+current_violations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pending_decision
+●●●●●● 2mm □△
+hard_violations
+●●●●●● 1mm □
+v
+v
+current_violations
+v
+'blocked'
+●●●●●● 2mm □
+hard_violations
+record
+●●●●●● 1mm □
+'blocked_post_approval'
+record
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'approval_id'
+'approved'
+'message'
+'violations'
+approval_id
+●●●●●● 1mm □
+'Constitutional rules re-validation failed'
+v
+v
+hard_violations
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pending_decision
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+'blocked_quarantine'
+record
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'approval_id'
+'approved'
+'message'
+approval_id
+●●●●●● 1mm □
+"Resource '"
+pending_decision
+"' is now quarantined"
+pending_decision
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+pending_decision
+●●●●●● 1mm □△
+'Approved by '
+approver_id
+' with justification: '
+justification
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+'pending_execution'
+●●●●●● 3mm ○
+'approval_id'
+'approved'
+'message'
+'justification'
+approval_id
+●●●●●● 3mm □△○
+'Approved - awaiting execution outcome'
+justification
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_approval_outcome
+●●●●●● 1mm □△
+self
+approval_id
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Record the outcome of an approved action.'
+record
+●●●●●● 3mm △
+●●●●●● 2mm □
+record
+approval_id
+record
+●●●●●● 1mm □
+success
+'success'
+'failure'
+record
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.02
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GovernanceContext
+'\n        Main governance evaluation method.\n\n        Checks:\n        1. Constitutional rules (cannot be overridden)\n        2. Policy rules (configurable)\n        3. Autonomy tier constraints\n        '
+●●●●●● 3mm △
+'total_evaluations'
+1
+reasoning_trace
+●●●●●● 1mm □
+all_violations
+●●●●●● 1mm □
+all_warnings
+●●●●●● 1mm □
+required_approvals
+●●●●●● 1mm □
+decision_id
+●●●●●● 1mm □
+'gov-decision-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+reasoning_trace
+●●●●●● 1mm □△
+'Starting governance evaluation: '
+decision_id
+●●●●●● 2mm □△
+reasoning_trace
+●●●●●● 1mm □△
+'Action: '
+context
+' on '
+context
+●●●●●● 2mm □△
+reasoning_trace
+●●●●●● 1mm □△
+'Checking constitutional rules...'
+●●●●●● 2mm □△
+constitutional_violations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+all_violations
+●●●●●● 1mm □△
+constitutional_violations
+●●●●●● 2mm □△
+●●●●●● 2mm □
+constitutional_violations
+hard_violations
+●●●●●● 1mm □
+v
+v
+constitutional_violations
+v
+'blocked'
+●●●●●● 2mm □
+hard_violations
+reasoning_trace
+●●●●●● 1mm □△
+'BLOCKED: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hard_violations
+●●●●●● 2mm □△
+' constitutional violation(s)'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'denied'
+1
+decision
+●●●●●● 1mm □
+GovernanceDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+reasoning_trace
+●●●●●● 1mm □△
+'Checking autonomy tier ('
+●●●●●● 3mm △
+')...'
+●●●●●● 2mm □△
+tier_allowed
+tier
+tier_reasons
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tier_allowed
+reasoning_trace
+●●●●●● 1mm □△
+'BLOCKED: Autonomy tier constraint - '
+tier_reasons
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'denied'
+1
+decision
+●●●●●● 1mm □
+GovernanceDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+reasoning_trace
+●●●●●● 1mm □△
+'Checking policy rules...'
+●●●●●● 2mm □△
+denied
+approvals
+warnings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+all_warnings
+●●●●●● 1mm □△
+warnings
+●●●●●● 2mm □△
+required_approvals
+●●●●●● 1mm □△
+approvals
+●●●●●● 2mm □△
+●●●●●● 2mm □
+denied
+reasoning_trace
+●●●●●● 1mm □△
+'BLOCKED: Policy violation - '
+denied
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'denied'
+1
+decision
+●●●●●● 1mm □
+GovernanceDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+tier_config
+●●●●●● 1mm □
+AUTONOMY_TIERS
+●●●●●● 3mm △
+●●●●●● 2mm □
+tier_config
+required_approvals
+●●●●●● 1mm □△
+'Tier requires explicit approval'
+●●●●●● 2mm □△
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+required_approvals
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+allowed
+reasoning_trace
+●●●●●● 1mm □△
+'ALLOWED: All checks passed'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'allowed'
+1
+●●●●●● 3mm □
+reasoning_trace
+●●●●●● 1mm □△
+'PENDING APPROVAL: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+required_approvals
+●●●●●● 2mm □△
+' approval(s) required'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_warnings
+●●●●●● 3mm △
+'warnings'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_warnings
+●●●●●● 2mm □△
+reasoning_trace
+●●●●●● 1mm □△
+'WARNINGS: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_warnings
+●●●●●● 2mm □△
+' warning(s)'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+GovernanceDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+GovernanceDecision
+●●●●●● 1mm □
+_log_decision
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+GovernanceDecision
+'Log governance decision.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+GovernanceDecision
+'Publish governance decision to message bus.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Failed to publish event: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get governance statistics.'
+●●●●●● 3mm ○
+'current_tier'
+'trust_score'
+'active_policies'
+'total_violations'
+'components_with_sla'
+'kpi_summary'
+'compliance_summary'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+r
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+std
+●●●●●● 3mm △
+●●●●●● 1mm □△
+std
+1.0
+●●●●●● 2mm □△
+std
+ComplianceStandard
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_metrics_dashboard
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get comprehensive metrics dashboard.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_decision_log
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent governance decisions.'
+●●●●●● 3mm ○
+'decision_id'
+'action_type'
+'allowed'
+'autonomy_tier'
+'timestamp'
+d
+d
+d
+d
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_violations
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent violations.'
+●●●●●● 3mm ○
+'violation_id'
+'rule'
+'severity'
+'description'
+'enforcement_action'
+'timestamp'
+v
+v
+v
+v
+v
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+GovernanceConnector
+'\n    Connects Governance Engine to Layer 1 message bus.\n\n    Autonomous Actions:\n    1. Action requested -> Evaluate governance\n    2. Trust violation -> Adjust trust score\n    3. Approval granted -> Update decision status\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+governance_engine
+message_bus
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GovernanceEngine
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+governance_engine
+get_governance_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GovernanceDecision
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Initializing...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Initialized and connected to message bus'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Registered 3 request handlers'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Subscribe to relevant events.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Subscribed to 2 event topics'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register autonomous actions.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Registered 1 autonomous action'
+●●●●●● 2mm □△
+Message
+'Handle governance evaluation request.'
+payload
+●●●●●● 1mm □
+message
+context
+●●●●●● 1mm □
+GovernanceContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 3mm △
+decision
+●●●●●● 1mm □
+decision
+●●●●●● 3mm ○
+'decision_id'
+'allowed'
+'violations'
+'warnings'
+'required_approvals'
+'autonomy_tier'
+'reasoning'
+decision
+decision
+decision
+asdict
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+decision
+decision
+decision
+decision
+decision
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle approval for pending decision.'
+decision_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+approved
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'approved'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+approver_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'approver_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'error'
+'Decision '
+decision_id
+' not found in pending approvals'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+●●●●●● 2mm □
+approved
+decision
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+decision
+●●●●●● 1mm □△
+'Approved by '
+approver_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm □
+decision
+●●●●●● 1mm □△
+'Rejected by '
+approver_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision_id
+●●●●●● 3mm ○
+'decision_id'
+'approved'
+'approver_id'
+decision_id
+approved
+approver_id
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle request for governance stats.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle learning success - boost trust.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.005
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Trust boosted on learning success'
+●●●●●● 2mm □△
+Message
+'Handle learning failure - reduce trust.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] Trust reduced on learning failure'
+●●●●●● 2mm □△
+Message
+'Auto-evaluate external API calls.'
+context
+●●●●●● 1mm □
+GovernanceContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE-CONNECTOR] External API call blocked: '
+message
+●●●●●● 1mm □△
+'api_endpoint'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_governance_engine
+●●●●●● 2mm □○
+GovernanceEngine
+●●●●●● 2mm □
+_governance_connector
+●●●●●● 2mm □○
+GovernanceConnector
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_governance_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global governance engine instance.'
+●●●●●● 2mm □
+_governance_engine
+●●●●●● 2mm □
+_governance_engine
+●●●●●● 1mm □
+GovernanceEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Created global Governance Engine'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_governance_engine
+GovernanceEngine
+●●●●●● 1mm □
+get_governance_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global governance connector instance.'
+●●●●●● 2mm □
+_governance_connector
+●●●●●● 2mm □
+_governance_connector
+●●●●●● 1mm □
+GovernanceConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNANCE] Created global Governance Connector'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_governance_connector
+GovernanceConnector
+●●●●●● 1mm □
+reset_governance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset governance instances (for testing).'
+_governance_engine
+●●●●●● 1mm □
+●●●●●● 2mm □
+_governance_connector
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'local'
+●●●●●● 3mm □△○
+0.0
+●●●●●● 2mm □
+'\n    Convenience function to evaluate governance for an action.\n\n    Usage:\n        decision = await evaluate_governance(\n            action_type="write_file",\n            actor_id="user-123",\n            target_resource="/data/config.json",\n            impact_scope="component"\n        )\n\n        if decision.allowed:\n            # proceed with action\n        else:\n            # handle denial\n    '
+engine
+●●●●●● 1mm □
+get_governance_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+GovernanceContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+GovernanceDecision

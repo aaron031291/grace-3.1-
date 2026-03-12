@@ -1,0 +1,220 @@
+## dynamic_dictionary.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+●●●●●● 3mm □△○
+database.models.braille_dictionary
+●●●●●● 2mm □△○
+BrailleDictionaryMapping
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DynamicDictionaryManager
+'\n    Manages the live, auto-updating semantic dictionary for Spindle.\n    Maps human words to strict deterministic Braille constraints.\n    '
+●●●●●● 1mm □
+learn_word
+●●●●●● 1mm □△
+cls
+word
+braille_encoding
+semantic_meaning
+master_loop
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'COGNITION'
+'\n        Teaches Spindle a new semantic mapping or updates an existing one.\n        '
+word
+●●●●●● 1mm □
+word
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+word
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+existing
+●●●●●● 1mm □
+braille_encoding
+existing
+●●●●●● 1mm □
+semantic_meaning
+logger
+●●●●●● 1mm □△
+"[Semantic Dictionary] Updated mapping for '"
+word
+"' -> "
+braille_encoding
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'word'
+'encoding'
+'updated'
+word
+braille_encoding
+●●●●●● 3mm □
+new_mapping
+●●●●●● 1mm □
+BrailleDictionaryMapping
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+new_mapping
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"[Semantic Dictionary] Learned new mapping for '"
+word
+"' -> "
+braille_encoding
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'status'
+'word'
+'encoding'
+'created'
+word
+braille_encoding
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+lookup_word
+●●●●●● 1mm □△
+cls
+word
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Returns the raw Braille encoding for a specific semantic word.\n        '
+word
+●●●●●● 1mm □
+word
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+mapping
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+word
+BrailleDictionaryMapping
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mapping
+mapping
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_full_dictionary
+●●●●●● 1mm □△
+cls
+master_loop
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Dumps the entire semantic dictionary context.\n        Used to feed Spindle its deterministic vocabulary range before logic assembly.\n        '
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+query
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+master_loop
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+BrailleDictionaryMapping
+master_loop
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'word'
+'encoding'
+'meaning'
+m
+m
+m
+m
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_dynamic_dictionary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+DynamicDictionaryManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DynamicDictionaryManager

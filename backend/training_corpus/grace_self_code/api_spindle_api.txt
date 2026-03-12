@@ -1,0 +1,298 @@
+## spindle_api.py
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Depends
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+cognitive.physics.bitmask_geometry
+●●●●●● 2mm □△○
+HierarchicalZ3Geometry
+●●●●●● 3mm □△○
+cognitive.braille_compiler
+●●●●●● 2mm □△○
+NLPCompilerEdge
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+compiler
+●●●●●● 1mm □
+NLPCompilerEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 2mm △
+ActionRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+natural_language
+●●●●●● 1mm ○
+privilege
+●●●●●● 1mm ○
+'user'
+session_context
+●●●●●● 2mm □△
+●●●●●● 2mm △
+VerificationResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+is_valid
+●●●●●● 3mm △
+mathematical_proof
+●●●●●● 1mm ○
+z3_mask
+●●●●●● 2mm □△
+ActionRequest
+'\n    Takes an action request from the UI, compiles it into the 256-bit HDC structure,\n    and runs it through the Z3 SMT Formal Theorem Prover.\n    Returns strict mathematical guarantees of system safety.\n    '
+logger
+●●●●●● 1mm □△
+'Frontend requesting formal verification for: '
+req
+●●●●●● 2mm □△
+masks
+verification_msg
+●●●●●● 1mm □
+compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+masks
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+get_magma_graphs
+●●●●●● 3mm □△○
+cognitive.magma.causal_inference
+●●●●●● 2mm □△○
+LLMCausalInferencer
+graphs
+●●●●●● 1mm □
+get_magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+causal_inferencer
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+action_lower
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start_nodes
+●●●●●● 1mm □
+node
+graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_content
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'core temperature'
+action_lower
+'core temperature'
+node_content
+start_nodes
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'archiving'
+action_lower
+'archiving'
+node_content
+start_nodes
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+action_lower
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+node_content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+3
+start_nodes
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_nodes
+start_nodes
+●●●●●● 1mm □
+req
+catastrophe_keywords
+●●●●●● 1mm □
+'crash'
+'failure'
+'catastrophe'
+'loss'
+'shutdown'
+'meltdown'
+'breach'
+start_concept
+start_nodes
+chains
+●●●●●● 1mm □
+causal_inferencer
+●●●●●● 1mm □△
+start_concept
+●●●●●● 2mm □△
+●●●●●● 3mm □
+chains
+node
+●●●●●● 3mm □
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+bad_word
+node
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bad_word
+catastrophe_keywords
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] Z3 Overridden! Causal Graph predicts disaster: '
+' -> '
+●●●●●● 1mm □△
+●●●●●● 3mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+masks
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.world_model.error_middleware
+●●●●●● 2mm □△○
+get_error_middleware
+SpindleRejection
+middleware
+●●●●●● 1mm □
+get_error_middleware
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rejection
+●●●●●● 1mm □
+SpindleRejection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+alternative
+●●●●●● 1mm □
+middleware
+●●●●●● 1mm □△
+rejection
+●●●●●● 2mm □△
+●●●●●● 2mm □
+alternative
+verification_msg
+●●●●●● 1mm □
+'Z3_UNSAT: Causal Graph Violation. Action leads to critical failure state: '
+' -> '
+●●●●●● 1mm □△
+●●●●●● 3mm □
+●●●●●● 2mm □△
+'. SUGGESTED FIX: '
+alternative
+' RATIONALE: '
+alternative
+●●●●●● 3mm □
+verification_msg
+●●●●●● 1mm □
+'Z3_UNSAT: Causal Graph Violation. Action leads to critical failure state: '
+' -> '
+●●●●●● 1mm □△
+●●●●●● 3mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+masks
+●●●●●● 2mm □
+masks
+Exception
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] Failed to cross-reference Causal Graph: '
+e
+●●●●●● 2mm □△
+constraint_id
+●●●●●● 1mm □
+'spindle_constraint_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+masks
+d_val
+i_val
+s_val
+c_val
+●●●●●● 1mm □
+masks
+magma_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+VerificationResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+magma_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+VerificationResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/verify_action'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+include_spindle_router
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+router
+●●●●●● 2mm □△

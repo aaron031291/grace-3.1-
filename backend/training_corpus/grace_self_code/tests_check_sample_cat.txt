@@ -1,0 +1,96 @@
+## check_sample_cat.py
+●●●●●● 2mm □△○
+sqlite3
+db_path
+●●●●●● 1mm □
+'data/grace.db'
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+"\n    SELECT id, url, status \n    FROM scraping_jobs \n    WHERE url LIKE '%sample.cat%'\n    ORDER BY id DESC \n    LIMIT 1\n"
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+job_id
+url
+status
+●●●●●● 1mm □
+job
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Latest sample.cat job: ID='
+job_id
+', Status='
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'URL: '
+url
+'\n'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n        SELECT url, status, title\n        FROM scraped_pages \n        WHERE job_id = ?\n        ORDER BY id\n        LIMIT 25\n    '
+job_id
+●●●●●● 2mm □△
+pages
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+pages
+●●●●●● 2mm □△
+' pages:\n'
+●●●●●● 2mm □△
+page_url
+page_status
+title
+pages
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'['
+page_status
+'] '
+page_url
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+title
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Title: '
+title
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'No sample.cat jobs found'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△

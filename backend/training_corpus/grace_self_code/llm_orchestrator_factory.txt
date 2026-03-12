@@ -1,0 +1,436 @@
+## factory.py
+'\nLLM Factory — Central access point for ALL AI models.\n\nModel hierarchy:\n  LOCAL (free, fast, private):\n    - Qwen 2.5 Coder (code generation — latest dedicated coder, reasoning for code)\n    - Qwen 3 (reasoning — latest reasoning model)\n    - Qwen 3 14B (fast — quick responses)\n\n  CLOUD (paid, powerful, reasoning):\n    - Opus 4.6 / Claude (deep reasoning, architecture, audit)\n    - Kimi K2.5 (long context, document analysis, 262K window)\n\nTask routing:\n    code     → Qwen 2.5 Coder (local)\n    reason   → Qwen 3 (local) or Opus (cloud)\n    fast     → Qwen 3 14B (local)\n    document → Qwen 3 (local, parse/read docs) or Kimi (cloud) if no OLLAMA_MODEL_DOCUMENT\n    general  → default model\n    audit    → Opus (cloud)\n\nEvery client wrapped with GovernanceAwareLLM:\n    - Governance rules injected into every call\n    - Hallucination guard on every response\n    - Usage stats tracked for BI dashboard\n    - Genesis Key on every call\n'
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+ollama_adapter
+●●●●●● 2mm □△○
+OllamaLLMClient
+●●●●●● 3mm □△○
+openai_client
+●●●●●● 2mm □△○
+OpenAILLMClient
+●●●●●● 3mm □△○
+kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+●●●●●● 3mm □△○
+opus_client
+●●●●●● 2mm □△○
+OpusLLMClient
+●●●●●● 3mm □△○
+governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+●●●●●● 3mm □△○
+ollama_resolver
+●●●●●● 2mm □△○
+resolve_ollama_model
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 1mm □
+_wrap
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+BaseLLMClient
+'Wrap a client with governance rules + persona + hallucination guard.'
+●●●●●● 3mm ○
+GovernanceAwareLLM
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+_ollama_with_model
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Create an Ollama client with a specific model override.'
+client
+●●●●●● 1mm □
+OllamaLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+model
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n    Get a LLM client with governance rules enforced.\n    Providers: ollama, kimi, opus, openai\n    '
+provider
+●●●●●● 1mm □
+provider
+settings
+●●●●●● 2mm □
+provider
+'openai'
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+OpenAILLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+provider
+'kimi'
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+provider
+'opus'
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+OpusLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+OllamaLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'general'
+'\n    Get the best model for a specific task type.\n    Routes to the optimal model based on task requirements.\n\n    Tasks:\n      code     → Qwen 2.5 Coder (local, reasoning + coding)\n      reason   → Qwen 3 (local, reasoning)\n      fast     → Qwen 3 14B (local, quick responses)\n      audit    → Opus (cloud, deep analysis)\n      document → Qwen (local, parse/read) or Kimi (cloud, 262K) if no local\n      general  → default model\n    '
+●●●●●● 2mm □
+task
+'code'
+settings
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+resolve_ollama_model
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+task
+'reason'
+settings
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+resolve_ollama_model
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'fast'
+settings
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+resolve_ollama_model
+●●●●●● 1mm □△
+'fast'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+task
+'audit'
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_opus_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'document'
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_DOCUMENT'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+resolve_ollama_model
+●●●●●● 1mm □△
+'document'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Kimi K2.5 — long context, document analysis, 262K window.'
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_opus_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Opus 4.6 (Claude) — deep reasoning, architecture, audit.'
+●●●●●● 3mm ○
+_wrap
+●●●●●● 1mm □△
+OpusLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Qwen 2.5 Coder — code generation (local). Uses resolved model (with fallbacks).'
+model
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_qwen_reasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Qwen 3 — reasoning model (local). Uses resolved model (with fallbacks).'
+model
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_qwen_document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Qwen (local) for document parsing/reading. No GPT 4.1 or Kimi required.'
+model
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+'document'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_ollama_with_model
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_deepseek_reasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Alias for get_qwen_reasoner(). Qwen 3 is the default reasoning model.'
+●●●●●● 3mm ○
+get_qwen_reasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_raw_client
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get a raw client WITHOUT governance wrapping (internal use only).'
+provider
+●●●●●● 1mm □
+provider
+settings
+●●●●●● 2mm □
+provider
+'openai'
+●●●●●● 3mm ○
+OpenAILLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+provider
+'kimi'
+●●●●●● 3mm ○
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+provider
+'opus'
+●●●●●● 3mm ○
+OpusLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+OllamaLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 1mm □
+get_all_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all available models across all providers.'
+models
+●●●●●● 1mm □
+task
+model_attr
+desc
+'code'
+'OLLAMA_MODEL_CODE'
+'Code generation (Qwen 2.5 Coder)'
+'reason'
+'OLLAMA_MODEL_REASON'
+'Reasoning (Qwen 3)'
+'fast'
+'OLLAMA_MODEL_FAST'
+'Fast tasks (Qwen 3 14B)'
+model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+model_attr
+''
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □△
+'id'
+'provider'
+'model'
+'description'
+'available'
+'cost'
+'location'
+task
+'ollama'
+model
+'(not set)'
+desc
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+'free'
+'local'
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □△
+'id'
+'provider'
+'model'
+'description'
+'available'
+'cost'
+'location'
+'kimi'
+'kimi'
+settings
+'Kimi K2.5 — long context, document analysis, 262K window'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+'cloud'
+'cloud'
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □△
+'id'
+'provider'
+'model'
+'description'
+'available'
+'cost'
+'location'
+'opus'
+'opus'
+settings
+'Opus 4.6 (Claude) — deep reasoning, architecture, audit'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+'cloud'
+'cloud'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+models
+●●●●●● 1mm □△

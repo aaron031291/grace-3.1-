@@ -1,0 +1,362 @@
+## test_determinism_validation.py
+'\nValidate determinism: same inputs must produce same outputs (no random, no model).\n\nRun from the backend directory (project root for pytest):\n  cd path/to/grace-3.1--Aaron-new2/backend\n  python -m pytest tests/test_determinism_validation.py -v\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestDeterminismValidation
+'Run determinism to validate.'
+●●●●●● 1mm □
+test_deterministic_choice_same_seed_same_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_choice
+options
+●●●●●● 1mm □
+'a'
+'b'
+'c'
+seed
+●●●●●● 1mm □
+'task-123'
+r1
+●●●●●● 1mm □
+deterministic_choice
+●●●●●● 1mm □△
+options
+seed
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □
+deterministic_choice
+●●●●●● 1mm □△
+options
+seed
+●●●●●● 2mm □△
+r1
+r2
+'Same seed must yield same choice'
+r1
+options
+●●●●●● 1mm □
+test_deterministic_choice_different_seed_can_differ
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_choice
+options
+●●●●●● 1mm □
+'x'
+'y'
+'z'
+a
+●●●●●● 1mm □
+deterministic_choice
+●●●●●● 1mm □△
+options
+'seed1'
+●●●●●● 2mm □△
+b
+●●●●●● 1mm □
+deterministic_choice
+●●●●●● 1mm □△
+options
+'seed2'
+●●●●●● 2mm □△
+a
+options
+b
+options
+●●●●●● 1mm □
+test_deterministic_run_id_same_task_same_minute_same_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_run_id
+task
+●●●●●● 1mm □
+'fix the bug'
+r1
+●●●●●● 1mm □
+deterministic_run_id
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □
+deterministic_run_id
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+r1
+r2
+r1
+●●●●●● 1mm □△
+'PIPE-'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r1
+●●●●●● 2mm □△
+13
+●●●●●● 1mm □
+test_should_use_llm_force_deterministic_false
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+should_use_llm
+should_use_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_should_use_llm_phase0_no_handoff_false
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+should_use_llm
+phase0
+●●●●●● 1mm □
+'handoff_to_llm'
+●●●●●● 1mm □
+should_use_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_should_use_llm_phase0_handoff_true
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+should_use_llm
+phase0
+●●●●●● 1mm □
+'handoff_to_llm'
+●●●●●● 3mm □△○
+should_use_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_should_use_llm_none_phase0_true
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+should_use_llm
+should_use_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_deterministic_temperature
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_temperature
+deterministic_temperature
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+deterministic_temperature
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.3
+●●●●●● 1mm □
+test_deterministic_model_choice_same_seed_same_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+deterministic_model_choice
+models
+●●●●●● 1mm □
+'kimi'
+'opus'
+'qwen'
+m1
+●●●●●● 1mm □
+deterministic_model_choice
+●●●●●● 1mm □△
+models
+'task-a'
+●●●●●● 2mm □△
+m2
+●●●●●● 1mm □
+deterministic_model_choice
+●●●●●● 1mm □△
+models
+'task-a'
+●●●●●● 2mm □△
+m1
+m2
+m1
+models
+●●●●●● 1mm □
+test_genesis_key_id_format_deterministic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Genesis key IDs are GK- + 32 hex (hash-based), not UUID.'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+key_type
+●●●●●● 1mm □
+GenesisKeyType
+what_description
+●●●●●● 1mm □
+'test what'
+who_actor
+●●●●●● 1mm □
+'test-who'
+where_location
+●●●●●● 1mm □
+'/test'
+when_ts
+●●●●●● 1mm □
+'2025-01-01T12:00:00'
+input_hash
+●●●●●● 1mm □
+''
+parent_key_id
+●●●●●● 1mm □
+''
+payload
+●●●●●● 1mm □
+key_type
+'|'
+what_description
+'|'
+who_actor
+'|'
+where_location
+''
+'|||'
+when_ts
+'|'
+input_hash
+'|'
+parent_key_id
+''
+key_id
+●●●●●● 1mm □
+'GK-'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+32
+key_id
+●●●●●● 1mm □△
+'GK-'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+key_id
+●●●●●● 2mm □△
+3
+●●●●●● 3mm ○
+32
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+c
+'0123456789abcdef'
+c
+key_id
+3
+●●●●●● 2mm □△
+key_id2
+●●●●●● 1mm □
+'GK-'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+32
+key_id
+key_id2
+●●●●●● 1mm □
+test_get_determinism_info
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Enterprise: version and config exposed for observability.'
+●●●●●● 3mm □△○
+core.determinism
+●●●●●● 2mm □△○
+get_determinism_info
+DETERMINISM_API_VERSION
+info
+●●●●●● 1mm □
+get_determinism_info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+info
+'api_version'
+DETERMINISM_API_VERSION
+info
+'hash_algorithm'
+'sha256'
+'temperature_deterministic'
+info
+info
+'temperature_deterministic'
+0.0

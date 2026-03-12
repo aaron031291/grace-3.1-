@@ -1,0 +1,840 @@
+## test_file_detector_simple.py
+'\nSimplified test for file change detection only (no database/ingestion).\nTests if the scanner properly detects CRUD operations.\n'
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+pytestmark
+●●●●●● 1mm □
+pytest
+●●●●●● 1mm □△
+get_embedding_model
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_section
+●●●●●● 1mm □△
+title
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+title
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_state
+●●●●●● 1mm □△
+fm
+●●●●●● 2mm □△
+'Print current file tracking state'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tracked files: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fm
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+filepath
+hash_val
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+fm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ '
+filepath
+': '
+hash_val
+8
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_disk_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Show what files are on disk'
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+f
+f
+kb_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFiles on disk: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+rel
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+rel
+' ('
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_crud_detection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test detection of Create, Read, Update, Delete operations'
+print_section
+●●●●●● 1mm □△
+'FILE CHANGE DETECTION DIAGNOSTIC'
+●●●●●● 2mm □△
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'.ingestion_state.json'
+●●●●●● 2mm □
+state_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Cleared state file\n'
+●●●●●● 2mm □△
+print_section
+●●●●●● 1mm □△
+'TEST 1: CREATE - Detect new file'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'test_create.txt'
+●●●●●● 2mm □
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'BEFORE:'
+●●●●●● 2mm □△
+print_state
+●●●●●● 1mm □△
+fm
+●●●●●● 2mm □△
+check_disk_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n→ Creating test_create.txt...'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+'Initial content'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking detection logic:'
+●●●●●● 2mm □△
+current_files
+●●●●●● 1mm □
+filepath
+kb_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fm
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_files
+rel_path
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Files found on disk: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_files
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rel_path
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+in_state
+●●●●●● 1mm □
+rel_path
+fm
+status
+●●●●●● 1mm □
+in_state
+'✓ in state'
+'✗ NEW'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    '
+status
+': '
+rel_path
+●●●●●● 2mm □△
+detected_new
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+f
+fm
+f
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDetection result: '
+detected_new
+'✓ PASS - New file detected'
+'✗ FAIL - New file NOT detected'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_section
+●●●●●● 1mm □△
+'TEST 2: MODIFY - Detect file change'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'test_modify.txt'
+●●●●●● 2mm □
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating and tracking initial file...'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+'Original content'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+orig_hash
+●●●●●● 1mm □
+fm
+●●●●●● 1mm □△
+test_file
+●●●●●● 2mm □△
+fm
+'test_modify.txt'
+●●●●●● 1mm □
+orig_hash
+fm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Initial hash: '
+orig_hash
+8
+'...\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'BEFORE:'
+●●●●●● 2mm □△
+print_state
+●●●●●● 1mm □△
+fm
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n→ Modifying test_modify.txt...'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+'Original content\nNew line added'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+current_files
+●●●●●● 1mm □
+filepath
+kb_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fm
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_files
+rel_path
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking detection logic:'
+●●●●●● 2mm □△
+rel_path
+filepath
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+old_hash
+●●●●●● 1mm □
+fm
+●●●●●● 1mm □△
+rel_path
+●●●●●● 2mm □△
+new_hash
+●●●●●● 1mm □
+fm
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 2mm □
+old_hash
+●●●●●● 2mm □
+status
+●●●●●● 1mm □
+'? Not in state'
+●●●●●● 1mm △
+old_hash
+new_hash
+status
+●●●●●● 1mm □
+'= Same hash (no change)'
+status
+●●●●●● 1mm □
+'✗ Hash changed: '
+old_hash
+8
+'... → '
+new_hash
+8
+'...'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+rel_path
+': '
+status
+●●●●●● 2mm □△
+detected_mod
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+fm
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □△
+current_files
+f
+●●●●●● 2mm □△
+f
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+fm
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDetection result: '
+detected_mod
+'✓ PASS - Modification detected'
+'✗ FAIL - Modification NOT detected'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_section
+●●●●●● 1mm □△
+'TEST 3: DELETE - Detect file removal'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'test_delete.txt'
+●●●●●● 2mm □
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating and tracking initial file...'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+'This file will be deleted'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+file_hash
+●●●●●● 1mm □
+fm
+●●●●●● 1mm □△
+test_file
+●●●●●● 2mm □△
+fm
+'test_delete.txt'
+●●●●●● 1mm □
+file_hash
+fm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Tracked as: test_delete.txt\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'BEFORE:'
+●●●●●● 2mm □△
+print_state
+●●●●●● 1mm □△
+fm
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n→ Deleting test_delete.txt...'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+current_files
+●●●●●● 1mm □
+filepath
+kb_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fm
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_files
+rel_path
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking detection logic:'
+●●●●●● 2mm □△
+deleted_files
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+fm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+deleted_files
+rel_path
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+deleted_files
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗ DELETED: '
+rel_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  (No deleted files detected)'
+●●●●●● 2mm □△
+detected_del
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+deleted_files
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDetection result: '
+detected_del
+'✓ PASS - Deletion detected'
+'✗ FAIL - Deletion NOT detected'
+●●●●●● 2mm □△
+print_section
+●●●●●● 1mm □△
+'TEST 4: EXISTING FILE - Detect file that exists but not in state'
+●●●●●● 2mm □△
+state_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'.ingestion_state.json'
+●●●●●● 2mm □
+state_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Cleared state file\n'
+●●●●●● 2mm □△
+text_file
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm □△
+'text.txt'
+●●●●●● 2mm □
+text_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found text.txt ('
+text_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes)\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'text.txt not found - creating it...'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+text_file
+●●●●●● 1mm □△
+'Test content for existing file detection'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+time
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+fm
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'BEFORE:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tracked files: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fm
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+check_disk_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current_files
+●●●●●● 1mm □
+filepath
+kb_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fm
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_files
+rel_path
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking detection logic:'
+●●●●●● 2mm □△
+new_files
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+fm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_files
+rel_path
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+new_files
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗ NEW: '
+rel_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  (No new files detected)'
+●●●●●● 2mm □△
+detected_existing
+●●●●●● 1mm □
+'text.txt'
+new_files
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDetection result: '
+detected_existing
+'✓ PASS - text.txt detected as new'
+'✗ FAIL - text.txt NOT detected'
+●●●●●● 2mm □△
+print_section
+●●●●●● 1mm □△
+'SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ File detection logic is working as expected'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Issue must be in the ingestion process (database not initialized in tests)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTo test ingestion, run the app with initialized database'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🔍 SIMPLIFIED FILE DETECTOR DIAGNOSTIC\n'
+●●●●●● 2mm □△
+test_crud_detection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✗ Test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,272 @@
+## environment.py
+'\nEnvironment Manager — select which project/workspace all output goes to.\n\nEvery action in Grace (Dev tab, chat, code generation, file writes)\nroutes to the ACTIVE environment. Switch environment = switch where\ndata lands.\n\nEnvironments map to project folders:\n  "microsoft" → data/projects/microsoft/\n  "apple" → data/projects/apple/\n  "grace" → data/projects/grace-ai/ (locked from delete)\n\nModels run independently — if Kimi is down, Opus/Qwen/DeepSeek still work.\n'
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_active_env
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'default'
+'grace-ai'
+_env_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PROJECTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'projects'
+●●●●●● 1mm □
+set_environment
+●●●●●● 1mm □△
+env_name
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'default'
+'Set the active environment/project for a user.'
+_env_lock
+_active_env
+user_id
+●●●●●● 1mm □
+env_name
+project_dir
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+env_name
+●●●●●● 2mm □
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'frontend'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'backend'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'docs'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'tests'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'environment'
+'path'
+'created'
+env_name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+project_dir
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_environment
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'default'
+'Get the active environment for a user.'
+_env_lock
+●●●●●● 3mm ○
+_active_env
+●●●●●● 1mm □△
+user_id
+'grace-ai'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_environment_path
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'default'
+'Get the file system path for the active environment.'
+env
+●●●●●● 1mm □
+get_environment
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+PROJECTS_DIR
+●●●●●● 3mm □△
+env
+Path
+●●●●●● 1mm □
+list_environments
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all available environments.'
+PROJECTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+envs
+●●●●●● 1mm □
+d
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+PROJECTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+file_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+d
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+envs
+●●●●●● 1mm □△
+'name'
+'path'
+'file_count'
+'locked'
+'active'
+d
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+file_count
+d
+'grace-ai'
+d
+get_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+envs
+●●●●●● 1mm □△
+●●●●●● 1mm □
+route_file_write
+●●●●●● 1mm □△
+relative_path
+content
+source
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'dev_tab'
+'default'
+"Write a file to the ACTIVE environment's project folder."
+env_path
+●●●●●● 1mm □
+get_environment_path
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+env_path
+●●●●●● 3mm □△
+relative_path
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.workspace_bridge
+●●●●●● 2mm □△○
+write_file
+write_file
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+content
+source
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'saved'
+'environment'
+'path'
+'relative'
+●●●●●● 3mm □△○
+get_environment
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+relative_path
+●●●●●● 2mm □△

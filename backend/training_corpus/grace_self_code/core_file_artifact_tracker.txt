@@ -1,0 +1,433 @@
+## file_artifact_tracker.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'file_artifact_tracker'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileArtifactTracker
+'\n    Produces the provenance baseline and handles drift detection.\n    Matches the Guardian Boot Gate (Phase 1) requirements.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+root_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+root_dir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'provenance_baseline.json'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'.git'
+'__pycache__'
+'venv'
+'venv_gpu'
+'.pytest_cache'
+'.genesis_snapshots'
+'logs'
+'cache'
+'mcp_repos'
+'__grACE_shadow'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'.pyc'
+'.log'
+'.bak'
+'.txt'
+●●●●●● 1mm □
+_compute_file_hash
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Computes SHA-256 hash of a file.'
+hasher
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'rb'
+●●●●●● 2mm □△
+f
+chunk
+iter
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+4096
+●●●●●● 2mm □△
+b''
+●●●●●● 2mm □△
+hasher
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hasher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_baseline
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generates the provenance baseline manifest.'
+manifest
+●●●●●● 1mm □
+'version'
+'files'
+'1.0'
+dirpath
+dirnames
+filenames
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+dirnames
+●●●●●● 1mm □
+d
+d
+dirnames
+d
+●●●●●● 3mm △
+filename
+filenames
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+dirpath
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □
+file_path
+●●●●●● 3mm △
+filename
+'provenance_baseline.json'
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+file_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+manifest
+'files'
+rel_path
+●●●●●● 1mm □
+'hash'
+'size'
+file_hash
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not hash '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+manifest
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Generated provenance baseline with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manifest
+'files'
+●●●●●● 2mm □△
+' files.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+manifest
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+detect_drift
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Detects drift against the JSON baseline.\n        Returns a list of drift artifacts (new, deleted, or modified files).\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileNotFoundError
+●●●●●● 1mm □△
+'Baseline manifest not found. Cannot detect drift.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+baseline
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+baseline_files
+●●●●●● 1mm □
+baseline
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+current_files
+●●●●●● 1mm □
+drifts
+●●●●●● 1mm □
+dirpath
+dirnames
+filenames
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+dirnames
+●●●●●● 1mm □
+d
+d
+dirnames
+d
+●●●●●● 3mm △
+filename
+filenames
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+dirpath
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □
+file_path
+●●●●●● 3mm △
+filename
+'provenance_baseline.json'
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+current_files
+rel_path
+●●●●●● 1mm □
+file_path
+rel_path
+file_path
+current_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel_path
+baseline_files
+drifts
+●●●●●● 1mm □△
+'path'
+'type'
+rel_path
+'new'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+current_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_hash
+baseline_files
+rel_path
+'hash'
+drifts
+●●●●●● 1mm □△
+'path'
+'type'
+'expected'
+'actual'
+rel_path
+'modified'
+baseline_files
+rel_path
+'hash'
+current_hash
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not hash '
+file_path
+' for drift detection: '
+e
+●●●●●● 2mm □△
+rel_path
+baseline_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel_path
+current_files
+drifts
+●●●●●● 1mm □△
+'path'
+'type'
+rel_path
+'deleted'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+drifts
+logger
+●●●●●● 1mm □△
+'Drift detected: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+drifts
+●●●●●● 2mm □△
+' anomalies found.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'No drift detected. Baseline integrity verified.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+drifts
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm □△○
+argparse
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--generate'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--detect'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+FileArtifactTracker
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+drifts
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+drift
+drifts
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+drift
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Please specify --generate or --detect'
+●●●●●● 2mm □△

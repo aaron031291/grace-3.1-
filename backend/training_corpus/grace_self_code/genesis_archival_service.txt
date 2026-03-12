@@ -1,0 +1,1134 @@
+## archival_service.py
+'\nGenesis Key Archival Service.\n\nCollects keys every 24 hours, generates reports, and organizes them by date.\n'
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyArchive
+UserProfile
+FixSuggestion
+GenesisKeyType
+GenesisKeyStatus
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ArchivalService
+'\n    Service for archiving Genesis Keys and generating reports.\n\n    Every 24 hours:\n    1. Collects all keys from the previous day\n    2. Generates comprehensive report\n    3. Archives keys with metadata\n    4. Stores in organized folder structure\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+archive_base_path
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+archive_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_default_archive_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get default archive path.'
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+backend_dir
+'genesis_archives'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_ensure_archive_directory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure archive directory exists.'
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+archive_daily_keys
+●●●●●● 1mm □△
+self
+target_date
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Archive all Genesis Keys for a specific date.\n\n        Args:\n            target_date: Date to archive (defaults to yesterday)\n            session: Database session\n\n        Returns:\n            GenesisKeyArchive record\n        '
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+target_date
+●●●●●● 2mm □
+target_date
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+day_start
+●●●●●● 1mm □
+target_date
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+day_end
+●●●●●● 1mm □
+day_start
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Archiving Genesis Keys for '
+day_start
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+day_start
+GenesisKey
+day_end
+GenesisKey
+GenesisKeyStatus
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+logger
+●●●●●● 1mm □△
+'No keys to archive for this date'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+sess
+●●●●●● 2mm □△
+report_summary
+report_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+stats
+day_start
+●●●●●● 2mm □△
+date_str
+●●●●●● 1mm □
+day_start
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+archive_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+date_str
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+archive_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+archive_dir
+'genesis_keys_'
+date_str
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+keys_file
+●●●●●● 2mm □△
+report_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+archive_dir
+'report_'
+date_str
+'.txt'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report_summary
+report_file
+●●●●●● 2mm □△
+data_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+archive_dir
+'data_'
+date_str
+'.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+report_data
+f
+●●●●●● 2mm □△
+archive
+●●●●●● 1mm □
+GenesisKeyArchive
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+archive
+●●●●●● 2mm □△
+key
+keys
+key
+●●●●●● 1mm □
+GenesisKeyStatus
+key
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+keys_file
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Archived '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+' keys for '
+date_str
+'. Archive ID: '
+archive
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+archive
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to archive keys: '
+e
+●●●●●● 2mm □△
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GenesisKeyArchive
+●●●●●● 1mm □
+_generate_statistics
+●●●●●● 1mm □△
+self
+keys
+session
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 2mm □△
+'Generate statistics from keys.'
+stats
+●●●●●● 1mm □
+'total_keys'
+'error_count'
+'fix_count'
+'user_count'
+'type_breakdown'
+'file_changes'
+'error_types'
+'users'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+0
+0
+0
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+keys
+key_type
+●●●●●● 1mm □
+key
+stats
+'type_breakdown'
+key_type
+●●●●●● 1mm □
+stats
+'type_breakdown'
+●●●●●● 1mm □△
+key_type
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+key
+stats
+'error_count'
+1
+●●●●●● 2mm □
+key
+stats
+'error_types'
+key
+●●●●●● 1mm □
+stats
+'error_types'
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+key
+GenesisKeyType
+stats
+'fix_count'
+1
+●●●●●● 2mm □
+key
+stats
+'file_changes'
+key
+●●●●●● 1mm □
+stats
+'file_changes'
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+key
+stats
+'users'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+stats
+'user_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stats
+'users'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+user_counts
+●●●●●● 1mm □
+key
+keys
+●●●●●● 2mm □
+key
+user_counts
+key
+●●●●●● 1mm □
+user_counts
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+user_counts
+stats
+'most_active_user'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+user_counts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'file_changes'
+stats
+'most_changed_file'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+stats
+'file_changes'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'error_types'
+stats
+'most_common_error'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+stats
+'error_types'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_generate_report
+●●●●●● 1mm □△
+self
+keys
+stats
+date
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm □○
+datetime
+'Generate human-readable report and structured data.'
+report_lines
+●●●●●● 1mm □
+'='
+●●●●●● 2mm □△
+80
+'GENESIS KEY DAILY REPORT'
+'Date: '
+date
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+'Generated: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S UTC'
+●●●●●● 2mm □△
+'='
+●●●●●● 2mm □△
+80
+''
+'SUMMARY'
+'-'
+●●●●●● 2mm □△
+80
+'Total Genesis Keys: '
+stats
+'total_keys'
+'Errors Detected: '
+stats
+'error_count'
+'Fixes Applied: '
+stats
+'fix_count'
+'Active Users: '
+stats
+'user_count'
+''
+●●●●●● 2mm □
+stats
+●●●●●● 1mm □△
+'most_active_user'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'Most Active User: '
+stats
+'most_active_user'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+●●●●●● 1mm □△
+'most_changed_file'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'Most Changed File: '
+stats
+'most_changed_file'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+●●●●●● 1mm □△
+'most_common_error'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'Most Common Error: '
+stats
+'most_common_error'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+''
+'KEY TYPE BREAKDOWN'
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+key_type
+count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+stats
+'type_breakdown'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+percentage
+●●●●●● 1mm □
+count
+●●●●●● 3mm □△
+stats
+'total_keys'
+●●●●●● 2mm □△
+100
+report_lines
+●●●●●● 1mm □△
+'  '
+key_type
+'25'
+' '
+count
+'5'
+' ('
+percentage
+'5.1f'
+'%)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'error_types'
+report_lines
+●●●●●● 1mm □△
+''
+'ERROR TYPES'
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+error_type
+count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+stats
+'error_types'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'  '
+error_type
+'40'
+' '
+count
+'5'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'file_changes'
+report_lines
+●●●●●● 1mm □△
+''
+'TOP 10 MODIFIED FILES'
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+top_files
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+stats
+'file_changes'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+file_path
+count
+top_files
+report_lines
+●●●●●● 1mm □△
+'  '
+file_path
+'60'
+' '
+count
+'5'
+' changes'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+''
+'TRACKING SUMMARY (What, Where, When, Why, Who, How)'
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+actors
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+key
+key
+keys
+key
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'WHO: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+actors
+●●●●●● 2mm □△
+' unique actors'
+●●●●●● 2mm □△
+locations
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+key
+key
+keys
+key
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'WHERE: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+locations
+●●●●●● 2mm □△
+' unique locations'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+earliest
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+key
+key
+keys
+●●●●●● 2mm □△
+latest
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+key
+key
+keys
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'WHEN: '
+earliest
+●●●●●● 1mm □△
+'%H:%M:%S'
+●●●●●● 2mm □△
+' - '
+latest
+●●●●●● 1mm □△
+'%H:%M:%S'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+with_reasons
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+key
+keys
+key
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'WHY: '
+with_reasons
+' keys have documented reasons'
+●●●●●● 2mm □△
+with_methods
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+key
+keys
+key
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'HOW: '
+with_methods
+' keys have documented methods'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+''
+'='
+●●●●●● 2mm □△
+80
+'End of Report'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+report_summary
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+report_lines
+●●●●●● 2mm □△
+report_data
+●●●●●● 1mm □
+'date'
+'generated_at'
+'statistics'
+'tracking_summary'
+date
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'unique_actors'
+'unique_locations'
+'keys_with_reasons'
+'keys_with_methods'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+actors
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+locations
+●●●●●● 2mm □△
+with_reasons
+with_methods
+●●●●●● 3mm ○
+report_summary
+report_data
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_save_keys_to_file
+●●●●●● 1mm □△
+self
+keys
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm ○
+'Save keys to JSON file.'
+keys_data
+●●●●●● 1mm □
+key
+keys
+key_dict
+●●●●●● 1mm □
+'key_id'
+'key_type'
+'status'
+'what'
+'where'
+'when'
+'why'
+'who'
+'how'
+'file_path'
+'line_number'
+'is_error'
+'error_type'
+'error_message'
+'metadata_human'
+'metadata_ai'
+key
+key
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+keys_data
+●●●●●● 1mm □△
+key_dict
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+keys_data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_report_to_file
+●●●●●● 1mm □△
+self
+report
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Save report to text file.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_archive_for_date
+●●●●●● 1mm □△
+self
+date
+session
+●●●●●● 2mm □△
+datetime
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get archive for a specific date.'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+day_start
+●●●●●● 1mm □
+date
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+day_end
+●●●●●● 1mm □
+day_start
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+archive
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKeyArchive
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKeyArchive
+day_start
+GenesisKeyArchive
+day_end
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+archive
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GenesisKeyArchive
+●●●●●● 1mm □
+list_archives
+●●●●●● 1mm □△
+self
+limit
+session
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+30
+●●●●●● 2mm □
+'List recent archives.'
+sess
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+archives
+●●●●●● 1mm □
+sess
+●●●●●● 1mm □△
+GenesisKeyArchive
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKeyArchive
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+archives
+●●●●●● 2mm □
+close_session
+sess
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+GenesisKeyArchive
+_archival_service
+●●●●●● 2mm □○
+ArchivalService
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_archival_service
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get or create the global archival service instance.'
+●●●●●● 2mm □
+_archival_service
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+_archival_service
+●●●●●● 1mm □
+ArchivalService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_archival_service
+ArchivalService
+●●●●●● 1mm □
+schedule_daily_archival
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Schedule daily archival task.\n\n    This should be called on application startup to set up the archival schedule.\n    '
+●●●●●● 2mm □△○
+schedule
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 1mm □
+run_archival
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run archival task.'
+logger
+●●●●●● 1mm □△
+'Running scheduled Genesis Key archival'
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+get_archival_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Scheduled archival failed: '
+e
+●●●●●● 2mm □△
+schedule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'02:00'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+run_archival
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_scheduler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run scheduler in background thread.'
+●●●●●● 3mm □△○
+schedule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+60
+●●●●●● 2mm □△
+scheduler_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scheduler_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Genesis Key daily archival scheduled for 2:00 AM daily'
+●●●●●● 2mm □△

@@ -1,0 +1,502 @@
+## code_sandbox.py
+'\nCode Sandbox — Safe Python execution for Grace-generated code.\n\nGrace generates code via LLMs but never runs it. This sandbox:\n  1. Compiles code (catches syntax errors)\n  2. Static analysis (catches common issues)\n  3. Executes in isolated subprocess (catches runtime errors)\n  4. Timeout and resource limits (prevents infinite loops/OOM)\n  5. Captures stdout, stderr, return values\n  6. All execution tracked via Genesis Keys\n\nSecurity: subprocess with timeout, no network, limited filesystem.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MAX_EXECUTION_SECONDS
+●●●●●● 1mm □
+30
+MAX_OUTPUT_BYTES
+●●●●●● 1mm □
+100000
+●●●●●● 2mm △
+SandboxResult
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'compiled'
+'syntax_errors'
+'static_warnings'
+'executed'
+'stdout'
+'stderr'
+'return_code'
+'execution_time_ms'
+'runtime_error'
+'success'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+5000
+●●●●●● 3mm △
+2000
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+compile_check
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Stage 1: Check if code compiles (syntax validation).'
+result
+●●●●●● 1mm □
+SandboxResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+code
+'<sandbox>'
+'exec'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+SyntaxError
+result
+●●●●●● 1mm □△
+'Line '
+e
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+SandboxResult
+●●●●●● 1mm □
+static_analyse
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Stage 2: Static analysis — catch common issues without running.'
+warnings
+●●●●●● 1mm □
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 3mm ○
+'Cannot parse — syntax error'
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+'system'
+'popen'
+'exec'
+'eval'
+warnings
+●●●●●● 1mm □△
+'Line '
+node
+': dangerous call to '
+node
+'()'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+'exec'
+'eval'
+'compile'
+'__import__'
+warnings
+●●●●●● 1mm □△
+'Line '
+node
+': dangerous call to '
+node
+'()'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+alias
+node
+●●●●●● 2mm □
+alias
+'os'
+'subprocess'
+'shutil'
+'socket'
+'http'
+warnings
+●●●●●● 1mm □△
+'Line '
+node
+": imports potentially dangerous module '"
+alias
+"'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+node
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+'os'
+'subprocess'
+'shutil'
+'socket'
+warnings
+●●●●●● 1mm □△
+'Line '
+node
+": imports from dangerous module '"
+node
+"'"
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+●●●●●● 3mm □△○
+warnings
+●●●●●● 1mm □△
+'Line '
+node
+': while True loop — potential infinite loop'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+execute_sandboxed
+●●●●●● 1mm □△
+code
+timeout
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+MAX_EXECUTION_SECONDS
+'\n    Full sandbox: compile → static analyse → execute in subprocess.\n    Returns comprehensive result with stdout, stderr, and timing.\n    '
+result
+●●●●●● 1mm □
+SandboxResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+code
+'<sandbox>'
+'exec'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+SyntaxError
+result
+●●●●●● 1mm □△
+'Line '
+e
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+●●●●●● 1mm □
+static_analyse
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+f
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+sys
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+proc
+MAX_OUTPUT_BYTES
+result
+●●●●●● 1mm □
+proc
+MAX_OUTPUT_BYTES
+result
+●●●●●● 1mm □
+proc
+result
+●●●●●● 1mm □
+proc
+0
+●●●●●● 2mm □
+proc
+0
+proc
+lines
+●●●●●● 1mm □
+proc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+lines
+lines
+1
+'Unknown error'
+subprocess
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+'Execution timed out after '
+timeout
+'s'
+result
+●●●●●● 1mm □
+1
+Exception
+result
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+SandboxResult
+●●●●●● 1mm □
+verify_code_quality
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Full code quality check: compile + static + execute + score.\n    Returns a quality score 0-100.\n    '
+result
+●●●●●● 1mm □
+execute_sandboxed
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+result
+score
+30
+●●●●●● 2mm □
+result
+result
+score
+40
+●●●●●● 2mm □
+result
+score
+15
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+2
+score
+10
+●●●●●● 2mm □
+result
+score
+15
+●●●●●● 3mm ○
+'score'
+'compiled'
+'runs_successfully'
+'static_warnings'
+'runtime_error'
+'execution_time_ms'
+'stdout_preview'
+'detail'
+score
+result
+result
+result
+result
+result
+result
+500
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

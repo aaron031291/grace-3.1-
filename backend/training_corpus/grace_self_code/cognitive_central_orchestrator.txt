@@ -1,0 +1,979 @@
+## central_orchestrator.py
+'\nCentral Orchestrator — Grace\'s Cognitive Operating System\n\nThe "central nervous system" that coordinates all autonomous systems.\nEvery cognitive module feeds into and draws from this orchestrator.\n\nResponsibilities:\n  - Global state awareness (what every system is doing right now)\n  - Task distribution (route work to the right cognitive module)\n  - Conflict resolution (when systems produce contradictory outputs)\n  - Priority management (what gets processed first)\n  - Integration health monitoring (detect broken connections)\n  - Cross-system state synchronization\n\nArchitecture:\n  All systems → Event Bus → Central Orchestrator → Decisions → Systems\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SystemState
+'Global state container — single source of truth for the entire system.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm ○
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update
+●●●●●● 1mm □△
+self
+component
+state
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 2mm □
+component
+●●●●●● 3mm △
+●●●●●● 3mm △
+component
+●●●●●● 1mm □
+●●●●●● 3mm △
+component
+●●●●●● 1mm □△
+state
+●●●●●● 2mm □△
+●●●●●● 3mm △
+component
+'last_updated'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get
+●●●●●● 1mm □△
+self
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+k
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+add_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+100
+●●●●●● 1mm □
+get_active_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+CentralOrchestrator
+"\n    Grace's Cognitive Operating System.\n    Coordinates all autonomous systems into unified intelligence.\n    "
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+SystemState
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'CentralOrchestrator'
+●●●●●● 1mm □
+initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Wire up event bus subscriptions for all systems.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+subscribe
+●●●●●● 1mm □△
+'llm.called'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'llm.failed'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'healing.*'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'trust.*'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'file.*'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'learning.*'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'consensus.*'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'genesis.key_created'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Event bus subscriptions registered'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Event bus setup failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_on_llm_called
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'llm'
+'last_call'
+'provider'
+'status'
+event
+event
+●●●●●● 1mm □△
+'provider'
+'unknown'
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_llm_failed
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'llm'
+'last_error'
+'error'
+'status'
+event
+event
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_healing_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'immune_system'
+'last_event'
+'timestamp'
+'data'
+event
+event
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_trust_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'trust_engine'
+'last_update'
+'component'
+'score'
+event
+event
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_file_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'file_system'
+'last_event'
+'timestamp'
+event
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_learning_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'learning'
+'last_event'
+'timestamp'
+event
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_consensus_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'consensus'
+'last_run'
+'models'
+event
+event
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_on_genesis_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'genesis'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_keys'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'genesis'
+'total_keys'
+'last_key'
+count
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_sync_initial_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Pull initial state from all systems.'
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dashboard
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'trust_engine'
+'overall_trust'
+'component_count'
+'status'
+dashboard
+●●●●●● 1mm □△
+'overall_trust'
+0
+●●●●●● 2mm □△
+dashboard
+●●●●●● 1mm □△
+'component_count'
+0
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'trust_engine'
+'status'
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'flash_cache'
+'entries'
+'keywords'
+'status'
+stats
+●●●●●● 1mm □△
+'total_entries'
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+'unique_keywords'
+0
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'flash_cache'
+'status'
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+v
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'memory'
+'total_entries'
+'systems'
+'status'
+total
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'memory'
+'status'
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+get_llm_usage_stats
+stats
+●●●●●● 1mm □
+get_llm_usage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'llm'
+'total_calls'
+'avg_latency'
+'status'
+stats
+●●●●●● 1mm □△
+'total_calls'
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □△
+'avg_latency_ms'
+0
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'llm'
+'status'
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_available_models
+models
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+available
+●●●●●● 1mm □
+m
+m
+models
+m
+'available'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'consensus'
+'available_models'
+'model_names'
+'status'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+available
+●●●●●● 2mm □△
+m
+'name'
+m
+available
+'active'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'consensus'
+'status'
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+sync_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Force a full state sync and return the result.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+route_task
+●●●●●● 1mm □△
+self
+task_type
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Route a task to the appropriate cognitive module.\n        The orchestrator decides which system handles what.\n        '
+routing_table
+●●●●●● 1mm □
+'code_generation'
+'file_organization'
+'knowledge_expansion'
+'healing'
+'consensus_needed'
+'learning'
+'code_integration'
+'document_analysis'
+'pipeline'
+'librarian'
+'knowledge_cycle'
+'immune_system'
+'consensus_engine'
+'idle_learner'
+'hunter'
+'flash_cache'
+target
+●●●●●● 1mm □
+routing_table
+●●●●●● 1mm □△
+task_type
+'pipeline'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'target'
+'timestamp'
+'data_keys'
+task_type
+target
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'task.routed'
+'type'
+'target'
+task_type
+target
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'routed_to'
+'task_type'
+target
+task_type
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_integration_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check all integration points and report broken connections.\n        This is the integration health monitor Opus identified as missing.\n        '
+checks
+●●●●●● 1mm □
+integrations
+●●●●●● 1mm □
+'pipeline'
+'cognitive.pipeline'
+'CognitivePipeline'
+'consensus'
+'cognitive.consensus_engine'
+'run_consensus'
+'flash_cache'
+'cognitive.flash_cache'
+'get_flash_cache'
+'event_bus'
+'cognitive.event_bus'
+'publish'
+'unified_memory'
+'cognitive.unified_memory'
+'get_unified_memory'
+'trust_engine'
+'cognitive.trust_engine'
+'get_trust_engine'
+'immune_system'
+'cognitive.immune_system'
+'GraceImmuneSystem'
+'librarian'
+'cognitive.librarian_autonomous'
+'AutonomousLibrarian'
+'mirror'
+'cognitive.mirror_self_modeling'
+'MirrorSelfModelingSystem'
+'knowledge_cycle'
+'cognitive.knowledge_cycle'
+'KnowledgeCycle'
+'model_updater'
+'cognitive.model_updater'
+'check_all_models'
+'magma'
+'cognitive.magma_bridge'
+'query_context'
+'idle_learner'
+'cognitive.idle_learner'
+'IdleLearner'
+'hunter'
+'cognitive.hunter_assimilator'
+'HunterAssimilator'
+'file_generator'
+'cognitive.file_generator'
+'FileGenerator'
+healthy
+●●●●●● 1mm □
+0
+broken
+●●●●●● 1mm □
+0
+name
+module_path
+attr_name
+integrations
+mod
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+module_path
+●●●●●● 2mm □△
+obj
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+mod
+attr_name
+●●●●●● 2mm □△
+checks
+name
+●●●●●● 1mm □
+'status'
+'importable'
+'callable'
+'healthy'
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+obj
+●●●●●● 2mm □△
+healthy
+1
+Exception
+checks
+name
+●●●●●● 1mm □
+'status'
+'error'
+'broken'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+broken
+1
+●●●●●● 3mm ○
+'total'
+'healthy'
+'broken'
+'health_percent'
+'checks'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+integrations
+●●●●●● 2mm □△
+healthy
+broken
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+healthy
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+integrations
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+checks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_global_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get the complete global state — everything Grace knows about herself.'
+●●●●●● 3mm ○
+'components'
+'active_tasks'
+'last_sync'
+'initialized'
+'event_bus_connected'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_dashboard
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'High-level dashboard for the orchestrator.'
+global_state
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+global_state
+'components'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+global_state
+'components'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'system_status'
+'integration_health'
+'active_components'
+'total_components'
+'integration_checks'
+'global_state'
+health
+'health_percent'
+80
+'healthy'
+'degraded'
+health
+'health_percent'
+active_count
+total
+health
+global_state
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CentralOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CentralOrchestrator

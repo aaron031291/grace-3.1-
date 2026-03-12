@@ -1,0 +1,460 @@
+## verify_grace_os_stage456.py
+'\nGrace OS — Stage 4/5/6 Verification Test\n\nEnd-to-end test for the full 9-layer pipeline:\nL1 (Runtime) → L2 (Planning) → L3 (Proposer) → L4 (Evaluator)\n→ L5 (Simulation) → L6 (Codegen) → L7 (Testing) → L8 (Verification)\n→ L9 (Deployment Gate)\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TaskType
+GENERAL
+●●●●●● 1mm □
+'general'
+●●●●●● 2mm △
+LLMOrchestrator
+●●●●●● 2mm △
+MCPClient
+mock_llm_mod
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_llm_mod
+●●●●●● 1mm □
+TaskType
+mock_llm_mod
+●●●●●● 1mm □
+LLMOrchestrator
+sys
+'llm_orchestrator.llm_orchestrator'
+●●●●●● 1mm □
+mock_llm_mod
+mock_mcp_mod
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mcp_mod
+●●●●●● 1mm □
+MCPClient
+sys
+'grace_mcp.client'
+●●●●●● 1mm □
+mock_mcp_mod
+●●●●●● 3mm □△○
+grace_os.kernel.message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+grace_os.kernel.layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+grace_os.kernel.session_manager
+●●●●●● 2mm □△○
+SessionManager
+●●●●●● 3mm □△○
+grace_os.layers.l1_runtime.runtime_layer
+●●●●●● 2mm □△○
+RuntimeLayer
+●●●●●● 3mm □△○
+grace_os.layers.l2_planning.planning_layer
+●●●●●● 2mm □△○
+PlanningLayer
+●●●●●● 3mm □△○
+grace_os.layers.l3_proposer.proposer_layer
+●●●●●● 2mm □△○
+ProposerLayer
+●●●●●● 3mm □△○
+grace_os.layers.l4_evaluator.evaluator_layer
+●●●●●● 2mm □△○
+EvaluatorLayer
+●●●●●● 3mm □△○
+grace_os.layers.l5_simulation.simulation_layer
+●●●●●● 2mm □△○
+SimulationLayer
+●●●●●● 3mm □△○
+grace_os.layers.l6_codegen.codegen_layer
+●●●●●● 2mm □△○
+CodegenLayer
+●●●●●● 3mm □△○
+grace_os.layers.l7_testing.testing_layer
+●●●●●● 2mm □△○
+TestingLayer
+●●●●●● 3mm □△○
+grace_os.layers.l8_verification.verification_layer
+●●●●●● 2mm □△○
+VerificationLayer
+●●●●●● 3mm □△○
+grace_os.layers.l9_deployment.deployment_layer
+●●●●●● 2mm □△○
+DeploymentLayer
+●●●●●● 2mm △
+MockLLM
+'Responds with valid JSON for each layer type.'
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 2mm △
+Result
+success
+●●●●●● 3mm △
+content
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 1mm □△
+dataclass
+system_prompt
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'system_prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'L2 Planning'
+system_prompt
+'Decompose'
+prompt
+content
+●●●●●● 1mm □
+'[{"id": "t1", "description": "Add GET /api/users endpoint", "type": "codegen"}]'
+●●●●●● 1mm △
+'L3 Solution Proposer'
+system_prompt
+content
+●●●●●● 1mm □
+'[{"id":"p1","approach":"Flask Blueprint with SQLAlchemy","tradeoffs":"Tight ORM coupling","risk_score":20},{"id":"p2","approach":"Raw SQL with connection pooling","tradeoffs":"More control, more code","risk_score":35},{"id":"p3","approach":"FastAPI with Pydantic models","tradeoffs":"Modern but migration needed","risk_score":45}]'
+●●●●●● 2mm □
+'L4 Evaluator'
+system_prompt
+content
+●●●●●● 1mm □
+'{"scores":[{"proposal_id":"p1","correctness":90,"performance":80,"maintainability":85,"risk":80,"total":84},{"proposal_id":"p2","correctness":75,"performance":90,"maintainability":60,"risk":65,"total":73},{"proposal_id":"p3","correctness":85,"performance":85,"maintainability":90,"risk":55,"total":79}],"selected":"p1"}'
+●●●●●● 1mm △
+'L5 Simulation'
+system_prompt
+content
+●●●●●● 1mm □
+'{"risks":["Route collision with existing /api/admin"],"edge_cases":["Empty user list","Invalid user ID"],"dependency_impacts":["models.py needs User model"],"contradictions":[],"impact_score":25,"recommendation":"proceed"}'
+●●●●●● 2mm □
+'L8 Verification'
+system_prompt
+content
+●●●●●● 1mm □
+'{"verified":true,"requirements_met":["GET endpoint created"],"requirements_missed":[],"security_flags":[],"consistency_issues":[],"readability_score":85,"overall_trust":88}'
+●●●●●● 3mm □
+content
+●●●●●● 1mm □
+"from flask import Blueprint\nusers_bp = Blueprint('users', __name__)\n@users_bp.route('/api/users')\ndef get_users():\n    return {'users': []}"
+●●●●●● 3mm ○
+Result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockMCP
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+'Mock '
+tool_name
+' executed'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'Stage456Test'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Grace OS — Stage 4/5/6 Verification: Full 9-Layer Pipeline'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+bus
+●●●●●● 1mm □
+MessageBus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □
+LayerRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+MockLLM
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mcp
+●●●●●● 1mm □
+MockMCP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layers
+●●●●●● 1mm □
+'L1'
+'L2'
+'L3'
+'L4'
+'L5'
+'L6'
+'L7'
+'L8'
+'L9'
+RuntimeLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+PlanningLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+ProposerLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+EvaluatorLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+SimulationLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+CodegenLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+TestingLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+VerificationLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+DeploymentLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+name
+layer
+layers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ '
+name
+' ('
+layer
+') started'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'-'
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  All 9 layers registered. Starting session...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+session_mgr
+●●●●●● 1mm □
+SessionManager
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+trace_id
+●●●●●● 1mm □
+session_mgr
+●●●●●● 1mm □△
+'Add a REST endpoint for listing users'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+session_mgr
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  RESULTS'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Status:      '
+status
+'status'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Trust Score:  '
+status
+'trust_score'
+'.1f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Tasks:        '
+status
+'tasks_count'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Duration:     '
+status
+'duration_sec'
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+'error'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Error:        '
+status
+'error'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+'status'
+'completed'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  ✅ STAGE 4/5/6 VERIFICATION PASSED — Full 9-layer pipeline operational!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  ❌ VERIFICATION FAILED — Status: '
+status
+'status'
+', Error: '
+status
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

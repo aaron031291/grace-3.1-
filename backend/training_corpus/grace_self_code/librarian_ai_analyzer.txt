@@ -1,0 +1,1257 @@
+## ai_analyzer.py
+'\nAIContentAnalyzer - LLM-based Content Analysis\n\nUses LLM Orchestrator to analyze document content and suggest categorization when\nrule-based matching is insufficient or ambiguous.\n\nFULLY INTEGRATED with:\n- Cognitive Framework (OODA Loop + 12 Invariants)\n- Genesis Key tracking\n- Hallucination mitigation\n- Learning Memory integration\n- Layer 1 Message Bus\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+librarian.utils
+●●●●●● 2mm □△○
+truncate_text
+parse_confidence_label
+safe_json_loads
+normalize_tag_name
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AIContentAnalyzer
+'\n    LLM-powered content analysis for intelligent document categorization.\n\n    NOW FULLY INTEGRATED with LLM Orchestrator to provide:\n    - Suggested tags based on content understanding\n    - Document category classification\n    - Main topics identification\n    - Confidence scores\n\n    All AI operations are:\n    - Tracked with Genesis Keys\n    - Enforced through OODA Loop + 12 Invariants\n    - Verified through hallucination mitigation pipeline\n    - Integrated with Learning Memory\n    - Logged for complete audit trail\n\n    Features:\n    - Content sampling (first N chunks to avoid token limits)\n    - Low temperature for consistent categorization\n    - JSON-structured responses with fallbacks\n    - Configurable confidence thresholds\n\n    Example:\n        >>> from llm_orchestrator.llm_orchestrator import get_llm_orchestrator\n        >>> analyzer = AIContentAnalyzer(db_session, llm_orchestrator=get_llm_orchestrator())\n        >>> result = analyzer.analyze_document(document_id=123)\n        >>> print(f"Suggested tags: {result[\'tags\']}")\n        >>> print(f"Confidence: {result[\'confidence\']}")\n        >>> print(f"Genesis Key: {result[\'genesis_key_id\']}")\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+llm_client
+llm_orchestrator
+model_name
+max_chunks
+max_chars
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'mistral:7b'
+5
+4000
+'\n        Initialize AIContentAnalyzer.\n\n        Args:\n            db_session: SQLAlchemy database session\n            llm_client: Provider-agnostic LLM client\n            llm_orchestrator: LLM Orchestrator instance (preferred)\n            model_name: Model to use for analysis (default: "mistral:7b")\n            max_chunks: Maximum chunks to analyze (default: 5)\n            max_chars: Maximum characters to analyze (default: 4000)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_chunks
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_chars
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_orchestrator
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_client
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] ✓ Connected to LLM Orchestrator'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Could not connect to LLM Orchestrator: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Could not get LLM client: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+analyze_document
+●●●●●● 1mm □△
+self
+document_id
+custom_prompt
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Analyze a document using LLM to suggest categorization.\n\n        Args:\n            document_id: Document ID to analyze\n            custom_prompt: Optional custom analysis prompt\n\n        Returns:\n            Dict: Analysis results with tags, category, topics, confidence\n\n        Example:\n            >>> result = analyzer.analyze_document(123)\n            >>> {\n            ...     "tags": ["ai", "machine-learning", "research"],\n            ...     "category": "research",\n            ...     "topics": ["neural networks", "deep learning"],\n            ...     "purpose": "Technical paper on transformers",\n            ...     "confidence": 0.9,\n            ...     "confidence_label": "high",\n            ...     "raw_response": "..."\n            ... }\n        '
+document
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+ValueError
+●●●●●● 1mm □△
+'Document '
+document_id
+' not found'
+●●●●●● 2mm □△
+content_sample
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content_sample
+logger
+●●●●●● 1mm □△
+'No content available for document '
+document_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'tags'
+'category'
+'topics'
+'purpose'
+'confidence'
+'confidence_label'
+'error'
+'unknown'
+''
+0.0
+'low'
+'No content available'
+prompt
+●●●●●● 1mm □
+custom_prompt
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document
+content_sample
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+trust_score
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Using LLM Orchestrator for document '
+document_id
+●●●●●● 2mm □△
+task_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task_result
+response
+●●●●●● 1mm □
+task_result
+genesis_key_id
+●●●●●● 1mm □
+task_result
+trust_score
+●●●●●● 1mm □
+task_result
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] ✓ Orchestrator task completed - Genesis Key: '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm □
+Exception
+●●●●●● 1mm □△
+'Orchestrator task failed: '
+task_result
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Using direct LLM client for document '
+document_id
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+prompt
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'message'
+response
+response
+●●●●●● 1mm □
+response
+'message'
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+'No LLM backend available (orchestrator or client)'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+result
+'raw_response'
+●●●●●● 1mm □
+response
+●●●●●● 2mm □
+genesis_key_id
+result
+'genesis_key_id'
+●●●●●● 1mm □
+genesis_key_id
+●●●●●● 2mm □
+trust_score
+●●●●●● 2mm □
+result
+'trust_score'
+●●●●●● 1mm □
+trust_score
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Analyzed document '
+document_id
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'tags'
+●●●●●● 2mm □△
+' tags, confidence='
+result
+'confidence'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Analysis failed for document '
+document_id
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'tags'
+'category'
+'topics'
+'purpose'
+'confidence'
+'confidence_label'
+'error'
+'raw_response'
+'unknown'
+''
+0.0
+'low'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_sample_document_content
+●●●●●● 1mm □△
+self
+document
+●●●●●● 2mm □△
+Document
+'\n        Sample document content for analysis.\n\n        Takes first N chunks up to max_chars to avoid token limits.\n\n        Args:\n            document: Document instance\n\n        Returns:\n            str: Sampled content\n        '
+●●●●●● 2mm □
+document
+●●●●●● 3mm ○
+''
+content_parts
+●●●●●● 1mm □
+total_chars
+●●●●●● 1mm □
+0
+i
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+document
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_chars
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 3mm △
+remaining_chars
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+total_chars
+content_parts
+●●●●●● 1mm □△
+chunk
+remaining_chars
+●●●●●● 2mm □△
+content_parts
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+total_chars
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+content_parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_build_analysis_prompt
+●●●●●● 1mm □△
+self
+document
+content_sample
+●●●●●● 2mm □△
+Document
+●●●●●● 1mm ○
+'\n        Build analysis prompt for LLM.\n\n        Args:\n            document: Document instance\n            content_sample: Sampled content\n\n        Returns:\n            str: Analysis prompt\n        '
+prompt
+●●●●●● 1mm □
+'Analyze this document and provide categorization information.\n\nDocument Information:\n- Filename: '
+document
+'\n- File Path: '
+document
+'N/A'
+'\n- MIME Type: '
+document
+'N/A'
+'\n- Size: '
+document
+' bytes\n\nContent Sample (first '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content_sample
+●●●●●● 2mm □△
+' characters):\n'
+truncate_text
+●●●●●● 1mm □△
+content_sample
+●●●●●● 2mm □△
+'\n\nPlease analyze this document and provide:\n1. Primary category (choose one: research, code, documentation, media, data, configuration, tutorial, other)\n2. 3-7 relevant tags (lowercase, single words or hyphenated phrases)\n3. Main topics covered (2-5 topics)\n4. Brief document purpose (1 sentence)\n5. Your confidence level (low, medium, high)\n\nRespond in JSON format:\n{\n    "category": "research",\n    "tags": ["ai", "machine-learning", "neural-networks"],\n    "topics": ["deep learning", "transformer architecture"],\n    "purpose": "Technical paper explaining transformer models",\n    "confidence": "high"\n}\n\nBe concise and accurate. Focus on technical classification.'
+●●●●●● 3mm ○
+prompt
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_parse_analysis_response
+●●●●●● 1mm □△
+self
+response
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Parse LLM response into structured data.\n\n        Handles various response formats with fallbacks.\n\n        Args:\n            response: Raw LLM response\n\n        Returns:\n            Dict: Parsed analysis results\n        '
+result
+●●●●●● 1mm □
+'tags'
+'category'
+'topics'
+'purpose'
+'confidence'
+'confidence_label'
+'unknown'
+''
+0.5
+'medium'
+json_obj
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_obj
+●●●●●● 2mm □
+'category'
+json_obj
+result
+'category'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+json_obj
+'category'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'tags'
+json_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+json_obj
+'tags'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'tags'
+●●●●●● 1mm □
+normalize_tag_name
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+tag
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tag
+json_obj
+'tags'
+tag
+7
+●●●●●● 2mm □
+'topics'
+json_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+json_obj
+'topics'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'topics'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic
+json_obj
+'topics'
+topic
+5
+●●●●●● 2mm □
+'purpose'
+json_obj
+result
+'purpose'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+json_obj
+'purpose'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □
+'confidence'
+json_obj
+conf_str
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+json_obj
+'confidence'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'confidence_label'
+●●●●●● 1mm □
+conf_str
+result
+'confidence'
+●●●●●● 1mm □
+parse_confidence_label
+●●●●●● 1mm □△
+conf_str
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Failed to parse JSON from LLM response, using text extraction'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_json
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Extract JSON object from text.\n\n        Handles cases where JSON is embedded in markdown or other text.\n\n        Args:\n            text: Text containing JSON\n\n        Returns:\n            Optional[Dict]: Parsed JSON or None\n        '
+json_obj
+●●●●●● 1mm □
+safe_json_loads
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+json_obj
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json_obj
+●●●●●● 2mm □△○
+re
+json_blocks
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'```(?:json)?\\s*(\\{[^`]+\\})\\s*```'
+text
+re
+●●●●●● 2mm □△
+block
+json_blocks
+json_obj
+●●●●●● 1mm □
+safe_json_loads
+●●●●●● 1mm □△
+block
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+json_obj
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json_obj
+json_matches
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\{[^}]+\\}'
+text
+re
+●●●●●● 2mm □△
+match
+json_matches
+json_obj
+●●●●●● 1mm □
+safe_json_loads
+●●●●●● 1mm □△
+match
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_obj
+●●●●●● 1mm □
+●●●●●● 1mm □△
+json_obj
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'category'
+json_obj
+●●●●●● 3mm ○
+json_obj
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_from_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Extract information from non-JSON text response.\n\n        Fallback parser for when LLM doesn't return proper JSON.\n\n        Args:\n            text: LLM response text\n\n        Returns:\n            Dict: Extracted information\n        "
+result
+●●●●●● 1mm □
+'tags'
+'category'
+'topics'
+'purpose'
+'confidence'
+'confidence_label'
+'unknown'
+''
+0.4
+'low'
+text_lower
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+categories
+●●●●●● 1mm □
+'research'
+'code'
+'documentation'
+'media'
+'data'
+'configuration'
+'tutorial'
+cat
+categories
+●●●●●● 2mm □
+cat
+text_lower
+result
+'category'
+●●●●●● 1mm □
+cat
+●●●●●● 2mm □△○
+re
+tag_patterns
+●●●●●● 1mm □
+'tags?:\\s*([^\\n]+)'
+'keywords?:\\s*([^\\n]+)'
+'topics?:\\s*([^\\n]+)'
+pattern
+tag_patterns
+match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+text_lower
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+tags_str
+●●●●●● 1mm □
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □
+normalize_tag_name
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+re
+●●●●●● 1mm □△
+'[,;]'
+tags_str
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'tags'
+●●●●●● 1mm □△
+tags
+7
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'high confidence'
+text_lower
+'very confident'
+text_lower
+result
+'confidence'
+●●●●●● 1mm □
+0.9
+result
+'confidence_label'
+●●●●●● 1mm □
+'high'
+●●●●●● 1mm △
+'medium confidence'
+text_lower
+'moderately confident'
+text_lower
+result
+'confidence'
+●●●●●● 1mm □
+0.7
+result
+'confidence_label'
+●●●●●● 1mm □
+'medium'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+analyze_batch
+●●●●●● 1mm □△
+self
+document_ids
+skip_errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Analyze multiple documents in batch.\n\n        Args:\n            document_ids: List of document IDs\n            skip_errors: Continue on errors (default: True)\n\n        Returns:\n            List[Dict]: Analysis results for each document\n\n        Example:\n            >>> results = analyzer.analyze_batch([1, 2, 3, 4, 5])\n            >>> successful = [r for r in results if "error" not in r]\n            >>> print(f"Analyzed {len(successful)}/{len(results)} documents")\n        '
+results
+●●●●●● 1mm □
+doc_id
+document_ids
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+doc_id
+●●●●●● 2mm □△
+result
+'document_id'
+●●●●●● 1mm □
+doc_id
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to analyze document '
+doc_id
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+skip_errors
+results
+●●●●●● 1mm □△
+'document_id'
+'error'
+'tags'
+'category'
+'confidence'
+doc_id
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'unknown'
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+suggest_tags_for_query
+●●●●●● 1mm □△
+self
+query
+max_tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'\n        Suggest tags for a search query or description.\n\n        Useful for helping users categorize content or refine searches.\n\n        Args:\n            query: Search query or content description\n            max_tags: Maximum tags to suggest (default: 5)\n\n        Returns:\n            List[str]: Suggested tags\n\n        Example:\n            >>> tags = analyzer.suggest_tags_for_query(\n            ...     "paper about neural networks and deep learning"\n            ... )\n            >>> print(tags)  # ["ai", "neural-networks", "deep-learning", "research"]\n        '
+prompt
+●●●●●● 1mm □
+'Suggest '
+max_tags
+' relevant tags for this query or content description:\n\nQuery: "'
+query
+'"\n\nProvide '
+max_tags
+' specific, relevant tags (lowercase, hyphenated if needed).\nRespond with ONLY a JSON array of tags, nothing else.\n\nExample response: ["ai", "machine-learning", "research"]\n'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+task_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task_result
+response
+●●●●●● 1mm □
+task_result
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm △
+●●●●●● 3mm △
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+prompt
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'message'
+response
+response
+●●●●●● 1mm □
+response
+'message'
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tags
+●●●●●● 1mm □
+safe_json_loads
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+tags
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+normalize_tag_name
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+t
+tags
+t
+max_tags
+●●●●●● 3mm ○
+Exception
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Failed to suggest tags for query: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+compare_documents
+●●●●●● 1mm □△
+self
+doc_id_1
+doc_id_2
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'\n        Compare two documents to identify similarities and differences.\n\n        Args:\n            doc_id_1: First document ID\n            doc_id_2: Second document ID\n\n        Returns:\n            Dict: Comparison results with similarity score and analysis\n\n        Example:\n            >>> comparison = analyzer.compare_documents(123, 456)\n            >>> print(f"Similarity: {comparison[\'similarity_score\']}")\n            >>> print(f"Relationship: {comparison[\'relationship_type\']}")\n        '
+doc1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id_1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id_2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc1
+doc2
+ValueError
+●●●●●● 1mm □△
+'One or both documents not found'
+●●●●●● 2mm □△
+content1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+doc1
+●●●●●● 2mm □△
+1000
+content2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+doc2
+●●●●●● 2mm □△
+1000
+prompt
+●●●●●● 1mm □
+'Compare these two documents and determine their relationship:\n\nDocument 1: '
+doc1
+'\n'
+truncate_text
+●●●●●● 1mm □△
+content1
+800
+●●●●●● 2mm □△
+'\n\nDocument 2: '
+doc2
+'\n'
+truncate_text
+●●●●●● 1mm □△
+content2
+800
+●●●●●● 2mm □△
+'\n\nAnalyze:\n1. Similarity score (0.0-1.0)\n2. Relationship type (duplicate, version, related, citation, unrelated)\n3. Brief explanation (1 sentence)\n\nRespond in JSON:\n{\n    "similarity_score": 0.75,\n    "relationship_type": "related",\n    "explanation": "Both documents discuss similar topics"\n}\n'
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+task_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task_result
+response
+●●●●●● 1mm □
+task_result
+genesis_key_id
+●●●●●● 1mm □
+task_result
+●●●●●● 3mm □
+Exception
+●●●●●● 1mm □△
+'Comparison task failed'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+prompt
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'message'
+response
+response
+●●●●●● 1mm □
+response
+'message'
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+'No LLM backend available'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+comparison_result
+●●●●●● 1mm □
+'document_1_id'
+'document_2_id'
+'similarity_score'
+'relationship_type'
+'explanation'
+'raw_response'
+doc_id_1
+doc_id_2
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'similarity_score'
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'relationship_type'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'explanation'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 2mm □
+genesis_key_id
+comparison_result
+'genesis_key_id'
+●●●●●● 1mm □
+genesis_key_id
+●●●●●● 3mm ○
+comparison_result
+Exception
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Failed to compare documents: '
+exc
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'document_1_id'
+'document_2_id'
+'similarity_score'
+'relationship_type'
+'explanation'
+'error'
+doc_id_1
+doc_id_2
+0.0
+'unknown'
+'Analysis failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+is_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if AI analysis is available (LLM Orchestrator or legacy Ollama).\n\n        Returns:\n            bool: True if available, False otherwise\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_model_info
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get information about the current analysis model.\n\n        Returns:\n            Dict: Model information\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'model_name'
+'available'
+'backend'
+'features'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'llm_orchestrator'
+'cognitive_enforcement'
+'genesis_key_tracking'
+'hallucination_mitigation'
+'learning_memory_integration'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'model_name'
+'available'
+'backend'
+'running'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'direct_llm_client'
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[AI ANALYZER] Failed to get model info: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'model_name'
+'available'
+'error'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Model not available'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

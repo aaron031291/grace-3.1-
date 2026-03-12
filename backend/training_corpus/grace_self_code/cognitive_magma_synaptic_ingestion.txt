@@ -1,0 +1,1050 @@
+## synaptic_ingestion.py
+'\nMagma Memory - Synaptic Ingestion\n\nWrite/update path for the Magma memory system:\n1. Event Segmentation - Break content into meaningful segments\n2. Dense/Sparse Embedding - Generate embeddings for segments\n3. Semantic Linking - Connect to existing semantic concepts\n4. Temporal Linking - Establish time relationships\n5. Entity Linking - Link entities across contexts\n6. Causal Inference - Detect cause-effect relationships\n\nThis is the ingestion pipeline that feeds the relation graphs.\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Set
+Tuple
+Callable
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+GraphNode
+GraphEdge
+RelationType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SegmentType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of segments extracted from content.'
+SENTENCE
+●●●●●● 1mm □
+'sentence'
+PARAGRAPH
+●●●●●● 1mm □
+'paragraph'
+CONCEPT
+●●●●●● 1mm □
+'concept'
+ENTITY
+●●●●●● 1mm □
+'entity'
+EVENT
+●●●●●● 1mm □
+'event'
+FACT
+●●●●●● 1mm □
+'fact'
+PROCEDURE
+●●●●●● 1mm □
+'procedure'
+●●●●●● 2mm △
+Segment
+'A segment extracted from content.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+segment_type
+SegmentType
+start_pos
+●●●●●● 2mm ○
+end_pos
+●●●●●● 2mm ○
+embedding
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entities
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concepts
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+IngestionResult
+'Result of ingesting content.'
+segments
+●●●●●● 3mm □△
+Segment
+nodes_created
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+edges_created
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+entities_linked
+●●●●●● 2mm ○
+concepts_linked
+●●●●●● 2mm ○
+temporal_links
+●●●●●● 2mm ○
+causal_links
+●●●●●● 2mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+EventSegmenter
+'\n    Segments content into meaningful units for graph ingestion.\n\n    Strategies:\n    - Sentence segmentation\n    - Paragraph segmentation\n    - Entity extraction\n    - Concept extraction\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(?<=[.!?])\\s+'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\n\\n+'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b[A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*\\b'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-SEGMENTER] EventSegmenter initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+segment
+●●●●●● 1mm □△
+self
+content
+segment_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SegmentType
+SegmentType
+'\n        Segment content into units.\n\n        Args:\n            content: Raw content to segment\n            segment_type: Type of segmentation to perform\n\n        Returns:\n            List of Segment objects\n        '
+●●●●●● 2mm □
+segment_type
+SegmentType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm △
+segment_type
+SegmentType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+segment_type
+SegmentType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm △
+segment_type
+SegmentType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Segment
+●●●●●● 1mm □
+_segment_sentences
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Segment into sentences.'
+sentences
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+pos
+●●●●●● 1mm □
+0
+sentence
+sentences
+sentence
+●●●●●● 1mm □
+sentence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sentence
+start
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+sentence
+pos
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+start
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sentence
+●●●●●● 2mm □△
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sentence
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □△
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pos
+●●●●●● 1mm □
+end
+●●●●●● 3mm ○
+segments
+●●●●●● 3mm □△
+Segment
+●●●●●● 1mm □
+_segment_paragraphs
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Segment into paragraphs.'
+paragraphs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+pos
+●●●●●● 1mm □
+0
+para
+paragraphs
+para
+●●●●●● 1mm □
+para
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+para
+start
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+para
+pos
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+start
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+para
+●●●●●● 2mm □△
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+para
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □△
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pos
+●●●●●● 1mm □
+end
+●●●●●● 3mm ○
+segments
+●●●●●● 3mm □△
+Segment
+●●●●●● 1mm □
+_extract_entities
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract entities as segments.'
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+entity
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+entities
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+entity
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+start
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entity
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □△
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+segments
+●●●●●● 3mm □△
+Segment
+●●●●●● 1mm □
+_extract_concepts
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract concepts (noun phrases) as segments.'
+concept_patterns
+●●●●●● 1mm □
+'\\b(?:the\\s+)?(\\w+(?:\\s+\\w+)*)\\s+(?:of|for|in)\\s+(\\w+(?:\\s+\\w+)*)'
+'\\b([A-Z][a-z]+(?:\\s+[A-Z]?[a-z]+)*)'
+concepts
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+concept_patterns
+matches
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+content
+●●●●●● 2mm □△
+match
+matches
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+match
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+concepts
+●●●●●● 1mm □△
+m
+m
+match
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+match
+●●●●●● 2mm □△
+2
+concepts
+●●●●●● 1mm □△
+match
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+concept
+concepts
+start
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+concept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start
+0
+segments
+●●●●●● 1mm □△
+Segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+segments
+●●●●●● 3mm □△
+Segment
+●●●●●● 2mm △
+SemanticLinker
+'Links segments to semantic concepts in the graph.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+similarity_threshold
+●●●●●● 2mm □△
+MagmaRelationGraphs
+●●●●●● 3mm ○
+0.7
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+similarity_threshold
+●●●●●● 1mm □
+link_segment
+●●●●●● 1mm □△
+self
+segment
+embedding
+●●●●●● 2mm □△
+Segment
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Link a segment to existing semantic concepts.\n\n        Returns list of created edge IDs.\n        '
+●●●●●● 2mm □
+embedding
+●●●●●● 3mm ○
+node_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node_id
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+TemporalLinker
+'Links segments to temporal events in the graph.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+●●●●●● 2mm □△
+MagmaRelationGraphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 1mm □
+link_segment
+●●●●●● 1mm □△
+self
+segment
+timestamp
+●●●●●● 2mm □△
+Segment
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+'\n        Link a segment to temporal graph.\n\n        Returns list of created node/edge IDs.\n        '
+ts
+●●●●●● 1mm □
+timestamp
+segment
+node_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+node_id
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+EntityLinker
+'Links entities across contexts in the entity graph.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+●●●●●● 2mm □△
+MagmaRelationGraphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+link_entities
+●●●●●● 1mm □△
+self
+segment
+●●●●●● 2mm □△
+Segment
+'\n        Link entities from segment to entity graph.\n\n        Creates entity nodes and co-occurrence edges.\n        '
+created_ids
+●●●●●● 1mm □
+entity_node_ids
+●●●●●● 1mm □
+entity
+segment
+entity_lower
+●●●●●● 1mm □
+entity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entity_lower
+●●●●●● 3mm △
+entity_node_ids
+●●●●●● 1mm □△
+●●●●●● 3mm △
+entity_lower
+●●●●●● 2mm □△
+●●●●●● 3mm □
+node_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+entity_lower
+●●●●●● 1mm □
+node_id
+●●●●●● 3mm □
+entity_node_ids
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+●●●●●● 3mm □
+created_ids
+●●●●●● 1mm □△
+node_id
+●●●●●● 2mm □△
+i
+ent1_id
+●●●●●● 2mm □
+●●●●●● 1mm □△
+entity_node_ids
+●●●●●● 2mm □△
+ent2_id
+entity_node_ids
+i
+●●●●●● 3mm ○
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ent1_id
+ent2_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+created_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+CausalLinker
+'Detects and links causal relationships.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+●●●●●● 2mm □△
+MagmaRelationGraphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+'(\\w+(?:\\s+\\w+)*)\\s+causes?\\s+(\\w+(?:\\s+\\w+)*)'
+RelationType
+'(\\w+(?:\\s+\\w+)*)\\s+leads?\\s+to\\s+(\\w+(?:\\s+\\w+)*)'
+RelationType
+'(\\w+(?:\\s+\\w+)*)\\s+results?\\s+in\\s+(\\w+(?:\\s+\\w+)*)'
+RelationType
+'because\\s+of\\s+(\\w+(?:\\s+\\w+)*)[,.]?\\s+(\\w+(?:\\s+\\w+)*)'
+RelationType
+'(\\w+(?:\\s+\\w+)*)\\s+enables?\\s+(\\w+(?:\\s+\\w+)*)'
+RelationType
+'(\\w+(?:\\s+\\w+)*)\\s+prevents?\\s+(\\w+(?:\\s+\\w+)*)'
+RelationType
+●●●●●● 1mm □
+detect_causal_relations
+●●●●●● 1mm □△
+self
+segment
+●●●●●● 2mm □△
+Segment
+'\n        Detect causal relationships in segment.\n\n        Returns list of (cause, effect, relation_type) tuples.\n        '
+relations
+●●●●●● 1mm □
+pattern
+relation_type
+●●●●●● 3mm △
+matches
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+segment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+match
+matches
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+match
+●●●●●● 2mm □△
+2
+relations
+●●●●●● 1mm □△
+match
+0
+match
+1
+relation_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+relations
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+RelationType
+●●●●●● 1mm □
+link_causal_relations
+●●●●●● 1mm □△
+self
+segment
+●●●●●● 2mm □△
+Segment
+'\n        Create causal links from segment.\n\n        Returns list of created edge IDs.\n        '
+relations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+created_ids
+●●●●●● 1mm □
+cause
+effect
+relation_type
+relations
+cause_node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cause_node
+●●●●●● 2mm □△
+effect_node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+effect_node
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cause_node
+effect_node
+relation_type
+●●●●●● 2mm □△
+created_ids
+●●●●●● 1mm □△
+edge_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+created_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+SynapticIngestionPipeline
+'\n    Complete ingestion pipeline for Magma memory.\n\n    Orchestrates:\n    1. Event segmentation\n    2. Embedding generation (placeholder - needs actual embedder)\n    3. Semantic linking\n    4. Temporal linking\n    5. Entity linking\n    6. Causal inference\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graphs
+embedding_fn
+●●●●●● 2mm □△
+MagmaRelationGraphs
+●●●●●● 2mm □○
+●●●●●● 1mm △○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Initialize ingestion pipeline.\n\n        Args:\n            graphs: MagmaRelationGraphs instance\n            embedding_fn: Optional function to generate embeddings\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+graphs
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_fn
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+EventSegmenter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+SemanticLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TemporalLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EntityLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CausalLinker
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-INGESTION] SynapticIngestionPipeline initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_default_embedding
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Default embedding function (placeholder).'
+●●●●●● 2mm □△○
+hashlib
+hash_bytes
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+b
+●●●●●● 3mm □△
+255.0
+b
+hash_bytes
+●●●●●● 2mm □△
+12
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+ingest
+●●●●●● 1mm □△
+self
+content
+genesis_key_id
+timestamp
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Ingest content into Magma memory.\n\n        Args:\n            content: Content to ingest\n            genesis_key_id: Optional Genesis Key for tracking\n            timestamp: Optional timestamp for temporal linking\n            metadata: Optional additional metadata\n\n        Returns:\n            IngestionResult with details of what was created\n        '
+timestamp
+●●●●●● 1mm □
+timestamp
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+metadata
+sentence_segments
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+SegmentType
+●●●●●● 2mm □△
+entity_segments
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+SegmentType
+●●●●●● 2mm □△
+all_segments
+●●●●●● 1mm □
+sentence_segments
+●●●●●● 3mm ○
+entity_segments
+nodes_created
+●●●●●● 1mm □
+edges_created
+●●●●●● 1mm □
+entities_linked
+●●●●●● 1mm □
+0
+concepts_linked
+●●●●●● 1mm □
+0
+temporal_links
+●●●●●● 1mm □
+0
+causal_links
+●●●●●● 1mm □
+0
+segment
+sentence_segments
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+segment
+●●●●●● 1mm □
+embedding
+semantic_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment
+embedding
+●●●●●● 2mm □△
+nodes_created
+●●●●●● 1mm □△
+semantic_ids
+●●●●●● 2mm □△
+concepts_linked
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+semantic_ids
+●●●●●● 2mm □△
+temporal_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment
+timestamp
+●●●●●● 2mm □△
+nodes_created
+●●●●●● 1mm □△
+temporal_ids
+●●●●●● 2mm □△
+temporal_links
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+temporal_ids
+●●●●●● 2mm □△
+entity_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+nodes_created
+●●●●●● 1mm □△
+entity_ids
+●●●●●● 2mm □△
+entities_linked
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+causal_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+edges_created
+●●●●●● 1mm □△
+causal_ids
+●●●●●● 2mm □△
+causal_links
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+causal_ids
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-INGESTION] Ingested '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_segments
+●●●●●● 2mm □△
+' segments: '
+concepts_linked
+' concepts, '
+entities_linked
+' entities, '
+temporal_links
+' temporal, '
+causal_links
+' causal'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+IngestionResult
+●●●●●● 1mm □
+ingest_batch
+●●●●●● 1mm □△
+self
+contents
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Ingest multiple pieces of content.\n\n        Args:\n            contents: List of content strings\n            genesis_key_id: Optional shared Genesis Key\n\n        Returns:\n            List of IngestionResult objects\n        '
+results
+●●●●●● 1mm □
+content
+contents
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+IngestionResult

@@ -1,0 +1,289 @@
+## simulation_layer.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SimulationLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 5: Simulation & Reasoning Engine.\n    Pre-flight analysis — reasons about code behavior without running it.\n    Static analysis, edge case detection, dependency impact, contradiction detection.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L5_Simulation'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'static_analysis'
+'symbolic_execution'
+'impact_analysis'
+'edge_case_detection'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'SIMULATE_PROPOSAL'
+'ANALYZE_IMPACT'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 2mm □
+message
+'SIMULATE_PROPOSAL'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'ANALYZE_IMPACT'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Simulate a proposal to find risks and edge cases before codegen.'
+proposal
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'selected_proposal'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+approach
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+proposal
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+proposal
+●●●●●● 1mm □△
+'approach'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+proposal
+●●●●●● 2mm □△
+task_desc
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L5] Simulating proposal: '
+approach
+60
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L5 Simulation Engine of Grace OS. Analyze the proposed solution WITHOUT running code. Think through: 1) What could break in existing code? 2) What edge cases exist (null inputs, empty lists, API failures)? 3) What dependencies are affected? 4) Any logical contradictions with existing patterns? Respond ONLY with JSON: {"risks": ["..."], "edge_cases": ["..."], "dependency_impacts": ["..."], "contradictions": ["..."], "impact_score": 0-100, "recommendation": "proceed|caution|block"}'
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+json
+Exception
+logger
+●●●●●● 1mm □△
+'[L5] Parse failed, using safe defaults: '
+e
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+risks
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'risks'
+●●●●●● 2mm □△
+edge_cases
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'edge_cases'
+●●●●●● 2mm □△
+impact_score
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'impact_score'
+30
+●●●●●● 2mm □△
+recommendation
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'recommendation'
+'proceed'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+20.0
+100.0
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+impact_score
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'risks'
+'edge_cases'
+'dependency_impacts'
+'contradictions'
+'impact_score'
+'recommendation'
+'selected_proposal'
+'task'
+risks
+edge_cases
+analysis
+●●●●●● 1mm □△
+'dependency_impacts'
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+'contradictions'
+●●●●●● 2mm □△
+impact_score
+recommendation
+proposal
+task
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Analyze dependency impact of a specific code change.'
+change_description
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'change_description'
+''
+●●●●●● 2mm □△
+affected_files
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'affected_files'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L5] Analyzing impact of: '
+change_description
+60
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L5 Impact Analyzer. Given a code change and affected files, determine what else might break. Respond with JSON: {"affected_modules": ["..."], "risk_level": "low|medium|high", "details": "..."}'
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+'affected_modules'
+'risk_level'
+'details'
+'medium'
+'Analysis inconclusive'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+result
+●●●●●● 2mm □△
+LayerResponse

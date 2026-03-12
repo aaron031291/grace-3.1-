@@ -1,0 +1,828 @@
+## test_cognitive_engine.py
+'\nTests for the cognitive engine and invariant enforcement.\n\nThese tests validate that the 12 invariants are properly enforced.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+cognitive.engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+cognitive.ooda
+●●●●●● 2mm □△○
+OODALoop
+OODAPhase
+●●●●●● 3mm □△○
+cognitive.ambiguity
+●●●●●● 2mm □△○
+AmbiguityLedger
+AmbiguityLevel
+●●●●●● 3mm □△○
+cognitive.invariants
+●●●●●● 2mm □△○
+InvariantValidator
+●●●●●● 3mm □△○
+cognitive.decision_log
+●●●●●● 2mm □△○
+DecisionLogger
+●●●●●● 1mm □
+test_ooda_loop_enforces_order
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that OODA loop enforces proper phase ordering.'
+ooda
+●●●●●● 1mm □
+OODALoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ooda
+OODAPhase
+ooda
+●●●●●● 1mm □△
+'fact'
+'value'
+●●●●●● 2mm □△
+ooda
+OODAPhase
+ooda
+●●●●●● 1mm □△
+'context'
+'data'
+'constraint'
+'value'
+●●●●●● 2mm □△
+ooda
+OODAPhase
+ooda
+●●●●●● 1mm □△
+'plan'
+'action'
+●●●●●● 2mm □△
+ooda
+OODAPhase
+result
+●●●●●● 1mm □
+ooda
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+ooda
+OODAPhase
+result
+'result'
+ooda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ooda_loop_prevents_skipping
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that OODA loop prevents skipping phases.'
+ooda
+●●●●●● 1mm □
+OODALoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ooda
+●●●●●● 1mm □△
+'fact'
+'value'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+ooda
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ooda_loop_prevents_direct_execution
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that actions cannot bypass OODA.'
+ooda
+●●●●●● 1mm □
+OODALoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+ooda
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ambiguity_ledger_tracks_levels
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that ambiguity ledger tracks all levels correctly.'
+ledger
+●●●●●● 1mm □
+AmbiguityLedger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'fact1'
+'value1'
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'fact2'
+'value2'
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'fact3'
+'value3'
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'fact4'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ledger
+●●●●●● 1mm □△
+AmbiguityLevel
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ledger
+●●●●●● 1mm □△
+AmbiguityLevel
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ledger
+●●●●●● 1mm □△
+AmbiguityLevel
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ledger
+●●●●●● 1mm □△
+AmbiguityLevel
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_ambiguity_ledger_blocks_on_unknowns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that blocking unknowns are properly tracked.'
+ledger
+●●●●●● 1mm □
+AmbiguityLedger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'critical_data'
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'optional_data'
+●●●●●● 2mm □△
+blocking
+●●●●●● 1mm □
+ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+blocking
+●●●●●● 2mm □△
+1
+blocking
+0
+'critical_data'
+●●●●●● 1mm □
+test_ambiguity_promotion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that unknowns can be promoted to known.'
+ledger
+●●●●●● 1mm □
+AmbiguityLedger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+'data'
+'actual_value'
+●●●●●● 2mm □△
+ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+ledger
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+entry
+AmbiguityLevel
+entry
+'actual_value'
+●●●●●● 1mm □
+test_irreversible_requires_justification
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that irreversible actions require justification.'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'justification'
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_blocking_unknowns_prevent_irreversible
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that blocking unknowns prevent irreversible actions.'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'backup_exists'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'blocking unknowns'
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_recursion_depth_limit_enforced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that recursion depth limits are enforced.'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'recursion depth'
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_iteration_limit_enforced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that iteration limits are enforced.'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'iteration limit'
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_decision_freeze_point_enforced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that decision freeze points are enforced.'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'freeze point'
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_alternative_paths_required
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that alternative paths are considered (warning).'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'alternative'
+w
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_chess_mode_path_selection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that path selection works in chess mode.'
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+'data'
+'value'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'fast_path'
+0.5
+1.0
+1.0
+1.0
+0.1
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'optimal_path'
+1.0
+0.8
+0.7
+1.0
+0.3
+selected
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+selected
+●●●●●● 2mm □
+'name'
+selected
+●●●●●● 1mm □
+test_full_decision_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test complete decision cycle with all invariants.'
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+'filepath'
+'file_size'
+'/path/to/doc.pdf'
+1024000
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'filepath'
+'/path/to/doc.pdf'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'chunk_count'
+100
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+'safety_critical'
+'impact_scope'
+●●●●●● 1mm □
+'local'
+'system_ready'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'standard_ingestion'
+1.0
+1.0
+1.0
+1.0
+0.2
+selected
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'chunks'
+'success'
+10
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+action
+●●●●●● 2mm □△
+result
+'status'
+'success'
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+context
+c
+c
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_decision_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that all decisions are logged.'
+logger
+●●●●●● 1mm □
+DecisionLogger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logs
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+logs
+●●●●●● 2mm □△
+0
+logs
+0
+'event'
+'decision_start'
+engine
+●●●●●● 1mm □△
+context
+'test'
+'data'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'test'
+1.0
+1.0
+1.0
+1.0
+0.1
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+logs
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+log
+'event'
+'alternatives_considered'
+log
+logs
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+'result'
+●●●●●● 2mm □△
+logs
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+log
+'event'
+'decision_complete'
+log
+logs
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_strict_mode_enforcement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that strict mode enforces all invariants.'
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'critical_data'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+'test'
+'data'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_complexity_must_justify_benefit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that complexity requires measurable benefit.'
+validator
+●●●●●● 1mm □
+InvariantValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'complexity'
+w
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'benefit'
+w
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_optionality_scoring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that future options are weighted in scoring.'
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+alt1
+●●●●●● 1mm □
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+0.5
+1.0
+1.0
+1.0
+0.1
+alt2
+●●●●●● 1mm □
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+0.8
+0.2
+1.0
+1.0
+0.1
+score1
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+alt1
+●●●●●● 2mm □△
+score2
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+alt2
+●●●●●● 2mm □△
+score1
+score2
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

@@ -1,0 +1,2090 @@
+## test_web_scraping_service.py
+'\nComprehensive Component Tests for Web Scraping Service\n\nTests the complete web scraping functionality:\n- URL validation and sanitization\n- Content extraction with trafilatura\n- Recursive crawling with depth control\n- Document downloading\n- Semantic filtering\n- Database persistence\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+patch
+MagicMock
+AsyncMock
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+asyncio
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestURLValidator
+'Test URLValidator class'
+●●●●●● 1mm □
+test_validate_valid_http_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test validation of valid HTTP URL'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'http://example.com'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 3mm □△○
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_validate_valid_https_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test validation of valid HTTPS URL'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://example.com'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 3mm □△○
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_validate_empty_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test validation of empty URL'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+'cannot be empty'
+error
+●●●●●● 1mm □
+test_validate_none_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test validation of None URL'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_validate_no_scheme
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test validation of URL without scheme'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'example.com'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+'scheme'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_validate_file_scheme_blocked
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file:// scheme is blocked'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'file:///etc/passwd'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+'not allowed'
+error
+●●●●●● 1mm □
+test_validate_javascript_scheme_blocked
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test javascript: scheme is blocked'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'javascript:alert(1)'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_validate_localhost_blocked
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test localhost URLs are blocked'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'http://localhost:8080'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+'not allowed'
+error
+●●●●●● 1mm □
+test_validate_internal_ip_blocked
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test internal IP addresses are blocked'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'http://192.168.1.1'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'http://10.0.0.1'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'http://127.0.0.1'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_validate_no_domain
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test URL without domain is invalid'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'http://'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_validate_cloud_storage_blocked
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cloud storage links are handled'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://dropbox.com/folder'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+'Cloud storage'
+error
+●●●●●● 2mm △
+TestURLValidatorNormalization
+'Test URL normalization'
+●●●●●● 1mm □
+test_normalize_removes_fragment
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test fragment is removed from URL'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+normalized
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page#section'
+●●●●●● 2mm □△
+'#'
+normalized
+normalized
+'https://example.com/page'
+●●●●●● 1mm □
+test_normalize_preserves_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test query string is preserved'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+normalized
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page?foo=bar'
+●●●●●● 2mm □△
+'?foo=bar'
+normalized
+●●●●●● 1mm □
+test_normalize_basic_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test basic URL normalization'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+normalized
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page/'
+●●●●●● 2mm □△
+normalized
+'https://example.com/page/'
+●●●●●● 2mm △
+TestURLValidatorDomainCheck
+'Test domain checking'
+●●●●●● 1mm □
+test_is_same_domain_true
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test same domain detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page1'
+'https://example.com/page2'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_same_domain_www_prefix
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test www prefix is ignored'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://www.example.com/page1'
+'https://example.com/page2'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_same_domain_subdomain
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test subdomain detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://blog.example.com/page'
+'https://example.com/home'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_same_domain_false
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test different domain detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page'
+'https://other.com/page'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestURLValidatorDocumentDetection
+'Test document type detection'
+●●●●●● 1mm □
+test_is_downloadable_document_pdf
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test PDF detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/file.pdf'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_downloadable_document_docx
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test DOCX detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/file.docx'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_downloadable_document_pptx
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test PPTX detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/slides.pptx'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_downloadable_document_xlsx
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test XLSX detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/data.xlsx'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_downloadable_document_with_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test document detection with query string'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/download?file=doc.pdf'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_downloadable_document_download_pattern
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test download URL pattern detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/download/report'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_downloadable_document_html
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test HTML is not detected as document'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page.html'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_is_not_downloadable_document
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test regular page is not a document'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/about'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestURLValidatorGoogleDrive
+'Test Google Drive URL handling'
+●●●●●● 1mm □
+test_is_google_drive_url_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Google Drive file URL detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://drive.google.com/file/d/abc123/view'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_google_drive_url_doc
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Google Docs URL detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://docs.google.com/document/d/abc123/edit'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_google_drive_url_sheet
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Google Sheets URL detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://docs.google.com/spreadsheets/d/abc123'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_not_google_drive_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test non-Drive URL'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_extract_drive_file_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extracting Drive file ID'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+file_id
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://drive.google.com/file/d/1abc123xyz/view'
+●●●●●● 2mm □△
+file_id
+'1abc123xyz'
+●●●●●● 1mm □
+test_extract_drive_file_id_doc
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extracting ID from Google Doc'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+file_id
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://docs.google.com/document/d/doc123/edit'
+●●●●●● 2mm □△
+file_id
+'doc123'
+●●●●●● 1mm □
+test_get_drive_download_url_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating download URL for Drive file'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+download_url
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://drive.google.com/file/d/abc123/view'
+●●●●●● 2mm □△
+'uc?id=abc123'
+download_url
+'export=download'
+download_url
+●●●●●● 1mm □
+test_get_drive_download_url_doc
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating download URL for Google Doc'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+download_url
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://docs.google.com/document/d/doc123/edit'
+●●●●●● 2mm □△
+'export?format=docx'
+download_url
+●●●●●● 1mm □
+test_get_drive_download_url_sheet
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test generating download URL for Google Sheet'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+download_url
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://docs.google.com/spreadsheets/d/sheet123/edit'
+●●●●●● 2mm □△
+'export?format=xlsx'
+download_url
+●●●●●● 2mm △
+TestURLValidatorBinaryFiles
+'Test binary file detection'
+●●●●●● 1mm □
+test_is_binary_file_image
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test image file detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/image.jpg'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/image.png'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/image.gif'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_binary_file_video
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test video file detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/video.mp4'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/video.avi'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_binary_file_archive
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test archive file detection'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/file.zip'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/file.tar.gz'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_binary_file_html
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test HTML is not binary'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page.html'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_is_binary_file_no_extension
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test URL without extension is not binary'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/page'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestScrapingJobModel
+'Test ScrapingJob database model'
+●●●●●● 1mm □
+test_job_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test job serialization to dict'
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapingJob
+job
+●●●●●● 1mm □
+ScrapingJob
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+job
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'id'
+1
+data
+'url'
+'https://example.com'
+data
+'depth'
+2
+data
+'status'
+'running'
+data
+'total_pages'
+10
+data
+'pages_scraped'
+5
+'progress_percentage'
+data
+●●●●●● 1mm □
+test_job_progress_percentage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test progress percentage calculation'
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapingJob
+job
+●●●●●● 1mm □
+ScrapingJob
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+job
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'progress_percentage'
+25
+●●●●●● 1mm □
+test_job_progress_zero_total
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test progress with zero total pages'
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapingJob
+job
+●●●●●● 1mm □
+ScrapingJob
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+job
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'progress_percentage'
+0
+●●●●●● 2mm △
+TestScrapedPageModel
+'Test ScrapedPage database model'
+●●●●●● 1mm □
+test_page_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test page serialization to dict'
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapedPage
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+page
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'id'
+1
+data
+'job_id'
+1
+data
+'url'
+'https://example.com/page'
+data
+'depth_level'
+0
+data
+'title'
+'Test Page'
+data
+'status'
+'success'
+●●●●●● 1mm □
+test_page_similarity_score_float
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test similarity score conversion to float'
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapedPage
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+page
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'similarity_score'
+0.75
+●●●●●● 1mm □
+test_page_similarity_score_none
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test similarity score when None'
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapedPage
+page
+●●●●●● 1mm □
+ScrapedPage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+page
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'similarity_score'
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestWebScrapingService
+'Test WebScrapingService class'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock database session'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+self
+mock_session
+●●●●●● 2mm □△
+'Create scraping service with mocked session'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.WebScrapingService.__init__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+WebScrapingService
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+mock_session
+service
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+30
+service
+●●●●●● 1mm □
+10
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+service
+pytest
+●●●●●● 1mm □
+test_service_initialization
+●●●●●● 1mm □△
+self
+mock_session
+●●●●●● 2mm □△
+'Test service initializes correctly'
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.DocumentDownloader'
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+mock_session
+●●●●●● 2mm □△
+service
+mock_session
+service
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+30
+●●●●●● 1mm □
+test_extract_links
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test link extraction from HTML'
+html
+●●●●●● 1mm □
+'\n        <html>\n        <body>\n            <a href="/page1">Page 1</a>\n            <a href="https://example.com/page2">Page 2</a>\n            <a href="../page3">Page 3</a>\n        </body>\n        </html>\n        '
+links
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+html
+'https://example.com/'
+●●●●●● 2mm □△
+'https://example.com/page1'
+links
+'https://example.com/page2'
+links
+●●●●●● 1mm □
+test_extract_links_empty_html
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test link extraction from empty HTML'
+links
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+''
+'https://example.com/'
+●●●●●● 2mm □△
+links
+●●●●●● 1mm □
+test_extract_links_no_links
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test link extraction from HTML without links'
+html
+●●●●●● 1mm □
+'<html><body><p>No links here</p></body></html>'
+links
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+html
+'https://example.com/'
+●●●●●● 2mm □△
+links
+●●●●●● 1mm □
+test_cosine_similarity
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test cosine similarity calculation'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+vec1
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1
+0
+0
+●●●●●● 2mm □△
+vec2
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1
+0
+0
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+similarity
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+0.001
+●●●●●● 1mm □
+test_cosine_similarity_orthogonal
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test cosine similarity of orthogonal vectors'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+vec1
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1
+0
+0
+●●●●●● 2mm □△
+vec2
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+0
+1
+0
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+0.001
+●●●●●● 1mm □
+test_cosine_similarity_opposite
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test cosine similarity of opposite vectors'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+vec1
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1
+0
+0
+●●●●●● 2mm □△
+vec2
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1
+0
+0
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+similarity
+●●●●●● 3mm ○
+1.0
+●●●●●● 2mm □△
+0.001
+●●●●●● 2mm △
+TestWebScrapingServiceFiltering
+'Test link filtering functionality'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock database session'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+self
+mock_session
+●●●●●● 2mm □△
+'Create scraping service with mocked session'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.WebScrapingService.__init__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+WebScrapingService
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+mock_session
+service
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+service
+pytest
+●●●●●● 1mm □
+test_filter_relevant_links_skip_visited
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test visited URLs are skipped'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+scraping_service
+●●●●●● 1mm □△
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/visited'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+links
+●●●●●● 1mm □
+'https://example.com/visited'
+'https://example.com/new'
+filtered
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered
+●●●●●● 2mm □△
+1
+'new'
+filtered
+0
+●●●●●● 1mm □
+test_filter_relevant_links_same_domain
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test same domain filtering'
+links
+●●●●●● 1mm □
+'https://example.com/page1'
+'https://other.com/page2'
+filtered
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered
+●●●●●● 2mm □△
+1
+'example.com'
+filtered
+0
+●●●●●● 1mm □
+test_filter_relevant_links_skip_login
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test login URLs are skipped'
+links
+●●●●●● 1mm □
+'https://example.com/login'
+'https://example.com/signup'
+'https://example.com/content'
+filtered
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered
+●●●●●● 2mm □△
+1
+'content'
+filtered
+0
+●●●●●● 1mm □
+test_filter_relevant_links_include_documents
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test documents bypass semantic filtering'
+links
+●●●●●● 1mm □
+'https://example.com/report.pdf'
+'https://example.com/data.xlsx'
+filtered
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered
+●●●●●● 2mm □△
+2
+●●●●●● 2mm △
+TestWebScrapingServicePersistence
+'Test database persistence'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock database session'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_job
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_job
+●●●●●● 1mm □
+'test_folder'
+mock_job
+●●●●●● 1mm □
+0
+mock_job
+●●●●●● 1mm □
+0
+mock_job
+●●●●●● 1mm □
+0
+mock_job
+●●●●●● 1mm □
+0
+●●●●●● 3mm △○
+●●●●●● 1mm □
+mock_job
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+temp_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary storage'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+self
+mock_session
+●●●●●● 2mm □△
+'Create scraping service with mocked session'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.WebScrapingService.__init__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+WebScrapingService
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+mock_session
+service
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+service
+pytest
+●●●●●● 1mm □
+test_mark_page_failed
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test marking page as failed'
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_store_filtered_page
+●●●●●● 1mm □△
+self
+scraping_service
+●●●●●● 2mm □△
+'Test storing filtered page'
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestWebScrapingServiceContentSaving
+'Test content file saving'
+●●●●●● 1mm □
+temp_dir
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary directory'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+self
+temp_dir
+●●●●●● 2mm □△
+'Create scraping service'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.WebScrapingService.__init__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+WebScrapingService
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Path
+'parent'
+temp_dir
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+service
+pytest
+●●●●●● 1mm □
+test_save_content_creates_file
+●●●●●● 1mm □△
+self
+scraping_service
+temp_dir
+●●●●●● 2mm □△
+'Test content is saved to file'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.Path'
+●●●●●● 2mm □△
+MockPath
+mock_path_instance
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_path_instance
+●●●●●● 1mm □
+temp_dir
+mock_path_instance
+●●●●●● 1mm □
+temp_dir
+●●●●●● 3mm □△
+x
+MockPath
+●●●●●● 1mm □
+mock_path_instance
+MockPath
+●●●●●● 1mm □
+temp_dir
+●●●●●● 3mm □△
+x
+kb_dir
+●●●●●● 1mm □
+temp_dir
+●●●●●● 3mm □△
+'knowledge_base'
+kb_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'Test content for saving'
+title
+●●●●●● 1mm □
+'Test Page'
+url
+●●●●●● 1mm □
+'https://example.com/test'
+file_path
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestWebScrapingServiceAsync
+'Test async scraping functionality'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock database session'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+0
+job
+●●●●●● 1mm □
+0
+job
+●●●●●● 1mm □
+'test'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+job
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+scraping_service
+●●●●●● 1mm □△
+self
+mock_session
+●●●●●● 2mm □△
+'Create scraping service with mocked session'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.WebScrapingService.__init__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+WebScrapingService
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+mock_session
+service
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+30
+service
+●●●●●● 1mm □
+10
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+service
+pytest
+'Test job status is updated on start'
+job
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+0
+job
+●●●●●● 1mm □
+'pending'
+scraping_service
+●●●●●● 1mm □
+job
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+scraping_service
+'_scrape_url_recursive'
+●●●●●● 2mm □△
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+'completed'
+pytest
+'Test handling of non-existent job'
+scraping_service
+●●●●●● 1mm □
+●●●●●● 2mm □
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test max pages limit is respected'
+job
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+100
+scraping_service
+●●●●●● 1mm □
+job
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scraping_service
+●●●●●● 2mm □△
+0
+pytest
+'Test already visited URLs are skipped'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+scraping_service
+●●●●●● 1mm □△
+URLValidator
+●●●●●● 1mm □△
+'https://example.com/visited'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+0
+scraping_service
+●●●●●● 1mm □
+job
+scraping_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scraping_service
+●●●●●● 2mm □△
+1
+pytest
+●●●●●● 2mm △
+TestWebScrapingIntegration
+'Integration tests for web scraping'
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create mock database session'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+0
+job
+●●●●●● 1mm □
+0
+job
+●●●●●● 1mm □
+'test'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+job
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+pytest
+●●●●●● 1mm □
+test_full_url_validation_flow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete URL validation flow'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://news.example.com/article/123'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 3mm □△○
+normalized
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'https://news.example.com/article/123#comments'
+●●●●●● 2mm □△
+'#'
+normalized
+is_same
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+normalized
+'https://example.com'
+●●●●●● 2mm □△
+is_same
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_google_drive_complete_flow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete Google Drive URL handling'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+drive_url
+●●●●●● 1mm □
+'https://drive.google.com/file/d/1abc123xyz/view?usp=sharing'
+is_valid
+_
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+drive_url
+●●●●●● 2mm □△
+URLValidator
+●●●●●● 1mm □△
+drive_url
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+file_id
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+drive_url
+●●●●●● 2mm □△
+file_id
+'1abc123xyz'
+download_url
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+drive_url
+●●●●●● 2mm □△
+'1abc123xyz'
+download_url
+'export=download'
+download_url
+●●●●●● 2mm △
+TestWebScrapingErrorHandling
+'Test error handling in web scraping'
+●●●●●● 1mm □
+test_url_validator_handles_malformed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test URL validator handles malformed URLs'
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'not a url'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+'://missing-scheme.com'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_cosine_similarity_error_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine similarity handles errors gracefully'
+●●●●●● 3mm □△○
+scraping.service
+●●●●●● 2mm □△○
+WebScrapingService
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'scraping.service.WebScrapingService.__init__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+WebScrapingService
+●●●●●● 1mm □△
+WebScrapingService
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

@@ -377,7 +377,6 @@ class DataPipeline:
         self,
         genesis_key,
         input_data: Any,
-        immutable_location: str
     ) -> Dict[str, Any]:
         """
         Index for RAG (Retrieval Augmented Generation).

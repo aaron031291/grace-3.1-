@@ -106,7 +106,7 @@ export async function streamCompletion(codeBefore, codeAfter, filePath, language
  */
 export function parseMentions(text) {
   const mentions = [];
-  const cleanText = text.replace(/@([\w./-]+)/g, (match, path) => {
+  const cleanText = text.replace(/@([\w./\-]+)/g, (match, path) => {
     mentions.push(path);
     return "";
   }).trim();

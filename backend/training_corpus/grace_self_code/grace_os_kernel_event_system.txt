@@ -1,0 +1,355 @@
+## event_system.py
+'\nGrace OS — Event & Audit System\n\nFull observability for Grace OS. Every layer action emits a structured event.\nProvides an immutable audit trail, replay capability, and subscriber support.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MESSAGE_SENT
+●●●●●● 1mm □
+'MESSAGE_SENT'
+MESSAGE_RECEIVED
+●●●●●● 1mm □
+'MESSAGE_RECEIVED'
+RESPONSE_RETURNED
+●●●●●● 1mm □
+'RESPONSE_RETURNED'
+LAYER_STARTED
+●●●●●● 1mm □
+'LAYER_STARTED'
+LAYER_STOPPED
+●●●●●● 1mm □
+'LAYER_STOPPED'
+TRUST_UPDATED
+●●●●●● 1mm □
+'TRUST_UPDATED'
+SESSION_STARTED
+●●●●●● 1mm □
+'SESSION_STARTED'
+SESSION_COMPLETED
+●●●●●● 1mm □
+'SESSION_COMPLETED'
+TOOL_CALLED
+●●●●●● 1mm □
+'TOOL_CALLED'
+●●●●●● 2mm △
+GraceEvent
+'A structured event emitted by the Grace OS system.'
+event_type
+●●●●●● 1mm ○
+trace_id
+●●●●●● 1mm ○
+layer
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event_id
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+EventSubscriber
+●●●●●● 1mm □
+●●●●●● 1mm △○
+GraceEvent
+●●●●●● 2mm □
+●●●●●● 2mm △
+EventSystem
+'\n    Central event bus for Grace OS observability.\n    Provides append-only event logs, subscription, and replay.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+GraceEvent
+●●●●●● 3mm △
+●●●●●● 3mm □△
+GraceEvent
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+EventSubscriber
+●●●●●● 1mm □
+emit
+●●●●●● 1mm □△
+self
+event_type
+trace_id
+layer
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Emit a structured event. Appends to session and global logs.'
+event
+●●●●●● 1mm □
+GraceEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trace_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+trace_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+trace_id
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+subscriber
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event_type
+●●●●●● 2mm □△
+subscriber
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[EventSystem] Subscriber error: '
+e
+●●●●●● 2mm □△
+subscriber
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+subscriber
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[EventSystem] Wildcard subscriber error: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[EventSystem] '
+event_type
+' | '
+layer
+' | session='
+trace_id
+8
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+event
+GraceEvent
+●●●●●● 1mm □
+subscribe
+●●●●●● 1mm □△
+self
+event_type
+subscriber
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+EventSubscriber
+"\n        Subscribe to a specific event type.\n        Use '*' to subscribe to all events.\n        "
+●●●●●● 2mm □
+event_type
+●●●●●● 3mm △
+●●●●●● 3mm △
+event_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+event_type
+●●●●●● 1mm □△
+subscriber
+●●●●●● 2mm □△
+●●●●●● 1mm □
+unsubscribe
+●●●●●● 1mm □△
+self
+event_type
+subscriber
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+EventSubscriber
+'Remove a subscriber.'
+●●●●●● 2mm □
+event_type
+●●●●●● 3mm △
+●●●●●● 2mm □
+subscriber
+●●●●●● 3mm △
+event_type
+●●●●●● 3mm △
+event_type
+●●●●●● 1mm □△
+subscriber
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_events
+●●●●●● 1mm □△
+self
+trace_id
+event_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Get events for a session, optionally filtered by type.\n        Used for replay and debugging.\n        '
+events
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event_type
+events
+●●●●●● 1mm □
+e
+e
+events
+e
+event_type
+●●●●●● 3mm ○
+'event_id'
+'event_type'
+'trace_id'
+'layer'
+'payload'
+'timestamp'
+e
+e
+e
+e
+e
+e
+e
+events
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_event_count
+●●●●●● 1mm □△
+self
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get total event count for a session.'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_global_log
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get the most recent events across all sessions.'
+recent
+●●●●●● 1mm □
+●●●●●● 3mm △
+limit
+●●●●●● 3mm ○
+'event_id'
+'event_type'
+'trace_id'
+'layer'
+'timestamp'
+e
+e
+e
+e
+e
+e
+recent
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_session_timeline
+●●●●●● 1mm □△
+self
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a human-readable timeline of events for a session.'
+events
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'['
+e
+'] '
+e
+' @ '
+datetime
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%H:%M:%S.%f'
+●●●●●● 2mm □△
+3
+e
+events
+●●●●●● 3mm □△
+●●●●●● 1mm ○

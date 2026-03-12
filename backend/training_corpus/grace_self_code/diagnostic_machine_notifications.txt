@@ -1,0 +1,1362 @@
+## notifications.py
+'\nNotification Channels for Diagnostic Machine\n\nSupports multiple notification channels:\n- Webhook (HTTP POST to configurable endpoints)\n- Slack (via webhook or API)\n- Email (via SMTP)\n- Console/Log (for debugging)\n\nAll notifications are non-blocking and include retry logic.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+smtplib
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+email.mime.text
+●●●●●● 2mm □△○
+MIMEText
+●●●●●● 2mm □△○
+aiohttp
+HAS_AIOHTTP
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+aiohttp
+●●●●●● 1mm □
+●●●●●● 2mm □
+HAS_AIOHTTP
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+email.mime.multipart
+●●●●●● 2mm □△○
+MIMEMultipart
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+abc
+●●●●●● 2mm □△○
+ABC
+abstractmethod
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+NotificationPriority
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Priority levels for notifications.'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+NotificationStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Status of notification delivery.'
+PENDING
+●●●●●● 1mm □
+'pending'
+SENT
+●●●●●● 1mm □
+'sent'
+FAILED
+●●●●●● 1mm □
+'failed'
+RETRYING
+●●●●●● 1mm □
+'retrying'
+●●●●●● 2mm △
+NotificationPayload
+'Payload for a notification.'
+notification_id
+●●●●●● 1mm ○
+title
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+priority
+NotificationPriority
+source
+●●●●●● 1mm ○
+'diagnostic_machine'
+details
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tags
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+NotificationResult
+'Result of sending a notification.'
+notification_id
+●●●●●● 1mm ○
+channel
+●●●●●● 1mm ○
+status
+NotificationStatus
+message
+●●●●●● 1mm ○
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retry_count
+●●●●●● 2mm ○
+0
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+NotificationChannel
+●●●●●● 3mm □△
+ABC
+ABC
+'Abstract base class for notification channels.'
+●●●●●● 1mm □
+send
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+NotificationPayload
+'Send a notification through this channel.'
+abstractmethod
+NotificationResult
+●●●●●● 1mm □
+is_configured
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if the channel is properly configured.'
+abstractmethod
+●●●●●● 3mm △
+●●●●●● 2mm △
+WebhookChannel
+●●●●●● 3mm □△
+NotificationChannel
+NotificationChannel
+'Webhook notification channel - sends HTTP POST to configured endpoints.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+webhook_url
+headers
+timeout
+max_retries
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+30
+3
+●●●●●● 3mm △
+●●●●●● 1mm □
+webhook_url
+os
+●●●●●● 1mm □△
+'DIAGNOSTIC_WEBHOOK_URL'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+headers
+'Content-Type'
+'User-Agent'
+'application/json'
+'GRACE-DiagnosticMachine/1.0'
+●●●●●● 3mm △
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_retries
+●●●●●● 1mm □
+is_configured
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+send
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+NotificationPayload
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+requests
+data
+●●●●●● 1mm □
+'notification_id'
+'title'
+'message'
+'priority'
+'source'
+'details'
+'timestamp'
+'tags'
+payload
+payload
+payload
+payload
+payload
+payload
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+payload
+retry
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+201
+202
+204
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Webhook returned '
+response
+': '
+response
+200
+●●●●●● 2mm □△
+requests
+logger
+●●●●●● 1mm □△
+'Webhook timeout (attempt '
+retry
+●●●●●● 3mm ○
+1
+'/'
+●●●●●● 3mm △
+')'
+●●●●●● 2mm □△
+requests
+logger
+●●●●●● 1mm □△
+'Webhook error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NotificationResult
+●●●●●● 2mm △
+SlackChannel
+●●●●●● 3mm □△
+NotificationChannel
+NotificationChannel
+'Slack notification channel - sends messages via Slack webhook or API.'
+PRIORITY_EMOJI
+●●●●●● 1mm □
+NotificationPriority
+NotificationPriority
+NotificationPriority
+NotificationPriority
+':information_source:'
+':warning:'
+':exclamation:'
+':rotating_light:'
+PRIORITY_COLOR
+●●●●●● 1mm □
+NotificationPriority
+NotificationPriority
+NotificationPriority
+NotificationPriority
+'#36a64f'
+'#daa520'
+'#ff8c00'
+'#dc143c'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+webhook_url
+channel
+username
+icon_emoji
+timeout
+max_retries
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'GRACE Diagnostic'
+':robot_face:'
+30
+3
+●●●●●● 3mm △
+●●●●●● 1mm □
+webhook_url
+os
+●●●●●● 1mm □△
+'SLACK_WEBHOOK_URL'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+channel
+os
+●●●●●● 1mm □△
+'SLACK_CHANNEL'
+'#grace-alerts'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+username
+●●●●●● 3mm △
+●●●●●● 1mm □
+icon_emoji
+●●●●●● 3mm △
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_retries
+●●●●●● 1mm □
+is_configured
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+send
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+NotificationPayload
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+requests
+emoji
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+':bell:'
+●●●●●● 2mm □△
+color
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+payload
+'#808080'
+●●●●●● 2mm □△
+slack_payload
+●●●●●● 1mm □
+'channel'
+'username'
+'icon_emoji'
+'attachments'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+'color'
+'blocks'
+color
+'type'
+'text'
+'header'
+'type'
+'text'
+'emoji'
+'plain_text'
+emoji
+' '
+payload
+●●●●●● 3mm □△○
+'type'
+'text'
+'section'
+'type'
+'text'
+'mrkdwn'
+payload
+'type'
+'elements'
+'context'
+'type'
+'text'
+'mrkdwn'
+'*Priority:* '
+payload
+' | *Source:* '
+payload
+' | *Time:* '
+payload
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S UTC'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+payload
+fields
+●●●●●● 1mm □
+key
+value
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+fields
+●●●●●● 1mm □△
+'type'
+'text'
+'mrkdwn'
+'*'
+key
+':* '
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fields
+slack_payload
+'attachments'
+0
+'blocks'
+●●●●●● 1mm □△
+'type'
+'fields'
+'section'
+fields
+10
+●●●●●● 2mm □△
+retry
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Slack returned '
+response
+': '
+response
+200
+●●●●●● 2mm □△
+requests
+logger
+●●●●●● 1mm □△
+'Slack error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NotificationResult
+●●●●●● 2mm △
+EmailChannel
+●●●●●● 3mm □△
+NotificationChannel
+NotificationChannel
+'Email notification channel - sends emails via SMTP.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+smtp_host
+smtp_port
+smtp_user
+smtp_password
+from_email
+to_emails
+use_tls
+timeout
+max_retries
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+30
+3
+●●●●●● 3mm △
+●●●●●● 1mm □
+smtp_host
+os
+●●●●●● 1mm □△
+'SMTP_HOST'
+'smtp.gmail.com'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+smtp_port
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'SMTP_PORT'
+'587'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+smtp_user
+os
+●●●●●● 1mm □△
+'SMTP_USER'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+smtp_password
+os
+●●●●●● 1mm □△
+'SMTP_PASSWORD'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+from_email
+os
+●●●●●● 1mm □△
+'SMTP_FROM'
+'grace@example.com'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_emails
+os
+●●●●●● 1mm □△
+'ALERT_EMAILS'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_tls
+●●●●●● 3mm △
+●●●●●● 1mm □
+timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_retries
+●●●●●● 1mm □
+is_configured
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+send
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+NotificationPayload
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+MIMEMultipart
+●●●●●● 1mm □△
+'alternative'
+●●●●●● 2mm □△
+msg
+'Subject'
+●●●●●● 1mm □
+'[GRACE '
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'] '
+payload
+msg
+'From'
+●●●●●● 1mm □
+●●●●●● 3mm △
+msg
+'To'
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+e
+e
+●●●●●● 3mm △
+e
+●●●●●● 2mm □△
+text_content
+●●●●●● 1mm □
+'\nGRACE Diagnostic Alert\n======================\n\nTitle: '
+payload
+'\nPriority: '
+payload
+'\nSource: '
+payload
+'\nTime: '
+payload
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S UTC'
+●●●●●● 2mm □△
+'\n\nMessage:\n'
+payload
+'\n\nDetails:\n'
+payload
+json
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+'None'
+'\n\n---\nThis is an automated message from GRACE Diagnostic Machine.\n'
+html_content
+●●●●●● 1mm □
+'\n<html>\n<head>\n<style>\n    body { font-family: Arial, sans-serif; margin: 20px; }\n    .header { background: #2c3e50; color: white; padding: 20px; border-radius: 5px; }\n    .content { padding: 20px; background: #ecf0f1; border-radius: 5px; margin-top: 10px; }\n    .details { background: #fff; padding: 15px; border-radius: 5px; margin-top: 10px; }\n    .priority-critical { border-left: 5px solid #e74c3c; }\n    .priority-high { border-left: 5px solid #e67e22; }\n    .priority-medium { border-left: 5px solid #f39c12; }\n    .priority-low { border-left: 5px solid #27ae60; }\n    code { background: #eee; padding: 2px 5px; border-radius: 3px; }\n</style>\n</head>\n<body>\n<div class="header">\n    <h1>GRACE Diagnostic Alert</h1>\n</div>\n<div class="content priority-'
+payload
+'">\n    <h2>'
+payload
+'</h2>\n    <p><strong>Priority:</strong> '
+payload
+'</p>\n    <p><strong>Source:</strong> '
+payload
+'</p>\n    <p><strong>Time:</strong> '
+payload
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S UTC'
+●●●●●● 2mm □△
+'</p>\n    <h3>Message</h3>\n    <p>'
+payload
+'</p>\n</div>\n<div class="details">\n    <h3>Details</h3>\n    <pre>'
+payload
+json
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+'None'
+'</pre>\n</div>\n<hr>\n<p><small>This is an automated message from GRACE Diagnostic Machine.</small></p>\n</body>\n</html>\n'
+msg
+●●●●●● 1mm □△
+MIMEText
+●●●●●● 1mm □△
+text_content
+'plain'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □△
+MIMEText
+●●●●●● 1mm □△
+html_content
+'html'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+retry
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+smtplib
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+server
+●●●●●● 2mm □
+●●●●●● 3mm △
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+smtplib
+logger
+●●●●●● 1mm □△
+'SMTP error: '
+e
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Email error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NotificationResult
+●●●●●● 2mm △
+ConsoleChannel
+●●●●●● 3mm □△
+NotificationChannel
+NotificationChannel
+'Console/Log notification channel - for debugging and local development.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+log_level
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+logging
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_level
+●●●●●● 1mm □
+is_configured
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+send
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+NotificationPayload
+priority_markers
+●●●●●● 1mm □
+NotificationPriority
+NotificationPriority
+NotificationPriority
+NotificationPriority
+'[INFO]'
+'[WARN]'
+'[HIGH]'
+'[CRIT]'
+marker
+●●●●●● 1mm □
+priority_markers
+●●●●●● 1mm □△
+payload
+'[????]'
+●●●●●● 2mm □△
+log_message
+●●●●●● 1mm □
+'\n'
+'='
+●●●●●● 2mm □△
+60
+'\n'
+marker
+' DIAGNOSTIC NOTIFICATION\n'
+'='
+●●●●●● 2mm □△
+60
+'\nID: '
+payload
+'\nTitle: '
+payload
+'\nPriority: '
+payload
+'\nSource: '
+payload
+'\nTime: '
+payload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n\nMessage:\n'
+payload
+'\n\nDetails: '
+payload
+json
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+'None'
+'\n'
+'='
+●●●●●● 2mm □△
+60
+'\n'
+logger
+●●●●●● 1mm □△
+●●●●●● 3mm △
+log_message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NotificationResult
+●●●●●● 2mm △
+NotificationManager
+'\n    Manages multiple notification channels and dispatches alerts.\n\n    Supports:\n    - Multiple channels (webhook, slack, email, console)\n    - Async/background sending\n    - Priority-based channel selection\n    - Retry logic per channel\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+enable_webhook
+enable_slack
+enable_email
+enable_console
+async_mode
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+NotificationChannel
+●●●●●● 3mm △
+●●●●●● 1mm □
+async_mode
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 2mm □
+enable_webhook
+●●●●●● 3mm △
+'webhook'
+●●●●●● 1mm □
+WebhookChannel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_slack
+●●●●●● 3mm △
+'slack'
+●●●●●● 1mm □
+SlackChannel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_email
+●●●●●● 3mm △
+'email'
+●●●●●● 1mm □
+EmailChannel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_console
+●●●●●● 3mm △
+'console'
+●●●●●● 1mm □
+ConsoleChannel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_channel
+●●●●●● 1mm □△
+self
+name
+channel
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+NotificationChannel
+'Add a custom notification channel.'
+●●●●●● 3mm △
+name
+●●●●●● 1mm □
+channel
+●●●●●● 1mm □
+remove_channel
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove a notification channel.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_configured_channels
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get list of configured channels.'
+●●●●●● 3mm ○
+name
+name
+channel
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+channel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+notify
+●●●●●● 1mm □△
+self
+title
+message
+priority
+details
+channels
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+NotificationPriority
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+NotificationPriority
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Send notification to specified channels.\n\n        Args:\n            title: Notification title\n            message: Notification message\n            priority: Priority level\n            details: Additional details dict\n            channels: List of channels to use (None = all configured)\n            tags: Tags for categorization\n\n        Returns:\n            List of NotificationResult for each channel\n        '
+●●●●●● 3mm △
+1
+payload
+●●●●●● 1mm □
+NotificationPayload
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_channels
+●●●●●● 1mm □
+channels
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_channels
+●●●●●● 1mm □
+c
+c
+target_channels
+c
+●●●●●● 3mm △
+●●●●●● 2mm □
+target_channels
+logger
+●●●●●● 1mm □△
+'No configured channels available for notification'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+futures
+●●●●●● 1mm □
+channel_name
+target_channels
+channel
+●●●●●● 1mm □
+●●●●●● 3mm △
+channel_name
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+channel
+payload
+●●●●●● 2mm □△
+futures
+●●●●●● 1mm □△
+channel_name
+future
+●●●●●● 2mm □△
+channel_name
+future
+futures
+result
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+results
+●●●●●● 1mm □△
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+channel_name
+target_channels
+channel
+●●●●●● 1mm □
+●●●●●● 3mm △
+channel_name
+result
+●●●●●● 1mm □
+channel
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+results
+●●●●●● 1mm □△
+NotificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 1mm □
+notify_alert
+●●●●●● 1mm □△
+self
+alert_id
+severity
+message
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Send diagnostic alert notification.'
+priority_map
+●●●●●● 1mm □
+'info'
+'warning'
+'high'
+'critical'
+NotificationPriority
+NotificationPriority
+NotificationPriority
+NotificationPriority
+priority
+●●●●●● 1mm □
+priority_map
+●●●●●● 1mm □△
+severity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NotificationPriority
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 1mm □
+notify_health_change
+●●●●●● 1mm □△
+self
+previous_status
+current_status
+health_score
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Send health status change notification.'
+priority
+●●●●●● 1mm □
+NotificationPriority
+●●●●●● 2mm □
+current_status
+'critical'
+priority
+●●●●●● 1mm □
+NotificationPriority
+●●●●●● 1mm △
+current_status
+'degraded'
+priority
+●●●●●● 1mm □
+NotificationPriority
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 1mm □
+notify_healing_action
+●●●●●● 1mm □△
+self
+action_name
+target_component
+success
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Send healing action notification.'
+status_msg
+●●●●●● 1mm □
+success
+'succeeded'
+'failed'
+priority
+●●●●●● 1mm □
+success
+NotificationPriority
+NotificationPriority
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 1mm □
+notify_freeze
+●●●●●● 1mm □△
+self
+reason
+affected_components
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Send system freeze notification.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 1mm □
+get_recent_results
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Get recent notification results.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+NotificationResult
+●●●●●● 1mm □
+shutdown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Shutdown the notification manager.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_notification_manager
+●●●●●● 2mm □○
+NotificationManager
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_notification_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global notification manager.'
+●●●●●● 2mm □
+_notification_manager
+●●●●●● 2mm □
+_notification_manager
+●●●●●● 1mm □
+NotificationManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_notification_manager
+NotificationManager

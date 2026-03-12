@@ -1,0 +1,243 @@
+## ingestor.py
+"\nWorld Model Ingestor — Neural-Symbolic Situational Awareness\n\nThis module serves as Grace's sensory input array. It receives unstructured\nor semi-structured external data (e.g., logs, environment sensor readings,\nhuman behavioral data, web events) and uses LLMs to extract actionable\nsemantic and causal meaning.\n\nIt directly wires into Magma Memory's Causal Graph to permanently store\nthe causal chains defining real-world physics and dependencies.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+LLMOrchestrator
+TaskType
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+get_magma_graphs
+●●●●●● 3mm □△○
+cognitive.magma.causal_inference
+●●●●●● 2mm □△○
+LLMCausalInferencer
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+WorldModelIngestor
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+graphs
+●●●●●● 1mm □
+get_magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LLMCausalInferencer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] Failed to initialize Causal Engine: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_execute_llm_extraction
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Helper to route Magma Causal Prompts through the Orchestrator'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+result
+●●●●●● 3mm ○
+'Extraction Failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+ingest_event_stream
+●●●●●● 1mm □△
+self
+data_payload
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'external_sensor'
+"\n        Ingest raw external data, extract semantic meaning, and generate Causal Claims\n        to persist in Magma's Causal Graph.\n        \n        Args:\n            data_payload: The raw text/JSON of the external event.\n            source: Where this data came from.\n            \n        Returns:\n            Dict containing ingestion stats and generated edges.\n        "
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] Ingesting external sensor data from source: '
+source
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+'Magma Causal Engine offline.'
+claims
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+claims
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] No actionable causal claims found in event stream.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'edges_created'
+'message'
+'success'
+0
+'No claims detected.'
+genesis_key
+●●●●●● 1mm □
+'sensor_event_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm □△○
+cognitive.validators.tla_validator
+●●●●●● 2mm □△○
+get_tla_validator
+tla_validator
+●●●●●● 1mm □
+get_tla_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+requested_edges
+●●●●●● 1mm □
+c
+c
+c
+c
+claims
+tla_validation
+●●●●●● 1mm □
+tla_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tla_validation
+'status'
+'REJECTED'
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] TLA+ Validator Rejected Update: '
+tla_validation
+'reason'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'reason'
+'tla_spec'
+'error'
+tla_validation
+'reason'
+tla_validation
+'tla_spec'
+edge_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edges_created
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edge_ids
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] Extracted and stored '
+edges_created
+' causal edges into Magma after TLA+ validation.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'edges_created'
+'claims'
+'genesis_key'
+'success'
+edges_created
+'cause'
+'effect'
+'confidence'
+c
+c
+c
+c
+claims
+genesis_key
+Exception
+logger
+●●●●●● 1mm □△
+'[WORLD-MODEL] Ingestion failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_ingestor
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_world_model_ingestor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_ingestor
+●●●●●● 2mm □
+_ingestor
+●●●●●● 1mm □
+WorldModelIngestor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_ingestor
+WorldModelIngestor

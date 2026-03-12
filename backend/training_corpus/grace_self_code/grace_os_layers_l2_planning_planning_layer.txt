@@ -1,0 +1,156 @@
+## planning_layer.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PlanningLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 2: Task Decomposition & Planning.\n    Breaks down user intents into actionable task graphs.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L2_Planning'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task_decomposition'
+'planning'
+'intent_parsing'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'DECOMPOSE_TASK'
+'REPLAN_TASK'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+'\n        Main entry point for L2.\n        '
+●●●●●● 2mm □
+message
+'DECOMPOSE_TASK'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'REPLAN_TASK'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Logic for decomposing a prompt into a task list.\n        '
+prompt
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L2] Decomposing prompt: '
+prompt
+50
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+"You are the L2 Planning Layer of Grace OS. Your job is to break down a user's coding request into a DAG of atomic tasks. Respond ONLY with a JSON list of tasks, where each task has: id, description, dependency_ids, and type (e.g., 'codegen', 'test')."
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+tasks
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'tasks'
+tasks
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[L2] Failed to parse LLM response: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Malformed planning response from LLM.'
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Logic for re-planning based on downstream failures.\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'message'
+'Re-plan not yet implemented.'
+●●●●●● 2mm □△
+LayerResponse

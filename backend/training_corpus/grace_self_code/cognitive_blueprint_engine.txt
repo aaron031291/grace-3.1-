@@ -1,0 +1,1218 @@
+## blueprint_engine.py
+'\nBlueprint Engine — Kimi+Opus Design, Qwen Builds, Grace Verifies\n\nThe coding architecture that removes the need for a developer:\n  1. DESIGN: Kimi+Opus consensus creates a typed blueprint (JSON spec)\n  2. BUILD: Qwen 2.5 (local, free) writes code from the blueprint\n  3. TEST: Grace Compiler verifies (sandbox + trust + compass)\n  4. RETRY: If fail → Qwen retries with error feedback (up to 20x)\n  5. ESCALATE: If still fail → back to Kimi+Opus for blueprint revision\n  6. DEPLOY: If pass → integrate into Grace via Live Integration Protocol\n\nEconomics:\n  Kimi+Opus: ~$0.60 per blueprint (thinking)\n  Qwen: $0 per build (local GPU)\n  50 Qwen retries cost less than 1 Opus call\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BLUEPRINTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'blueprints'
+MAX_QWEN_RETRIES
+●●●●●● 1mm □
+20
+MAX_BLUEPRINT_REVISIONS
+●●●●●● 1mm □
+3
+●●●●●● 2mm △
+FunctionSpec
+name
+●●●●●● 1mm ○
+inputs
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+output_type
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+constraints
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_cases
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+Blueprint
+●●●●●● 1mm △
+●●●●●● 1mm ○
+task
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+'draft'
+architecture
+●●●●●● 1mm ○
+''
+functions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dependencies
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success_criteria
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+consensus_score
+●●●●●● 3mm ○
+0.0
+generated_code
+●●●●●● 1mm ○
+''
+build_attempts
+●●●●●● 2mm ○
+0
+revision_count
+●●●●●● 2mm ○
+0
+errors
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 3mm ○
+0.0
+created_at
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+k
+v
+k
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 1mm □
+create_from_prompt
+●●●●●● 1mm □△
+user_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Full pipeline: User types what they want → code gets deployed.\n\n    Step 1: Kimi+Opus design the blueprint\n    Step 2: Qwen builds the code\n    Step 3: Grace verifies\n    Step 4: Retry or deploy\n    '
+bp
+●●●●●● 1mm □
+Blueprint
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+'designing'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+blueprint_spec
+●●●●●● 1mm □
+_design_blueprint
+●●●●●● 1mm □△
+user_prompt
+bp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+blueprint_spec
+bp
+●●●●●● 1mm □
+'failed'
+bp
+●●●●●● 1mm □△
+'Blueprint design failed'
+●●●●●● 2mm □△
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+bp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+blueprint_spec
+●●●●●● 1mm □△
+'architecture'
+''
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+blueprint_spec
+●●●●●● 1mm □△
+'functions'
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+blueprint_spec
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+blueprint_spec
+●●●●●● 1mm □△
+'success_criteria'
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+blueprint_spec
+●●●●●● 1mm □△
+'consensus_score'
+0
+●●●●●● 2mm □△
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+MAX_QWEN_RETRIES
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+'building'
+bp
+●●●●●● 1mm □
+attempt
+●●●●●● 3mm ○
+1
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+_build_from_blueprint
+●●●●●● 1mm □△
+bp
+attempt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+bp
+●●●●●● 1mm □△
+'Build attempt '
+attempt
+●●●●●● 3mm ○
+1
+': no code generated'
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+code
+bp
+●●●●●● 1mm □
+'testing'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+test_result
+●●●●●● 1mm □
+_test_code
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+test_result
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+test_result
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+'deployed'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+_track_blueprint
+●●●●●● 1mm □△
+bp
+'deployed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'result'
+'message'
+'test_result'
+bp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'SUCCESS'
+'Code deployed after '
+attempt
+●●●●●● 3mm ○
+1
+' attempt(s). Trust: '
+bp
+test_result
+bp
+●●●●●● 1mm □△
+'Attempt '
+attempt
+●●●●●● 3mm ○
+1
+': '
+test_result
+●●●●●● 1mm □△
+'error'
+'verification failed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+bp
+MAX_BLUEPRINT_REVISIONS
+bp
+1
+bp
+●●●●●● 1mm □
+'designing'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+revised
+●●●●●● 1mm □
+_revise_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+revised
+bp
+●●●●●● 1mm □
+revised
+●●●●●● 1mm □△
+'functions'
+bp
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+revised
+●●●●●● 1mm □△
+'architecture'
+bp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_retry_with_revised_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+'failed'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+_track_blueprint
+●●●●●● 1mm □△
+bp
+'failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'result'
+'message'
+'needs_human'
+bp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'FAILED'
+'Failed after '
+bp
+' builds and '
+bp
+' revisions'
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_design_blueprint
+●●●●●● 1mm □△
+prompt
+bp
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Blueprint
+'Use Kimi+Opus consensus to design the blueprint.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+result
+●●●●●● 2mm □△○
+re
+json_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\{[\\s\\S]+\\}'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_match
+spec
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+json_match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+spec
+'consensus_score'
+●●●●●● 1mm □
+result
+●●●●●● 3mm ○
+spec
+Exception
+●●●●●● 3mm ○
+'architecture'
+'functions'
+'dependencies'
+'success_criteria'
+'consensus_score'
+text
+500
+prompt
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Blueprint design failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_build_from_blueprint
+●●●●●● 1mm □△
+bp
+attempt
+●●●●●● 2mm □△
+Blueprint
+●●●●●● 2mm ○
+'Use Qwen (local) to build code from the blueprint.'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+builder
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+error_context
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+bp
+error_context
+●●●●●● 1mm □
+'\n\nPrevious attempts failed with:\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+bp
+3
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'Build Python code for this blueprint:\n\nArchitecture: '
+bp
+'\n\nFunctions to implement:\n'
+json
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+3000
+'\n\nDependencies: '
+bp
+'\nSuccess criteria: '
+bp
+'\n'
+error_context
+'\n\nOutput ONLY valid, runnable Python code. No explanations.'
+code
+●●●●●● 1mm □
+builder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+code
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```python'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+9
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+3
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+3
+●●●●●● 3mm ○
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Build failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_test_code
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"Test generated code through Grace's compiler. Feed errors back as training data."
+●●●●●● 3mm □△○
+cognitive.grace_compiler
+●●●●●● 2mm □△○
+get_grace_compiler
+compiler
+●●●●●● 1mm □
+get_grace_compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+compiler
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+test_result
+●●●●●● 1mm □
+'passed'
+'trust_score'
+'error'
+'warnings'
+'tests_passed'
+'tests_failed'
+result
+result
+result
+'; '
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+''
+result
+result
+result
+●●●●●● 3mm □△○
+cognitive.ml_trainer
+●●●●●● 2mm □△○
+get_ml_trainer
+get_ml_trainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'blueprint_build'
+'trust_score'
+'error_count'
+'warning_count'
+'tests_passed'
+'code_length'
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+result
+'success'
+'failure'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+test_result
+Exception
+●●●●●● 3mm ○
+'passed'
+'error'
+'trust_score'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_revise_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+Blueprint
+'Ask Kimi+Opus to revise the blueprint based on build errors.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+json_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\{[\\s\\S]+\\}'
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_match
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+json_match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_retry_with_revised_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+Blueprint
+'Retry building with the revised blueprint.'
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+MAX_QWEN_RETRIES
+●●●●●● 1mm □○
+2
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+_build_from_blueprint
+●●●●●● 1mm □△
+bp
+bp
+●●●●●● 3mm ○
+attempt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+bp
+●●●●●● 1mm □
+code
+bp
+1
+test_result
+●●●●●● 1mm □
+_test_code
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+test_result
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+test_result
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+'deployed'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+_track_blueprint
+●●●●●● 1mm □△
+bp
+'deployed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'result'
+'message'
+bp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'SUCCESS'
+'Deployed after revision '
+bp
+bp
+●●●●●● 1mm □△
+'Rev'
+bp
+' attempt '
+attempt
+●●●●●● 3mm ○
+1
+': '
+test_result
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+bp
+●●●●●● 1mm □
+'failed'
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'result'
+'needs_human'
+bp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'FAILED'
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_save_blueprint
+●●●●●● 1mm □△
+bp
+●●●●●● 2mm □△
+Blueprint
+BLUEPRINTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BLUEPRINTS_DIR
+●●●●●● 3mm □△
+bp
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+bp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_track_blueprint
+●●●●●● 1mm □△
+bp
+outcome
+●●●●●● 2mm □△
+Blueprint
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'blueprint.'
+outcome
+'id'
+'task'
+'attempts'
+bp
+bp
+100
+bp
+●●●●●● 2mm □△
+Exception
+_log_coding_pattern
+●●●●●● 1mm □△
+bp
+outcome
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_log_coding_pattern
+●●●●●● 1mm □△
+bp
+outcome
+●●●●●● 2mm □△
+Blueprint
+●●●●●● 1mm ○
+'\n    Log every coding pattern — successful or failed — as training data.\n    Over 18 months this builds a deterministic backbone of coding knowledge.\n\n    Successful patterns become a PLAYBOOK:\n      - What was asked\n      - What blueprint was designed\n      - What code was generated\n      - What the trust score was\n      - How many attempts it took\n      - Locked as a positive pattern in memory\n\n    Failed patterns become LESSONS:\n      - What went wrong\n      - What errors occurred\n      - What was tried\n      - Why it failed\n    '
+pattern
+●●●●●● 1mm □
+'pattern_id'
+'timestamp'
+'outcome'
+'task'
+'architecture'
+'functions'
+'code'
+'trust_score'
+'build_attempts'
+'revision_count'
+'errors'
+bp
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+outcome
+bp
+bp
+1000
+bp
+10
+bp
+bp
+5000
+''
+bp
+bp
+bp
+bp
+5
+playbook_dir
+●●●●●● 1mm □
+BLUEPRINTS_DIR
+●●●●●● 3mm □△
+'coding_playbook'
+playbook_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+outcome
+'deployed'
+playbook_dir
+●●●●●● 3mm □△
+'success_'
+bp
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+bp
+' '
+bp
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+il
+●●●●●● 1mm □△
+'blueprint_build'
+'trust_score'
+'attempts'
+'revisions'
+'code_length'
+bp
+bp
+bp
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+bp
+''
+●●●●●● 2mm □△
+'success'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PLAYBOOK] Positive pattern logged: '
+bp
+60
+' (trust: '
+bp
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+playbook_dir
+●●●●●● 3mm □△
+'failure_'
+bp
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+il
+●●●●●● 1mm □△
+'blueprint_build'
+'trust_score'
+'attempts'
+'revisions'
+'code_length'
+bp
+bp
+bp
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+bp
+''
+●●●●●● 2mm □△
+'failure'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[PLAYBOOK] Failure pattern logged: '
+bp
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_playbook_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get stats on the coding playbook — the training data being built over time.'
+playbook_dir
+●●●●●● 1mm □
+BLUEPRINTS_DIR
+●●●●●● 3mm □△
+'coding_playbook'
+●●●●●● 2mm □
+playbook_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'successes'
+'failures'
+0
+0
+0
+successes
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+playbook_dir
+●●●●●● 1mm □△
+'success_*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+failures
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+playbook_dir
+●●●●●● 1mm □△
+'failure_*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'successes'
+'failures'
+'success_rate'
+'total_size_kb'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successes
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failures
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failures
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successes
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successes
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failures
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+successes
+●●●●●● 3mm ○
+failures
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_blueprints
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BLUEPRINTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+BLUEPRINTS_DIR
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'id'
+'task'
+'status'
+'trust_score'
+'attempts'
+data
+'id'
+data
+'task'
+100
+data
+'status'
+data
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'build_attempts'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○

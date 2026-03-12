@@ -1,0 +1,908 @@
+## cognitive_enforcer.py
+"\nCognitive Framework Enforcer for LLMs\n\nEnsures all LLM operations follow GRACE's cognitive blueprint:\n- 12 OODA Invariants\n- Deterministic decision-making\n- Observability and traceability\n- Trust-based reasoning\n\nAll LLM interactions are logged with Genesis Keys and tracked.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CognitiveConstraints
+'Cognitive constraints for LLM operation.'
+requires_determinism
+●●●●●● 3mm △
+●●●●●● 1mm □
+is_safety_critical
+●●●●●● 3mm △
+●●●●●● 1mm □
+impact_scope
+●●●●●● 1mm ○
+'local'
+is_reversible
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+max_recursion_depth
+●●●●●● 2mm ○
+3
+time_limit_seconds
+●●●●●● 2mm ○
+30
+requires_grounding
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+min_confidence_threshold
+●●●●●● 3mm ○
+0.6
+min_consensus_threshold
+●●●●●● 3mm ○
+0.7
+dataclass
+●●●●●● 2mm △
+CognitiveDecision
+'Cognitive decision record.'
+decision_id
+●●●●●● 1mm ○
+operation
+●●●●●● 1mm ○
+ooda_phase
+●●●●●● 1mm ○
+constraints
+CognitiveConstraints
+ambiguity_ledger
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+alternatives_considered
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+selected_path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+reasoning_trace
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+timestamp
+datetime
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+CognitiveEnforcer
+'\n    Enforces cognitive framework on all LLM operations.\n\n    Implements 12 OODA Invariants:\n    1. OODA as Primary Control Loop\n    2. Explicit Ambiguity Accounting\n    3. Reversibility Before Commitment\n    4. Determinism Where Safety Depends on It\n    5. Blast Radius Minimization\n    6. Observability Is Mandatory\n    7. Simplicity Is a First-Class Constraint\n    8. Feedback Is Continuous\n    9. Bounded Recursion\n    10. Optionality > Optimization\n    11. Time-Bounded Reasoning\n    12. Forward Simulation (Chess Mode)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize cognitive enforcer.'
+●●●●●● 3mm △
+●●●●●● 3mm □△
+CognitiveDecision
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+CognitiveDecision
+●●●●●● 1mm □
+begin_ooda_loop
+●●●●●● 1mm □△
+self
+operation
+constraints
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+CognitiveConstraints
+'\n        Begin OODA loop for operation.\n\n        Args:\n            operation: Operation name\n            constraints: Cognitive constraints\n\n        Returns:\n            Decision ID\n        '
+decision_id
+●●●●●● 1mm □
+'decision_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+CognitiveDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision_id
+●●●●●● 1mm □
+decision
+logger
+●●●●●● 1mm □△
+'[OODA] Started decision loop: '
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+observe
+●●●●●● 1mm □△
+self
+decision_id
+observations
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        OBSERVE phase: Gather facts and data.\n\n        Invariant 2: Explicit Ambiguity Accounting\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Decision '
+decision_id
+' not active'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+decision
+●●●●●● 1mm □
+'observe'
+key
+value
+observations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+decision
+'unknown'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □△
+'confidence'
+1.0
+●●●●●● 2mm □△
+0.8
+decision
+'inferred'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+decision
+'known'
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □△
+'OBSERVE: Gathered '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+observations
+●●●●●● 2mm □△
+' observations'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OODA-OBSERVE] '
+decision_id
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+observations
+●●●●●● 2mm □△
+' observations'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+orient
+●●●●●● 1mm □△
+self
+decision_id
+context
+constraints_update
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        ORIENT phase: Understand context and constraints.\n\n        Invariant 4: Determinism Where Safety Depends on It\n        Invariant 5: Blast Radius Minimization\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Decision '
+decision_id
+' not active'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+decision
+●●●●●● 1mm □
+'orient'
+●●●●●● 2mm □
+constraints_update
+key
+value
+constraints_update
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+decision
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+decision
+key
+value
+●●●●●● 2mm □△
+blocking_unknowns
+●●●●●● 1mm □
+u
+u
+decision
+'unknown'
+decision
+●●●●●● 2mm □
+blocking_unknowns
+decision
+●●●●●● 1mm □△
+'ORIENT: HALT - Blocking unknowns detected for irreversible operation: '
+blocking_unknowns
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Blocking unknowns prevent irreversible operation: '
+blocking_unknowns
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □△
+'ORIENT: Context understood. Impact scope: '
+decision
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OODA-ORIENT] '
+decision_id
+': Impact='
+decision
+●●●●●● 2mm □△
+●●●●●● 1mm □
+decide
+●●●●●● 1mm □△
+self
+decision_id
+alternatives
+selection_criteria
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        DECIDE phase: Evaluate alternatives and choose path.\n\n        Invariant 7: Simplicity Is a First-Class Constraint\n        Invariant 10: Optionality > Optimization\n        Invariant 12: Forward Simulation (Chess Mode)\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Decision '
+decision_id
+' not active'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+decision
+●●●●●● 1mm □
+'decide'
+decision
+●●●●●● 1mm □
+alternatives
+●●●●●● 2mm □
+selection_criteria
+selection_criteria
+●●●●●● 1mm □
+'simplicity'
+'optionality'
+'immediate_value'
+'reversibility'
+0.3
+0.3
+0.2
+0.2
+scored_alternatives
+●●●●●● 1mm □
+alt
+alternatives
+score
+●●●●●● 1mm □
+0.0
+criterion
+weight
+selection_criteria
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+alt
+●●●●●● 1mm □△
+criterion
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+weight
+●●●●●● 2mm □
+decision
+alt
+●●●●●● 1mm □△
+'reversible'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+score
+0.5
+complexity
+●●●●●● 1mm □
+alt
+●●●●●● 1mm □△
+'complexity'
+0.5
+●●●●●● 2mm □△
+score
+1.0
+●●●●●● 1mm □△
+complexity
+●●●●●● 2mm □△
+0.3
+scored_alternatives
+●●●●●● 1mm □△
+'total_score'
+alt
+score
+●●●●●● 2mm □△
+scored_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selected
+●●●●●● 1mm □
+scored_alternatives
+0
+decision
+●●●●●● 1mm □
+selected
+decision
+●●●●●● 1mm □△
+"DECIDE: Selected path '"
+selected
+●●●●●● 1mm □△
+'name'
+'unknown'
+●●●●●● 2mm □△
+"' with score "
+selected
+'total_score'
+'.3f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OODA-DECIDE] '
+decision_id
+': Selected '
+selected
+●●●●●● 1mm □△
+'name'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+act
+●●●●●● 1mm □△
+self
+decision_id
+action_result
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+'\n        ACT phase: Execute and observe outcomes.\n\n        Invariant 6: Observability Is Mandatory\n        Invariant 8: Feedback Is Continuous\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Decision '
+decision_id
+' not active'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+decision
+●●●●●● 1mm □
+'act'
+decision
+●●●●●● 1mm □△
+'ACT: Executed. Success='
+success
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OODA-ACT] '
+decision_id
+': Success='
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □
+finalize_decision
+●●●●●● 1mm □△
+self
+decision_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Finalize decision and move to log.\n\n        Invariant 6: Observability Is Mandatory\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Decision '
+decision_id
+' not active'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+decision
+●●●●●● 1mm □
+genesis_key_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision_id
+logger
+●●●●●● 1mm □△
+'[OODA] Finalized decision: '
+decision_id
+' (Genesis: '
+genesis_key_id
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+validate_determinism
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Validate determinism requirement (Invariant 4).\n\n        Returns:\n            True if determinism requirements are met\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+●●●●●● 2mm □
+decision
+●●●●●● 2mm □
+decision
+'unknown'
+logger
+●●●●●● 1mm □△
+'[DETERMINISM] Decision '
+decision_id
+' has unknowns but requires determinism'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+decision
+'assumed'
+logger
+●●●●●● 1mm □△
+'[DETERMINISM] Decision '
+decision_id
+' has assumptions but requires determinism'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_blast_radius
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Validate blast radius constraints (Invariant 5).\n\n        Returns:\n            True if blast radius is acceptable\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+●●●●●● 2mm □
+decision
+'systemic'
+●●●●●● 2mm □
+decision
+decision
+logger
+●●●●●● 1mm □△
+'[BLAST RADIUS] Systemic, safety-critical, irreversible operation requires approval'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_bounded_recursion
+●●●●●● 1mm □△
+self
+decision_id
+current_depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'\n        Validate recursion bounds (Invariant 9).\n\n        Args:\n            decision_id: Decision ID\n            current_depth: Current recursion depth\n\n        Returns:\n            True if within bounds\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+●●●●●● 2mm □
+current_depth
+decision
+logger
+●●●●●● 1mm □△
+'[RECURSION] Decision '
+decision_id
+' exceeded max depth '
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_time_bounds
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Validate time bounds (Invariant 11).\n\n        Returns:\n            True if within time limits\n        '
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+decision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+elapsed
+decision
+logger
+●●●●●● 1mm □△
+'[TIME BOUNDS] Decision '
+decision_id
+' exceeded time limit'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_all_invariants
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Validate all applicable invariants.\n\n        Returns:\n            Dictionary of invariant validation results\n        '
+●●●●●● 3mm ○
+'determinism'
+'blast_radius'
+'recursion_bounds'
+'time_bounds'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_decision
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get decision by ID.'
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+decision_id
+decision
+●●●●●● 3mm △
+●●●●●● 2mm □
+decision
+decision_id
+●●●●●● 3mm ○
+decision
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+CognitiveDecision
+●●●●●● 1mm □
+get_decision_log
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent decision log.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+CognitiveDecision
+●●●●●● 1mm □
+get_ambiguity_ledger
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get ambiguity ledger for decision.'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_reasoning_trace
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get reasoning trace for decision.'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+run_enforcement_checklist
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Run complete enforcement checklist (from cognitive blueprint).\n\n        Returns:\n            Checklist results\n        '
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 3mm ○
+'error'
+'Decision not found'
+checklist
+●●●●●● 1mm □
+'ooda_completed'
+'ambiguity_classified'
+'reversibility_checked'
+'determinism_validated'
+'blast_radius_assessed'
+'observability_ensured'
+'simplicity_considered'
+'feedback_enabled'
+'bounds_set'
+'optionality_evaluated'
+'time_limit_set'
+'alternatives_considered'
+decision
+'act'
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+ledger
+ledger
+decision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+1
+decision
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+0
+checklist
+'all_passed'
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+checklist
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+checklist
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_cognitive_enforcer
+●●●●●● 2mm □○
+CognitiveEnforcer
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cognitive_enforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global cognitive enforcer instance.'
+●●●●●● 2mm □
+_cognitive_enforcer
+●●●●●● 2mm □
+_cognitive_enforcer
+●●●●●● 1mm □
+CognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cognitive_enforcer
+CognitiveEnforcer

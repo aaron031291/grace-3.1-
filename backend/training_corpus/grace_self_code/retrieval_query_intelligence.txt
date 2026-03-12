@@ -1,0 +1,1592 @@
+## query_intelligence.py
+"\nMulti-Tier Query Intelligence System\n\nOrchestrates intelligent query handling with three-tier fallback:\n1. Tier 1 - VectorDB Search: Query Qdrant for relevant information\n2. Tier 2 - Model Knowledge: Use model's built-in knowledge if VectorDB fails\n3. Tier 3 - User Context Request: Request specific context from user\n\nEach tier has quality/confidence thresholds that trigger fallback to next tier.\n"
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+ImportError
+settings
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+QueryTier
+●●●●●● 3mm □△
+Enum
+Enum
+'Query handling tiers.'
+VECTORDB
+●●●●●● 1mm □
+'VECTORDB'
+MODEL_KNOWLEDGE
+●●●●●● 1mm □
+'MODEL_KNOWLEDGE'
+INTERNET_SEARCH
+●●●●●● 1mm □
+'INTERNET_SEARCH'
+USER_CONTEXT
+●●●●●● 1mm □
+'USER_CONTEXT'
+●●●●●● 2mm △
+ConfidenceMetrics
+'\n    Confidence and quality metrics for query results.\n    \n    Attributes:\n        overall_score: Overall confidence score (0.0-1.0)\n        result_count: Number of results returned\n        avg_similarity: Average similarity score\n        score_variance: Variance in similarity scores\n        coverage_score: How well results cover the query\n        uncertainty_detected: Whether uncertainty signals were found\n    '
+overall_score
+●●●●●● 3mm ○
+0.0
+result_count
+●●●●●● 2mm ○
+0
+avg_similarity
+●●●●●● 3mm ○
+0.0
+score_variance
+●●●●●● 3mm ○
+0.0
+coverage_score
+●●●●●● 3mm ○
+0.0
+uncertainty_detected
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+is_high_quality
+●●●●●● 1mm □△
+self
+threshold
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.7
+'Check if metrics indicate high quality results.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+threshold
+●●●●●● 3mm △
+dataclass
+●●●●●● 2mm △
+KnowledgeGap
+'\n    Represents a specific piece of missing information.\n    \n    Attributes:\n        gap_id: Unique identifier for this gap\n        topic: General topic area of the gap\n        specific_question: Specific question to ask user\n        required: Whether this gap must be filled\n        suggestions: Optional suggestions for user\n    '
+gap_id
+●●●●●● 1mm ○
+topic
+●●●●●● 1mm ○
+specific_question
+●●●●●● 1mm ○
+required
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+suggestions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert to dictionary for API response.'
+●●●●●● 3mm ○
+'gap_id'
+'topic'
+'specific_question'
+'required'
+'suggestions'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+QueryResult
+'\n    Unified result structure for all query tiers.\n    \n    Attributes:\n        tier: Which tier was used\n        success: Whether query was successfully answered\n        response: The generated response text\n        confidence: Confidence metrics\n        sources: Source chunks (for Tier 1)\n        knowledge_gaps: Identified gaps (for Tier 3)\n        warnings: Any warnings to display to user\n        metadata: Additional metadata\n    '
+tier
+QueryTier
+success
+●●●●●● 3mm △
+response
+●●●●●● 1mm ○
+confidence
+ConfidenceMetrics
+sources
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knowledge_gaps
+●●●●●● 3mm □△
+KnowledgeGap
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Convert to dictionary for API response.'
+●●●●●● 3mm ○
+'tier'
+'success'
+'response'
+'confidence'
+'sources'
+'knowledge_gaps'
+'warnings'
+'metadata'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+gap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gap
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+MultiTierQueryHandler
+'\n    Central orchestrator for multi-tier query handling.\n    \n    Implements intelligent fallback logic:\n    - Try VectorDB first (Tier 1)\n    - Fall back to model knowledge if VectorDB quality is low (Tier 2)\n    - Request user context if model confidence is low (Tier 3)\n    \n    Each tier has configurable quality/confidence thresholds.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+retriever
+llm_client
+serpapi_service
+vectordb_quality_threshold
+model_confidence_threshold
+enable_tier2
+enable_tier3
+enable_tier4
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+0.6
+0.7
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n        Initialize multi-tier query handler.\n        \n        Args:\n            retriever: DocumentRetriever instance for Tier 1\n            llm_client: LLM client for Tier 2 & 3\n            serpapi_service: SerpAPI service for Tier 3 (internet search)\n            vectordb_quality_threshold: Minimum quality for Tier 1 success\n            model_confidence_threshold: Minimum confidence for Tier 2 success\n            enable_tier2: Enable Tier 2 (model knowledge)\n            enable_tier3: Enable Tier 3 (internet search)\n            enable_tier4: Enable Tier 4 (context requests)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+serpapi_service
+●●●●●● 3mm △
+●●●●●● 1mm □
+vectordb_quality_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_confidence_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_tier2
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_tier3
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_tier4
+logger
+●●●●●● 1mm □△
+'MultiTierQueryHandler initialized: T1_threshold='
+vectordb_quality_threshold
+', T2_threshold='
+model_confidence_threshold
+', T2_enabled='
+enable_tier2
+', T3_enabled='
+enable_tier3
+', T4_enabled='
+enable_tier4
+●●●●●● 2mm □△
+●●●●●● 1mm □
+handle_query
+●●●●●● 1mm □△
+self
+query
+user_id
+genesis_key_id
+context
+conversation_history
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Main entry point for query handling.\n        \n        Executes tier fallback logic:\n        1. Try VectorDB (Tier 1)\n        2. If quality low, try model knowledge (Tier 2)\n        3. If confidence low, request user context (Tier 3)\n        \n        Args:\n            query: User query text\n            user_id: Optional user identifier\n            genesis_key_id: Optional Genesis Key for tracking\n            context: Optional user-provided context from previous Tier 3 request\n            conversation_history: Optional conversation history for context-aware responses\n            \n        Returns:\n            QueryResult with response and metadata\n        '
+query_id
+●●●●●● 1mm □
+'q_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Handling query: '
+query
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conversation_history
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Using conversation context with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+conversation_history
+●●●●●● 2mm □△
+' messages'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] User context provided, integrating...'
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+query
+'\n\nContext: '
+context
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+tier2_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Trying Model Knowledge first...'
+●●●●●● 2mm □△
+tier2_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+query_id
+●●●●●● 2mm □
+conversation_history
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tier2_result
+tier2_result
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] ✅ Model Knowledge succeeded with confidence '
+tier2_result
+'.2f'
+●●●●●● 2mm □△
+tier2_result
+'query_id'
+●●●●●● 1mm □
+query_id
+tier2_result
+'response_time_ms'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tier2_result
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Model uncertain (confidence '
+tier2_result
+'.2f'
+'), trying internet search...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+tier2_result
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Attempting internet search for current/factual info...'
+●●●●●● 2mm □△
+tier3_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+query_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tier3_result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tier3_result
+●●●●●● 2mm □△
+0
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] ✅ Internet Search succeeded with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tier3_result
+●●●●●● 2mm □△
+' results'
+●●●●●● 2mm □△
+tier3_result
+'query_id'
+●●●●●● 1mm □
+query_id
+tier3_result
+'response_time_ms'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tier3_result
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Internet search found no results, requesting user context...'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'['
+query_id
+"] Query doesn't need internet search, requesting user context..."
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Requesting user to provide context...'
+●●●●●● 2mm □△
+tier1_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+query_id
+●●●●●● 2mm □△
+tier4_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+query_id
+tier1_result
+●●●●●● 2mm □△
+tier4_result
+'query_id'
+●●●●●● 1mm □
+query_id
+tier4_result
+'response_time_ms'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tier4_result
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] All tiers failed or disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+QueryResult
+●●●●●● 1mm □
+_try_vectordb
+●●●●●● 1mm □△
+self
+query
+query_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Tier 1: Try VectorDB retrieval.\n        \n        Args:\n            query: User query\n            query_id: Query identifier\n            \n        Returns:\n            QueryResult with VectorDB results and quality metrics\n        '
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quality_metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunks
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+quality_metrics
+0.3
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □
+'text'
+'score'
+'chunk_id'
+'document_id'
+'filename'
+'source'
+chunk
+'text'
+chunk
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'chunk_id'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'filename'
+'Unknown'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'source'
+'Unknown'
+●●●●●● 2mm □△
+chunk
+chunks
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Tier 1 error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+QueryResult
+●●●●●● 1mm □
+_try_model_knowledge
+●●●●●● 1mm □△
+self
+query
+query_id
+tier1_result
+conversation_history
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+QueryResult
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+"\n        Tier 2: Try model's built-in knowledge.\n        \n        Args:\n            query: User query\n            query_id: Query identifier\n            tier1_result: Result from Tier 1 (may have partial info)\n            conversation_history: Optional conversation history for context\n            \n        Returns:\n            QueryResult with model-generated response and confidence\n        "
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+conversation_history
+●●●●●● 2mm □△
+confidence_metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+query
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □
+"This answer is based on the AI model's general knowledge, not your knowledge base. It may not be specific to your context."
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Tier 2 error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+QueryResult
+●●●●●● 1mm □
+_should_use_internet_search
+●●●●●● 1mm □△
+self
+query
+tier2_result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+QueryResult
+"\n        Determine if internet search is appropriate for this query.\n        \n        Internet search is useful for:\n        - Current events, news, recent information\n        - Factual lookups (people, places, companies, products)\n        - Technical documentation, APIs, libraries\n        - Questions the model explicitly says it doesn't know\n        \n        NOT useful for:\n        - Personal/contextual questions\n        - Opinion-based questions\n        - Questions about user's specific setup/environment\n        \n        Args:\n            query: User query\n            tier2_result: Result from Tier 2 (model knowledge)\n            \n        Returns:\n            True if internet search should be attempted\n        "
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tier2_result
+tier2_result
+response_lower
+●●●●●● 1mm □
+tier2_result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dont_know_phrases
+●●●●●● 1mm □
+"i don't know"
+"i'm not sure"
+"i don't have information"
+'i cannot provide'
+"i don't have access"
+"i'm not aware"
+'no information available'
+'cannot find'
+"don't have data"
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+phrase
+response_lower
+phrase
+dont_know_phrases
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Model explicitly indicated lack of knowledge - internet search appropriate'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+current_info_keywords
+●●●●●● 1mm □
+'latest'
+'recent'
+'current'
+'today'
+'now'
+'2024'
+'2025'
+'2026'
+'news'
+'update'
+'new version'
+'release'
+factual_keywords
+●●●●●● 1mm □
+'who is'
+'what is'
+'where is'
+'when did'
+'how to'
+'documentation'
+'api'
+'library'
+'framework'
+'tutorial'
+'company'
+'product'
+'service'
+'website'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+query_lower
+keyword
+current_info_keywords
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Query contains current info keywords - internet search appropriate'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+query_lower
+keyword
+factual_keywords
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Query appears to be factual lookup - internet search appropriate'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+personal_keywords
+●●●●●● 1mm □
+'my'
+'our'
+'this project'
+'this code'
+'this system'
+'how do i'
+'should i'
+'can i'
+'configure'
+'setup my'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+query_lower
+keyword
+personal_keywords
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Query appears personal/contextual - internet search NOT appropriate'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+tier2_result
+tier2_result
+0.5
+logger
+●●●●●● 1mm □△
+'Model confidence very low ('
+tier2_result
+'.2f'
+') - trying internet search'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_try_internet_search
+●●●●●● 1mm □△
+self
+query
+query_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Tier 3: Try internet search via SerpAPI.\n        \n        Args:\n            query: User query\n            query_id: Query identifier\n            \n        Returns:\n            QueryResult with internet search results\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+search_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+search_results
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context_parts
+●●●●●● 1mm □
+sources
+●●●●●● 1mm □
+idx
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+search_results
+1
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+link
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snippet
+context_parts
+●●●●●● 1mm □△
+'[Source '
+idx
+': '
+title
+']\n'
+snippet
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □△
+'text'
+'score'
+'chunk_id'
+'document_id'
+'filename'
+'source'
+'upload_method'
+snippet
+1.0
+●●●●●● 1mm □△
+idx
+●●●●●● 2mm □△
+0.1
+●●●●●● 2mm □
+●●●●●● 2mm □
+title
+link
+'internet_search'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context_parts
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Auto-ingesting '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+search_results
+●●●●●● 2mm □△
+' internet search results...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+search_results
+query_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] [OK] Search results ingested successfully'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Failed to ingest search results: '
+ingest_error
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □
+'This answer is based on current internet search results. Information may not be verified or specific to your context.'
+'✓ Search results have been saved to your knowledge base for future reference.'
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Tier 3 (Internet Search) error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+QueryResult
+●●●●●● 1mm □
+_ingest_search_results
+●●●●●● 1mm □△
+self
+query
+search_results
+query_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+"\n        Ingest internet search results into the knowledge base.\n        \n        This saves the search results so they're available for future queries,\n        preventing repeated internet searches for the same information.\n        \n        Args:\n            query: Original search query\n            search_results: List of search results from SerpAPI\n            query_id: Query identifier for logging\n        "
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 2mm □△○
+datetime
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+idx
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+search_results
+1
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'title'
+'Result_'
+idx
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+link
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snippet
+content
+●●●●●● 1mm □
+'# '
+title
+'\n\nSource: '
+link
+'\nQuery: '
+query
+'\nRetrieved: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n\n---\n\n'
+snippet
+'\n'
+safe_title
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+' '
+'_'
+'-'
+c
+'_'
+c
+title
+●●●●●● 2mm □△
+safe_title
+●●●●●● 1mm □
+safe_title
+100
+filename
+●●●●●● 1mm □
+'internet_search_'
+safe_title
+'.txt'
+doc_id
+status
+●●●●●● 1mm □
+ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_id
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Ingested search result '
+idx
+': '
+title
+' (doc_id='
+doc_id
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Failed to ingest search result '
+idx
+': '
+status
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Successfully ingested '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+search_results
+●●●●●● 2mm □△
+' search results directly into VectorDB'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'['
+query_id
+'] Error ingesting search results: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_request_user_context
+●●●●●● 1mm □△
+self
+query
+query_id
+tier1_result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+QueryResult
+'\n        Tier 3: Request specific context from user.\n        \n        Args:\n            query: User query\n            query_id: Query identifier\n            tier1_result: Result from Tier 1 (may have partial info)\n            \n        Returns:\n            QueryResult with context request\n        '
+gaps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+tier1_result
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+gaps
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+QueryResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+QueryResult
+●●●●●● 1mm □
+_assess_vectordb_quality
+●●●●●● 1mm □△
+self
+chunks
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Assess quality of VectorDB retrieval results.\n        \n        Factors:\n        - Number of chunks returned\n        - Average similarity scores\n        - Score variance (consistency)\n        - Coverage (do results address the query)\n        \n        Args:\n            chunks: Retrieved chunks\n            query: Original query\n            \n        Returns:\n            ConfidenceMetrics with quality assessment\n        '
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+ConfidenceMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+chunk
+chunks
+result_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+avg_similarity
+●●●●●● 1mm □
+scores
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+0.0
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+1
+mean
+●●●●●● 1mm □
+avg_similarity
+variance
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+mean
+●●●●●● 3mm □○
+2
+s
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+score_variance
+●●●●●● 1mm □
+variance
+●●●●●● 3mm □
+score_variance
+●●●●●● 1mm □
+0.0
+coverage_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+result_count
+●●●●●● 3mm □△
+5.0
+1.0
+●●●●●● 2mm □△
+overall_score
+●●●●●● 1mm □
+avg_similarity
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+coverage_score
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+1.0
+●●●●●● 1mm □△
+score_variance
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+ConfidenceMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConfidenceMetrics
+●●●●●● 1mm □
+_assess_model_confidence
+●●●●●● 1mm □△
+self
+response
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Assess confidence in model-generated response.\n        \n        Looks for uncertainty signals like:\n        - "I\'m not sure", "might be", "possibly"\n        - Very short responses\n        - Hedging language\n        - Explicit lack of knowledge statements\n        \n        Args:\n            response: Model-generated response\n            query: Original query\n            \n        Returns:\n            ConfidenceMetrics with confidence assessment\n        '
+uncertainty_phrases
+●●●●●● 1mm □
+"i don't know"
+"i'm not sure"
+"i don't have information"
+'i cannot provide'
+"i don't have access"
+"i'm not aware"
+'no information available'
+'cannot find'
+"don't have data"
+'i would need more'
+"i don't have enough"
+'i lack'
+'might be'
+'possibly'
+'perhaps'
+'maybe'
+'could be'
+'i think'
+'i believe'
+'probably'
+'likely'
+'seems like'
+'appears to be'
+'may be'
+'uncertain'
+'unclear'
+'need more context'
+'need more information'
+'can you provide'
+'please clarify'
+'could you specify'
+'more details'
+response_lower
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+uncertainty_detected
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+phrase
+response_lower
+phrase
+uncertainty_phrases
+●●●●●● 2mm □△
+●●●●●● 2mm □
+uncertainty_detected
+●●●●●● 3mm ○
+ConfidenceMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response_length
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response_length
+10
+length_score
+●●●●●● 1mm □
+0.3
+●●●●●● 1mm △
+response_length
+30
+length_score
+●●●●●● 1mm □
+0.6
+length_score
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm ○
+ConfidenceMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConfidenceMetrics
+●●●●●● 1mm □
+_identify_knowledge_gaps
+●●●●●● 1mm □△
+self
+query
+tier1_result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+QueryResult
+'\n        Identify specific knowledge gaps preventing a complete answer.\n        \n        Args:\n            query: User query\n            tier1_result: Tier 1 result (may have partial info)\n            \n        Returns:\n            List of KnowledgeGap objects\n        '
+gaps
+●●●●●● 1mm □
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'how'
+query_lower
+'deploy'
+query_lower
+'install'
+query_lower
+gaps
+●●●●●● 1mm □△
+KnowledgeGap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'configure'
+query_lower
+'setup'
+query_lower
+'config'
+query_lower
+gaps
+●●●●●● 1mm □△
+KnowledgeGap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gaps
+gaps
+●●●●●● 1mm □△
+KnowledgeGap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+gaps
+●●●●●● 3mm □△
+KnowledgeGap
+●●●●●● 1mm □
+_generate_rag_response
+●●●●●● 1mm □△
+self
+query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate response using RAG context.'
+prompt
+●●●●●● 1mm □
+'Based on the following context, answer the question.\n\nContext:\n'
+context
+'\n\nQuestion: '
+query
+'\n\nAnswer:'
+model_name
+●●●●●● 1mm □
+settings
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_model_response
+●●●●●● 1mm □△
+self
+query
+conversation_history
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Generate response using model knowledge (with optional conversation context).'
+messages
+●●●●●● 1mm □
+system_prompt
+●●●●●● 1mm □
+'You are a helpful AI assistant with conversation memory. Follow these guidelines:\n\n**IMPORTANT: Use Conversation History**\n- You can see the previous messages in this conversation\n- ALWAYS check if the answer is in the conversation history before saying you don\'t know\n- Reference previous messages when relevant\n- Remember what the user told you earlier\n\n**Response Guidelines:**\n\n1. **If the question is about something mentioned earlier**: Use the conversation history to answer. Don\'t say you don\'t know if it was already discussed.\n\n2. **If the question is CLEAR and you know the answer**: Provide a direct, concise, and accurate answer.\n\n3. **If the question is AMBIGUOUS or lacks context**: Ask 2-3 specific clarifying questions to understand what the user needs.\n\n4. **If you genuinely don\'t have the information AND it wasn\'t mentioned earlier**: Say "I don\'t know" or "I don\'t have information about this" clearly.\n\n**Examples:**\n- Previous: "I love red" → Later: "What\'s my favorite color?" → Answer: "Red! You mentioned earlier that you love the color red."\n- "What is Python?" → Answer directly with definition\n- "How do I fix it?" → Ask: "What are you trying to fix? What error are you seeing?"\n- "Tell me about the project" → Ask: "Which project? What aspect interests you?"\n\n**Remember**: Always check the conversation history first!\n'
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conversation_history
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+conversation_history
+●●●●●● 2mm □△
+0
+messages
+●●●●●● 1mm □△
+conversation_history
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONVERSATION-MEMORY] Passing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+conversation_history
+●●●●●● 2mm □△
+' messages to model'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONVERSATION-MEMORY] Messages: '
+conversation_history
+●●●●●● 2mm □△
+●●●●●● 3mm □
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+'Question: '
+query
+'\n\nAnswer:'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[CONVERSATION-MEMORY] No conversation history available'
+●●●●●● 2mm □△
+model_name
+●●●●●● 1mm □
+settings
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_context_request_message
+●●●●●● 1mm □△
+self
+query
+gaps
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+KnowledgeGap
+'Generate user-friendly context request message.'
+message
+●●●●●● 1mm □
+'I need more information to answer your question accurately.\n\n'
+i
+gap
+●●●●●● 2mm □
+●●●●●● 1mm □△
+gaps
+1
+●●●●●● 2mm □△
+message
+i
+'. '
+gap
+'\n'
+●●●●●● 2mm □
+gap
+message
+'   Suggestions: '
+', '
+●●●●●● 1mm □△
+gap
+●●●●●● 2mm □△
+'\n'
+message
+'\nPlease provide this information so I can give you a better answer.'
+●●●●●● 3mm ○
+message
+●●●●●● 1mm ○

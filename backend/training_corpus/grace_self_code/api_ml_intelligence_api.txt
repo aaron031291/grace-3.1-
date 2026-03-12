@@ -1,0 +1,15 @@
+## ml_intelligence_api.py
+'\nML Intelligence API — thin bridge for api.ml_intelligence_api import.\n\nExposes get_orchestrator() that returns the ML Intelligence orchestrator\n(neural trust, bandit, meta-learning, etc.) for app startup and Grace systems integration.\n'
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return the singleton ML Intelligence orchestrator.'
+●●●●●● 3mm □△○
+ml_intelligence.integration_orchestrator
+●●●●●● 2mm □△○
+get_ml_orchestrator
+●●●●●● 3mm ○
+get_ml_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,251 @@
+## bi_api.py
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+random
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return main aggregates for KPIs and intelligence stats.'
+genesis_total
+●●●●●● 1mm □
+0
+genesis_today
+●●●●●● 1mm □
+0
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+genesis_total
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+today_start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_today
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+today_start
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'BI dashboard error fetching genesis keys: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'uptime'
+'documents'
+'chats'
+'genesis_keys'
+'learning'
+'tasks'
+'days'
+'hours'
+4
+12
+'total'
+'total_size_mb'
+'growth'
+'this_week'
+'avg_confidence'
+125
+450
+'up'
+15
+0.88
+'total_chats'
+'total_messages'
+'avg_per_chat'
+42
+350
+8
+'total'
+'today'
+'error_rate'
+genesis_total
+genesis_today
+2.5
+'examples'
+'skills'
+'avg_trust'
+215
+18
+0.92
+'total'
+'by_status'
+85
+'completed'
+'active'
+'failed'
+60
+5
+20
+router
+●●●●●● 1mm □△
+'/dashboard'
+●●●●●● 2mm □△
+'Return a 7-day activity array.'
+days
+●●●●●● 1mm □
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+6
+1
+1
+●●●●●● 2mm □△
+target_date
+●●●●●● 1mm □
+today
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+0
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+day_start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+target_date
+datetime
+●●●●●● 2mm □△
+day_end
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+target_date
+datetime
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+day_start
+GenesisKey
+day_end
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+random
+●●●●●● 1mm □△
+10
+100
+●●●●●● 2mm □△
+days
+●●●●●● 1mm □△
+'date'
+'genesis_keys'
+'documents'
+target_date
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+count
+random
+●●●●●● 1mm □△
+0
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'days'
+days
+router
+●●●●●● 1mm □△
+'/trends'
+●●●●●● 2mm □△
+'Aggregate raw config dump for BI settings.'
+●●●●●● 3mm ○
+'kpi_summary'
+'kpi_dashboard'
+'monitoring_metrics'
+'user_retention'
+'system_efficiency'
+'cost_per_query'
+'80%'
+'95%'
+'$0.001'
+'active_users'
+'compute_hours'
+1
+120
+'avg_response_time'
+'cache_hit_rate'
+'1.2s'
+'85%'
+router
+●●●●●● 1mm □△
+'/full'
+●●●●●● 2mm □△

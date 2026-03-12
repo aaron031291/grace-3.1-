@@ -1,0 +1,1883 @@
+## test_merge_analysis_aaron_new.py
+'\nPre-Merge Analysis: Aaron-new → main\n=====================================\nComprehensive tests to determine if the Aaron-new branch can be safely merged.\n\nCovers:\n  Section 1: Unit Tests (pure logic, no external services)\n  Section 2: Integration Tests (FastAPI test client)\n  Section 3: Code Analysis (structural / import safety)\n\nRun with:\n  cd d:\\grace-3.1-\\backend\n  python -m pytest tests/test_merge_analysis_aaron_new.py -v\n\nAll external services (Kimi, Qdrant, Ollama, Genesis) are mocked.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+importlib
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+●●●●●● 2mm □△○
+pytest
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+'TESTING'
+●●●●●● 1mm □
+'true'
+os
+'DATABASE_URL'
+●●●●●● 1mm □
+'sqlite:///:memory:'
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_QDRANT_CHECK'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_OLLAMA_CHECK'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_AUTO_INGESTION'
+'true'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestFileGeneratorUnit
+'Unit tests for cognitive/file_generator.py (commit 390badd7).'
+●●●●●● 1mm □
+_make_generator
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Import FileGenerator with all external calls pre-mocked.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.factory'
+'api.docs_library_api'
+'cognitive.librarian_autonomous'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.file_generator
+●●●●●● 2mm □△○
+FileGenerator
+●●●●●● 3mm ○
+FileGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_file_type_detection_pdf
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Auto-detect 'pdf' from .pdf extension."
+gen
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detected
+●●●●●● 1mm □
+ext
+●●●●●● 1mm □
+'.pdf'
+type_map
+●●●●●● 1mm □
+'.pdf'
+'.txt'
+'.md'
+'.json'
+'.csv'
+'.html'
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.yaml'
+'.yml'
+'.css'
+'.sql'
+'.sh'
+'.xml'
+'pdf'
+'txt'
+'markdown'
+'json'
+'csv'
+'html'
+'python'
+'javascript'
+'typescript'
+'react'
+'react'
+'yaml'
+'yaml'
+'css'
+'sql'
+'bash'
+'xml'
+result
+●●●●●● 1mm □
+type_map
+●●●●●● 1mm □△
+ext
+'txt'
+●●●●●● 2mm □△
+result
+'pdf'
+"PDF extension should map to 'pdf'"
+●●●●●● 1mm □
+test_file_type_detection_python
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Auto-detect 'python' from .py extension."
+type_map
+●●●●●● 1mm □
+'.pdf'
+'.txt'
+'.md'
+'.json'
+'.csv'
+'.html'
+'.py'
+'.js'
+'pdf'
+'txt'
+'markdown'
+'json'
+'csv'
+'html'
+'python'
+'javascript'
+type_map
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+'python'
+●●●●●● 1mm □
+test_file_type_detection_unknown_defaults_to_txt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Unknown extension defaults to 'txt'."
+type_map
+●●●●●● 1mm □
+'.pdf'
+'.py'
+'pdf'
+'python'
+type_map
+●●●●●● 1mm □△
+'.xyz'
+'txt'
+●●●●●● 2mm □△
+'txt'
+●●●●●● 1mm □
+test_pdf_placeholder_format
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'PDF generation wraps with header and footer markers.'
+gen
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'This is a test document.'
+formatted
+●●●●●● 1mm □
+gen
+●●●●●● 1mm □△
+content
+'report.pdf'
+●●●●●● 2mm □△
+'='
+●●●●●● 2mm □△
+60
+formatted
+'REPORT.PDF'
+formatted
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Grace AI'
+formatted
+content
+formatted
+●●●●●● 1mm □
+test_pdf_placeholder_suffix_note
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'PDF saves as .pdf.txt (placeholder behavior must be clear).'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+filename
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'report.pdf'
+●●●●●● 2mm □△
+new_path
+●●●●●● 1mm □
+filename
+●●●●●● 1mm □△
+'.pdf.txt'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+new_path
+●●●●●● 2mm □△
+'report.pdf.txt'
+●●●●●● 1mm □
+test_generate_returns_failure_when_llm_fails
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+'When LLM returns None, generate() returns {success: False}.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.factory'
+'api.docs_library_api'
+'cognitive.librarian_autonomous'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+'settings'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.file_generator
+●●●●●● 2mm □△○
+FileGenerator
+_get_kb
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.file_generator._get_kb'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+FileGenerator
+'_generate_content'
+●●●●●● 2mm □△
+gen
+●●●●●● 1mm □
+FileGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+gen
+●●●●●● 1mm □△
+'write a report'
+'report.txt'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+'error'
+result
+●●●●●● 1mm □
+test_generate_success_structure
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+'Successful generation returns expected keys.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.factory'
+'api.docs_library_api'
+'cognitive.librarian_autonomous'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.file_generator
+●●●●●● 2mm □△○
+FileGenerator
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.file_generator._get_kb'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+FileGenerator
+'_generate_content'
+●●●●●● 2mm □△
+gen
+●●●●●● 1mm □
+FileGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+gen
+●●●●●● 1mm □△
+'write hello'
+'hello.txt'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+'filename'
+result
+'path'
+result
+'size'
+result
+'content_preview'
+result
+●●●●●● 1mm □
+test_get_file_generator_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'get_file_generator() returns the same instance.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.factory'
+'api.docs_library_api'
+'cognitive.librarian_autonomous'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+cognitive.file_generator
+●●●●●● 1mm □
+fg_mod
+fg_mod
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.file_generator
+●●●●●● 2mm □△○
+get_file_generator
+g1
+●●●●●● 1mm □
+get_file_generator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+g2
+●●●●●● 1mm □
+get_file_generator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+g1
+g2
+●●●●●● 2mm △
+TestAutoResearchUnit
+'Unit tests for cognitive/auto_research.py (commit 13d55b99).'
+●●●●●● 1mm □
+_make_engine
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.kimi_enhanced'
+'retrieval.retriever'
+'embedding.embedder'
+'vector_db.client'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.auto_research
+●●●●●● 2mm □△○
+AutoResearchEngine
+●●●●●● 3mm ○
+AutoResearchEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_analyse_folder_returns_expected_keys
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+'analyse_folder returns folder_path, files, subfolders.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.kimi_enhanced'
+'retrieval.retriever'
+'embedding.embedder'
+'vector_db.client'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.auto_research
+●●●●●● 2mm □△○
+AutoResearchEngine
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.auto_research._get_kb'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+AutoResearchEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'some_domain'
+●●●●●● 2mm □△
+'folder_path'
+result
+'files'
+result
+'subfolders'
+result
+result
+'folder_path'
+'some_domain'
+●●●●●● 1mm □
+test_research_cycle_versioning
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+'run_research_cycle creates versioned research_v1 folder.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.kimi_enhanced'
+'retrieval.retriever'
+'embedding.embedder'
+'vector_db.client'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.auto_research
+●●●●●● 2mm □△○
+AutoResearchEngine
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.auto_research._get_kb'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+AutoResearchEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_reason_about_domain'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_search_knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_search_kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_predict_next_topics'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'test_domain'
+●●●●●● 2mm □△
+result
+'version'
+'v1'
+result
+'folder'
+'test_domain'
+result
+'files_created'
+1
+●●●●●● 1mm □
+test_research_cycle_increments_version
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+'Second run_research_cycle produces v2.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.kimi_enhanced'
+'retrieval.retriever'
+'embedding.embedder'
+'vector_db.client'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.auto_research
+●●●●●● 2mm □△○
+AutoResearchEngine
+domain_path
+●●●●●● 1mm □
+●●●●●● 3mm ○
+domain_path
+●●●●●● 3mm □△
+'my_domain'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain_path
+●●●●●● 3mm □△
+'my_domain'
+●●●●●● 3mm □△
+'research_v1'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'cognitive.auto_research._get_kb'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+AutoResearchEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_reason_about_domain'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_search_knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_search_kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+engine
+'_predict_next_topics'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'my_domain'
+●●●●●● 2mm □△
+result
+'version'
+'v2'
+●●●●●● 1mm □
+test_history_is_limited
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'get_history returns max 20 items.'
+engine
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+30
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'cycle'
+i
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+20
+●●●●●● 1mm □
+test_get_auto_research_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'get_auto_research() is a singleton.'
+mocks
+●●●●●● 1mm □
+'llm_orchestrator.kimi_enhanced'
+'retrieval.retriever'
+'embedding.embedder'
+'vector_db.client'
+'cognitive.magma_bridge'
+'api._genesis_tracker'
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+mocks
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+cognitive.auto_research
+●●●●●● 1mm □
+ar_mod
+ar_mod
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.auto_research
+●●●●●● 2mm □△○
+get_auto_research
+e1
+●●●●●● 1mm □
+get_auto_research
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e2
+●●●●●● 1mm □
+get_auto_research
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e1
+e2
+●●●●●● 2mm △
+TestGraceTodosImports
+'Verify commit 27fa506c — imports align with refactored todos API.'
+●●●●●● 1mm □
+test_todos_models_import_cleanly
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'All models used in the updated test_grace_todos_api.py import correctly.'
+●●●●●● 3mm □△○
+api.grace_todos_api
+●●●●●● 2mm □△○
+router
+TaskStatus
+TaskPriority
+TaskType
+ProcessingMode
+AgentType
+GraceTask
+UserRequirement
+TeamMember
+GraceAgent
+AutonomousAction
+TaskBoard
+tasks_store
+●●●●●● 1mm □
+tasks
+requirements_store
+●●●●●● 1mm □
+requirements
+team_store
+●●●●●● 1mm □
+team_members
+agents_store
+●●●●●● 1mm □
+grace_agents
+actions_store
+●●●●●● 1mm □
+autonomous_actions
+router
+●●●●●● 2mm □
+ImportError
+pytest
+●●●●●● 1mm □△
+'Import of grace_todos_api components failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_task_status_enum_all_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'All 7 expected TaskStatus values exist.'
+●●●●●● 3mm □△○
+api.grace_todos_api
+●●●●●● 2mm □△○
+TaskStatus
+expected
+●●●●●● 1mm □
+'QUEUED'
+'SCHEDULED'
+'RUNNING'
+'PAUSED'
+'COMPLETED'
+'FAILED'
+'CANCELLED'
+s
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TaskStatus
+s
+●●●●●● 2mm □△
+'TaskStatus.'
+s
+' is missing'
+●●●●●● 1mm □
+test_task_priority_enum
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'All 5 priority levels exist.'
+●●●●●● 3mm □△○
+api.grace_todos_api
+●●●●●● 2mm □△○
+TaskPriority
+p
+'CRITICAL'
+'HIGH'
+'MEDIUM'
+'LOW'
+'BACKGROUND'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+TaskPriority
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_grace_task_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'GraceTask can be instantiated with minimal fields.'
+●●●●●● 3mm □△○
+api.grace_todos_api
+●●●●●● 2mm □△○
+GraceTask
+TaskStatus
+task
+●●●●●● 1mm □
+GraceTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+TaskStatus
+task
+0
+task
+'Merge Test Task'
+●●●●●● 1mm □
+test_task_board_empty_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'TaskBoard instantiates with empty lists for all columns.'
+●●●●●● 3mm □△○
+api.grace_todos_api
+●●●●●● 2mm □△○
+TaskBoard
+board
+●●●●●● 1mm □
+TaskBoard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+board
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+board
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+board
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+board
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △
+TestPerTaskModelSelection
+'Verify commit 0393e8fd — per-task model selection via env vars.'
+●●●●●● 1mm □
+test_env_var_code_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'OLLAMA_MODEL_CODE env var is recognized by the factory.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+os
+'OLLAMA_MODEL_CODE'
+'qwen2.5-coder:32b'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_CODE'
+●●●●●● 2mm □△
+'qwen2.5-coder:32b'
+●●●●●● 1mm □
+test_env_var_reason_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'OLLAMA_MODEL_REASON env var is recognized.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+os
+'OLLAMA_MODEL_REASON'
+'llama3.1:70b'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_REASON'
+●●●●●● 2mm □△
+'llama3.1:70b'
+●●●●●● 1mm □
+test_env_var_fast_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'OLLAMA_MODEL_FAST env var is recognized.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+os
+'OLLAMA_MODEL_FAST'
+'mistral:7b'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_FAST'
+●●●●●● 2mm □△
+'mistral:7b'
+●●●●●● 1mm □
+test_llm_factory_get_llm_for_task_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'get_llm_for_task function is importable from the factory.'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_llm_for_task
+●●●●●● 2mm □△
+ImportError
+pytest
+●●●●●● 1mm □△
+'llm_orchestrator not available in test environment'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_test_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Try to create a FastAPI test client. Returns None if app unavailable.'
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 3mm ○
+TestClient
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+_get_test_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 2mm □
+pytest
+●●●●●● 1mm □△
+'FastAPI app not available for integration tests'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+client
+pytest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestRouterIntegration
+'Integration tests for the v1 router and new endpoints.'
+●●●●●● 1mm □
+test_file_generator_endpoint_exists
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'POST /api/v1/generate/file returns 200 or 422, not 404.'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/generate/file'
+●●●●●● 2mm □△
+response
+404
+'/api/v1/generate/file returned 404 — endpoint not registered. Status: '
+response
+●●●●●● 1mm □
+test_research_analyse_endpoint_exists
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'POST /api/v1/research/analyse returns 200 or 422, not 404.'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/research/analyse?folder_path=test_merge'
+●●●●●● 2mm □△
+response
+404
+'/api/v1/research/analyse returned 404'
+●●●●●● 1mm □
+test_research_run_endpoint_exists
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'POST /api/v1/research/run returns 200 or 422, not 404.'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/research/run?folder_path=test_merge&max_queries=1'
+●●●●●● 2mm □△
+response
+404
+'/api/v1/research/run returned 404'
+●●●●●● 1mm □
+test_research_history_endpoint_exists
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'GET /api/v1/research/history returns 200.'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/research/history'
+●●●●●● 2mm □△
+response
+200
+'/api/v1/research/history returned '
+response
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'history'
+data
+●●●●●● 1mm □
+test_librarian_status_not_broken
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'GET /api/v1/librarian/status still returns 200 (regression check).'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/librarian/status'
+●●●●●● 2mm □△
+response
+200
+'/api/v1/librarian/status broke — returned '
+response
+●●●●●● 1mm □
+test_hunter_assimilate_endpoint_still_works
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'POST /api/v1/hunter/assimilate is still registered (regression).'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/hunter/assimilate'
+●●●●●● 2mm □△
+response
+404
+'/api/v1/hunter/assimilate returned 404 — endpoint removed'
+●●●●●● 1mm □
+test_registry_all_endpoint_still_works
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'GET /api/v1/registry/all still works (regression).'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/registry/all'
+●●●●●● 2mm □△
+response
+404
+●●●●●● 1mm □
+test_todos_board_endpoint_accessible
+●●●●●● 1mm □△
+self
+api_client
+●●●●●● 2mm □△
+'Grace Todos endpoints accessible — tasks board returns a response.'
+response
+●●●●●● 1mm □
+api_client
+●●●●●● 1mm □△
+'/api/v1/tasks/board'
+●●●●●● 2mm □△
+response
+404
+'/api/v1/tasks/board returned 404 — tasks route may be broken'
+●●●●●● 2mm △
+TestCodeAnalysis
+'Static code analysis of Aaron-new additions.'
+COGNITIVE_DIR
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+NEW_FILES
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'file_generator.py'
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'auto_research.py'
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'librarian_autonomous.py'
+ROUTER_FILE
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'api'
+●●●●●● 3mm □△
+'v1'
+●●●●●● 3mm □△
+'router.py'
+●●●●●● 1mm □
+_parse_ast
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+Path
+'Parse a Python file into an AST.'
+●●●●●● 3mm ○
+ast
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □
+test_new_files_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'All 3 new cognitive files introduced by Aaron-new exist.'
+f
+●●●●●● 3mm △
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Expected new file missing: '
+f
+●●●●●● 1mm □
+test_new_files_are_valid_python
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'New files parse as valid Python (no syntax errors).'
+errors
+●●●●●● 1mm □
+f
+●●●●●● 3mm △
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+SyntaxError
+errors
+●●●●●● 1mm □△
+f
+': '
+e
+●●●●●● 2mm □△
+errors
+'Syntax errors in new files:\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_router_is_valid_python
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'api/v1/router.py parses without syntax errors.'
+tree
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+tree
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_router_no_duplicate_paths
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'No duplicate FULL route paths (prefix + path) in the router source.'
+●●●●●● 2mm □△○
+re
+source
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prefix_map
+●●●●●● 1mm □
+prefix_matches
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(\\w+_router|\\w+)\\s*=\\s*_AR\\(prefix=["\\\']([^"\\\']+)["\\\']'
+source
+●●●●●● 2mm □△
+var_name
+prefix_val
+prefix_matches
+prefix_map
+var_name
+●●●●●● 1mm □
+prefix_val
+prefix_map
+'v1_router'
+●●●●●● 1mm □
+'/api/v1'
+full_paths
+●●●●●● 1mm □
+route_decorators
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'@(\\w+)\\.(?:get|post|put|delete|patch)\\(["\\\']([^"\\\']+)["\\\']'
+source
+●●●●●● 2mm □△
+var_name
+route_path
+route_decorators
+prefix
+●●●●●● 1mm □
+prefix_map
+●●●●●● 1mm □△
+var_name
+''
+●●●●●● 2mm □△
+full_paths
+●●●●●● 1mm □△
+prefix
+route_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+Counter
+duplicates
+●●●●●● 1mm □
+p
+p
+count
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+full_paths
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+1
+duplicates
+'Duplicate FULL route paths in router.py: '
+duplicates
+'. These would cause routing conflicts.'
+●●●●●● 1mm □
+test_external_imports_guarded_file_generator
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'In file_generator.py all risky imports are inside try/except blocks.'
+path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'file_generator.py'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+'file_generator.py not found'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+risky_top_level
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+ast
+●●●●●● 2mm □△
+import_line
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+mod
+node
+''
+mod
+'llm_orchestrator'
+'api.'
+'cognitive.'
+'retrieval.'
+'vector_db.'
+●●●●●● 2mm □△
+parent
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+parent
+ast
+●●●●●● 2mm □△
+child
+ast
+●●●●●● 1mm □△
+parent
+●●●●●● 2mm □△
+●●●●●● 2mm □
+child
+node
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_pdf_placeholder_is_transparent
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'The .pdf.txt placeholder has a clear inline comment in the source.'
+path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'file_generator.py'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+'file_generator.py not found'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'placeholder'
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Placeholder'
+source
+'PDF →.pdf.txt behavior has no inline comment/explanation. This silent behavior could confuse callers.'
+●●●●●● 1mm □
+test_all_new_classes_have_docstrings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'FileGenerator and AutoResearchEngine classes have docstrings.'
+checks
+●●●●●● 1mm □
+'FileGenerator'
+'AutoResearchEngine'
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'file_generator.py'
+backend_dir
+●●●●●● 3mm □△
+'cognitive'
+●●●●●● 3mm □△
+'auto_research.py'
+class_name
+path
+checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+class_name
+has_docstring
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+0
+ast
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+0
+ast
+●●●●●● 2mm □△
+has_docstring
+class_name
+' is missing a class docstring'
+●●●●●● 1mm □
+test_genesis_tracker_import_pattern
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'All _genesis_tracker imports in new files are inside try/except blocks.'
+f
+●●●●●● 3mm △
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'_genesis_tracker'
+source
+lines
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+violations
+●●●●●● 1mm □
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'_genesis_tracker'
+line
+'import'
+line
+context
+●●●●●● 1mm □
+lines
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+i
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+i
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'try:'
+l
+l
+context
+●●●●●● 2mm □△
+violations
+●●●●●● 1mm □△
+f
+':L'
+i
+●●●●●● 3mm ○
+1
+': '
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+violations
+'_genesis_tracker imported outside try/except:\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_no_hardcoded_absolute_paths
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"New cognitive files don't have hardcoded absolute Windows/Unix paths."
+f
+●●●●●● 3mm △
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+bad_paths
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(?<!#)["\\\'][CD]:\\\\\\\\[^"\\\']+["\\\']'
+source
+●●●●●● 2mm □△
+bad_paths
+re
+●●●●●● 1mm □△
+'(?<!#)["\\\']\\/home\\/[^"\\\']+["\\\']'
+source
+●●●●●● 2mm □△
+bad_paths
+f
+' contains hardcoded absolute paths: '
+bad_paths
+●●●●●● 1mm □
+test_router_imports_are_lazy
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'router.py imports cognitive modules lazily (inside functions), not at top level.'
+source
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+top_level_cognitive_imports
+●●●●●● 1mm □
+in_function
+●●●●●● 1mm □
+●●●●●● 1mm □
+line
+lines
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stripped
+●●●●●● 1mm □△
+'def '
+●●●●●● 2mm □△
+stripped
+●●●●●● 1mm □△
+'async def '
+●●●●●● 2mm □△
+in_function
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+in_function
+stripped
+●●●●●● 1mm □△
+'from cognitive.'
+●●●●●● 2mm □△
+top_level_cognitive_imports
+●●●●●● 1mm □△
+stripped
+●●●●●● 2mm □△
+top_level_cognitive_imports
+'router.py has top-level cognitive imports (should be lazy): '
+top_level_cognitive_imports
+●●●●●● 1mm □
+pytest_terminal_summary
+●●●●●● 1mm □△
+terminalreporter
+exitstatus
+config
+●●●●●● 2mm □△
+'Print merge readiness assessment after all tests.'
+passed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+terminalreporter
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+terminalreporter
+●●●●●● 1mm □△
+'failed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+skipped
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+terminalreporter
+●●●●●● 1mm □△
+'skipped'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+passed
+●●●●●● 3mm ○
+failed
+●●●●●● 3mm ○
+skipped
+terminalreporter
+●●●●●● 1mm □△
+'='
+'MERGE READINESS ASSESSMENT: Aaron-new → main'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+0
+terminalreporter
+●●●●●● 1mm □△
+'✅ SAFE TO MERGE — '
+passed
+'/'
+total
+' tests passed, '
+skipped
+' skipped (infra).'
+●●●●●● 2mm □△
+terminalreporter
+●●●●●● 1mm □△
+'   No blocking issues found. New features are additive and fail-safe.'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+failed
+3
+terminalreporter
+●●●●●● 1mm □△
+'⚠️  REVIEW REQUIRED — '
+failed
+' test(s) failed. Investigate before merging.'
+●●●●●● 2mm □△
+terminalreporter
+●●●●●● 1mm □△
+'❌ DO NOT MERGE — '
+failed
+' failures detected. Branch has breaking changes.'
+●●●●●● 2mm □△

@@ -1,0 +1,366 @@
+## debug_vector_mapping.py
+'Debug vector ID to chunk mapping.'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'VECTOR ID TO CHUNK MAPPING DEBUG'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+EmbeddingModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+'GDP'
+query_embedding
+●●●●●● 1mm □
+embedding_model
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+0
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\nQuery: '"
+query
+"'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total results: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'QDRANT RESULTS (from vector search):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+results
+8
+1
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+doc_name
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'filename'
+'unknown'
+●●●●●● 2mm □△
+text_preview
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+100
+●●●●●● 1mm □△
+'\n'
+' '
+●●●●●● 2mm □△
+vector_id
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'score'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+i
+'. Vector ID: '
+vector_id
+', Score: '
+score
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   File: '
+doc_name
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Text: '
+text_preview
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'NOW CHECKING WHAT RETRIEVER GETS FROM DATABASE:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+sessionmaker
+db_type
+●●●●●● 1mm □
+settings
+DatabaseType
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+DatabaseType
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+sessionmaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDOCUMENTS IN DATABASE:'
+●●●●●● 2mm □△
+doc
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ID '
+doc
+': '
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nMAPPING FOR TOP QDRANT RESULTS:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+results
+8
+1
+●●●●●● 2mm □△
+vector_id
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+payload_file
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'filename'
+'unknown'
+●●●●●● 2mm □△
+payload_text
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+50
+chunk
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+vector_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+doc
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db_file
+●●●●●● 1mm □
+doc
+doc
+'UNKNOWN (doc_id '
+chunk
+')'
+db_text
+●●●●●● 1mm □
+chunk
+50
+●●●●●● 3mm □
+db_file
+●●●●●● 1mm □
+'NO CHUNK FOUND'
+●●●●●● 3mm □
+db_text
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+i
+'. Vector ID '
+vector_id
+':'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   QDRANT file: '
+payload_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   DB file:     '
+db_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   MATCH: '
+payload_file
+db_file
+'✓'
+'✗ MISMATCH'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+traceback
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nError: '
+e
+●●●●●● 2mm □△
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△

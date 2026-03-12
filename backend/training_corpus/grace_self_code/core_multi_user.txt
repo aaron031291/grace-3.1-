@@ -1,0 +1,749 @@
+## multi_user.py
+'\nMulti-User System — lightweight IDs, activity tracking, team summaries.\n\nEvery user gets a lightweight ID on signup.\nActivity tracked per-person, per-project.\nDaily summaries: individual + team.\nHot-swap containers with auto-save.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+USERS_DIR
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'users'
+_activity_log
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_activity_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_active_sessions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_user
+●●●●●● 1mm □△
+email
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Create a user with a lightweight ID.'
+USERS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+'U-'
+hashlib
+●●●●●● 1mm □△
+email
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+user
+●●●●●● 1mm □
+'id'
+'email'
+'name'
+'created_at'
+'active_project'
+'projects'
+user_id
+email
+name
+email
+●●●●●● 1mm □△
+'@'
+●●●●●● 2mm □△
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_file
+●●●●●● 1mm □
+USERS_DIR
+●●●●●● 3mm □△
+user_id
+'.json'
+●●●●●● 2mm □
+user_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_file
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+user
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+user
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_user
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+user_file
+●●●●●● 1mm □
+USERS_DIR
+●●●●●● 3mm □△
+user_id
+'.json'
+●●●●●● 2mm □
+user_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+user_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'User not found'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_users
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+USERS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+users
+●●●●●● 1mm □
+f
+USERS_DIR
+●●●●●● 1mm □△
+'U-*.json'
+●●●●●● 2mm □△
+users
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+users
+●●●●●● 1mm □△
+●●●●●● 1mm □
+log_activity
+●●●●●● 1mm □△
+user_id
+action
+project_id
+detail
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+''
+''
+●●●●●● 2mm □
+'Log user activity.'
+entry
+●●●●●● 1mm □
+'user_id'
+'action'
+'project_id'
+'detail'
+'data'
+'ts'
+user_id
+action
+project_id
+detail
+200
+data
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_activity_lock
+_activity_log
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_activity_log
+●●●●●● 2mm □△
+10000
+_activity_log
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+light_track
+light_track
+●●●●●● 1mm □△
+'user_input'
+user_id
+': '
+action
+' in '
+project_id
+'multi_user'
+'activity'
+user_id
+project_id
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+get_user_activity
+●●●●●● 1mm □△
+user_id
+hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+24
+'Get activity for a specific user.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_activity_lock
+●●●●●● 3mm ○
+a
+a
+_activity_log
+a
+'user_id'
+user_id
+a
+'ts'
+cutoff
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_project_activity
+●●●●●● 1mm □△
+project_id
+hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+24
+'Get activity for a specific project.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_activity_lock
+●●●●●● 3mm ○
+a
+a
+_activity_log
+a
+'project_id'
+project_id
+a
+'ts'
+cutoff
+●●●●●● 1mm □△
+●●●●●● 1mm □
+generate_daily_summary
+●●●●●● 1mm □△
+project_id
+hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+''
+24
+'Generate daily summary: per-person + team + Genesis key activity.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_activity_lock
+●●●●●● 2mm □
+project_id
+activities
+●●●●●● 1mm □
+a
+a
+_activity_log
+a
+'project_id'
+project_id
+a
+'ts'
+cutoff
+●●●●●● 3mm □
+activities
+●●●●●● 1mm □
+a
+a
+_activity_log
+a
+'ts'
+cutoff
+by_user
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+a
+activities
+by_user
+a
+'user_id'
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+individual
+●●●●●● 1mm □
+uid
+acts
+by_user
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action_counts
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+a
+acts
+action_counts
+a
+'action'
+1
+individual
+uid
+●●●●●● 1mm □
+'total_actions'
+'action_breakdown'
+'projects_touched'
+'first_activity'
+'last_activity'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+acts
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+action_counts
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+a
+'project_id'
+a
+acts
+a
+'project_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+acts
+acts
+0
+'ts'
+●●●●●● 2mm □
+acts
+acts
+1
+'ts'
+●●●●●● 2mm □
+action_dist
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+a
+activities
+action_dist
+a
+'action'
+1
+team
+●●●●●● 1mm □
+'total_actions'
+'total_users'
+'users'
+'projects_touched'
+'action_distribution'
+'busiest_user'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+activities
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+by_user
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+by_user
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+a
+'project_id'
+a
+activities
+a
+'project_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+action_dist
+●●●●●● 2mm □△
+by_user
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+by_user
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_stats
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+miner
+●●●●●● 1mm □
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+miner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_stats
+●●●●●● 1mm □
+'total_keys'
+'error_clusters'
+'repeated_failures'
+patterns
+●●●●●● 1mm □△
+'keys_analyzed'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 1mm □△
+'error_clusters'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 1mm □△
+'repeated_failures'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+title
+●●●●●● 1mm □
+'Daily Report: '
+team
+'total_users'
+' users, '
+team
+'total_actions'
+' actions'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fast'
+'prompt'
+'models'
+'Write a 1-sentence summary of this team activity: '
+team
+'total_users'
+' users did '
+team
+'total_actions'
+' actions across '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+team
+'projects_touched'
+●●●●●● 2mm □△
+' projects. Top action: '
+action_dist
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+action_dist
+●●●●●● 2mm □△
+'none'
+'.'
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+r
+'data'
+●●●●●● 1mm □△
+'individual_responses'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+resp
+●●●●●● 2mm □△
+200
+title
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'title'
+'period_hours'
+'individual'
+'team'
+'genesis'
+'generated_at'
+title
+hours
+individual
+team
+genesis_stats
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+switch_project
+●●●●●● 1mm □△
+user_id
+new_project
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Hot-swap to a different project. Auto-saves current state.'
+old_project
+●●●●●● 1mm □
+_active_sessions
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'project'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+old_project
+_save_session
+●●●●●● 1mm □△
+user_id
+old_project
+●●●●●● 2mm □△
+_active_sessions
+user_id
+●●●●●● 1mm □
+'project'
+'switched_at'
+'previous'
+new_project
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+old_project
+●●●●●● 3mm □△○
+core.environment
+●●●●●● 2mm □△○
+set_environment
+set_environment
+●●●●●● 1mm □△
+new_project
+user_id
+●●●●●● 2mm □△
+Exception
+log_activity
+●●●●●● 1mm □△
+user_id
+'switch_project'
+new_project
+'Switched from '
+old_project
+'none'
+' to '
+new_project
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'user_id'
+'project'
+'previous'
+'auto_saved'
+user_id
+new_project
+old_project
+old_project
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_session
+●●●●●● 1mm □△
+user_id
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Auto-save session state.'
+session_dir
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'sessions'
+●●●●●● 3mm □△
+user_id
+session_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_file
+●●●●●● 1mm □
+session_dir
+●●●●●● 3mm □△
+project_id
+'.json'
+session_file
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'project_id'
+'saved_at'
+'user_id'
+project_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_active_session
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+_active_sessions
+●●●●●● 1mm □△
+user_id
+'project'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△

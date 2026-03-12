@@ -1,0 +1,587 @@
+## test_learning_system.py
+'\nQuick test script to verify autonomous learning components are working.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_imports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test all required imports.'
+logger
+●●●●●● 1mm □△
+'Testing imports...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+logger
+●●●●●● 1mm □△
+'  ✓ Database session'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningOrchestrator
+logger
+●●●●●● 1mm □△
+'  ✓ Learning Orchestrator'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+logger
+●●●●●● 1mm □△
+'  ✓ Genesis Trigger Pipeline'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+logger
+●●●●●● 1mm □△
+'  ✓ Autonomous Healing System'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+logger
+●●●●●● 1mm □△
+'  ✓ Mirror Self-Modeling'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'  ✗ Import failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test database connection.'
+logger
+●●●●●● 1mm □△
+'\nTesting database connection...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+'data/grace.db'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+logger
+●●●●●● 1mm □△
+'  ✓ Database connected ('
+count
+' Genesis Keys)'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'  ✗ Database test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_orchestrator_initialization
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Learning Orchestrator can be initialized.'
+logger
+●●●●●● 1mm □△
+'\nTesting Learning Orchestrator initialization...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningOrchestrator
+kb_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+LearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Orchestrator created with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+' study agents'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Practice agents: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Mirror agent: '
+orchestrator
+'Yes'
+'No'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'  ✗ Orchestrator test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Genesis Key Trigger Pipeline.'
+logger
+●●●●●● 1mm □△
+'\nTesting Genesis Key Trigger Pipeline...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+trigger_pipeline
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Trigger pipeline initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Status: '
+status
+'message'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'  ✗ Trigger pipeline test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_healing_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Autonomous Healing System.'
+logger
+●●●●●● 1mm □△
+'\nTesting Autonomous Healing System...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+healing
+●●●●●● 1mm □
+get_autonomous_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Healing system initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Trust level: MEDIUM_RISK_AUTO'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'  ✗ Healing system test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Mirror Self-Modeling System.'
+logger
+●●●●●● 1mm □△
+'\nTesting Mirror Self-Modeling System...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Mirror system initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ Observation window: 24 hours'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'  ✗ Mirror system test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'GRACE AUTONOMOUS LEARNING SYSTEM - VERIFICATION TEST'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'Imports'
+'Database'
+'Learning Orchestrator'
+'Trigger Pipeline'
+'Healing System'
+'Mirror System'
+test_imports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_orchestrator_initialization
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_healing_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'TEST RESULTS'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+test_name
+passed
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+passed
+'✓ PASS'
+'✗ FAIL'
+logger
+●●●●●● 1mm □△
+test_name
+'25'
+' '
+status
+●●●●●● 2mm □△
+●●●●●● 2mm □
+passed
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+logger
+●●●●●● 1mm □△
+'\n✅ ALL TESTS PASSED - System ready to start!'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nRun: python start_autonomous_learning.py'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'\n❌ SOME TESTS FAILED - Fix errors before starting'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

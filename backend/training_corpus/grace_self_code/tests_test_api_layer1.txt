@@ -1,0 +1,382 @@
+## test_api_layer1.py
+'\nTests for Layer 1 API endpoints including whitelist management.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestLayer1UserInput
+'Test Layer 1 user input processing.'
+●●●●●● 1mm □
+test_process_user_input_success
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test processing user input through Layer 1.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/user-input'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_process_user_input_missing_fields
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test user input with missing required fields.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/user-input'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest
+●●●●●● 2mm △
+TestLayer1Stats
+'Test Layer 1 statistics endpoint.'
+●●●●●● 1mm □
+test_get_layer1_stats
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting Layer 1 statistics.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/stats'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_verify_layer1_structure
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test Layer 1 structure verification.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/verify'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestLayer1Cognitive
+'Test Layer 1 cognitive endpoints.'
+●●●●●● 1mm □
+test_get_cognitive_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting cognitive integration status.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/cognitive/status'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_decision_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting cognitive decision history.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/cognitive/decisions'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_get_active_decisions
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting active cognitive decisions.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/cognitive/active'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestWhitelistEndpoints
+'Test whitelist management endpoints.'
+●●●●●● 1mm □
+test_get_whitelist
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting all whitelist entries.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_entries'
+data
+'domains'
+data
+'paths'
+data
+'patterns'
+data
+'domains_count'
+data
+'paths_count'
+data
+'patterns_count'
+data
+●●●●●● 1mm □
+test_get_whitelist_logs
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting whitelist access logs.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist/logs'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'logs'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'logs'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_post_whitelist
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test adding a whitelist entry.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_patch_whitelist_entry
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test updating a whitelist entry status.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist/domains/d-1'
+●●●●●● 2mm □△
+response
+200
+404
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'success'
+●●●●●● 3mm □△○
+data
+'entry'
+'status'
+'paused'
+●●●●●● 1mm □
+test_patch_whitelist_invalid_type
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test updating whitelist with invalid entry type.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist/invalid_type/d-1'
+●●●●●● 2mm □△
+response
+400
+●●●●●● 1mm □
+test_delete_whitelist_entry
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test deleting a whitelist entry.'
+get_response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist'
+●●●●●● 2mm □△
+get_response
+200
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist/domains/nonexistent-id'
+●●●●●● 2mm □△
+response
+404
+●●●●●● 1mm □
+test_delete_whitelist_invalid_type
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test deleting with invalid entry type.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/whitelist/invalid_type/d-1'
+●●●●●● 2mm □△
+response
+400
+pytest
+●●●●●● 2mm △
+TestLayer1ExternalAPI
+'Test Layer 1 external API processing.'
+●●●●●● 1mm □
+test_process_external_api
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test processing external API data.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/external-api'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_process_memory_mesh
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test processing memory mesh data.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/memory-mesh'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_process_system_event
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test processing system events.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/system-event'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest

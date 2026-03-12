@@ -1,0 +1,98 @@
+## self_model.py
+'\nSelf-Model — unified temporal awareness + self-mirror.\n\nMerges:\n  - cognitive/time_sense.py (TimeSense)\n  - cognitive/mirror_self_modeling.py (MirrorSelfModeling)\n\nBoth implementations stay in original files.\nThis provides the unified interface.\n'
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+MirrorSelfModeling
+ImportError
+MirrorSelfModeling
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △
+SelfModel
+"Grace's self-awareness: time + mirror + patterns."
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+TimeSense
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+MirrorSelfModeling
+MirrorSelfModeling
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Current temporal context.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+reflect
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Self-mirror observation.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'patterns'
+'status'
+'mirror_unavailable'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+urgency
+●●●●●● 1mm □△
+self
+deadline_iso
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Calculate urgency of a deadline.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+deadline_iso
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+activity_patterns
+●●●●●● 1mm □△
+self
+timestamps
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'Analyze activity patterns from timestamps.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+__all__
+●●●●●● 1mm □
+'SelfModel'
+'TimeSense'
+'MirrorSelfModeling'

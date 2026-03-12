@@ -1,0 +1,125 @@
+## test_learning_subagent_bases.py
+'Quick verification that learning subagents initialize in lightweight mode.\n\nThis is intentionally a simple, direct-execution script (no pytest).\nIt should work even when no embedding model, Qdrant, or Ollama is available.\n\nRun:\n  python backend/test_learning_subagent_bases.py\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+multiprocessing
+●●●●●● 2mm □△○
+Queue
+Manager
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+StudySubagent
+PracticeSubagent
+kb_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+'backend/knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+Manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shared
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_queue
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+study
+●●●●●● 1mm □
+StudySubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+practice
+●●●●●● 1mm □
+PracticeSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+study
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+practice
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+study
+'retrieve'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+practice
+'retrieve'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ StudySubagent initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ PracticeSubagent initialized'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'OK'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

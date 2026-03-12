@@ -1,0 +1,1334 @@
+## docs_library_api.py
+'\nDocs Library API - Central document library managed by the Librarian\n\nEvery file uploaded anywhere in the system (Folders, ingestion, API)\ngets registered here. The Librarian keeps this library organised.\n\nTwo views:\n  1. All Documents — flat column list of every document\n  2. Folder View  — documents grouped by the folder/domain they belong to\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+UploadFile
+File
+Form
+Query
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+List
+Dict
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+shutil
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get a database session.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 1mm □
+SL
+●●●●●● 3mm ○
+SL
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □
+_safe_json_parse
+●●●●●● 1mm □△
+text
+default
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+text
+●●●●●● 3mm ○
+default
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+json
+TypeError
+●●●●●● 3mm ○
+default
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+'Convert a Document ORM object to a serialisable dict.'
+tags
+●●●●●● 1mm □
+_safe_json_parse
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+_safe_json_parse
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+doc
+meta
+●●●●●● 1mm □△
+'user_metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+file_path
+parts
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_get_kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rel
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+'.'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+''
+ValueError
+TypeError
+folder
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+1
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 3mm ○
+'id'
+'filename'
+'stored_filename'
+'file_path'
+'folder'
+'file_size'
+'mime_type'
+'source'
+'status'
+'upload_method'
+'total_chunks'
+'tags'
+'description'
+'confidence_score'
+'created_at'
+'updated_at'
+doc
+doc
+doc
+doc
+file_path
+folder
+doc
+doc
+doc
+doc
+doc
+doc
+tags
+doc
+doc
+doc
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_file_extension
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+name
+Path
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+register_document
+●●●●●● 1mm □△
+filename
+file_path
+file_size
+source
+upload_method
+mime_type
+directory
+description
+tags
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+0
+'upload'
+'librarian'
+●●●●●● 2mm □
+''
+''
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Register a document in the library.  Called by any upload endpoint so\n    every file ends up in the docs library regardless of where it was uploaded.\n    Returns the document id.\n    '
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content_hash
+existing
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 3mm ○
+existing
+doc
+●●●●●● 1mm □
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"Docs library: registered '"
+filename
+"' (id="
+doc
+") in folder '"
+directory
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'docs_'
+source
+'Docs: '
+source
+filename
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+''
+'Doc registered: '
+filename
+'Source: '
+source
+', Dir: '
+directory
+'positive'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+doc
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Docs library registration failed: '
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_guess_mime
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext_map
+●●●●●● 1mm □
+'.pdf'
+'.txt'
+'.md'
+'.doc'
+'.docx'
+'.csv'
+'.json'
+'.xml'
+'.html'
+'.py'
+'.js'
+'.yaml'
+'.yml'
+'application/pdf'
+'text/plain'
+'text/markdown'
+'application/msword'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'text/csv'
+'application/json'
+'application/xml'
+'text/html'
+'text/x-python'
+'text/javascript'
+'text/yaml'
+'text/yaml'
+ext
+●●●●●● 1mm □
+_file_extension
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ext_map
+●●●●●● 1mm □△
+ext
+'application/octet-stream'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+Query
+●●●●●● 1mm □△
+'newest'
+●●●●●● 2mm □△
+200
+0
+'\n    View 1 — All Documents in a flat column list.\n    Supports filtering by status, source, and text search on filename.\n    '
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+status
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+source
+●●●●●● 2mm □△
+●●●●●● 2mm □
+search
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+'%'
+search
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sort
+'newest'
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+sort
+'oldest'
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sort
+'name'
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+sort
+'size'
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+offset
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'offset'
+'limit'
+'documents'
+total
+offset
+limit
+_doc_to_dict
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+d
+docs
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/all'
+●●●●●● 2mm □△
+'\n    View 2 — Documents grouped by the folder/domain they belong to.\n    Returns a tree where each folder contains its documents.\n    '
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folders
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+doc
+docs
+d
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+d
+'folder'
+'(root)'
+●●●●●● 2mm □
+folder
+folders
+folders
+folder
+●●●●●● 1mm □
+folders
+folder
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+folder_list
+●●●●●● 1mm □
+folder_name
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+folders
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+items
+●●●●●● 1mm □
+folders
+folder_name
+total_size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+'file_size'
+●●●●●● 2mm □△
+0
+d
+items
+●●●●●● 2mm □△
+folder_list
+●●●●●● 1mm □△
+'folder'
+'document_count'
+'total_size'
+'documents'
+folder_name
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+total_size
+items
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_documents'
+'total_folders'
+'folders'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+folder_list
+●●●●●● 2mm □△
+folder_list
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/by-folder'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get all documents within a specific folder/domain.'
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+doc
+docs
+d
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+d
+'folder'
+folder_path
+d
+'folder'
+●●●●●● 1mm □△
+folder_path
+●●●●●● 3mm ○
+'/'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'folder'
+'total'
+'documents'
+folder_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+results
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/folder/{folder_path:path}'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Get full detail for a single document including chunk info.'
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+result
+'chunks'
+●●●●●● 1mm □
+'index'
+'text'
+'token_count'
+c
+c
+c
+500
+''
+c
+c
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+50
+result
+'total_chunk_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+os
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+result
+'file_exists_on_disk'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+kb
+●●●●●● 1mm □
+_get_kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+disk_path
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+doc
+doc
+●●●●●● 3mm □
+result
+'file_exists_on_disk'
+●●●●●● 1mm □
+disk_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/document/{doc_id}'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DocumentRenameRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+filename
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+DocumentRenameRequest
+'Rename a document in the library.'
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+old_name
+●●●●●● 1mm □
+doc
+doc
+●●●●●● 1mm □
+req
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'renamed'
+'id'
+'new_filename'
+●●●●●● 3mm □△○
+doc_id
+req
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/document/{doc_id}'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Delete a document from the library. Optionally remove the file from disk.'
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_deleted
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+delete_file
+doc
+fp
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fp
+●●●●●● 1mm □
+_get_kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+fp
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_deleted
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+doc_name
+●●●●●● 1mm □
+doc
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'deleted'
+'id'
+'file_removed'
+●●●●●● 3mm □△○
+doc_id
+file_deleted
+HTTPException
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/document/{doc_id}'
+●●●●●● 2mm □△
+UploadFile
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+File
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+'\n    Upload a document directly to the docs library.\n    The file is saved into the knowledge base under the given folder\n    and registered in the library.\n\n    For files > 10 MB, uses streaming write to avoid holding full file in memory.\n    For files > ~10 MB consider using /api/upload/initiate (chunked upload) instead.\n    '
+kb
+●●●●●● 1mm □
+_get_kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+folder
+kb
+●●●●●● 3mm □△
+folder
+kb
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+file
+hasher
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_size
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'wb'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm □△○
+chunk
+●●●●●● 1mm □
+file
+●●●●●● 1mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+f
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+hasher
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+total_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+hasher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tag_list
+●●●●●● 1mm □
+tags
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+tags
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_id
+●●●●●● 1mm □
+register_document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'uploaded'
+'document_id'
+'path'
+'folder'
+'name'
+'size'
+●●●●●● 3mm □△○
+doc_id
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+folder
+file
+total_size
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/upload'
+●●●●●● 2mm □△
+'Get aggregate stats about the docs library.'
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+total_size
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+by_status
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+db
+●●●●●● 1mm □△
+Document
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+by_source
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+db
+●●●●●● 1mm □△
+Document
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+by_method
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+db
+●●●●●● 1mm □△
+Document
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder_set
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+docs
+d
+●●●●●● 1mm □
+_doc_to_dict
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+d
+'folder'
+folder_set
+●●●●●● 1mm □△
+d
+'folder'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_documents'
+'total_size_bytes'
+'total_size_mb'
+'total_folders'
+'by_status'
+'by_source'
+'by_upload_method'
+total
+total_size
+total_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_size
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+2
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+folder_set
+●●●●●● 2mm □△
+by_status
+by_source
+by_method
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/stats'
+●●●●●● 2mm □△

@@ -1,0 +1,667 @@
+## list_learning_memory.py
+'\nList learning patterns and learning examples from the learning memory database.\n\nRun from backend dir (with venv active):\n  python scripts/list_learning_memory.py\n  python scripts/list_learning_memory.py --examples\n  python scripts/list_learning_memory.py --patterns --limit 20\n\nUses backend/.env for database connection (SQLite or PostgreSQL).\n'
+●●●●●● 2mm □△○
+argparse
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+sys
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_from_json_str
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+parsed
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+parsed
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parsed
+'raw'
+val
+Exception
+●●●●●● 3mm ○
+'raw'
+val
+●●●●●● 3mm ○
+'raw'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--patterns'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--examples'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--limit'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--json'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+args
+args
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_session_factory
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningPattern
+rows
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+p
+rows
+data
+●●●●●● 1mm □△
+'id'
+'created_at'
+'updated_at'
+'pattern_name'
+'pattern_type'
+'preconditions'
+'actions'
+'expected_outcomes'
+'trust_score'
+'success_rate'
+'sample_size'
+'supporting_examples'
+'times_applied'
+'times_succeeded'
+'times_failed'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+p
+'id'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'created_at'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'updated_at'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'pattern_name'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'pattern_type'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'preconditions'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'actions'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'expected_outcomes'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'trust_score'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'success_rate'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'sample_size'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'supporting_examples'
+'[]'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'times_applied'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'times_succeeded'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+p
+'times_failed'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'patterns'
+'count'
+data
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Learning patterns (count='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+') ---\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+i
+p
+●●●●●● 2mm □
+●●●●●● 1mm □△
+data
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ['
+i
+'] '
+p
+●●●●●● 1mm □△
+'pattern_name'
+●●●●●● 2mm □△
+'(unnamed)'
+'  type='
+p
+●●●●●● 1mm □△
+'pattern_type'
+●●●●●● 2mm □△
+'  trust='
+p
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+'  success_rate='
+p
+●●●●●● 1mm □△
+'success_rate'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+prec
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'preconditions'
+●●●●●● 2mm □△
+act
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prec
+act
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      preconditions: '
+json
+●●●●●● 1mm □△
+prec
+●●●●●● 2mm □△
+120
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      actions: '
+json
+●●●●●● 1mm □△
+act
+●●●●●● 2mm □△
+120
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+rows
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+e
+rows
+data
+●●●●●● 1mm □△
+'id'
+'created_at'
+'updated_at'
+'example_type'
+'input_context'
+'expected_output'
+'actual_output'
+'trust_score'
+'source'
+'times_referenced'
+'times_validated'
+'times_invalidated'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+e
+'id'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'created_at'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+e
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'updated_at'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+e
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'example_type'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'input_context'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'expected_output'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'actual_output'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'trust_score'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'source'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'times_referenced'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'times_validated'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'times_invalidated'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'examples'
+'count'
+data
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Learning examples (count='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+') ---\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+i
+e
+●●●●●● 2mm □
+●●●●●● 1mm □△
+data
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ['
+i
+'] type='
+e
+●●●●●● 1mm □△
+'example_type'
+●●●●●● 2mm □△
+'  source='
+e
+●●●●●● 1mm □△
+'source'
+●●●●●● 2mm □△
+'  trust='
+e
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+e
+●●●●●● 1mm □△
+'input_context'
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+e
+●●●●●● 1mm □△
+'expected_output'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+exp
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      context: '
+json
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      expected: '
+json
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

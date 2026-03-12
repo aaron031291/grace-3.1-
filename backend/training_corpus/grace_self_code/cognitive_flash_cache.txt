@@ -1,0 +1,2133 @@
+## flash_cache.py
+'\nFlashCache — Reference-Based Intelligent Caching Layer\n\nInstead of downloading and storing full content from external sources, FlashCache\nstores lightweight metadata (keywords, summary, validation status, trust score)\nalongside the source URI. Content is streamed on demand from the original source.\n\nArchitecture:\n  ┌─────────────────────────────────────────────────────────┐\n  │                     FlashCache                          │\n  │                                                         │\n  │  ┌──────────┐  ┌────────────┐  ┌──────────────────────┐│\n  │  │ SQLite   │  │ In-Memory  │  │  Keyword Inverted    ││\n  │  │ Store    │  │ LRU Cache  │  │  Index               ││\n  │  └──────────┘  └────────────┘  └──────────────────────┘│\n  │                                                         │\n  │  ┌──────────────────────────────────────────────────────┐│\n  │  │ Source Registry (API, Web, Search, Internal)         ││\n  │  └──────────────────────────────────────────────────────┘│\n  │                                                         │\n  │  Capabilities:                                          │\n  │  • register(uri, keywords, summary) → fast lookup       │\n  │  • lookup(keyword) → matching entries without download   │\n  │  • stream(entry_id) → fetch content from source on demand│\n  │  • predict_keywords(topic) → pre-discover related refs   │\n  │  • validate(entry_id) → verify source still accessible   │\n  └─────────────────────────────────────────────────────────┘\n\nBenefits:\n  - No redundant downloads — source URI is the reference, content is fetched once\n  - Fast keyword lookup — inverted index over all cached references\n  - Pre-emptive keyword discovery — scan sources for relevant terms ahead of time\n  - Trust-scored references — validated entries get higher priority\n  - TTL-based freshness — stale entries re-validated automatically\n  - Works across all data sources: APIs, web, search, internal knowledge\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+OrderedDict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Set
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DEFAULT_TTL_HOURS
+●●●●●● 1mm □
+72
+LRU_MAX_SIZE
+●●●●●● 1mm □
+10000
+KEYWORD_BATCH_SIZE
+●●●●●● 1mm □
+50
+●●●●●● 1mm □
+_get_cache_db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+base
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+base
+●●●●●● 3mm □△
+'flash_cache.db'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+FlashCacheEntry
+'A single cached reference.'
+__slots__
+●●●●●● 1mm □
+'id'
+'source_uri'
+'source_type'
+'source_name'
+'keywords'
+'summary'
+'content_hash'
+'headers'
+'auth_type'
+'trust_score'
+'validation_status'
+'access_count'
+'last_accessed'
+'created_at'
+'ttl_hours'
+'metadata'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+slot
+●●●●●● 3mm △
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+slot
+kwargs
+●●●●●● 1mm □△
+slot
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+s
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+s
+●●●●●● 2mm □
+●●●●●● 2mm □△
+s
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_stale
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+last
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+last
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm △
+FlashCache
+'\n    The core cache engine.\n\n    Thread-safe, backed by SQLite for persistence and an in-memory LRU\n    for hot lookups. Keyword inverted index enables sub-millisecond\n    keyword → entries resolution.\n    '
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_path
+_get_cache_db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm ○
+FlashCacheEntry
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'FlashCache'
+●●●●●● 1mm □
+_init_db
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA journal_mode=WAL'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA busy_timeout=30000'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+"\n                CREATE TABLE IF NOT EXISTS flash_entries (\n                    id TEXT PRIMARY KEY,\n                    source_uri TEXT NOT NULL,\n                    source_type TEXT NOT NULL DEFAULT 'web',\n                    source_name TEXT DEFAULT '',\n                    keywords TEXT DEFAULT '[]',\n                    summary TEXT DEFAULT '',\n                    content_hash TEXT DEFAULT '',\n                    headers TEXT DEFAULT '{}',\n                    auth_type TEXT DEFAULT 'none',\n                    trust_score REAL DEFAULT 0.5,\n                    validation_status TEXT DEFAULT 'unvalidated',\n                    access_count INTEGER DEFAULT 0,\n                    last_accessed TEXT,\n                    created_at TEXT,\n                    ttl_hours INTEGER DEFAULT 72,\n                    metadata TEXT DEFAULT '{}'\n                )\n            "
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'\n                CREATE INDEX IF NOT EXISTS idx_flash_source_uri\n                ON flash_entries(source_uri)\n            '
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'\n                CREATE INDEX IF NOT EXISTS idx_flash_source_type\n                ON flash_entries(source_type)\n            '
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'\n                CREATE INDEX IF NOT EXISTS idx_flash_trust\n                ON flash_entries(trust_score DESC)\n            '
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'\n                CREATE TABLE IF NOT EXISTS flash_keywords (\n                    keyword TEXT NOT NULL,\n                    entry_id TEXT NOT NULL,\n                    relevance REAL DEFAULT 1.0,\n                    PRIMARY KEY (keyword, entry_id)\n                )\n            '
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'\n                CREATE INDEX IF NOT EXISTS idx_flash_kw\n                ON flash_keywords(keyword)\n            '
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_conn
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA journal_mode=WAL'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA busy_timeout=30000'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 3mm ○
+conn
+sqlite3
+●●●●●● 1mm □
+register
+●●●●●● 1mm □△
+self
+source_uri
+source_type
+source_name
+keywords
+summary
+content_hash
+headers
+auth_type
+trust_score
+ttl_hours
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'web'
+''
+●●●●●● 2mm □
+''
+''
+●●●●●● 2mm □
+'none'
+0.5
+DEFAULT_TTL_HOURS
+●●●●●● 2mm □
+'\n        Register a source reference in the flash cache.\n        Returns the entry ID.\n\n        Does NOT download the content — only stores the URI and metadata.\n        '
+entry_id
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+source_uri
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw_list
+●●●●●● 1mm □
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+keywords
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+FlashCacheEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'\n                    INSERT OR REPLACE INTO flash_entries\n                    (id, source_uri, source_type, source_name, keywords, summary,\n                     content_hash, headers, auth_type, trust_score, validation_status,\n                     access_count, last_accessed, created_at, ttl_hours, metadata)\n                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n                '
+entry_id
+source_uri
+source_type
+source_name
+json
+●●●●●● 1mm □△
+kw_list
+●●●●●● 2mm □△
+summary
+2000
+content_hash
+json
+●●●●●● 1mm □△
+headers
+●●●●●● 2mm □△
+auth_type
+trust_score
+'unvalidated'
+0
+now
+now
+ttl_hours
+json
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'DELETE FROM flash_keywords WHERE entry_id = ?'
+entry_id
+●●●●●● 2mm □△
+kw
+kw_list
+conn
+●●●●●● 1mm □△
+'INSERT OR REPLACE INTO flash_keywords (keyword, entry_id, relevance) VALUES (?, ?, ?)'
+kw
+entry_id
+1.0
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+entry
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+LRU_MAX_SIZE
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+kw_list
+●●●●●● 2mm □
+kw
+●●●●●● 3mm △
+●●●●●● 3mm △
+kw
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+kw
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entry_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+lookup
+●●●●●● 1mm □△
+self
+keyword
+keywords
+source_type
+min_trust
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+0.0
+50
+'\n        Fast keyword lookup. Returns matching entries WITHOUT downloading content.\n\n        If multiple keywords are given, returns entries matching ANY of them,\n        ranked by how many keywords they match and their trust score.\n        '
+kw_list
+●●●●●● 1mm □
+●●●●●● 2mm □
+keyword
+kw_list
+●●●●●● 1mm □△
+keyword
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keywords
+kw_list
+●●●●●● 1mm □△
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+keywords
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kw_list
+source_type
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+limit
+min_trust
+●●●●●● 2mm □△
+entry_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+kw
+kw_list
+matching_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+kw
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matching_ids
+matching_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+eid
+matching_ids
+entry_scores
+eid
+●●●●●● 1mm □
+entry_scores
+●●●●●● 1mm □△
+eid
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+results
+●●●●●● 1mm □
+eid
+match_count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+entry_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 2mm □
+source_type
+entry
+source_type
+●●●●●● 2mm □
+entry
+min_trust
+d
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+'match_count'
+●●●●●● 1mm □
+match_count
+results
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+source_type
+min_trust
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.0
+50
+'\n        Full-text search across keywords, summaries, and source names.\n        More flexible than lookup — splits query into tokens and does fuzzy matching.\n        '
+tokens
+●●●●●● 1mm □
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □
+tokens
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conditions
+●●●●●● 1mm □
+params
+●●●●●● 1mm □
+token
+tokens
+10
+conditions
+●●●●●● 1mm □△
+'(LOWER(summary) LIKE ? OR LOWER(source_name) LIKE ? OR LOWER(keywords) LIKE ?)'
+●●●●●● 2mm □△
+params
+●●●●●● 1mm □△
+'%'
+token
+'%'
+'%'
+token
+'%'
+'%'
+token
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source_type
+conditions
+●●●●●● 1mm □△
+'source_type = ?'
+●●●●●● 2mm □△
+params
+●●●●●● 1mm □△
+source_type
+●●●●●● 2mm □△
+conditions
+●●●●●● 1mm □△
+'trust_score >= ?'
+●●●●●● 2mm □△
+params
+●●●●●● 1mm □△
+min_trust
+●●●●●● 2mm □△
+where
+●●●●●● 1mm □
+' AND '
+●●●●●● 1mm □△
+conditions
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT * FROM flash_entries WHERE '
+where
+' ORDER BY trust_score DESC, access_count DESC LIMIT ?'
+params
+●●●●●● 3mm ○
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+seen
+●●●●●● 1mm □
+r
+'id'
+r
+results
+row
+rows
+●●●●●● 2mm □
+row
+'id'
+seen
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+row
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+'match_count'
+●●●●●● 1mm □
+0
+results
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+seen
+●●●●●● 1mm □△
+row
+'id'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+limit
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stream_content
+●●●●●● 1mm □△
+self
+entry_id
+timeout
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+30
+'\n        Fetch content from the original source on demand.\n        This is the only time actual data is downloaded.\n        Updates access count and last_accessed timestamp.\n        '
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 3mm ○
+'error'
+'entry_id'
+'Entry not found'
+entry_id
+●●●●●● 2mm □△○
+requests
+headers
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+entry
+json
+●●●●●● 1mm □△
+entry
+'{}'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+'bearer'
+headers
+●●●●●● 1mm □△
+'Authorization'
+●●●●●● 2mm □△
+headers
+●●●●●● 1mm □△
+'User-Agent'
+'Grace/FlashCache/1.0'
+●●●●●● 2mm □△
+headers
+●●●●●● 1mm □△
+'Accept'
+'application/json, text/html, */*'
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_type
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+'Content-Type'
+''
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+total
+●●●●●● 1mm □
+0
+max_bytes
+●●●●●● 1mm □
+10
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+chunk
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+total
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total
+max_bytes
+raw
+●●●●●● 1mm □
+b''
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+●●●●●● 2mm □
+text
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'json'
+content_type
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+Exception
+text
+●●●●●● 1mm □
+raw
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'text'
+content_type
+'html'
+content_type
+text
+●●●●●● 1mm □
+raw
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+raw
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+new_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changed
+●●●●●● 1mm □
+entry
+entry
+new_hash
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+new_hash
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'entry_id'
+'source_uri'
+'content_type'
+'size'
+'changed_since_last'
+'trust_score'
+entry_id
+entry
+content_type
+total
+changed
+entry
+●●●●●● 2mm □
+data
+●●●●●● 2mm □
+result
+'data'
+●●●●●● 1mm □
+data
+●●●●●● 2mm □
+text
+●●●●●● 2mm □
+result
+'text'
+●●●●●● 1mm □
+text
+50000
+●●●●●● 3mm ○
+result
+requests
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+'unreachable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'entry_id'
+'source_uri'
+'error'
+'validation_status'
+entry_id
+entry
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'unreachable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+validate
+●●●●●● 1mm □△
+self
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if source is still accessible without downloading full content.\n        Uses HEAD request for efficiency.\n        '
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 3mm ○
+'valid'
+'reason'
+●●●●●● 1mm □
+'not_found'
+●●●●●● 2mm □△○
+requests
+headers
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+entry
+json
+●●●●●● 1mm □△
+entry
+'{}'
+●●●●●● 2mm □△
+headers
+●●●●●● 1mm □△
+'User-Agent'
+'Grace/FlashCache/1.0'
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+400
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+'validated'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'valid'
+'entry_id'
+'status_code'
+'content_type'
+'content_length'
+●●●●●● 3mm □△○
+entry_id
+resp
+resp
+●●●●●● 1mm □△
+'Content-Type'
+''
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □△
+'Content-Length'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+'http_error'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'valid'
+'entry_id'
+'status_code'
+'reason'
+●●●●●● 1mm □
+entry_id
+resp
+'HTTP '
+resp
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+'unreachable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'valid'
+'entry_id'
+'reason'
+●●●●●● 1mm □
+entry_id
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+extract_keywords
+●●●●●● 1mm □△
+self
+text
+max_keywords
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+20
+'\n        Extract keywords from text for indexing.\n        Uses a simple TF-based approach — fast and deterministic.\n        '
+●●●●●● 2mm □△○
+re
+stop_words
+●●●●●● 1mm □
+'the'
+'a'
+'an'
+'is'
+'are'
+'was'
+'were'
+'be'
+'been'
+'being'
+'have'
+'has'
+'had'
+'do'
+'does'
+'did'
+'will'
+'would'
+'could'
+'should'
+'may'
+'might'
+'shall'
+'can'
+'need'
+'dare'
+'ought'
+'used'
+'to'
+'of'
+'in'
+'for'
+'on'
+'with'
+'at'
+'by'
+'from'
+'as'
+'into'
+'through'
+'during'
+'before'
+'after'
+'above'
+'below'
+'between'
+'out'
+'off'
+'over'
+'under'
+'again'
+'further'
+'then'
+'once'
+'here'
+'there'
+'when'
+'where'
+'why'
+'how'
+'all'
+'each'
+'every'
+'both'
+'few'
+'more'
+'most'
+'other'
+'some'
+'such'
+'no'
+'nor'
+'not'
+'only'
+'own'
+'same'
+'so'
+'than'
+'too'
+'very'
+'just'
+'because'
+'but'
+'and'
+'or'
+'if'
+'while'
+'about'
+'up'
+'it'
+'its'
+'this'
+'that'
+'these'
+'those'
+'i'
+'me'
+'my'
+'we'
+'our'
+'you'
+'your'
+'he'
+'him'
+'his'
+'she'
+'her'
+'they'
+'them'
+'their'
+'what'
+'which'
+'who'
+'whom'
+words
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[a-zA-Z][a-zA-Z0-9_-]{2,}'
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+freq
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+w
+words
+●●●●●● 2mm □
+w
+stop_words
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+3
+freq
+w
+●●●●●● 1mm □
+freq
+●●●●●● 1mm □△
+w
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+sorted_words
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+freq
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+w
+w
+_
+sorted_words
+max_keywords
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+predict_keywords
+●●●●●● 1mm □△
+self
+topic
+depth
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+2
+'\n        Pre-emptive keyword discovery. Given a topic, find related cached\n        references that the user might need next.\n\n        Uses keyword co-occurrence: if topic keywords appear alongside other\n        keywords in cached entries, those co-occurring keywords are likely relevant.\n        '
+topic_kws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □
+topic_kws
+●●●●●● 3mm ○
+direct_entries
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+co_keywords
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+entry
+direct_entries
+entry_kws
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'keywords'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+entry_kws
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+entry_kws
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+entry_kws
+●●●●●● 2mm □△
+Exception
+entry_kws
+●●●●●● 1mm □
+kw
+entry_kws
+●●●●●● 2mm □
+kw
+topic_kws
+co_keywords
+kw
+●●●●●● 1mm □
+co_keywords
+●●●●●● 1mm □△
+kw
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+depth
+1
+co_keywords
+top_co
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+co_keywords
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+kw
+_
+top_co
+expanded
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+expanded
+entry_kws
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'keywords'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+entry_kws
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+entry_kws
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+entry_kws
+●●●●●● 2mm □△
+Exception
+entry_kws
+●●●●●● 1mm □
+k
+entry_kws
+●●●●●● 2mm □
+k
+topic_kws
+co_keywords
+k
+●●●●●● 1mm □
+co_keywords
+●●●●●● 1mm □△
+k
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+ranked
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+co_keywords
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+30
+●●●●●● 3mm ○
+'keyword'
+'relevance'
+'source_count'
+kw
+count
+count
+kw
+count
+ranked
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_trust
+●●●●●● 1mm □△
+self
+entry_id
+trust_delta
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Adjust trust score for an entry (positive or negative).'
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 3mm ○
+new_trust
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+entry
+●●●●●● 3mm ○
+trust_delta
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'UPDATE flash_entries SET trust_score = ? WHERE id = ?'
+new_trust
+entry_id
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+new_trust
+●●●●●● 1mm □
+remove
+●●●●●● 1mm □△
+self
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove an entry from the cache.'
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'DELETE FROM flash_entries WHERE id = ?'
+entry_id
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'DELETE FROM flash_keywords WHERE entry_id = ?'
+entry_id
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+kw
+ids
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ids
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Cache statistics.'
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM flash_entries'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+by_type
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+conn
+●●●●●● 1mm □△
+'SELECT source_type, COUNT(*) FROM flash_entries GROUP BY source_type'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+by_status
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+conn
+●●●●●● 1mm □△
+'SELECT validation_status, COUNT(*) FROM flash_entries GROUP BY validation_status'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+avg_trust
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT AVG(trust_score) FROM flash_entries'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+0
+total_accesses
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT SUM(access_count) FROM flash_entries'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+0
+unique_keywords
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(DISTINCT keyword) FROM flash_keywords'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stale
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM flash_entries WHERE validation_status = 'unreachable'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'total_entries'
+'by_type'
+'by_validation_status'
+'avg_trust_score'
+'total_accesses'
+'unique_keywords'
+'stale_entries'
+'lru_size'
+'keyword_index_size'
+total
+by_type
+by_status
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg_trust
+3
+●●●●●● 2mm □△
+total_accesses
+unique_keywords
+stale
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+cleanup_stale
+●●●●●● 1mm □△
+self
+max_age_hours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'Remove entries older than their TTL that are unreachable.'
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT id, last_accessed, ttl_hours, validation_status FROM flash_entries'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+to_delete
+●●●●●● 1mm □
+row
+rows
+last
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+row
+'last_accessed'
+●●●●●● 2mm □△
+ttl
+●●●●●● 1mm □
+row
+'ttl_hours'
+DEFAULT_TTL_HOURS
+●●●●●● 2mm □
+max_age_hours
+ttl
+●●●●●● 1mm □
+max_age_hours
+●●●●●● 2mm □
+now
+●●●●●● 1mm □△
+last
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+row
+'validation_status'
+'unreachable'
+to_delete
+●●●●●● 1mm □△
+row
+'id'
+●●●●●● 2mm □△
+Exception
+eid
+to_delete
+conn
+●●●●●● 1mm □△
+'DELETE FROM flash_entries WHERE id = ?'
+eid
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'DELETE FROM flash_keywords WHERE entry_id = ?'
+eid
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+to_delete
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_get_entry
+●●●●●● 1mm □△
+self
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get entry from LRU or DB.'
+●●●●●● 2mm □
+entry_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+entry_id
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+row
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT * FROM flash_entries WHERE id = ?'
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+row
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+row
+●●●●●● 2mm □△
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+entry
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+LRU_MAX_SIZE
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entry
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+FlashCacheEntry
+●●●●●● 1mm □
+_row_to_entry
+●●●●●● 1mm □△
+self
+row
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+row
+'keywords'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+Exception
+kw
+●●●●●● 1mm □
+hdrs
+●●●●●● 1mm □
+row
+'headers'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+hdrs
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+hdrs
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+hdrs
+●●●●●● 2mm □△
+Exception
+hdrs
+●●●●●● 1mm □
+meta
+●●●●●● 1mm □
+row
+'metadata'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+meta
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+meta
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+meta
+●●●●●● 2mm □△
+Exception
+meta
+●●●●●● 1mm □
+●●●●●● 3mm ○
+FlashCacheEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FlashCacheEntry
+●●●●●● 1mm □
+_touch
+●●●●●● 1mm □△
+self
+entry_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Update access count and timestamp.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'UPDATE flash_entries SET access_count = access_count + 1, last_accessed = ? WHERE id = ?'
+now
+entry_id
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+entry_id
+0
+●●●●●● 3mm ○
+1
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+now
+●●●●●● 1mm □
+_update_hash
+●●●●●● 1mm □△
+self
+entry_id
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'UPDATE flash_entries SET content_hash = ? WHERE id = ?'
+content_hash
+entry_id
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+content_hash
+●●●●●● 1mm □
+_mark_validation
+●●●●●● 1mm □△
+self
+entry_id
+status
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'UPDATE flash_entries SET validation_status = ? WHERE id = ?'
+status
+entry_id
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+entry_id
+●●●●●● 1mm □
+status
+●●●●●● 1mm □
+_keyword_search_db
+●●●●●● 1mm □△
+self
+keyword
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search keyword index in DB for fuzzy match.'
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT entry_id FROM flash_keywords WHERE keyword LIKE ?'
+'%'
+keyword
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ids
+●●●●●● 1mm □
+r
+'entry_id'
+r
+rows
+●●●●●● 2mm □
+ids
+●●●●●● 2mm □
+keyword
+●●●●●● 3mm △
+●●●●●● 3mm △
+keyword
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+keyword
+●●●●●● 1mm □△
+ids
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ids
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Set
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_list_recent
+●●●●●● 1mm □△
+self
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'List most recently accessed entries.'
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT * FROM flash_entries WHERE trust_score >= ? ORDER BY last_accessed DESC LIMIT ?'
+min_trust
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+rows
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_keyword_index
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load keyword index into memory on startup.'
+●●●●●● 3mm △
+conn
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT keyword, entry_id FROM flash_keywords'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+row
+rows
+kw
+●●●●●● 1mm □
+row
+'keyword'
+eid
+●●●●●● 1mm □
+row
+'entry_id'
+●●●●●● 2mm □
+kw
+●●●●●● 3mm △
+●●●●●● 3mm △
+kw
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+kw
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the singleton FlashCache instance.'
+●●●●●● 3mm ○
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FlashCache

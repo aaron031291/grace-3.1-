@@ -1,0 +1,1105 @@
+## telemetry_service.py
+"\nTelemetry service for Grace's self-modeling mechanism.\n\nINTEGRATED with LLM Orchestrator for health monitoring.\n\nThis service provides context managers and utilities for tracking\noperations, measuring performance, and enabling replay functionality.\n\nHealth checks prioritize LLM Orchestrator availability over direct\nOllama client access to ensure consistent system status reporting.\n"
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+traceback
+●●●●●● 2mm □△○
+psutil
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+contextlib
+●●●●●● 2mm □△○
+contextmanager
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+Generator
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+OperationType
+OperationStatus
+PerformanceBaseline
+DriftAlert
+SystemState
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TelemetryService
+'\n    Service for emitting and tracking telemetry events.\n\n    Provides context managers for operation tracking, baseline learning,\n    and drift detection.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+track_operation
+●●●●●● 1mm □△
+self
+operation_type
+operation_name
+parent_run_id
+input_data
+metadata
+●●●●●● 2mm □△
+OperationType
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Context manager that tracks an operation from start to finish.\n\n        Usage:\n            with telemetry.track_operation(\n                OperationType.INGESTION,\n                "ingest_pdf",\n                input_data={"filename": "doc.pdf"}\n            ) as run_id:\n                # Do work\n                result = process_document()\n                return result\n\n        Args:\n            operation_type: Type of operation being performed\n            operation_name: Specific name of the operation\n            parent_run_id: ID of parent operation (for nested tracking)\n            input_data: Input data for hashing and replay\n            metadata: Additional metadata to store\n\n        Yields:\n            run_id: Unique identifier for this operation run\n        '
+run_id
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+input_hash
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+input_data
+●●●●●● 2mm □
+input_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+input_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+input_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cpu_before
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory_before
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+operation
+●●●●●● 1mm □
+OperationLog
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to log operation start: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run_id
+●●●●●● 3mm ○
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run_id
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+cpu_after
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory_after
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+operation
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+operation
+●●●●●● 1mm □
+duration_ms
+operation
+●●●●●● 1mm □
+OperationStatus
+operation
+●●●●●● 1mm □
+cpu_before
+●●●●●● 3mm ○
+cpu_after
+●●●●●● 3mm □△
+2
+operation
+●●●●●● 1mm □
+memory_after
+●●●●●● 1mm □△
+memory_before
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+operation
+●●●●●● 2mm □△
+Exception
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+operation
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+operation
+●●●●●● 1mm □
+duration_ms
+operation
+●●●●●● 1mm □
+OperationStatus
+operation
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+operation
+●●●●●● 1mm □
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to log operation failure: '
+commit_error
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+operation
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+operation
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Drift detection failed: '
+drift_error
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contextmanager
+Generator
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+record_tokens
+●●●●●● 1mm □△
+self
+run_id
+input_tokens
+output_tokens
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Record token counts for an operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+operation
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation
+●●●●●● 2mm □
+input_tokens
+●●●●●● 2mm □
+operation
+●●●●●● 1mm □
+input_tokens
+●●●●●● 2mm □
+output_tokens
+●●●●●● 2mm □
+operation
+●●●●●● 1mm □
+output_tokens
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to record tokens: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_confidence
+●●●●●● 1mm □△
+self
+run_id
+confidence_score
+contradiction_detected
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Record confidence metrics for an operation.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+operation
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation
+operation
+●●●●●● 1mm □
+confidence_score
+operation
+●●●●●● 1mm □
+contradiction_detected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to record confidence: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_baseline
+●●●●●● 1mm □△
+self
+session
+operation
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+OperationLog
+'Update performance baselines based on completed operation.'
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PerformanceBaseline
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+PerformanceBaseline
+operation
+PerformanceBaseline
+operation
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+baseline
+baseline
+●●●●●● 1mm □
+PerformanceBaseline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+baseline
+●●●●●● 2mm □△
+window_start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_ops
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+operation
+OperationLog
+operation
+OperationLog
+window_start
+OperationLog
+●●●●●● 1mm □△
+OperationStatus
+OperationStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+recent_ops
+durations
+●●●●●● 1mm □
+op
+op
+recent_ops
+op
+●●●●●● 2mm □
+●●●●●● 2mm □
+durations
+durations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+durations
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+2
+baseline
+●●●●●● 1mm □
+durations
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+durations
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.99
+●●●●●● 2mm □△
+mean
+●●●●●● 1mm □
+baseline
+variance
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+mean
+●●●●●● 3mm □○
+2
+d
+durations
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+durations
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+variance
+●●●●●● 3mm □○
+0.5
+completed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+op
+recent_ops
+op
+OperationStatus
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+completed
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_ops
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_ops
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+completed
+cpu_values
+●●●●●● 1mm □
+op
+op
+recent_ops
+op
+●●●●●● 2mm □
+●●●●●● 2mm □
+cpu_values
+baseline
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+cpu_values
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cpu_values
+●●●●●● 2mm □△
+memory_values
+●●●●●● 1mm □
+op
+op
+recent_ops
+op
+●●●●●● 2mm □
+●●●●●● 2mm □
+memory_values
+baseline
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+memory_values
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+memory_values
+●●●●●● 2mm □△
+confidence_values
+●●●●●● 1mm □
+op
+op
+recent_ops
+op
+●●●●●● 2mm □
+●●●●●● 2mm □
+confidence_values
+baseline
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+confidence_values
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+confidence_values
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+op
+recent_ops
+op
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+contradictions
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_ops
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to update baseline: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_drift
+●●●●●● 1mm □△
+self
+session
+operation
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+OperationLog
+'Check if operation has drifted from baseline and create alert if needed.'
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PerformanceBaseline
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+PerformanceBaseline
+operation
+PerformanceBaseline
+operation
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+baseline
+baseline
+10
+●●●●●● 3mm ○
+alerts
+●●●●●● 1mm □
+●●●●●● 2mm □
+operation
+baseline
+deviation
+●●●●●● 1mm □
+operation
+●●●●●● 1mm □△
+baseline
+●●●●●● 3mm □△
+baseline
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+deviation
+●●●●●● 2mm □△
+50
+severity
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+deviation
+●●●●●● 2mm □△
+100
+'high'
+'medium'
+alerts
+●●●●●● 1mm □△
+'drift_type'
+'baseline_value'
+'observed_value'
+'deviation_percent'
+'severity'
+'latency'
+baseline
+operation
+deviation
+severity
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation
+OperationStatus
+●●●●●● 2mm □
+baseline
+0.9
+alerts
+●●●●●● 1mm □△
+'drift_type'
+'baseline_value'
+'observed_value'
+'deviation_percent'
+'severity'
+'failure'
+baseline
+0.0
+100.0
+'high'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+operation
+baseline
+deviation
+●●●●●● 1mm □
+operation
+●●●●●● 1mm □△
+baseline
+●●●●●● 3mm □△
+baseline
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+deviation
+20
+alerts
+●●●●●● 1mm □△
+'drift_type'
+'baseline_value'
+'observed_value'
+'deviation_percent'
+'severity'
+'confidence'
+baseline
+operation
+deviation
+'medium'
+●●●●●● 2mm □△
+alert_data
+alerts
+alert
+●●●●●● 1mm □
+DriftAlert
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+alert
+●●●●●● 2mm □△
+●●●●●● 2mm □
+alerts
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Drift detected for '
+operation
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alerts
+●●●●●● 2mm □△
+' alert(s) created'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Drift detection failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+capture_system_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Capture current system state snapshot.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+Chat
+ChatHistory
+ollama_running
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ollama_running
+●●●●●● 1mm □
+orchestrator
+●●●●●● 2mm □
+●●●●●● 2mm □
+ollama_running
+logger
+●●●●●● 1mm □△
+'[TELEMETRY] LLM health via orchestrator: OK'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+ollama_running
+●●●●●● 3mm □△○
+ollama_client.client
+●●●●●● 2mm □△○
+check_ollama_running
+ollama_running
+●●●●●● 1mm □
+check_ollama_running
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ollama_running
+logger
+●●●●●● 1mm □△
+'[TELEMETRY] LLM health via direct client: OK'
+●●●●●● 2mm □△
+Exception
+qdrant_connected
+●●●●●● 1mm □
+●●●●●● 1mm □
+vector_count
+●●●●●● 1mm □
+●●●●●● 2mm □
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collection_info
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qdrant_connected
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+vector_count
+●●●●●● 1mm □
+collection_info
+collection_info
+●●●●●● 2mm □
+Exception
+document_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ChatHistory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avg_confidence
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+average_confidence_score
+●●●●●● 1mm □
+avg_confidence
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+0
+c
+avg_confidence
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+avg_confidence
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cpu_percent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+memory
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+disk
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □
+SystemState
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+state
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'System state captured: '
+document_count
+' docs, '
+chunk_count
+' chunks'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+state
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to capture system state: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SystemState
+_telemetry_service
+●●●●●● 2mm □○
+TelemetryService
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_telemetry_service
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get or create the global telemetry service instance.'
+●●●●●● 2mm □
+_telemetry_service
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+_telemetry_service
+●●●●●● 1mm □
+TelemetryService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_telemetry_service
+TelemetryService

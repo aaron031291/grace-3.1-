@@ -1,0 +1,754 @@
+## model_updater.py
+'\nModel Auto-Update — Checks for new Kimi/Opus model versions and updates config.\n\nWhen providers release new model versions (e.g. kimi-k2-0711 → kimi-k2-0812,\nclaude-sonnet-4 → claude-opus-5), this module:\n1. Polls provider APIs for available models\n2. Compares against current config\n3. Logs new versions found\n4. Optionally auto-switches to the latest model\n5. Records the change via Genesis Key\n\nCan be triggered manually or run on a schedule (e.g. daily).\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+VERSIONS_FILE
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'model_versions.json'
+●●●●●● 1mm □
+_load_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+VERSIONS_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+VERSIONS_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'checks'
+'current'
+'history'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_save_version_history
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+VERSIONS_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+VERSIONS_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_kimi_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check available Kimi models from the Moonshot API.'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+result
+●●●●●● 1mm □
+'provider'
+'current_model'
+'available'
+'new_found'
+'kimi'
+settings
+●●●●●● 2mm □
+settings
+result
+'error'
+●●●●●● 1mm □
+'KIMI_API_KEY not configured'
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+client
+●●●●●● 1mm □
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'available'
+●●●●●● 1mm □
+'id'
+'created'
+'owned_by'
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'created'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'owned_by'
+''
+●●●●●● 2mm □△
+m
+models
+current
+●●●●●● 1mm □
+settings
+available_ids
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+m
+models
+new_models
+●●●●●● 1mm □
+m
+m
+models
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+current
+'kimi'
+m
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_models
+result
+'new_found'
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+m
+new_models
+result
+'model_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+result
+'checked_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_opus_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check available Opus/Claude models from the Anthropic API.'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+result
+●●●●●● 1mm □
+'provider'
+'current_model'
+'available'
+'new_found'
+'opus'
+settings
+●●●●●● 2mm □
+settings
+result
+'error'
+●●●●●● 1mm □
+'OPUS_API_KEY not configured'
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△○
+requests
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+settings
+'/models'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+data
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+result
+'available'
+●●●●●● 1mm □
+'id'
+'display_name'
+'created_at'
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'display_name'
+''
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'created_at'
+''
+●●●●●● 2mm □△
+m
+models
+current
+●●●●●● 1mm □
+settings
+new_models
+●●●●●● 1mm □
+m
+m
+models
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+current
+●●●●●● 2mm □
+new_models
+result
+'new_found'
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+m
+new_models
+result
+'model_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'error'
+●●●●●● 1mm □
+'HTTP '
+resp
+': '
+resp
+200
+result
+'checked_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_ollama_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check available Ollama models.'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+result
+●●●●●● 1mm □
+'provider'
+'current_model'
+'available'
+'new_found'
+'ollama'
+settings
+●●●●●● 2mm □△○
+requests
+resp
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+settings
+'/api/tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+data
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+result
+'available'
+●●●●●● 1mm □
+'name'
+'size'
+'modified_at'
+m
+●●●●●● 1mm □△
+'name'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'size'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'modified_at'
+''
+●●●●●● 2mm □△
+m
+models
+result
+'model_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'error'
+●●●●●● 1mm □
+'HTTP '
+resp
+result
+'checked_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+check_all_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check all providers for model updates.'
+results
+●●●●●● 1mm □
+'kimi'
+'opus'
+'ollama'
+'checked_at'
+check_kimi_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_opus_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_ollama_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_new
+●●●●●● 1mm □
+0
+provider
+data
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_new
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'new_found'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+'total_new_models'
+●●●●●● 1mm □
+total_new
+history
+●●●●●● 1mm □
+_load_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+'checks'
+●●●●●● 1mm □△
+'timestamp'
+'total_new'
+'kimi_count'
+'opus_count'
+'ollama_count'
+results
+'checked_at'
+total_new
+results
+'kimi'
+●●●●●● 1mm □△
+'model_count'
+0
+●●●●●● 2mm □△
+results
+'opus'
+●●●●●● 1mm □△
+'model_count'
+0
+●●●●●● 2mm □△
+results
+'ollama'
+●●●●●● 1mm □△
+'model_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+history
+'checks'
+●●●●●● 1mm □
+history
+'checks'
+50
+history
+'current'
+●●●●●● 1mm □
+'kimi'
+'opus'
+'ollama'
+results
+'kimi'
+●●●●●● 1mm □△
+'current_model'
+●●●●●● 2mm □△
+results
+'opus'
+●●●●●● 1mm □△
+'current_model'
+●●●●●● 2mm □△
+results
+'ollama'
+●●●●●● 1mm □△
+'current_model'
+●●●●●● 2mm □△
+_save_version_history
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+update_model
+●●●●●● 1mm □△
+provider
+model_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Update the active model for a provider.\n    Changes the runtime config (requires restart for settings.py defaults).\n    '
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+old_model
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+provider
+'kimi'
+old_model
+●●●●●● 1mm □
+settings
+settings
+●●●●●● 1mm □
+model_id
+●●●●●● 1mm △
+provider
+'opus'
+old_model
+●●●●●● 1mm □
+settings
+settings
+●●●●●● 1mm □
+model_id
+●●●●●● 2mm □
+provider
+'ollama'
+old_model
+●●●●●● 1mm □
+settings
+settings
+●●●●●● 1mm □
+model_id
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'error'
+'Unknown provider: '
+provider
+env_file
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.env'
+env_key
+●●●●●● 1mm □
+'kimi'
+'opus'
+'ollama'
+'KIMI_MODEL'
+'OPUS_MODEL'
+'OLLAMA_LLM_DEFAULT'
+●●●●●● 1mm □△
+provider
+●●●●●● 2mm □△
+●●●●●● 2mm □
+env_key
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+found
+●●●●●● 1mm □
+●●●●●● 1mm □
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+env_key
+'='
+●●●●●● 2mm □△
+lines
+i
+●●●●●● 1mm □
+env_key
+'='
+model_id
+found
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+found
+lines
+●●●●●● 1mm □△
+env_key
+'='
+model_id
+●●●●●● 2mm □△
+env_file
+●●●●●● 1mm □△
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to update .env: '
+e
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+_load_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+'history'
+●●●●●● 1mm □△
+'provider'
+'old_model'
+'new_model'
+'updated_at'
+provider
+old_model
+model_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+history
+'current'
+provider
+●●●●●● 1mm □
+model_id
+_save_version_history
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'updated'
+'provider'
+'old_model'
+'new_model'
+●●●●●● 3mm □△○
+provider
+old_model
+model_id
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the model version change history.'
+●●●●●● 3mm ○
+_load_version_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

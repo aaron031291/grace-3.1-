@@ -1,0 +1,1287 @@
+## relationship_manager.py
+'\nRelationshipManager - Document Relationship Detection and Management\n\nAutomatically detects and manages relationships between documents including:\n- Similarity-based relationships (related content)\n- Version relationships (v1, v2, draft, final)\n- Citation relationships (references)\n- Duplicate detection\n\nBuilds a knowledge graph of document relationships.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+Set
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+and_
+or_
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+DocumentRelationship
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+librarian.utils
+●●●●●● 2mm □△○
+calculate_similarity_score
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RelationshipManager
+'\n    Manages document relationships and knowledge graph construction.\n\n    Detects various relationship types:\n    - **related**: Similar content (embedding similarity)\n    - **version**: Same document, different versions\n    - **citation**: One document references another\n    - **duplicate**: Very high similarity (>0.95)\n    - **prerequisite**: Dependency relationship\n    - **supersedes**: Newer replaces older\n    - **part_of**: Document is part of collection\n\n    Example:\n        >>> from embedding import get_embedding_model\n        >>> from vector_db.client import get_qdrant_client\n        >>>\n        >>> rel_manager = RelationshipManager(\n        ...     db_session,\n        ...     get_embedding_model(),\n        ...     get_qdrant_client()\n        ... )\n        >>>\n        >>> # Detect relationships\n        >>> relationships = rel_manager.detect_relationships(document_id=123)\n        >>> print(f"Found {len(relationships)} relationships")\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+embedding_model
+vector_db_client
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize RelationshipManager.\n\n        Args:\n            db_session: SQLAlchemy database session\n            embedding_model: Embedding model for similarity\n            vector_db_client: Qdrant vector DB client\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+vector_db_client
+●●●●●● 1mm □
+detect_relationships
+●●●●●● 1mm □△
+self
+document_id
+max_candidates
+similarity_threshold
+detect_versions
+detect_citations
+detect_duplicates
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+20
+0.7
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n        Detect relationships for a document.\n\n        Args:\n            document_id: Document ID to analyze\n            max_candidates: Max similar documents to consider\n            similarity_threshold: Minimum similarity (0.0-1.0)\n            detect_versions: Detect version relationships\n            detect_citations: Detect citation relationships\n            detect_duplicates: Detect duplicate documents\n\n        Returns:\n            List[Dict]: Detected relationships\n\n        Example:\n            >>> relationships = rel_manager.detect_relationships(\n            ...     document_id=123,\n            ...     max_candidates=20,\n            ...     similarity_threshold=0.75\n            ... )\n            >>> for rel in relationships:\n            ...     print(f"{rel[\'type\']}: Doc {rel[\'target_id\']} (score: {rel[\'strength\']})")\n        '
+document
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+ValueError
+●●●●●● 1mm □△
+'Document '
+document_id
+' not found'
+●●●●●● 2mm □△
+detected_relationships
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+similar_docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+target_doc
+similarity_score
+similar_docs
+●●●●●● 2mm □
+detect_duplicates
+similarity_score
+0.95
+rel_type
+●●●●●● 1mm □
+'duplicate'
+●●●●●● 3mm □
+rel_type
+●●●●●● 1mm □
+'related'
+detected_relationships
+●●●●●● 1mm □△
+'source_id'
+'target_id'
+'type'
+'strength'
+'confidence'
+'detected_by'
+'metadata'
+document_id
+target_doc
+rel_type
+similarity_score
+similarity_score
+'embedding'
+'similarity_score'
+'target_filename'
+similarity_score
+target_doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+detect_versions
+version_rels
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+detected_relationships
+●●●●●● 1mm □△
+version_rels
+●●●●●● 2mm □△
+●●●●●● 2mm □
+detect_citations
+citation_rels
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+detected_relationships
+●●●●●● 1mm □△
+citation_rels
+●●●●●● 2mm □△
+detected_relationships
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+detected_relationships
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Detected '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+detected_relationships
+●●●●●● 2mm □△
+' relationships for document '
+document_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detected_relationships
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_find_similar_documents
+●●●●●● 1mm □△
+self
+document
+max_candidates
+threshold
+●●●●●● 2mm □△
+Document
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+20
+0.7
+'\n        Find similar documents using embedding similarity.\n\n        Args:\n            document: Source document\n            max_candidates: Maximum similar documents\n            threshold: Minimum similarity score\n\n        Returns:\n            List[Tuple[Document, float]]: List of (document, similarity_score)\n        '
+●●●●●● 2mm □
+document
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similar_docs
+●●●●●● 1mm □
+first_chunk
+●●●●●● 1mm □
+document
+0
+●●●●●● 2mm □
+first_chunk
+●●●●●● 3mm ○
+all_docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+other_doc
+all_docs
+●●●●●● 2mm □
+other_doc
+filename_sim
+●●●●●● 1mm □
+calculate_similarity_score
+●●●●●● 1mm □△
+document
+''
+other_doc
+''
+●●●●●● 2mm □△
+doc_content
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+c
+500
+c
+document
+3
+●●●●●● 2mm □△
+other_content
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+c
+500
+c
+other_doc
+3
+●●●●●● 2mm □△
+content_sim
+●●●●●● 1mm □
+calculate_similarity_score
+●●●●●● 1mm □△
+doc_content
+other_content
+●●●●●● 2mm □△
+combined_sim
+●●●●●● 1mm □
+filename_sim
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+content_sim
+●●●●●● 2mm □△
+0.7
+●●●●●● 2mm □
+combined_sim
+threshold
+similar_docs
+●●●●●● 1mm □△
+other_doc
+combined_sim
+●●●●●● 2mm □△
+similar_docs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+similar_docs
+●●●●●● 1mm □
+similar_docs
+max_candidates
+Exception
+logger
+●●●●●● 1mm □△
+'Error finding similar documents: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+similar_docs
+●●●●●● 3mm □△
+Tuple
+Document
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_detect_version_relationships
+●●●●●● 1mm □△
+self
+document
+●●●●●● 2mm □△
+Document
+'\n        Detect version relationships (v1, v2, draft, final, etc.).\n\n        Args:\n            document: Source document\n\n        Returns:\n            List[Dict]: Detected version relationships\n        '
+●●●●●● 2mm □
+document
+●●●●●● 3mm ○
+relationships
+●●●●●● 1mm □
+filename
+●●●●●● 1mm □
+document
+base_name
+version_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 2mm □
+base_name
+●●●●●● 3mm ○
+all_docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+other_doc
+all_docs
+●●●●●● 2mm □
+other_doc
+other_base
+other_version
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+other_doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+other_base
+●●●●●● 3mm △
+●●●●●● 1mm □△
+base_name
+other_base
+●●●●●● 2mm □△
+●●●●●● 2mm □
+version_info
+other_version
+is_newer
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+version_info
+other_version
+●●●●●● 2mm □△
+rel_type
+●●●●●● 1mm □
+'version'
+●●●●●● 3mm □
+is_newer
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □
+rel_type
+●●●●●● 1mm □
+'version'
+relationships
+●●●●●● 1mm □△
+'source_id'
+'target_id'
+'type'
+'strength'
+'confidence'
+'detected_by'
+'metadata'
+document
+other_doc
+rel_type
+0.8
+0.8
+'heuristic'
+'source_version'
+'target_version'
+'source_is_newer'
+version_info
+other_version
+is_newer
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+relationships
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_version_info
+●●●●●● 1mm □△
+self
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Extract base name and version info from filename.\n\n        Args:\n            filename: Filename to parse\n\n        Returns:\n            Tuple[Optional[str], Optional[str]]: (base_name, version_info)\n\n        Example:\n            >>> _extract_version_info("report_v2.pdf")\n            (\'report\', \'v2\')\n            >>> _extract_version_info("draft_final.docx")\n            (\'\', \'final\')\n        '
+name_without_ext
+●●●●●● 1mm □
+'.'
+filename
+filename
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+0
+filename
+version_patterns
+●●●●●● 1mm □
+'_v(\\d+)'
+'_version_?(\\d+)'
+'_(draft|final|revised?)'
+'_(\\d{4}-\\d{2}-\\d{2})'
+'\\((\\d+)\\)'
+pattern
+version_patterns
+match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+name_without_ext
+re
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+version
+●●●●●● 1mm □
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+base_name
+●●●●●● 1mm □
+name_without_ext
+match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'_- '
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+base_name
+version
+●●●●●● 3mm ○
+name_without_ext
+●●●●●● 2mm □
+Tuple
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_are_base_names_similar
+●●●●●● 1mm □△
+self
+name1
+name2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Check if base names are similar enough.'
+●●●●●● 2mm □
+name1
+name2
+●●●●●● 3mm ○
+●●●●●● 1mm □
+similarity
+●●●●●● 1mm □
+calculate_similarity_score
+●●●●●● 1mm □△
+name1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similarity
+0.7
+●●●●●● 3mm △
+●●●●●● 1mm □
+_is_version_newer
+●●●●●● 1mm □△
+self
+version1
+version2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Determine if version1 is newer than version2.\n\n        Args:\n            version1: First version string\n            version2: Second version string\n\n        Returns:\n            Optional[bool]: True if version1 is newer, False if older, None if unknown\n        '
+v1_num
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+'\\D'
+''
+version1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+v2_num
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+'\\D'
+''
+version2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+v1_num
+v2_num
+ValueError
+AttributeError
+date_pattern
+●●●●●● 1mm □
+'(\\d{4}-\\d{2}-\\d{2})'
+match1
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+date_pattern
+version1
+●●●●●● 2mm □△
+match2
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+date_pattern
+version2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match1
+match2
+●●●●●● 3mm ○
+match1
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+match2
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+status_order
+●●●●●● 1mm □
+'draft'
+'revised'
+'final'
+1
+2
+3
+v1_lower
+●●●●●● 1mm □
+version1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v2_lower
+●●●●●● 1mm □
+version2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v1_status
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+s
+s
+status_order
+s
+v1_lower
+●●●●●● 2mm □
+●●●●●● 2mm □△
+v2_status
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+s
+s
+status_order
+s
+v2_lower
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+v1_status
+v2_status
+●●●●●● 3mm ○
+status_order
+v1_status
+status_order
+v2_status
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_detect_citation_relationships
+●●●●●● 1mm □△
+self
+document
+●●●●●● 2mm □△
+Document
+"\n        Detect citation relationships (document references another).\n\n        Checks if other document filenames appear in this document's content.\n\n        Args:\n            document: Source document\n\n        Returns:\n            List[Dict]: Detected citation relationships\n        "
+●●●●●● 2mm □
+document
+●●●●●● 3mm ○
+relationships
+●●●●●● 1mm □
+all_docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+c
+c
+document
+5
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+other_doc
+all_docs
+●●●●●● 2mm □
+other_doc
+filename_base
+●●●●●● 1mm □
+other_doc
+●●●●●● 1mm □△
+'.'
+1
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filename_base
+●●●●●● 2mm □△
+5
+filename_base
+content
+relationships
+●●●●●● 1mm □△
+'source_id'
+'target_id'
+'type'
+'strength'
+'confidence'
+'detected_by'
+'metadata'
+document
+other_doc
+'citation'
+0.75
+0.7
+'heuristic'
+'cited_filename'
+other_doc
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+relationships
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_deduplicate_relationships
+●●●●●● 1mm □△
+self
+relationships
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Remove duplicate relationships.'
+seen
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unique_relationships
+●●●●●● 1mm □
+rel
+relationships
+key
+●●●●●● 1mm □
+rel
+'source_id'
+rel
+'target_id'
+rel
+'type'
+●●●●●● 2mm □
+key
+seen
+seen
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+unique_relationships
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+unique_relationships
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_relationship
+●●●●●● 1mm □△
+self
+source_document_id
+target_document_id
+relationship_type
+confidence
+strength
+detected_by
+bidirectional
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+1.0
+0.5
+'user'
+●●●●●● 1mm □
+●●●●●● 2mm □
+'\n        Manually create a relationship between documents.\n\n        Args:\n            source_document_id: Source document ID\n            target_document_id: Target document ID\n            relationship_type: Type (citation, prerequisite, related, etc.)\n            confidence: Confidence score (0.0-1.0)\n            strength: Relationship strength (0.0-1.0)\n            detected_by: Who/what created it\n            bidirectional: If True, relationship goes both ways\n            metadata: Optional metadata dict\n\n        Returns:\n            DocumentRelationship: Created relationship\n\n        Example:\n            >>> rel = rel_manager.create_relationship(\n            ...     source_document_id=123,\n            ...     target_document_id=456,\n            ...     relationship_type="prerequisite",\n            ...     metadata={"reason": "Must read before"}\n            ... )\n        '
+source
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+source_document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+target_document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+target
+ValueError
+●●●●●● 1mm □△
+'Source or target document not found'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source_document_id
+target_document_id
+ValueError
+●●●●●● 1mm □△
+'Cannot create relationship to self'
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentRelationship
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+and_
+●●●●●● 1mm □△
+DocumentRelationship
+source_document_id
+DocumentRelationship
+target_document_id
+DocumentRelationship
+relationship_type
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+logger
+●●●●●● 1mm □△
+'Relationship already exists: '
+source_document_id
+' -> '
+target_document_id
+' ('
+relationship_type
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+existing
+●●●●●● 2mm □
+●●●●●● 1mm □
+DocumentRelationship
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created relationship: '
+source_document_id
+' -> '
+target_document_id
+' ('
+relationship_type
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+DocumentRelationship
+●●●●●● 1mm □
+save_detected_relationships
+●●●●●● 1mm □△
+self
+relationships
+skip_existing
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Save detected relationships to database.\n\n        Args:\n            relationships: List of relationship dicts from detect_relationships()\n            skip_existing: Skip relationships that already exist\n\n        Returns:\n            int: Number of relationships created\n\n        Example:\n            >>> rels = rel_manager.detect_relationships(document_id=123)\n            >>> count = rel_manager.save_detected_relationships(rels)\n            >>> print(f"Saved {count} relationships")\n        '
+created_count
+●●●●●● 1mm □
+0
+rel
+relationships
+●●●●●● 2mm □
+skip_existing
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentRelationship
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+and_
+●●●●●● 1mm □△
+DocumentRelationship
+rel
+'source_id'
+DocumentRelationship
+rel
+'target_id'
+DocumentRelationship
+rel
+'type'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_count
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to save relationship: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Saved '
+created_count
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+relationships
+●●●●●● 2mm □△
+' relationships'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+created_count
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_document_relationships
+●●●●●● 1mm □△
+self
+document_id
+direction
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'both'
+'\n        Get all relationships for a document.\n\n        Args:\n            document_id: Document ID\n            direction: "outgoing", "incoming", or "both"\n\n        Returns:\n            Dict with "outgoing" and/or "incoming" relationship lists\n\n        Example:\n            >>> rels = rel_manager.get_document_relationships(123)\n            >>> print(f"Outgoing: {len(rels[\'outgoing\'])}")\n            >>> print(f"Incoming: {len(rels[\'incoming\'])}")\n        '
+result
+●●●●●● 1mm □
+●●●●●● 2mm □
+direction
+'outgoing'
+'both'
+outgoing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentRelationship
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentRelationship
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'outgoing'
+●●●●●● 1mm □
+'id'
+'target_document_id'
+'relationship_type'
+'confidence'
+'strength'
+'detected_by'
+'bidirectional'
+'metadata'
+'created_at'
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel
+outgoing
+●●●●●● 2mm □
+direction
+'incoming'
+'both'
+incoming
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentRelationship
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentRelationship
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'incoming'
+●●●●●● 1mm □
+'id'
+'source_document_id'
+'relationship_type'
+'confidence'
+'strength'
+'detected_by'
+'bidirectional'
+'metadata'
+'created_at'
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel
+incoming
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_dependency_graph
+●●●●●● 1mm □△
+self
+document_id
+max_depth
+relationship_types
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+3
+●●●●●● 2mm □
+'\n        Get dependency graph for a document.\n\n        Traverses relationships up to max_depth levels.\n\n        Args:\n            document_id: Starting document ID\n            max_depth: Maximum traversal depth\n            relationship_types: Filter by relationship types\n\n        Returns:\n            Dict: Graph with nodes and edges\n\n        Example:\n            >>> graph = rel_manager.get_dependency_graph(123, max_depth=2)\n            >>> print(f"Nodes: {len(graph[\'nodes\'])}")\n            >>> print(f"Edges: {len(graph[\'edges\'])}")\n        '
+visited
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nodes
+●●●●●● 1mm □
+edges
+●●●●●● 1mm □
+●●●●●● 1mm □
+traverse
+●●●●●● 1mm □△
+doc_id
+current_depth
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_depth
+max_depth
+doc_id
+visited
+●●●●●● 3mm ○
+visited
+●●●●●● 1mm □△
+doc_id
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+nodes
+doc_id
+●●●●●● 1mm □
+'id'
+'filename'
+'file_path'
+'depth'
+doc_id
+doc
+doc
+current_depth
+rels
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+doc_id
+●●●●●● 2mm □△
+rel
+rels
+●●●●●● 1mm □△
+'outgoing'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+relationship_types
+rel
+'relationship_type'
+relationship_types
+target_id
+●●●●●● 1mm □
+rel
+'target_document_id'
+edges
+●●●●●● 1mm □△
+'source'
+'target'
+'type'
+'strength'
+doc_id
+target_id
+rel
+'relationship_type'
+rel
+'strength'
+●●●●●● 2mm □△
+traverse
+●●●●●● 1mm □△
+target_id
+current_depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+rel
+rels
+●●●●●● 1mm □△
+'incoming'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+relationship_types
+rel
+'relationship_type'
+relationship_types
+source_id
+●●●●●● 1mm □
+rel
+'source_document_id'
+edges
+●●●●●● 1mm □△
+'source'
+'target'
+'type'
+'strength'
+source_id
+doc_id
+rel
+'relationship_type'
+rel
+'strength'
+●●●●●● 2mm □△
+traverse
+●●●●●● 1mm □△
+source_id
+current_depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+traverse
+●●●●●● 1mm □△
+document_id
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'root_document_id'
+'nodes'
+'edges'
+'node_count'
+'edge_count'
+document_id
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+nodes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+edges
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+nodes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edges
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+delete_relationship
+●●●●●● 1mm □△
+self
+relationship_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n        Delete a relationship.\n\n        Args:\n            relationship_id: Relationship ID to delete\n\n        Returns:\n            bool: True if deleted, False if not found\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentRelationship
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentRelationship
+relationship_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleted relationship '
+relationship_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △

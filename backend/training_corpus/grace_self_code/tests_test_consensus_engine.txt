@@ -1,0 +1,474 @@
+## test_consensus_engine.py
+'\nTests for the Multi-Model Consensus Engine.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+pytest
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_QDRANT_CHECK'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_OLLAMA_CHECK'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'DISABLE_GENESIS_TRACKING'
+'true'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestModelRegistry
+'Test model discovery and availability.'
+●●●●●● 1mm □
+test_model_registry_has_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+MODEL_REGISTRY
+'opus'
+MODEL_REGISTRY
+'kimi'
+MODEL_REGISTRY
+'qwen'
+MODEL_REGISTRY
+'reasoning'
+MODEL_REGISTRY
+●●●●●● 1mm □
+test_model_registry_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+MODEL_REGISTRY
+mid
+info
+MODEL_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'name'
+info
+'provider'
+info
+'strengths'
+info
+'cost_tier'
+info
+●●●●●● 1mm □
+●●●●●● 1mm □△
+info
+'strengths'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_available_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_available_models
+models
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+4
+m
+models
+'id'
+m
+'name'
+m
+'available'
+m
+●●●●●● 1mm □
+●●●●●● 1mm □△
+m
+'available'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_cost_tiers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+MODEL_REGISTRY
+tiers
+●●●●●● 1mm □
+info
+'cost_tier'
+info
+MODEL_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cloud'
+tiers
+'free'
+tiers
+●●●●●● 2mm △
+TestConsensusDataStructures
+'Test data classes and structures.'
+●●●●●● 1mm □
+test_model_response_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+ModelResponse
+r
+●●●●●● 1mm □
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'test'
+r
+'Hello world'
+r
+100.5
+r
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_model_response_with_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+ModelResponse
+r
+●●●●●● 1mm □
+ModelResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'Connection failed'
+r
+''
+●●●●●● 1mm □
+test_consensus_result_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+ConsensusResult
+r
+●●●●●● 1mm □
+ConsensusResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'test query'
+r
+0.8
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+1
+r
+'user'
+r
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestVerification
+'Test Layer 4 verification logic.'
+●●●●●● 1mm □
+test_verify_clean_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+layer4_verify
+v
+●●●●●● 1mm □
+layer4_verify
+●●●●●● 1mm □△
+'This is a comprehensive analysis of the problem.'
+'Analyze X'
+●●●●●● 2mm □△
+'trust_score'
+v
+'hallucination_score'
+v
+'passed'
+v
+●●●●●● 1mm □
+test_verify_short_output_flagged
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+layer4_verify
+v
+●●●●●● 1mm □
+layer4_verify
+●●●●●● 1mm □△
+'OK'
+'Analyze X'
+●●●●●● 2mm □△
+'Response too short'
+v
+●●●●●● 1mm □△
+'hallucination_flags'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_verify_empty_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+layer4_verify
+v
+●●●●●● 1mm □
+layer4_verify
+●●●●●● 1mm □△
+''
+'Analyze X'
+●●●●●● 2mm □△
+v
+'hallucination_score'
+1.0
+●●●●●● 2mm △
+TestBatchQueue
+'Test autonomous batch queue.'
+●●●●●● 1mm □
+test_queue_entry_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+'prompt'
+'context'
+'priority'
+'status'
+'Test query'
+'Test context'
+'high'
+'queued'
+entry
+'prompt'
+'Test query'
+entry
+'status'
+'queued'
+entry
+'priority'
+'high'
+●●●●●● 1mm □
+test_queue_autonomous_query_callable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+queue_autonomous_query
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+queue_autonomous_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_batch_queue_callable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_batch_queue
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_batch_queue
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_run_batch_callable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_batch
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+run_batch
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestConsensusAPI
+'Test the API module.'
+●●●●●● 1mm □
+test_import_router
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.consensus_api
+●●●●●● 2mm □△○
+router
+router
+●●●●●● 2mm □
+router
+'/api/consensus'
+●●●●●● 1mm □
+test_routes_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.consensus_api
+●●●●●● 2mm □△○
+router
+paths
+●●●●●● 1mm □
+r
+r
+router
+prefix
+●●●●●● 1mm □
+router
+prefix
+'/models'
+paths
+prefix
+'/run'
+paths
+prefix
+'/quick'
+paths
+prefix
+'/batch/queue'
+paths
+prefix
+'/batch/run'
+paths
+●●●●●● 2mm △
+TestIntegrationPoints
+'Test that consensus engine can be imported from other systems.'
+●●●●●● 1mm □
+test_importable_from_immune_system_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+queue_autonomous_query
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+queue_autonomous_query
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_importable_from_pipeline_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+run_consensus
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_importable_from_librarian_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+queue_autonomous_query
+get_available_models
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+queue_autonomous_query
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_available_models
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_flash_cache_in_pipeline_ooda
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Verify FlashCache is importable for pipeline OODA stage.'
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_flash_cache
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_flash_cache_in_knowledge_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Verify FlashCache search is available for knowledge cycle.'
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FlashCache
+'search'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FlashCache
+'lookup'
+●●●●●● 2mm □△

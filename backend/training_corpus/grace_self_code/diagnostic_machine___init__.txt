@@ -1,0 +1,108 @@
+## __init__.py
+'\nGRACE Diagnostic Machine - 4-Layer Autonomous Diagnostic System\n\nIntegrates with:\n- Test results (passed/failed/skipped)\n- Genesis Keys (provenance tracking)\n- Cognitive Framework (learning/memory)\n- GRACE Mirror (self-reflection)\n- Tail logs and metrics\n\nArchitecture:\n- Layer 1: Sensors (data collection)\n- Layer 2: Interpreters (pattern analysis)\n- Layer 3: Judgement (decision making)\n- Layer 4: Action Routing (response execution)\n\nEnhanced Features:\n- Notifications: Webhook, Slack, Email alerts\n- Real-time: WebSocket live updates\n- Cognitive: Learning Memory, Memory Mesh integration\n- Trends: Historical analysis and baseline calibration\n- Healing: Comprehensive self-repair actions\n'
+●●●●●● 3mm □△○
+sensors
+●●●●●● 2mm □△○
+SensorLayer
+SensorData
+●●●●●● 3mm □△○
+interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+InterpretedData
+●●●●●● 3mm □△○
+judgement
+●●●●●● 2mm □△○
+JudgementLayer
+JudgementResult
+●●●●●● 3mm □△○
+action_router
+●●●●●● 2mm □△○
+ActionRouter
+ActionDecision
+●●●●●● 3mm □△○
+diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+●●●●●● 3mm □△○
+notifications
+●●●●●● 2mm □△○
+NotificationManager
+NotificationPayload
+NotificationPriority
+get_notification_manager
+●●●●●● 3mm □△○
+realtime
+●●●●●● 2mm □△○
+ConnectionManager
+DiagnosticEventEmitter
+EventType
+RealtimeEvent
+get_connection_manager
+get_event_emitter
+●●●●●● 3mm □△○
+cognitive_integration
+●●●●●● 2mm □△○
+CognitiveIntegrationManager
+LearningMemoryIntegration
+DecisionLogIntegration
+MemoryMeshIntegration
+get_cognitive_manager
+●●●●●● 3mm □△○
+trend_analysis
+●●●●●● 2mm □△○
+TimeSeriesStore
+TrendAnalyzer
+DiagnosticMetricsCollector
+TrendResult
+TrendDirection
+get_time_series_store
+get_trend_analyzer
+get_metrics_collector
+●●●●●● 3mm □△○
+healing
+●●●●●● 2mm □△○
+HealingExecutor
+HealingActionType
+HealingResult
+get_healing_executor
+execute_healing
+__all__
+●●●●●● 1mm □
+'SensorLayer'
+'SensorData'
+'InterpreterLayer'
+'InterpretedData'
+'JudgementLayer'
+'JudgementResult'
+'ActionRouter'
+'ActionDecision'
+'DiagnosticEngine'
+'NotificationManager'
+'NotificationPayload'
+'NotificationPriority'
+'get_notification_manager'
+'ConnectionManager'
+'DiagnosticEventEmitter'
+'EventType'
+'RealtimeEvent'
+'get_connection_manager'
+'get_event_emitter'
+'CognitiveIntegrationManager'
+'LearningMemoryIntegration'
+'DecisionLogIntegration'
+'MemoryMeshIntegration'
+'get_cognitive_manager'
+'TimeSeriesStore'
+'TrendAnalyzer'
+'DiagnosticMetricsCollector'
+'TrendResult'
+'TrendDirection'
+'get_time_series_store'
+'get_trend_analyzer'
+'get_metrics_collector'
+'HealingExecutor'
+'HealingActionType'
+'HealingResult'
+'get_healing_executor'
+'execute_healing'

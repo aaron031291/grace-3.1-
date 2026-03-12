@@ -1,0 +1,292 @@
+## data_service.py
+'Data domain service — whitelist sources, flash cache.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+uuid
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'whitelist_sources'
+●●●●●● 1mm □
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sub
+'api_sources'
+'web_sources'
+DATA_DIR
+●●●●●● 3mm □△
+sub
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load
+●●●●●● 1mm □△
+kind
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+kind
+'.json'
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_save
+●●●●●● 1mm □△
+kind
+data
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 3mm □△
+kind
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+api_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sources'
+_load
+●●●●●● 1mm □△
+'api_sources'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+web_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sources'
+_load
+●●●●●● 1mm □△
+'web_sources'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_api
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □
+_load
+●●●●●● 1mm □△
+'api_sources'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+'id'
+'name'
+'url'
+'created_at'
+'api-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+payload
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □△
+'url'
+''
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+_save
+●●●●●● 1mm □△
+'api_sources'
+sources
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+source
+●●●●●● 1mm □
+add_web
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □
+_load
+●●●●●● 1mm □△
+'web_sources'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+'id'
+'name'
+'url'
+'created_at'
+'web-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+payload
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □△
+'url'
+''
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+_save
+●●●●●● 1mm □△
+'web_sources'
+sources
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+source
+●●●●●● 1mm □
+delete_source
+●●●●●● 1mm □△
+source_id
+●●●●●● 2mm □△
+kind
+'api_sources'
+'web_sources'
+sources
+●●●●●● 1mm □
+_load
+●●●●●● 1mm □△
+kind
+●●●●●● 2mm □△
+filtered
+●●●●●● 1mm □
+s
+s
+sources
+s
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+source_id
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filtered
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sources
+●●●●●● 2mm □△
+_save
+●●●●●● 1mm □△
+kind
+filtered
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'deleted'
+'id'
+●●●●●● 3mm □△○
+source_id
+●●●●●● 3mm ○
+'error'
+'Not found'
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'api_source_count'
+'web_source_count'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_load
+●●●●●● 1mm □△
+'api_sources'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_load
+●●●●●● 1mm □△
+'web_sources'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+flash_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+●●●●●● 3mm ○
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'entries'
+0

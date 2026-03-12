@@ -1,0 +1,534 @@
+## semantic_search.py
+'\nSemantic Search — ask Grace anything about how she works in natural language.\n\n"How does the librarian work?" → full component profile with code location,\nconnections, Genesis key history, memory, dependencies.\n\nReplaces having to explain Grace to every new developer.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+COMPONENTS
+●●●●●● 1mm □
+'librarian'
+'brain_api'
+'consensus_engine'
+'coding_pipeline'
+'deterministic_bridge'
+'ouroboros_loop'
+'hebbian'
+'memory_injector'
+'genesis_tracker'
+'safety'
+'intelligence'
+'workspace_bridge'
+'project_container'
+'governance_engine'
+'deep_learning'
+'cognitive_mesh'
+'auto_router'
+'environment'
+'multi_user'
+'resilience'
+'file'
+'purpose'
+'connects'
+'core/librarian.py'
+'Auto-categorize, tag, version, search all documents'
+'workspace_bridge'
+'document_processor'
+'genesis_tracker'
+'file'
+'purpose'
+'connects'
+'api/brain_api_v2.py'
+'Single entry point for all 200 brain actions across 8 domains'
+'all services'
+'all cognitive modules'
+'file'
+'purpose'
+'connects'
+'cognitive/consensus_engine.py'
+'4-model deliberation — Kimi, Opus, Qwen, DeepSeek must agree'
+'llm_orchestrator'
+'trust_engine'
+'intelligence'
+'file'
+'purpose'
+'connects'
+'core/coding_pipeline.py'
+'8-layer pipeline: plan→decompose→propose→select→simulate→generate→verify→deploy'
+'brain_api'
+'deterministic_bridge'
+'safety'
+'governance'
+'file'
+'purpose'
+'connects'
+'core/deterministic_bridge.py'
+'Find bugs WITHOUT LLM — AST parse, import check, tests, DB health'
+'coding_pipeline'
+'ouroboros_loop'
+'file'
+'purpose'
+'connects'
+'api/autonomous_loop_api.py'
+'30s autonomous cycle: detect→decide→act→learn→verify'
+'component_health'
+'triggers'
+'intelligence'
+'brain_api'
+'file'
+'purpose'
+'connects'
+'core/hebbian.py'
+'Synaptic weights between brains — connections strengthen on success'
+'brain_api.call_brain'
+'file'
+'purpose'
+'connects'
+'core/memory_injector.py'
+'Injects memory+trust+episodes+patterns into every LLM call'
+'governance_wrapper'
+'all LLM clients'
+'file'
+'purpose'
+'connects'
+'api/_genesis_tracker.py'
+'Track every operation with what/who/when/where/why/how'
+'genesis_storage'
+'event_bus'
+'qdrant'
+'file'
+'purpose'
+'connects'
+'core/safety.py'
+'Rollback, security scan, budget breaker, provenance ledger'
+'coding_pipeline'
+'brain_api'
+'file'
+'purpose'
+'connects'
+'core/intelligence.py'
+'Genesis key mining, adaptive trust, episodic mining'
+'ouroboros_loop'
+'brain_api'
+'file'
+'purpose'
+'connects'
+'core/workspace_bridge.py'
+'Sync files between folder UI and Dev tab — every write tracked'
+'genesis_tracker'
+'librarian'
+'realtime_sync'
+'file'
+'purpose'
+'connects'
+'core/project_container.py'
+'Isolated project environments with 3-tier governance rules'
+'environment'
+'governance_engine'
+'file'
+'purpose'
+'connects'
+'core/governance_engine.py'
+'Per-project rules, approval workflow, KPI scoring, compliance'
+'coding_pipeline'
+'brain_api'
+'file'
+'purpose'
+'connects'
+'core/deep_learning.py'
+'3-head PyTorch MLP predicting success/risk/trust from Genesis keys'
+'intelligence'
+'ouroboros_loop'
+'file'
+'purpose'
+'connects'
+'core/cognitive_mesh.py'
+'Unified interface to OODA, ambiguity, procedural memory, bandits'
+'coding_pipeline'
+'brain_api'
+'file'
+'purpose'
+'connects'
+'core/auto_router.py'
+'Natural language → optimal brain+action routing'
+'brain_api'
+'hebbian'
+'file'
+'purpose'
+'connects'
+'core/environment.py'
+'Select which project all output routes to'
+'workspace_bridge'
+'brain_api'
+'file'
+'purpose'
+'connects'
+'core/multi_user.py'
+'Lightweight user IDs, activity tracking, team summaries'
+'brain_api'
+'tracing'
+'file'
+'purpose'
+'connects'
+'core/resilience.py'
+'Circuit breakers, error boundaries, graceful degradation'
+'brain_api'
+●●●●●● 1mm □
+semantic_query
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Ask Grace anything about how she works.\n    Returns structured answer with code locations, connections, history.\n    '
+q
+●●●●●● 1mm □
+question
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+cid
+info
+COMPONENTS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+cid
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+q
+cid
+q
+score
+5
+word
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+word
+info
+'purpose'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+1
+●●●●●● 2mm □
+word
+' '
+●●●●●● 1mm □△
+info
+'connects'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+0.5
+●●●●●● 2mm □
+score
+0
+matches
+●●●●●● 1mm □△
+cid
+info
+score
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matches
+file_matches
+●●●●●● 1mm □
+_search_code
+●●●●●● 1mm □△
+q
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'query'
+'component_matches'
+'code_matches'
+'suggestion'
+question
+0
+file_matches
+'No exact component match. Try: '
+●●●●●● 3mm ○
+', '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □△
+top
+●●●●●● 1mm □
+matches
+0
+cid
+info
+score
+●●●●●● 1mm □
+top
+result
+●●●●●● 1mm □
+'query'
+'component_id'
+'purpose'
+'file'
+'connects_to'
+question
+cid
+info
+'purpose'
+info
+'file'
+info
+'connects'
+filepath
+●●●●●● 1mm □
+ROOT
+●●●●●● 3mm □△
+info
+'file'
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'file_size'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+result
+'line_count'
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+functions
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+classes
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+result
+'functions'
+●●●●●● 1mm □
+functions
+20
+result
+'classes'
+●●●●●● 1mm □
+classes
+10
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+matches
+●●●●●● 2mm □△
+1
+result
+'related'
+●●●●●● 1mm □
+'id'
+'purpose'
+'relevance'
+m
+0
+m
+1
+'purpose'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+m
+2
+1
+●●●●●● 2mm □△
+m
+matches
+1
+5
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_search_code
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search code files for query terms.'
+results
+●●●●●● 1mm □
+terms
+●●●●●● 1mm □
+t
+t
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+2
+py_file
+ROOT
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+5000
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+t
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+terms
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'file'
+'match'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+ROOT
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'content'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the full component registry.'
+●●●●●● 3mm ○
+'components'
+'total'
+COMPONENTS
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_component_profile
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get detailed profile for one component.'
+●●●●●● 2mm □
+component_id
+COMPONENTS
+●●●●●● 3mm ○
+'error'
+'Unknown component: '
+component_id
+●●●●●● 3mm ○
+semantic_query
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△

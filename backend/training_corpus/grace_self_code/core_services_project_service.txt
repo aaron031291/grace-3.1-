@@ -1,0 +1,598 @@
+## project_service.py
+'Project management service — visual cards, scoped context, mirroring.'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+PROJECTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'projects'
+●●●●●● 1mm □
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PROJECTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_meta_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+PROJECTS_DIR
+●●●●●● 3mm □△
+'projects.json'
+●●●●●● 1mm □
+_load_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □
+_meta_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_save_projects
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_meta_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all projects as visual cards.'
+projects
+●●●●●● 1mm □
+_load_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+projects
+folder
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+p
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+'file_count'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+folder
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+'size_kb'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+folder
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □
+p
+'file_count'
+●●●●●● 1mm □
+0
+●●●●●● 3mm □
+p
+'size_kb'
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+'projects'
+'total'
+projects
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+projects
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_project
+●●●●●● 1mm □△
+name
+description
+project_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'fullstack'
+'Create a new project with standard folder structure.'
+●●●●●● 2mm □△○
+uuid
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+projects
+●●●●●● 1mm □
+_load_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_id
+●●●●●● 1mm □
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'-'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.'
+'-'
+●●●●●● 2mm □△
+30
+project_dir
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 2mm □
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Project '
+project_id
+' already exists'
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'frontend'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'backend'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'docs'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_dir
+●●●●●● 3mm □△
+'tests'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project
+●●●●●● 1mm □
+'id'
+'name'
+'description'
+'type'
+'created_at'
+'updated_at'
+'language'
+'status'
+project_id
+name
+description
+project_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'python'
+'active'
+projects
+●●●●●● 1mm □△
+project
+●●●●●● 2mm □△
+_save_projects
+●●●●●● 1mm □△
+projects
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+project
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_project
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get project details + file tree.'
+projects
+●●●●●● 1mm □
+_load_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+p
+p
+projects
+p
+'id'
+project_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+project
+●●●●●● 3mm ○
+'error'
+'Project not found'
+project_dir
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 2mm □
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Project directory not found'
+●●●●●● 1mm □
+_tree
+●●●●●● 1mm □△
+path
+depth
+max_depth
+●●●●●● 2mm □△
+0
+3
+●●●●●● 2mm □
+depth
+max_depth
+●●●●●● 3mm ○
+'name'
+'type'
+'children'
+path
+'directory'
+children
+●●●●●● 1mm □
+item
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+children
+●●●●●● 1mm □△
+_tree
+●●●●●● 1mm □△
+item
+depth
+●●●●●● 3mm ○
+1
+max_depth
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+children
+●●●●●● 1mm □△
+'name'
+'type'
+'path'
+'size'
+item
+'file'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+PROJECTS_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+PermissionError
+●●●●●● 3mm ○
+'name'
+'type'
+'children'
+path
+'directory'
+children
+project
+'tree'
+●●●●●● 1mm □
+_tree
+●●●●●● 1mm □△
+project_dir
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+project
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_project_context
+●●●●●● 1mm □△
+project_id
+max_chars
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10000
+'Get project context for scoped LLM chat — file summaries.'
+project_dir
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 2mm □
+project_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+context_parts
+●●●●●● 1mm □
+'Project: '
+project_id
+total_chars
+●●●●●● 1mm □
+0
+f
+project_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.md'
+'.json'
+'.yaml'
+'.yml'
+'.txt'
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rel
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+project_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+content
+500
+part
+●●●●●● 1mm □
+'\n--- '
+rel
+' ---\n'
+snippet
+●●●●●● 2mm □
+total_chars
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+part
+●●●●●● 2mm □△
+max_chars
+context_parts
+●●●●●● 1mm □△
+part
+●●●●●● 2mm □△
+total_chars
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+part
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+write_project_file
+●●●●●● 1mm □△
+project_id
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Write a file inside a project.'
+target
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 3mm □△
+file_path
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'saved'
+'path'
+●●●●●● 3mm □△○
+project_id
+'/'
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+read_project_file
+●●●●●● 1mm □△
+project_id
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Read a file from a project.'
+target
+●●●●●● 1mm □
+PROJECTS_DIR
+●●●●●● 3mm □△
+project_id
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'File not found'
+●●●●●● 3mm ○
+'content'
+'path'
+'size'
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_id
+'/'
+file_path
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

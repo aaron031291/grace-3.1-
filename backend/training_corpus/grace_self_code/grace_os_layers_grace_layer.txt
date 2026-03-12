@@ -1,0 +1,152 @@
+## grace_layer.py
+'\nGrace OS — Grace Layer (Integration Base)\n\nExtends BaseLayer to provide standardized access to Shared Services:\n- LLM Orchestrator (Thinking)\n- MCP Client (Acting)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+base_layer
+●●●●●● 2mm □△○
+BaseLayer
+●●●●●● 3mm □△○
+kernel.message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+kernel.layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+LLMOrchestrator
+TaskType
+●●●●●● 3mm □△○
+grace_mcp.client
+●●●●●● 2mm □△○
+MCPClient
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraceLayer
+●●●●●● 3mm □△
+BaseLayer
+BaseLayer
+"\n    Subclass this for any layer that needs to 'think' (LLM) or 'act' (MCP).\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+MessageBus
+LayerRegistry
+LLMOrchestrator
+MCPClient
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm
+●●●●●● 3mm △
+●●●●●● 1mm □
+mcp
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □
+'Standardized LLM call for all Grace layers.'
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Prompting LLM...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] LLM Task Failed: '
+result
+1
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+result
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Standardized MCP tool call for all Grace layers.'
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Calling tool: '
+tool_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+build_response
+●●●●●● 1mm □△
+self
+message
+status
+payload
+trust_score
+●●●●●● 2mm □△
+LayerMessage
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+80.0
+'Helper to build a standardized response.'
+●●●●●● 3mm ○
+LayerResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LayerResponse

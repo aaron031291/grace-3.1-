@@ -1,0 +1,720 @@
+## security.py
+'\nEnterprise Security Module — secrets management, rate limiting,\nrequest validation, SQL injection prevention.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+lru_cache
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+VAULT_PATH
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'.vault.enc'
+_vault_cache
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_cipher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Fernet cipher from GRACE_MASTER_KEY env var.'
+key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'GRACE_MASTER_KEY'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cryptography.fernet
+●●●●●● 2mm □△○
+Fernet
+●●●●●● 3mm ○
+Fernet
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+key
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'cryptography not installed — vault disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_secret
+●●●●●● 1mm □△
+name
+default
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n    Get a secret value. Priority:\n      1. Encrypted vault (GRACE_MASTER_KEY + .vault.enc)\n      2. Environment variable\n      3. .env file value\n      4. Default\n    '
+●●●●●● 2mm □
+_vault_cache
+●●●●●● 2mm □
+cipher
+●●●●●● 1mm □
+_get_cipher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cipher
+VAULT_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+encrypted
+●●●●●● 1mm □
+VAULT_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decrypted
+●●●●●● 1mm □
+cipher
+●●●●●● 1mm □△
+encrypted
+●●●●●● 2mm □△
+_vault_cache
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+decrypted
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Secrets vault loaded'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Vault load failed: '
+e
+●●●●●● 2mm □△
+_vault_cache
+●●●●●● 1mm □
+●●●●●● 3mm □
+_vault_cache
+●●●●●● 1mm □
+●●●●●● 2mm □
+name
+_vault_cache
+●●●●●● 3mm ○
+_vault_cache
+name
+env_val
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+name
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+env_val
+●●●●●● 3mm ○
+env_val
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+name
+default
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+default
+●●●●●● 1mm ○
+●●●●●● 1mm □
+create_vault
+●●●●●● 1mm □△
+secrets
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Create/overwrite the encrypted vault.'
+cipher
+●●●●●● 1mm □
+_get_cipher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cipher
+RuntimeError
+●●●●●● 1mm □△
+'Set GRACE_MASTER_KEY env var first'
+●●●●●● 2mm □△
+VAULT_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+encrypted
+●●●●●● 1mm □
+cipher
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+secrets
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+VAULT_PATH
+●●●●●● 1mm □△
+encrypted
+●●●●●● 2mm □△
+_vault_cache
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+secrets
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Vault created with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+secrets
+●●●●●● 2mm □△
+' secrets'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RateLimiter
+'\n    Sliding window rate limiter.\n    Usage:\n        limiter = RateLimiter(requests_per_minute=100)\n        if not limiter.allow("brain:chat:192.168.1.1"):\n            return 429\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+requests_per_minute
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+60.0
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+allow
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+hits
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+t
+t
+hits
+t
+cutoff
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+●●●●●● 1mm □△
+now
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+remaining
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+hits
+●●●●●● 1mm □
+t
+t
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+t
+cutoff
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hits
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+_brain_limiters
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+RateLimiter
+_limiter_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BRAIN_RATE_LIMITS
+●●●●●● 1mm □
+'chat'
+'ai'
+'system'
+'files'
+'govern'
+'data'
+'tasks'
+'code'
+'deterministic'
+60
+30
+100
+100
+50
+50
+100
+30
+20
+●●●●●● 1mm □
+check_rate_limit
+●●●●●● 1mm □△
+brain
+client_ip
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'unknown'
+'Check if a brain request is within rate limits. Returns True if allowed.'
+_limiter_lock
+●●●●●● 2mm □
+brain
+_brain_limiters
+rpm
+●●●●●● 1mm □
+BRAIN_RATE_LIMITS
+●●●●●● 1mm □△
+brain
+100
+●●●●●● 2mm □△
+_brain_limiters
+brain
+●●●●●● 1mm □
+RateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+brain
+':'
+client_ip
+●●●●●● 3mm ○
+_brain_limiters
+brain
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_rate_limit_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get current rate limit configuration.'
+●●●●●● 3mm ○
+'limits'
+'active_limiters'
+BRAIN_RATE_LIMITS
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_brain_limiters
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+MAX_REQUEST_SIZE
+●●●●●● 1mm □
+16
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+MAX_FIELD_LENGTH
+●●●●●● 1mm □
+50000
+●●●●●● 1mm □
+validate_request_size
+●●●●●● 1mm □△
+content_length
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+content_length
+MAX_REQUEST_SIZE
+●●●●●● 3mm △
+●●●●●● 1mm □
+sanitize_string
+●●●●●● 1mm □△
+value
+max_length
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+MAX_FIELD_LENGTH
+'Remove dangerous characters, truncate.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+max_length
+value
+●●●●●● 1mm □
+value
+max_length
+value
+●●●●●● 1mm □
+value
+●●●●●● 1mm □△
+'\x00'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+value
+●●●●●● 1mm ○
+●●●●●● 1mm □
+check_sql_injection
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Returns True if value looks like SQL injection attempt.'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+lower
+●●●●●● 1mm □
+value
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+"'; drop"
+"'; delete"
+"'; update"
+"'; insert"
+"' or '1'='1"
+"' or 1=1"
+'union select'
+'exec('
+'execute('
+'xp_cmdshell'
+'<script>'
+'javascript:'
+'onerror='
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+lower
+p
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+safe_sql_text
+●●●●●● 1mm □△
+sql
+params
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Wrap raw SQL text() with injection checks.'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 2mm □
+'--'
+sql
+';'
+sql
+ValueError
+●●●●●● 1mm □△
+'Potential SQL injection detected'
+●●●●●● 2mm □△
+key
+val
+params
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+check_sql_injection
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+"SQL injection attempt in parameter '"
+key
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □△
+sql
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+backup_database
+●●●●●● 1mm □△
+source_path
+backup_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Create a timestamped backup of the SQLite database.'
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □
+source_path
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+source_path
+●●●●●● 1mm □
+settings
+Exception
+source_path
+●●●●●● 1mm □
+'data/grace.db'
+●●●●●● 2mm □
+backup_dir
+backup_dir
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+source_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'backups'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+backup_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+backup_path
+●●●●●● 1mm □
+backup_dir
+'/grace_'
+timestamp
+'.db'
+source
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+source_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Source not found: '
+source_path
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+backup_path
+●●●●●● 2mm □△
+wal
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+source_path
+'-wal'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+wal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+wal
+●●●●●● 2mm □△
+backup_path
+'-wal'
+●●●●●● 2mm □△
+size_mb
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+backup_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database backup: '
+backup_path
+' ('
+size_mb
+' MB)'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+backup_path
+●●●●●● 1mm ○

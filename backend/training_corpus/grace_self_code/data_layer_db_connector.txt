@@ -1,0 +1,71 @@
+## db_connector.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+asyncio
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DataLayerConnector
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.genesis_key
+●●●●●● 2mm □△○
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DB-CONNECTOR] PostgreSQL proxy ready. Genesis Key: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Raw query execution tracked by Genesis.\n        '
+logger
+●●●●●● 1mm □△
+'[DB-CONNECTOR] Executing query via key '
+●●●●●● 3mm △
+': '
+query
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'genesis_key'
+'mock_query_success'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+_connector
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_db_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_connector
+●●●●●● 2mm □
+_connector
+●●●●●● 1mm □
+DataLayerConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_connector
+DataLayerConnector

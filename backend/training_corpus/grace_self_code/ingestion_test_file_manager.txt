@@ -1,0 +1,824 @@
+## test_file_manager.py
+'\nTest suite for the File-Based Ingestion Manager.\nProvides tests to verify the implementation is working correctly.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'backend'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSuite
+'Test suite for file ingestion manager.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+setup
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Set up test environment.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUITE: File-Based Ingestion Manager'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Temp directory: '
+●●●●●● 3mm △
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+teardown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clean up test environment.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nCleaned up: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test
+●●●●●● 1mm □△
+self
+name
+func
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Run a test.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Running: '
+name
+'...'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ PASSED'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+AssertionError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ FAILED: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ ERROR: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 1mm □
+assert_equal
+●●●●●● 1mm □△
+self
+actual
+expected
+msg
+●●●●●● 2mm □△
+''
+'Assert equality.'
+●●●●●● 2mm □
+actual
+expected
+AssertionError
+●●●●●● 1mm □△
+msg
+' (expected '
+expected
+', got '
+actual
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_true
+●●●●●● 1mm □△
+self
+value
+msg
+●●●●●● 2mm □△
+''
+'Assert value is true.'
+●●●●●● 2mm □
+value
+AssertionError
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_false
+●●●●●● 1mm □△
+self
+value
+msg
+●●●●●● 2mm □△
+''
+'Assert value is false.'
+●●●●●● 2mm □
+value
+AssertionError
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_file_exists
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+'Assert file exists.'
+●●●●●● 2mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AssertionError
+●●●●●● 1mm □△
+'File does not exist: '
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+assert_file_not_exists
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+'Assert file does not exist.'
+●●●●●● 2mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AssertionError
+●●●●●● 1mm □△
+'File should not exist: '
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_tracker_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GitFileTracker initialization.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+GitFileTracker
+tracker
+●●●●●● 1mm □
+GitFileTracker
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Repo path should exist'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+tracker
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'Repo path mismatch'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_git_tracker_initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test git repository initialization.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+GitFileTracker
+tracker
+●●●●●● 1mm □
+GitFileTracker
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+success
+'Git initialization should succeed'
+●●●●●● 2mm □△
+git_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.git'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+git_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_file_hash_computation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file hash computation.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+test_file
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'test.txt'
+test_file
+●●●●●● 1mm □△
+'test content'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+hashlib
+expected_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+b'test content'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_file
+'rb'
+●●●●●● 2mm □△
+f
+actual_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+actual_hash
+expected_hash
+'Hash mismatch'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_state_file_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test state file creation and management.'
+●●●●●● 2mm □△○
+json
+state_file
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.ingestion_state.json'
+state
+●●●●●● 1mm □
+'file1.md'
+'file2.txt'
+'hash1'
+'hash2'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+state_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+state
+f
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+state_file
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+state_file
+'r'
+●●●●●● 2mm □△
+f
+loaded
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loaded
+state
+'State mismatch'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_supported_extensions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test supported file extension detection.'
+supported
+●●●●●● 1mm □
+'.txt'
+'.md'
+'.pdf'
+'.py'
+'.json'
+test_files
+●●●●●● 1mm □
+'document.txt'
+'guide.md'
+'report.pdf'
+'script.py'
+'config.json'
+'image.png'
+'video.mp4'
+'.hidden'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+filename
+should_support
+test_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_supported
+●●●●●● 1mm □
+ext
+supported
+●●●●●● 2mm □
+filename
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+is_supported
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+is_supported
+should_support
+'Extension detection failed for '
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_file_change_dataclass
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test FileChange dataclass.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+FileChange
+change
+●●●●●● 1mm □
+FileChange
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+change
+'test.md'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+change
+'added'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+change
+'abc123'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+change
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ingestion_result_dataclass
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test IngestionResult dataclass.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionResult
+result
+●●●●●● 1mm □
+IngestionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+'test.md'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+42
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_path_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test path handling and file operations.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_path
+●●●●●● 3mm □△
+'guides'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_path
+●●●●●● 3mm □△
+'tutorials'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_path
+●●●●●● 3mm □△
+'guide.md'
+●●●●●● 1mm □△
+'guide'
+●●●●●● 2mm □△
+kb_path
+●●●●●● 3mm □△
+'guides'
+●●●●●● 3mm □△
+'tutorial.md'
+●●●●●● 1mm □△
+'tutorial'
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+kb_path
+●●●●●● 1mm □△
+'*.md'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+2
+'Should find 2 markdown files'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_text_encoding
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test text file reading with different encodings.'
+●●●●●● 2mm □△○
+tempfile
+utf8_file
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'utf8.txt'
+utf8_file
+●●●●●● 1mm □△
+'Hello 世界'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+utf8_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'世界'
+content
+'UTF-8 content should be readable'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_json_serialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test JSON serialization of data.'
+●●●●●● 2mm □△○
+json
+data
+●●●●●● 1mm □
+'files'
+'timestamp'
+'count'
+'test.md'
+'test.txt'
+'hash1'
+'hash2'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+2
+json_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+loaded
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+json_str
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loaded
+'count'
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+loaded
+'files'
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Git tracker initialization'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Git repository initialization'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'File hash computation'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'State file management'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Supported extensions'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'FileChange dataclass'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'IngestionResult dataclass'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Path handling'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Text encoding'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'JSON serialization'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'RESULTS'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total:   '
+total
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Passed:  '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed:  '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+0
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main test entry point.'
+suite
+●●●●●● 1mm □
+TestSuite
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+suite
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+0
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

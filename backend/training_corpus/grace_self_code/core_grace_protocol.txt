@@ -1,0 +1,979 @@
+## grace_protocol.py
+'\nGRACE Communication Protocol\n================================\nDefines the rules for how AI components communicate:\n\n  - AI-to-AI:   Structured dicts only. No NLP. No prose.\n  - AI-to-Human: NLP (natural language) responses.\n\nThis is ENFORCED, not suggested. Every cross-component call uses\nstructured GraceMessage / GraceResponse, never free-text strings.\nNLP generation happens ONLY at the final human-facing boundary.\n\nProtocol Rules:\n  1. All internal messages are GraceMessage dicts (structured, typed)\n  2. All internal responses are GraceResponse dicts (structured, typed)\n  3. Code generation requests carry a contract_type for enforcement\n  4. NLP is generated ONLY when output_mode == "human"\n  5. AI-to-AI calls NEVER interpret NLP — they read structured fields\n  6. The governance contract is attached to every code operation\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+OutputMode
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Who receives the output — determines whether NLP is generated.'
+HUMAN
+●●●●●● 1mm □
+'human'
+AI
+●●●●●● 1mm □
+'ai'
+●●●●●● 2mm △
+OperationType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Type of operation for contract routing.'
+CODE_GENERATE
+●●●●●● 1mm □
+'code_generate'
+CODE_FIX
+●●●●●● 1mm □
+'code_fix'
+CODE_REVIEW
+●●●●●● 1mm □
+'code_review'
+COMPONENT_CREATE
+●●●●●● 1mm □
+'component_create'
+HEALING
+●●●●●● 1mm □
+'healing'
+ANALYZE
+●●●●●● 1mm □
+'analyze'
+QUERY
+●●●●●● 1mm □
+'query'
+DIAGNOSE
+●●●●●● 1mm □
+'diagnose'
+PLAN
+●●●●●● 1mm □
+'plan'
+●●●●●● 2mm △
+GraceMessage
+'\n    Structured message for AI-to-AI communication.\n    No NLP. Just typed fields.\n    '
+operation
+OperationType
+source
+●●●●●● 1mm ○
+target
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_mode
+OutputMode
+OutputMode
+contract_type
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+execution_allowed
+●●●●●● 3mm △
+●●●●●● 1mm □
+trace_id
+●●●●●● 1mm ○
+''
+timestamp
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+asdict
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+d
+'operation'
+●●●●●● 1mm □
+●●●●●● 3mm △
+d
+'output_mode'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+d
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+GraceResponse
+'\n    Structured response for AI-to-AI communication.\n    Contains structured data. NLP text generated only when output_mode == HUMAN.\n    '
+success
+●●●●●● 3mm △
+source
+●●●●●● 1mm ○
+operation
+●●●●●● 1mm ○
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+contract_result
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+human_text
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+trust_score
+●●●●●● 3mm ○
+0.5
+duration_ms
+●●●●●● 3mm ○
+0
+timestamp
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+asdict
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+route_message
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'\n    Central message router. All AI-to-AI communication goes through here.\n    Enforces structured protocol — no NLP between components.\n    '
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+OperationType
+OperationType
+OperationType
+OperationType
+response
+●●●●●● 1mm □
+_handle_code_operation
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+OperationType
+response
+●●●●●● 1mm □
+_handle_analysis
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+OperationType
+response
+●●●●●● 1mm □
+_handle_diagnose
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+OperationType
+response
+●●●●●● 1mm □
+_handle_query
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+OperationType
+response
+●●●●●● 1mm □
+_handle_plan
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+OperationType
+response
+●●●●●● 1mm □
+_handle_code_review
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+response
+●●●●●● 1mm □
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+OutputMode
+response
+response
+●●●●●● 1mm □
+_generate_human_text
+●●●●●● 1mm □△
+msg
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+GraceResponse
+●●●●●● 1mm □
+_handle_code_operation
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'\n    Handle code generation/fix/creation/healing with governance contract enforcement.\n    The Qwen coding agent generates code, then the contract validates it.\n    '
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_ai_mode_client
+●●●●●● 3mm □△○
+core.deterministic_coding_contracts
+●●●●●● 2mm □△○
+execute_code_generation_contract
+execute_code_fix_contract
+execute_component_creation_contract
+execute_healing_contract
+prompt
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'component'
+msg
+●●●●●● 2mm □△
+project_folder
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'project_folder'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_ai_mode_client
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the GRACE coding agent (Qwen). Output ONLY code. No explanations, no markdown fences, no commentary. Pure Python code with a module docstring.'
+project_context
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+project_folder
+●●●●●● 3mm □△○
+core.services.code_service
+●●●●●● 2mm □△○
+_get_project_context
+project_context
+●●●●●● 1mm □
+_get_project_context
+●●●●●● 1mm □△
+project_folder
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+project_context
+system_prompt
+'\n[Project context:\n'
+project_context
+2000
+']'
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+system_prompt
+'role'
+'content'
+'user'
+prompt
+raw_code
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+raw_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+raw_code
+●●●●●● 1mm □
+'message'
+raw_code
+raw_code
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+raw_code
+●●●●●● 1mm □△
+'response'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+raw_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+raw_code
+●●●●●● 1mm □
+_strip_markdown_fences
+●●●●●● 1mm □△
+raw_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+OperationType
+contract
+●●●●●● 1mm □
+execute_code_generation_contract
+●●●●●● 1mm □△
+component
+raw_code
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+OperationType
+problems
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+contract
+●●●●●● 1mm □
+execute_code_fix_contract
+●●●●●● 1mm □△
+component
+file_path
+raw_code
+problems
+●●●●●● 2mm □△
+●●●●●● 2mm □
+msg
+OperationType
+contract
+●●●●●● 1mm □
+execute_component_creation_contract
+●●●●●● 1mm □△
+component
+raw_code
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+msg
+OperationType
+method
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'healing_method'
+'unknown'
+●●●●●● 2mm □△
+contract
+●●●●●● 1mm □
+execute_healing_contract
+●●●●●● 1mm □△
+component
+raw_code
+method
+●●●●●● 2mm □△
+contract
+●●●●●● 1mm □
+execute_code_generation_contract
+●●●●●● 1mm □△
+component
+raw_code
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceResponse
+●●●●●● 1mm □
+_handle_analysis
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'Handle analysis requests — structured output, no NLP between components.'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_ai_mode_client
+client
+●●●●●● 1mm □
+get_ai_mode_client
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+system
+●●●●●● 1mm □
+'Analyze the following and respond with a JSON object containing: findings (list of strings), severity (low/medium/high/critical), recommendations (list of strings), confidence (0-1 float).'
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+system
+'role'
+'content'
+'user'
+prompt
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+response
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+json
+TypeError
+data
+●●●●●● 1mm □
+'raw_analysis'
+'format'
+text
+'unstructured'
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceResponse
+●●●●●● 1mm □
+_handle_diagnose
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'Diagnostic — structured dict output.'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceResponse
+●●●●●● 1mm □
+_handle_query
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'Query — use RAG retrieval, structured output.'
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'query'
+msg
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceResponse
+●●●●●● 1mm □
+_handle_plan
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'Planning — structured task breakdown, no NLP.'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_ai_mode_client
+client
+●●●●●● 1mm □
+get_ai_mode_client
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+system
+●●●●●● 1mm □
+'Break the following task into steps. Respond ONLY with a JSON object: {"steps": [{"id": 1, "description": "...", "dependencies": [], "estimated_minutes": N}], "total_steps": N, "estimated_total_minutes": N}'
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+system
+'role'
+'content'
+'user'
+prompt
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+response
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+json
+TypeError
+data
+●●●●●● 1mm □
+'raw_plan'
+'format'
+text
+'unstructured'
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceResponse
+●●●●●● 1mm □
+_handle_code_review
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+GraceMessage
+'Code review — deterministic checks + LLM analysis, structured output.'
+code
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'code'
+''
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'component'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_coding_contracts
+●●●●●● 2mm □△○
+check_syntax
+check_imports_resolve
+check_no_dangerous_patterns
+check_has_docstring
+steps
+●●●●●● 1mm □
+check_syntax
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+check_imports_resolve
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+check_no_dangerous_patterns
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+check_has_docstring
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GraceResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceResponse
+●●●●●● 1mm □
+_generate_human_text
+●●●●●● 1mm □△
+msg
+response
+●●●●●● 2mm □△
+GraceMessage
+GraceResponse
+'\n    Generate NLP text ONLY for human-facing output.\n    This is the ONLY place NLP is created from structured data.\n    '
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'fast'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+data_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+2000
+system
+●●●●●● 1mm □
+'Convert the following structured AI result into a clear, concise human-readable response. Be direct and informative.'
+prompt
+●●●●●● 1mm □
+'Operation: '
+response
+'\nSuccess: '
+response
+'\nData: '
+data_str
+'\n'
+●●●●●● 2mm □
+response
+prompt
+'\nGenerated code (first 500 chars):\n'
+response
+500
+●●●●●● 2mm □
+response
+prompt
+'\nError: '
+response
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+system
+'role'
+'content'
+'user'
+prompt
+text
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'message'
+text
+text
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □△
+'response'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+Exception
+●●●●●● 2mm □
+response
+●●●●●● 3mm ○
+'Operation failed: '
+response
+●●●●●● 3mm ○
+'Operation '
+response
+' completed successfully.'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_strip_markdown_fences
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove markdown code fences from LLM output.'
+code
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```python'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'```python'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+3
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+code
+3
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+code
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_trust
+●●●●●● 1mm □△
+contract
+●●●●●● 2mm □△
+'Extract trust score from contract result.'
+step
+contract
+●●●●●● 2mm □
+step
+'trust_gate'
+step
+●●●●●● 3mm ○
+step
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.5
+●●●●●● 3mm ○

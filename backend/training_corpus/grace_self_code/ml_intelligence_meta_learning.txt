@@ -1,0 +1,1325 @@
+## meta_learning.py
+'\nMeta-Learning Module - Learning to Learn\n\nImplements meta-learning algorithms to optimize learning strategies.\nLearns which learning approaches work best for different types of tasks.\n\nAlgorithms:\n- MAML (Model-Agnostic Meta-Learning)\n- Reptile (First-order MAML variant)\n- Learning Rate Scheduling via meta-learning\n- Hyperparameter Optimization\n- Task Similarity Detection\n'
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+torch.nn
+●●●●●● 1mm □
+nn
+●●●●●● 2mm □△○
+torch.nn.functional
+●●●●●● 1mm □
+F
+●●●●●● 3mm □△○
+torch.optim
+●●●●●● 2mm □△○
+SGD
+Adam
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Tuple
+Optional
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+copy
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm △
+LearningTask
+'A learning task for meta-learning'
+task_id
+●●●●●● 1mm ○
+task_type
+●●●●●● 1mm ○
+support_set
+●●●●●● 3mm □△
+Tuple
+query_set
+●●●●●● 3mm □△
+Tuple
+metadata
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+MetaLearningEpisode
+'Results from a meta-learning episode'
+task
+LearningTask
+initial_loss
+●●●●●● 3mm ○
+final_loss
+●●●●●● 3mm ○
+improvement
+●●●●●● 3mm ○
+num_steps
+●●●●●● 2mm ○
+optimal_lr
+●●●●●● 3mm ○
+optimal_batch_size
+●●●●●● 2mm ○
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+MAML
+●●●●●● 3mm □△
+nn
+'\n    Model-Agnostic Meta-Learning (MAML)\n\n    Learns initialization parameters that enable fast adaptation\n    to new tasks with few gradient steps.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+inner_lr
+outer_lr
+inner_steps
+first_order
+●●●●●● 2mm □△
+nn
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+0.01
+0.001
+5
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+inner_lr
+●●●●●● 3mm △
+●●●●●● 1mm □
+outer_lr
+●●●●●● 3mm △
+●●●●●● 1mm □
+inner_steps
+●●●●●● 3mm △
+●●●●●● 1mm □
+first_order
+●●●●●● 3mm △
+●●●●●● 1mm □
+Adam
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+inner_loop
+●●●●●● 1mm □△
+self
+task
+loss_fn
+●●●●●● 2mm □△
+LearningTask
+●●●●●● 1mm △○
+F
+'\n        Inner loop: Adapt model to specific task\n\n        Args:\n            task: Learning task with support set\n            loss_fn: Loss function\n\n        Returns:\n            (adapted_model, final_loss)\n        '
+adapted_model
+●●●●●● 1mm □
+copy
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+inner_optimizer
+●●●●●● 1mm □
+SGD
+●●●●●● 1mm □△
+adapted_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+task
+X
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+x
+x
+y
+batch
+●●●●●● 2mm □△
+y
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+y
+x
+y
+batch
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+adapted_model
+●●●●●● 1mm □△
+X
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+loss_fn
+●●●●●● 1mm □△
+predictions
+y
+●●●●●● 2mm □△
+inner_optimizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inner_optimizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+X
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+x
+x
+y
+task
+●●●●●● 2mm □△
+y
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+y
+x
+y
+task
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+adapted_model
+●●●●●● 1mm □△
+X
+●●●●●● 2mm □△
+final_loss
+●●●●●● 1mm □
+loss_fn
+●●●●●● 1mm □△
+predictions
+y
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+adapted_model
+final_loss
+Tuple
+nn
+●●●●●● 3mm ○
+●●●●●● 1mm □
+outer_loop
+●●●●●● 1mm □△
+self
+tasks
+loss_fn
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningTask
+●●●●●● 1mm △○
+F
+'\n        Outer loop: Update meta-parameters\n\n        Args:\n            tasks: Batch of learning tasks\n            loss_fn: Loss function\n\n        Returns:\n            Meta-loss\n        '
+meta_loss
+●●●●●● 1mm □
+0.0
+task
+tasks
+adapted_model
+_
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+loss_fn
+●●●●●● 2mm □△
+X
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+x
+x
+y
+task
+●●●●●● 2mm □△
+y
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+y
+x
+y
+task
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+adapted_model
+●●●●●● 1mm □△
+X
+●●●●●● 2mm □△
+task_loss
+●●●●●● 1mm □
+loss_fn
+●●●●●● 1mm □△
+predictions
+y
+●●●●●● 2mm □△
+meta_loss
+task_loss
+meta_loss
+●●●●●● 1mm □
+meta_loss
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+meta_loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+meta_loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+meta_train
+●●●●●● 1mm □△
+self
+task_distribution
+num_iterations
+tasks_per_batch
+loss_fn
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningTask
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm △○
+1000
+4
+F
+'\n        Train meta-learner\n\n        Args:\n            task_distribution: Distribution of tasks to meta-learn from\n            num_iterations: Number of meta-training iterations\n            tasks_per_batch: Tasks per meta-batch\n            loss_fn: Loss function\n\n        Returns:\n            List of meta-losses\n        '
+meta_losses
+●●●●●● 1mm □
+iteration
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_iterations
+●●●●●● 2mm □△
+task_batch
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+task_distribution
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+meta_loss
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_batch
+loss_fn
+●●●●●● 2mm □△
+meta_losses
+●●●●●● 1mm □△
+meta_loss
+●●●●●● 2mm □△
+●●●●●● 2mm □
+iteration
+●●●●●● 2mm □○
+100
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Meta-iteration '
+iteration
+': Loss = '
+meta_loss
+'.4f'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+meta_losses
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △
+HyperparameterOptimizer
+'\n    Meta-learn optimal hyperparameters for different task types\n\n    Uses Bayesian optimization and historical performance\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'learning_rate'
+'batch_size'
+'num_epochs'
+'dropout'
+'weight_decay'
+'mean'
+'std'
+0.001
+0.0005
+'mean'
+'std'
+32
+16
+'mean'
+'std'
+10
+5
+'mean'
+'std'
+0.2
+0.1
+'mean'
+'std'
+0.0001
+5e-05
+●●●●●● 2mm □△
+●●●●●● 1mm □
+suggest_hyperparameters
+●●●●●● 1mm □△
+self
+task_type
+task_metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Suggest hyperparameters for a task\n\n        Args:\n            task_type: Type of task\n            task_metadata: Additional task information\n\n        Returns:\n            Dict of suggested hyperparameters\n        '
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+task_type
+suggestions
+●●●●●● 1mm □
+lr_mean
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+stats
+'learning_rate'
+'mean'
+●●●●●● 2mm □△
+lr_std
+●●●●●● 1mm □
+stats
+'learning_rate'
+'std'
+suggestions
+'learning_rate'
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+lr_mean
+lr_std
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+batch_mean
+●●●●●● 1mm □
+stats
+'batch_size'
+'mean'
+batch_std
+●●●●●● 1mm □
+stats
+'batch_size'
+'std'
+batch_size
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+batch_mean
+batch_std
+●●●●●● 2mm □△
+8
+128
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+suggestions
+'batch_size'
+●●●●●● 1mm □
+2
+●●●●●● 3mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+epoch_mean
+●●●●●● 1mm □
+stats
+'num_epochs'
+'mean'
+epoch_std
+●●●●●● 1mm □
+stats
+'num_epochs'
+'std'
+suggestions
+'num_epochs'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+epoch_mean
+epoch_std
+●●●●●● 2mm □△
+1
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+dropout_mean
+●●●●●● 1mm □
+stats
+'dropout'
+'mean'
+dropout_std
+●●●●●● 1mm □
+stats
+'dropout'
+'std'
+suggestions
+'dropout'
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+dropout_mean
+dropout_std
+●●●●●● 2mm □△
+0.0
+0.5
+●●●●●● 2mm □△
+wd_mean
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+stats
+'weight_decay'
+'mean'
+●●●●●● 2mm □△
+wd_std
+●●●●●● 1mm □
+stats
+'weight_decay'
+'std'
+suggestions
+'weight_decay'
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+wd_mean
+wd_std
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+suggestions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+update_from_result
+●●●●●● 1mm □△
+self
+task_type
+hyperparams
+performance
+task_metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Update hyperparameter distributions based on observed performance\n\n        Args:\n            task_type: Type of task\n            hyperparams: Hyperparameters used\n            performance: Observed performance (higher is better)\n            task_metadata: Additional task information\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'task_type'
+'hyperparams'
+'performance'
+'metadata'
+'timestamp'
+task_type
+hyperparams
+performance
+task_metadata
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+alpha
+●●●●●● 1mm □
+0.1
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+task_type
+weight
+●●●●●● 1mm □
+performance
+param_name
+param_value
+hyperparams
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+param_name
+stats
+old_mean
+●●●●●● 1mm □
+stats
+param_name
+'mean'
+stats
+param_name
+'mean'
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+alpha
+●●●●●● 2mm □△
+weight
+●●●●●● 2mm □△
+old_mean
+●●●●●● 3mm ○
+alpha
+●●●●●● 2mm □△
+weight
+●●●●●● 2mm □△
+param_value
+deviation
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+param_value
+●●●●●● 1mm □△
+old_mean
+●●●●●● 2mm □△
+old_std
+●●●●●● 1mm □
+stats
+param_name
+'std'
+stats
+param_name
+'std'
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+alpha
+●●●●●● 2mm □△
+old_std
+●●●●●● 3mm ○
+alpha
+●●●●●● 2mm □△
+deviation
+●●●●●● 1mm □
+get_best_hyperparameters
+●●●●●● 1mm □△
+self
+task_type
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'\n        Get top k best hyperparameter configurations\n\n        Args:\n            task_type: Type of task\n            top_k: Number of configurations to return\n\n        Returns:\n            List of (hyperparams, performance) tuples\n        '
+relevant_results
+●●●●●● 1mm □
+result
+'hyperparams'
+result
+'performance'
+result
+●●●●●● 3mm △
+result
+'task_type'
+task_type
+sorted_results
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+relevant_results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sorted_results
+top_k
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm △
+TaskSimilarityDetector
+'\n    Detect similar tasks to enable transfer learning\n\n    Uses task embeddings and performance correlation\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+embedding_dim
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+128
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_dim
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+np
+●●●●●● 3mm △
+●●●●●● 1mm □○
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+embed_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'\n        Create embedding for a task\n\n        Args:\n            task: Learning task\n\n        Returns:\n            Task embedding vector\n        '
+features
+●●●●●● 1mm □
+task_types
+●●●●●● 1mm □
+'classification'
+'regression'
+'generation'
+'retrieval'
+type_encoding
+●●●●●● 1mm □
+task
+t
+1.0
+0.0
+t
+task_types
+features
+●●●●●● 1mm □△
+type_encoding
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'input_dim'
+task
+features
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+task
+'input_dim'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+features
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'output_dim'
+task
+features
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+task
+'output_dim'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+features
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'num_classes'
+task
+features
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+task
+'num_classes'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+features
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embedding
+●●●●●● 2mm □△
+●●●●●● 3mm △
+embedding
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+embedding
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embedding
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+embedding
+●●●●●● 1mm □
+embedding
+●●●●●● 3mm △
+●●●●●● 3mm ○
+embedding
+np
+●●●●●● 1mm □
+add_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Add task to similarity database'
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+embedding
+●●●●●● 1mm □
+find_similar_tasks
+●●●●●● 1mm □△
+self
+task
+top_k
+exclude_task_ids
+●●●●●● 2mm □△
+LearningTask
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+5
+●●●●●● 2mm □
+'\n        Find similar tasks\n\n        Args:\n            task: Query task\n            top_k: Number of similar tasks to return\n            exclude_task_ids: Task IDs to exclude\n\n        Returns:\n            List of (task_id, similarity) tuples\n        '
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □
+task_id
+task_embedding
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exclude_task_ids
+task_id
+exclude_task_ids
+similarity
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+query_embedding
+task_embedding
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+np
+●●●●●● 1mm □△
+query_embedding
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+task_embedding
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1e-08
+similarities
+task_id
+●●●●●● 1mm □
+similarity
+sorted_tasks
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+similarities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sorted_tasks
+top_k
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm △
+MetaLearningOrchestrator
+'\n    Main orchestrator for meta-learning\n\n    Coordinates MAML, hyperparameter optimization, and task similarity\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_model
+save_dir
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+save_dir
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+'models'
+'meta_learning'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_model
+MAML
+●●●●●● 1mm □△
+base_model
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+HyperparameterOptimizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TaskSimilarityDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+MetaLearningEpisode
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+optimize_learning_for_task
+●●●●●● 1mm □△
+self
+task
+loss_fn
+●●●●●● 2mm □△
+LearningTask
+●●●●●● 1mm △○
+F
+'\n        Optimize learning approach for a specific task\n\n        Args:\n            task: Learning task\n            loss_fn: Loss function\n\n        Returns:\n            MetaLearningEpisode with results\n        '
+hyperparams
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+task
+●●●●●● 2mm □△
+similar_tasks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+initial_loss
+●●●●●● 1mm □
+●●●●●● 2mm □
+final_loss
+●●●●●● 1mm □
+●●●●●● 2mm □
+num_steps
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+●●●●●● 3mm △
+X
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+x
+x
+y
+task
+●●●●●● 2mm □△
+y_true
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+y
+x
+y
+task
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+X
+●●●●●● 2mm □△
+initial_loss
+●●●●●● 1mm □
+loss_fn
+●●●●●● 1mm □△
+predictions
+y_true
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+adapted_model
+final_loss
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+loss_fn
+●●●●●● 2mm □△
+num_steps
+●●●●●● 1mm □
+●●●●●● 3mm △
+episode
+●●●●●● 1mm □
+MetaLearningEpisode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episode
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+performance
+●●●●●● 1mm □
+initial_loss
+episode
+●●●●●● 3mm □△
+initial_loss
+●●●●●● 3mm ○
+1e-08
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+hyperparams
+performance
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+episode
+MetaLearningEpisode
+●●●●●● 1mm □
+get_learning_recommendations
+●●●●●● 1mm □△
+self
+task_type
+task_metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Get recommendations for learning a new task type\n\n        Args:\n            task_type: Type of task\n            task_metadata: Task metadata\n\n        Returns:\n            Dict with recommendations\n        '
+hyperparams
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+task_metadata
+●●●●●● 2mm □△
+best_configs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'suggested_hyperparams'
+'best_known_configs'
+'num_historical_examples'
+hyperparams
+best_configs
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+e
+e
+●●●●●● 3mm △
+e
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+save_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save meta-learning state'
+state
+●●●●●● 1mm □
+'hyperparam_stats'
+'performance_history'
+'task_embeddings'
+'num_episodes'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+k
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+state_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'meta_learning_state.json'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+state_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+state
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+model_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'maml_model.pt'
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+load_state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load meta-learning state'
+state_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'meta_learning_state.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+state_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+state_path
+'r'
+●●●●●● 2mm □△
+f
+state
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □△
+'hyperparam_stats'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+'performance_history'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+k
+np
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+state
+●●●●●● 1mm □△
+'task_embeddings'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+_meta_learning_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_meta_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get singleton meta-learning orchestrator'
+●●●●●● 2mm □
+_meta_learning_instance
+●●●●●● 2mm □
+_meta_learning_instance
+●●●●●● 1mm □
+MetaLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_meta_learning_instance
+MetaLearningOrchestrator

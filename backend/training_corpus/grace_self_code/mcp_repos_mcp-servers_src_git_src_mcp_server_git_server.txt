@@ -1,0 +1,1157 @@
+## server.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Sequence
+Optional
+●●●●●● 3mm □△○
+mcp.server
+●●●●●● 2mm □△○
+Server
+●●●●●● 3mm □△○
+mcp.server.session
+●●●●●● 2mm □△○
+ServerSession
+●●●●●● 3mm □△○
+mcp.server.stdio
+●●●●●● 2mm □△○
+stdio_server
+●●●●●● 3mm □△○
+mcp.types
+●●●●●● 2mm □△○
+ClientCapabilities
+TextContent
+Tool
+ListRootsResult
+RootsCapability
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+git
+●●●●●● 3mm □△○
+git.exc
+●●●●●● 2mm □△○
+BadName
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+DEFAULT_CONTEXT_LINES
+●●●●●● 1mm □
+3
+●●●●●● 2mm △
+GitStatus
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+●●●●●● 2mm △
+GitDiffUnstaged
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+context_lines
+●●●●●● 2mm ○
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm △
+GitDiffStaged
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+context_lines
+●●●●●● 2mm ○
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm △
+GitDiff
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+target
+●●●●●● 1mm ○
+context_lines
+●●●●●● 2mm ○
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm △
+GitCommit
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+●●●●●● 2mm △
+GitAdd
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+files
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+GitReset
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+●●●●●● 2mm △
+GitLog
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+max_count
+●●●●●● 2mm ○
+10
+start_timestamp
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+end_timestamp
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GitCreateBranch
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+branch_name
+●●●●●● 1mm ○
+base_branch
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm △
+GitCheckout
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+branch_name
+●●●●●● 1mm ○
+●●●●●● 2mm △
+GitShow
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+revision
+●●●●●● 1mm ○
+●●●●●● 2mm △
+GitBranch
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+repo_path
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+branch_type
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+contains
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+not_contains
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GitTools
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+STATUS
+●●●●●● 1mm □
+'git_status'
+DIFF_UNSTAGED
+●●●●●● 1mm □
+'git_diff_unstaged'
+DIFF_STAGED
+●●●●●● 1mm □
+'git_diff_staged'
+DIFF
+●●●●●● 1mm □
+'git_diff'
+COMMIT
+●●●●●● 1mm □
+'git_commit'
+ADD
+●●●●●● 1mm □
+'git_add'
+RESET
+●●●●●● 1mm □
+'git_reset'
+LOG
+●●●●●● 1mm □
+'git_log'
+CREATE_BRANCH
+●●●●●● 1mm □
+'git_create_branch'
+CHECKOUT
+●●●●●● 1mm □
+'git_checkout'
+SHOW
+●●●●●● 1mm □
+'git_show'
+BRANCH
+●●●●●● 1mm □
+'git_branch'
+●●●●●● 1mm □
+git_status
+●●●●●● 1mm □△
+repo
+●●●●●● 2mm □△
+git
+●●●●●● 3mm ○
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_diff_unstaged
+●●●●●● 1mm □△
+repo
+context_lines
+●●●●●● 2mm □△
+git
+●●●●●● 2mm ○
+DEFAULT_CONTEXT_LINES
+●●●●●● 3mm ○
+repo
+●●●●●● 1mm □△
+'--unified='
+context_lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_diff_staged
+●●●●●● 1mm □△
+repo
+context_lines
+●●●●●● 2mm □△
+git
+●●●●●● 2mm ○
+DEFAULT_CONTEXT_LINES
+●●●●●● 3mm ○
+repo
+●●●●●● 1mm □△
+'--unified='
+context_lines
+'--cached'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_diff
+●●●●●● 1mm □△
+repo
+target
+context_lines
+●●●●●● 2mm □△
+git
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+BadName
+●●●●●● 1mm □△
+"Invalid target: '"
+target
+"' - cannot start with '-'"
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+repo
+●●●●●● 1mm □△
+'--unified='
+context_lines
+target
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_commit
+●●●●●● 1mm □△
+repo
+message
+●●●●●● 2mm □△
+git
+●●●●●● 1mm ○
+commit
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Changes committed successfully with hash '
+commit
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_add
+●●●●●● 1mm □△
+repo
+files
+●●●●●● 2mm □△
+git
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+files
+'.'
+repo
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+repo
+●●●●●● 1mm □△
+'--'
+files
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Files staged successfully'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_reset
+●●●●●● 1mm □△
+repo
+●●●●●● 2mm □△
+git
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'All staged changes reset'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_log
+●●●●●● 1mm □△
+repo
+max_count
+start_timestamp
+end_timestamp
+●●●●●● 2mm □△
+git
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+10
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+start_timestamp
+end_timestamp
+args
+●●●●●● 1mm □
+●●●●●● 2mm □
+start_timestamp
+args
+●●●●●● 1mm □△
+'--since'
+start_timestamp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+end_timestamp
+args
+●●●●●● 1mm □△
+'--until'
+end_timestamp
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □△
+'--format=%H%n%an%n%ad%n%s%n'
+●●●●●● 2mm □△
+log_output
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+log
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_output
+●●●●●● 2mm □△
+4
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+●●●●●● 3mm ○
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_output
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log
+●●●●●● 2mm □△
+max_count
+log
+●●●●●● 1mm □△
+'Commit: '
+log_output
+i
+'\nAuthor: '
+log_output
+i
+●●●●●● 3mm ○
+1
+'\nDate: '
+log_output
+i
+●●●●●● 3mm ○
+2
+'\nMessage: '
+log_output
+i
+●●●●●● 3mm ○
+3
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+log
+●●●●●● 3mm □
+commits
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+log
+●●●●●● 1mm □
+●●●●●● 3mm □
+commit
+commits
+log
+●●●●●● 1mm □△
+'Commit: '
+commit
+'\nAuthor: '
+commit
+'\nDate: '
+commit
+'\nMessage: '
+commit
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+log
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_create_branch
+●●●●●● 1mm □△
+repo
+branch_name
+base_branch
+●●●●●● 2mm □△
+git
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+base_branch
+base
+●●●●●● 1mm □
+repo
+base_branch
+●●●●●● 3mm □
+base
+●●●●●● 1mm □
+repo
+repo
+●●●●●● 1mm □△
+branch_name
+base
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+"Created branch '"
+branch_name
+"' from '"
+base
+"'"
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_checkout
+●●●●●● 1mm □△
+repo
+branch_name
+●●●●●● 2mm □△
+git
+●●●●●● 1mm ○
+●●●●●● 2mm □
+branch_name
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+BadName
+●●●●●● 1mm □△
+"Invalid branch name: '"
+branch_name
+"' - cannot start with '-'"
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+branch_name
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+branch_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+"Switched to branch '"
+branch_name
+"'"
+●●●●●● 1mm ○
+●●●●●● 1mm □
+git_show
+●●●●●● 1mm □△
+repo
+revision
+●●●●●● 2mm □△
+git
+●●●●●● 1mm ○
+commit
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+revision
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+'Commit: '
+commit
+'\nAuthor: '
+commit
+'\nDate: '
+commit
+'\nMessage: '
+commit
+'\n'
+●●●●●● 2mm □
+commit
+parent
+●●●●●● 1mm □
+commit
+0
+diff
+●●●●●● 1mm □
+parent
+●●●●●● 1mm □△
+commit
+●●●●●● 2mm □△
+●●●●●● 3mm □
+diff
+●●●●●● 1mm □
+commit
+●●●●●● 1mm □△
+git
+●●●●●● 2mm □△
+d
+diff
+output
+●●●●●● 1mm □△
+'\n--- '
+d
+'\n+++ '
+d
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+d
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+output
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+validate_repo_path
+●●●●●● 1mm □△
+repo_path
+allowed_repository
+●●●●●● 2mm □△
+Path
+Path
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Validate that repo_path is within the allowed repository path.'
+●●●●●● 2mm □
+allowed_repository
+●●●●●● 2mm □
+●●●●●● 3mm ○
+resolved_repo
+●●●●●● 1mm □
+repo_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+resolved_allowed
+●●●●●● 1mm □
+allowed_repository
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OSError
+RuntimeError
+ValueError
+●●●●●● 1mm □△
+'Invalid path: '
+repo_path
+●●●●●● 2mm □△
+resolved_repo
+●●●●●● 1mm □△
+resolved_allowed
+●●●●●● 2mm □△
+ValueError
+ValueError
+●●●●●● 1mm □△
+"Repository path '"
+repo_path
+"' is outside the allowed repository '"
+allowed_repository
+"'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+repo
+branch_type
+contains
+not_contains
+●●●●●● 2mm □△
+git
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+contains
+contains_sha
+●●●●●● 1mm □
+●●●●●● 2mm □
+contains_sha
+●●●●●● 1mm □
+'--contains'
+contains
+not_contains
+not_contains_sha
+●●●●●● 1mm □
+●●●●●● 2mm □
+not_contains_sha
+●●●●●● 1mm □
+'--no-contains'
+not_contains
+branch_type
+'local'
+b_type
+●●●●●● 1mm □
+●●●●●● 2mm □
+'remote'
+b_type
+●●●●●● 1mm □
+'-r'
+'all'
+b_type
+●●●●●● 1mm □
+'-a'
+●●●●●● 3mm ○
+'Invalid branch type: '
+branch_type
+branch_info
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+b_type
+contains_sha
+not_contains_sha
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+branch_info
+●●●●●● 1mm ○
+Path
+●●●●●● 1mm ○
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm □
+repository
+●●●●●● 2mm □
+git
+●●●●●● 1mm □△
+repository
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Using repository at '
+repository
+●●●●●● 2mm □△
+git
+logger
+●●●●●● 1mm □△
+repository
+' is not a valid Git repository'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+server
+●●●●●● 1mm □
+Server
+●●●●●● 1mm □△
+'mcp-git'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tool
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+server
+ServerSession
+●●●●●● 2mm □△
+TypeError
+●●●●●● 1mm □△
+'server.request_context.session must be a ServerSession'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+server
+●●●●●● 1mm □△
+ClientCapabilities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+roots_result
+ListRootsResult
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Roots result: '
+roots_result
+●●●●●● 2mm □△
+repo_paths
+●●●●●● 1mm □
+root
+roots_result
+path
+●●●●●● 1mm □
+root
+git
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+repo_paths
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+git
+●●●●●● 3mm ○
+repo_paths
+Sequence
+●●●●●● 1mm ○
+●●●●●● 1mm □
+by_commandline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+repository
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+repository
+●●●●●● 2mm □△
+Sequence
+●●●●●● 1mm ○
+cmd_repos
+●●●●●● 1mm □
+by_commandline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root_repos
+●●●●●● 1mm □
+by_roots
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+root_repos
+cmd_repos
+Sequence
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+repo_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+arguments
+'repo_path'
+●●●●●● 2mm □△
+validate_repo_path
+●●●●●● 1mm □△
+repo_path
+repository
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+git
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+name
+GitTools
+status
+●●●●●● 1mm □
+git_status
+●●●●●● 1mm □△
+repo
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+diff
+●●●●●● 1mm □
+git_diff_unstaged
+●●●●●● 1mm □△
+repo
+arguments
+●●●●●● 1mm □△
+'context_lines'
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+diff
+●●●●●● 1mm □
+git_diff_staged
+●●●●●● 1mm □△
+repo
+arguments
+●●●●●● 1mm □△
+'context_lines'
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+diff
+●●●●●● 1mm □
+git_diff
+●●●●●● 1mm □△
+repo
+arguments
+'target'
+arguments
+●●●●●● 1mm □△
+'context_lines'
+DEFAULT_CONTEXT_LINES
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_commit
+●●●●●● 1mm □△
+repo
+arguments
+'message'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_add
+●●●●●● 1mm □△
+repo
+arguments
+'files'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_reset
+●●●●●● 1mm □△
+repo
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+log
+●●●●●● 1mm □
+git_log
+●●●●●● 1mm □△
+repo
+arguments
+●●●●●● 1mm □△
+'max_count'
+10
+●●●●●● 2mm □△
+arguments
+●●●●●● 1mm □△
+'start_timestamp'
+●●●●●● 2mm □△
+arguments
+●●●●●● 1mm □△
+'end_timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_create_branch
+●●●●●● 1mm □△
+repo
+arguments
+'branch_name'
+arguments
+●●●●●● 1mm □△
+'base_branch'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_checkout
+●●●●●● 1mm □△
+repo
+arguments
+'branch_name'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_show
+●●●●●● 1mm □△
+repo
+arguments
+'revision'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GitTools
+result
+●●●●●● 1mm □
+git_branch
+●●●●●● 1mm □△
+repo
+arguments
+●●●●●● 1mm □△
+'branch_type'
+'local'
+●●●●●● 2mm □△
+arguments
+●●●●●● 1mm □△
+'contains'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+arguments
+●●●●●● 1mm □△
+'not_contains'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Unknown tool: '
+name
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+TextContent
+options
+●●●●●● 1mm □
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stdio_server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+read_stream
+write_stream
+server
+●●●●●● 1mm □△
+read_stream
+write_stream
+options
+●●●●●● 2mm □△
+●●●●●● 2mm □

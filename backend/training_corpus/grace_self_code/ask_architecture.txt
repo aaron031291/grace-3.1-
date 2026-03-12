@@ -1,0 +1,112 @@
+## ask_architecture.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_qwen_coder
+get_kimi_client
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+"You are a core cognitive engine inside the Grace AGI architecture. You have deep knowledge of Grace's autonomous loops, the memory mesh, and self-healing systems."
+prompt
+●●●●●● 1mm □
+'Based on your understanding of the Grace 3.1 architecture, what is missing from the system right now? What critical components are not wired up properly or remain unimplemented to get the system FULLY functional as an autonomous, self-healing, self-improving AGI? Please provide a concise but highly technical response detailing the specific gaps in integration or implementation. Mention specific subsystems (like the unified logic hub, ghost memory, consensus engine) if they are incomplete.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'architecture_gaps.md'
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+'=== QWEN 3 (Local Reasoning & Coding Engine) ===\n'
+●●●●●● 2mm □△
+os
+'OLLAMA_MODEL_CODE'
+●●●●●● 1mm □
+'qwen3:32b'
+qwen
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 2mm □△
+Exception
+f
+●●●●●● 1mm □△
+'Qwen error: '
+e
+'\n\n'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'=== KIMI (Cloud Context Engine) ===\n'
+●●●●●● 2mm □△
+kimi
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+f
+●●●●●● 1mm □△
+'Kimi error: '
+e
+'\n'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Fatal script error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -728,11 +728,11 @@ class FeedbackLoop:
         Record the outcome of a pipeline generation via unified memory.
         outcome: 'positive', 'negative', 'failure'
         """
-        source = "cognitive_pipeline"
         try:
             from cognitive.unified_memory import get_unified_memory
             mem = get_unified_memory()
             trust = {"positive": 0.8, "negative": 0.3, "failure": 0.1}.get(outcome, 0.5) + trust_delta
+            source = "cognitive_pipeline"
 
             mem.store_learning(
                 input_ctx=prompt[:5000],
@@ -741,7 +741,6 @@ class FeedbackLoop:
                 trust=trust,
                 source=source,
                 example_type=f"pipeline_{outcome}",
-                trust_coin="VVT_PLATINUM_COIN",
             )
             mem.store_episode(
                 problem=prompt[:2000],
@@ -749,7 +748,6 @@ class FeedbackLoop:
                 outcome=output[:2000],
                 trust=trust,
                 source="feedback_loop",
-                trust_coin="VVT_PLATINUM_COIN",
             )
             if outcome == "positive" and trust >= 0.8:
                 mem.store_procedure(
@@ -758,7 +756,6 @@ class FeedbackLoop:
                     steps="Generate, Verify, Apply",
                     trust=trust,
                     proc_type="pipeline_learned",
-                    trust_coin="VVT_PLATINUM_COIN",
                 )
 
             from api._genesis_tracker import track

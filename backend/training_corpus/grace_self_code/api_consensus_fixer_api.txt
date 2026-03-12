@@ -1,0 +1,669 @@
+## consensus_fixer_api.py
+'\nConsensus Auto-Fixer — gives the consensus mechanism full authority to\ndiagnose and fix problems, subject to:\n  1. Hallucination verification\n  2. All models must agree\n  3. Every action tracked via Genesis key\n  4. Governance rules enforced\n\nFlow:\n  1. Probe detects broken endpoint / dormant service\n  2. All available models independently diagnose the problem\n  3. Consensus formed — agreements and disagreements identified\n  4. If ALL models agree with high confidence → auto-execute fix\n  5. Fix verified by re-probing the endpoint\n  6. Everything tracked in Genesis keys with full provenance\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_all_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Collect all known problems from every diagnostic source.'
+problems
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+_discover_routes
+_probe_endpoint
+routes
+●●●●●● 1mm □
+_discover_routes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+routes
+100
+result
+●●●●●● 1mm □
+_probe_endpoint
+●●●●●● 1mm □△
+r
+'path'
+r
+'method'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'status'
+'broken'
+problems
+●●●●●● 1mm □△
+'source'
+'type'
+'target'
+'error'
+'status_code'
+'api_probe'
+'broken_endpoint'
+result
+'path'
+result
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'status_code'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Probe discovery skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+COMPONENT_REGISTRY
+_get_genesis_keys
+_classify_component
+_check_service_health
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+svc_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+svc_health
+●●●●●● 2mm □△
+●●●●●● 2mm □
+classified
+'status'
+'red'
+'orange'
+problems
+●●●●●● 1mm □△
+'source'
+'type'
+'target'
+'component_id'
+'error'
+'status'
+'component_health'
+'degraded_component'
+classified
+'label'
+comp_id
+classified
+'reason'
+classified
+'status'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Component health check skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.runtime_triggers_api
+●●●●●● 2mm □△○
+_scan_resources
+_scan_services
+_scan_code
+_scan_network
+scanner
+_scan_resources
+_scan_services
+_scan_code
+_scan_network
+found
+●●●●●● 1mm □
+scanner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+found
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+t
+'to_dict'
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+'warning'
+problems
+●●●●●● 1mm □△
+'source'
+'type'
+'target'
+'error'
+'severity'
+'trigger_scan'
+entry
+●●●●●● 1mm □△
+'category'
+'unknown'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'detail'
+''
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'severity'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+●●●●●● 3mm ○
+problems
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_consensus_diagnose_and_fix
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n    Send a problem to ALL models for diagnosis + fix proposal.\n    If all agree → execute. If not → log for human review.\n    '
+prompt
+●●●●●● 1mm □
+'Grace system problem detected:\n\nSource: '
+problem
+●●●●●● 1mm □△
+'source'
+●●●●●● 2mm □△
+'\nType: '
+problem
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'\nTarget: '
+problem
+●●●●●● 1mm □△
+'target'
+●●●●●● 2mm □△
+'\nError: '
+problem
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+'\nStatus: '
+problem
+●●●●●● 1mm □△
+'status'
+problem
+●●●●●● 1mm □△
+'status_code'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\n1. What is the root cause? (max 2 sentences)\n2. What is the specific fix? (max 3 sentences)\n3. Can this be safely auto-fixed without human approval? (yes/no + reason)\n'
+result
+●●●●●● 1mm □
+'problem'
+'diagnosis'
+'confidence'
+'all_agree'
+'auto_fixable'
+'action_taken'
+'genesis_key_id'
+problem
+●●●●●● 2mm □
+0
+●●●●●● 1mm □
+●●●●●● 1mm □
+'none'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+consensus
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'diagnosis'
+●●●●●● 1mm □
+consensus
+result
+'confidence'
+●●●●●● 1mm □
+consensus
+result
+'models_used'
+●●●●●● 1mm □
+consensus
+result
+'agreements'
+●●●●●● 1mm □
+consensus
+result
+'disagreements'
+●●●●●● 1mm □
+consensus
+result
+'all_agree'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+consensus
+●●●●●● 2mm □△
+0
+result
+'individual_responses'
+●●●●●● 1mm □
+consensus
+output_lower
+●●●●●● 1mm □
+consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'auto_fixable'
+●●●●●● 1mm □
+result
+'all_agree'
+result
+'confidence'
+0.6
+'yes'
+output_lower
+'auto-fix'
+output_lower
+'safely'
+output_lower
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+gk_id
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'genesis_key_id'
+●●●●●● 1mm □
+gk_id
+Exception
+●●●●●● 2mm □
+result
+'auto_fixable'
+heal_result
+●●●●●● 1mm □
+_execute_healing
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+result
+'action_taken'
+●●●●●● 1mm □
+heal_result
+●●●●●● 1mm □△
+'action'
+'attempted'
+●●●●●● 2mm □△
+result
+'heal_result'
+●●●●●● 1mm □
+heal_result
+Exception
+result
+'diagnosis'
+●●●●●● 1mm □
+'Consensus failed: '
+e
+result
+'action_taken'
+●●●●●● 1mm □
+'consensus_error'
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_execute_healing
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Execute a safe healing action for a problem.'
+ptype
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ptype
+'degraded_component'
+'down'
+problem
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+TriggerSource
+engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'target'
+'diagnostic_cycle'
+target
+●●●●●● 2mm □
+'database'
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'db'
+ptype
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'target'
+'db_pool_reset'
+target
+●●●●●● 2mm □
+'memory'
+problem
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'ram'
+ptype
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'target'
+'gc_collect'
+target
+●●●●●● 3mm ○
+'action'
+'target'
+'no_safe_action'
+target
+Exception
+●●●●●● 3mm ○
+'action'
+'target'
+'error'
+'heal_error'
+target
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Scan every diagnostic source for problems.'
+problems
+●●●●●● 1mm □
+_get_all_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'problems'
+'total'
+'critical'
+'scanned_at'
+problems
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+problems
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+p
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'red'
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/scan'
+●●●●●● 2mm □△
+'\n    Full autonomous pipeline: scan → diagnose via consensus → fix.\n    All models must agree. Everything tracked via Genesis keys.\n    '
+problems
+●●●●●● 1mm □
+_get_all_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+problems
+●●●●●● 3mm ○
+'status'
+'message'
+'problems_found'
+'all_clear'
+'No problems found'
+0
+results
+●●●●●● 1mm □
+problem
+problems
+10
+result
+●●●●●● 1mm □
+_consensus_diagnose_and_fix
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+fixed
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 1mm □△
+'action_taken'
+●●●●●● 2mm □△
+'none'
+'consensus_error'
+agreed
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 1mm □△
+'all_agree'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'problems_found'
+'diagnosed'
+'fixed'
+'consensus_agreed'
+'results'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fixed
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agreed
+●●●●●● 2mm □△
+results
+router
+●●●●●● 1mm □△
+'/fix-all'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'Diagnose and fix a single specific problem via consensus.'
+problem
+●●●●●● 1mm □
+'source'
+'type'
+'target'
+'error'
+'manual'
+'user_reported'
+target
+error
+result
+●●●●●● 1mm □
+_consensus_diagnose_and_fix
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/fix-one'
+●●●●●● 2mm □△

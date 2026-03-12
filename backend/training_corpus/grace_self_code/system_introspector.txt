@@ -1,0 +1,1826 @@
+## system_introspector.py
+'\nDeterministic System Introspection Engine\n==========================================\nCatalogs EVERYTHING in the Grace system so anyone new can come in,\nsearch, and understand the entire architecture without context.\n\nIndexes:\n- Every Python file with classes, functions, imports\n- Every API endpoint (routers, paths, methods)\n- Every model/weight reference\n- Every configuration setting\n- Every connector and its actions\n- Every data flow relationship\n- Every LLM client (Kimi, Opus, Ollama, etc.)\n\nAll deterministic. No LLM needed. Pure AST + structural analysis.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Set
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileIndex
+'Index entry for a single Python file.'
+path
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+classes
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+functions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+imports
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+docstring
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+line_count
+●●●●●● 2mm ○
+has_router
+●●●●●● 3mm △
+●●●●●● 1mm □
+router_prefix
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+has_tests
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+APIEndpoint
+'A discovered API endpoint.'
+method
+●●●●●● 1mm ○
+path
+●●●●●● 1mm ○
+function_name
+●●●●●● 1mm ○
+file
+●●●●●● 1mm ○
+tags
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ConnectorInfo
+'A Layer 1 connector with its actions.'
+name
+●●●●●● 1mm ○
+file
+●●●●●● 1mm ○
+component_type
+●●●●●● 1mm ○
+autonomous_actions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+request_handlers
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+subscriptions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+SystemIndex
+'Complete searchable index of the Grace system.'
+timestamp
+●●●●●● 1mm ○
+files
+●●●●●● 3mm □△
+FileIndex
+endpoints
+●●●●●● 3mm □△
+APIEndpoint
+connectors
+●●●●●● 3mm □△
+ConnectorInfo
+models
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+settings
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+data_flows
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+file_count
+●●●●●● 2mm ○
+total_classes
+●●●●●● 2mm ○
+total_functions
+●●●●●● 2mm ○
+total_endpoints
+●●●●●● 2mm ○
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'file_count'
+'total_classes'
+'total_functions'
+'total_endpoints'
+'files'
+'endpoints'
+'connectors'
+'models'
+'settings'
+'data_flows'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+e
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search the index for a query string.'
+q
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+terms
+●●●●●● 1mm □
+t
+t
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+1
+results
+●●●●●● 1mm □
+'query'
+'files'
+'endpoints'
+'connectors'
+'classes'
+'functions'
+'settings'
+query
+f
+●●●●●● 3mm △
+score
+●●●●●● 1mm □
+0
+term
+terms
+●●●●●● 2mm □
+term
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+3
+●●●●●● 2mm □
+f
+term
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+2
+●●●●●● 2mm □
+term
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+1
+cls
+f
+●●●●●● 2mm □
+term
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+2
+results
+'classes'
+●●●●●● 1mm □△
+'class'
+'file'
+cls
+f
+●●●●●● 2mm □△
+fn
+f
+●●●●●● 2mm □
+term
+fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+1
+results
+'functions'
+●●●●●● 1mm □△
+'function'
+'file'
+fn
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+score
+0
+results
+'files'
+●●●●●● 1mm □△
+'path'
+'category'
+'relevance'
+'docstring'
+f
+f
+score
+f
+''
+200
+●●●●●● 2mm □△
+ep
+●●●●●● 3mm △
+score
+●●●●●● 1mm □
+0
+term
+terms
+●●●●●● 2mm □
+term
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+3
+●●●●●● 2mm □
+term
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+2
+●●●●●● 2mm □
+ep
+term
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+1
+tag
+ep
+●●●●●● 2mm □
+term
+tag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+1
+●●●●●● 2mm □
+score
+0
+results
+'endpoints'
+●●●●●● 1mm □△
+'method'
+'path'
+'function'
+'file'
+'relevance'
+ep
+ep
+ep
+ep
+score
+●●●●●● 2mm □△
+c
+●●●●●● 3mm △
+score
+●●●●●● 1mm □
+0
+term
+terms
+●●●●●● 2mm □
+term
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+term
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+3
+●●●●●● 2mm □
+c
+term
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+2
+●●●●●● 2mm □
+score
+0
+results
+'connectors'
+●●●●●● 1mm □△
+'name'
+'type'
+'file'
+'relevance'
+c
+c
+c
+score
+●●●●●● 2mm □△
+key
+val
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+term
+terms
+●●●●●● 2mm □
+term
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'settings'
+●●●●●● 1mm □△
+'key'
+'value'
+key
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+key
+results
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+key
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+results
+key
+●●●●●● 2mm □△
+20
+results
+'total_results'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+_categorize_file
+●●●●●● 1mm □△
+rel_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Categorize a file by its directory.'
+parts
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+rel_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parts
+●●●●●● 3mm ○
+'root'
+category_map
+●●●●●● 1mm □
+'api'
+'cognitive'
+'core'
+'database'
+'diagnostic_machine'
+'embedding'
+'genesis'
+'grace_mcp'
+'grace_os'
+'ingestion'
+'layer1'
+'librarian'
+'llm_orchestrator'
+'ml_intelligence'
+'models'
+'retrieval'
+'search'
+'security'
+'vector_db'
+'file_manager'
+'tests'
+'api'
+'cognitive'
+'core'
+'database'
+'diagnostics'
+'embedding'
+'genesis'
+'mcp'
+'os_layers'
+'ingestion'
+'layer1'
+'librarian'
+'llm'
+'ml_intelligence'
+'models'
+'retrieval'
+'search'
+'security'
+'vector_db'
+'file_manager'
+'tests'
+●●●●●● 3mm ○
+category_map
+●●●●●● 1mm □△
+parts
+0
+parts
+0
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+index_python_files
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'Index every Python file with classes, functions, imports.'
+files
+●●●●●● 1mm □
+skip_dirs
+●●●●●● 1mm □
+'__pycache__'
+'venv'
+'node_modules'
+'.git'
+'mcp_repos'
+'knowledge_base'
+py_file
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+py_file
+skip
+skip_dirs
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+UnicodeDecodeError
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+classes
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+functions
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+ast
+●●●●●● 2mm □△
+imports
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+alias
+node
+imports
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+imports
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+docstring
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+has_router
+●●●●●● 1mm □
+'router'
+source
+'APIRouter'
+source
+router_prefix
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+has_router
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+t
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+t
+ast
+●●●●●● 2mm □△
+t
+'router'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+kw
+node
+●●●●●● 2mm □
+kw
+'prefix'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+router_prefix
+●●●●●● 1mm □
+kw
+files
+●●●●●● 1mm □△
+FileIndex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+files
+●●●●●● 3mm □△
+FileIndex
+●●●●●● 1mm □
+index_api_endpoints
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Index all API endpoints by parsing router decorators.\n    Finds @router.get, @app.get, @router.post, etc.\n    '
+endpoints
+●●●●●● 1mm □
+skip_dirs
+●●●●●● 1mm □
+'__pycache__'
+'venv'
+'node_modules'
+'.git'
+py_file
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+py_file
+skip
+skip_dirs
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+UnicodeDecodeError
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router_prefix
+●●●●●● 1mm □
+''
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+t
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+t
+ast
+●●●●●● 2mm □△
+t
+'router'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+kw
+node
+●●●●●● 2mm □
+kw
+'prefix'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+router_prefix
+●●●●●● 1mm □
+kw
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+ast
+●●●●●● 2mm □△
+decorator
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+decorator
+ast
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □
+decorator
+method
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'get'
+'post'
+'put'
+'delete'
+'patch'
+'websocket'
+method
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+method
+decorator
+path_arg
+●●●●●● 1mm □
+decorator
+0
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+path_arg
+ast
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+router_prefix
+●●●●●● 3mm ○
+path_arg
+tags
+●●●●●● 1mm □
+kw
+decorator
+●●●●●● 2mm □
+kw
+'tags'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+elt
+kw
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+elt
+ast
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □△
+elt
+●●●●●● 2mm □△
+docstring
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+endpoints
+●●●●●● 1mm □△
+APIEndpoint
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+endpoints
+●●●●●● 3mm □△
+APIEndpoint
+●●●●●● 1mm □
+index_connectors
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'Index all Layer 1 connectors and their capabilities.'
+connectors
+●●●●●● 1mm □
+connector_dir
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'layer1'
+●●●●●● 3mm □△
+'components'
+●●●●●● 2mm □
+connector_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+connectors
+py_file
+connector_dir
+●●●●●● 1mm □△
+'*_connector.py'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+UnicodeDecodeError
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+docstring
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+''
+classes
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+main_class
+●●●●●● 1mm □
+classes
+classes
+0
+●●●●●● 2mm □
+autonomous_actions
+●●●●●● 1mm □
+request_handlers
+●●●●●● 1mm □
+subscriptions
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'register_autonomous_action'
+kw
+node
+●●●●●● 2mm □
+kw
+'description'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+autonomous_actions
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+●●●●●● 1mm △
+func
+'register_request_handler'
+kw
+node
+●●●●●● 2mm □
+kw
+'topic'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+request_handlers
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'subscribe'
+kw
+node
+●●●●●● 2mm □
+kw
+'topic'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+subscriptions
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+component_type
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+'_connector'
+''
+●●●●●● 2mm □△
+connectors
+●●●●●● 1mm □△
+ConnectorInfo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+connectors
+●●●●●● 3mm □△
+ConnectorInfo
+●●●●●● 1mm □
+index_models_and_weights
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'Index all model references, weights, and LLM configurations.'
+models
+●●●●●● 1mm □
+'llm_providers'
+'embedding_models'
+'ml_models'
+'configured_models'
+llm_dir
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'llm_orchestrator'
+●●●●●● 2mm □
+llm_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+py_file
+llm_dir
+●●●●●● 1mm □△
+'*_client.py'
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+'_client'
+''
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docstring_match
+●●●●●● 1mm □
+'"""'
+source
+source
+●●●●●● 1mm □△
+'"""'
+●●●●●● 2mm □△
+1
+''
+models
+'llm_providers'
+●●●●●● 1mm □△
+'name'
+'file'
+'description'
+name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+docstring_match
+200
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+models
+'llm_providers'
+●●●●●● 1mm □△
+'name'
+'file'
+name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+models
+'embedding_models'
+●●●●●● 1mm □△
+'name'
+'device'
+'path'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_DEFAULT'
+'all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_DEVICE'
+'cpu'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_MODEL_PATH'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+models
+'configured_models'
+●●●●●● 1mm □
+'primary_llm'
+'provider'
+'kimi_model'
+'opus_model'
+'code_model'
+'reasoning_model'
+'fast_model'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_MODEL'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_LLM_DEFAULT'
+'mistral:7b'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_PROVIDER'
+'ollama'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_MODEL'
+'kimi-k2.5'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_MODEL'
+'claude-sonnet-4-20250514'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_CODE'
+'qwen3.5-coder:7b'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_REASON'
+'deepseek-r1:7b'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_FAST'
+'qwen3.5:7b'
+●●●●●● 2mm □△
+ImportError
+ml_dir
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'ml_intelligence'
+●●●●●● 2mm □
+ml_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+py_file
+ml_dir
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+py_file
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'torch'
+source
+'nn.Module'
+source
+'sklearn'
+source
+models
+'ml_models'
+●●●●●● 1mm □△
+'name'
+'file'
+'type'
+py_file
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'torch'
+source
+'pytorch'
+'sklearn'
+●●●●●● 2mm □△
+Exception
+dl_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'core'
+●●●●●● 3mm □△
+'deep_learning.py'
+●●●●●● 2mm □
+dl_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+'ml_models'
+●●●●●● 1mm □△
+'name'
+'file'
+'type'
+'description'
+'deep_learning'
+'core/deep_learning.py'
+'pytorch'
+'3-head MLP predicting success/risk/trust from Genesis keys'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+models
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+index_settings
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'Index all configuration settings.'
+settings_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'settings.py'
+●●●●●● 2mm □
+settings_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+settings_map
+●●●●●● 1mm □
+source
+●●●●●● 1mm □
+settings_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+node
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+'(computed)'
+settings_map
+name
+●●●●●● 1mm □
+'line'
+'default'
+node
+value
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+100
+'(computed)'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+target
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+target
+ast
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+node
+settings_map
+target
+●●●●●● 1mm □
+'line'
+'default'
+node
+value
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+100
+'(computed)'
+Exception
+●●●●●● 3mm ○
+settings_map
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_data_flows
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return known data flow relationships in the system.'
+●●●●●● 3mm ○
+'from'
+'to'
+'via'
+'data'
+'user_input'
+'brain_api'
+'HTTP/WebSocket'
+'Chat queries, commands'
+'from'
+'to'
+'via'
+'data'
+'brain_api'
+'llm_orchestrator'
+'function call'
+'LLM requests'
+'from'
+'to'
+'via'
+'data'
+'brain_api'
+'retrieval'
+'function call'
+'RAG queries'
+'from'
+'to'
+'via'
+'data'
+'retrieval'
+'qdrant'
+'vector search'
+'Embedding vectors'
+'from'
+'to'
+'via'
+'data'
+'retrieval'
+'embedding'
+'function call'
+'Text to embed'
+'from'
+'to'
+'via'
+'data'
+'ingestion'
+'qdrant'
+'upsert'
+'Document chunks + embeddings'
+'from'
+'to'
+'via'
+'data'
+'ingestion'
+'genesis_keys'
+'Layer 1 bus'
+'File provenance'
+'from'
+'to'
+'via'
+'data'
+'genesis_keys'
+'memory_mesh'
+'Layer 1 bus'
+'Learning linkage'
+'from'
+'to'
+'via'
+'data'
+'memory_mesh'
+'llm_orchestration'
+'Layer 1 bus'
+'Procedural skills'
+'from'
+'to'
+'via'
+'data'
+'memory_mesh'
+'autonomous_learning'
+'Layer 1 bus'
+'Pattern detection'
+'from'
+'to'
+'via'
+'data'
+'file_watcher'
+'version_control'
+'Layer 1 bus'
+'File changes'
+'from'
+'to'
+'via'
+'data'
+'diagnostic_engine'
+'healing_executor'
+'action router'
+'Healing commands'
+'from'
+'to'
+'via'
+'data'
+'diagnostic_engine'
+'websocket'
+'event emitter'
+'Health events'
+'from'
+'to'
+'via'
+'data'
+'autonomous_loop'
+'diagnostic_engine'
+'function call'
+'Cycle triggers'
+'from'
+'to'
+'via'
+'data'
+'continuous_learning'
+'memory_mesh'
+'function call'
+'Learning ingestion'
+'from'
+'to'
+'via'
+'data'
+'consensus_engine'
+'kimi_client'
+'HTTP API'
+'Reasoning requests'
+'from'
+'to'
+'via'
+'data'
+'consensus_engine'
+'opus_client'
+'HTTP API'
+'Audit + reasoning'
+'from'
+'to'
+'via'
+'data'
+'consensus_engine'
+'ollama_client'
+'HTTP API'
+'Local model requests'
+'from'
+'to'
+'via'
+'data'
+'serpapi_service'
+'knowledge_base'
+'auto-ingest'
+'Search results'
+'from'
+'to'
+'via'
+'data'
+'llm_orchestrator'
+'database'
+'SQLAlchemy'
+'Chat persistence'
+'from'
+'to'
+'via'
+'data'
+'ml_intelligence'
+'memory_mesh'
+'trust scoring'
+'KPI and trust'
+'from'
+'to'
+'via'
+'data'
+'governance_engine'
+'brain_api'
+'approval workflow'
+'Action approvals'
+'from'
+'to'
+'via'
+'data'
+'coding_pipeline'
+'deterministic_bridge'
+'function call'
+'Bug detection'
+'from'
+'to'
+'via'
+'data'
+'coding_pipeline'
+'safety'
+'function call'
+'Security scans'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+build_system_index
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'Build the complete searchable system index.'
+logger
+●●●●●● 1mm □△
+'[INTROSPECTOR] Building system index...'
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+index_python_files
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+endpoints
+●●●●●● 1mm □
+index_api_endpoints
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+connectors
+●●●●●● 1mm □
+index_connectors
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+index_models_and_weights
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+settings
+●●●●●● 1mm □
+index_settings
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+data_flows
+●●●●●● 1mm □
+get_data_flows
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_classes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+files
+●●●●●● 2mm □△
+total_functions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+files
+●●●●●● 2mm □△
+index
+●●●●●● 1mm □
+SystemIndex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INTROSPECTOR] Index built: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+' files, '
+total_classes
+' classes, '
+total_functions
+' functions, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+endpoints
+●●●●●● 2mm □△
+' endpoints, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+connectors
+●●●●●● 2mm □△
+' connectors'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+index
+SystemIndex
+_cached_index
+●●●●●● 2mm □○
+SystemIndex
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+force_rebuild
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Get or build the system index (cached).'
+●●●●●● 2mm □
+_cached_index
+●●●●●● 2mm □
+force_rebuild
+_cached_index
+●●●●●● 1mm □
+build_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cached_index
+SystemIndex
+●●●●●● 1mm □
+search_system
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search across the entire Grace system.'
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+index
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

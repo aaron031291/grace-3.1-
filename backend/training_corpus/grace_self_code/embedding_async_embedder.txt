@@ -1,0 +1,400 @@
+## async_embedder.py
+'\nAsync Batch Embedding Generator\n\nWraps synchronous embedding model with async batch processing for scalability.\n\nPerformance Improvement: 3-4x faster for batch operations\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+Dict
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AsyncBatchEmbedder
+'\n    Asynchronous wrapper for batch embedding generation.\n\n    Features:\n    - Thread pool for parallel processing\n    - Batch optimization\n    - Automatic retry logic\n    - Non-blocking async interface\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+embedder
+max_workers
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+4
+32
+'\n        Initialize async embedder.\n\n        Args:\n            embedder: Base EmbeddingModel instance\n            max_workers: Number of worker threads\n            batch_size: Batch size for embedding generation\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedder
+●●●●●● 3mm △
+●●●●●● 1mm □
+batch_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Initialized with '
+max_workers
+' workers, batch_size='
+batch_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Asynchronously embed a single text.\n\n        Args:\n            text: Text to embed\n\n        Returns:\n            Embedding vector\n        '
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+0
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'\n        Asynchronously embed a batch of texts.\n\n        Args:\n            texts: List of texts to embed\n            batch_size: Override default batch size\n\n        Returns:\n            List of embedding vectors\n        '
+●●●●●● 2mm □
+texts
+●●●●●● 3mm ○
+batch_size
+●●●●●● 1mm □
+batch_size
+●●●●●● 3mm △
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+texts
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_embed_batch_sync
+●●●●●● 1mm □△
+self
+texts
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'\n        Synchronous batch embedding (runs in thread pool).\n\n        Args:\n            texts: List of texts to embed\n            batch_size: Batch size for processing\n\n        Returns:\n            List of embedding vectors\n        '
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Embedded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+' texts in batches of '
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+Exception
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Error embedding batch: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'\n        Embed multiple batches in parallel.\n\n        Args:\n            text_groups: List of text batches to embed\n            batch_size: Batch size for each group\n\n        Returns:\n            List of embedding batches (one per group)\n        '
+tasks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+group
+batch_size
+●●●●●● 2mm □△
+group
+text_groups
+results
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Error in batch '
+i
+': '
+result
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+embeddings
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+3
+1.0
+'\n        Embed texts with automatic retry on failure.\n\n        Args:\n            texts: List of texts to embed\n            max_retries: Maximum retry attempts\n            retry_delay: Delay between retries (seconds)\n\n        Returns:\n            List of embedding vectors\n        '
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+max_retries
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+Exception
+●●●●●● 2mm □
+attempt
+max_retries
+●●●●●● 1mm □△
+1
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Retry '
+attempt
+●●●●●● 3mm ○
+1
+'/'
+max_retries
+' after error: '
+e
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+retry_delay
+●●●●●● 2mm □△
+attempt
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Failed after '
+max_retries
+' retries'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+shutdown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Shutdown the thread pool executor'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ASYNC-EMBEDDER] Executor shutdown complete'
+●●●●●● 2mm □△
+'Async context manager entry'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'Async context manager exit'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AsyncSemanticSearch
+'\n    Async wrapper for semantic search operations.\n\n    Combines async embedding with vector DB search.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+embedder
+vector_db_client
+●●●●●● 2mm □△
+AsyncBatchEmbedder
+'\n        Initialize async semantic search.\n\n        Args:\n            embedder: AsyncBatchEmbedder instance\n            vector_db_client: Qdrant client\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedder
+●●●●●● 3mm △
+●●●●●● 1mm □
+vector_db_client
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'documents'
+5
+0.3
+'\n        Asynchronously search for similar vectors.\n\n        Args:\n            query: Query text\n            collection_name: Vector DB collection\n            limit: Maximum results\n            score_threshold: Minimum similarity score\n\n        Returns:\n            List of search results\n        '
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+collection_name
+query_embedding
+limit
+score_threshold
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'documents'
+5
+'\n        Search for multiple queries in parallel.\n\n        Args:\n            queries: List of query texts\n            collection_name: Vector DB collection\n            limit: Maximum results per query\n\n        Returns:\n            List of result lists (one per query)\n        '
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+queries
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+collection_name
+emb
+limit
+0.3
+●●●●●● 2mm □△
+emb
+embeddings
+results
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+create_async_embedder
+●●●●●● 1mm □△
+base_embedder
+max_workers
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+4
+32
+'\n    Create async embedder from base embedder.\n\n    Args:\n        base_embedder: Base EmbeddingModel instance\n        max_workers: Number of worker threads\n        batch_size: Batch size for processing\n\n    Returns:\n        AsyncBatchEmbedder instance\n    '
+●●●●●● 3mm ○
+AsyncBatchEmbedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AsyncBatchEmbedder
+●●●●●● 1mm □
+create_async_semantic_search
+●●●●●● 1mm □△
+embedder
+vector_db_client
+●●●●●● 2mm □△
+AsyncBatchEmbedder
+'\n    Create async semantic search helper.\n\n    Args:\n        embedder: AsyncBatchEmbedder instance\n        vector_db_client: Qdrant client\n\n    Returns:\n        AsyncSemanticSearch instance\n    '
+●●●●●● 3mm ○
+AsyncSemanticSearch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AsyncSemanticSearch

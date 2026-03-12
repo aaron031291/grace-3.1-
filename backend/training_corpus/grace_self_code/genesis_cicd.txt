@@ -1,0 +1,1371 @@
+## cicd.py
+'\nGenesis Key CI/CD Pipeline System\n=================================\nSelf-hosted CI/CD pipeline powered by Genesis Keys.\nNo external dependencies - fully autonomous build/test/deploy.\n\nGenesis Key Actions for CI/CD:\n- PIPELINE_TRIGGER: Initiates a pipeline run\n- PIPELINE_STAGE: Executes a pipeline stage\n- PIPELINE_COMPLETE: Marks pipeline completion\n- BUILD_ARTIFACT: Creates build artifacts\n- TEST_EXECUTION: Runs test suites\n- DEPLOYMENT: Handles deployments\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+tempfile
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PipelineStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Pipeline execution status.'
+PENDING
+●●●●●● 1mm □
+'pending'
+QUEUED
+●●●●●● 1mm □
+'queued'
+RUNNING
+●●●●●● 1mm □
+'running'
+SUCCESS
+●●●●●● 1mm □
+'success'
+FAILED
+●●●●●● 1mm □
+'failed'
+CANCELLED
+●●●●●● 1mm □
+'cancelled'
+SKIPPED
+●●●●●● 1mm □
+'skipped'
+●●●●●● 2mm △
+StageType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of pipeline stages.'
+CHECKOUT
+●●●●●● 1mm □
+'checkout'
+INSTALL
+●●●●●● 1mm □
+'install'
+LINT
+●●●●●● 1mm □
+'lint'
+TEST
+●●●●●● 1mm □
+'test'
+BUILD
+●●●●●● 1mm □
+'build'
+SECURITY
+●●●●●● 1mm □
+'security'
+DEPLOY
+●●●●●● 1mm □
+'deploy'
+NOTIFY
+●●●●●● 1mm □
+'notify'
+CUSTOM
+●●●●●● 1mm □
+'custom'
+●●●●●● 2mm △
+StageResult
+'Result of a pipeline stage execution.'
+stage_name
+●●●●●● 1mm ○
+status
+PipelineStatus
+started_at
+●●●●●● 1mm ○
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+duration_seconds
+●●●●●● 3mm ○
+0
+exit_code
+●●●●●● 2mm ○
+0
+stdout
+●●●●●● 1mm ○
+''
+stderr
+●●●●●● 1mm ○
+''
+artifacts
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+PipelineStage
+'Definition of a pipeline stage.'
+name
+●●●●●● 1mm ○
+stage_type
+StageType
+commands
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+working_dir
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+environment
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeout_seconds
+●●●●●● 2mm ○
+600
+continue_on_error
+●●●●●● 3mm △
+●●●●●● 1mm □
+condition
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+depends_on
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+artifacts
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+Pipeline
+'Pipeline definition.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+''
+stages
+●●●●●● 3mm □△
+PipelineStage
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+triggers
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+branches
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+environment
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeout_minutes
+●●●●●● 2mm ○
+60
+created_at
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+updated_at
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+PipelineRun
+'A single execution of a pipeline.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+pipeline_id
+●●●●●● 1mm ○
+pipeline_name
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 1mm ○
+status
+PipelineStatus
+PipelineStatus
+trigger
+●●●●●● 1mm ○
+'manual'
+branch
+●●●●●● 1mm ○
+'main'
+commit_sha
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+commit_message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+triggered_by
+●●●●●● 1mm ○
+'system'
+started_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+duration_seconds
+●●●●●● 3mm ○
+0
+stage_results
+●●●●●● 3mm □△
+StageResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+artifacts
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logs
+●●●●●● 1mm ○
+''
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GenesisKeyAction
+'Genesis Key actions for CI/CD tracking.'
+PIPELINE_TRIGGER
+●●●●●● 1mm □
+'cicd:pipeline:trigger'
+PIPELINE_STAGE
+●●●●●● 1mm □
+'cicd:pipeline:stage'
+PIPELINE_COMPLETE
+●●●●●● 1mm □
+'cicd:pipeline:complete'
+BUILD_ARTIFACT
+●●●●●● 1mm □
+'cicd:build:artifact'
+TEST_EXECUTION
+●●●●●● 1mm □
+'cicd:test:execution'
+DEPLOYMENT
+●●●●●● 1mm □
+'cicd:deploy'
+WEBHOOK_RECEIVED
+●●●●●● 1mm □
+'cicd:webhook:received'
+●●●●●● 2mm △
+GenesisCICD
+'\n    Genesis Key-powered CI/CD system.\n\n    Self-hosted continuous integration and deployment\n    without external dependencies.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+workspace_dir
+artifacts_dir
+max_concurrent_runs
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'/tmp/grace-cicd'
+'/tmp/grace-cicd/artifacts'
+5
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+workspace_dir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+artifacts_dir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_concurrent_runs
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Pipeline
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PipelineRun
+●●●●●● 3mm △
+asyncio
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+asyncio
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+asyncio
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_default_pipelines
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register default CI/CD pipelines.'
+ci_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+ci_pipeline
+●●●●●● 1mm □
+ci_pipeline
+quick_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+quick_pipeline
+●●●●●● 1mm □
+quick_pipeline
+deploy_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+deploy_pipeline
+●●●●●● 1mm □
+deploy_pipeline
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+action
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Generate a Genesis Key for CI/CD tracking.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_data
+●●●●●● 1mm □
+action
+':'
+timestamp
+':'
+json
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+genesis_key
+●●●●●● 1mm □
+'gk-cicd-'
+key_hash
+●●●●●● 3mm △
+genesis_key
+●●●●●● 1mm □
+'action'
+'timestamp'
+'metadata'
+'created_at'
+action
+timestamp
+metadata
+timestamp
+logger
+●●●●●● 1mm □△
+'[Genesis] Created key '
+genesis_key
+' for action '
+action
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_key
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'manual'
+'main'
+●●●●●● 2mm □
+●●●●●● 2mm □
+'system'
+●●●●●● 2mm □
+'\n        Trigger a pipeline execution.\n\n        Args:\n            pipeline_id: ID of pipeline to run\n            trigger: Trigger type (push, pull_request, manual, schedule)\n            branch: Git branch\n            commit_sha: Git commit SHA\n            commit_message: Commit message\n            triggered_by: User/system that triggered\n            variables: Additional environment variables\n\n        Returns:\n            PipelineRun object\n        '
+●●●●●● 2mm □
+pipeline_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+"Pipeline '"
+pipeline_id
+"' not found"
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+●●●●●● 3mm △
+pipeline_id
+run_id
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+8
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKeyAction
+'pipeline_id'
+'run_id'
+'trigger'
+'branch'
+'commit_sha'
+pipeline_id
+run_id
+trigger
+branch
+commit_sha
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+PipelineRun
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+run_id
+●●●●●● 1mm □
+run
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[CICD] Pipeline '"
+pipeline
+"' queued as run "
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+run
+PipelineRun
+●●●●●● 1mm □
+_start_worker
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start the pipeline worker.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Background worker that processes pipeline runs.'
+logger
+●●●●●● 1mm □△
+'[CICD] Pipeline worker started'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+run_id
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+run_id
+●●●●●● 1mm □
+task
+Exception
+logger
+●●●●●● 1mm □△
+'[CICD] Worker error: '
+e
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Execute a pipeline run.'
+run
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run
+●●●●●● 3mm ○
+pipeline
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pipeline
+run
+●●●●●● 1mm □
+PipelineStatus
+●●●●●● 3mm ○
+run
+●●●●●● 1mm □
+PipelineStatus
+run
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run_workspace
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+run_id
+run_workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CICD] Executing pipeline '
+pipeline
+' (run: '
+run_id
+')'
+●●●●●● 2mm □△
+completed_stages
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+StageResult
+stage
+pipeline
+deps_met
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+dep
+completed_stages
+completed_stages
+dep
+PipelineStatus
+dep
+stage
+●●●●●● 2mm □△
+●●●●●● 2mm □
+deps_met
+stage
+dep_failed
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+dep
+completed_stages
+completed_stages
+dep
+PipelineStatus
+dep
+stage
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dep_failed
+result
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+completed_stages
+stage
+●●●●●● 1mm □
+result
+run
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+stage
+run_workspace
+run
+pipeline
+run
+●●●●●● 1mm □△
+'variables'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+completed_stages
+stage
+●●●●●● 1mm □
+result
+run
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKeyAction
+'run_id'
+'stage'
+'status'
+'duration'
+run_id
+stage
+result
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+PipelineStatus
+stage
+run
+●●●●●● 1mm □
+PipelineStatus
+artifact_path
+stage
+full_path
+●●●●●● 1mm □
+run_workspace
+●●●●●● 3mm □△
+artifact_path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+artifact_dest
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+run_id
+●●●●●● 3mm □△
+artifact_path
+artifact_dest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+full_path
+artifact_dest
+●●●●●● 2mm □△
+●●●●●● 3mm □
+shutil
+●●●●●● 1mm □△
+full_path
+artifact_dest
+●●●●●● 2mm □△
+run
+artifact_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+artifact_dest
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run
+PipelineStatus
+all_success
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+PipelineStatus
+PipelineStatus
+r
+run
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+all_success
+PipelineStatus
+PipelineStatus
+Exception
+logger
+●●●●●● 1mm □△
+'[CICD] Pipeline execution error: '
+e
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+PipelineStatus
+run
+'\nPipeline error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+end
+●●●●●● 1mm □△
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKeyAction
+'run_id'
+'pipeline_id'
+'status'
+'duration'
+'stages_run'
+run_id
+run
+run
+run
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+run_id
+logger
+●●●●●● 1mm □△
+'[CICD] Pipeline '
+run
+' completed: '
+run
+●●●●●● 2mm □△
+PipelineStage
+Path
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Execute a single pipeline stage.'
+started_at
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+env
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+env
+●●●●●● 1mm □△
+environment
+●●●●●● 2mm □△
+env
+'BRANCH'
+●●●●●● 1mm □
+branch
+env
+'WORKSPACE'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+workspace
+●●●●●● 2mm □△
+env
+'GRACE_CICD'
+●●●●●● 1mm □
+'true'
+env
+●●●●●● 1mm □△
+stage
+●●●●●● 2mm □△
+work_dir
+●●●●●● 1mm □
+workspace
+●●●●●● 2mm □
+stage
+work_dir
+●●●●●● 1mm □
+workspace
+●●●●●● 3mm □△
+stage
+work_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+script
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+stage
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CICD] Running stage: '
+stage
+●●●●●● 2mm □△
+process
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+script
+●●●●●● 2mm □△
+stdout
+stderr
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+process
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+process
+result
+●●●●●● 1mm □
+stdout
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+10000
+result
+●●●●●● 1mm □
+stderr
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+10000
+asyncio
+process
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+PipelineStatus
+result
+●●●●●● 1mm □
+'Stage timed out after '
+stage
+' seconds'
+result
+●●●●●● 1mm □
+1
+●●●●●● 2mm □
+result
+0
+result
+●●●●●● 1mm □
+PipelineStatus
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+PipelineStatus
+Exception
+result
+●●●●●● 1mm □
+PipelineStatus
+result
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+1
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+end
+●●●●●● 1mm □△
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CICD] Stage '
+stage
+': '
+result
+' ('
+result
+'.1f'
+'s)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+StageResult
+●●●●●● 1mm □
+get_pipeline
+●●●●●● 1mm □△
+self
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a pipeline by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pipeline_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Pipeline
+●●●●●● 1mm □
+get_run
+●●●●●● 1mm □△
+self
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a pipeline run by ID.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+PipelineRun
+●●●●●● 1mm □
+list_pipelines
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all registered pipelines.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Pipeline
+●●●●●● 1mm □
+list_runs
+●●●●●● 1mm □△
+self
+pipeline_id
+status
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+PipelineStatus
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+50
+'List pipeline runs with optional filters.'
+runs
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pipeline_id
+runs
+●●●●●● 1mm □
+r
+r
+runs
+r
+pipeline_id
+●●●●●● 2mm □
+status
+runs
+●●●●●● 1mm □
+r
+r
+runs
+r
+status
+runs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+runs
+limit
+●●●●●● 3mm □△
+PipelineRun
+●●●●●● 1mm □
+register_pipeline
+●●●●●● 1mm □△
+self
+pipeline
+●●●●●● 2mm □△
+Pipeline
+'Register a new pipeline.'
+●●●●●● 3mm △
+pipeline
+●●●●●● 1mm □
+pipeline
+logger
+●●●●●● 1mm □△
+'[CICD] Registered pipeline: '
+pipeline
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Cancel a running pipeline.'
+run
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+run
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+run
+PipelineStatus
+PipelineStatus
+PipelineStatus
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+run_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+PipelineStatus
+run
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CICD] Cancelled run: '
+run_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_keys
+●●●●●● 1mm □△
+self
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get Genesis Keys, optionally filtered by run ID.'
+●●●●●● 2mm □
+run_id
+●●●●●● 3mm ○
+k
+v
+k
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'run_id'
+●●●●●● 2mm □△
+run_id
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Stop the CI/CD system.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+run_id
+task
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CICD] Pipeline system stopped'
+●●●●●● 2mm □△
+_cicd_instance
+●●●●●● 2mm □○
+GenesisCICD
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global CI/CD instance.'
+●●●●●● 2mm □
+_cicd_instance
+●●●●●● 2mm □
+_cicd_instance
+●●●●●● 1mm □
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cicd_instance
+GenesisCICD
+'Initialize the CI/CD system.'
+cicd
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CICD] Genesis CI/CD system initialized'
+●●●●●● 2mm □△
+'Shutdown the CI/CD system.'
+●●●●●● 2mm □
+_cicd_instance
+_cicd_instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cicd_instance
+●●●●●● 1mm □
+●●●●●● 2mm □

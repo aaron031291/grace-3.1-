@@ -1,0 +1,415 @@
+## query_intelligence_models.py
+'\nSQLAlchemy models for query intelligence and multi-tier query handling.\n\nThese models track:\n- Query handling decisions and tier usage\n- Knowledge gaps identified during queries\n- User-submitted context for gap resolution\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+Integer
+String
+Text
+Boolean
+Float
+ForeignKey
+DateTime
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm △
+QueryHandlingLog
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Log of query handling decisions and tier usage.\n    \n    Tracks which tier was used for each query, confidence scores,\n    and performance metrics for learning and optimization.\n    '
+__tablename__
+●●●●●● 1mm □
+'query_handling_log'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+query_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+query_text
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+tier_used
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+vectordb_attempted
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+vectordb_quality
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+vectordb_result_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+model_attempted
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+model_confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+uncertainty_detected
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+context_requested
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+context_provided
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+final_success
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+response_time_ms
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+knowledge_gaps
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'KnowledgeGap'
+●●●●●● 2mm □△
+context_submissions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'ContextSubmission'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<QueryHandlingLog(id='
+●●●●●● 3mm △
+", query_id='"
+●●●●●● 3mm △
+"', tier='"
+●●●●●● 3mm △
+"', confidence="
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+KnowledgeGap
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Identified knowledge gaps during query processing.\n    \n    Represents specific pieces of information that were missing\n    and needed to answer a query completely.\n    '
+__tablename__
+●●●●●● 1mm □
+'knowledge_gaps'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+query_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+ForeignKey
+●●●●●● 1mm □△
+'query_handling_log.query_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gap_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gap_topic
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+specific_question
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+required
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+resolved
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+resolution_source
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+resolved_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+query_log
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'QueryHandlingLog'
+●●●●●● 2mm □△
+context_submissions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'ContextSubmission'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<KnowledgeGap(id='
+●●●●●● 3mm △
+", gap_id='"
+●●●●●● 3mm △
+"', topic='"
+●●●●●● 3mm △
+"', resolved="
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+ContextSubmission
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    User-submitted context to fill knowledge gaps.\n    \n    Stores context provided by users to help answer queries\n    where the system lacked sufficient information.\n    '
+__tablename__
+●●●●●● 1mm □
+'context_submissions'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+query_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+ForeignKey
+●●●●●● 1mm □△
+'query_handling_log.query_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gap_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+ForeignKey
+●●●●●● 1mm □△
+'knowledge_gaps.gap_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+submitted_context
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+used_in_response
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+improved_response
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+validated
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+query_log
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'QueryHandlingLog'
+●●●●●● 2mm □△
+knowledge_gap
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'KnowledgeGap'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<ContextSubmission(id='
+●●●●●● 3mm △
+", query_id='"
+●●●●●● 3mm △
+"', gap_id='"
+●●●●●● 3mm △
+"', used="
+●●●●●● 3mm △
+')>'

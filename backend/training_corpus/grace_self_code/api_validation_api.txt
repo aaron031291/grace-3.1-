@@ -1,0 +1,862 @@
+## validation_api.py
+"\napi/validation_api.py\n─────────────────────────────────────────────────────────────────────────────\nValidation & Trust Score API\n\nExposes Grace's internal validation metrics to the frontend:\n  - Code verification trust scores (per task and running average)\n  - KPI health per component (coding_agent, self_healing, learning)\n  - Input/output alignment checks (expected vs actual outputs)\n  - Behavioral KPIs aligned with Grace's constitutional pillars\n  - External user-facing success metrics\n\nFrontend can poll GET /api/validation/status for a live dashboard.\n"
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_kpi_snapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Collect KPI data from ml_intelligence KPI tracker.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+●●●●●● 3mm ○
+'available'
+●●●●●● 1mm □
+components
+●●●●●● 1mm □
+'coding_agent.verification'
+'verification_pass'
+'brain_code'
+'brain_ai'
+'brain_system'
+'brain_learn'
+'brain_memory'
+'error_pipeline'
+data
+●●●●●● 1mm □
+comp
+components
+trust
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+data
+comp
+●●●●●● 1mm □
+'trust_score'
+'requests'
+'successes'
+'failures'
+'rejections'
+trust
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+trust
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+●●●●●● 1mm □△
+comp
+'requests'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+'successes'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+'failures'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+'rejected'
+●●●●●● 2mm □△
+Exception
+data
+comp
+●●●●●● 1mm □
+'error'
+'unavailable'
+●●●●●● 3mm ○
+'available'
+'components'
+●●●●●● 3mm □△○
+data
+Exception
+●●●●●● 3mm ○
+'available'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+80
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_recent_verification_results
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Pull recent verification outcomes from Genesis KB.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+desc
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+rows
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+'system_event'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+'%verification%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+desc
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'description'
+'is_error'
+'created_at'
+'context'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+100
+r
+r
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+r
+r
+rows
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_get_healing_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get self-healing MTTR and success rate from error_pipeline.'
+●●●●●● 3mm □△○
+self_healing.error_pipeline
+●●●●●● 2mm □△○
+get_error_pipeline
+ep
+●●●●●● 1mm □
+get_error_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ep
+'get_stats'
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_memory_alignment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if all 3 memory layers have data — input/output alignment signal.'
+out
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+stats
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'unified_memory'
+●●●●●● 1mm □
+stats
+Exception
+out
+'unified_memory'
+●●●●●● 1mm □
+'error'
+'unavailable'
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 1mm □
+magma
+out
+'magma'
+●●●●●● 1mm □
+magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+out
+'magma'
+●●●●●● 1mm □
+'error'
+'unavailable'
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+out
+'ghost'
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+out
+'ghost'
+●●●●●● 1mm □
+'error'
+'unavailable'
+●●●●●● 3mm ○
+out
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n    Full validation dashboard — trust scores, KPIs, memory alignment.\n    Suitable for frontend polling (30s interval recommended).\n    '
+●●●●●● 3mm ○
+'timestamp'
+'kpis'
+'recent_verifications'
+'healing_stats'
+'memory_alignment'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_get_kpi_snapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_get_recent_verification_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_get_healing_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_get_memory_alignment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+"\n    Component-level trust scores aligned with Grace's pillars.\n    Simple endpoint for the frontend trust gauge widget.\n    "
+kpis
+●●●●●● 1mm □
+_get_kpi_snapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+kpis
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_t
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+components
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'timestamp'
+'scores'
+'overall'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'coding_agent'
+'verification'
+'self_healing'
+'intelligence'
+'code_brain'
+'learning_brain'
+'memory_brain'
+'system_brain'
+_t
+●●●●●● 1mm □△
+'coding_agent.verification'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'verification_pass'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'error_pipeline'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'brain_ai'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'brain_code'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'brain_learn'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'brain_memory'
+●●●●●● 2mm □△
+_t
+●●●●●● 1mm □△
+'brain_system'
+●●●●●● 2mm □△
+_compute_overall_trust
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trust'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compute_overall_trust
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Simple weighted average of available trust scores.'
+scores
+●●●●●● 1mm □
+v
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+v
+components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+scores
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+'Raw KPI metrics per component — requests, successes, failures, rejections.'
+●●●●●● 3mm ○
+_get_kpi_snapshot
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/kpis'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'\n    Recent code verification decisions — accepted/rejected, trust score, flags.\n    Use to display verification history in the frontend.\n    '
+●●●●●● 3mm ○
+'timestamp'
+'results'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_get_recent_verification_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/verifications/recent'
+●●●●●● 2mm □△
+'\n    Trigger a full deep probe scan on demand.\n    Returns a probe report ID — results show up in /api/validation/status.\n    '
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+AutonomousDiagnostics
+diag
+●●●●●● 1mm □
+AutonomousDiagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'triggered'
+'message'
+●●●●●● 3mm □△○
+'Deep probe started in background'
+Exception
+●●●●●● 3mm ○
+'triggered'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+router
+●●●●●● 1mm □△
+'/trigger-deep-probe'
+●●●●●● 2mm □△
+'Returns currently running self-healing playbooks + recent history.'
+●●●●●● 3mm □△○
+self_healing.error_pipeline
+●●●●●● 2mm □△○
+get_error_pipeline
+ep
+●●●●●● 1mm □
+get_error_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'active'
+'recent_history'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+ep
+'active_playbooks'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+ep
+'playbook_history'
+●●●●●● 2mm □△
+20
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/playbooks/active'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Returns a combined recent activity stream from Episodic, Learning, and Procedural memory.'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+um
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+um
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'stats'
+'recent_ingestion'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/memory/stream'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Returns recently applied code patches from the coding agent task queue.'
+●●●●●● 3mm □△○
+coding_agent.task_queue
+●●●●●● 2mm □△○
+get_task_queue
+tq
+●●●●●● 1mm □
+get_task_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patches
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+tq
+'recent_patches'
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm ○
+'timestamp'
+'patches'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patches
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/patches/recent'
+●●●●●● 2mm □△
+'Returns the list of active background tasks for the Swarm Swimlane.'
+●●●●●● 3mm □△○
+coding_agent.task_queue
+●●●●●● 2mm □△○
+get_swarm_status
+●●●●●● 3mm ○
+'timestamp'
+'tasks'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_swarm_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/swarm/active'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Trigger an instant code revert for a specific patch ID.'
+●●●●●● 3mm □△○
+coding_agent.task_queue
+●●●●●● 2mm □△○
+get_task_queue
+tq
+●●●●●● 1mm □
+get_task_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_patch
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+p
+p
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+tq
+'recent_patches'
+●●●●●● 2mm □△
+p
+'id'
+patch_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target_patch
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+'Patch '
+patch_id
+' not found in recent memory'
+file_path
+●●●●●● 1mm □
+target_patch
+●●●●●● 1mm □△
+'file'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+'Target file missing'
+●●●●●● 2mm □△○
+subprocess
+proc
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'git'
+'checkout'
+'--'
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+proc
+0
+target_patch
+'reverted'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'ok'
+'msg'
+●●●●●● 3mm □△○
+'Reverted '
+file_path
+' via git checkout'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+'Git revert failed: '
+●●●●●● 3mm ○
+proc
+Exception
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/revert-patch'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Returns recent Qwen/DeepSeek prompts, outputs, and their Trust Scores.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+desc
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+rows
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+'coding_task'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+desc
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'calls'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'id'
+'description'
+'trust_score'
+'created_at'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+r
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+r
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+r
+rows
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/llm/monitor'
+●●●●●● 2mm □△

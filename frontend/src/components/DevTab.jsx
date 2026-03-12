@@ -14,7 +14,6 @@ const PILLARS = [
   { id: "diagnose", label: "Diagnose & Heal", icon: "🏥", desc: "Autopilot Diagnostics combining probes, triggers, and invariant checks with auto-heal." },
   { id: "observe", label: "Trace & Observe", icon: "📡", desc: "Unified observability dashboard for system health, loops, and trust scores." },
   { id: "govern", label: "Govern & Learn", icon: "🏛️", desc: "Central Context Hub for uploading rules, schemas, and tracking knowledge gaps." },
-  { id: "verify", label: "Test, Validate & Verify", icon: "✅", desc: "The Autonomous Proving Ground: 12-Layer VVT pipeline, deterministic invariant checks, and trust gating." },
 ];
 
 export default function DevTab() {
@@ -83,7 +82,6 @@ export default function DevTab() {
           {activePillar === "diagnose" && <DiagnoseArena />}
           {activePillar === "observe" && <ObserveArena />}
           {activePillar === "govern" && <GovernArena />}
-          {activePillar === "verify" && <VerifyArena />}
         </div>
       </div>
 
@@ -313,52 +311,8 @@ function BuildArena({ onOpenTaskManager }) {
         style={{ height: 120, padding: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, color: C.text, fontSize: 14, resize: "none", outline: "none", fontFamily: "inherit", marginBottom: 16, flexShrink: 0 }}
       />
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
-          onClick={async () => {
-            if (!prompt.trim()) return;
-            const contextBody = window.selectedArtifacts ? window.selectedArtifacts : [];
-            setLogs(prev => [...prev, `>>> Submitting task: "${prompt}"...`]);
-            if (contextBody.length > 0) {
-              setLogs(prev => [...prev, `>>> Attaching ${contextBody.length} files as context...`]);
-            }
-
-            try {
-              const res = await fetch(`${API_BASE_URL}/api/devlab/start`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  intent: prompt,
-                  context_files: contextBody,
-                  model: 'qwen'
-                })
-              });
-
-              if (res.ok) {
-                const data = await res.json();
-                setActiveTask({ id: data.task_id, name: "Build Pipeline", intent: prompt });
-                setLogs(prev => [...prev, `>>> Task accepted. ID: ${data.task_id}`]);
-
-                // Open Stream Array
-                const eventSource = new EventSource(`${API_BASE_URL}/api/devlab/stream/${data.task_id}`);
-                eventSource.onmessage = (e) => {
-                  setLogs(l => [...l, e.data]);
-                  if (e.data.includes("[END OF STREAM]")) eventSource.close();
-                };
-                eventSource.onerror = () => {
-                  setLogs(l => [...l, "[ERROR] Connection lost."]);
-                  eventSource.close();
-                };
-              } else {
-                setLogs(prev => [...prev, `[ERROR] Build pipeline rejected the request.`]);
-              }
-            } catch (err) {
-              setLogs(prev => [...prev, `[ERROR] Failed to start task: ${err.message}`]);
-            }
-            setPrompt("");
-          }}
-          disabled={!prompt.trim()}
-          style={{ padding: "12px 24px", background: !prompt.trim() ? C.border : C.accent, border: "none", borderRadius: 6, color: !prompt.trim() ? C.dim : "#fff", fontSize: 13, fontWeight: 700, cursor: !prompt.trim() ? "not-allowed" : "pointer" }}>
-          Run Build Pipeline {window.selectedArtifacts?.length ? `(with ${window.selectedArtifacts.length} files)` : ''}
+        <button style={{ padding: "12px 24px", background: C.accent, border: "none", borderRadius: 6, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          Run Build Pipeline
         </button>
       </div>
 
@@ -640,99 +594,3 @@ function TaskManagerModal({ onClose }) {
     </div>
   );
 }
-
-// ─────────────────────────────────────────────────────────────────
-// VERIFY ARENA (The 12-Layer Autonomous Proving Ground)
-// ─────────────────────────────────────────────────────────────────
-function VerifyArena() {
-  const [activeTask, setActiveTask] = useState(null);
-  const [logs, setLogs] = useState([]);
-  const logsEndRef = useRef(null);
-
-  useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [logs]);
-
-  const triggerTest = async (type) => {
-    setLogs(prev => [...prev, `[SYSTEM] Triggering ${type.toUpperCase()} sweep...`]);
-    try {
-      const endpoint = type === 'deterministic' ? 'deterministic' : type;
-      const res = await fetch(`${API_BASE_URL}/api/test-verify/${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: type === 'deterministic' ? JSON.stringify({ code: "def mock(): pass", function_name: "mock" }) : null
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setActiveTask({ id: data.task_id, type });
-        setLogs(prev => [...prev, `[SYSTEM] Task accepted. ID: ${data.task_id}`]);
-
-        const eventSource = new EventSource(`${API_BASE_URL}/api/test-verify/stream/${data.task_id}`);
-        eventSource.onmessage = (e) => {
-          setLogs(l => [...l, e.data]);
-          if (e.data.includes("[END OF STREAM]")) eventSource.close();
-        };
-        eventSource.onerror = () => {
-          setLogs(l => [...l, "[SYSTEM] Connection lost or stream ended."]);
-          eventSource.close();
-        };
-      } else {
-        setLogs(prev => [...prev, `[ERROR] Failed to start task.`]);
-      }
-    } catch (err) {
-      setLogs(prev => [...prev, `[ERROR] Ex: ${err.message}`]);
-    }
-  };
-
-  return (
-    <div style={{ padding: 24, height: '100%', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ background: '#10b98115', borderLeft: `4px solid ${C.success}`, padding: 20, borderRadius: "0 8px 8px 0", marginBottom: 24 }}>
-        <div style={{ fontSize: 18, fontWeight: 800, color: C.success, marginBottom: 8, letterSpacing: 0.5 }}>The Autonomous Proving Ground</div>
-        <div style={{ fontSize: 13, color: '#ddd', lineHeight: 1.6 }}>
-          Run the ultimate Validation, Verification, & Test (VVT) pipeline. Code must survive the 12-layer invariant gauntlet, state isolation, and chaos injection before achieving Platinum LLM Autonomy status.
-        </div>
-
-        <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-          <button onClick={() => triggerTest('smoke')} style={verifyBtn(C.info)}>Smoke Test</button>
-          <button onClick={() => triggerTest('pytest')} style={verifyBtn(C.accent)}>Full PyTest Suite</button>
-          <button onClick={() => triggerTest('stress')} style={verifyBtn(C.warn)}>Stress / Load</button>
-          <button onClick={() => triggerTest('deterministic')} style={{ ...verifyBtn(C.success), fontWeight: 800 }}>⚡ 12-Layer VVT Pipeline</button>
-        </div>
-      </div>
-
-      <div style={{ flex: 1, minHeight: 400, display: 'flex', flexDirection: 'column', background: '#000', borderRadius: 8, border: `1px solid ${C.border}`, overflow: 'hidden' }}>
-        <div style={{ padding: '8px 16px', background: C.bgAlt, borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span>✅</span> VVT Live Stream Terminal
-            {activeTask && <span style={{ padding: '2px 6px', background: C.success, color: '#000', borderRadius: 4, fontSize: 10 }}>{activeTask.id}</span>}
-          </div>
-          <button onClick={() => { setLogs([]); setActiveTask(null); }} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 11 }}>Clear</button>
-        </div>
-
-        <div style={{ flex: 1, padding: 16, overflowY: 'auto', fontFamily: 'monospace', fontSize: 13, color: '#0f0', lineHeight: 1.6 }}>
-          {logs.length === 0 ? (
-            <div style={{ color: C.dim }}>[ Select an execution strategy above to initialize the Proving Ground... ]</div>
-          ) : (
-            <>
-              {logs.map((log, i) => {
-                let color = '#55ff55';
-                if (log.includes('[ERROR]') || log.includes('FATAL')) color = '#ff5555';
-                else if (log.includes('[SYSTEM]') || log.includes('[START]')) color = '#55ffff';
-                else if (log.includes('[VERIFY]')) color = '#ffff55';
-                return <div key={i} style={{ color }}>{log}</div>;
-              })}
-              <div ref={logsEndRef} />
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const verifyBtn = (color) => ({
-  flex: 1, padding: "10px 16px", background: 'transparent',
-  border: `1px solid ${color}`, borderRadius: 6, color: color,
-  fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
-});

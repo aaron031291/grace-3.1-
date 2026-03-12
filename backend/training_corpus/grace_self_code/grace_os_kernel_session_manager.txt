@@ -1,0 +1,448 @@
+## session_manager.py
+'\nGrace OS — Session Manager\n\nThe entry point for starting and managing coding tasks.\nOrchestrates the lifecycle of a Grace OS session.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SessionState
+'Tracks the state of a single session.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+trace_id
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+trace_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+prompt
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'initializing'
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+SessionManager
+'\n    Manages Grace OS sessions.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+bus
+registry
+trust_threshold
+●●●●●● 2mm □△
+MessageBus
+LayerRegistry
+●●●●●● 3mm ○
+85.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+bus
+●●●●●● 3mm △
+●●●●●● 1mm □
+registry
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+SessionState
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_threshold
+●●●●●● 1mm ○
+'\n        Starts a new Grace OS session from a user prompt.\n        Routes through the full 9-layer pipeline:\n        L1 (setup) → L2 (plan) → L3 (propose) → L4 (evaluate) → L5 (simulate)\n        → L6 (codegen) → L7 (test) → L8 (verify) → L9 (deploy gate)\n        \n        Returns:\n            trace_id: The unique ID for this session.\n        '
+trace_id
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionState
+●●●●●● 1mm □△
+trace_id
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm △
+trace_id
+●●●●●● 1mm □
+●●●●●● 3mm △○
+layer_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[SessionManager] Starting session '
+trace_id
+': '
+prompt
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'setting_up'
+setup_msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+setup_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+setup_msg
+●●●●●● 2mm □△
+layer_scores
+'L1'
+●●●●●● 1mm □
+setup_resp
+env_id
+●●●●●● 1mm □
+setup_resp
+●●●●●● 1mm □△
+'environment_id'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'planning'
+planning_msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+planning_msg
+●●●●●● 2mm □△
+layer_scores
+'L2'
+●●●●●● 1mm □
+plan_resp
+●●●●●● 2mm □
+plan_resp
+'success'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'Planning failed'
+●●●●●● 3mm ○
+trace_id
+●●●●●● 3mm △○
+●●●●●● 1mm □
+plan_resp
+●●●●●● 1mm □△
+'tasks'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SessionManager] Planning done. '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+' tasks.'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'executing'
+task
+●●●●●● 3mm △○
+task_desc
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'description'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SessionManager] Processing task: '
+task_desc
+50
+●●●●●● 2mm □△
+propose_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L3'
+●●●●●● 1mm □
+propose_resp
+proposals
+●●●●●● 1mm □
+propose_resp
+●●●●●● 1mm □△
+'proposals'
+●●●●●● 2mm □△
+eval_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L4'
+●●●●●● 1mm □
+eval_resp
+selected
+●●●●●● 1mm □
+eval_resp
+●●●●●● 1mm □△
+'selected_proposal'
+proposals
+proposals
+0
+●●●●●● 2mm □△
+sim_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L5'
+●●●●●● 1mm □
+sim_resp
+exec_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L6'
+●●●●●● 1mm □
+exec_resp
+●●●●●● 2mm □
+exec_resp
+'success'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'Codegen failed: '
+exec_resp
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+test_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L7'
+●●●●●● 1mm □
+test_resp
+verify_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L8'
+●●●●●● 1mm □
+verify_resp
+●●●●●● 2mm □
+test_resp
+'failure'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'failed'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'Tests failed for task: '
+task
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+'failed'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'deploying'
+gate_resp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layer_scores
+'L9'
+●●●●●● 1mm □
+gate_resp
+●●●●●● 2mm □
+gate_resp
+●●●●●● 1mm □△
+'approved'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'completed'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+gate_resp
+●●●●●● 1mm □△
+'aggregate_trust'
+0
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SessionManager] Session '
+trace_id
+' COMPLETED. Trust: '
+●●●●●● 3mm △○
+'.1f'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'rejected'
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+'Deployment rejected: '
+gate_resp
+●●●●●● 1mm □△
+'policy_violations'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[SessionManager] Session '
+trace_id
+' REJECTED at gate.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trace_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_session_status
+●●●●●● 1mm □△
+self
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Retrieve the current state of a session.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'trace_id'
+'status'
+'tasks_count'
+'trust_score'
+'error'
+'duration_sec'
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

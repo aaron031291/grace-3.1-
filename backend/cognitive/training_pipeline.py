@@ -392,3 +392,50 @@ def get_recommended_plan(available_storage_gb: int = 1000) -> Dict[str, Any]:
 
     plan["total_estimated_gb"] = running_total
     return plan
+
+def augment_training_with_spindle_feedback():
+    """
+    Query Magma for UNSAT Z3 Spindle proofs to improve Qwen's mathematical alignment.
+    Any Z3 generation failures are appended to the training corpus.
+    """
+    from cognitive import magma_bridge
+    
+    if not magma_bridge.is_available():
+        logger.warning("Magma unavailable. Cannot augment training data with Spindle feedback.")
+        return 0
+        
+    # Get recent failed Spindle constraints from Magma
+    results = magma_bridge.query_results("verify_spindle_action", limit=500)
+    
+    unsat_cases = []
+    for r in results:
+        # Filter for UNSAT resolutions
+        if r.get("data", {}).get("status") == "UNSAT":
+            unsat_cases.append(r)
+            
+    if not unsat_cases:
+        return 0
+        
+    # Write to local training corpus for Qwen instruction tuning
+    output_dir = Path("training_corpus/spindle_feedback")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    count = 0
+    for case in unsat_cases:
+        cid = case.get("data", {}).get("constraint_id", "unknown")
+        out_file = output_dir / f"{cid}.json"
+        
+        # Instruction tuning format for Qwen
+        training_record = {
+            "instruction": f"Generate a formal Z3 SMT constraint for the Spindle topological physics engine based on this rule: {case.get('target', '')}",
+            "output": f"# ERROR: The generated constraint resulted in an UNSAT proof and violated the Spindle topology.\\n# Mathematical Proof:\\n{case.get('rationale', '')}",
+            "source": "magma_spindle_feedback",
+            "status": "UNSAT"
+        }
+        
+        with open(out_file, "w") as f:
+            json.dump(training_record, f, indent=2)
+        count += 1
+        
+    logger.info(f"Augmented Qwen training corpus with {count} UNSAT Spindle proofs from Magma Memory.")
+    return count

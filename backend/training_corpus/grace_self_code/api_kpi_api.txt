@@ -1,0 +1,266 @@
+## kpi_api.py
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+random
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+COMPONENTS
+●●●●●● 1mm □
+'name'
+'status'
+'trust_score'
+'total_actions'
+'kpi_count'
+'coding_agent'
+'excellent'
+0.95
+450
+5
+'name'
+'status'
+'trust_score'
+'total_actions'
+'kpi_count'
+'diagnostic_engine'
+'good'
+0.88
+1200
+3
+'name'
+'status'
+'trust_score'
+'total_actions'
+'kpi_count'
+'self_healing'
+'fair'
+0.75
+85
+4
+'name'
+'status'
+'trust_score'
+'total_actions'
+'kpi_count'
+'file_watcher'
+'excellent'
+0.98
+5600
+2
+'name'
+'status'
+'trust_score'
+'total_actions'
+'kpi_count'
+'knowledge_retrieval'
+'poor'
+0.6
+120
+6
+'name'
+'status'
+'trust_score'
+'total_actions'
+'kpi_count'
+'genesis_tracker'
+'good'
+0.92
+3400
+3
+'Return top-level system health for the KPI dashboard.'
+trust
+●●●●●● 1mm □
+0.85
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys_trust
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+'brain_system'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sys_trust
+●●●●●● 2mm □
+trust
+●●●●●● 1mm □
+sys_trust
+Exception
+●●●●●● 3mm ○
+'system_trust_score'
+'status'
+'component_count'
+trust
+'operational'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+'Return dashboard aggregates for components.'
+sorted_comps
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 2mm □△
+top_performers
+●●●●●● 1mm □
+c
+'name'
+c
+sorted_comps
+3
+c
+'trust_score'
+0.8
+needs_attention
+●●●●●● 1mm □
+c
+'name'
+c
+sorted_comps
+c
+'trust_score'
+0.8
+●●●●●● 3mm ○
+'top_performers'
+'needs_attention'
+'components'
+top_performers
+needs_attention
+COMPONENTS
+router
+●●●●●● 1mm □△
+'/dashboard'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Return specific detailed KPIs for a component.'
+target_comp
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+c
+c
+COMPONENTS
+c
+'name'
+name
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target_comp
+●●●●●● 3mm ○
+'trust_score'
+'kpis'
+'created_at'
+'updated_at'
+0.0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'trust_score'
+'created_at'
+'updated_at'
+'kpis'
+target_comp
+'trust_score'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'success_rate'
+'avg_latency'
+'error_rate'
+'metric_name'
+'count'
+'value'
+'timestamp'
+'Success Rate'
+target_comp
+'total_actions'
+target_comp
+'trust_score'
+●●●●●● 2mm □△
+100
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'metric_name'
+'count'
+'value'
+'timestamp'
+'Avg Latency (ms)'
+1500
+45.2
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'metric_name'
+'count'
+'value'
+'timestamp'
+'Error Rate'
+25
+1.0
+●●●●●● 1mm □△
+target_comp
+'trust_score'
+●●●●●● 2mm □△
+100
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/components/{name}'
+●●●●●● 2mm □△

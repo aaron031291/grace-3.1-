@@ -1,0 +1,1772 @@
+## deterministic_bridge.py
+'\nDeterministic Bridge — finds problems WITHOUT LLM reasoning,\nthen feeds exact facts to LLMs for fix generation,\nthen verifies fixes WITHOUT LLM reasoning.\n\nThe hallucination-proof cycle:\n  DETECT (deterministic) → DESCRIBE (deterministic) → FIX (LLM) → VERIFY (deterministic)\n\nNo guessing at any stage except the fix generation, which is\nconstrained by exact facts on both sides.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+importlib
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DeterministicDetector
+'\n    Finds problems using ONLY deterministic methods.\n    No LLM reasoning. No guessing. Just facts.\n    '
+●●●●●● 1mm □
+full_scan
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Run every deterministic check and return structured facts.'
+report
+●●●●●● 1mm □
+'scanned_at'
+'checks'
+'problems'
+'total_checks'
+'total_problems'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+0
+checks
+●●●●●● 1mm □
+'syntax'
+●●●●●● 3mm △
+'imports'
+●●●●●● 3mm △
+'files'
+●●●●●● 3mm △
+'db'
+●●●●●● 3mm △
+'tests'
+●●●●●● 3mm △
+'services'
+●●●●●● 3mm △
+'learning_memory'
+●●●●●● 3mm △
+'genesis_qdrant'
+●●●●●● 3mm △
+'circular_imports'
+●●●●●● 3mm △
+'unused_variables'
+●●●●●● 3mm △
+'config'
+●●●●●● 3mm △
+name
+checker
+checks
+result
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'checks'
+name
+●●●●●● 1mm □
+result
+report
+'total_checks'
+1
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+report
+'problems'
+●●●●●● 1mm □△
+result
+'problems'
+●●●●●● 2mm □△
+Exception
+report
+'checks'
+name
+●●●●●● 1mm □
+'error'
+'problems'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+report
+'total_problems'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+'problems'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_syntax
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'AST-parse every Python file — catches syntax errors deterministically.'
+problems
+●●●●●● 1mm □
+checked
+●●●●●● 1mm □
+0
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+py_file
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+checked
+1
+ast
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SyntaxError
+problems
+●●●●●● 1mm □△
+'type'
+'file'
+'line'
+'message'
+'severity'
+'deterministic'
+'syntax_error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+e
+e
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'checked'
+'errors'
+'problems'
+checked
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if critical imports resolve — deterministic.'
+problems
+●●●●●● 1mm □
+critical_modules
+●●●●●● 1mm □
+'fastapi'
+'sqlalchemy'
+'pydantic'
+'uvicorn'
+'requests'
+'json'
+'pathlib'
+'threading'
+mod
+critical_modules
+importlib
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+ImportError
+problems
+●●●●●● 1mm □△
+'type'
+'module'
+'severity'
+'deterministic'
+'missing_import'
+mod
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+grace_modules
+●●●●●● 1mm □
+'core.services.chat_service'
+'core.services.files_service'
+'core.services.govern_service'
+'core.services.system_service'
+'core.intelligence'
+'core.hebbian'
+'core.resilience'
+'core.security'
+mod
+grace_modules
+importlib
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+Exception
+problems
+●●●●●● 1mm □△
+'type'
+'module'
+'error'
+'severity'
+'deterministic'
+'broken_module'
+mod
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+'high'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'critical'
+'grace'
+'problems'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critical_modules
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+grace_modules
+●●●●●● 2mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_files_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check critical files exist — deterministic.'
+problems
+●●●●●● 1mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+critical_files
+●●●●●● 1mm □
+'app.py'
+'api/brain_api_v2.py'
+'api/_genesis_tracker.py'
+'api/health.py'
+'core/services/chat_service.py'
+'core/services/files_service.py'
+'core/services/govern_service.py'
+'core/intelligence.py'
+'core/hebbian.py'
+'core/resilience.py'
+'core/coding_pipeline.py'
+'database/connection.py'
+'database/session.py'
+f
+critical_files
+●●●●●● 2mm □
+root
+●●●●●● 3mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □△
+'type'
+'file'
+'severity'
+'deterministic'
+'missing_file'
+f
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'checked'
+'problems'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critical_files
+●●●●●● 2mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check database health — deterministic.'
+problems
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □△
+'type'
+'severity'
+'deterministic'
+'db_missing'
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'problems'
+problems
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+required
+●●●●●● 1mm □
+'genesis_key'
+'chats'
+'chat_history'
+t
+required
+●●●●●● 2mm □
+t
+tables
+problems
+●●●●●● 1mm □△
+'type'
+'table'
+'severity'
+'deterministic'
+'missing_table'
+t
+'high'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+problems
+●●●●●● 1mm □△
+'type'
+'error'
+'severity'
+'deterministic'
+'db_error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'exists'
+'problems'
+●●●●●● 3mm □△○
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_tests
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Run test suite — deterministic pass/fail.'
+problems
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+subprocess
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+'python3'
+'-m'
+'pytest'
+'tests/test_grace_system.py'
+'-v'
+'--tb=line'
+'-q'
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+' PASSED'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+' FAILED'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+0
+line
+result
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'FAILED'
+line
+problems
+●●●●●● 1mm □△
+'type'
+'test'
+'severity'
+'deterministic'
+'test_failure'
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+100
+'high'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'passed'
+'failed'
+'problems'
+passed
+failed
+problems
+Exception
+●●●●●● 3mm ○
+'error'
+'problems'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_circular_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Detect circular imports in Grace's module graph — deterministic."
+problems
+●●●●●● 1mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+import_graph
+●●●●●● 1mm □
+py_file
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+rel
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+imports
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+imports
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+import_graph
+rel
+●●●●●● 1mm □
+imports
+Exception
+●●●●●● 3mm ○
+'modules_scanned'
+'problems'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+import_graph
+●●●●●● 2mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_unused_variables
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Find obviously unused variables in Python files — deterministic.'
+problems
+●●●●●● 1mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+py_file
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+root
+●●●●●● 1mm □△
+'core/**/*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+root
+●●●●●● 1mm □△
+'api/*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+assigned
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+used
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+target
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+target
+ast
+●●●●●● 2mm □△
+assigned
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+used
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+unused
+●●●●●● 1mm □
+assigned
+●●●●●● 1mm □△
+used
+●●●●●● 1mm □△
+'_'
+'__all__'
+'__name__'
+'__file__'
+var
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+unused
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □
+var
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □△
+'type'
+'file'
+'variable'
+'severity'
+'deterministic'
+'unused_variable'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+var
+'low'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'problems'
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_config
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Validate configuration files — deterministic.'
+problems
+●●●●●● 1mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+env_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+required
+●●●●●● 1mm □
+'KIMI_API_KEY'
+'OPUS_API_KEY'
+key
+required
+●●●●●● 2mm □
+key
+'='
+content
+key
+'=\n'
+content
+problems
+●●●●●● 1mm □△
+'type'
+'key'
+'severity'
+'deterministic'
+'missing_config'
+key
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'problems'
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_services
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if critical services respond — deterministic.'
+problems
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+urllib.request
+services
+●●●●●● 1mm □
+'ollama'
+'http://localhost:11434/api/tags'
+'qdrant'
+'http://localhost:6333/collections'
+name
+url
+services
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+Exception
+problems
+●●●●●● 1mm □△
+'type'
+'service'
+'url'
+'severity'
+'deterministic'
+'service_down'
+name
+url
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'checked'
+'problems'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+services
+●●●●●● 2mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_learning_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if learning memory is available (Layer4 / neuro-symbolic). Deterministic.'
+problems
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+kb_path
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'knowledge_base'
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+mgr
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+examples
+●●●●●● 1mm □
+mgr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+'problems'
+●●●●●● 3mm □△○
+problems
+Exception
+problems
+●●●●●● 1mm □△
+'type'
+'message'
+'severity'
+'deterministic'
+'flag_for_human'
+'learning_memory_unavailable'
+'Learning memory unavailable: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+120
+'. Wire LearningMemoryManager in Layer4 or disable neuro-symbolic.'
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+'error'
+'problems'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_genesis_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check for Genesis/Qdrant upsert failures (e.g. 400). Deterministic via recent logs.'
+problems
+●●●●●● 1mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm □△
+'grace.log'
+●●●●●● 2mm □
+log_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tail
+●●●●●● 1mm □
+log_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+500
+text
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+tail
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'400'
+text
+'genesis'
+text
+'qdrant'
+text
+'points'
+text
+'bad request'
+text
+problems
+●●●●●● 1mm □△
+'type'
+'message'
+'severity'
+'deterministic'
+'flag_for_human'
+'genesis_qdrant_400'
+"Qdrant upsert (genesis_keys) returns 400 — usually vector size mismatch. Fix: set GENESIS_VECTOR_SIZE to your collection's vector size in backend/.env (see logs for the value), or drop the genesis_keys collection in Qdrant Cloud to let the backend recreate it. To disable: DISABLE_GENESIS_QDRANT_PUSH=1."
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+collections
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+names
+●●●●●● 1mm □
+c
+c
+collections
+●●●●●● 2mm □
+'genesis_keys'
+names
+names
+problems
+●●●●●● 1mm □△
+'type'
+'message'
+'severity'
+'deterministic'
+'flag_for_human'
+'genesis_keys_missing'
+"Qdrant collection 'genesis_keys' not found. Create it or disable Genesis push."
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'checked'
+'problems'
+●●●●●● 3mm □△○
+problems
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DeterministicAutoFixer
+'\n    Fixes common problems WITHOUT using an LLM.\n    These are pattern-matched fixes with 100% confidence.\n    '
+●●●●●● 1mm □
+auto_fix
+●●●●●● 1mm □△
+self
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'Attempt to fix problems deterministically. Returns list of fixes applied.'
+fixes
+●●●●●● 1mm □
+p
+problems
+fix
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fix
+fixes
+●●●●●● 1mm □△
+fix
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fixes
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_try_fix
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ptype
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ptype
+'syntax_error'
+"expected ':'"
+problem
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ptype
+'missing_import'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ptype
+'missing_file'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fix_missing_colon
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Add missing colon at the end of a line.'
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+filepath
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+problem
+'file'
+lines
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line_idx
+●●●●●● 1mm □
+problem
+'line'
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □
+0
+line_idx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+lines
+line_idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+':'
+●●●●●● 2mm □△
+lines
+line_idx
+●●●●●● 1mm □
+line
+●●●●●● 3mm ○
+':'
+filepath
+●●●●●● 1mm □△
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'fixed'
+'type'
+'file'
+'line'
+●●●●●● 3mm □△○
+'added_colon'
+problem
+'file'
+problem
+'line'
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fix_missing_import
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Install missing Python package.'
+module
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'module'
+''
+●●●●●● 2mm □△
+pip_map
+●●●●●● 1mm □
+'fastapi'
+'sqlalchemy'
+'pydantic'
+'uvicorn'
+'requests'
+'psutil'
+'watchdog'
+'dulwich'
+'fastapi'
+'sqlalchemy'
+'pydantic'
+'uvicorn'
+'requests'
+'psutil'
+'watchdog'
+'dulwich'
+●●●●●● 2mm □
+module
+pip_map
+●●●●●● 2mm □△○
+subprocess
+subprocess
+●●●●●● 1mm □△
+'pip'
+'install'
+pip_map
+module
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'fixed'
+'type'
+'module'
+●●●●●● 3mm □△○
+'installed_package'
+module
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fix_missing_file
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Create missing file from template.'
+filepath
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'file'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+filepath
+●●●●●● 3mm ○
+●●●●●● 2mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+filepath
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+'__init__.py'
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'fixed'
+'type'
+'file'
+●●●●●● 3mm □△○
+'created_init'
+filepath
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run full deterministic scan and build a structured report.'
+detector
+●●●●●● 1mm □
+DeterministicDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_LLM_AFTER_TRIES
+●●●●●● 1mm □
+3
+_STATE_FILE
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'deterministic_bridge_state.json'
+●●●●●● 1mm □
+_load_failure_tries
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Load persisted failure-try count (0 if missing or invalid).'
+●●●●●● 2mm □
+_STATE_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+_STATE_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'failure_tries'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_save_failure_tries
+●●●●●● 1mm □△
+count
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Persist failure-try count.'
+_STATE_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_STATE_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'failure_tries'
+'updated_at'
+count
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not save deterministic_bridge_state: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+deterministic_fix_cycle
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n    The full deterministic bridge cycle:\n      1. DETECT problems (deterministic)\n      2. BUILD fix prompt with exact facts\n      3. FEED to LLM (constrained by facts)\n      4. VERIFY fix (deterministic)\n    '
+result
+●●●●●● 1mm □
+'started_at'
+'detection'
+'fix_prompt'
+'fix_generated'
+'verification'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'detection'
+●●●●●● 1mm □
+'total_checks'
+'total_problems'
+'problems'
+report
+'total_checks'
+report
+'total_problems'
+report
+'problems'
+10
+●●●●●● 2mm □
+report
+'problems'
+task
+_save_failure_tries
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'clean'
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □
+report
+'problems'
+facts
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+'- ['
+p
+'type'
+'] '
+p
+●●●●●● 1mm □△
+'file'
+p
+●●●●●● 1mm □△
+'module'
+p
+●●●●●● 1mm □△
+'service'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' '
+p
+●●●●●● 1mm □△
+'line'
+●●●●●● 2mm □△
+'line '
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'line'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+': '
+''
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+report
+'problems'
+10
+●●●●●● 2mm □△
+fix_prompt
+●●●●●● 1mm □
+'DETERMINISTIC FACTS (verified, not guessed):\n'
+facts
+'\n\nGenerate the EXACT fix for each problem. Return ONLY the corrected code. No explanation needed.'
+●●●●●● 1mm △
+task
+fix_prompt
+●●●●●● 1mm □
+'Task: '
+task
+'\n\nGenerate the code to accomplish this task.'
+result
+'status'
+●●●●●● 1mm □
+'nothing_to_fix'
+●●●●●● 3mm ○
+result
+result
+'fix_prompt'
+●●●●●● 1mm □
+fix_prompt
+500
+auto_fixer
+●●●●●● 1mm □
+DeterministicAutoFixer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+auto_fixes
+●●●●●● 1mm □
+auto_fixer
+●●●●●● 1mm □△
+report
+'problems'
+●●●●●● 2mm □△
+result
+'auto_fixes'
+●●●●●● 1mm □
+auto_fixes
+result
+'auto_fixed_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+auto_fixes
+●●●●●● 2mm □△
+unfixed
+●●●●●● 1mm □
+p
+p
+report
+'problems'
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+'file'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'file'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'missing_'
+'installed_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'syntax_error'
+'added_colon'
+●●●●●● 2mm □△
+f
+auto_fixes
+●●●●●● 2mm □△
+●●●●●● 2mm □
+unfixed
+_save_failure_tries
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+auto_fixes
+result
+'status'
+●●●●●● 1mm □
+'auto_fixed_complete'
+●●●●●● 3mm □
+result
+'status'
+●●●●●● 1mm □
+'clean'
+_track_genesis
+●●●●●● 1mm □△
+result
+report
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+'remaining_for_llm'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unfixed
+●●●●●● 2mm □△
+failure_tries
+●●●●●● 1mm □
+_load_failure_tries
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+_save_failure_tries
+●●●●●● 1mm □△
+failure_tries
+●●●●●● 2mm □△
+result
+'failure_try'
+●●●●●● 1mm □
+failure_tries
+result
+'llm_after_tries'
+●●●●●● 1mm □
+_LLM_AFTER_TRIES
+●●●●●● 2mm □
+failure_tries
+_LLM_AFTER_TRIES
+result
+'status'
+●●●●●● 1mm □
+'deferred_llm'
+result
+'message'
+●●●●●● 1mm □
+'LLM will be called after '
+_LLM_AFTER_TRIES
+' failure tries (current: '
+failure_tries
+')'
+_track_genesis
+●●●●●● 1mm □△
+result
+report
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+'llm_called'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+llm_fix
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'llm_generated_fix'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+llm_fix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+llm_fix
+2000
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+llm_fix
+●●●●●● 2mm □△
+2000
+result
+'fix_generated'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+_save_failure_tries
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'llm_fix_generated'
+result
+'message'
+●●●●●● 1mm □
+'LLM was called after 3 failure tries; fix generated (apply/verify separately if needed).'
+Exception
+logger
+●●●●●● 1mm □△
+'Deterministic bridge LLM call failed: %s'
+e
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'llm_fix_failed'
+result
+'llm_error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+300
+result
+'fix_generated'
+●●●●●● 1mm □
+●●●●●● 1mm □
+_track_genesis
+●●●●●● 1mm □△
+result
+report
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_track_genesis
+●●●●●● 1mm □△
+result
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Track deterministic scan/fix via Genesis.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □

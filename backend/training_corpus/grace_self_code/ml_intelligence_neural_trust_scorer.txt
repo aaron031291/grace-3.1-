@@ -1,0 +1,1183 @@
+## neural_trust_scorer.py
+'\nNeural Trust Scorer - Deep Learning-based Trust Scoring System\n\nReplaces rule-based trust scoring with a learned neural network that\nadapts based on observed outcomes and feedback.\n\nFeatures:\n- Multi-layer feedforward network with attention\n- Online learning with experience replay\n- Confidence intervals via Monte Carlo dropout\n- Feature engineering from learning examples\n- Adversarial robustness testing\n'
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+torch.nn
+●●●●●● 1mm □
+nn
+●●●●●● 2mm □△○
+torch.nn.functional
+●●●●●● 1mm □
+F
+●●●●●● 3mm □△○
+torch.optim
+●●●●●● 2mm □△○
+AdamW
+●●●●●● 3mm □△○
+torch.utils.data
+●●●●●● 2mm □△○
+Dataset
+DataLoader
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Tuple
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm △
+TrustFeatures
+'Extracted features for trust scoring'
+source_reliability
+●●●●●● 3mm ○
+outcome_quality
+●●●●●● 3mm ○
+consistency_score
+●●●●●● 3mm ○
+validation_count
+●●●●●● 2mm ○
+invalidation_count
+●●●●●● 2mm ○
+age_days
+●●●●●● 3mm ○
+content_length
+●●●●●● 2mm ○
+has_code
+●●●●●● 3mm △
+has_structure
+●●●●●● 3mm △
+has_references
+●●●●●● 3mm △
+usage_frequency
+●●●●●● 3mm ○
+success_rate
+●●●●●● 3mm ○
+embedding
+●●●●●● 2mm □○
+np
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+TrainingExample
+'Training example for neural trust scorer'
+features
+TrustFeatures
+true_outcome
+●●●●●● 3mm ○
+timestamp
+datetime
+dataclass
+●●●●●● 2mm △
+TrustScorerNetwork
+●●●●●● 3mm □△
+nn
+'\n    Neural network for trust score prediction\n\n    Architecture:\n    - Input: Feature vector + optional embedding\n    - Multi-head attention over feature importance\n    - Feedforward layers with residual connections\n    - Dropout for uncertainty estimation\n    - Output: Trust score [0, 1] + uncertainty\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+feature_dim
+embedding_dim
+hidden_dims
+num_attention_heads
+dropout_rate
+use_embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+12
+384
+256
+128
+64
+4
+0.3
+●●●●●● 3mm □△○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_embeddings
+input_dim
+●●●●●● 1mm □
+feature_dim
+●●●●●● 2mm □
+use_embeddings
+input_dim
+embedding_dim
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+input_dim
+hidden_dims
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hidden_dims
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+hidden_dims
+i
+hidden_dims
+i
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+hidden_dims
+i
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+dropout_rate
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+hidden_dims
+1
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+hidden_dims
+1
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+return_uncertainty
+●●●●●● 2mm □△
+torch
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n        Forward pass\n\n        Args:\n            x: Input features [batch_size, feature_dim]\n            return_uncertainty: If True, return (score, uncertainty)\n\n        Returns:\n            Trust score [0, 1] or (score, uncertainty)\n        '
+x
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x_attn
+●●●●●● 1mm □
+x
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+attn_out
+_
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x_attn
+x_attn
+x_attn
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+x
+●●●●●● 3mm ○
+attn_out
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+layer
+●●●●●● 3mm △
+residual
+●●●●●● 1mm □
+x
+x
+●●●●●● 1mm □
+layer
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 2mm □
+residual
+x
+x
+●●●●●● 1mm □
+x
+●●●●●● 3mm ○
+residual
+trust_score
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+return_uncertainty
+uncertainty
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trust_score
+uncertainty
+●●●●●● 3mm ○
+trust_score
+torch
+●●●●●● 1mm □
+predict_with_uncertainty
+●●●●●● 1mm □△
+self
+x
+num_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+20
+'\n        Monte Carlo dropout for uncertainty estimation\n\n        Args:\n            x: Input features\n            num_samples: Number of MC samples\n\n        Returns:\n            (mean_score, std_score)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_samples
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+mean_score
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+std_score
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mean_score
+std_score
+Tuple
+torch
+torch
+●●●●●● 2mm △
+ExperienceReplay
+'Experience replay buffer for online learning'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10000
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add
+●●●●●● 1mm □△
+self
+example
+●●●●●● 2mm □△
+TrainingExample
+'Add training example to buffer'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 1mm □
+sample
+●●●●●● 1mm □△
+self
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Sample random batch'
+indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+i
+i
+indices
+●●●●●● 3mm □△
+TrainingExample
+●●●●●● 1mm □
+__len__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+NeuralTrustScorer
+'\n    Neural Trust Scorer - Main interface\n\n    Combines neural network with online learning and uncertainty estimation\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model_path
+device
+learning_rate
+batch_size
+replay_buffer_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'models/neural_trust_scorer.pt'
+●●●●●● 2mm □
+0.0001
+32
+10000
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+batch_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+TrustScorerNetwork
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AdamW
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ExperienceReplay
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_updates'
+'total_loss'
+'recent_losses'
+0
+0.0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+extract_features
+●●●●●● 1mm □△
+self
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'\n        Extract features from learning example\n\n        Args:\n            learning_example: Dict with learning example data\n\n        Returns:\n            TrustFeatures object\n        '
+total_uses
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'times_validated'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+learning_example
+●●●●●● 1mm □△
+'times_invalidated'
+0
+●●●●●● 2mm □△
+success_rate
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'times_validated'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+total_uses
+1
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'created_at'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+created_at
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+created_at
+●●●●●● 2mm □△
+age_days
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+created_at
+context
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'input_context'
+''
+●●●●●● 2mm □△
+output
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'expected_output'
+''
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+context
+' '
+output
+has_code
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keyword
+'def '
+'class '
+'import '
+'function'
+'()'
+'{}'
+●●●●●● 2mm □△
+has_structure
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+char
+content
+char
+'#'
+'*'
+'-'
+'1.'
+'2.'
+●●●●●● 2mm □△
+has_references
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keyword
+'http'
+'see'
+'reference'
+'source'
+'doc'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TrustFeatures
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TrustFeatures
+●●●●●● 1mm □
+features_to_tensor
+●●●●●● 1mm □△
+self
+features
+●●●●●● 2mm □△
+TrustFeatures
+'Convert features to tensor'
+feature_vector
+●●●●●● 1mm □
+features
+features
+features
+features
+●●●●●● 3mm □△
+100.0
+features
+●●●●●● 3mm □△
+100.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+features
+●●●●●● 3mm □△
+365.0
+1.0
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+features
+●●●●●● 3mm □△
+10000.0
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+features
+features
+●●●●●● 2mm □
+features
+●●●●●● 2mm □
+●●●●●● 3mm △
+feature_vector
+●●●●●● 1mm □△
+features
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+feature_vector
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+torch
+●●●●●● 1mm □△
+feature_vector
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □
+predict_trust
+●●●●●● 1mm □△
+self
+learning_example
+return_uncertainty
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Predict trust score for learning example\n\n        Args:\n            learning_example: Learning example dict\n            return_uncertainty: Whether to return uncertainty estimate\n\n        Returns:\n            (trust_score, uncertainty) or just trust_score\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+return_uncertainty
+mean_score
+std_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mean_score
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+std_score
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+score
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Tuple
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+update_from_outcome
+●●●●●● 1mm □△
+self
+learning_example
+outcome_success
+perform_training
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n        Update model based on observed outcome\n\n        Args:\n            learning_example: Learning example dict\n            outcome_success: Whether the outcome was successful\n            perform_training: Whether to perform training update immediately\n        '
+features
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+training_example
+●●●●●● 1mm □
+TrainingExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+training_example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+perform_training
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+train_step
+●●●●●● 1mm □△
+self
+num_batches
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+1
+'\n        Perform training step using experience replay\n\n        Args:\n            num_batches: Number of batches to train on\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_loss
+●●●●●● 1mm □
+0.0
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_batches
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+X
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ex
+●●●●●● 2mm □△
+ex
+batch
+●●●●●● 2mm □△
+y
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+ex
+ex
+batch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+predictions
+uncertainties
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+X
+●●●●●● 2mm □△
+bce_loss
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+predictions
+y
+●●●●●● 2mm □△
+uncertainty_loss
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+uncertainties
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 1mm □△
+y
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+bce_loss
+●●●●●● 3mm ○
+0.1
+●●●●●● 2mm □△
+uncertainty_loss
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_loss
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avg_loss
+●●●●●● 1mm □
+total_loss
+●●●●●● 3mm □△
+num_batches
+●●●●●● 3mm △
+'total_updates'
+num_batches
+●●●●●● 3mm △
+'total_loss'
+total_loss
+●●●●●● 3mm △
+'recent_losses'
+●●●●●● 1mm □△
+avg_loss
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+avg_loss
+●●●●●● 1mm □
+adversarial_test
+●●●●●● 1mm □△
+self
+learning_example
+epsilon
+num_samples
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+0.1
+10
+'\n        Test adversarial robustness\n\n        Perturbs input features and measures score stability\n\n        Args:\n            learning_example: Learning example to test\n            epsilon: Perturbation magnitude\n            num_samples: Number of perturbations to test\n\n        Returns:\n            Dict with robustness metrics\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+x_base
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+base_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x_base
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+perturbed_scores
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_samples
+●●●●●● 2mm □△
+noise
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+x_base
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+epsilon
+x_perturbed
+●●●●●● 1mm □
+x_base
+●●●●●● 3mm ○
+noise
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+perturbed_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x_perturbed
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+perturbed_scores
+●●●●●● 1mm □△
+perturbed_score
+●●●●●● 2mm □△
+perturbed_scores
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+perturbed_scores
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'base_score'
+'mean_perturbed_score'
+'std_perturbed_score'
+'max_deviation'
+'robustness_score'
+base_score
+perturbed_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+perturbed_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+perturbed_scores
+●●●●●● 1mm □△
+base_score
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1.0
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+perturbed_scores
+●●●●●● 1mm □△
+base_score
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+save_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save model to disk'
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+checkpoint
+●●●●●● 1mm □
+'network_state'
+'optimizer_state'
+'training_stats'
+'replay_buffer_size'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+checkpoint
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+load_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load model from disk'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+checkpoint
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+checkpoint
+'network_state'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+checkpoint
+'optimizer_state'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+checkpoint
+●●●●●● 1mm □△
+'training_stats'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get training statistics'
+recent_loss
+●●●●●● 1mm □
+●●●●●● 3mm △
+'recent_losses'
+np
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'recent_losses'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm ○
+'total_updates'
+'replay_buffer_size'
+'recent_avg_loss'
+'device'
+●●●●●● 3mm △
+'total_updates'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+recent_loss
+●●●●●● 3mm △
+●●●●●● 1mm □○
+_neural_trust_scorer_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_neural_trust_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get singleton neural trust scorer instance'
+●●●●●● 2mm □
+_neural_trust_scorer_instance
+●●●●●● 2mm □
+model_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+'models'
+●●●●●● 2mm □△
+model_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+model_dir
+'neural_trust_scorer.pt'
+●●●●●● 2mm □△
+_neural_trust_scorer_instance
+●●●●●● 1mm □
+NeuralTrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_neural_trust_scorer_instance
+NeuralTrustScorer

@@ -1,0 +1,73 @@
+## __init__.py
+●●●●●● 2mm □△○
+click
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+server
+●●●●●● 2mm □△○
+serve
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+repository
+verbose
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+'MCP Git Server - Git functionality for MCP'
+●●●●●● 2mm □△○
+asyncio
+logging_level
+●●●●●● 1mm □
+logging
+●●●●●● 2mm □
+verbose
+1
+logging_level
+●●●●●● 1mm □
+logging
+●●●●●● 1mm △
+verbose
+2
+logging_level
+●●●●●● 1mm □
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+serve
+●●●●●● 1mm □△
+repository
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+click
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+click
+●●●●●● 1mm □△
+'--repository'
+'-r'
+●●●●●● 2mm □△
+click
+●●●●●● 1mm □△
+'-v'
+'--verbose'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,109 @@
+## test_ide_bridge_e2e.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+ide_bridge
+●●●●●● 1mm □
+run_verification
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🧪 INITIATING IDE BRIDGE VERIFICATION TEST 🧪'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[TEST 1] Triggering IDE on_save...'
+●●●●●● 2mm □△
+test_file
+●●●●●● 1mm □
+'C:/Users/aaron/Desktop/grace-3.1--Aaron-new2/backend/models/braille_node.py'
+ide_bridge
+●●●●●● 1mm □△
+test_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ on_save invoked successfully (fires async passive context).'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ on_save failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[TEST 2] Triggering IDE on_command ('Explain the new braille node model')..."
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ide_bridge
+●●●●●● 1mm □△
+'Explain the new BrailleSandboxNode database model and how the genesis_key handles deterministic dots.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[Spindle Output Returned to IDE]:'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Verification Failed. API returned error: '
+result
+'error'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'💡 TIP: Ensure the Grace API (app.py) is running on localhost:8000!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ Verification Successful! Bridge is communicating perfectly with Spindle and the Sandbox.'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ on_command failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+run_verification
+●●●●●● 1mm □△
+●●●●●● 2mm □△

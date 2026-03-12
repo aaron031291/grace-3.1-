@@ -11,8 +11,6 @@ Provides secure input handling to prevent:
 import re
 import html
 from typing import Any, Optional, List, Union
-from pathlib import Path, PurePosixPath, PureWindowsPath
-
 from .config import get_security_config
 
 
@@ -61,7 +59,6 @@ class InputValidator:
         value: str,
         max_length: Optional[int] = None,
         allow_html: bool = False,
-        allow_special_chars: bool = True,
         field_name: str = "input"
     ) -> tuple:
         """

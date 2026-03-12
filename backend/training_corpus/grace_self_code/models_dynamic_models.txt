@@ -1,0 +1,32 @@
+## dynamic_models.py
+'\nAuto-generated schema proposals that have been approved by the user.\nDo not manually edit this file unless overriding an LLM mistake.\nAll models inside this file are inherently registered to Base.\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Text
+Float
+Boolean
+ForeignKey
+Index
+Integer
+DateTime
+JSON
+Enum
+●●●●●● 1mm □
+SQLEnum
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+enum

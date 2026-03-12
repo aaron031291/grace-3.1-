@@ -9,7 +9,7 @@ class TestBrainV2Routing:
         r = client.get("/api/v2/directory")
         assert r.status_code == 200
         data = r.json()
-        assert data["total_domains"] == 9
+        assert data["total_domains"] == 8
         assert data["total_actions"] >= 70
 
     def test_invalid_domain_returns_error(self, client):
@@ -21,10 +21,10 @@ class TestBrainV2Routing:
         assert r.status_code in (400, 500)
         assert "Unknown action" in r.json().get("detail", "")
 
-    def test_brain_directory_lists_all_9_domains(self, client):
+    def test_brain_directory_lists_all_8_domains(self, client):
         r = client.get("/api/v2/directory")
         domains = r.json()["domains"]
-        expected = {"chat", "files", "govern", "ai", "system", "data", "tasks", "code", "deterministic"}
+        expected = {"chat", "files", "govern", "ai", "system", "data", "tasks", "code"}
         assert set(domains.keys()) == expected
 
     def test_each_domain_has_actions(self, client):

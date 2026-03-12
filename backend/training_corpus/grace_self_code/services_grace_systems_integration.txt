@@ -1,0 +1,1680 @@
+## grace_systems_integration.py
+'\nGrace Systems Integration Service\n\nUnified integration layer connecting Grace Planning and Todos systems\nwith all core Grace systems:\n- DeepMagmaMemory (memory/learning)\n- DiagnosticMachine (4-layer diagnostics)\n- OracleMLIntelligence (ML predictions)\n- SecurityLayer (trust/governance)\n- SelfHealingSystem (auto-recovery)\n- NeuralSymbolicAI (reasoning)\n- IngestionPipeline (data processing)\n- ProactiveLearning (autonomous learning)\n\nAuthor: Grace Autonomous System\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm △
+GraceSystemType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of Grace subsystems'
+MEMORY
+●●●●●● 1mm □
+'memory'
+DIAGNOSTIC
+●●●●●● 1mm □
+'diagnostic'
+ORACLE
+●●●●●● 1mm □
+'oracle'
+SECURITY
+●●●●●● 1mm □
+'security'
+SELF_HEALING
+●●●●●● 1mm □
+'self_healing'
+NEURAL_SYMBOLIC
+●●●●●● 1mm □
+'neural_symbolic'
+INGESTION
+●●●●●● 1mm □
+'ingestion'
+PROACTIVE
+●●●●●● 1mm □
+'proactive'
+COGNITIVE
+●●●●●● 1mm □
+'cognitive'
+LIBRARIAN
+●●●●●● 1mm □
+'librarian'
+●●●●●● 2mm △
+IntegrationEvent
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Events that trigger system integration'
+TASK_CREATED
+●●●●●● 1mm □
+'task_created'
+TASK_STARTED
+●●●●●● 1mm □
+'task_started'
+TASK_COMPLETED
+●●●●●● 1mm □
+'task_completed'
+TASK_FAILED
+●●●●●● 1mm □
+'task_failed'
+CONCEPT_APPROVED
+●●●●●● 1mm □
+'concept_approved'
+EXECUTION_STARTED
+●●●●●● 1mm □
+'execution_started'
+IDE_HANDOFF
+●●●●●● 1mm □
+'ide_handoff'
+LEARNING_COMPLETE
+●●●●●● 1mm □
+'learning_complete'
+DIAGNOSTIC_ALERT
+●●●●●● 1mm □
+'diagnostic_alert'
+SECURITY_CHECK
+●●●●●● 1mm □
+'security_check'
+●●●●●● 2mm △
+GraceSystemsIntegration
+'\n    Central integration hub for all Grace systems.\n    Provides unified access to memory, diagnostics, oracle, and other systems.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □○
+IntegrationEvent
+●●●●●● 3mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_systems
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize connections to all Grace systems'
+system
+GraceSystemType
+●●●●●● 3mm △
+system
+●●●●●● 1mm □
+'status'
+'last_accessed'
+'health'
+'metrics'
+'initialized'
+●●●●●● 2mm □
+'unknown'
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'working'
+●●●●●● 2mm □
+"\n        Store data in Grace's memory system.\n\n        Args:\n            key: Memory key\n            data: Data to store\n            memory_type: working, short_term, long_term, procedural\n            context: Additional context for memory formation\n        "
+●●●●●● 3mm □△○
+cognitive.deep_magma_memory
+●●●●●● 2mm □△○
+DeepMagmaMemory
+memory
+●●●●●● 1mm □
+DeepMagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'memory_id'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Memory system not available'
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+10
+'\n        Retrieve relevant memories for a query.\n\n        Args:\n            query: Search query\n            memory_type: Filter by memory type\n            limit: Max results\n        '
+●●●●●● 3mm □△○
+cognitive.deep_magma_memory
+●●●●●● 2mm □△○
+DeepMagmaMemory
+memory
+●●●●●● 1mm □
+DeepMagmaMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'memories'
+●●●●●● 3mm □△○
+results
+ImportError
+●●●●●● 3mm ○
+'success'
+'error'
+'memories'
+●●●●●● 1mm □
+'Memory system not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+'memories'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Learn from task execution and store in memory.\n\n        Args:\n            task_id: Task identifier\n            task_data: Task details\n            outcome: success, failure, partial\n        '
+learning_data
+●●●●●● 1mm □
+'task_id'
+'task_type'
+'task_title'
+'outcome'
+'duration_ms'
+'learned_at'
+'patterns'
+'errors'
+task_id
+task_data
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+outcome
+task_data
+●●●●●● 1mm □△
+'duration_ms'
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'patterns'
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'errors'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'full'
+'\n        Run diagnostic analysis using 4-layer DiagnosticMachine.\n\n        Args:\n            target: What to analyze (task, concept, system, etc.)\n            target_type: Type of target\n            depth: quick, standard, full\n        '
+●●●●●● 3mm □△○
+diagnostic_machine.core
+●●●●●● 2mm □△○
+DiagnosticMachine
+diagnostic
+●●●●●● 1mm □
+DiagnosticMachine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+diagnostic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'diagnosis'
+'severity'
+'recommendations'
+'layer_results'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'diagnosis'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'recommendations'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'layer_results'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Diagnostic system not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Run health check on Grace systems.\n\n        Args:\n            systems: Specific systems to check, or all if None\n        '
+●●●●●● 3mm □△○
+diagnostic_machine.core
+●●●●●● 2mm □△○
+DiagnosticMachine
+diagnostic
+●●●●●● 1mm □
+DiagnosticMachine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health_report
+●●●●●● 1mm □
+diagnostic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'overall_health'
+'systems'
+'alerts'
+●●●●●● 3mm □△○
+health_report
+●●●●●● 1mm □△
+'overall_health'
+●●●●●● 2mm □△
+health_report
+●●●●●● 1mm □△
+'systems'
+●●●●●● 2mm □△
+health_report
+●●●●●● 1mm □△
+'alerts'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'overall_health'
+'systems'
+'alerts'
+●●●●●● 3mm □△○
+'unknown'
+s
+'status'
+'unknown'
+s
+GraceSystemType
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Get ML predictions from Oracle system.\n\n        Args:\n            prediction_type: task_success, priority, effort, risk\n            input_data: Data for prediction\n        '
+●●●●●● 3mm □△○
+api.ml_intelligence_api
+●●●●●● 2mm □△○
+get_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prediction_type
+'task_success'
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm △
+prediction_type
+'priority'
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prediction_type
+'effort'
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm △
+prediction_type
+'risk'
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+prediction_type
+input_data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'prediction'
+'confidence'
+'factors'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'prediction'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'confidence'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'factors'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Oracle ML system not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Use Oracle to suggest best assignment for a task.\n\n        Args:\n            task_data: Task details\n            available_assignees: List of team members/agents with skills\n        '
+●●●●●● 3mm □△○
+api.ml_intelligence_api
+●●●●●● 2mm □△○
+get_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+'task_type'
+'task_complexity'
+'required_skills'
+'priority'
+'assignees'
+task_data
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'estimated_complexity'
+'medium'
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'required_capabilities'
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'priority'
+5
+●●●●●● 2mm □△
+'id'
+'skills'
+'current_load'
+'success_rate'
+a
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+a
+●●●●●● 1mm □△
+'skills'
+●●●●●● 2mm □△
+a
+●●●●●● 1mm □△
+'current_load'
+0
+●●●●●● 2mm □△
+a
+●●●●●● 1mm □△
+'success_rate'
+0.8
+●●●●●● 2mm □△
+a
+available_assignees
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'suggested_assignee'
+'confidence'
+'reasoning'
+'alternatives'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'assignee_id'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'confidence'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'reasoning'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'alternatives'
+●●●●●● 2mm □△
+ImportError
+best_match
+●●●●●● 1mm □
+●●●●●● 2mm □
+best_score
+●●●●●● 1mm □
+0
+required_skills
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+task_data
+●●●●●● 1mm □△
+'required_capabilities'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assignee
+available_assignees
+assignee_skills
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+assignee
+●●●●●● 1mm □△
+'skills'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+match_score
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+required_skills
+●●●●●● 3mm △
+assignee_skills
+●●●●●● 2mm □△
+load_factor
+●●●●●● 1mm □
+1
+●●●●●● 1mm □△
+assignee
+●●●●●● 1mm □△
+'current_load'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+100
+score
+●●●●●● 1mm □
+match_score
+●●●●●● 2mm □△
+load_factor
+●●●●●● 2mm □
+score
+best_score
+best_score
+●●●●●● 1mm □
+score
+best_match
+●●●●●● 1mm □
+assignee
+●●●●●● 3mm ○
+'success'
+'suggested_assignee'
+'confidence'
+'reasoning'
+'alternatives'
+●●●●●● 3mm □△○
+best_match
+best_match
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.5
+●●●●●● 3mm ○
+best_score
+●●●●●● 2mm □△
+0.1
+0.9
+●●●●●● 2mm □△
+'Skill-based matching'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Validate task execution with security layer.\n\n        Args:\n            task_data: Task to validate\n            executor_id: Who/what will execute\n        '
+●●●●●● 3mm □△○
+security.layer
+●●●●●● 2mm □△○
+SecurityLayer
+security
+●●●●●● 1mm □
+SecurityLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+security
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'approved'
+'trust_score'
+'restrictions'
+'requires_approval'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'approved'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'restrictions'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'requires_approval'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'approved'
+'trust_score'
+'restrictions'
+'requires_approval'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+0.7
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Check if user has permissions for an action.\n\n        Args:\n            user_id: User Genesis ID\n            action: Action to perform\n            resource: Resource being accessed\n        '
+●●●●●● 3mm □△○
+security.layer
+●●●●●● 2mm □△○
+SecurityLayer
+security
+●●●●●● 1mm □
+SecurityLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+has_permission
+●●●●●● 1mm □
+security
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'has_permission'
+'user_id'
+'action'
+●●●●●● 3mm □△○
+has_permission
+user_id
+action
+ImportError
+●●●●●● 3mm ○
+'success'
+'has_permission'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Handle a failure with self-healing system.\n\n        Args:\n            failure_type: Type of failure\n            failure_data: Failure details\n            context: Additional context\n        '
+●●●●●● 3mm □△○
+cognitive.self_healing
+●●●●●● 2mm □△○
+SelfHealingSystem
+healing
+●●●●●● 1mm □
+SelfHealingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'recovered'
+'recovery_action'
+'new_state'
+'recommendations'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'recovered'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'action_taken'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'new_state'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'recommendations'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'recovered'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm □
+'Self-healing system not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Get recovery suggestions for an error.\n\n        Args:\n            error_data: Error details\n        '
+●●●●●● 3mm □△○
+cognitive.self_healing
+●●●●●● 2mm □△○
+SelfHealingSystem
+healing
+●●●●●● 1mm □
+SelfHealingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+●●●●●● 1mm □
+healing
+●●●●●● 1mm □△
+error_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'suggestions'
+'auto_recoverable'
+●●●●●● 3mm □△○
+suggestions
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+'auto_recoverable'
+●●●●●● 2mm □△
+s
+suggestions
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'suggestions'
+'auto_recoverable'
+●●●●●● 3mm □△○
+'action'
+'description'
+'auto_recoverable'
+'retry'
+'Retry the operation'
+●●●●●● 3mm □△○
+'action'
+'description'
+'auto_recoverable'
+'skip'
+'Skip and continue'
+●●●●●● 1mm □
+'action'
+'description'
+'auto_recoverable'
+'escalate'
+'Escalate to human'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'analytical'
+'\n        Use neural-symbolic reasoning for analysis.\n\n        Args:\n            problem: Problem to analyze\n            context: Context data\n            reasoning_type: analytical, creative, logical, hybrid\n        '
+●●●●●● 3mm □△○
+cognitive.neural_symbolic
+●●●●●● 2mm □△○
+NeuralSymbolicAI
+reasoner
+●●●●●● 1mm □
+NeuralSymbolicAI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+reasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'conclusion'
+'reasoning_chain'
+'confidence'
+'supporting_evidence'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'conclusion'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'chain'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'confidence'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'evidence'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Neural-symbolic system not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Ingest task output into knowledge base.\n\n        Args:\n            task_id: Source task\n            output_data: Data to ingest\n            output_type: code, document, config, etc.\n        '
+●●●●●● 3mm □△○
+api.ingestion_api
+●●●●●● 2mm □△○
+get_ingestion_pipeline
+pipeline
+●●●●●● 1mm □
+get_ingestion_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'ingestion_id'
+'chunks_created'
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'chunks'
+0
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Ingestion system not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Get proactive improvement suggestions.\n\n        Args:\n            context_type: task, concept, workflow\n            context_data: Context for suggestions\n        '
+●●●●●● 3mm □△○
+api.proactive_learning
+●●●●●● 2mm □△○
+get_proactive_system
+proactive
+●●●●●● 1mm □
+get_proactive_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+●●●●●● 1mm □
+proactive
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'suggestions'
+'auto_applicable'
+●●●●●● 3mm □△○
+suggestions
+s
+s
+suggestions
+s
+●●●●●● 1mm □△
+'auto_applicable'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'suggestions'
+'auto_applicable'
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Queue a learning task for proactive processing.\n\n        Args:\n            learning_task: Learning task details\n        '
+●●●●●● 3mm □△○
+api.proactive_learning
+●●●●●● 2mm □△○
+get_proactive_system
+proactive
+●●●●●● 1mm □
+get_proactive_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+proactive
+●●●●●● 1mm □△
+learning_task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'queued'
+'queue_position'
+'estimated_completion'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □△
+'position'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'estimated_completion'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Proactive learning not available'
+Exception
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+register_event_handler
+●●●●●● 1mm □△
+self
+event
+handler
+●●●●●● 2mm □△
+IntegrationEvent
+●●●●●● 3mm △○
+'Register a handler for an integration event'
+●●●●●● 2mm □
+event
+●●●●●● 3mm △
+●●●●●● 3mm △
+event
+●●●●●● 1mm □
+●●●●●● 3mm △
+event
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+IntegrationEvent
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Emit an integration event to all handlers'
+●●●●●● 2mm □
+event
+●●●●●● 3mm △
+handler
+●●●●●● 3mm △
+event
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm □
+handler
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Process a task using all relevant Grace systems.\n\n        This is the main integration point that coordinates:\n        1. Security validation\n        2. Memory retrieval for context\n        3. Oracle predictions\n        4. Diagnostic pre-checks\n        5. Task execution\n        6. Learning capture\n        7. Output ingestion\n        '
+task_id
+●●●●●● 1mm □
+task_data
+●●●●●● 1mm □△
+'id'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'task_id'
+'systems_used'
+'start_time'
+task_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+security_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+executor_id
+●●●●●● 2mm □△
+results
+'security'
+●●●●●● 1mm □
+security_result
+results
+'systems_used'
+●●●●●● 1mm □△
+'security'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+security_result
+●●●●●● 1mm □△
+'approved'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+results
+'status'
+●●●●●● 1mm □
+'rejected'
+results
+'reason'
+●●●●●● 1mm □
+'Security validation failed'
+●●●●●● 3mm ○
+results
+memory_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'memory_context'
+●●●●●● 1mm □
+memory_result
+●●●●●● 1mm □△
+'memories'
+●●●●●● 2mm □△
+results
+'systems_used'
+●●●●●● 1mm □△
+'memory'
+●●●●●● 2mm □△
+oracle_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'prediction'
+●●●●●● 1mm □
+oracle_result
+results
+'systems_used'
+●●●●●● 1mm □△
+'oracle'
+●●●●●● 2mm □△
+diagnostic_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'system_health'
+●●●●●● 1mm □
+diagnostic_result
+results
+'systems_used'
+●●●●●● 1mm □△
+'diagnostic'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+IntegrationEvent
+'task_id'
+'task_data'
+'predictions'
+task_id
+task_data
+oracle_result
+●●●●●● 2mm □△
+results
+'status'
+●●●●●● 1mm □
+'ready'
+results
+'end_time'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Complete a task and capture learnings.\n\n        Args:\n            task_id: Task identifier\n            task_data: Task details\n            outcome: success, failure, partial\n            output: Task output if any\n        '
+results
+●●●●●● 1mm □
+'task_id'
+'outcome'
+'systems_used'
+task_id
+outcome
+learning_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'learning'
+●●●●●● 1mm □
+learning_result
+results
+'systems_used'
+●●●●●● 1mm □△
+'memory'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+output
+ingest_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'ingestion'
+●●●●●● 1mm □
+ingest_result
+results
+'systems_used'
+●●●●●● 1mm □△
+'ingestion'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+outcome
+'failure'
+healing_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'task_id'
+'task_type'
+'errors'
+task_id
+task_data
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+task_data
+●●●●●● 1mm □△
+'errors'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+'recovery_suggestions'
+●●●●●● 1mm □
+healing_result
+results
+'systems_used'
+●●●●●● 1mm □△
+'self_healing'
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+outcome
+'success'
+IntegrationEvent
+IntegrationEvent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+'task_id'
+'outcome'
+'task_data'
+task_id
+outcome
+task_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_log_integration
+●●●●●● 1mm □△
+self
+system
+action
+details
+success
+error
+●●●●●● 2mm □△
+GraceSystemType
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Log integration activity'
+log_entry
+●●●●●● 1mm □
+'timestamp'
+'system'
+'action'
+'details'
+'success'
+'error'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system
+action
+details
+success
+error
+●●●●●● 3mm △
+●●●●●● 1mm □△
+log_entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+system
+'last_accessed'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+system
+'health'
+●●●●●● 1mm □
+'healthy'
+●●●●●● 3mm □
+●●●●●● 3mm △
+system
+'health'
+●●●●●● 1mm □
+'degraded'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+1000
+●●●●●● 1mm □
+get_system_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get status of all integrated systems'
+●●●●●● 3mm ○
+'systems'
+'total_integrations'
+'recent_failures'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+log
+log
+●●●●●● 3mm △
+50
+log
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_integration_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get integration metrics'
+success_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+log
+●●●●●● 3mm △
+log
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+failure_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+success_count
+by_system
+●●●●●● 1mm □
+log
+●●●●●● 3mm △
+system
+●●●●●● 1mm □
+log
+●●●●●● 1mm □△
+'system'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+system
+by_system
+by_system
+system
+●●●●●● 1mm □
+'success'
+'failure'
+0
+0
+●●●●●● 2mm □
+log
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+by_system
+system
+'success'
+1
+●●●●●● 3mm □
+by_system
+system
+'failure'
+1
+●●●●●● 3mm ○
+'total_integrations'
+'success_count'
+'failure_count'
+'success_rate'
+'by_system'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+success_count
+failure_count
+●●●●●● 3mm △
+success_count
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+by_system
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_integration_instance
+●●●●●● 2mm □○
+GraceSystemsIntegration
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_grace_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the Grace Systems Integration singleton'
+●●●●●● 2mm □
+_integration_instance
+●●●●●● 2mm □
+_integration_instance
+●●●●●● 1mm □
+GraceSystemsIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_integration_instance
+GraceSystemsIntegration

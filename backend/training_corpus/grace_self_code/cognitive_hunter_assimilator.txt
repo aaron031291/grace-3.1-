@@ -1,0 +1,1501 @@
+## hunter_assimilator.py
+"\nHUNTER Assimilator — Autonomous code integration system.\n\nWhen a user submits code/feature with the keyword HUNTER, Grace:\n1. Accepts the code as intended for integration\n2. Runs it through the full cognitive pipeline (9 stages)\n3. Kimi analyses and reasons about the code\n4. Grace verifies, tests, and validates\n5. Coding agent fixes any issues found\n6. Trust Engine scores the result\n7. Hallucination guard verifies against project\n8. Self-healing checks it won't break anything\n9. Librarian places files in the right location\n10. Database schemas auto-detected and migrated\n11. Handshake protocol announces the new component to all systems\n12. Genesis key tracks the entire assimilation chain\n\nNo manual testing, no manual file placement, no manual schema updates.\nThe user says HUNTER, Grace does everything else.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AssimilationResult
+'Complete result of a HUNTER assimilation.'
+request_id
+●●●●●● 1mm ○
+''
+status
+●●●●●● 1mm ○
+'pending'
+steps
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_created
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files_modified
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+schemas_detected
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues_found
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues_fixed
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 3mm ○
+0
+handshake_sent
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+started_at
+●●●●●● 1mm ○
+''
+completed_at
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+HunterAssimilator
+"\n    Autonomous code assimilation triggered by HUNTER keyword.\n    Runs new code through Grace's entire backend pipeline.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+AssimilationResult
+●●●●●● 1mm □
+is_hunter_request
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if text contains the HUNTER trigger.'
+●●●●●● 3mm ○
+'HUNTER'
+text
+●●●●●● 3mm △
+●●●●●● 1mm □
+assimilate
+●●●●●● 1mm □△
+self
+code
+description
+project_folder
+user
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+''
+'system'
+'\n        Full autonomous assimilation of new code into Grace.\n        '
+result
+●●●●●● 1mm □
+AssimilationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+result
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+'analysing'
+step1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+description
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+step1
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+step1
+●●●●●● 1mm □△
+'schemas'
+●●●●●● 2mm □△
+step2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+description
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step2
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'testing'
+step3
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+description
+project_folder
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step3
+●●●●●● 2mm □△
+step4
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step4
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step4
+●●●●●● 1mm □△
+'issues'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step4
+'issues'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+result
+●●●●●● 1mm □
+'fixing'
+step5
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+result
+project_folder
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step5
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step5
+●●●●●● 1mm □△
+'fixed_code'
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+step5
+'fixed_code'
+result
+●●●●●● 1mm □
+step5
+●●●●●● 1mm □△
+'fixed'
+●●●●●● 2mm □△
+step6
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step6
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+step6
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+step7
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step7
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'integrating'
+step8
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+result
+project_folder
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step8
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+step9
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step9
+●●●●●● 2mm □△
+step10
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step10
+●●●●●● 2mm □△
+step11
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step11
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+step11
+●●●●●● 1mm □△
+'sent'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+step12
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+project_folder
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step12
+●●●●●● 2mm □△
+step13
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+description
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step13
+●●●●●● 2mm □△
+step14
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step14
+●●●●●● 2mm □△
+step15
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+step15
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'complete'
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+ingest
+store_procedure
+ingest
+●●●●●● 1mm □△
+'HUNTER assimilation: '
+description
+'. Files: '
+result
+'. Trust: '
+result
+●●●●●● 2mm □△
+store_procedure
+●●●●●● 1mm □△
+'Assimilated: '
+description
+50
+description
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+AssimilationResult
+●●●●●● 1mm □
+_step_parse
+●●●●●● 1mm □△
+self
+code
+description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+files
+●●●●●● 1mm □
+schemas
+●●●●●● 1mm □
+file_blocks
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'```filepath:\\s*(.+?)\\n(.*?)```'
+code
+re
+●●●●●● 2mm □△
+path
+content
+file_blocks
+files
+●●●●●● 1mm □△
+'path'
+'content'
+'size'
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+files
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+'.py'
+●●●●●● 2mm □
+'function '
+code
+'const '
+code
+ext
+●●●●●● 1mm □
+'.js'
+●●●●●● 1mm △
+'<'
+code
+'>'
+code
+'html'
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+'.html'
+name
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[^a-z0-9]'
+'_'
+description
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+30
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ext
+files
+●●●●●● 1mm □△
+'path'
+'content'
+'size'
+name
+code
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+schema_patterns
+●●●●●● 1mm □
+'CREATE\\s+TABLE\\s+(\\w+)'
+'class\\s+(\\w+)\\(.*BaseModel\\)'
+'class\\s+(\\w+)\\(.*Base\\)'
+'__tablename__\\s*=\\s*["\\\'](\\w+)["\\\']'
+pattern
+schema_patterns
+matches
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+code
+●●●●●● 2mm □△
+schemas
+●●●●●● 1mm □△
+matches
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'files'
+'schemas'
+'file_details'
+'parse'
+f
+'path'
+f
+files
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+schemas
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_kimi_analyse
+●●●●●● 1mm □△
+self
+code
+description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+●●●●●● 2mm □
+enter_loop
+●●●●●● 1mm □△
+'consensus_refinement'
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'Circuit breaker: consensus loop depth exceeded'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+_check_model_available
+available
+●●●●●● 1mm □
+m
+m
+'opus'
+'kimi'
+'qwen'
+_check_model_available
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+available
+●●●●●● 2mm □△
+2
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'analysis'
+'success'
+'method'
+'models_used'
+'confidence'
+'kimi_analyse'
+result
+●●●●●● 3mm □△○
+'consensus'
+result
+result
+Exception
+exit_loop
+●●●●●● 1mm □△
+'consensus_refinement'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+'Analyse this code being integrated into Grace AI:\n\nDescription: '
+description
+'\n\nCode:\n'
+code
+5000
+'\n\nProvide: 1) What it does 2) Dependencies needed 3) Potential conflicts 4) Integration points 5) Risk assessment'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'analysis'
+'success'
+'method'
+'kimi_analyse'
+response
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+'kimi_solo'
+Exception
+●●●●●● 3mm ○
+'step'
+'analysis'
+'error'
+'kimi_analyse'
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_pipeline_verify
+●●●●●● 1mm □△
+self
+code
+description
+project_folder
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'stages_passed'
+'stages_failed'
+'invariants'
+'ambiguity'
+'trust'
+'pipeline_verify'
+ctx
+ctx
+ctx
+ctx
+ctx
+Exception
+●●●●●● 3mm ○
+'step'
+'error'
+'pipeline_verify'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_code_review
+●●●●●● 1mm □△
+self
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+issues
+●●●●●● 1mm □
+●●●●●● 2mm □
+'eval('
+code
+issues
+●●●●●● 1mm □△
+'security: eval() usage detected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'exec('
+code
+issues
+●●●●●● 1mm □△
+'security: exec() usage detected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'import os; os.system'
+code
+issues
+●●●●●● 1mm □△
+'security: shell command execution detected'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'password'
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'='
+code
+"'"
+code
+'"'
+code
+issues
+●●●●●● 1mm □△
+'security: possible hardcoded password'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'TODO'
+code
+'FIXME'
+code
+issues
+●●●●●● 1mm □△
+'quality: TODO/FIXME found — incomplete code'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'print('
+code
+'logger'
+code
+issues
+●●●●●● 1mm □△
+'quality: print() used instead of logger'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+review
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+review
+●●●●●● 1mm □△
+'review'
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+'kimi_review: '
+review
+'review'
+200
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'step'
+'issues'
+'issue_count'
+'code_review'
+issues
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_fix_issues
+●●●●●● 1mm □△
+self
+code
+issues
+project_folder
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+fix_prompt
+●●●●●● 1mm □
+'Fix these issues in the code:\n\nIssues:\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'- '
+i
+i
+issues
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\nCode:\n'
+code
+4000
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 3mm ○
+'step'
+'fixed_code'
+'fixed'
+'fix_issues'
+ctx
+issues
+5
+Exception
+●●●●●● 3mm ○
+'step'
+'fixed_code'
+'fixed'
+'fix_issues'
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_trust_score
+●●●●●● 1mm □△
+self
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+engine
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'hunter_assimilation'
+'HUNTER Code'
+code
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'trust'
+'needs_verification'
+'trust_score'
+comp
+comp
+Exception
+●●●●●● 3mm ○
+'step'
+'trust'
+'trust_score'
+50
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_healing_precheck
+●●●●●● 1mm □△
+self
+code
+files
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+concerns
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'app.py'
+f
+f
+files
+●●●●●● 2mm □△
+concerns
+●●●●●● 1mm □△
+'Modifies main app — high impact'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'database'
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'migration'
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+files
+●●●●●● 2mm □△
+concerns
+●●●●●● 1mm □△
+'Database changes — needs migration check'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'settings'
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'config'
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+files
+●●●●●● 2mm □△
+concerns
+●●●●●● 1mm □△
+'Configuration changes — may affect runtime'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'concerns'
+'safe'
+'healing_precheck'
+concerns
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+concerns
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_write_files
+●●●●●● 1mm □△
+self
+code
+files
+project_folder
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+written
+●●●●●● 1mm □
+kb
+●●●●●● 1mm □
+project_folder
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+project_folder
+file_blocks
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'```filepath:\\s*(.+?)\\n(.*?)```'
+code
+re
+●●●●●● 2mm □△
+path
+content
+file_blocks
+target
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+written
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[HUNTER] Failed to write '
+path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'written'
+'count'
+'write_files'
+written
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+written
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_migrate_schemas
+●●●●●● 1mm □△
+self
+schemas
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+migrated
+●●●●●● 1mm □
+schema
+schemas
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+migrated
+●●●●●● 1mm □△
+schema
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'step'
+'schemas'
+'note'
+'migrate_schemas'
+migrated
+'Auto-migration on startup via create_tables()'
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_librarian_organise
+●●●●●● 1mm □△
+self
+files
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+organised
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.librarian_autonomous
+●●●●●● 2mm □△○
+get_autonomous_librarian
+lib
+●●●●●● 1mm □
+get_autonomous_librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+files
+result
+●●●●●● 1mm □
+lib
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'organised'
+organised
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'step'
+'organised'
+'librarian_organise'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+organised
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_handshake
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+AssimilationResult
+"\n        Announce the new component to every system in Grace.\n        'Hi, I'm this component, I do this, I connect to these systems.'\n        "
+announcement
+●●●●●● 1mm □
+'type'
+'request_id'
+'files'
+'schemas'
+'trust_score'
+'timestamp'
+'hunter_handshake'
+result
+result
+result
+result
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+rt
+●●●●●● 1mm □
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+announcement
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'step'
+'sent'
+'announcement'
+'handshake'
+●●●●●● 3mm □△○
+announcement
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_contradiction_check
+●●●●●● 1mm □△
+self
+code
+project_folder
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+project_folder
+kb
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+project_folder
+●●●●●● 2mm □
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_files
+●●●●●● 1mm □
+f
+f
+kb
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+new_files
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+conflicts
+●●●●●● 1mm □
+f
+f
+new_files
+f
+existing_files
+●●●●●● 2mm □
+conflicts
+●●●●●● 3mm ○
+'step'
+'conflicts'
+'clean'
+'contradiction_check'
+conflicts
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'step'
+'conflicts'
+'clean'
+'contradiction_check'
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'step'
+'clean'
+'contradiction_check'
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_feed_learning
+●●●●●● 1mm □△
+self
+code
+description
+result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+AssimilationResult
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+outcome
+●●●●●● 1mm □
+result
+60
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+'positive'
+'negative'
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'outcome'
+'recorded'
+'feed_learning'
+outcome
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'step'
+'recorded'
+'error'
+'feed_learning'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_immune_postcheck
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+get_immune_system
+immune
+●●●●●● 1mm □
+get_immune_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_anomalies
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'anomalies'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'anomalies_after'
+'health'
+'immune_postcheck'
+new_anomalies
+result
+●●●●●● 1mm □△
+'overall_health'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'step'
+'skipped'
+'immune_postcheck'
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_update_kpi
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+AssimilationResult
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+engine
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+result
+60
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'hunter_assimilation'
+'HUNTER Assimilator'
+'Trust: '
+result
+', Issues: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+', Fixed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'component_trust'
+'trend'
+'update_kpi'
+comp
+comp
+Exception
+●●●●●● 3mm ○
+'step'
+'skipped'
+'update_kpi'
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'status'
+'files'
+'issues_found'
+'issues_fixed'
+'trust'
+'handshake'
+'started'
+'completed'
+r
+r
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+r
+r
+r
+r
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+_hunter
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_hunter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_hunter
+●●●●●● 2mm □
+_hunter
+●●●●●● 1mm □
+HunterAssimilator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_hunter
+HunterAssimilator

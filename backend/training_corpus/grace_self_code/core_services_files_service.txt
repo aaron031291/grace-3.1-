@@ -1,0 +1,985 @@
+## files_service.py
+'Files domain service — direct file system operations and agentic filing (brain + Qwen/librarian).'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+rel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Path traversal blocked'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+target
+●●●●●● 1mm □
+tree
+●●●●●● 1mm □△
+p
+max_depth
+●●●●●● 2mm □△
+●●●●●● 2mm □
+3
+kb
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □
+p
+_safe
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+kb
+root
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_b
+●●●●●● 1mm □△
+d
+depth
+●●●●●● 2mm □△
+0
+r
+●●●●●● 1mm □
+'path'
+'name'
+'type'
+'children'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+d
+'knowledge_base'
+'directory'
+●●●●●● 2mm □
+depth
+max_depth
+●●●●●● 3mm ○
+r
+item
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'children'
+●●●●●● 1mm □△
+_b
+●●●●●● 1mm □△
+item
+depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+r
+'children'
+●●●●●● 1mm □△
+'path'
+'name'
+'type'
+'size'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+item
+'file'
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+PermissionError
+●●●●●● 3mm ○
+r
+●●●●●● 3mm ○
+_b
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 1mm □
+browse
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+''
+target
+●●●●●● 1mm □
+path
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+items
+●●●●●● 1mm □
+item
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+items
+●●●●●● 1mm □△
+'name'
+'type'
+'path'
+'size'
+item
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'directory'
+'file'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'items'
+'total'
+path
+items
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+●●●●●● 1mm □
+read
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+content
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+50000
+●●●●●● 3mm ○
+'path'
+'content'
+'size'
+path
+content
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+write
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'size'
+'saved'
+path
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+create
+●●●●●● 1mm □△
+path
+content
+directory
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □
+●●●●●● 2mm □
+directory
+path
+●●●●●● 1mm □
+directory
+'/'
+path
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'created'
+path
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+delete
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'deleted'
+path
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+query
+limit
+●●●●●● 2mm □△
+10
+'Simple file content search.'
+results
+●●●●●● 1mm □
+f
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+'.txt'
+'.md'
+'.py'
+'.json'
+'.yaml'
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'path'
+'name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+limit
+Exception
+●●●●●● 3mm ○
+'query'
+'results'
+'total'
+query
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_files
+total_size
+by_ext
+●●●●●● 1mm □
+0
+0
+f
+kb
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_files
+1
+total_size
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'none'
+by_ext
+ext
+●●●●●● 1mm □
+by_ext
+●●●●●● 1mm □△
+ext
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+'total_files'
+'total_size_mb'
+'by_extension'
+total_files
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_size
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+by_ext
+●●●●●● 1mm □
+docs_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all documents from the docs library.'
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_list_all_documents
+●●●●●● 3mm ○
+_list_all_documents
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'documents'
+●●●●●● 1mm □
+_call_brain
+●●●●●● 1mm □△
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Call brain from files service (agentic path).'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+save_file_agentic
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n    Save file then run librarian process and agentic filing (correct subfolder, categorization).\n    Payload: path, content, project_id (optional). Triggers data/librarian_process and files/filing.\n    '
+path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+project_id
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+'path required'
+out
+●●●●●● 1mm □
+write
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+out
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+r1
+●●●●●● 1mm □
+_call_brain
+●●●●●● 1mm □△
+'data'
+'librarian_process'
+'path'
+'content'
+'project_id'
+path
+content
+project_id
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □
+_call_brain
+●●●●●● 1mm □△
+'files'
+'filing'
+'path'
+path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'saved'
+'size'
+'librarian'
+'filing'
+path
+●●●●●● 3mm □△○
+out
+●●●●●● 1mm □△
+'size'
+●●●●●● 2mm □△
+r1
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+r1
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r2
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+place_in_folder
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n    Place file in the correct subfolder (agentic: librarian suggests or use target_folder).\n    Payload: path, target_folder (optional; if missing, librarian suggests).\n    '
+●●●●●● 3mm ○
+_call_brain
+●●●●●● 1mm □△
+'data'
+'librarian_organise_file'
+'path'
+'target_folder'
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'target_folder'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_doc
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n    Create a document: suggest or use folder, write content, then process and categorize.\n    Payload: path (or name), content, folder (optional), project_id (optional).\n    '
+path
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'path'
+p
+●●●●●● 1mm □△
+'name'
+'untitled.md'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'folder'
+''
+●●●●●● 2mm □△
+project_id
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'project_id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+folder
+path
+●●●●●● 1mm □
+folder
+folder
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+'/'
+path
+path
+out
+●●●●●● 1mm □
+create
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+out
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+r1
+●●●●●● 1mm □
+_call_brain
+●●●●●● 1mm □△
+'data'
+'librarian_process'
+'path'
+'content'
+'project_id'
+path
+content
+project_id
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □
+_call_brain
+●●●●●● 1mm □△
+'files'
+'filing'
+'path'
+path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'created'
+'librarian'
+'filing'
+path
+●●●●●● 3mm □△○
+r1
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+r1
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r2
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_report
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n    Create a report (e.g. daily summary), place in reports folder, and register with librarian.\n    Payload: title, report_type (optional), content (optional); or generate_daily_report if no content.\n    '
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+title
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'title'
+'report'
+●●●●●● 2mm □△
+report_type
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'report_type'
+'daily'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+core.reports
+●●●●●● 2mm □△○
+generate_daily_report
+data
+●●●●●● 1mm □
+generate_daily_report
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'hours'
+24
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Exception
+content
+●●●●●● 1mm □
+'{ "error": "'
+e
+'", "generated_at": "'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'" }'
+safe_name
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+' -_'
+c
+'_'
+c
+title
+●●●●●● 2mm □△
+80
+path
+●●●●●● 1mm □
+'reports/'
+report_type
+'/'
+safe_name
+'_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M'
+●●●●●● 2mm □△
+'.json'
+out
+●●●●●● 1mm □
+create
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+out
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+_call_brain
+●●●●●● 1mm □△
+'data'
+'librarian_process'
+'path'
+'content'
+'project_id'
+path
+content
+'reports'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'created'
+'report_type'
+path
+●●●●●● 3mm □△○
+report_type
+●●●●●● 2mm □△
+●●●●●● 1mm □
+categorize
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Run librarian categorization for a path (tags, category, purpose).'
+●●●●●● 3mm ○
+_call_brain
+●●●●●● 1mm □△
+'data'
+'librarian_categorize'
+'path'
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+filing
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n    Agentic filing: suggest or move file to correct subfolder via librarian (Qwen-backed).\n    Payload: path. Calls data/librarian_organise_file.\n    '
+●●●●●● 3mm ○
+_call_brain
+●●●●●● 1mm □△
+'data'
+'librarian_organise_file'
+'path'
+p
+●●●●●● 1mm □△
+'path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □△

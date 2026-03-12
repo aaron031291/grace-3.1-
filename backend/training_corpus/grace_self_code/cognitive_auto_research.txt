@@ -1,0 +1,727 @@
+## auto_research.py
+"\nAuto-Research Engine — Proactive knowledge expansion for domain folders.\n\nWhen a user creates a new domain folder, Grace:\n1. Reads the folder name and subfolder names\n2. Reasons about what topics this domain covers\n3. Offers to auto-ingest knowledge around those topics\n4. Searches: web, APIs, knowledge base, Kimi reasoning\n5. Pulls data into the folder automatically\n6. Versions each research cycle (Research v1, v2, v3...)\n7. Uses reverse KNN to predict what the user will need NEXT\n8. Stays 5-7 steps ahead of the user's current knowledge\n9. Kimi deepens and broadens the context each cycle\n10. Librarian organises everything, genesis tracks it all\n\nConnected to: Librarian, Ingestion, Kimi, Opus, Magma, Trust Engine,\nKnowledge Cycle, Genesis Keys, TimeSense, Cognitive Partner\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AutoResearchEngine
+'\n    Proactive research engine that pre-empts user knowledge needs.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+analyse_folder
+●●●●●● 1mm □△
+self
+folder_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Analyse a folder to understand what domain it represents.\n        Read folder name, subfolders, existing files.\n        Reason about what topics this covers.\n        '
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+folder_path
+●●●●●● 2mm □
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder_name
+●●●●●● 1mm □
+folder
+subfolders
+●●●●●● 1mm □
+d
+d
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+f
+f
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+content_preview
+●●●●●● 1mm □
+''
+f
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+'.txt'
+'.md'
+'.py'
+'.json'
+content_preview
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+500
+●●●●●● 3mm ○
+'\n'
+Exception
+analysis
+●●●●●● 1mm □
+'folder_path'
+'folder_name'
+'subfolders'
+'files'
+'file_count'
+'content_preview'
+folder_path
+folder_name
+subfolders
+files
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+content_preview
+1000
+topics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+folder_name
+subfolders
+files
+content_preview
+●●●●●● 2mm □△
+analysis
+'topics'
+●●●●●● 1mm □
+topics
+analysis
+'suggested_research'
+●●●●●● 1mm □
+topics
+●●●●●● 1mm □△
+'research_queries'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+analysis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_reason_about_domain
+●●●●●● 1mm □△
+self
+folder_name
+subfolders
+files
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Use Kimi to reason about what this domain folder needs.'
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+"A user created a knowledge folder called '"
+folder_name
+"'.\nSubfolders: "
+subfolders
+'\nFiles: '
+files
+'\nContent preview:\n'
+content
+500
+'\n\nBased on the folder name and structure, determine:\n1. What domain/topic does this folder cover?\n2. List 10 specific topics the user likely needs to learn about\n3. List 5 search queries to find relevant content\n4. What subfolders should be created for organisation?\n5. What related domains should we also research?\nRespond as JSON with keys: domain, topics, research_queries, suggested_subfolders, related_domains'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```json'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'domain'
+'research_queries'
+'topics'
+'raw'
+folder_name
+folder_name
+folder_name
+response
+500
+Exception
+●●●●●● 3mm ○
+'domain'
+'research_queries'
+'topics'
+folder_name
+folder_name
+folder_name
+●●●●●● 1mm □○
+●●●●●● 1mm □
+run_research_cycle
+●●●●●● 1mm □△
+self
+folder_path
+depth
+max_queries
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+1
+10
+'\n        Run a full research cycle for a domain folder.\n        Searches, ingests, versions, and expands.\n        '
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+folder
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+folder_path
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+queries
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'suggested_research'
+folder_path
+●●●●●● 2mm □△
+max_queries
+existing_research
+●●●●●● 1mm □
+d
+d
+folder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'research_'
+●●●●●● 2mm □△
+version
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+existing_research
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+research_dir
+●●●●●● 1mm □
+folder
+●●●●●● 3mm □△
+'research_v'
+version
+research_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'folder'
+'version'
+'research_dir'
+'queries'
+'results'
+'files_created'
+folder_path
+'v'
+version
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+research_dir
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+queries
+0
+query
+queries
+kb_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+kimi_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+analysis
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'domain'
+folder_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+kb_results
+content
+'## From Knowledge Base\n\n'
+kb_results
+'\n\n'
+●●●●●● 2mm □
+kimi_results
+content
+'## Research\n\n'
+kimi_results
+'\n\n'
+●●●●●● 2mm □
+content
+filename
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+40
+●●●●●● 3mm ○
+'.md'
+filepath
+●●●●●● 1mm □
+research_dir
+●●●●●● 3mm □△
+filename
+filepath
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+result
+'files_created'
+1
+result
+'results'
+●●●●●● 1mm □△
+'query'
+'file'
+'length'
+query
+filename
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+ingest
+ingest
+●●●●●● 1mm □△
+content
+2000
+●●●●●● 2mm □△
+Exception
+next_topics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+analysis
+result
+●●●●●● 2mm □△
+result
+'predicted_next'
+●●●●●● 1mm □
+next_topics
+subfolder
+analysis
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'suggested_subfolders'
+●●●●●● 2mm □△
+sf_path
+●●●●●● 1mm □
+folder
+●●●●●● 3mm □△
+subfolder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sf_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sf_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'subfolders_created'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+subfolder
+●●●●●● 2mm □△
+result
+'duration_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+store_procedure
+store_procedure
+●●●●●● 1mm □△
+'Research: '
+folder_path
+' v'
+version
+'Researched '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+queries
+●●●●●● 2mm □△
+' topics, created '
+result
+'files_created'
+' files'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_search_knowledge_base
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search existing knowledge base for relevant content.'
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+500
+c
+chunks
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_search_kimi
+●●●●●● 1mm □△
+self
+query
+domain
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Use Kimi to research a topic in depth.'
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+kimi
+●●●●●● 1mm □△
+"Research this topic in depth for the domain '"
+domain
+"':\n\n"
+query
+'\n\nProvide: key facts, practical applications, common patterns, code examples if relevant, and connections to related concepts.'
+●●●●●● 2mm □△
+''
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_predict_next_topics
+●●●●●● 1mm □△
+self
+analysis
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+'Reverse KNN — predict what the user will need next.'
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current_topics
+●●●●●● 1mm □
+r
+'query'
+r
+results
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+domain
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'domain'
+''
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+'Domain: '
+domain
+'\nTopics already researched: '
+current_topics
+"\n\nPredict the next 5-7 topics the user will need but hasn't thought of yet.\nThink several steps ahead — what would a domain expert research next?\nList just the topic names, one per line."
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 3mm ○
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'0123456789.-) '
+●●●●●● 2mm □△
+line
+response
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+5
+7
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+20
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+_engine
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_auto_research
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_engine
+●●●●●● 2mm □
+_engine
+●●●●●● 1mm □
+AutoResearchEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_engine
+AutoResearchEngine

@@ -1,0 +1,641 @@
+## memory_mesh_connector.py
+'\nMemory Mesh Connector - Autonomous Learning Memory Integration\n\nConnects the memory mesh to Layer 1 message bus for:\n- Automatic Genesis Key linking\n- Trust-based episodic/procedural routing\n- Cross-component learning coordination\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+ComponentType
+Message
+get_message_bus
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegration
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MemoryMeshConnector
+'\n    Connects Memory Mesh to Layer 1 message bus.\n\n    Autonomous Actions:\n    1. New Genesis Key → Auto-link to learning memory\n    2. High-trust learning → Auto-create episodic memory\n    3. Very high-trust → Auto-create procedural memory\n    4. Pattern detected → Notify autonomous learning\n    5. New procedure → Notify LLM orchestration for skill use\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+memory_mesh
+message_bus
+●●●●●● 2mm □△
+MemoryMeshIntegration
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+memory_mesh
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] Registered with message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register all autonomous actions for memory mesh.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] ⭐ Registered 6 autonomous actions'
+●●●●●● 2mm □△
+Message
+'Handle new Genesis Key creation - auto-link to learning.'
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+learning_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'learning_type'
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 🤖 New Genesis Key: '
+genesis_key_id
+' (type: '
+learning_type
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'Handle high-trust learning - auto-create episodic memory.'
+learning_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'learning_id'
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 🤖 High-trust learning: '
+learning_id
+' (trust: '
+trust_score
+'.2f'
+') → Creating episodic memory'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'Handle very high-trust learning - auto-create procedural memory.'
+learning_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'learning_id'
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+procedure_name
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'procedure_name'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 🤖 Very high-trust learning: '
+learning_id
+' (trust: '
+trust_score
+'.2f'
+') → Creating procedure: '
+procedure_name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'Handle pattern detection - notify autonomous learning.'
+pattern_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'pattern_id'
+●●●●●● 2mm □△
+pattern_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'pattern_type'
+●●●●●● 2mm □△
+examples_count
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'examples_count'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 🤖 Pattern detected: '
+pattern_type
+' ('
+examples_count
+' examples)'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'\n        Proactive learning gap analysis (NEW - Grace-aligned).\n\n        Analyzes memory mesh to identify knowledge gaps and suggests\n        what Grace should learn next.\n        '
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 🤖 Running proactive learning gap analysis'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.memory_mesh_learner
+●●●●●● 2mm □△○
+get_memory_mesh_learner
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learner
+●●●●●● 1mm □
+get_memory_mesh_learner
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+suggestions
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+learner
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] ✓ Published '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+suggestions
+●●●●●● 1mm □△
+'top_priorities'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' learning suggestions'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] Error in learning gap analysis: '
+e
+●●●●●● 2mm □△
+Message
+'\n        Handle trust score degradation (NEW - self-healing).\n\n        When trust scores drop, automatically trigger re-learning or review.\n        '
+learning_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'learning_id'
+●●●●●● 2mm □△
+old_trust
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'old_trust'
+0.0
+●●●●●● 2mm □△
+new_trust
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'new_trust'
+0.0
+●●●●●● 2mm □△
+degradation
+●●●●●● 1mm □
+old_trust
+●●●●●● 1mm □△
+new_trust
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] ⚠️  Trust degradation detected: learning_id='
+learning_id
+', '
+old_trust
+'.2f'
+' → '
+new_trust
+'.2f'
+' (Δ='
+degradation
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+degradation
+0.2
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers for other components.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 🔧 Registered 3 request handlers'
+●●●●●● 2mm □△
+Message
+'Handle request for memory mesh statistics (ASYNC OPTIMIZED).'
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'stats'
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle request for learning by Genesis Key.'
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+LearningExample
+learning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_key_id'
+'learning_examples'
+genesis_key_id
+'id'
+'experience_type'
+'trust_score'
+'created_at'
+ex
+ex
+ex
+ex
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ex
+learning
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle request for procedures matching context.'
+context
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+min_trust
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'min_trust_score'
+0.8
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Procedure
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'procedures'
+'id'
+'name'
+'success_rate'
+'times_used'
+proc
+proc
+proc
+proc
+proc
+procedures
+10
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Subscribe to events from other components.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 📡 Subscribed to 2 event topics'
+●●●●●● 2mm □△
+Message
+'Handle file ingestion completion - extract learning.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 📄 File ingested: '
+file_path
+' (Genesis Key: '
+genesis_key_id
+')'
+●●●●●● 2mm □△
+Message
+'Handle RAG feedback - update learning memory.'
+query
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'query'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+retrieval_quality
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'quality_score'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] 💬 RAG feedback: success='
+success
+', quality='
+retrieval_quality
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+experience_type
+●●●●●● 1mm □
+'success'
+●●●●●● 3mm □
+experience_type
+●●●●●● 1mm □
+'failure'
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Trigger learning ingestion with full message bus integration.\n\n        Automatically:\n        - Creates Genesis Key if needed\n        - Publishes events for high/very-high trust\n        - Triggers episodic/procedural creation\n        - Notifies other components\n        '
+learning_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+LearningExample
+learning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+learning_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning
+●●●●●● 3mm ○
+learning_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning
+0.7
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+learning
+0.8
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] ✓ Learning ingested: '
+learning_id
+' (trust: '
+learning
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+learning_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+create_memory_mesh_connector
+●●●●●● 1mm □△
+memory_mesh
+message_bus
+●●●●●● 2mm □△
+MemoryMeshIntegration
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+'Create and initialize memory mesh connector.'
+connector
+●●●●●● 1mm □
+MemoryMeshConnector
+●●●●●● 1mm □△
+memory_mesh
+message_bus
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-CONNECTOR] ✓ Initialized and connected to message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+connector
+MemoryMeshConnector

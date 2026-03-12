@@ -1,0 +1,697 @@
+## test_all_genesis_connections.py
+'\nTest ALL Genesis Key Connections.\n\nVerifies that Genesis Keys are connected to:\n1. Memory Mesh\n2. Genesis Key Folder (Layer 1)\n3. Librarian\n4. RAG System\n5. Ingestion System\n6. Autonomous Triggers\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_memory_mesh_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Genesis Key → Memory Mesh connection.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 1: Memory Mesh Connection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Created Genesis Key: '
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Should have been fed into Memory Mesh'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   Check logs for: '[OK] Genesis Key fed into Memory Mesh'"
+●●●●●● 2mm □△
+key
+●●●●●● 2mm □
+'Genesis Key should have an ID'
+Exception
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'no such table'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+pytest
+pytest
+●●●●●● 1mm □△
+'Database not initialized: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'Memory Mesh connection failed: '
+e
+●●●●●● 1mm □
+test_layer1_folder_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Genesis Key → Layer 1 Folder connection.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 2: Layer 1 Folder Connection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+layer1_kb
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 3mm □△
+'layer_1'
+●●●●●● 3mm □△
+'genesis_key'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking Layer 1 KB folder: '
+layer1_kb
+●●●●●● 2mm □△
+●●●●●● 2mm □
+layer1_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+layer1_kb
+●●●●●● 1mm □△
+'**/*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Layer 1 Genesis Key folder exists'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+' JSON files'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+files
+recent
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n   Recent files:'
+●●●●●● 2mm □△
+f
+recent
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      - '
+f
+●●●●●● 1mm □△
+layer1_kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARNING] Layer 1 KB folder not found - creating it'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+layer1_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+layer1_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Layer 1 KB folder should exist'
+Exception
+●●●●●● 1mm □
+'Layer 1 folder check failed: '
+e
+●●●●●● 1mm □
+test_librarian_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Librarian daily organization.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 3: Librarian Connection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+librarian.genesis_key_curator
+●●●●●● 2mm □△○
+get_genesis_key_curator
+curator
+●●●●●● 1mm □
+get_genesis_key_curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+curator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Librarian curator operational'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Scheduler Running: '
+status
+'scheduler_running'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Organized Days: '
+status
+'organized_days_count'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Latest Day: '
+status
+'latest_organized_day'
+●●●●●● 2mm □△
+status
+●●●●●● 2mm □
+'Librarian should return status'
+Exception
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'Librarian connection failed: '
+e
+●●●●●● 1mm □
+test_rag_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test RAG system creates Genesis Keys.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 4: RAG Connection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+inspect
+●●●●●● 3mm □△○
+api.retrieve
+●●●●●● 2mm □△○
+retrieve_chunks_cognitive
+source_file
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+retrieve_chunks_cognitive
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+source_file
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+has_genesis
+●●●●●● 1mm □
+'genesis'
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'create_key'
+content
+●●●●●● 2mm □
+has_genesis
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] RAG system creates Genesis Keys on queries'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   File: '
+source_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Genesis Key creation: FOUND'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARNING] RAG system not creating Genesis Keys (may be expected)'
+●●●●●● 2mm □△
+has_genesis
+●●●●●● 3mm □△○
+'RAG check completed'
+Exception
+●●●●●● 1mm □
+'RAG connection check failed: '
+e
+●●●●●● 1mm □
+test_ingestion_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test ingestion system creates Genesis Keys.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 5: Ingestion Connection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+inspect
+●●●●●● 3mm □△○
+api.file_ingestion
+●●●●●● 2mm □△○
+scan_knowledge_base
+source_file
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+scan_knowledge_base
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+source_file
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+has_genesis
+●●●●●● 1mm □
+'genesis'
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'create_key'
+content
+●●●●●● 2mm □
+has_genesis
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Ingestion system creates Genesis Keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   File: '
+source_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Genesis Key creation: FOUND'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARNING] Ingestion system not creating Genesis Keys (may be expected)'
+●●●●●● 2mm □△
+has_genesis
+●●●●●● 3mm □△○
+'Ingestion check completed'
+Exception
+●●●●●● 1mm □
+'Ingestion connection check failed: '
+e
+●●●●●● 1mm □
+test_autonomous_triggers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test autonomous triggers are connected.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 6: Autonomous Triggers'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+trigger_pipeline
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Autonomous trigger pipeline exists'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Pipeline: '
+trigger_pipeline
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Triggers on every Genesis Key creation'
+●●●●●● 2mm □△
+trigger_pipeline
+●●●●●● 2mm □
+'Trigger pipeline should exist'
+Exception
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'Autonomous triggers check failed: '
+e
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all connection tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'GENESIS KEY - ALL CONNECTIONS TEST SUITE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing all Genesis Key system integrations...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'Memory Mesh'
+test_memory_mesh_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Layer 1 Folder'
+test_layer1_folder_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Librarian'
+test_librarian_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'RAG System'
+test_rag_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Ingestion'
+test_ingestion_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Autonomous Triggers'
+test_autonomous_triggers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+test_name
+passed
+results
+status
+●●●●●● 1mm □
+passed
+'[PASS]'
+'[FAIL]'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' - '
+test_name
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+result
+1
+result
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[SUCCESS] All Genesis Key connections operational!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nCOMPLETE FLOW:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Input → Genesis Key → Memory Mesh'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'                     → Layer 1 Folder'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'                     → Librarian (daily)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'                     → Autonomous Triggers'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'                     → Learning & Adaptation'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARNING] Some connections need attention.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

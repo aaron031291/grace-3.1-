@@ -1,0 +1,2104 @@
+## fine_tuning.py
+'\nLLM Fine-Tuning System with User Permission\n\nEnables GRACE to fine-tune open-source LLMs using:\n- High-trust learning examples\n- User-approved training data\n- Autonomous learning patterns\n- Task-specific improvements\n\nAll fine-tuning:\n- Requires user permission\n- Generates detailed reports\n- Tracks with Genesis Keys\n- Validates improvements\n- Creates backups\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+multi_llm_client
+●●●●●● 2mm □△○
+MultiLLMClient
+TaskType
+●●●●●● 3mm □△○
+repo_access
+●●●●●● 2mm □△○
+RepositoryAccessLayer
+●●●●●● 3mm □△○
+learning_integration
+●●●●●● 2mm □△○
+LearningIntegration
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FineTuningStatus
+●●●●●● 3mm □△
+Enum
+Enum
+'Status of fine-tuning job.'
+PENDING_APPROVAL
+●●●●●● 1mm □
+'pending_approval'
+APPROVED
+●●●●●● 1mm □
+'approved'
+PREPARING_DATA
+●●●●●● 1mm □
+'preparing_data'
+TRAINING
+●●●●●● 1mm □
+'training'
+VALIDATING
+●●●●●● 1mm □
+'validating'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+CANCELLED
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 2mm △
+FineTuningMethod
+●●●●●● 3mm □△
+Enum
+Enum
+'Methods for fine-tuning.'
+LORA
+●●●●●● 1mm □
+'lora'
+QLORA
+●●●●●● 1mm □
+'qlora'
+FULL
+●●●●●● 1mm □
+'full'
+GGUF_ADAPTER
+●●●●●● 1mm □
+'gguf_adapter'
+●●●●●● 2mm △
+FineTuningDataset
+'Fine-tuning dataset.'
+dataset_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+task_type
+●●●●●● 1mm ○
+num_examples
+●●●●●● 2mm ○
+min_trust_score
+●●●●●● 3mm ○
+examples
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+validation_split
+●●●●●● 3mm ○
+created_at
+datetime
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+FineTuningConfig
+'Fine-tuning configuration.'
+method
+FineTuningMethod
+base_model
+●●●●●● 1mm ○
+target_model_name
+●●●●●● 1mm ○
+learning_rate
+●●●●●● 3mm ○
+num_epochs
+●●●●●● 2mm ○
+batch_size
+●●●●●● 2mm ○
+max_seq_length
+●●●●●● 2mm ○
+lora_rank
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+16
+lora_alpha
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+32
+lora_dropout
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+0.05
+dataclass
+●●●●●● 2mm △
+FineTuningReport
+'Fine-tuning report.'
+job_id
+●●●●●● 1mm ○
+status
+FineTuningStatus
+dataset
+FineTuningDataset
+config
+FineTuningConfig
+started_at
+datetime
+completed_at
+●●●●●● 2mm □○
+datetime
+training_loss
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+validation_loss
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+training_accuracy
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+validation_accuracy
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+baseline_performance
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+fine_tuned_performance
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+improvement_percentage
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+training_duration_minutes
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+gpu_memory_used_gb
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+model_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+adapter_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+backup_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+user_approved
+●●●●●● 3mm △
+●●●●●● 1mm □
+user_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+approval_timestamp
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+FineTuningApprovalRequest
+'Request for user approval of fine-tuning.'
+job_id
+●●●●●● 1mm ○
+dataset_summary
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+config_summary
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+estimated_duration_minutes
+●●●●●● 3mm ○
+estimated_cost
+●●●●●● 1mm ○
+benefits
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+risks
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+recommendation
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+LLMFineTuningSystem
+'\n    Fine-tuning system for open-source LLMs.\n\n    Handles complete fine-tuning pipeline with user approval.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+multi_llm_client
+repo_access
+learning_integration
+fine_tuning_output_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+LearningIntegration
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'backend/fine_tuned_models'
+'\n        Initialize fine-tuning system.\n\n        Args:\n            multi_llm_client: Multi-LLM client\n            repo_access: Repository access\n            learning_integration: Learning integration\n            fine_tuning_output_dir: Output directory for fine-tuned models\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+multi_llm_client
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_access
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_integration
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+fine_tuning_output_dir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+FineTuningReport
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+FineTuningReport
+●●●●●● 3mm △
+●●●●●● 3mm □△
+FineTuningReport
+●●●●●● 1mm □
+prepare_dataset
+●●●●●● 1mm □△
+self
+task_type
+dataset_name
+min_trust_score
+num_examples
+validation_split
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0.8
+500
+0.2
+●●●●●● 2mm □
+'\n        Prepare fine-tuning dataset from high-trust learning examples.\n\n        Args:\n            task_type: Type of task (code_generation, reasoning, etc.)\n            dataset_name: Name for dataset\n            min_trust_score: Minimum trust score for examples\n            num_examples: Target number of examples\n            validation_split: Validation set percentage\n            user_id: User ID for tracking\n\n        Returns:\n            FineTuningDataset ready for training\n        '
+logger
+●●●●●● 1mm □△
+"[FINE-TUNING] Preparing dataset '"
+dataset_name
+"' for "
+task_type
+●●●●●● 2mm □△
+dataset_id
+●●●●●● 1mm □
+'dataset_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 2mm □
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Repository access required for dataset preparation'
+●●●●●● 2mm □△
+learning_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+formatted_examples
+●●●●●● 1mm □
+example
+learning_examples
+formatted_examples
+●●●●●● 1mm □△
+'instruction'
+'input'
+'output'
+'trust_score'
+'source'
+'validated'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 1mm □△
+'input_context'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 1mm □△
+'expected_output'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □△
+'times_validated'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+split_idx
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+formatted_examples
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+validation_split
+●●●●●● 2mm □△
+train_examples
+●●●●●● 1mm □
+formatted_examples
+split_idx
+val_examples
+●●●●●● 1mm □
+formatted_examples
+split_idx
+dataset
+●●●●●● 1mm □
+FineTuningDataset
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataset_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+dataset_id
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+dataset_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+'dataset_id'
+'name'
+'description'
+'task_type'
+'num_examples'
+'train_examples'
+'val_examples'
+'created_at'
+dataset
+dataset
+dataset
+dataset
+dataset
+train_examples
+val_examples
+dataset
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Dataset prepared: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+train_examples
+●●●●●● 2mm □△
+' train, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+val_examples
+●●●●●● 2mm □△
+' val'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+dataset
+FineTuningDataset
+●●●●●● 1mm □
+request_fine_tuning_approval
+●●●●●● 1mm □△
+self
+dataset
+base_model
+target_model_name
+method
+user_id
+●●●●●● 2mm □△
+FineTuningDataset
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+FineTuningMethod
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+FineTuningMethod
+●●●●●● 2mm □
+'\n        Create approval request for user.\n\n        Args:\n            dataset: Prepared dataset\n            base_model: Base model to fine-tune\n            method: Fine-tuning method\n            user_id: User ID\n\n        Returns:\n            FineTuningApprovalRequest for user review\n        '
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Creating approval request for '
+base_model
+●●●●●● 2mm □△
+job_id
+●●●●●● 1mm □
+'job_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+config
+●●●●●● 1mm □
+FineTuningConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+estimated_duration
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dataset
+config
+●●●●●● 2mm □△
+estimated_cost
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dataset
+config
+method
+●●●●●● 2mm □△
+benefits
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dataset
+base_model
+●●●●●● 2mm □△
+risks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dataset
+config
+●●●●●● 2mm □△
+recommendation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dataset
+benefits
+risks
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+job_id
+●●●●●● 1mm □
+report
+approval_request
+●●●●●● 1mm □
+FineTuningApprovalRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Approval request created: '
+job_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+approval_request
+FineTuningApprovalRequest
+●●●●●● 1mm □
+_estimate_training_duration
+●●●●●● 1mm □△
+self
+dataset
+config
+●●●●●● 2mm □△
+FineTuningDataset
+FineTuningConfig
+'Estimate training duration in minutes.'
+examples_per_epoch
+●●●●●● 1mm □
+dataset
+epochs
+●●●●●● 1mm □
+config
+●●●●●● 2mm □
+config
+FineTuningMethod
+seconds
+●●●●●● 1mm □
+examples_per_epoch
+●●●●●● 2mm □△
+epochs
+●●●●●● 3mm □△
+3
+●●●●●● 1mm △
+config
+FineTuningMethod
+seconds
+●●●●●● 1mm □
+examples_per_epoch
+●●●●●● 2mm □△
+epochs
+seconds
+●●●●●● 1mm □
+examples_per_epoch
+●●●●●● 2mm □△
+epochs
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+seconds
+●●●●●● 3mm □△
+60
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_estimate_cost
+●●●●●● 1mm □△
+self
+dataset
+config
+method
+●●●●●● 2mm □△
+FineTuningDataset
+FineTuningConfig
+FineTuningMethod
+'Estimate cost/resources needed.'
+●●●●●● 2mm □
+method
+FineTuningMethod
+●●●●●● 3mm ○
+'Low (4-8GB VRAM, local GPU)'
+●●●●●● 1mm △
+method
+FineTuningMethod
+●●●●●● 3mm ○
+'Medium (8-16GB VRAM, local GPU)'
+●●●●●● 2mm □
+method
+FineTuningMethod
+●●●●●● 3mm ○
+'High (24+ GB VRAM, powerful GPU)'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'Variable'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_analyze_benefits
+●●●●●● 1mm □△
+self
+dataset
+base_model
+●●●●●● 2mm □△
+FineTuningDataset
+●●●●●● 1mm ○
+'Analyze potential benefits.'
+benefits
+●●●●●● 1mm □
+'Specialized '
+dataset
+' performance improvement'
+'Training on '
+dataset
+' high-trust examples (avg trust: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+'trust_score'
+ex
+dataset
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+dataset
+●●●●●● 2mm □△
+'.2f'
+')'
+'Model learns GRACE-specific patterns and knowledge'
+'Reduced hallucinations through trust-scored training data'
+'Better alignment with user preferences and system behavior'
+●●●●●● 2mm □
+'code'
+dataset
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+benefits
+●●●●●● 1mm □△
+'Improved code generation accuracy for your specific codebase'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'reasoning'
+dataset
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+benefits
+●●●●●● 1mm □△
+"Better reasoning aligned with GRACE's cognitive framework"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+benefits
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_analyze_risks
+●●●●●● 1mm □△
+self
+dataset
+config
+●●●●●● 2mm □△
+FineTuningDataset
+FineTuningConfig
+'Analyze potential risks.'
+risks
+●●●●●● 1mm □
+'Model may overfit to training examples if dataset too small'
+'Fine-tuned model may lose some general knowledge'
+'Requires GPU resources and time'
+'Need to validate improvements before deployment'
+●●●●●● 2mm □
+dataset
+100
+risks
+●●●●●● 1mm □△
+'Small dataset ('
+dataset
+' examples) increases overfitting risk'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+FineTuningMethod
+risks
+●●●●●● 1mm □△
+'Full fine-tuning requires significant resources and time'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+risks
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_recommendation
+●●●●●● 1mm □△
+self
+dataset
+benefits
+risks
+●●●●●● 2mm □△
+FineTuningDataset
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Generate recommendation.'
+●●●●●● 2mm □
+dataset
+500
+dataset
+0.8
+●●●●●● 3mm ○
+'✅ RECOMMENDED: High-quality dataset ('
+dataset
+' examples, trust >= '
+dataset
+') with good benefits-to-risk ratio.'
+●●●●●● 1mm △
+dataset
+200
+●●●●●● 3mm ○
+'⚠️ ACCEPTABLE: Moderate dataset size ('
+dataset
+' examples). Recommend monitoring for overfitting.'
+●●●●●● 3mm ○
+'⚠️ CAUTION: Small dataset ('
+dataset
+' examples) may lead to overfitting. Consider collecting more high-trust examples first.'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+approve_and_start_fine_tuning
+●●●●●● 1mm □△
+self
+job_id
+user_id
+dry_run
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n        Approve fine-tuning job and start training.\n\n        Args:\n            job_id: Fine-tuning job ID\n            user_id: User ID approving\n            dry_run: If True, simulate without actual training\n\n        Returns:\n            Updated FineTuningReport\n        '
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] User '
+user_id
+' approved job '
+job_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Job '
+job_id
+' not found in pending jobs'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+job_id
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □
+user_id
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningStatus
+●●●●●● 3mm △
+job_id
+●●●●●● 1mm □
+report
+●●●●●● 3mm △
+job_id
+●●●●●● 2mm □
+dry_run
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] DRY RUN mode - simulating training'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningStatus
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+0.15
+report
+●●●●●● 1mm □
+0.18
+report
+●●●●●● 1mm □
+0.92
+report
+●●●●●● 1mm □
+0.89
+report
+●●●●●● 1mm □
+15.5
+report
+●●●●●● 1mm □
+45.0
+report
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+job_id
+'_model'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+job_id
+'_adapter'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm △
+job_id
+●●●●●● 3mm ○
+report
+report
+●●●●●● 1mm □
+FineTuningStatus
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Preparing training data...'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningStatus
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Starting training...'
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningStatus
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Validating model...'
+●●●●●● 2mm □△
+validation_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningStatus
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'training_loss'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'validation_loss'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'training_accuracy'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'validation_accuracy'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+validation_result
+●●●●●● 1mm □△
+'improvement_percentage'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'duration_minutes'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'model_path'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'adapter_path'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+training_result
+●●●●●● 1mm □△
+'backup_path'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm △
+job_id
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Training completed! Improvement: '
+report
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+Exception
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Training failed: '
+e
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+FineTuningStatus
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+job_id
+FineTuningReport
+●●●●●● 1mm □
+_execute_training
+●●●●●● 1mm □△
+self
+report
+●●●●●● 2mm □△
+FineTuningReport
+'\n        Execute actual fine-tuning training.\n\n        Supports multiple training backends:\n        1. Unsloth (fastest, most efficient for LoRA/QLoRA)\n        2. Transformers + PEFT (widely supported)\n        3. GGUF adapter training via llama.cpp\n\n        The system will automatically select the best available backend.\n        '
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Starting training for job '
+report
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Method: '
+report
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Base model: '
+report
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataset_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+report
+'.json'
+model_output_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+report
+'_model'
+adapter_output_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+report
+'_adapter'
+backup_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+report
+'_backup'
+model_output_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+adapter_output_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+backup_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+report
+FineTuningMethod
+FineTuningMethod
+training_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+dataset_path
+adapter_output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+training_result
+●●●●●● 2mm □
+training_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+dataset_path
+adapter_output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+training_result
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] No training backend available, using simulation mode'
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+adapter_output_path
+●●●●●● 2mm □△
+duration_minutes
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+60
+●●●●●● 3mm ○
+'training_loss'
+'validation_loss'
+'training_accuracy'
+'validation_accuracy'
+'duration_minutes'
+'model_path'
+'adapter_path'
+'backup_path'
+'backend_used'
+'gpu_memory_used_gb'
+training_result
+●●●●●● 1mm □△
+'training_loss'
+0.15
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □△
+'validation_loss'
+0.18
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □△
+'training_accuracy'
+0.92
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □△
+'validation_accuracy'
+0.89
+●●●●●● 2mm □△
+duration_minutes
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+model_output_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+adapter_output_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backup_path
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □△
+'backend'
+'simulation'
+●●●●●● 2mm □△
+training_result
+●●●●●● 1mm □△
+'gpu_memory_gb'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_train_with_unsloth
+●●●●●● 1mm □△
+self
+report
+dataset_path
+output_path
+●●●●●● 2mm □△
+FineTuningReport
+Path
+Path
+'Train using Unsloth (fastest LoRA/QLoRA training).'
+●●●●●● 3mm □△○
+unsloth
+●●●●●● 2mm □△○
+FastLanguageModel
+●●●●●● 3mm □△○
+trl
+●●●●●● 2mm □△○
+SFTTrainer
+●●●●●● 3mm □△○
+transformers
+●●●●●● 2mm □△○
+TrainingArguments
+●●●●●● 2mm □△○
+torch
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Using Unsloth backend'
+●●●●●● 2mm □△
+use_4bit
+●●●●●● 1mm □
+report
+FineTuningMethod
+model
+tokenizer
+●●●●●● 1mm □
+FastLanguageModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+FastLanguageModel
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+datasets
+●●●●●● 2mm □△○
+load_dataset
+dataset
+●●●●●● 1mm □
+load_dataset
+●●●●●● 1mm □△
+'json'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+formatting_func
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+texts
+●●●●●● 1mm □
+instruction
+inp
+out
+●●●●●● 3mm □
+●●●●●● 1mm □△
+examples
+'instruction'
+examples
+●●●●●● 1mm □△
+'input'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+'instruction'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+examples
+'output'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'### Instruction:\n'
+instruction
+'\n\n'
+●●●●●● 2mm □
+inp
+text
+'### Input:\n'
+inp
+'\n\n'
+text
+'### Response:\n'
+out
+texts
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+texts
+dataset
+●●●●●● 1mm □
+dataset
+●●●●●● 1mm □△
+formatting_func
+●●●●●● 2mm □△
+training_args
+●●●●●● 1mm □
+TrainingArguments
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trainer
+●●●●●● 1mm □
+SFTTrainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+train_result
+●●●●●● 1mm □
+trainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tokenizer
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gpu_memory_gb
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gpu_memory_gb
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+●●●●●● 3mm ○
+'training_loss'
+'validation_loss'
+'training_accuracy'
+'validation_accuracy'
+'backend'
+'gpu_memory_gb'
+train_result
+train_result
+●●●●●● 2mm □△
+1.1
+1.0
+●●●●●● 1mm □△
+train_result
+0.9
+●●●●●● 1mm □△
+train_result
+'unsloth'
+gpu_memory_gb
+ImportError
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Unsloth not available, trying alternative'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Unsloth training failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_train_with_transformers
+●●●●●● 1mm □△
+self
+report
+dataset_path
+output_path
+●●●●●● 2mm □△
+FineTuningReport
+Path
+Path
+'Train using Transformers + PEFT (widely compatible).'
+●●●●●● 3mm □△○
+transformers
+●●●●●● 2mm □△○
+AutoModelForCausalLM
+AutoTokenizer
+TrainingArguments
+Trainer
+DataCollatorForLanguageModeling
+●●●●●● 3mm □△○
+peft
+●●●●●● 2mm □△○
+LoraConfig
+get_peft_model
+TaskType
+●●●●●● 1mm □
+PeftTaskType
+●●●●●● 3mm □△○
+datasets
+●●●●●● 2mm □△○
+load_dataset
+●●●●●● 2mm □△○
+torch
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Using Transformers + PEFT backend'
+●●●●●● 2mm □△
+tokenizer
+●●●●●● 1mm □
+AutoTokenizer
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tokenizer
+●●●●●● 2mm □
+tokenizer
+●●●●●● 1mm □
+tokenizer
+model_kwargs
+●●●●●● 1mm □
+●●●●●● 2mm □
+report
+FineTuningMethod
+●●●●●● 3mm □△○
+transformers
+●●●●●● 2mm □△○
+BitsAndBytesConfig
+model_kwargs
+'quantization_config'
+●●●●●● 1mm □
+BitsAndBytesConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+AutoModelForCausalLM
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+peft_config
+●●●●●● 1mm □
+LoraConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+get_peft_model
+●●●●●● 1mm □△
+model
+peft_config
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataset
+●●●●●● 1mm □
+load_dataset
+●●●●●● 1mm □△
+'json'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+tokenize_function
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+texts
+●●●●●● 1mm □
+instruction
+inp
+out
+●●●●●● 3mm □
+●●●●●● 1mm □△
+examples
+'instruction'
+examples
+●●●●●● 1mm □△
+'input'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+'instruction'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+examples
+'output'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'### Instruction:\n'
+instruction
+'\n\n'
+●●●●●● 2mm □
+inp
+text
+'### Input:\n'
+inp
+'\n\n'
+text
+'### Response:\n'
+out
+texts
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tokenizer
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+tokenized_dataset
+●●●●●● 1mm □
+dataset
+●●●●●● 1mm □△
+tokenize_function
+●●●●●● 2mm □△
+training_args
+●●●●●● 1mm □
+TrainingArguments
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data_collator
+●●●●●● 1mm □
+DataCollatorForLanguageModeling
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trainer
+●●●●●● 1mm □
+Trainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+train_result
+●●●●●● 1mm □
+trainer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tokenizer
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gpu_memory_gb
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gpu_memory_gb
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+●●●●●● 3mm ○
+'training_loss'
+'validation_loss'
+'training_accuracy'
+'validation_accuracy'
+'backend'
+'gpu_memory_gb'
+train_result
+train_result
+●●●●●● 2mm □△
+1.1
+1.0
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+train_result
+0.5
+●●●●●● 2mm □△
+0.9
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+train_result
+0.4
+●●●●●● 2mm □△
+'transformers_peft'
+gpu_memory_gb
+ImportError
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Transformers/PEFT not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Transformers training failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_simulate_training
+●●●●●● 1mm □△
+self
+report
+output_path
+●●●●●● 2mm □△
+FineTuningReport
+Path
+'Simulate training when no backend is available (for testing).'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+random
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] Running in SIMULATION mode - no actual training'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FINE-TUNING] To enable real training, install:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  pip install unsloth transformers peft datasets trl bitsandbytes'
+●●●●●● 2mm □△
+num_steps
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+report
+●●●●●● 1mm □○
+report
+100
+●●●●●● 2mm □△
+step
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_steps
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step
+●●●●●● 2mm □○
+10
+0
+loss
+●●●●●● 1mm □
+2.0
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+step
+●●●●●● 3mm □△
+num_steps
+●●●●●● 3mm ○
+random
+●●●●●● 1mm □△
+0.1
+0.1
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SIMULATION] Step '
+step
+'/'
+num_steps
+', Loss: '
+loss
+'.4f'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+adapter_config
+●●●●●● 1mm □
+'model_type'
+'base_model'
+'method'
+'lora_rank'
+'lora_alpha'
+'training_examples'
+'simulated'
+'simulation'
+report
+report
+report
+report
+report
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+●●●●●● 3mm □△
+'adapter_config.json'
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+adapter_config
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'training_loss'
+'validation_loss'
+'training_accuracy'
+'validation_accuracy'
+'backend'
+'gpu_memory_gb'
+0.15
+●●●●●● 3mm ○
+random
+●●●●●● 1mm □△
+0.05
+0.05
+●●●●●● 2mm □△
+0.18
+●●●●●● 3mm ○
+random
+●●●●●● 1mm □△
+0.05
+0.05
+●●●●●● 2mm □△
+0.92
+●●●●●● 3mm ○
+random
+●●●●●● 1mm □△
+0.03
+0.03
+●●●●●● 2mm □△
+0.89
+●●●●●● 3mm ○
+random
+●●●●●● 1mm □△
+0.03
+0.03
+●●●●●● 2mm □△
+'simulation'
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_validate_model
+●●●●●● 1mm □△
+self
+report
+●●●●●● 2mm □△
+FineTuningReport
+'Validate fine-tuned model.'
+●●●●●● 3mm ○
+'improvement_percentage'
+'baseline_performance'
+'fine_tuned_performance'
+15.5
+'accuracy'
+0.75
+'accuracy'
+0.89
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+generate_report
+●●●●●● 1mm □△
+self
+job_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Generate detailed fine-tuning report.\n\n        Args:\n            job_id: Fine-tuning job ID\n\n        Returns:\n            Detailed report dictionary\n        '
+report
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+job_id
+●●●●●● 3mm △
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+job_id
+●●●●●● 1mm △
+job_id
+●●●●●● 3mm △
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+job_id
+completed
+●●●●●● 3mm △
+●●●●●● 2mm □
+completed
+job_id
+report
+●●●●●● 1mm □
+completed
+●●●●●● 2mm □
+report
+ValueError
+●●●●●● 1mm □△
+'Job '
+job_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'job_id'
+'status'
+'user_approved'
+'user_id'
+'approval_timestamp'
+'dataset'
+'configuration'
+'training_metrics'
+'performance_comparison'
+'resources'
+'outputs'
+'timing'
+'genesis_key_id'
+report
+report
+report
+report
+report
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'name'
+'description'
+'task_type'
+'num_examples'
+'min_trust_score'
+'avg_trust_score'
+report
+report
+report
+report
+report
+report
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+'trust_score'
+ex
+report
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+0
+'method'
+'base_model'
+'target_model_name'
+'learning_rate'
+'num_epochs'
+'batch_size'
+'lora_rank'
+'lora_alpha'
+report
+report
+report
+report
+report
+report
+report
+report
+'training_loss'
+'validation_loss'
+'training_accuracy'
+'validation_accuracy'
+'improvement_percentage'
+report
+report
+report
+report
+report
+'baseline'
+'fine_tuned'
+report
+report
+'training_duration_minutes'
+'gpu_memory_used_gb'
+report
+report
+'model_path'
+'adapter_path'
+'backup_path'
+report
+report
+report
+'started_at'
+'completed_at'
+'duration_minutes'
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+report
+●●●●●● 1mm □△
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+60
+●●●●●● 2mm □
+report
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+cancel_job
+●●●●●● 1mm □△
+self
+job_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Cancel pending or active job.'
+●●●●●● 2mm □
+job_id
+●●●●●● 3mm △
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+job_id
+report
+●●●●●● 1mm □
+FineTuningStatus
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm △
+job_id
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm △
+job_id
+●●●●●● 3mm △
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+job_id
+report
+●●●●●● 1mm □
+FineTuningStatus
+report
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm △
+job_id
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_jobs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all fine-tuning jobs.'
+●●●●●● 3mm ○
+'pending'
+'active'
+'completed'
+'job_id'
+'status'
+'dataset'
+j
+j
+j
+j
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'job_id'
+'status'
+'dataset'
+j
+j
+j
+j
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'job_id'
+'status'
+'dataset'
+'improvement'
+j
+j
+j
+j
+j
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_fine_tuning_system
+●●●●●● 2mm □○
+LLMFineTuningSystem
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_fine_tuning_system
+●●●●●● 1mm □△
+multi_llm_client
+repo_access
+learning_integration
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □○
+LearningIntegration
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create global fine-tuning system instance.'
+●●●●●● 2mm □
+_fine_tuning_system
+●●●●●● 2mm □
+_fine_tuning_system
+●●●●●● 1mm □
+LLMFineTuningSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_fine_tuning_system
+LLMFineTuningSystem

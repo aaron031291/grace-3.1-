@@ -1,0 +1,1088 @@
+## governance_wrapper.py
+'\nGovernance-Aware LLM Wrapper\n\nWraps any BaseLLMClient to automatically inject governance rules and\npersona context into every LLM call system-wide.\n\nAll uploaded rule documents (GDPR, ISO, anti-bribery, code standards,\nuser rules) become law — injected into the system prompt so Grace and\nKimi always follow them.\n\nPersona context (personal + professional) shapes how Grace communicates.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_rules_cache
+●●●●●● 1mm □
+●●●●●● 2mm □
+_rules_cache_ts
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+_load_governance_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Load all active governance rules and persona from the governance rules API.\n    Cached for 60 seconds to avoid reading files on every LLM call.\n    '
+●●●●●● 2mm □△○
+time
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_rules_cache
+●●●●●● 2mm □
+now
+●●●●●● 1mm □△
+_rules_cache_ts
+60
+●●●●●● 3mm ○
+_rules_cache
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+get_persona
+●●●●●● 1mm □
+get_active_persona
+list_rules
+RULES_DIR
+_list_rule_files
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+persona
+●●●●●● 1mm □
+get_active_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rule_texts
+●●●●●● 1mm □
+docs
+●●●●●● 1mm □
+_list_rule_files
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+docs
+●●●●●● 2mm □
+d
+●●●●●● 1mm □△
+'enforced'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+RULES_DIR
+●●●●●● 3mm □△
+d
+'id'
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+3000
+rule_texts
+●●●●●● 1mm □△
+'[RULE: '
+d
+'filename'
+' ('
+d
+'category'
+')]\n'
+text
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+'rules'
+'rules_count'
+'personal'
+'professional'
+rule_texts
+'\n\n---\n\n'
+●●●●●● 1mm □△
+rule_texts
+●●●●●● 2mm □△
+''
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rule_texts
+●●●●●● 2mm □△
+persona
+●●●●●● 1mm □△
+'personal'
+''
+●●●●●● 2mm □△
+persona
+●●●●●● 1mm □△
+'professional'
+''
+●●●●●● 2mm □△
+_rules_cache
+●●●●●● 1mm □
+result
+_rules_cache_ts
+●●●●●● 1mm □
+now
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Governance context load skipped: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'rules'
+'rules_count'
+'personal'
+'professional'
+''
+0
+''
+''
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Build the governance prefix that gets prepended to every system prompt.\n    Includes governance rules + unified memory context.\n    '
+ctx
+●●●●●● 1mm □
+_load_governance_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+importlib
+mi
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+'core.memory_injector'
+●●●●●● 2mm □△
+memory_context
+●●●●●● 1mm □
+mi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+memory_context
+parts
+●●●●●● 1mm □△
+"SYSTEM CONTEXT (from Grace's memory):\n"
+memory_context
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+ctx
+'rules'
+parts
+●●●●●● 1mm □△
+'MANDATORY GOVERNANCE RULES ('
+ctx
+'rules_count'
+' documents enforced):\nYou MUST comply with all of the following rules. They are LAW.\n\n'
+ctx
+'rules'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+'personal'
+parts
+●●●●●● 1mm □△
+'PERSONAL INTERACTION STYLE:\n'
+ctx
+'personal'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+'professional'
+parts
+●●●●●● 1mm □△
+'PROFESSIONAL PRESENTATION STYLE (for external communications, documents, emails):\n'
+ctx
+'professional'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parts
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 3mm ○
+'\n\n---\n\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n---\n\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+build_domain_prefix
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Build governance prefix specific to a domain folder.'
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+get_rule_content
+●●●●●● 3mm ○
+get_rule_content
+●●●●●● 1mm □△
+folder_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+_usage_stats
+●●●●●● 1mm □
+'total_calls'
+'total_errors'
+'by_provider'
+'total_latency_ms'
+0
+0
+0
+_stats_lock
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+'threading'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_track_llm_call
+●●●●●● 1mm □△
+prompt
+response
+provider
+latency_ms
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+0
+●●●●●● 2mm □
+'Track every LLM call — genesis key + in-memory stats + DB stats.'
+_stats_lock
+_usage_stats
+'total_calls'
+1
+_usage_stats
+'total_latency_ms'
+latency_ms
+●●●●●● 2mm □
+error
+_usage_stats
+'total_errors'
+1
+●●●●●● 2mm □
+provider
+_usage_stats
+'by_provider'
+_usage_stats
+'by_provider'
+provider
+●●●●●● 1mm □
+'calls'
+'errors'
+'latency_ms'
+0
+0
+0
+_usage_stats
+'by_provider'
+provider
+'calls'
+1
+_usage_stats
+'by_provider'
+provider
+'latency_ms'
+latency_ms
+●●●●●● 2mm □
+error
+_usage_stats
+'by_provider'
+provider
+'errors'
+1
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"INSERT INTO llm_usage_stats (provider, model, call_type, prompt_tokens, completion_tokens, latency_ms, success, error_message, caller, created_at, updated_at) VALUES (:prov, :model, 'generate', :pt, :ct, :lat, :suc, :err, :caller, :now, :now)"
+●●●●●● 2mm □△
+'prov'
+'model'
+'pt'
+'ct'
+'lat'
+'suc'
+'err'
+'caller'
+'now'
+provider
+''
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+latency_ms
+error
+●●●●●● 2mm □
+error
+'governance_wrapper'
+__import__
+●●●●●● 1mm □△
+'datetime'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'llm.called'
+'provider'
+'latency_ms'
+'success'
+provider
+latency_ms
+error
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+get_llm_usage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get aggregated LLM usage statistics for BI dashboard.'
+_stats_lock
+stats
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_usage_stats
+●●●●●● 2mm □△
+stats
+'by_provider'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+stats
+'by_provider'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'total_calls'
+0
+stats
+'avg_latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+stats
+'total_latency_ms'
+●●●●●● 3mm □△
+stats
+'total_calls'
+1
+●●●●●● 2mm □△
+stats
+'error_rate'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+stats
+'total_errors'
+●●●●●● 3mm □△
+stats
+'total_calls'
+4
+●●●●●● 2mm □△
+●●●●●● 3mm □
+stats
+'avg_latency_ms'
+●●●●●● 1mm □
+0
+●●●●●● 3mm □
+stats
+'error_rate'
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+stats
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GovernanceAwareLLM
+●●●●●● 3mm □△
+BaseLLMClient
+BaseLLMClient
+'\n    Wraps any LLM client to inject governance rules and persona\n    into every call automatically. Tracks usage stats for BI.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+inner
+●●●●●● 2mm □△
+BaseLLMClient
+●●●●●● 3mm △
+●●●●●● 1mm □
+inner
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+temperature
+max_tokens
+stream
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+gov_prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gov_prefix
+system_prompt
+●●●●●● 1mm □
+system_prompt
+''
+●●●●●● 3mm ○
+gov_prefix
+provider_name
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+error_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+_track_llm_call
+●●●●●● 1mm □△
+prompt
+200
+''
+provider_name
+latency
+error_msg
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'llm.error'
+'provider'
+'error'
+'latency_ms'
+'prompt_preview'
+provider_name
+error_msg
+200
+latency
+prompt
+100
+●●●●●● 2mm □△
+Exception
+latency
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+_track_llm_call
+●●●●●● 1mm □△
+prompt
+200
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+200
+provider_name
+latency
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_hallucination_check
+●●●●●● 1mm □△
+self
+result
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Deep hallucination guard on every LLM response.\n\n        Checks:\n        1. Classic self-referential / overconfidence text patterns\n        2. If response contains code → AST syntax validation\n        3. Ghost memory contradiction (session context)\n        4. RAG trust score – if KB has relevant content and confidence is low, flag\n        '
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+20
+●●●●●● 3mm ○
+result
+flags
+●●●●●● 1mm □
+lower
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'as an ai language model'
+lower
+flags
+●●●●●● 1mm □△
+'self_referential'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+lower
+p
+'100% guaranteed'
+'absolutely impossible'
+'never fails'
+●●●●●● 2mm □△
+flags
+●●●●●● 1mm □△
+'overconfident'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+30
+'?'
+prompt
+flags
+●●●●●● 1mm □△
+'suspiciously_short'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'def '
+result
+'class '
+result
+'import '
+result
+●●●●●● 2mm □△○
+ast
+●●●●●● 1mm □
+_ast
+_ast
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+SyntaxError
+flags
+●●●●●● 1mm □△
+'code_syntax_error:line_'
+se
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ghost
+'get_context'
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □
+ctx
+●●●●●● 2mm □△○
+re
+denied
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(\\w+) does not exist'
+lower
+●●●●●● 2mm □△
+term
+denied
+●●●●●● 2mm □
+term
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+term
+●●●●●● 2mm □△
+4
+flags
+●●●●●● 1mm □△
+'ghost_contradiction:denied_'
+term
+'_but_exists_in_session'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+200
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+flags
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+ml_intelligence.neuro_symbolic_reasoner
+●●●●●● 2mm □△○
+get_neuro_symbolic_reasoner
+reasoner
+●●●●●● 1mm □
+get_neuro_symbolic_reasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reasoning
+●●●●●● 1mm □
+reasoner
+●●●●●● 1mm □△
+prompt
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reasoning
+0.8
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+reasoning
+●●●●●● 2mm □△
+0
+kb_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+reasoning
+0
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kb_text
+30
+kb_text
+30
+lower
+flags
+●●●●●● 1mm □△
+'possible_kb_divergence'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+flags
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'hallucination.detected'
+'flags'
+'provider'
+'prompt_preview'
+'response_preview'
+flags
+●●●●●● 3mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+prompt
+100
+result
+100
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[HALLUCINATION-GUARD] %d flag(s) on response from %s: %s'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+flags
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+flags
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+gov_prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt_preview
+●●●●●● 1mm □
+messages
+messages
+1
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+200
+''
+●●●●●● 2mm □
+gov_prefix
+messages
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+messages
+●●●●●● 2mm □△
+●●●●●● 2mm □
+messages
+messages
+0
+●●●●●● 1mm □△
+'role'
+●●●●●● 2mm □△
+'system'
+messages
+0
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+messages
+0
+'content'
+●●●●●● 3mm ○
+gov_prefix
+●●●●●● 3mm □
+messages
+●●●●●● 1mm □△
+0
+'role'
+'content'
+'system'
+gov_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+provider_name
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_msg
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+error_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+_track_llm_call
+●●●●●● 1mm □△
+prompt_preview
+''
+provider_name
+latency
+error_msg
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+_track_llm_call
+●●●●●● 1mm □△
+prompt_preview
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+200
+provider_name
+latency
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model_name
+●●●●●● 2mm □△
+●●●●●● 3mm △

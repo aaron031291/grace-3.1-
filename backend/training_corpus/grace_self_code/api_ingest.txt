@@ -1,0 +1,985 @@
+## ingest.py
+'\nText ingestion API endpoints.\nProvides REST endpoints for uploading and managing documents.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+File
+UploadFile
+Form
+Query
+Depends
+Path
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ingestion_service
+●●●●●● 2mm □○
+TextIngestionService
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create ingestion service.\n\n    Returns None if service cannot be initialized (e.g., in test environments\n    without embedding models). Endpoints should handle None gracefully.\n    '
+●●●●●● 2mm □
+_ingestion_service
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[INGEST] Initializing ingestion service...'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embedding_model
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Embedding model not available, ingestion service disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[INGEST] [OK] Got embedding model (singleton)'
+●●●●●● 2mm □△
+_ingestion_service
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[INGEST] [OK] Ingestion service created successfully'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to initialize ingestion service: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+_ingestion_service
+●●●●●● 2mm □○
+TextIngestionService
+●●●●●● 2mm △
+IngestTextRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request model for text ingestion.'
+text
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+filename
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+source
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+'upload'
+●●●●●● 2mm □△
+upload_method
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+'ui-paste'
+●●●●●● 2mm □△
+source_type
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+'user_generated'
+●●●●●● 2mm □△
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+tags
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+metadata
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DocumentInfo
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Document information response.'
+●●●●●● 1mm △
+●●●●●● 2mm ○
+filename
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+upload_method
+●●●●●● 1mm ○
+confidence_score
+●●●●●● 3mm ○
+source_reliability
+●●●●●● 3mm ○
+content_quality
+●●●●●● 3mm ○
+consensus_score
+●●●●●● 3mm ○
+recency_score
+●●●●●● 3mm ○
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+tags
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+total_chunks
+●●●●●● 2mm ○
+text_length
+●●●●●● 2mm ○
+created_at
+●●●●●● 1mm ○
+updated_at
+●●●●●● 1mm ○
+chunks
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △
+DocumentListItem
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Document list item.'
+●●●●●● 1mm △
+●●●●●● 2mm ○
+filename
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+upload_method
+●●●●●● 1mm ○
+confidence_score
+●●●●●● 3mm ○
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+tags
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+total_chunks
+●●●●●● 2mm ○
+text_length
+●●●●●● 2mm ○
+created_at
+●●●●●● 1mm ○
+●●●●●● 2mm △
+IngestionResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response for ingestion operation.'
+success
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+message
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+document_id
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SearchResult
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Search result item.'
+vector_id
+●●●●●● 2mm ○
+score
+●●●●●● 3mm ○
+chunk_id
+●●●●●● 2mm ○
+document_id
+●●●●●● 2mm ○
+chunk_index
+●●●●●● 2mm ○
+text
+●●●●●● 1mm ○
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SearchResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response for document search.'
+query
+●●●●●● 1mm ○
+results
+●●●●●● 3mm □△
+SearchResult
+total
+●●●●●● 2mm ○
+●●●●●● 2mm △
+DocumentListResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response for document listing.'
+documents
+●●●●●● 3mm □△
+DocumentListItem
+total
+●●●●●● 2mm ○
+IngestTextRequest
+●●●●●● 2mm □○
+TextIngestionService
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    Ingest plain text content.\n\n    Chunks the text, generates embeddings, and stores in both SQL database and Qdrant.\n\n    Args:\n        request: IngestTextRequest containing text, filename, and metadata\n        service: Ingestion service instance\n\n    Returns:\n        IngestionResponse with document ID and status\n    '
+●●●●●● 2mm □
+service
+●●●●●● 2mm □
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Ingesting text document...'
+●●●●●● 2mm □△
+entity_meta
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.semantic_entity_classifier
+●●●●●● 2mm □△○
+classify_entity
+classified
+●●●●●● 1mm □
+classify_entity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entity_meta
+●●●●●● 1mm □
+'entity_type'
+'entity_confidence'
+'target_table'
+'target_collection'
+'canonical_fields'
+classified
+'entity_type'
+classified
+'confidence'
+classified
+'db_table'
+classified
+'vector_collection'
+classified
+'canonical_fields'
+logger
+●●●●●● 1mm □△
+"[SEMANTIC] Classified '%s' → %s (%.0f%%)"
+●●●●●● 3mm □△
+classified
+'entity_type'
+classified
+'confidence'
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SEMANTIC] Classification skipped: %s'
+ce
+●●●●●● 2mm □△
+merged_metadata
+●●●●●● 1mm □
+●●●●●● 3mm □△
+entity_meta
+document_id
+message
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document_id
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'ingestion'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'ingestion'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+IngestionResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'ingestion'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Ingestion error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/text'
+●●●●●● 2mm □△
+IngestionResponse
+UploadFile
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+TextIngestionService
+File
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+'upload'
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+'user_generated'
+●●●●●● 2mm □△
+Form
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    Ingest a file (text or document).\n    \n    Supports: TXT, MD, PDF, DOCX, DOC, XLSX, PPTX, etc.\n    Automatically handles format-specific text extraction.\n    \n    Args:\n        file: Uploaded file\n        source: Source identifier\n        source_type: Type of source for reliability calculation\n        metadata: Optional JSON metadata\n        service: Ingestion service instance\n        \n    Returns:\n        IngestionResponse with document ID and status\n    '
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+chardet
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+FileHandler
+filename
+●●●●●● 1mm □
+file
+'uploaded_file'
+file_ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] Received file: '
+filename
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+' bytes)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] File extension: '
+file_ext
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_ext
+'.pdf'
+'.docx'
+'.doc'
+'.xlsx'
+'.xls'
+'.pptx'
+'.ppt'
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] Using specialized extractor for '
+file_ext
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+temp_file
+temp_file
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+temp_path
+●●●●●● 1mm □
+temp_file
+text
+error
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+temp_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] Extraction failed: '
+error
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] [OK] Extracted '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+' characters from '
+file_ext
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+temp_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not delete temp file '
+temp_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] Reading as text file'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+text
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] [OK] Decoded as UTF-8'
+●●●●●● 2mm □△
+UnicodeDecodeError
+detected
+●●●●●● 1mm □
+chardet
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+encoding
+●●●●●● 1mm □
+detected
+detected
+●●●●●● 1mm □△
+'encoding'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+encoding
+text
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+encoding
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] [OK] Decoded as '
+encoding
+●●●●●● 2mm □△
+UnicodeDecodeError
+LookupError
+text
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'latin-1'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] [OK] Decoded as latin-1 (fallback)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+text
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'latin-1'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] [OK] Decoded as latin-1 (no detection)'
+●●●●●● 2mm □△
+metadata_dict
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+metadata
+metadata_dict
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+json
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] Ingesting '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+' characters...'
+●●●●●● 2mm □△
+document_id
+message
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document_id
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] Ingestion failed: '
+message
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'ingestion'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] [OK] Successfully ingested document '
+document_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'ingestion'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+IngestionResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'ingestion'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[API_FILE_INGEST] File ingestion error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/file'
+●●●●●● 2mm □△
+IngestionResponse
+●●●●●● 2mm ○
+TextIngestionService
+Path
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    Get information about a document and its chunks.\n    \n    Args:\n        document_id: ID of the document\n        service: Ingestion service instance\n        \n    Returns:\n        DocumentInfo with document details and chunks\n    '
+doc_info
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_info
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+DocumentInfo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting document: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/documents/{document_id}'
+●●●●●● 2mm □△
+DocumentInfo
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+TextIngestionService
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    List ingested documents with optional filtering.\n    \n    Args:\n        status: Filter by status (pending, processing, completed, failed)\n        source: Filter by source (upload, url, api)\n        limit: Maximum number of results\n        offset: Result offset for pagination\n        service: Ingestion service instance\n        \n    Returns:\n        DocumentListResponse with document list\n    '
+documents
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+DocumentListResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error listing documents: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/documents'
+●●●●●● 2mm □△
+DocumentListResponse
+●●●●●● 2mm ○
+TextIngestionService
+Path
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    Delete a document and all its chunks.\n    \n    Args:\n        document_id: ID of the document to delete\n        service: Ingestion service instance\n        \n    Returns:\n        IngestionResponse with deletion status\n    '
+success
+message
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+logger
+●●●●●● 1mm □△
+'Error deleting document: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/documents/{document_id}'
+●●●●●● 2mm □△
+IngestionResponse
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+TextIngestionService
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    Search for similar document chunks.\n    \n    Uses semantic search with embeddings.\n    \n    Args:\n        query: Search query text\n        limit: Maximum number of results\n        threshold: Minimum similarity score (0-1)\n        service: Ingestion service instance\n        \n    Returns:\n        SearchResponse with matching chunks\n    '
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SearchResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Search error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/search'
+●●●●●● 2mm □△
+SearchResponse
+TextIngestionService
+Depends
+●●●●●● 1mm □△
+get_ingestion_service
+●●●●●● 2mm □△
+'\n    Get status of ingestion service and vector database.\n    \n    Returns:\n        Dictionary with service status information\n    '
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ingestion_service'
+'vector_db_connected'
+'collections'
+'timestamp'
+'operational'
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting status: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ingestion_service'
+'vector_db_connected'
+'error'
+'timestamp'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+●●●●●● 2mm □△

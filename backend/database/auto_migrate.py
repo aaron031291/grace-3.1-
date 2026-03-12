@@ -38,7 +38,7 @@ ENUM_COLUMN_MAP: dict[str, tuple[str, list[str]]] = {
             # Extended types used at runtime
             "learning_complete", "gap_identified", "audit_event",
             "mission_created", "research", "fix_applied",
-            "schema_migration", "healing_event", "coding_task",
+            "schema_migration", "healing_event",
         ],
     ),
     "genesiskeystatus": (
@@ -150,20 +150,7 @@ def run_auto_migrate(engine: Engine) -> list[str]:
                         continue
 
                     pg_type = _pg_type_for_column(col)
-                    
-                    # Generate safe, type-aware default values for non-nullable cols
-                    if col.nullable:
-                        nullable_clause = ""
-                    else:
-                        if pg_type in ("JSON", "JSONB"):
-                            nullable_clause = " NOT NULL DEFAULT '{}'::jsonb"
-                        elif pg_type in ("INTEGER", "DOUBLE PRECISION", "FLOAT"):
-                            nullable_clause = " NOT NULL DEFAULT 0"
-                        elif pg_type == "BOOLEAN":
-                            nullable_clause = " NOT NULL DEFAULT false"
-                        else:
-                            nullable_clause = " NOT NULL DEFAULT ''"
-                            
+                    nullable_clause = "" if col.nullable else " NOT NULL DEFAULT ''"
                     try:
                         conn.execute(
                             text(

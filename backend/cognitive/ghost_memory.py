@@ -91,7 +91,7 @@ class GhostMemory:
         """Check if the current task appears complete."""
         return self._error_free_turns >= 6 and self._total_turns >= 3
 
-    def complete_task(self, user_approved: bool = False) -> Dict[str, Any]:
+    def complete_task(self, user_approved: bool = True) -> Dict[str, Any]:
         """
         Task is done. Reflect, save to playbook, reset cache.
         Returns the reflection.

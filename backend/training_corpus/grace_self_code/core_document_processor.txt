@@ -1,0 +1,566 @@
+## document_processor.py
+'\nAutonomous Document Processor — handles unlimited document uploads.\n\nNo limit on document count. 5GB per file max.\nProcesses in batches of 10, queues the rest, runs autonomously.\nUses lightweight Genesis keys for high-frequency tracking.\n\nFlow:\n  User uploads 50 documents → first 10 processed immediately →\n  remaining 40 queued → background agent processes 10 at a time →\n  each document chunked, embedded, ingested → Genesis key per chunk →\n  user notified when complete\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+queue
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BATCH_SIZE
+●●●●●● 1mm □
+10
+CHUNK_SIZE
+●●●●●● 1mm □
+2000
+CHUNK_OVERLAP
+●●●●●● 1mm □
+200
+MAX_FILE_SIZE
+●●●●●● 1mm □
+5
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+_processing_queue
+queue
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_processor_running
+●●●●●● 1mm □
+●●●●●● 1mm □
+_processor_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_processing_status
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DocumentJob
+file_path
+●●●●●● 1mm ○
+file_name
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+''
+category
+●●●●●● 1mm ○
+'general'
+workspace
+●●●●●● 1mm ○
+''
+status
+●●●●●● 1mm ○
+'queued'
+chunks_created
+●●●●●● 2mm ○
+0
+queued_at
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 1mm □
+process_documents
+●●●●●● 1mm □△
+files
+category
+workspace
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'general'
+''
+'\n    Accept unlimited documents. Process first batch immediately,\n    queue the rest for autonomous processing.\n\n    Each file dict: { "name": str, "content": str, "size": int }\n    '
+results
+●●●●●● 1mm □
+'total'
+'immediate'
+'queued'
+'batch_size'
+'jobs'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+0
+0
+BATCH_SIZE
+immediate
+●●●●●● 1mm □
+files
+BATCH_SIZE
+queued
+●●●●●● 1mm □
+files
+BATCH_SIZE
+f
+immediate
+job
+●●●●●● 1mm □
+DocumentJob
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_process_single
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+results
+'jobs'
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+results
+'immediate'
+1
+f
+queued
+job
+●●●●●● 1mm □
+DocumentJob
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_processing_queue
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+_processing_status
+job
+●●●●●● 1mm □
+'status'
+'queued_at'
+'queued'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'queued'
+1
+queue
+results
+'jobs'
+●●●●●● 1mm □△
+'file'
+'status'
+job
+'queue_full'
+●●●●●● 2mm □△
+_ensure_processor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+light_track
+light_track
+●●●●●● 1mm □△
+'file_ingestion'
+'Documents queued: '
+results
+'immediate'
+' immediate, '
+results
+'queued'
+' queued'
+'document_processor'
+'upload'
+'batch'
+category
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_single
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+DocumentJob
+'Process a single document — chunk, store, index.'
+job
+●●●●●● 1mm □
+'processing'
+_processing_status
+job
+●●●●●● 1mm □
+'status'
+'processing'
+content
+●●●●●● 1mm □
+job
+●●●●●● 2mm □
+content
+●●●●●● 3mm ○
+'file'
+'status'
+'chunks'
+job
+'empty'
+0
+chunks
+●●●●●● 1mm □
+_chunk_text
+●●●●●● 1mm □△
+content
+CHUNK_SIZE
+CHUNK_OVERLAP
+●●●●●● 2mm □△
+stored
+●●●●●● 1mm □
+0
+i
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+chunk_path
+●●●●●● 1mm □
+'governance_rules/'
+job
+'/'
+job
+'.chunk_'
+i
+'.txt'
+●●●●●● 3mm □△○
+core.workspace_bridge
+●●●●●● 2mm □△○
+write_file
+write_file
+●●●●●● 1mm □△
+chunk_path
+chunk
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+ingest_document
+ingest_document
+●●●●●● 1mm □△
+chunk_path
+chunk
+job
+'document_processor'
+●●●●●● 2mm □△
+stored
+1
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+light_track
+light_track
+●●●●●● 1mm □△
+'file_ingestion'
+'Chunk '
+i
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+': '
+job
+'document_processor'
+'chunk'
+job
+job
+●●●●●● 2mm □△
+Exception
+job
+●●●●●● 1mm □
+'done'
+job
+●●●●●● 1mm □
+stored
+_processing_status
+job
+●●●●●● 1mm □
+'status'
+'chunks'
+'completed_at'
+'done'
+stored
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'file'
+'status'
+'chunks'
+job
+'done'
+stored
+Exception
+job
+●●●●●● 1mm □
+'failed'
+_processing_status
+job
+●●●●●● 1mm □
+'status'
+'error'
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file'
+'status'
+'error'
+job
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_chunk_text
+●●●●●● 1mm □△
+text
+chunk_size
+overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+2000
+200
+'Split text into overlapping chunks.'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 3mm ○
+text
+chunks
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+0
+start
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+start
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 2mm □
+end
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+boundary
+'\n\n'
+'\n'
+'. '
+' '
+break_point
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+boundary
+start
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 1mm □○
+2
+end
+●●●●●● 2mm □△
+●●●●●● 2mm □
+break_point
+start
+end
+●●●●●● 1mm □
+break_point
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+boundary
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+text
+start
+end
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+end
+●●●●●● 1mm □△
+overlap
+●●●●●● 3mm ○
+c
+c
+chunks
+c
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_ensure_processor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start the background document processor if not running.'
+_processor_lock
+●●●●●● 2mm □
+_processor_running
+●●●●●● 3mm ○
+_processor_running
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+batch
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+BATCH_SIZE
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+_processing_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+queue
+●●●●●● 2mm □
+batch
+●●●●●● 2mm □
+_processing_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_processor_lock
+_processor_running
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+job
+batch
+_process_single
+●●●●●● 1mm □△
+job
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+light_track
+light_track
+●●●●●● 1mm □△
+'file_ingestion'
+'Batch processed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+batch
+●●●●●● 2mm □△
+' documents'
+'document_processor'
+'batch'
+'complete'
+●●●●●● 2mm □△
+Exception
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_processing_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get status of all document processing jobs.'
+●●●●●● 3mm ○
+'queue_size'
+'processor_running'
+'jobs'
+'total_tracked'
+_processing_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_processor_running
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_processing_status
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_processing_status
+●●●●●● 2mm □△
+●●●●●● 2mm □△

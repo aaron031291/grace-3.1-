@@ -1,0 +1,191 @@
+## background_tasks.py
+'\nBackground task runner — opt-in async/thread coordination.\n\nComponents submit long-running jobs here. No forced rewrite of call paths.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Callable
+Any
+Optional
+●●●●●● 3mm □△○
+queue
+●●●●●● 2mm □△○
+Queue
+●●●●●● 2mm □△○
+atexit
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_pool
+●●●●●● 2mm □○
+ThreadPoolExecutor
+●●●●●● 2mm □
+_pool_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_pool_size
+●●●●●● 1mm □
+4
+_queue
+●●●●●● 2mm □○
+Queue
+●●●●●● 2mm □
+_worker_thread
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+_worker_stop
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_worker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Background worker that processes queued jobs.'
+_worker_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+job
+●●●●●● 1mm □
+_get_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+job
+●●●●●● 2mm □
+fn
+args
+kwargs
+●●●●●● 1mm □
+job
+fn
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Background task failed: %s'
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_pool_lock
+●●●●●● 2mm □
+_pool
+●●●●●● 2mm □
+_pool
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_pool
+ThreadPoolExecutor
+●●●●●● 1mm □
+_get_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_queue
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+queue
+●●●●●● 2mm □△○
+Queue
+●●●●●● 1mm □
+Q
+_queue
+●●●●●● 1mm □
+Q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_worker_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_worker_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_queue
+Queue
+●●●●●● 1mm □
+submit_background
+●●●●●● 1mm □△
+fn
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+Ellipsis
+Any
+Any
+Any
+'\n    Submit a task to run in the background (fire-and-forget).\n    Use for long-running work: ingestion, healing, diagnostics.\n    '
+_get_queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+fn
+args
+kwargs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+submit_thread_pool
+●●●●●● 1mm □△
+fn
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+Ellipsis
+Any
+Any
+Any
+'\n    Submit a task to the thread pool and return a Future.\n    Use when you need to await or check completion.\n    '
+●●●●●● 3mm ○
+_get_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+fn
+args
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm □
+shutdown
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Shutdown background workers (call on app exit).'
+_worker_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_pool
+_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+atexit
+●●●●●● 1mm □△
+shutdown
+●●●●●● 2mm □△

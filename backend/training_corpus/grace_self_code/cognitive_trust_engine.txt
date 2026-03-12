@@ -1,0 +1,1096 @@
+## trust_engine.py
+"\nTrust Engine — Component-level KPI tracking with trust scoring,\nverification, and autonomous remediation.\n\nHow it works:\n1. Every component/model/mechanism is tracked individually\n2. Each component's output is chunked and scored out of 100\n3. Scores aggregate into component trust (0-100)\n4. Component trust aggregates into system trust\n5. Trust determines verification requirements:\n   - 80+: deterministically verified (internal data) → auto-accept\n   - 60-79: LLM-driven → verify against knowledge base\n   - 40-59: unknown source → verify against web + APIs + oracle\n   - <40: reject or require human approval\n6. Failed components trigger self-healing or coding agent\n7. Genesis keys track every output for provenance\n\nVerification sources (checked in order):\n  1. Internal: knowledge base, memory mesh, chats, projects\n  2. Oracle: training data, learned patterns\n  3. External: web search, APIs, whitelist sources\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ChunkScore
+'Individual chunk within a component output.'
+chunk_id
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+score
+●●●●●● 3mm ○
+source
+●●●●●● 1mm ○
+verified
+●●●●●● 3mm △
+●●●●●● 1mm □
+verification_method
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+issues
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ComponentScore
+'Aggregated score for a component.'
+component_id
+●●●●●● 1mm ○
+component_name
+●●●●●● 1mm ○
+chunks
+●●●●●● 3mm □△
+ChunkScore
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 3mm ○
+50.0
+confidence_score
+●●●●●● 3mm ○
+0.0
+previous_trust
+●●●●●● 3mm ○
+50.0
+trend
+●●●●●● 1mm ○
+'stable'
+needs_verification
+●●●●●● 3mm △
+●●●●●● 1mm □
+needs_remediation
+●●●●●● 3mm △
+●●●●●● 1mm □
+remediation_type
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+last_updated
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+execution_count
+●●●●●● 2mm ○
+0
+dataclass
+●●●●●● 2mm △
+TrustEngine
+'\n    Tracks trust per component, verifies outputs, triggers remediation.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ComponentScore
+●●●●●● 1mm □
+score_output
+●●●●●● 1mm □△
+self
+component_id
+component_name
+output
+source
+chunk_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'llm'
+500
+"\n        Score a component's output by breaking it into chunks.\n        Each chunk is scored out of 100.\n        "
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+chunk_size
+●●●●●● 2mm □△
+scored_chunks
+●●●●●● 1mm □
+i
+chunk_text
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk_text
+source
+●●●●●● 2mm □△
+scored_chunks
+●●●●●● 1mm □△
+ChunkScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+component_id
+●●●●●● 1mm □
+ComponentScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+●●●●●● 3mm △
+component_id
+comp
+●●●●●● 1mm □
+comp
+comp
+●●●●●● 1mm □
+scored_chunks
+●●●●●● 2mm □
+scored_chunks
+avg_chunk_score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+scored_chunks
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scored_chunks
+●●●●●● 2mm □△
+comp
+1
+window
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+comp
+100
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+window
+●●●●●● 1mm □△
+1
+●●●●●● 3mm ○
+avg_chunk_score
+●●●●●● 3mm □△
+window
+1
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100.0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+comp
+●●●●●● 3mm □△
+300.0
+●●●●●● 2mm □△
+100.0
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+comp
+comp
+'up'
+comp
+comp
+'down'
+'stable'
+comp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+comp
+80
+●●●●●● 2mm □
+comp
+40
+comp
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+comp
+●●●●●● 1mm □
+'human'
+●●●●●● 1mm △
+comp
+60
+comp
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+comp
+●●●●●● 1mm □
+'coding_agent'
+●●●●●● 2mm □
+comp
+70
+comp
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+comp
+●●●●●● 1mm □
+'self_healing'
+●●●●●● 3mm □
+comp
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □
+comp
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+comp
+ComponentScore
+●●●●●● 1mm □
+verify_output
+●●●●●● 1mm □△
+self
+component_id
+output
+trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'\n        Verify output based on trust score thresholds.\n        80+: check internal data (deterministic)\n        60-79: check knowledge base + oracle\n        40-59: check web + APIs + external\n        <40: require human verification\n        '
+result
+●●●●●● 1mm □
+'component_id'
+'trust_score'
+'verification_level'
+'sources_checked'
+'verified'
+'confidence'
+'issues'
+component_id
+trust_score
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm □
+0.0
+●●●●●● 2mm □
+trust_score
+80
+result
+'sources_checked'
+●●●●●● 1mm □△
+'internal'
+●●●●●● 2mm □△
+internal
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+result
+'verified'
+●●●●●● 1mm □
+internal
+'found'
+result
+'confidence'
+●●●●●● 1mm □
+internal
+'confidence'
+●●●●●● 2mm □
+internal
+'found'
+result
+'issues'
+●●●●●● 1mm □△
+'Not found in internal knowledge base'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+trust_score
+60
+result
+'sources_checked'
+●●●●●● 1mm □△
+'knowledge_base'
+'oracle'
+'memory_mesh'
+●●●●●● 2mm □△
+kb_check
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+result
+'verified'
+●●●●●● 1mm □
+kb_check
+'found'
+result
+'confidence'
+●●●●●● 1mm □
+kb_check
+'confidence'
+●●●●●● 2mm □
+kb_check
+'found'
+result
+'issues'
+●●●●●● 1mm □△
+'Not corroborated by knowledge base or oracle'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust_score
+40
+result
+'sources_checked'
+●●●●●● 1mm □△
+'knowledge_base'
+'oracle'
+'web_search'
+'apis'
+'memory_mesh'
+'chats'
+'projects'
+●●●●●● 2mm □△
+full_check
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+result
+'verified'
+●●●●●● 1mm □
+full_check
+'found'
+result
+'confidence'
+●●●●●● 1mm □
+full_check
+'confidence'
+●●●●●● 2mm □
+full_check
+'found'
+result
+'issues'
+●●●●●● 1mm □△
+'Not verified by any internal or external source'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'sources_checked'
+●●●●●● 1mm □△
+'human_required'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'verified'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □
+result
+'confidence'
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm □
+result
+'issues'
+●●●●●● 1mm □△
+'Trust too low — requires human verification'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_system_trust
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Aggregate trust across all tracked components.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'system_trust'
+'components'
+50.0
+0
+scores
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+avg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+needs_attention
+●●●●●● 1mm □
+c
+c
+scores
+c
+high_trust
+●●●●●● 1mm □
+c
+c
+scores
+c
+80
+low_trust
+●●●●●● 1mm □
+c
+c
+scores
+c
+40
+●●●●●● 3mm ○
+'system_trust'
+'component_count'
+'high_trust_count'
+'low_trust_count'
+'needs_attention'
+'components'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+high_trust
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+low_trust
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+needs_attention
+●●●●●● 2mm □△
+c
+'name'
+'trust'
+'trend'
+'needs_remediation'
+'remediation_type'
+'chunk_count'
+c
+c
+c
+c
+c
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_component
+●●●●●● 1mm □△
+self
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+ComponentScore
+●●●●●● 1mm □
+trigger_remediation
+●●●●●● 1mm □△
+self
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Trigger appropriate remediation based on trust score.'
+comp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+comp
+●●●●●● 3mm ○
+'action'
+'reason'
+'none'
+'No remediation needed'
+result
+●●●●●● 1mm □
+'component'
+'trust'
+component_id
+comp
+●●●●●● 2mm □
+comp
+'self_healing'
+result
+'action'
+●●●●●● 1mm □
+'self_healing'
+result
+'detail'
+●●●●●● 1mm □
+'Triggering self-healing for component'
+●●●●●● 1mm △
+comp
+'coding_agent'
+result
+'action'
+●●●●●● 1mm □
+'coding_agent'
+result
+'detail'
+●●●●●● 1mm □
+'Routing to coding agent for fix'
+failed_chunks
+●●●●●● 1mm □
+c
+c
+comp
+c
+60
+result
+'failed_chunks'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed_chunks
+●●●●●● 2mm □△
+result
+'issues'
+●●●●●● 1mm □
+c
+c
+failed_chunks
+c
+●●●●●● 2mm □
+comp
+'human'
+result
+'action'
+●●●●●● 1mm □
+'human_approval'
+result
+'detail'
+●●●●●● 1mm □
+'Trust too low — routing to governance approvals'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_chunk_output
+●●●●●● 1mm □△
+self
+output
+chunk_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Break output into chunks for individual scoring.'
+●●●●●● 2mm □
+output
+●●●●●● 3mm ○
+''
+chunks
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+output
+i
+i
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+''
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_score_chunk
+●●●●●● 1mm □△
+self
+chunk
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Score a chunk out of 100 using deterministic 10-layer KPI rules.'
+kpi_score
+●●●●●● 1mm □
+100.0
+issues
+●●●●●● 1mm □
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+10
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Too short or empty'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+'('
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+')'
+●●●●●● 2mm □△
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Unbalanced parentheses'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+'['
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+']'
+●●●●●● 2mm □△
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Unbalanced brackets'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+'{'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Unbalanced braces'
+●●●●●● 2mm □△
+bad_tokens
+●●●●●● 1mm □
+'TODO'
+'FIXME'
+'HACK'
+'raise NotImplementedError'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+tok
+chunk
+tok
+bad_tokens
+●●●●●● 2mm □△
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Contains forbidden tokens (TODO/FIXME/etc)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'import os'
+chunk
+'os.system'
+chunk
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Unsafe OS operations'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'def '
+chunk
+'class '
+chunk
+●●●●●● 2mm □
+'"""'
+chunk
+"'''"
+chunk
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Missing docstrings'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+'unknown'
+kpi_score
+10
+issues
+●●●●●● 1mm □△
+'Unknown source'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100.0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+kpi_score
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_get_verification_level
+●●●●●● 1mm □△
+self
+trust
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+trust
+80
+●●●●●● 3mm ○
+'internal_only'
+●●●●●● 1mm △
+trust
+60
+●●●●●● 3mm ○
+'knowledge_base'
+●●●●●● 2mm □
+trust
+40
+●●●●●● 3mm ○
+'full_verification'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'human_required'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_verify_internal
+●●●●●● 1mm □△
+self
+output
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check against internal knowledge base and memory.'
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+'found'
+'confidence'
+●●●●●● 1mm □
+0.3
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM learning_examples WHERE trust_score >= 0.7'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'found'
+'confidence'
+count
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.9
+0.5
+●●●●●● 3mm ○
+count
+●●●●●● 2mm □△
+0.01
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'found'
+'confidence'
+●●●●●● 1mm □
+0.3
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_knowledge_base
+●●●●●● 1mm □△
+self
+output
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check against knowledge base + oracle.'
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm ○
+'found'
+'confidence'
+●●●●●● 1mm □
+0.2
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'completed'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+examples
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM learning_examples'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+has_data
+●●●●●● 1mm □
+docs
+0
+examples
+0
+●●●●●● 3mm ○
+'found'
+'confidence'
+has_data
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.8
+0.3
+●●●●●● 3mm ○
+docs
+●●●●●● 3mm ○
+examples
+●●●●●● 2mm □△
+0.005
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'found'
+'confidence'
+●●●●●● 1mm □
+0.2
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_full
+●●●●●● 1mm □△
+self
+output
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Full verification against all sources.'
+internal
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+combined_confidence
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+internal
+'confidence'
+kb
+'confidence'
+●●●●●● 2mm □△
+found
+●●●●●● 1mm □
+internal
+'found'
+kb
+'found'
+●●●●●● 3mm ○
+'found'
+'confidence'
+found
+combined_confidence
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+_trust_engine
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_trust_engine
+●●●●●● 2mm □
+_trust_engine
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_trust_engine
+TrustEngine

@@ -1,0 +1,79 @@
+## braille_dictionary.py
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Text
+Boolean
+Integer
+JSON
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm △
+BrailleDictionaryMapping
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Dynamic Braille Semantic Dictionary.\n    Maps human words and semantic meanings directly to raw Braille encodings.\n    Allows Spindle to auto-update and learn new vocabulary dynamically.\n    '
+__tablename__
+●●●●●● 1mm □
+'braille_semantic_dictionary'
+word
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+braille_encoding
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+semantic_meaning
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+master_loop
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+metadata_json
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+is_active
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+"<BrailleDictionaryMapping(word='"
+●●●●●● 3mm △
+"', encoding='"
+●●●●●● 3mm △
+"')>"

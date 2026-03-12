@@ -1,0 +1,880 @@
+## chat_service.py
+'Chat domain service — direct function calls, no HTTP.\n\nUnified conversational spine: RAG + unified memory (episodic recall) + LLM.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+get_session_factory
+●●●●●● 1mm □
+_get_rag_context
+●●●●●● 1mm □△
+query
+limit
+score_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+5
+0.3
+"Retrieve relevant chunks and build context string. Returns '' on failure."
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+retriever
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_episodic_recall
+●●●●●● 1mm □△
+problem
+k
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+3
+0.5
+"Recall similar past episodes from unified memory. Returns '' on failure."
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+●●●●●● 3mm □△○
+core.memory.unified_memory
+●●●●●● 2mm □△○
+UnifiedMemory
+mem
+●●●●●● 1mm □
+UnifiedMemory
+●●●●●● 1mm □△
+sess
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodes
+●●●●●● 3mm ○
+''
+parts
+●●●●●● 1mm □
+i
+ep
+●●●●●● 2mm □
+●●●●●● 1mm □△
+episodes
+k
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ep
+'problem'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ep
+'outcome'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'[Past '
+i
+'] Problem: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+200
+'\nOutcome: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'[Past '
+i
+'] '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+300
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+parts
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+''
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+list_chats
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chats
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'chats'
+'total'
+'id'
+'title'
+'model'
+'created_at'
+c
+c
+c
+c
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+c
+chats
+total
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_chat
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'title'
+'model'
+chat
+chat
+chat
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_chat
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+payload
+'chat_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+●●●●●● 3mm ○
+'error'
+'Chat not found'
+●●●●●● 3mm ○
+'id'
+'title'
+'model'
+chat
+chat
+chat
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+delete_chat
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □△
+payload
+'chat_id'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'deleted'
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_history
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatHistoryRepository
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+payload
+'chat_id'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'messages'
+'id'
+'role'
+'content'
+'created_at'
+m
+m
+m
+m
+m
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+messages
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+send_prompt_with_rag
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Send prompt with RAG context and unified memory (episodic recall). Single conversational spine.'
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+ChatHistoryRepository
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+payload
+'chat_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+●●●●●● 3mm ○
+'error'
+'Chat not found'
+message
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+rag_ctx
+●●●●●● 1mm □
+_get_rag_context
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+episode_ctx
+●●●●●● 1mm □
+_get_episodic_recall
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+system_parts
+●●●●●● 1mm □
+'You are Grace, a helpful AI assistant.'
+●●●●●● 2mm □
+rag_ctx
+system_parts
+●●●●●● 1mm □△
+'Relevant context from the knowledge base:\n'
+●●●●●● 3mm ○
+rag_ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episode_ctx
+system_parts
+●●●●●● 1mm □△
+'Relevant past experience (use when helpful):\n'
+●●●●●● 3mm ○
+episode_ctx
+●●●●●● 2mm □△
+system_content
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+system_parts
+●●●●●● 2mm □△
+recent
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+payload
+'chat_id'
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'system'
+system_content
+m
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+m
+m
+''
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+assistant_msg
+●●●●●● 1mm □
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'rag'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'chat_id'
+'message'
+'model'
+'generation_time'
+'used_rag'
+'used_memory'
+payload
+'chat_id'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+gen_time
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rag_ctx
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episode_ctx
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.kpi_recorder
+●●●●●● 2mm □△○
+record_component_kpi
+record_component_kpi
+●●●●●● 1mm □△
+'rag'
+'requests'
+1.0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+send_prompt
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Send prompt through the LLM pipeline. Uses RAG + unified memory when use_rag is True (default).'
+use_rag
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'use_rag'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_rag
+●●●●●● 3mm ○
+send_prompt_with_rag
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.repositories
+●●●●●● 2mm □△○
+ChatRepository
+ChatHistoryRepository
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chat_repo
+●●●●●● 1mm □
+ChatRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+history_repo
+●●●●●● 1mm □
+ChatHistoryRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+chat
+●●●●●● 1mm □
+chat_repo
+●●●●●● 1mm □△
+payload
+'chat_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat
+●●●●●● 3mm ○
+'error'
+'Chat not found'
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gen_time
+●●●●●● 1mm □
+_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+history_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'chat_id'
+'message'
+'model'
+'generation_time'
+payload
+'chat_id'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+chat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+gen_time
+2
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+●●●●●● 1mm □
+_run
+prompt
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'message'
+payload
+●●●●●● 1mm □△
+'prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'final_output'
+'confidence'
+'models_used'
+'individual_responses'
+'agreements'
+'disagreements'
+'total_latency_ms'
+result
+result
+result
+result
+result
+result
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_world_model
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.world_model
+●●●●●● 2mm □△○
+get_system_state
+●●●●●● 3mm ○
+get_system_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'state'
+'unavailable'
+●●●●●● 2mm □△

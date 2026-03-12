@@ -1,0 +1,769 @@
+## memory_mesh_metrics.py
+'\nMemory Mesh Performance Monitoring & Metrics\n\nTracks performance metrics for Memory Mesh scalability:\n- Query latencies\n- Cache hit rates\n- Embedding generation times\n- Vector search performance\n- Throughput metrics\n\nProvides real-time monitoring and alerting for performance degradation.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 2mm □△○
+statistics
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PerformanceMetrics
+'\n    Tracks performance metrics for Memory Mesh operations.\n\n    Provides:\n    - Real-time latency tracking\n    - P50/P95/P99 percentiles\n    - Cache hit rates\n    - Throughput metrics\n    - Performance alerts\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_samples
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+1000
+'\n        Initialize performance metrics tracker.\n\n        Args:\n            max_samples: Maximum samples to keep for calculations\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_samples
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[METRICS] Performance monitoring initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_query_latency
+●●●●●● 1mm □△
+self
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Record query latency in milliseconds'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+current_minute
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_minute
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+current_minute
+●●●●●● 3mm □
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+latency_ms
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'High query latency: '
+latency_ms
+'.0f'
+'ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_embedding_latency
+●●●●●● 1mm □△
+self
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Record embedding generation latency'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latency_ms
+5000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'High embedding latency: '
+latency_ms
+'.0f'
+'ms'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_vector_search_latency
+●●●●●● 1mm □△
+self
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Record vector search latency'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_stats_query_latency
+●●●●●● 1mm □△
+self
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Record stats query latency'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_cache_hit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Record cache hit'
+●●●●●● 3mm △
+1
+●●●●●● 1mm □
+record_cache_miss
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Record cache miss'
+●●●●●● 3mm △
+1
+●●●●●● 1mm □
+get_cache_hit_rate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get cache hit rate (0-1)'
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+total
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+total
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_calculate_percentiles
+●●●●●● 1mm □△
+self
+values
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+'Calculate percentile statistics'
+●●●●●● 2mm □
+values
+●●●●●● 3mm ○
+'p50'
+'p95'
+'p99'
+'mean'
+'min'
+'max'
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+sorted_values
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+values
+●●●●●● 2mm □△
+n
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_values
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'p50'
+'p95'
+'p99'
+'mean'
+'min'
+'max'
+n
+0
+sorted_values
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+0.5
+●●●●●● 2mm □△
+0.0
+n
+0
+sorted_values
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+0.0
+n
+0
+sorted_values
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+0.99
+●●●●●● 2mm □△
+0.0
+n
+0
+statistics
+●●●●●● 1mm □△
+sorted_values
+●●●●●● 2mm □△
+0.0
+n
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+sorted_values
+●●●●●● 2mm □△
+0.0
+n
+0
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+sorted_values
+●●●●●● 2mm □△
+0.0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_query_percentiles
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get query latency percentiles'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_embedding_percentiles
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get embedding latency percentiles'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_vector_search_percentiles
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get vector search latency percentiles'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_throughput_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get throughput metrics'
+uptime
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qps
+●●●●●● 1mm □
+uptime
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+uptime
+0
+recent_qpm
+●●●●●● 1mm □
+●●●●●● 3mm △
+statistics
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'total_queries'
+'uptime_seconds'
+'queries_per_second'
+'queries_per_minute_recent'
+'current_minute_count'
+●●●●●● 3mm △
+uptime
+qps
+recent_qpm
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all performance metrics'
+●●●●●● 3mm ○
+'timestamp'
+'query_latency'
+'embedding_latency'
+'vector_search_latency'
+'stats_query_latency'
+'cache'
+'throughput'
+'alerts'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'hits'
+'misses'
+'hit_rate'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+10
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_add_alert
+●●●●●● 1mm □△
+self
+message
+severity
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'info'
+'Add performance alert'
+alert
+●●●●●● 1mm □
+'timestamp'
+'message'
+'severity'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+severity
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alert
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+100
+●●●●●● 2mm □
+severity
+'warning'
+'error'
+logger
+●●●●●● 1mm □△
+'[METRICS] '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_performance_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check overall performance health.\n\n        Returns:\n            Health status and recommendations\n        '
+issues
+●●●●●● 1mm □
+recommendations
+●●●●●● 1mm □
+query_p95
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'p95'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query_p95
+500
+issues
+●●●●●● 1mm □△
+'High P95 query latency: '
+query_p95
+'.0f'
+'ms'
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □△
+'Consider adding more indexes or caching'
+●●●●●● 2mm □△
+hit_rate
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hit_rate
+0.5
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+100
+issues
+●●●●●● 1mm □△
+'Low cache hit rate: '
+hit_rate
+'.1%'
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □△
+'Review caching strategy and TTL settings'
+●●●●●● 2mm □△
+embedding_p95
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'p95'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embedding_p95
+3000
+issues
+●●●●●● 1mm □△
+'High P95 embedding latency: '
+embedding_p95
+'.0f'
+'ms'
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □△
+'Consider batching or async processing'
+●●●●●● 2mm □△
+health_score
+●●●●●● 1mm □
+100
+health_score
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+health_score
+80
+status
+●●●●●● 1mm □
+'healthy'
+●●●●●● 1mm △
+health_score
+60
+status
+●●●●●● 1mm □
+'degraded'
+status
+●●●●●● 1mm □
+'unhealthy'
+●●●●●● 3mm ○
+'status'
+'health_score'
+'issues'
+'recommendations'
+'timestamp'
+status
+health_score
+issues
+recommendations
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+reset_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Reset all metrics'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[METRICS] All metrics reset'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TimedOperation
+'\n    Context manager for timing operations.\n\n    Usage:\n        with TimedOperation(metrics, "query") as timer:\n            # ... perform operation ...\n            pass\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+metrics
+operation_type
+●●●●●● 2mm □△
+PerformanceMetrics
+●●●●●● 1mm ○
+'\n        Initialize timed operation.\n\n        Args:\n            metrics: PerformanceMetrics instance\n            operation_type: Type of operation (query, embedding, etc.)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+metrics
+●●●●●● 3mm △
+●●●●●● 1mm □
+operation_type
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__enter__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start timing'
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'End timing and record'
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency_ms
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □
+●●●●●● 3mm △
+'query'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'embedding'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'vector_search'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'stats'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+latency_ms
+●●●●●● 2mm □△
+_global_metrics
+●●●●●● 2mm □○
+PerformanceMetrics
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_performance_metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global performance metrics instance'
+●●●●●● 2mm □
+_global_metrics
+●●●●●● 2mm □
+_global_metrics
+●●●●●● 1mm □
+PerformanceMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_global_metrics
+PerformanceMetrics

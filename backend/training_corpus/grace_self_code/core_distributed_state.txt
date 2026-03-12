@@ -1,0 +1,392 @@
+## distributed_state.py
+'\nDistributed State — multi-instance state management.\n\nUses Redis when available, falls back to in-process dict.\nHandles: session state, active projects, user presence,\ncross-instance communication.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_local_state
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+_state_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_redis_client
+●●●●●● 1mm □
+●●●●●● 2mm □
+_redis_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+_get_redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Try to connect to Redis. Falls back to local dict.'
+●●●●●● 2mm □
+_redis_client
+●●●●●● 2mm □
+●●●●●● 3mm ○
+_redis_client
+●●●●●● 2mm □△○
+redis
+●●●●●● 2mm □△○
+os
+url
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'REDIS_URL'
+'redis://localhost:6379/0'
+●●●●●● 2mm □△
+_redis_client
+●●●●●● 1mm □
+redis
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+_redis_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_redis_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'Redis connected — distributed state enabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_redis_client
+Exception
+_redis_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+_redis_client
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+set_state
+●●●●●● 1mm □△
+key
+value
+ttl
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+3600
+'Set a state value. Uses Redis if available, local dict otherwise.'
+serialized
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+value
+r
+●●●●●● 1mm □
+_get_redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+r
+●●●●●● 1mm □△
+'grace:'
+key
+ttl
+serialized
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+_state_lock
+_local_state
+key
+●●●●●● 1mm □
+serialized
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_state
+●●●●●● 1mm □△
+key
+default
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Get a state value.'
+r
+●●●●●● 1mm □
+_get_redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+val
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'grace:'
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+val
+Exception
+_state_lock
+val
+●●●●●● 1mm □
+_local_state
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+val
+●●●●●● 3mm ○
+default
+Any
+●●●●●● 1mm □
+delete_state
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Delete a state value.'
+r
+●●●●●● 1mm □
+_get_redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+r
+●●●●●● 1mm □△
+'grace:'
+key
+●●●●●● 2mm □△
+Exception
+_state_lock
+_local_state
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+set_user_session
+●●●●●● 1mm □△
+user_id
+session_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Store user session state (survives hot-swap and restart with Redis).'
+set_state
+●●●●●● 1mm □△
+'session:'
+user_id
+session_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_user_session
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get user session state.'
+●●●●●● 3mm ○
+get_state
+●●●●●● 1mm □△
+'session:'
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_project_state
+●●●●●● 1mm □△
+project_id
+state_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Store project-level state.'
+set_state
+●●●●●● 1mm □△
+'project:'
+project_id
+state_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_project_state
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get project-level state.'
+●●●●●● 3mm ○
+get_state
+●●●●●● 1mm □△
+'project:'
+project_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+register_instance
+●●●●●● 1mm □△
+instance_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Register a Grace instance for multi-instance awareness.'
+set_state
+●●●●●● 1mm □△
+'instance:'
+instance_id
+'id'
+'started_at'
+'metadata'
+instance_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_instances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all active Grace instances.'
+r
+●●●●●● 1mm □
+_get_redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+keys
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'grace:instance:*'
+●●●●●● 2mm □△
+instances
+●●●●●● 1mm □
+key
+keys
+val
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+instances
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+instances
+Exception
+●●●●●● 3mm ○
+'id'
+'started_at'
+'note'
+'local'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'single instance (no Redis)'
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_distributed_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get distributed state statistics.'
+r
+●●●●●● 1mm □
+_get_redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'redis_available'
+'redis_url'
+'local_state_keys'
+'instances'
+'mode'
+_redis_available
+_redis_available
+'connected'
+'not configured'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_local_state
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+list_instances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_redis_available
+'distributed'
+'local'
+●●●●●● 2mm □△

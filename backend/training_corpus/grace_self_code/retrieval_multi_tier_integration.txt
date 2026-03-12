@@ -1,0 +1,204 @@
+## multi_tier_integration.py
+'\nMulti-tier chat integration helper.\n\nProvides a simplified wrapper to integrate MultiTierQueryHandler\nwith the existing chat endpoint without major refactoring.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+retrieval.query_intelligence
+●●●●●● 2mm □△○
+MultiTierQueryHandler
+QueryTier
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_multi_tier_handler
+●●●●●● 1mm □△
+llm_client
+●●●●●● 2mm □△
+'\n    Create a MultiTierQueryHandler instance.\n    \n    Args:\n        llm_client: Ollama client for LLM operations\n        \n    Returns:\n        Configured MultiTierQueryHandler\n    '
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 1mm □
+get_settings
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+serpapi_service
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+get_settings
+get_settings
+get_settings
+●●●●●● 3mm □△○
+search.serpapi_service
+●●●●●● 2mm □△○
+SerpAPIService
+serpapi_service
+●●●●●● 1mm □
+SerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'SerpAPI enabled for internet search (Tier 3)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'SerpAPI not configured - internet search (Tier 3) disabled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MultiTierQueryHandler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_query_handling
+●●●●●● 1mm □△
+query_id
+query_text
+tier_result
+response_time_ms
+user_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Log query handling to database for tracking and learning.\n    \n    Args:\n        query_id: Query identifier\n        query_text: Original query text\n        tier_result: QueryResult from MultiTierQueryHandler\n        response_time_ms: Response time in milliseconds\n        user_id: Optional user identifier\n        genesis_key_id: Optional Genesis Key\n    '
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+query_log
+●●●●●● 1mm □
+QueryHandlingLog
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+query_log
+●●●●●● 2mm □△
+gap
+tier_result
+knowledge_gap
+●●●●●● 1mm □
+KnowledgeGap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+knowledge_gap
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Logged query handling for '
+query_id
+': tier='
+tier_result
+', confidence='
+tier_result
+'.2f'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error logging query handling: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+format_chat_response
+●●●●●● 1mm □△
+tier_result
+model_name
+generation_time
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'\n    Format QueryResult into ChatResponse format.\n    \n    Args:\n        tier_result: QueryResult from MultiTierQueryHandler\n        model_name: Model name used\n        generation_time: Generation time in seconds\n        \n    Returns:\n        Dictionary matching ChatResponse schema\n    '
+●●●●●● 3mm ○
+'message'
+'model'
+'generation_time'
+'sources'
+'tier'
+'confidence'
+'knowledge_gaps'
+'warnings'
+'prompt_tokens'
+'response_tokens'
+tier_result
+model_name
+generation_time
+tier_result
+tier_result
+tier_result
+gap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gap
+tier_result
+tier_result
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

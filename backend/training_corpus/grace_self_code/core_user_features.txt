@@ -1,0 +1,816 @@
+## user_features.py
+'\nUser-level features — undo/redo, profiles, notifications, permissions.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+_undo_stacks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_redo_stacks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MAX_UNDO
+●●●●●● 1mm □
+50
+●●●●●● 1mm □
+push_undo
+●●●●●● 1mm □△
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Save current content before a change.'
+stack
+●●●●●● 1mm □
+_undo_stacks
+file_path
+stack
+●●●●●● 1mm □△
+'content'
+'ts'
+content
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stack
+●●●●●● 2mm □△
+MAX_UNDO
+stack
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+_redo_stacks
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+undo
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Undo last change. Returns previous content.'
+stack
+●●●●●● 1mm □
+_undo_stacks
+file_path
+●●●●●● 2mm □
+stack
+●●●●●● 3mm ○
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □
+stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_redo_stacks
+file_path
+●●●●●● 1mm □△
+'content'
+'ts'
+current
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+entry
+'content'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+entry
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+redo
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Redo last undone change.'
+stack
+●●●●●● 1mm □
+_redo_stacks
+file_path
+●●●●●● 2mm □
+stack
+●●●●●● 3mm ○
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □
+stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_undo_stacks
+file_path
+●●●●●● 1mm □△
+'content'
+'ts'
+current
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+entry
+'content'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+entry
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+PROFILES_PATH
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'user_profiles.json'
+●●●●●● 1mm □
+_load_profiles
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PROFILES_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+PROFILES_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+PROFILES_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_profiles
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+PROFILES_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PROFILES_PATH
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_profile
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'default'
+profiles
+●●●●●● 1mm □
+_load_profiles
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+profiles
+●●●●●● 1mm □△
+user_id
+'user_id'
+'theme'
+'default_model'
+'sidebar_width'
+'detail_width'
+'keyboard_shortcuts'
+'notifications'
+'auto_save'
+'created_at'
+user_id
+'dark'
+'consensus'
+200
+320
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_profile
+●●●●●● 1mm □△
+user_id
+updates
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+profiles
+●●●●●● 1mm □
+_load_profiles
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+profile
+●●●●●● 1mm □
+profiles
+●●●●●● 1mm □△
+user_id
+get_profile
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+profile
+●●●●●● 1mm □△
+updates
+●●●●●● 2mm □△
+profile
+'updated_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+profiles
+user_id
+●●●●●● 1mm □
+profile
+_save_profiles
+●●●●●● 1mm □△
+profiles
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+profile
+●●●●●● 2mm □△
+_notifications
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_notif_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+notify
+●●●●●● 1mm □△
+title
+message
+type
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'info'
+'system'
+'Create an in-app notification.'
+notif
+●●●●●● 1mm □
+'id'
+'title'
+'message'
+'type'
+'source'
+'read'
+'created_at'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+title
+message
+●●●●●● 3mm □
+source
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_notif_lock
+_notifications
+●●●●●● 1mm □△
+notif
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_notifications
+●●●●●● 2mm □△
+200
+_notifications
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+notif
+●●●●●● 1mm □
+get_notifications
+●●●●●● 1mm □△
+unread_only
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+_notif_lock
+●●●●●● 2mm □
+unread_only
+●●●●●● 3mm ○
+n
+n
+_notifications
+n
+'read'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_notifications
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+mark_read
+●●●●●● 1mm □△
+notif_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+_notif_lock
+n
+_notifications
+●●●●●● 2mm □
+n
+'id'
+notif_id
+n
+'read'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+clear_notifications
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_notif_lock
+_notifications
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PERMISSIONS_PATH
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'workspace_permissions.json'
+●●●●●● 1mm □
+_load_permissions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PERMISSIONS_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+PERMISSIONS_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+PERMISSIONS_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_permissions
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+PERMISSIONS_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PERMISSIONS_PATH
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_permission
+●●●●●● 1mm □△
+workspace
+user_id
+level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'read'
+'Set permission: read, write, admin.'
+perms
+●●●●●● 1mm □
+_load_permissions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+workspace
+perms
+perms
+workspace
+●●●●●● 1mm □
+perms
+workspace
+user_id
+●●●●●● 1mm □
+'level'
+'granted_at'
+level
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_save_permissions
+●●●●●● 1mm □△
+perms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'workspace'
+'user'
+'level'
+workspace
+user_id
+level
+●●●●●● 1mm □
+check_permission
+●●●●●● 1mm □△
+workspace
+user_id
+required
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'read'
+perms
+●●●●●● 1mm □
+_load_permissions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_perms
+●●●●●● 1mm □
+perms
+●●●●●● 1mm □△
+workspace
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+level
+●●●●●● 1mm □
+user_perms
+●●●●●● 1mm □△
+'level'
+'none'
+●●●●●● 2mm □△
+levels
+●●●●●● 1mm □
+'none'
+'read'
+'write'
+'admin'
+0
+1
+2
+3
+●●●●●● 3mm ○
+levels
+●●●●●● 1mm □△
+level
+0
+●●●●●● 2mm □△
+levels
+●●●●●● 1mm □△
+required
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_workspace_permissions
+●●●●●● 1mm □△
+workspace
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+perms
+●●●●●● 1mm □
+_load_permissions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+perms
+●●●●●● 1mm □△
+workspace
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SHORTCUTS
+●●●●●● 1mm □
+'Ctrl+S / Cmd+S'
+'Ctrl+K / Cmd+K'
+'Ctrl+P / Cmd+P'
+'Ctrl+Z / Cmd+Z'
+'Ctrl+Shift+Z'
+'Tab'
+'Escape'
+'Ctrl+/'
+'Ctrl+F'
+'Ctrl+Shift+F'
+'Ctrl+`'
+'Double-click'
+'Right-click'
+'Save current file + hot reload'
+'Open refactor prompt (Cmd+K style)'
+'Open fuzzy search across all workspaces'
+'Undo last change'
+'Redo'
+'Accept ghost-text completion'
+'Dismiss ghost-text / close panels'
+'Toggle comment (in code editor)'
+'Find in current file'
+'Search across all files'
+'Toggle terminal view'
+'Open action in full window'
+'Context menu with power actions'
+●●●●●● 1mm □
+get_shortcuts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'shortcuts'
+'total'
+SHORTCUTS
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+SHORTCUTS
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fuzzy_search
+●●●●●● 1mm □△
+query
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+20
+'Search file names and content across all workspaces.'
+results
+●●●●●● 1mm □
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+search_dirs
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'projects'
+DATA_DIR
+●●●●●● 3mm □△
+'governance_rules'
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'core'
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'api'
+search_dir
+search_dirs
+●●●●●● 2mm □
+search_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+search_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+'.pyc'
+'.pyo'
+●●●●●● 2mm □
+query_lower
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'type'
+'name'
+'path'
+'match'
+'file'
+f
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'filename'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+max_results
+f
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.json'
+'.md'
+'.txt'
+'.yaml'
+'.yml'
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+5000
+●●●●●● 2mm □
+query_lower
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line_num
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+i
+●●●●●● 3mm ○
+1
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+query_lower
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'type'
+'name'
+'path'
+'match'
+'line'
+'content'
+f
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'content'
+line_num
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+max_results
+●●●●●● 3mm ○
+results
+max_results
+●●●●●● 1mm □△

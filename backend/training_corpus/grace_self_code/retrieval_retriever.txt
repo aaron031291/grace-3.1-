@@ -1,0 +1,927 @@
+## retriever.py
+'\nDocument retriever module for RAG (Retrieval-Augmented Generation).\nRetrieves relevant document chunks based on semantic similarity to queries.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+database
+●●●●●● 2mm □△○
+session
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DocumentRetriever
+'Retrieves relevant document chunks for query context.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+collection_name
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+EmbeddingModel
+'documents'
+●●●●●● 2mm □
+'\n        Initialize document retriever.\n        \n        Args:\n            collection_name: Name of Qdrant collection\n            embedding_model: EmbeddingModel instance for generating query embeddings\n                            If None, will NOT create a new instance (must be provided)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+collection_name
+●●●●●● 2mm □
+embedding_model
+●●●●●● 2mm □
+ValueError
+●●●●●● 1mm □△
+'embedding_model is required - must be provided as an instance'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+retrieve
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+include_metadata
+filter_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+5
+0.5
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n        Retrieve relevant document chunks for a query.\n        \n        Args:\n            query: Query text to search for\n            limit: Maximum number of chunks to retrieve\n            score_threshold: Minimum similarity score (0-1)\n            include_metadata: Whether to include chunk metadata\n            filter_path: Optional path prefix to filter results (e.g., "forensic/auto_search/")\n            \n        Returns:\n            List of relevant chunks with scores and metadata\n            \n        Raises:\n            Exception: If embedding generation fails\n        '
+●●●●●● 2mm □
+query
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Empty query provided'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+0
+RuntimeError
+●●●●●● 2mm □
+'CUDA out of memory'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'out of memory'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'CUDA Out of Memory - falling back to CPU inference'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'cpu'
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'to'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'cpu'
+●●●●●● 2mm □△
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □
+qdrant_filter
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+filter_path
+●●●●●● 3mm □△○
+qdrant_client.models
+●●●●●● 2mm □△○
+Filter
+FieldCondition
+MatchText
+qdrant_filter
+●●●●●● 1mm □
+Filter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Applying path filter: '
+filter_path
+●●●●●● 2mm □△
+search_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+search_results
+logger
+●●●●●● 1mm □△
+'No results found for query: '
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_ids
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+'id'
+●●●●●● 2mm □△
+result
+search_results
+chunks_with_docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+DocumentChunk
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 1mm □△
+vector_ids
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_map
+●●●●●● 1mm □
+chunk
+chunk
+doc
+chunk
+doc
+chunks_with_docs
+enriched_results
+●●●●●● 1mm □
+result
+search_results
+vector_id
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+'id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vector_id
+chunk_map
+chunk
+document
+●●●●●● 1mm □
+chunk_map
+vector_id
+result_dict
+●●●●●● 1mm □
+'vector_id'
+'score'
+'chunk_id'
+'document_id'
+'chunk_index'
+'text'
+'confidence_score'
+result
+'id'
+result
+'score'
+chunk
+chunk
+chunk
+chunk
+chunk
+●●●●●● 2mm □
+include_metadata
+result_dict
+'metadata'
+●●●●●● 1mm □
+'document_id'
+'filename'
+'file_path'
+'source'
+'upload_method'
+'chunk_index'
+'char_start'
+'char_end'
+'confidence_score'
+'document_confidence_score'
+'created_at'
+'description'
+chunk
+document
+document
+'Unknown'
+document
+document
+●●●●●● 2mm □
+document
+document
+'Unknown'
+document
+document
+'Unknown'
+chunk
+chunk
+chunk
+chunk
+document
+document
+0.5
+document
+document
+document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+document
+●●●●●● 2mm □
+enriched_results
+●●●●●● 1mm □△
+result_dict
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Retrieved '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+enriched_results
+●●●●●● 2mm □△
+' chunks for query: '
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+enriched_results
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+"Retrieval error for query '"
+query
+"': "
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+retrieve_hybrid
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+include_metadata
+keyword_weight
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+5
+0.3
+●●●●●● 3mm □△○
+0.3
+'\n        Hybrid retrieval combining semantic search + keyword matching.\n        \n        For short queries, keyword matching helps ensure relevant documents.\n        For longer queries, semantic search dominates.\n        \n        Args:\n            query: Query text to search for\n            limit: Maximum number of chunks to retrieve\n            score_threshold: Minimum similarity score (0-1)\n            include_metadata: Whether to include chunk metadata\n            keyword_weight: Weight for keyword matching (0-1)\n            \n        Returns:\n            List of relevant chunks with combined scores\n        '
+semantic_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+semantic_results
+●●●●●● 3mm ○
+query_keywords
+●●●●●● 1mm □
+word
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+word
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+word
+●●●●●● 2mm □△
+2
+result
+semantic_results
+chunk_text
+●●●●●● 1mm □
+result
+'text'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keyword_matches
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+keyword
+query_keywords
+keyword
+chunk_text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query_keywords
+keyword_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+keyword_matches
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query_keywords
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+keyword_score
+●●●●●● 1mm □
+0.0
+original_score
+●●●●●● 1mm □
+result
+'score'
+combined_score
+●●●●●● 1mm □
+original_score
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+keyword_weight
+●●●●●● 3mm ○
+keyword_score
+●●●●●● 2mm □△
+keyword_weight
+result
+'score'
+●●●●●● 1mm □
+combined_score
+result
+'keyword_matches'
+●●●●●● 1mm □
+keyword_matches
+semantic_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+final_results
+●●●●●● 1mm □
+r
+r
+semantic_results
+r
+'score'
+score_threshold
+limit
+logger
+●●●●●● 1mm □△
+'Hybrid retrieval: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+final_results
+●●●●●● 2mm □△
+' chunks for query: '
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+final_results
+Exception
+logger
+●●●●●● 1mm □△
+"Hybrid retrieval error for query '"
+query
+"': "
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+retrieve_by_document
+●●●●●● 1mm □△
+self
+document_id
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'\n        Retrieve all chunks from a specific document.\n        \n        Args:\n            document_id: ID of the document\n            limit: Maximum number of chunks (None for all)\n            \n        Returns:\n            List of chunks from the document\n        '
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 2mm □
+limit
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+logger
+●●●●●● 1mm □△
+'No chunks found for document '
+document_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+document
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'chunk_id'
+'document_id'
+'chunk_index'
+'text'
+'metadata'
+chunk
+chunk
+chunk
+chunk
+'filename'
+'source'
+'char_start'
+'char_end'
+document
+document
+'Unknown'
+document
+document
+'Unknown'
+chunk
+chunk
+chunk
+chunks
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error retrieving chunks for document '
+document_id
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+retrieve_by_source
+●●●●●● 1mm □△
+self
+source
+limit
+include_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+20
+●●●●●● 3mm □△○
+'\n        Retrieve chunks from documents with a specific source.\n        \n        Args:\n            source: Source identifier\n            limit: Maximum number of chunks\n            include_text: Whether to include chunk text\n            \n        Returns:\n            List of chunks from matching documents\n        '
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+documents
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+documents
+logger
+●●●●●● 1mm □△
+'No documents found with source: '
+source
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+document_ids
+●●●●●● 1mm □
+doc
+doc
+documents
+query
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 1mm □△
+document_ids
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_map
+●●●●●● 1mm □
+doc
+doc
+doc
+documents
+●●●●●● 3mm ○
+'chunk_id'
+'document_id'
+'chunk_index'
+'text'
+'metadata'
+chunk
+chunk
+chunk
+include_text
+chunk
+●●●●●● 2mm □
+'filename'
+'source'
+'char_start'
+'char_end'
+doc_map
+chunk
+source
+chunk
+chunk
+chunk
+chunks
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+"Error retrieving chunks by source '"
+source
+"': "
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+build_context
+●●●●●● 1mm □△
+self
+chunks
+max_length
+include_sources
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Build a context string from retrieved chunks.\n        \n        Args:\n            chunks: List of chunk dictionaries from retrieve()\n            max_length: Maximum length of context string (None for unlimited)\n            include_sources: Whether to include source attribution\n            \n        Returns:\n            Formatted context string suitable for LLM input\n        '
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+''
+context_parts
+●●●●●● 1mm □
+total_length
+●●●●●● 1mm □
+0
+i
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+1
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 2mm □
+include_sources
+metadata
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+filename
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'filename'
+'Unknown'
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'score'
+●●●●●● 2mm □△
+score_str
+●●●●●● 1mm □
+score
+' (relevance: '
+score
+'.2%'
+')'
+''
+header
+●●●●●● 1mm □
+'[Document '
+i
+': '
+filename
+score_str
+']\n'
+●●●●●● 3mm □
+header
+●●●●●● 1mm □
+'[Document '
+i
+']\n'
+formatted_chunk
+●●●●●● 1mm □
+header
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+max_length
+combined_length
+●●●●●● 1mm □
+total_length
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+formatted_chunk
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+2
+●●●●●● 2mm □
+combined_length
+max_length
+logger
+●●●●●● 1mm □△
+'Context length limit reached. Included '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+' out of '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks.'
+●●●●●● 2mm □△
+total_length
+●●●●●● 1mm □
+combined_length
+context_parts
+●●●●●● 1mm □△
+formatted_chunk
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get a database session, initializing if needed.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 2mm □
+db_session
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+close
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clean up resources.'
+emb
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'embedding_model'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+emb
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+emb
+'unload_model'
+●●●●●● 2mm □△
+emb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error closing retriever: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__del__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Destructor to ensure cleanup.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_retriever
+●●●●●● 1mm □△
+collection_name
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+EmbeddingModel
+'documents'
+●●●●●● 2mm □
+'\n    Factory function to get a DocumentRetriever instance.\n    \n    Args:\n        collection_name: Name of Qdrant collection\n        embedding_model: EmbeddingModel instance (optional)\n        \n    Returns:\n        Initialized DocumentRetriever instance\n    '
+●●●●●● 3mm ○
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DocumentRetriever

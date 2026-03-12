@@ -1,0 +1,563 @@
+## genesis_storage.py
+'\nGenesis Key Tiered Storage — hot/warm/cold with compression,\nsampling, TTL expiry, and aggregation.\n\nReduces storage ~95% while keeping full audit capability.\n\nTiers:\n  HOT  (in-memory): last 1000 keys, instant access\n  WARM (SQLite): last 7 days, indexed\n  COLD (aggregated): >7 days, clustered by (type, action, outcome)\n\nSampling: high-frequency identical calls sampled at 1% after first 10\nTTL: debug=48h, performance=7d, errors=30d, learning=90d\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+zlib
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+defaultdict
+Counter
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+HOT_CAPACITY
+●●●●●● 1mm □
+1000
+WARM_DAYS
+●●●●●● 1mm □
+7
+COLD_CLUSTER_THRESHOLD
+●●●●●● 1mm □
+0.05
+SAMPLE_THRESHOLD
+●●●●●● 1mm □
+10
+SAMPLE_RATE
+●●●●●● 1mm □
+100
+TTL_HOURS
+●●●●●● 1mm □
+'debug'
+'performance'
+'error'
+'learning_complete'
+'system_event'
+'api_request'
+'ai_response'
+'code_change'
+'default'
+48
+168
+720
+2160
+168
+48
+168
+2160
+168
+●●●●●● 2mm △
+CompactKey
+'Minimal key representation for hot tier — ~200 bytes vs ~2KB full key.'
+__slots__
+●●●●●● 1mm □
+'key_type'
+'what'
+'who'
+'ts'
+'is_error'
+'tags_hash'
+key_type
+●●●●●● 1mm ○
+what
+●●●●●● 1mm ○
+who
+●●●●●● 1mm ○
+ts
+●●●●●● 3mm ○
+is_error
+●●●●●● 3mm △
+tags_hash
+●●●●●● 2mm ○
+dataclass
+●●●●●● 2mm △
+GenesisStorage
+'Tiered Genesis key storage manager.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'hot'
+'warm'
+'cold'
+'sampled_out'
+'expired'
+'compressed'
+0
+0
+0
+0
+0
+0
+●●●●●● 1mm □
+should_store
+●●●●●● 1mm □△
+self
+key_type
+what
+who
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Sampling gate — should this key be stored or sampled out?'
+fingerprint
+●●●●●● 1mm □
+key_type
+':'
+who
+':'
+what
+20
+●●●●●● 3mm △
+●●●●●● 3mm △
+fingerprint
+1
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+fingerprint
+●●●●●● 2mm □
+count
+SAMPLE_THRESHOLD
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+count
+●●●●●● 2mm □○
+SAMPLE_RATE
+0
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+'sampled_out'
+1
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+store_hot
+●●●●●● 1mm □△
+self
+key_type
+what
+who
+is_error
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+''
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Store in hot tier (in-memory ring buffer).'
+compact
+●●●●●● 1mm □
+CompactKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+compact
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'hot'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_hot
+●●●●●● 1mm □△
+self
+n
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent hot keys.'
+●●●●●● 3mm △
+keys
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+n
+●●●●●● 3mm ○
+'key_type'
+'what'
+'who'
+'ts'
+'is_error'
+k
+k
+k
+datetime
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+k
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+compress_for_cold
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'Compress a batch of keys for cold storage.'
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+compressed
+●●●●●● 1mm □
+zlib
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'compressed'
+1
+●●●●●● 3mm ○
+compressed
+●●●●●● 2mm □△
+●●●●●● 1mm □
+decompress_cold
+●●●●●● 1mm □△
+self
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Decompress cold storage data.'
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+zlib
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+aggregate_cluster
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'Aggregate similar keys into a single cluster summary.'
+●●●●●● 2mm □
+keys
+●●●●●● 3mm ○
+types
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+k
+●●●●●● 1mm □△
+'key_type'
+''
+●●●●●● 2mm □△
+k
+keys
+●●●●●● 2mm □△
+actors
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+k
+●●●●●● 1mm □△
+'who'
+''
+●●●●●● 2mm □△
+k
+keys
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+keys
+k
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cluster_size'
+'type_distribution'
+'top_actors'
+'error_count'
+'error_rate'
+'first_seen'
+'last_seen'
+'sample_what'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+types
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+actors
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+errors
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+errors
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+0
+keys
+keys
+1
+●●●●●● 1mm □△
+'ts'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+keys
+0
+●●●●●● 1mm □△
+'ts'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+k
+●●●●●● 1mm □△
+'what'
+''
+●●●●●● 2mm □△
+60
+k
+keys
+3
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_ttl_hours
+●●●●●● 1mm □△
+self
+key_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get TTL for a key type.'
+●●●●●● 3mm ○
+TTL_HOURS
+●●●●●● 1mm □△
+key_type
+TTL_HOURS
+'default'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+cleanup_expired
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Remove expired keys from the database.'
+removed
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+valid_key_types
+●●●●●● 1mm □
+e
+e
+GenesisKeyType
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+key_type
+hours
+TTL_HOURS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key_type
+'default'
+●●●●●● 2mm □
+key_type
+valid_key_types
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'DELETE FROM genesis_key WHERE key_type = :kt AND when_timestamp < :cutoff'
+●●●●●● 2mm □△
+'kt'
+'cutoff'
+key_type
+cutoff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+removed
+count
+●●●●●● 3mm △
+'expired'
+removed
+Exception
+logger
+●●●●●● 1mm □△
+'Cleanup error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'removed'
+'ttl_config'
+removed
+TTL_HOURS
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Storage statistics.'
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'hot_capacity'
+'sample_rate'
+'sample_threshold'
+'ttl_config'
+'unique_fingerprints'
+●●●●●● 3mm △
+HOT_CAPACITY
+'1/'
+SAMPLE_RATE
+SAMPLE_THRESHOLD
+TTL_HOURS
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_storage
+●●●●●● 2mm □○
+GenesisStorage
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_genesis_storage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_storage
+●●●●●● 2mm □
+_storage
+●●●●●● 1mm □
+GenesisStorage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_storage
+GenesisStorage

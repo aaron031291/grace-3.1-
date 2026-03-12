@@ -1,0 +1,2187 @@
+## deep_test_engine.py
+'\nDeep Test Engine — Logic tests for EVERY component, not just smoke checks.\n\nThree test levels:\n  1. LOGIC TESTS: Does each function do what it claims? (every component)\n  2. INTEGRATION TESTS: Do components work together correctly?\n  3. STRESS TESTS: Does the system hold under load? (continuous background)\n\nRuns automatically. Connects to immune system and self-healing.\nFailed tests trigger the autonomous healing loop.\nResults feed into the daily report and intelligence layer.\n'
+●●●●●● 2mm □△○
+gc
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+RESULTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'test_results'
+●●●●●● 2mm △
+DeepTestEngine
+"Tests every component's actual logic, not just imports."
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'DeepTestEngine'
+●●●●●● 1mm □
+run_logic_tests
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test the actual logic of every core component.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'tests'
+'passed'
+'failed'
+'errors'
+0
+0
+0
+tests
+●●●●●● 1mm □
+'FlashCache: register + lookup'
+●●●●●● 3mm △
+'FlashCache: keyword extraction'
+●●●●●● 3mm △
+'FlashCache: search'
+●●●●●● 3mm △
+'Trust Engine: score output'
+●●●●●● 3mm △
+'Trust Engine: component tracking'
+●●●●●● 3mm △
+'Event Bus: publish + subscribe'
+●●●●●● 3mm △
+'Event Bus: wildcard matching'
+●●●●●● 3mm △
+'Circuit Breaker: enter + exit loop'
+●●●●●● 3mm △
+'Circuit Breaker: depth limit'
+●●●●●● 3mm △
+'Circuit Breaker: 41 loops registered'
+●●●●●● 3mm △
+'Unified Memory: store + recall'
+●●●●●● 3mm △
+'Unified Memory: search all'
+●●●●●● 3mm △
+'Architecture Compass: build + explain'
+●●●●●● 3mm △
+'Architecture Compass: find capabilities'
+●●●●●● 3mm △
+'Architecture Compass: dependency prediction'
+●●●●●● 3mm △
+'Grace Compiler: compile valid code'
+●●●●●● 3mm △
+'Grace Compiler: reject dangerous code'
+●●●●●● 3mm △
+'Grace Compiler: auto-import'
+●●●●●● 3mm △
+'Code Sandbox: execute valid code'
+●●●●●● 3mm △
+'Code Sandbox: timeout on infinite loop'
+●●●●●● 3mm △
+'Code Sandbox: static analysis'
+●●●●●● 3mm △
+'Reverse kNN: gap scan'
+●●●●●● 3mm △
+'Reverse kNN: query logging'
+●●●●●● 3mm △
+'Intelligence Layer: ML observe'
+●●●●●● 3mm △
+'Intelligence Layer: neuro-symbolic rules'
+●●●●●● 3mm △
+'Reporting Engine: generate report'
+●●●●●● 3mm △
+'Communication Layer: format for human'
+●●●●●● 3mm △
+'Communication Layer: format for system'
+●●●●●● 3mm △
+'User Intent Override: analyse'
+●●●●●● 3mm △
+'Consensus Engine: model registry'
+●●●●●● 3mm △
+'Loop Orchestrator: composite definitions'
+●●●●●● 3mm △
+'Live Integration: integrate component'
+●●●●●● 3mm △
+'Autonomous Diagnostics: smoke test'
+●●●●●● 3mm △
+name
+test_fn
+tests
+ok
+detail
+●●●●●● 1mm □
+test_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'tests'
+●●●●●● 1mm □△
+'name'
+'passed'
+'detail'
+name
+ok
+detail
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+results
+'passed'
+1
+●●●●●● 3mm □
+results
+'failed'
+1
+Exception
+results
+'tests'
+●●●●●● 1mm □△
+'name'
+'passed'
+'detail'
+name
+●●●●●● 1mm □
+'CRASHED: '
+e
+●●●●●● 2mm □△
+results
+'errors'
+1
+results
+'total'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+'tests'
+●●●●●● 2mm □△
+results
+'duration_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+results
+'pass_rate'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+results
+'passed'
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+results
+'total'
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+results
+'status'
+●●●●●● 1mm □
+results
+'failed'
+0
+results
+'errors'
+0
+'ALL PASS'
+results
+'failed'
+●●●●●● 3mm ○
+results
+'errors'
+' FAILURES'
+results
+'timestamp'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+'failed'
+0
+results
+'errors'
+0
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+get_diagnostics
+diag
+●●●●●● 1mm □
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+results
+'tests'
+●●●●●● 2mm □
+t
+'passed'
+diag
+●●●●●● 1mm □△
+'logic_test_failure'
+t
+'name'
+': '
+t
+'detail'
+'deep_test_engine'
+●●●●●● 2mm □△
+Exception
+failed_tests
+●●●●●● 1mm □
+t
+t
+results
+'tests'
+t
+'passed'
+●●●●●● 2mm □
+failed_tests
+consensus_analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+failed_tests
+●●●●●● 2mm □△
+results
+'consensus_analysis'
+●●●●●● 1mm □
+consensus_analysis
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+il
+●●●●●● 1mm □△
+'system_health_monitoring'
+'tests_passed'
+'tests_failed'
+'pass_rate'
+results
+'passed'
+results
+'failed'
+results
+'pass_rate'
+results
+'failed'
+0
+'success'
+'failure'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'logic_test'
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_consensus_analyse_failures
+●●●●●● 1mm □△
+self
+failed_tests
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'\n        Full autonomous fix loop:\n          1. Kimi+Opus diagnose the failure\n          2. They generate a fix blueprint\n          3. Qwen builds the fix code\n          4. Grace compiles and tests it\n          5. Re-run the failing test to verify\n          6. Up to 4 attempts, then escalate to governance with full report\n        '
+failures_text
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+'- '
+t
+'name'
+': '
+t
+'detail'
+t
+failed_tests
+10
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+'diagnosis'
+'fix_attempted'
+'fix_succeeded'
+'attempts'
+'escalated_to_governance'
+'confidence'
+''
+●●●●●● 1mm □
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+analysis
+'diagnosis'
+●●●●●● 1mm □
+result
+2000
+analysis
+'confidence'
+●●●●●● 1mm □
+result
+Exception
+analysis
+'diagnosis'
+●●●●●● 1mm □
+'Consensus unavailable: '
+e
+●●●●●● 3mm △
+●●●●●● 1mm □△
+failed_tests
+analysis
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+4
+●●●●●● 2mm □△
+analysis
+'attempts'
+●●●●●● 1mm □
+attempt
+●●●●●● 3mm ○
+1
+analysis
+'fix_attempted'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+builder
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+error_ctx
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+attempt
+0
+error_ctx
+●●●●●● 1mm □
+'\nPrevious attempt '
+attempt
+' failed. Try a different approach.'
+fix_code
+●●●●●● 1mm □
+builder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+fix_code
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fix_code
+●●●●●● 2mm □△
+10
+●●●●●● 3mm □△○
+cognitive.grace_compiler
+●●●●●● 2mm □△○
+get_grace_compiler
+compile_result
+●●●●●● 1mm □
+get_grace_compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+fix_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+compile_result
+retest_passed
+●●●●●● 1mm □
+0
+retest_total
+●●●●●● 1mm □
+0
+t
+failed_tests
+5
+test_name
+●●●●●● 1mm □
+t
+'name'
+●●●●●● 1mm □△
+':'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+test_fn_name
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'_test_'
+test_name
+●●●●●● 2mm □△
+'_test_'
+test_name
+●●●●●● 2mm □
+attr_name
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+attr_name
+●●●●●● 1mm □△
+'_test_'
+●●●●●● 2mm □△
+test_name
+●●●●●● 1mm □△
+' '
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+':'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+attr_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retest_total
+1
+ok
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+retest_passed
+1
+Exception
+●●●●●● 2mm □
+retest_passed
+0
+retest_passed
+retest_total
+analysis
+'fix_succeeded'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+analysis
+'retest_passed'
+●●●●●● 1mm □
+retest_passed
+analysis
+'retest_total'
+●●●●●● 1mm □
+retest_total
+●●●●●● 3mm △
+●●●●●● 1mm □△
+failed_tests
+analysis
+fix_code
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+il
+●●●●●● 1mm □△
+'pipeline_self_repair'
+'attempts'
+'success'
+attempt
+●●●●●● 3mm ○
+1
+1.0
+'success'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+analysis
+Exception
+analysis
+'escalated_to_governance'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+api.governance_discussion_api
+●●●●●● 2mm □△○
+_save_discussion
+_ensure
+●●●●●● 2mm □△○
+uuid
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+did
+●●●●●● 1mm □
+'gov_test_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+discussion
+●●●●●● 1mm □
+'id'
+'title'
+'description'
+'request_type'
+'severity'
+'status'
+'created_at'
+'messages'
+'decision'
+did
+'Test Fix Failed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed_tests
+●●●●●● 2mm □△
+' logic test(s)'
+'Grace tried to fix '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed_tests
+●●●●●● 2mm □△
+' failing test(s) automatically.\n\nFailures:\n'
+failures_text
+'\n\nKimi+Opus diagnosis:\n'
+analysis
+'diagnosis'
+500
+'\n\nQwen attempted '
+analysis
+'attempts'
+' fixes — all failed.\nThis needs human review.'
+'test_fix_escalation'
+'high'
+'open'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'role'
+'content'
+'timestamp'
+'system'
+'Auto-escalated: '
+analysis
+'attempts'
+' fix attempts failed. Diagnosis: '
+analysis
+'diagnosis'
+500
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_save_discussion
+●●●●●● 1mm □△
+did
+discussion
+●●●●●● 2mm □△
+analysis
+'governance_discussion_id'
+●●●●●● 1mm □
+did
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'governance.test_escalation'
+'discussion_id'
+'failures'
+'attempts'
+did
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed_tests
+●●●●●● 2mm □△
+analysis
+'attempts'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+failed_tests
+analysis
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_save_test_playbook
+●●●●●● 1mm □△
+self
+failed_tests
+analysis
+fix_code
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+''
+'Save test fix attempt to playbook for learning.'
+playbook_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'test_playbook'
+playbook_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □
+analysis
+●●●●●● 1mm □△
+'fix_succeeded'
+●●●●●● 2mm □△
+'fixed'
+analysis
+●●●●●● 1mm □△
+'escalated_to_governance'
+●●●●●● 2mm □△
+'escalated'
+'failed'
+playbook_dir
+●●●●●● 3mm □△
+outcome
+'_'
+ts
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'failures'
+'diagnosis'
+'fix_code'
+'attempts'
+'fix_succeeded'
+'escalated'
+'timestamp'
+'name'
+'detail'
+t
+'name'
+t
+'detail'
+t
+failed_tests
+analysis
+●●●●●● 1mm □△
+'diagnosis'
+''
+●●●●●● 2mm □△
+fix_code
+2000
+analysis
+●●●●●● 1mm □△
+'attempts'
+0
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+'fix_succeeded'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □△
+'escalated_to_governance'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+start_stress_test
+●●●●●● 1mm □△
+self
+duration_minutes
+interval_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+5
+30
+'Start continuous stress testing in background.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'status'
+'already_running'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+_run_stress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+duration_minutes
+●●●●●● 2mm □△
+60
+cycle
+●●●●●● 1mm □
+0
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_time
+●●●●●● 3mm △
+cycle
+1
+cycle_start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mini_result
+●●●●●● 1mm □
+'cycle'
+'timestamp'
+'checks'
+cycle
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checks
+●●●●●● 1mm □
+'flash_cache'
+●●●●●● 3mm △
+'event_bus'
+●●●●●● 3mm △
+'circuit_breaker'
+●●●●●● 3mm △
+'compiler'
+●●●●●● 3mm △
+'sandbox'
+●●●●●● 3mm △
+passed
+●●●●●● 1mm □
+0
+name
+fn
+checks
+ok
+detail
+●●●●●● 1mm □
+fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mini_result
+'checks'
+●●●●●● 1mm □△
+'name'
+'ok'
+name
+ok
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+passed
+1
+Exception
+mini_result
+'checks'
+●●●●●● 1mm □△
+'name'
+'ok'
+name
+●●●●●● 1mm □
+●●●●●● 2mm □△
+mini_result
+'passed'
+●●●●●● 1mm □
+passed
+mini_result
+'total'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+checks
+●●●●●● 2mm □△
+mini_result
+'duration_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cycle_start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mini_result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+passed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+checks
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'stress_test.failure'
+'cycle'
+'passed'
+'total'
+cycle
+passed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+checks
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.autonomous_diagnostics
+●●●●●● 2mm □△○
+get_diagnostics
+failed_names
+●●●●●● 1mm □
+c
+'name'
+c
+mini_result
+'checks'
+c
+'ok'
+get_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'stress_test_failure'
+'Stress cycle '
+cycle
+': '
+', '
+●●●●●● 1mm □△
+failed_names
+●●●●●● 2mm □△
+' failed'
+'deep_test_engine'
+●●●●●● 2mm □△
+Exception
+time
+●●●●●● 1mm □△
+interval_seconds
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'duration_minutes'
+'interval_seconds'
+'started'
+duration_minutes
+interval_seconds
+●●●●●● 1mm □○
+●●●●●● 1mm □
+stop_stress_test
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the background stress test.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'status'
+'cycles_completed'
+'results'
+'stopped'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+10
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_stress_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current stress test status.'
+●●●●●● 3mm ○
+'running'
+'cycles_completed'
+'last_10'
+'all_passed'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+10
+●●●●●● 3mm △
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+'passed'
+r
+'total'
+r
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_test_flash_cache_logic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entry
+●●●●●● 2mm □
+'Register+get+remove: '
+entry
+'OK'
+'FAIL'
+●●●●●● 1mm □
+_test_flash_cache_keywords
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+'Python machine learning neural network deep learning'
+●●●●●● 2mm □△
+has_python
+●●●●●● 1mm □
+'python'
+kw
+●●●●●● 3mm ○
+has_python
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+3
+'Extracted '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+' keywords, python='
+has_python
+'found'
+'missing'
+●●●●●● 1mm □
+_test_flash_cache_search
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Search returned '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' results'
+●●●●●● 1mm □
+_test_trust_engine_score
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+'logic_test'
+'Logic Test'
+'test content'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+result
+●●●●●● 1mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'trust_score'
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+result
+score
+●●●●●● 1mm □
+'trust_score='
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'trust_score='
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+0
+score
+100
+'Score: '
+score
+●●●●●● 1mm □
+_test_trust_engine_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+te
+●●●●●● 1mm □△
+'tracking_test'
+'Track Test'
+'data'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Component tracked'
+●●●●●● 1mm □
+_test_event_bus_logic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+publish
+_subscribers
+received
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □
+received
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+subscribe
+●●●●●● 1mm □△
+'deep_test.logic'
+handler
+●●●●●● 2mm □△
+publish
+●●●●●● 1mm □△
+'deep_test.logic'
+'test'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+_subscribers
+●●●●●● 1mm □△
+'deep_test.logic'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+1
+received
+0
+'test'
+●●●●●● 3mm □△○
+'Received '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+' events'
+●●●●●● 1mm □
+_test_event_bus_wildcard
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+subscribe
+publish
+_subscribers
+received
+●●●●●● 1mm □
+subscribe
+●●●●●● 1mm □△
+'deep_wild.*'
+received
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+publish
+●●●●●● 1mm □△
+'deep_wild.test'
+●●●●●● 2mm □△
+_subscribers
+●●●●●● 1mm □△
+'deep_wild.*'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+1
+'Wildcard matched: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_circuit_breaker_logic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+ok
+●●●●●● 1mm □
+enter_loop
+●●●●●● 1mm □△
+'trust_homeostasis'
+●●●●●● 2mm □△
+exit_loop
+●●●●●● 1mm □△
+'trust_homeostasis'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ok
+ok
+'Enter+exit: OK'
+'BLOCKED'
+●●●●●● 1mm □
+_test_circuit_breaker_depth
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+enter_loop
+●●●●●● 1mm □△
+'emergency_response_coordination'
+●●●●●● 2mm □△
+blocked
+●●●●●● 1mm □
+enter_loop
+●●●●●● 1mm □△
+'emergency_response_coordination'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+4
+●●●●●● 2mm □△
+exit_loop
+●●●●●● 1mm □△
+'emergency_response_coordination'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+blocked
+blocked
+'Depth limit enforced'
+'NOT enforced'
+●●●●●● 1mm □
+_test_circuit_breaker_count
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+NAMED_LOOPS
+count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+NAMED_LOOPS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+40
+count
+' loops registered'
+●●●●●● 1mm □
+_test_unified_memory_logic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+stats
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Stats has '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stats
+●●●●●● 2mm □△
+' entries'
+●●●●●● 1mm □
+_test_unified_memory_search
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+results
+'Search returned total: '
+results
+●●●●●● 1mm □△
+'total'
+'?'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_compass_logic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+c
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+explanation
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'pipeline'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+explanation
+●●●●●● 2mm □△
+50
+'Explanation: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+explanation
+●●●●●● 2mm □△
+' chars'
+●●●●●● 1mm □
+_test_compass_find
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+c
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'code generation'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' components'
+●●●●●● 1mm □
+_test_compass_predict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+c
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+issues
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+' dependency issues'
+●●●●●● 1mm □
+_test_compiler_valid
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.grace_compiler
+●●●●●● 2mm □△○
+get_grace_compiler
+r
+●●●●●● 1mm □
+get_grace_compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+"def hello(): return 'world'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+r
+0
+'Trust: '
+r
+', errors: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_compiler_dangerous
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.grace_compiler
+●●●●●● 2mm □△○
+get_grace_compiler
+r
+●●●●●● 1mm □
+get_grace_compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+"import os; os.system('rm -rf /')"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+0
+'Blocked '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+' dangerous calls'
+●●●●●● 1mm □
+_test_compiler_auto_import
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.grace_compiler
+●●●●●● 2mm □△○
+get_grace_compiler
+r
+●●●●●● 1mm □
+get_grace_compiler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'def test(): trust_engine = None'
+●●●●●● 2mm □△
+has_warning
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'auto-imported'
+w
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'trust_engine'
+w
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+r
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Warnings: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_sandbox_valid
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.code_sandbox
+●●●●●● 2mm □△○
+execute_sandboxed
+r
+●●●●●● 1mm □
+execute_sandboxed
+●●●●●● 1mm □△
+"print('hello from sandbox')"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+'hello'
+r
+'Output: '
+r
+30
+●●●●●● 1mm □
+_test_sandbox_timeout
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.code_sandbox
+●●●●●● 2mm □△○
+execute_sandboxed
+r
+●●●●●● 1mm □
+execute_sandboxed
+●●●●●● 1mm □△
+'import time; time.sleep(100)'
+●●●●●● 2mm □△
+timed_out
+●●●●●● 1mm □
+r
+'timeout'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'timed out'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+timed_out
+'Timeout enforced: '
+r
+50
+●●●●●● 1mm □
+_test_sandbox_static
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.code_sandbox
+●●●●●● 2mm □△○
+static_analyse
+warnings
+●●●●●● 1mm □
+static_analyse
+●●●●●● 1mm □△
+"import os; os.system('test')"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+warnings
+●●●●●● 2mm □△
+0
+'Caught '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+warnings
+●●●●●● 2mm □△
+' dangerous patterns'
+●●●●●● 1mm □
+_test_reverse_knn_scan
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+get_reverse_knn
+r
+●●●●●● 1mm □
+get_reverse_knn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'summary'
+r
+'Gaps: '
+r
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_gaps'
+'?'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_reverse_knn_queries
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.reverse_knn
+●●●●●● 2mm □△○
+get_reverse_knn
+knn
+●●●●●● 1mm □
+get_reverse_knn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knn
+●●●●●● 1mm □△
+'deep_test_query'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Query logged'
+●●●●●● 1mm □
+_test_intelligence_ml
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+il
+●●●●●● 1mm □△
+'deep_test'
+'metric'
+1.0
+'success'
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+il
+●●●●●● 1mm □△
+'deep_test'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Patterns: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_intelligence_ns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.intelligence_layer
+●●●●●● 2mm □△○
+get_intelligence_layer
+il
+●●●●●● 1mm □
+get_intelligence_layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+il
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+stats
+'Rules: '
+stats
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_reporting
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.reporting_engine
+●●●●●● 2mm □△○
+generate_report
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+generate_report
+●●●●●● 2mm □△
+'Callable'
+●●●●●● 1mm □
+_test_comms_human
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.communication_layer
+●●●●●● 2mm □△○
+format_for_target
+r
+●●●●●● 1mm □
+format_for_target
+●●●●●● 1mm □△
+'status'
+'score'
+'healthy'
+95
+'human'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+r
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+10
+'Formatted: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+' chars'
+●●●●●● 1mm □
+_test_comms_system
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.communication_layer
+●●●●●● 2mm □△○
+format_for_target
+r
+●●●●●● 1mm □
+format_for_target
+●●●●●● 1mm □△
+'test message'
+'system'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'message'
+r
+'Keys: '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_override_analyse
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.user_intent_override
+●●●●●● 2mm □△○
+get_override_system
+r
+●●●●●● 1mm □
+get_override_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'delete everything'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+'destructive_operation'
+'Action: '
+r
+●●●●●● 1mm □
+_test_consensus_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+get_available_models
+models
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+4
+'Models: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_loop_orchestrator
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.loop_orchestrator
+●●●●●● 2mm □△○
+get_loop_orchestrator
+composites
+●●●●●● 1mm □
+get_loop_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+composites
+●●●●●● 2mm □△
+8
+'Composites: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+composites
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_test_live_integration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.live_integration
+●●●●●● 2mm □△○
+get_citizenship_ledger
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_citizenship_ledger
+●●●●●● 2mm □△
+'Callable'
+●●●●●● 1mm □
+_test_diagnostics_smoke
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.test_framework
+●●●●●● 2mm □△○
+smoke_test
+r
+●●●●●● 1mm □
+smoke_test
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+'passed'
+10
+'Smoke: '
+r
+'passed'
+'/'
+r
+'passed'
+●●●●●● 3mm ○
+r
+'failed'
+●●●●●● 1mm □
+_save_results
+●●●●●● 1mm □△
+self
+test_type
+results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+RESULTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+RESULTS_DIR
+●●●●●● 3mm □△
+test_type
+'_'
+ts
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_deep_test_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+DeepTestEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DeepTestEngine

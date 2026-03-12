@@ -1,0 +1,563 @@
+## middleware.py
+'\nGenesis Key Middleware for FastAPI.\n\nAutomatically tracks all API requests and responses with Genesis Keys.\nAssigns Genesis IDs to users on first access.\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 3mm □△○
+starlette.middleware.base
+●●●●●● 2mm □△○
+BaseHTTPMiddleware
+●●●●●● 3mm □△○
+starlette.requests
+●●●●●● 2mm □△○
+Request
+●●●●●● 3mm □△○
+starlette.responses
+●●●●●● 2mm □△○
+Response
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+FastAPI
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+●●●●●● 3mm □△○
+genesis.kb_integration
+●●●●●● 2mm □△○
+get_kb_integration
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+ImportError
+settings
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKeyMiddleware
+●●●●●● 3mm □△
+BaseHTTPMiddleware
+BaseHTTPMiddleware
+'\n    Middleware that tracks all API requests with Genesis Keys.\n\n    Features:\n    - Assigns Genesis ID to users on first access\n    - Tracks all inputs (requests) and outputs (responses)\n    - Creates session IDs for tracking user journeys\n    - Auto-populates to knowledge base\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+app
+●●●●●● 2mm □△
+FastAPI
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_kb_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Request
+●●●●●● 2mm □△○
+time
+t0
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+genesis_id
+●●●●●● 3mm □△
+●●●●●● 1mm □
+session_id
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+t1
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+request_key
+●●●●●● 1mm □
+●●●●●● 2mm □
+request_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+settings
+settings
+logger
+●●●●●● 1mm □△
+'Failed to create request Genesis Key: '
+e
+●●●●●● 2mm □△
+t2
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+t3
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'genesis_id'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+body_bytes
+●●●●●● 1mm □
+b''
+max_capture
+●●●●●● 1mm □
+50000
+chunk
+response
+body_bytes
+chunk
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+body_bytes
+●●●●●● 2mm □△
+max_capture
+body_bytes
+●●●●●● 1mm □
+body_bytes
+max_capture
+●●●●●● 3mm ○
+b' ... [truncated]'
+Exception
+●●●●●● 3mm □△○
+starlette.responses
+●●●●●● 2mm □△○
+Response
+●●●●●● 1mm □
+StarletteResponse
+response
+●●●●●● 1mm □
+StarletteResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+output_payload
+●●●●●● 1mm □
+'status_code'
+'duration_ms'
+'headers'
+response
+duration_ms
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+body_bytes
+●●●●●● 2mm □△○
+json
+output_payload
+'body'
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+body_bytes
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+output_payload
+'body_preview'
+●●●●●● 1mm □
+body_bytes
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+2000
+request_key_id
+●●●●●● 1mm □
+request_key
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+request_key
+'key_id'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+'X-Genesis-ID'
+●●●●●● 1mm □
+genesis_id
+response
+'X-Session-ID'
+●●●●●● 1mm □
+session_id
+●●●●●● 2mm □
+request_key_id
+response
+'X-Genesis-Request-Key'
+●●●●●● 1mm □
+request_key_id
+Exception
+●●●●●● 2mm □
+settings
+settings
+logger
+●●●●●● 1mm □△
+'Failed to create response Genesis Key: '
+e
+●●●●●● 2mm □△
+t4
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[LATENCY TRACE] '
+●●●●●● 3mm □△
+' - Total: '
+t4
+●●●●●● 1mm □△
+t0
+'.3f'
+'s | Setup: '
+t1
+●●●●●● 1mm □△
+t0
+'.3f'
+'s | ReqKey: '
+t2
+●●●●●● 1mm □△
+t1
+'.3f'
+'s | Route: '
+t3
+●●●●●● 1mm □△
+t2
+'.3f'
+'s | ResKey: '
+t4
+●●●●●● 1mm □△
+t3
+'.3f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □
+_get_or_create_genesis_id
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+Request
+'\n        Get or create Genesis ID for user.\n\n        Priority:\n        1. X-Genesis-ID header\n        2. genesis_id cookie\n        3. Create new Genesis ID\n        '
+genesis_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-Genesis-ID'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_id
+genesis_id
+●●●●●● 1mm □△
+'GU-'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_id
+genesis_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'genesis_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_id
+genesis_id
+●●●●●● 1mm □△
+'GU-'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_id
+seed
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+''
+'|'
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'user-agent'
+''
+●●●●●● 2mm □△
+'|'
+●●●●●● 3mm □△
+genesis_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+seed
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created new Genesis ID: '
+genesis_id
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+settings
+settings
+logger
+●●●●●● 1mm □△
+'Failed to create user profile: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_or_create_session_id
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+Request
+"\n        Get or create session ID.\n\n        Sessions track a user's journey through the application.\n        "
+session_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-Session-ID'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id
+●●●●●● 3mm ○
+session_id
+session_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'session_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id
+●●●●●● 3mm ○
+session_id
+hour_bucket
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d-%H'
+●●●●●● 2mm □△
+gid
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+'genesis_id'
+''
+●●●●●● 2mm □△
+''
+seed
+●●●●●● 1mm □
+gid
+'|'
+●●●●●● 3mm □△
+'|'
+hour_bucket
+session_id
+●●●●●● 1mm □
+'SS-'
+hashlib
+●●●●●● 1mm □△
+seed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 3mm ○
+session_id
+●●●●●● 1mm ○
+Request
+'Extract request body data if available.'
+●●●●●● 2mm □
+●●●●●● 3mm □△
+'POST'
+'PUT'
+'PATCH'
+body
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+body
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+body
+●●●●●● 2mm □△
+json
+UnicodeDecodeError
+●●●●●● 3mm ○
+'raw'
+body
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+1000
+Exception
+logger
+●●●●●● 1mm □△
+'Could not extract request data: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_should_skip_tracking
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+Request
+'Determine if request should be skipped from tracking.'
+path
+●●●●●● 1mm □
+●●●●●● 3mm □△
+skip_paths
+●●●●●● 1mm □
+'/health'
+'/docs'
+'/openapi.json'
+'/favicon.ico'
+'/static/'
+skip_path
+skip_paths
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+skip_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+add_genesis_middleware
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+FastAPI
+'\n    Add Genesis Key middleware to FastAPI app.\n\n    Call this during app initialization:\n        app = FastAPI()\n        add_genesis_middleware(app)\n    '
+app
+●●●●●● 1mm □△
+GenesisKeyMiddleware
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Genesis Key middleware enabled - tracking all requests'
+●●●●●● 2mm □△

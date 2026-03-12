@@ -1,0 +1,2117 @@
+## service.py
+'\nText ingestion service for processing documents and storing embeddings.\nHandles chunking, embedding generation, and vector storage.\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+Dict
+Any
+Tuple
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+database
+●●●●●● 2mm □△○
+session
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+cognitive.decorators
+●●●●●● 2mm □△○
+cognitive_operation
+COGNITIVE_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+COGNITIVE_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+cognitive_operation
+●●●●●● 1mm □△
+operation_name
+●●●●●● 2mm □△
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+func
+●●●●●● 3mm ○
+decorator
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TextChunker
+'Handles text chunking with semantic and structure-aware strategies.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+chunk_size
+chunk_overlap
+embedding_model
+use_semantic_chunking
+similarity_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 3mm △
+●●●●●● 3mm ○
+512
+100
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+0.5
+'\n        Initialize text chunker with semantic awareness.\n        \n        Args:\n            chunk_size: Target number of characters per chunk\n            chunk_overlap: Number of overlapping characters between chunks\n            embedding_model: Optional EmbeddingModel for semantic chunking\n            use_semantic_chunking: Whether to use embedding-based semantic chunking\n            similarity_threshold: Similarity threshold for semantic boundaries (0.0-1.0)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_overlap
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_semantic_chunking
+embedding_model
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+similarity_threshold
+●●●●●● 1mm □
+_split_by_structure
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Split text by structural elements (paragraphs, sentences).\n        \n        Args:\n            text: Text to split\n            \n        Returns:\n            List of structural segments\n        '
+paragraphs
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+paragraphs
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+paragraphs
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+paragraph
+paragraphs
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+paragraph
+●●●●●● 2mm □△
+●●●●●● 3mm △
+sentences
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(?<=[.!?])\\s+'
+paragraph
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+sentences
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+segments
+●●●●●● 1mm □△
+paragraph
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+segments
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_cosine_similarity
+●●●●●● 1mm □△
+self
+a
+b
+●●●●●● 2mm □△
+np
+np
+'Calculate cosine similarity between two vectors.'
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error calculating cosine similarity: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_semantic_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Perform semantic chunking using embeddings.\n        \n        Splits text into chunks based on semantic boundaries detected\n        by comparing embeddings of adjacent segments.\n        \n        Args:\n            text: Text to chunk\n            \n        Returns:\n            List of semantic chunks with metadata\n        '
+segments
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+segments
+●●●●●● 3mm ○
+'text'
+'char_start'
+'char_end'
+text
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+segment_texts
+●●●●●● 1mm □
+s
+s
+segments
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □
+segment_texts
+●●●●●● 3mm ○
+'text'
+'char_start'
+'char_end'
+text
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+segment_texts
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+current_chunk
+●●●●●● 1mm □
+current_length
+●●●●●● 1mm □
+0
+current_char_start
+●●●●●● 1mm □
+0
+i
+segment
+●●●●●● 2mm □
+●●●●●● 1mm □△
+segment_texts
+●●●●●● 2mm □△
+current_chunk
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+current_length
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+should_split
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+current_length
+●●●●●● 3mm △
+should_split
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segment_texts
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+current_length
+●●●●●● 3mm △
+●●●●●● 1mm □○
+2
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings
+i
+embeddings
+i
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+similarity
+●●●●●● 3mm △
+should_split
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+should_split
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segment_texts
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+chunk_text
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+current_chunk
+●●●●●● 2mm □△
+chunk_char_end
+●●●●●● 1mm □
+current_char_start
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk_text
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+'char_start'
+'char_end'
+chunk_text
+current_char_start
+chunk_char_end
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segment_texts
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+overlap_text
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk_text
+●●●●●● 2mm □△
+●●●●●● 3mm △
+chunk_text
+●●●●●● 3mm △
+chunk_text
+current_chunk
+●●●●●● 1mm □
+overlap_text
+current_length
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+overlap_text
+●●●●●● 2mm □△
+current_char_start
+●●●●●● 1mm □
+chunk_char_end
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □
+current_chunk
+●●●●●● 1mm □
+●●●●●● 3mm □
+current_length
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[CHUNKING] Semantic chunking produced '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segments
+●●●●●● 2mm □△
+' segments'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+Exception
+logger
+●●●●●● 1mm □△
+'Semantic chunking failed, falling back to simple chunking: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_simple_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Simple character-based chunking with overlap (fallback).\n        \n        Args:\n            text: Text to chunk\n            \n        Returns:\n            List of chunks\n        '
+chunks
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+start
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+text
+start
+end
+●●●●●● 2mm □
+chunk_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+'char_start'
+'char_end'
+chunk_text
+start
+end
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CHUNKING] Simple chunking produced '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+chunk_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Split text into chunks using the configured strategy.\n        \n        Uses embedding-based semantic chunking if available,\n        falls back to simple character-based chunking otherwise.\n        \n        Args:\n            text: Text to chunk\n            \n        Returns:\n            List of chunk dictionaries with content and position info\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[CHUNKING] Using embedding-based semantic chunking'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[CHUNKING] Using simple character-based chunking'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+TextIngestionService
+'Service for ingesting text documents into vector database.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+collection_name
+chunk_size
+chunk_overlap
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+EmbeddingModel
+'documents'
+512
+100
+●●●●●● 2mm □
+'\n        Initialize ingestion service.\n        \n        Args:\n            collection_name: Name of Qdrant collection for documents\n            chunk_size: Size of text chunks\n            chunk_overlap: Overlap between chunks\n            embedding_model: EmbeddingModel instance for generating embeddings\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+collection_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+TextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+ConfidenceScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+embedding_dim
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+qdrant_client
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Always return the current live Qdrant singleton (handles reconnects).'
+●●●●●● 3mm ○
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_get_db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n        Get a database session, initializing the session factory if needed.\n        \n        Returns:\n            SQLAlchemy Session instance\n        '
+●●●●●● 2mm □
+db_session
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+db_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+compute_file_hash
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Compute SHA256 hash of content.\n\n        Args:\n            content: Text content\n\n        Returns:\n            Hex digest of SHA256 hash\n        '
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+ingest_text_fast
+●●●●●● 1mm □△
+self
+text_content
+filename
+source
+upload_method
+source_type
+description
+tags
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'upload'
+'ui-upload'
+'user_generated'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Fast ingestion without confidence scoring (for quick uploads).\n        \n        Args:\n            text_content: The text content to ingest\n            filename: Name of the file/document\n            source: Source of the document\n            upload_method: How the document was uploaded\n            source_type: Type of source\n            description: Optional description\n            tags: Optional tags\n            metadata: Additional metadata\n            \n        Returns:\n            Tuple of (document_id, status_message)\n        '
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Starting fast ingestion for: '
+filename
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Text content length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Metadata: '
+metadata
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Got database session'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Computing content hash...'
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Content hash: '
+content_hash
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Checking for duplicate documents...'
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Document with hash '
+content_hash
+' already exists (ID: '
+existing
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+existing
+'Document already ingested'
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] No duplicates found, proceeding with ingestion'
+●●●●●● 2mm □△
+doc_metadata
+●●●●●● 1mm □
+'user_metadata'
+'original_source'
+'upload_timestamp'
+'source_type'
+metadata
+source
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_type
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Creating document record...'
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+document
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [OK] Created document record with ID: '
+document_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Chunking text with chunk_size=512, overlap=50...'
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [OK] Chunked text into '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks'
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+document
+document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_id_counter
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+document_id
+'000'
+●●●●●● 2mm □△
+vectors_to_upsert
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Starting batch embedding generation for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Embedding model not available!'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Embedding model not available'
+chunk_texts
+●●●●●● 1mm □
+chunk
+'text'
+chunk
+chunks
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'embedding_debug.log'
+'a'
+●●●●●● 2mm □△
+debug_log
+debug_log
+●●●●●● 1mm □△
+chunk_texts
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Batch embedding '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk_texts
+●●●●●● 2mm □△
+' texts...'
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □
+●●●●●● 2mm □
+batch_size
+●●●●●● 1mm □
+32
+all_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk_texts
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [OK] Generated batch embeddings for all '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks (batch_size='
+batch_size
+')'
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 2mm □
+'out of memory'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [WARN] CUDA OOM with batch_size='
+batch_size
+', reducing batch size...'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □
+smaller_batch_size
+●●●●●● 1mm □
+4
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk_texts
+●●●●●● 2mm □△
+smaller_batch_size
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+chunk_texts
+i
+i
+●●●●●● 3mm ○
+smaller_batch_size
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Embedding batch '
+i
+●●●●●● 1mm □○
+smaller_batch_size
+●●●●●● 3mm ○
+1
+'...'
+●●●●●● 2mm □△
+batch_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+batch
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □△
+batch_embeddings
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [OK] Generated batch embeddings for all '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks (fallback batch_size='
+smaller_batch_size
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Error during embedding: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Embedding generation failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+chunk_index
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+chunk
+'text'
+embedding_vector
+●●●●●● 1mm □
+all_embeddings
+chunk_index
+vector_id
+●●●●●● 1mm □
+vector_id_counter
+●●●●●● 3mm ○
+chunk_index
+chunk_metadata
+●●●●●● 1mm □
+'document_id'
+'chunk_index'
+'text'
+'filename'
+'source'
+'confidence_score'
+'created_at'
+document_id
+chunk_index
+chunk_text
+filename
+source
+0.5
+created_at
+vectors_to_upsert
+●●●●●● 1mm □△
+vector_id
+embedding_vector
+chunk_metadata
+●●●●●● 2mm □△
+chunk_record
+●●●●●● 1mm □
+DocumentChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+chunk_record
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Storing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vectors_to_upsert
+●●●●●● 2mm □△
+' vectors in Qdrant...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vectors_to_upsert
+batch_size
+●●●●●● 1mm □
+100
+batch_start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vectors_to_upsert
+●●●●●● 2mm □△
+batch_size
+●●●●●● 2mm □△
+batch_end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+batch_start
+●●●●●● 3mm ○
+batch_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vectors_to_upsert
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+vectors_to_upsert
+batch_start
+batch_end
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Upserting batch '
+batch_start
+'-'
+batch_end
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+batch
+●●●●●● 2mm □△
+' vectors)...'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Failed to store embeddings batch '
+batch_start
+'-'
+batch_end
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Failed to store embeddings (batch '
+batch_start
+'-'
+batch_end
+')'
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [OK] Successfully stored '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vectors_to_upsert
+●●●●●● 2mm □△
+' vectors in Qdrant'
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+'completed'
+document
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Committing database transaction...'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [OK][OK][OK] INGESTION COMPLETE [OK][OK][OK]'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Document '
+document_id
+': '
+filename
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST]   - '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST]   - '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+' characters'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST]   - Stored in PostgreSQL + Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.components.version_control_connector
+●●●●●● 2mm □△○
+get_version_control_connector
+vc_connector
+●●●●●● 1mm □
+get_version_control_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+real_file_path
+●●●●●● 1mm □
+filename
+●●●●●● 2mm □
+metadata
+'file_path'
+metadata
+real_file_path
+●●●●●● 1mm □
+metadata
+'file_path'
+version_result
+●●●●●● 1mm □
+vc_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+version_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [VERSION_CONTROL] Tracked: '
+filename
+' - Genesis Key: '
+version_result
+●●●●●● 1mm □△
+'genesis_key'
+●●●●●● 2mm □△
+', Version: '
+version_result
+●●●●●● 1mm □△
+'version_number'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [VERSION_CONTROL] Skipped: '
+version_result
+●●●●●● 1mm □△
+'reason'
+'Unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [VERSION_CONTROL] Failed to track version: '
+vc_error
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+document_id
+'Document ingested successfully'
+Exception
+●●●●●● 2mm □
+settings
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Ingestion error suppressed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Suppressed error details:'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Ingestion failed (error suppressed)'
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] [FAIL][FAIL][FAIL] ERROR DURING INGESTION [FAIL][FAIL][FAIL]'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Error details: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Ingestion failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[INGEST_FAST] Database session closed'
+●●●●●● 2mm □△
+cognitive_operation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tuple
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+ingest_text
+●●●●●● 1mm □△
+self
+text_content
+filename
+source
+upload_method
+source_type
+description
+tags
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'upload'
+'ui-upload'
+'user_generated'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n        Ingest text content into database and vector store with automatic confidence scoring.\n        \n        Confidence score is automatically calculated based on:\n        - Source type/reliability\n        - Content quality indicators\n        - Consensus with existing knowledge\n        - Recency of content\n        \n        Args:\n            text_content: The text content to ingest\n            filename: Name of the file/document\n            source: Source of the document (e.g., 'upload', 'url', 'api')\n            upload_method: How the document was uploaded (ui-upload, ui-paste, api, etc.)\n            source_type: Type of source for reliability calculation (official_docs, academic_paper, verified_tutorial, trusted_blog, community_qa, user_generated, unverified)\n            description: Optional description of the document\n            tags: Optional list of tags for categorization\n            metadata: Additional metadata dictionary\n            \n        Returns:\n            Tuple of (document_id, status_message)\n        "
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+logger
+●●●●●● 1mm □△
+'Document with hash '
+content_hash
+' already exists'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+existing
+'Document already ingested'
+doc_confidence_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_metadata
+●●●●●● 1mm □
+'user_metadata'
+'original_source'
+'upload_timestamp'
+'source_type'
+metadata
+source
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_type
+document
+●●●●●● 1mm □
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+document
+●●●●●● 2mm □
+doc_confidence_data
+●●●●●● 1mm □△
+'contradictions_detected'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Document '
+document_id
+' ('
+filename
+'): Found '
+doc_confidence_data
+●●●●●● 1mm □△
+'contradiction_count'
+0
+●●●●●● 2mm □△
+' semantic contradictions. Confidence score reduced accordingly.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created document record: '
+document_id
+' ('
+filename
+'), upload_method='
+upload_method
+', source_type='
+source_type
+', confidence_score='
+doc_confidence_data
+'confidence_score'
+'.3f'
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Chunked text into '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks'
+●●●●●● 2mm □△
+vector_id_counter
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+document_id
+'000'
+●●●●●● 2mm □△
+vectors_to_upsert
+●●●●●● 1mm □
+chunk_confidence_scores
+●●●●●● 1mm □
+all_chunk_texts
+●●●●●● 1mm □
+chunk
+'text'
+chunk
+chunks
+chunk_index
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+chunk
+'text'
+chunk_confidence_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk_confidence_scores
+●●●●●● 1mm □△
+chunk_confidence_data
+'confidence_score'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk_confidence_data
+●●●●●● 1mm □△
+'contradictions_detected'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Chunk '
+chunk_index
+' in document '
+document_id
+': Found '
+chunk_confidence_data
+●●●●●● 1mm □△
+'contradiction_count'
+0
+●●●●●● 2mm □△
+' semantic contradictions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk_text
+●●●●●● 2mm □△
+embedding_vector
+●●●●●● 1mm □
+embeddings
+0
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Embedding model not available'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Embedding model not available'
+vector_id
+●●●●●● 1mm □
+vector_id_counter
+●●●●●● 3mm ○
+chunk_index
+chunk_metadata
+●●●●●● 1mm □
+'document_id'
+'chunk_index'
+'filename'
+'char_start'
+'char_end'
+'text'
+'confidence_score'
+document_id
+chunk_index
+filename
+chunk
+'char_start'
+chunk
+'char_end'
+chunk_text
+chunk_confidence_data
+'confidence_score'
+metadata
+doc_chunk
+●●●●●● 1mm □
+DocumentChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc_chunk
+●●●●●● 2mm □△
+vectors_to_upsert
+●●●●●● 1mm □△
+vector_id
+embedding_vector
+chunk_metadata
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Calculated confidence scores for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+' chunks. Average: '
+np
+●●●●●● 1mm □△
+chunk_confidence_scores
+●●●●●● 2mm □△
+'.3f'
+', Min: '
+np
+●●●●●● 1mm □△
+chunk_confidence_scores
+●●●●●● 2mm □△
+'.3f'
+', Max: '
+np
+●●●●●● 1mm □△
+chunk_confidence_scores
+●●●●●● 2mm □△
+'.3f'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vectors_to_upsert
+success
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'Failed to upsert vectors to Qdrant'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Failed to store embeddings'
+document
+●●●●●● 1mm □
+'completed'
+document
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OK] Successfully ingested document: '
+document_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+document_id
+'Document ingested successfully'
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Error during ingestion: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Ingestion failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tuple
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+search_documents
+●●●●●● 1mm □△
+self
+query_text
+limit
+score_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+10
+0.5
+'\n        Search for similar document chunks.\n        \n        Args:\n            query_text: Query text\n            limit: Maximum number of results\n            score_threshold: Minimum similarity score\n            \n        Returns:\n            List of matching chunks with metadata\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Embedding model not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query_text
+●●●●●● 2mm □△
+0
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enriched_results
+●●●●●● 1mm □
+result
+results
+chunk
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+'id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+enriched_results
+●●●●●● 1mm □△
+'vector_id'
+'score'
+'chunk_id'
+'document_id'
+'chunk_index'
+'text'
+'metadata'
+result
+'id'
+result
+'score'
+chunk
+chunk
+chunk
+chunk
+chunk
+json
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+enriched_results
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Search error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_document_info
+●●●●●● 1mm □△
+self
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n        Get document information and chunk list with confidence scores.\n        \n        Args:\n            document_id: ID of the document\n            \n        Returns:\n            Dictionary with document info or None if not found\n        '
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+●●●●●● 3mm ○
+●●●●●● 2mm □
+chunks
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'filename'
+'source'
+'upload_method'
+'confidence_score'
+'source_reliability'
+'content_quality'
+'consensus_score'
+'recency_score'
+'description'
+'tags'
+'status'
+'total_chunks'
+'text_length'
+'created_at'
+'updated_at'
+'chunks'
+document
+document
+document
+document
+document
+document
+document
+document
+document
+document
+document
+json
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+document
+document
+document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'id'
+'index'
+'text_length'
+'vector_id'
+'confidence_score'
+'consensus_similarities'
+c
+c
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+c
+c
+json
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+chunks
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_documents
+●●●●●● 1mm □△
+self
+status
+source
+limit
+offset
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+100
+0
+'\n        List documents with optional filtering.\n        \n        Args:\n            status: Filter by status (pending, processing, completed, failed)\n            source: Filter by source\n            limit: Number of results\n            offset: Result offset\n            \n        Returns:\n            List of document summaries\n        '
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+Document
+status
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+Document
+source
+●●●●●● 2mm □△
+documents
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+offset
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'filename'
+'source'
+'upload_method'
+'confidence_score'
+'description'
+'tags'
+'status'
+'total_chunks'
+'text_length'
+'created_at'
+'updated_at'
+doc
+doc
+doc
+doc
+doc
+doc
+doc
+json
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+doc
+doc
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+documents
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+delete_document
+●●●●●● 1mm □△
+self
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n        Delete a document and its chunks.\n        \n        Args:\n            document_id: ID of document to delete\n            \n        Returns:\n            Tuple of (success, message)\n        '
+db
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Document not found'
+chunks
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_ids
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+chunks
+c
+●●●●●● 2mm □
+vector_ids
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OK] Deleted document: '
+document_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Document deleted successfully'
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Error deleting document: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Deletion failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○

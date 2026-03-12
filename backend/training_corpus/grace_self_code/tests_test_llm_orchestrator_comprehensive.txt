@@ -1,0 +1,3720 @@
+## test_llm_orchestrator_comprehensive.py
+'\nComprehensive Test Suite for LLM Orchestrator Module\n=====================================================\nTests for LLMOrchestrator, MultiLLMClient, HallucinationGuard,\nCognitiveEnforcer, and related components.\n\nCoverage:\n- LLMTaskRequest and LLMTaskResult dataclasses\n- LLMOrchestrator initialization\n- Task execution pipeline\n- Cognitive framework enforcement\n- Hallucination mitigation\n- Genesis Key assignment\n- Learning memory integration\n- Query methods\n- MultiLLMClient operations\n- Rate limiting\n- Error handling\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+AsyncMock
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 2mm □△○
+sys
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'sqlalchemy'
+●●●●●● 1mm □
+mock_sqlalchemy
+sys
+'sqlalchemy.orm'
+●●●●●● 1mm □
+mock_sqlalchemy
+mock_ollama
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_ollama
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_ollama
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'ollama_client'
+●●●●●● 1mm □
+mock_ollama
+sys
+'ollama_client.client'
+●●●●●● 1mm □
+mock_ollama
+mock_requests
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'requests'
+●●●●●● 1mm □
+mock_requests
+mock_settings
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_settings
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'settings'
+●●●●●● 1mm □
+mock_settings
+mock_genesis
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_genesis
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_genesis
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_genesis
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'genesis'
+●●●●●● 1mm □
+mock_genesis
+sys
+'genesis.cognitive_layer1_integration'
+●●●●●● 1mm □
+mock_genesis
+mock_cognitive
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cognitive
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cognitive
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'cognitive'
+●●●●●● 1mm □
+mock_cognitive
+sys
+'cognitive.learning_memory'
+●●●●●● 1mm □
+mock_cognitive
+mock_embedding
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_embedding
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'embedding'
+●●●●●● 1mm □
+mock_embedding
+mock_confidence_scorer
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_confidence_scorer
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_confidence_scorer
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_confidence_scorer
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_confidence_scorer
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'confidence_scorer'
+●●●●●● 1mm □
+mock_confidence_scorer
+sys
+'confidence_scorer.confidence_scorer'
+●●●●●● 1mm □
+mock_confidence_scorer
+sys
+'confidence_scorer.contradiction_detector'
+●●●●●● 1mm □
+mock_confidence_scorer
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TaskType
+●●●●●● 3mm □△
+Enum
+Enum
+'Task types for LLM operations.'
+GENERAL
+●●●●●● 1mm □
+'general'
+CODE_GENERATION
+●●●●●● 1mm □
+'code_generation'
+CODE_REVIEW
+●●●●●● 1mm □
+'code_review'
+DEBUGGING
+●●●●●● 1mm □
+'debugging'
+EXPLANATION
+●●●●●● 1mm □
+'explanation'
+REASONING
+●●●●●● 1mm □
+'reasoning'
+VALIDATION
+●●●●●● 1mm □
+'validation'
+●●●●●● 2mm △
+MockVerificationResult
+'Mock verification result.'
+is_verified
+●●●●●● 3mm △
+confidence_score
+●●●●●● 3mm ○
+trust_score
+●●●●●● 3mm ○
+final_content
+●●●●●● 1mm ○
+verification_details
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+MockCognitiveConstraints
+'Mock cognitive constraints.'
+max_complexity
+●●●●●● 3mm ○
+0.5
+require_reversibility
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+min_immediate_value
+●●●●●● 3mm ○
+0.3
+dataclass
+●●●●●● 2mm △
+TestLLMTaskRequest
+'Test LLMTaskRequest dataclass.'
+●●●●●● 1mm □
+test_basic_task_request
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a basic task request.'
+●●●●●● 2mm △
+LLMTaskRequest
+task_id
+●●●●●● 1mm ○
+prompt
+●●●●●● 1mm ○
+task_type
+TaskType
+user_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+require_verification
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_consensus
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_grounding
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+enable_learning
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+system_prompt
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+context_documents
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+cognitive_constraints
+●●●●●● 2mm □○
+MockCognitiveConstraints
+●●●●●● 2mm □
+dataclass
+●●●●●● 3mm □△
+●●●●●● 1mm □
+LLMTaskRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'test_task_001'
+●●●●●● 3mm □△
+'Write a function to sort a list'
+●●●●●● 3mm □△
+TaskType
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_task_request_with_all_options
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test task request with all options specified.'
+●●●●●● 2mm △
+LLMTaskRequest
+task_id
+●●●●●● 1mm ○
+prompt
+●●●●●● 1mm ○
+task_type
+TaskType
+user_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+require_verification
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_consensus
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_grounding
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+enable_learning
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+system_prompt
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+context_documents
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+cognitive_constraints
+●●●●●● 2mm □○
+MockCognitiveConstraints
+●●●●●● 2mm □
+dataclass
+constraints
+●●●●●● 1mm □
+MockCognitiveConstraints
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+LLMTaskRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'user_123'
+●●●●●● 3mm □△
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □
+●●●●●● 3mm □△
+'You are a debugging expert'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△
+0.3
+●●●●●● 2mm △
+TestLLMTaskResult
+'Test LLMTaskResult dataclass.'
+●●●●●● 1mm □
+test_successful_task_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a successful task result.'
+●●●●●● 2mm △
+LLMTaskResult
+task_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+content
+●●●●●● 1mm ○
+verification_result
+●●●●●● 2mm □○
+MockVerificationResult
+cognitive_decision_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+trust_score
+●●●●●● 3mm ○
+confidence_score
+●●●●●● 3mm ○
+model_used
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+learning_example_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+datetime
+dataclass
+verification
+●●●●●● 1mm □
+MockVerificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+LLMTaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+result
+0.92
+result
+0.95
+result
+'deepseek-coder'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_failed_task_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a failed task result.'
+●●●●●● 2mm △
+LLMTaskResult
+task_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+content
+●●●●●● 1mm ○
+verification_result
+●●●●●● 2mm □○
+MockVerificationResult
+cognitive_decision_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+trust_score
+●●●●●● 3mm ○
+confidence_score
+●●●●●● 3mm ○
+model_used
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+learning_example_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+datetime
+dataclass
+result
+●●●●●● 1mm □
+LLMTaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+''
+result
+0.0
+result
+0.0
+●●●●●● 2mm △
+TestRateLimiter
+'Test rate limiting functionality.'
+●●●●●● 1mm □
+test_rate_limiter_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test rate limiter initialization.'
+●●●●●● 2mm △
+RateLimiter
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+requests_per_minute
+requests_per_hour
+burst_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+60
+1000
+10
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_hour
+●●●●●● 3mm △
+●●●●●● 1mm □
+burst_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_hour
+limiter
+●●●●●● 1mm □
+RateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+limiter
+30
+limiter
+500
+limiter
+30
+limiter
+500
+●●●●●● 1mm □
+test_rate_limiter_acquire
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test token acquisition.'
+●●●●●● 2mm △
+RateLimiter
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+requests_per_minute
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+60
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+1000
+●●●●●● 1mm □
+acquire
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+limiter
+●●●●●● 1mm □
+RateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+limiter
+2
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+limiter
+1
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+limiter
+0
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_rate_limiter_burst
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test burst handling.'
+●●●●●● 2mm △
+RateLimiter
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+burst_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+●●●●●● 3mm △
+●●●●●● 1mm □
+burst_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+check_burst
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+reset_burst
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+limiter
+●●●●●● 1mm □
+RateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+limiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestMultiLLMClient
+'Test MultiLLMClient functionality.'
+●●●●●● 1mm □
+test_multi_llm_client_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test MultiLLMClient initialization.'
+●●●●●● 2mm △
+MockMultiLLMClient
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'deepseek-coder'
+'qwen2.5-coder'
+'deepseek-r1'
+'mistral-small'
+'llama3'
+'gemma2'
+'active'
+'priority'
+●●●●●● 3mm □△○
+1
+'active'
+'priority'
+●●●●●● 3mm □△○
+2
+'active'
+'priority'
+●●●●●● 3mm □△○
+3
+'active'
+'priority'
+●●●●●● 3mm □△○
+4
+'active'
+'priority'
+●●●●●● 3mm □△○
+5
+'active'
+'priority'
+●●●●●● 3mm □△○
+6
+●●●●●● 3mm △
+●●●●●● 1mm □
+client
+●●●●●● 1mm □
+MockMultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+6
+'deepseek-coder'
+client
+client
+'deepseek-coder'
+'active'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_model_selection_by_task_type
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test model selection based on task type.'
+●●●●●● 2mm △
+MockMultiLLMClient
+TASK_MODEL_MAP
+●●●●●● 1mm □
+TaskType
+TaskType
+TaskType
+TaskType
+TaskType
+'deepseek-coder'
+'qwen2.5-coder'
+'deepseek-coder'
+'qwen2.5-coder'
+'deepseek-r1'
+'mistral-small'
+'gemma2'
+'mistral-small'
+'llama3'
+'mistral-small'
+●●●●●● 1mm □
+select_model
+●●●●●● 1mm □△
+self
+task_type
+●●●●●● 2mm □△
+TaskType
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+'llama3'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+models
+0
+●●●●●● 1mm ○
+client
+●●●●●● 1mm □
+MockMultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+TaskType
+●●●●●● 2mm □△
+'deepseek-coder'
+client
+●●●●●● 1mm □△
+TaskType
+●●●●●● 2mm □△
+'deepseek-r1'
+client
+●●●●●● 1mm □△
+TaskType
+●●●●●● 2mm □△
+'gemma2'
+client
+●●●●●● 1mm □△
+TaskType
+●●●●●● 2mm □△
+'llama3'
+●●●●●● 1mm □
+test_generate_response
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LLM response generation.'
+●●●●●● 2mm △
+MockMultiLLMClient
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+task_type
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 1mm ○
+TaskType
+''
+●●●●●● 3mm ○
+'success'
+'content'
+'model_name'
+'duration_ms'
+'tokens_used'
+●●●●●● 3mm □△○
+'Response to: '
+prompt
+50
+'deepseek-coder'
+250.0
+150
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+client
+●●●●●● 1mm □
+MockMultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+'success'
+●●●●●● 3mm □△○
+'content'
+response
+response
+'model_name'
+'deepseek-coder'
+●●●●●● 1mm □
+test_failover_mechanism
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test failover when primary model fails.'
+●●●●●● 2mm △
+MockMultiLLMClient
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_with_failover
+●●●●●● 1mm □△
+self
+prompt
+models
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+model
+models
+●●●●●● 2mm □
+model
+●●●●●● 3mm △
+●●●●●● 2mm □
+model
+'primary_model'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+'model_name'
+●●●●●● 3mm □△○
+'Fallback response from '
+model
+model
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'All models failed'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+client
+●●●●●● 1mm □
+MockMultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'test prompt'
+'primary_model'
+'fallback_model'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+result
+'model_name'
+'fallback_model'
+●●●●●● 1mm □
+test_model_stats_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test tracking of model statistics.'
+●●●●●● 2mm △
+MockMultiLLMClient
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+record_usage
+●●●●●● 1mm □△
+self
+model
+success
+duration_ms
+tokens
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+model
+●●●●●● 3mm △
+●●●●●● 3mm △
+model
+●●●●●● 1mm □
+'total_calls'
+'successes'
+'failures'
+'total_duration_ms'
+'total_tokens'
+0
+0
+0
+0.0
+0
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+model
+stats
+'total_calls'
+1
+stats
+'successes'
+success
+1
+0
+stats
+'failures'
+success
+0
+1
+stats
+'total_duration_ms'
+duration_ms
+stats
+'total_tokens'
+tokens
+●●●●●● 1mm □
+get_model_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+client
+●●●●●● 1mm □
+MockMultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+'deepseek-coder'
+●●●●●● 3mm □△○
+150.0
+100
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+'deepseek-coder'
+●●●●●● 3mm □△○
+200.0
+150
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+'deepseek-coder'
+●●●●●● 1mm □
+50.0
+0
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'deepseek-coder'
+'total_calls'
+3
+stats
+'deepseek-coder'
+'successes'
+2
+stats
+'deepseek-coder'
+'failures'
+1
+●●●●●● 2mm △
+TestLLMOrchestrator
+'Test LLMOrchestrator main class.'
+●●●●●● 1mm □
+test_orchestrator_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test LLMOrchestrator initialization.'
+●●●●●● 2mm △
+MockLLMOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+embedding_model
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+knowledge_base_path
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □
+MockLLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 2mm □
+orchestrator
+●●●●●● 2mm □
+orchestrator
+orchestrator
+●●●●●● 1mm □
+test_orchestrator_with_dependencies
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test orchestrator with all dependencies.'
+●●●●●● 2mm △
+MockLLMOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+embedding_model
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+knowledge_base_path
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_embedding
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+MockLLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+mock_session
+orchestrator
+mock_embedding
+orchestrator
+●●●●●● 2mm □
+orchestrator
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestCognitiveEnforcement
+'Test cognitive framework enforcement.'
+●●●●●● 1mm □
+test_ooda_loop_begin
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test beginning OODA loop.'
+●●●●●● 2mm △
+MockCognitiveEnforcer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+begin_ooda_loop
+●●●●●● 1mm □△
+self
+operation
+constraints
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+MockCognitiveConstraints
+●●●●●● 2mm □
+●●●●●● 3mm △
+1
+decision_id
+●●●●●● 1mm □
+'decision_'
+●●●●●● 3mm △
+●●●●●● 3mm △
+decision_id
+●●●●●● 1mm □
+'operation'
+'constraints'
+'stage'
+'observations'
+'context'
+'alternatives'
+'action_result'
+operation
+constraints
+'observe'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+decision_id
+●●●●●● 1mm ○
+enforcer
+●●●●●● 1mm □
+MockCognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_id
+●●●●●● 1mm □
+enforcer
+●●●●●● 1mm □△
+'llm_task_code_generation'
+●●●●●● 2mm □△
+decision_id
+'decision_1'
+enforcer
+decision_id
+'operation'
+'llm_task_code_generation'
+enforcer
+decision_id
+'stage'
+'observe'
+●●●●●● 1mm □
+test_ooda_observe
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test OODA observe phase.'
+●●●●●● 2mm △
+MockCognitiveEnforcer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'decision_1'
+'stage'
+'observe'
+●●●●●● 1mm □
+observe
+●●●●●● 1mm □△
+self
+decision_id
+observations
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+decision_id
+'observations'
+●●●●●● 1mm □
+observations
+●●●●●● 3mm △
+decision_id
+'stage'
+●●●●●● 1mm □
+'orient'
+enforcer
+●●●●●● 1mm □
+MockCognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enforcer
+●●●●●● 1mm □△
+'decision_1'
+'task_id'
+'task_type'
+'prompt_length'
+'task_001'
+'code_generation'
+150
+●●●●●● 2mm □△
+enforcer
+'decision_1'
+'stage'
+'orient'
+enforcer
+'decision_1'
+'observations'
+'task_id'
+'task_001'
+●●●●●● 1mm □
+test_ooda_orient
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test OODA orient phase.'
+●●●●●● 2mm △
+MockCognitiveEnforcer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'decision_1'
+'stage'
+'orient'
+●●●●●● 1mm □
+orient
+●●●●●● 1mm □△
+self
+decision_id
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+decision_id
+'context'
+●●●●●● 1mm □
+context
+●●●●●● 3mm △
+decision_id
+'stage'
+●●●●●● 1mm □
+'decide'
+enforcer
+●●●●●● 1mm □
+MockCognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enforcer
+●●●●●● 1mm □△
+'decision_1'
+'verification_required'
+'consensus_required'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+enforcer
+'decision_1'
+'stage'
+'decide'
+enforcer
+'decision_1'
+'context'
+'verification_required'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_ooda_decide
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test OODA decide phase.'
+●●●●●● 2mm △
+MockCognitiveEnforcer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'decision_1'
+'stage'
+'decide'
+●●●●●● 1mm □
+decide
+●●●●●● 1mm □△
+self
+decision_id
+alternatives
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+best
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+alternatives
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision_id
+'alternatives'
+●●●●●● 1mm □
+alternatives
+●●●●●● 3mm △
+decision_id
+'selected'
+●●●●●● 1mm □
+best
+●●●●●● 3mm △
+decision_id
+'stage'
+●●●●●● 1mm □
+'act'
+enforcer
+●●●●●● 1mm □
+MockCognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enforcer
+●●●●●● 1mm □△
+'decision_1'
+'name'
+'immediate_value'
+'option_a'
+0.5
+'name'
+'immediate_value'
+'option_b'
+0.8
+●●●●●● 2mm □△
+enforcer
+'decision_1'
+'stage'
+'act'
+enforcer
+'decision_1'
+'selected'
+'name'
+'option_b'
+●●●●●● 1mm □
+test_ooda_act
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test OODA act phase.'
+●●●●●● 2mm △
+MockCognitiveEnforcer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'decision_1'
+'stage'
+'act'
+●●●●●● 1mm □
+act
+●●●●●● 1mm □△
+self
+decision_id
+action_result
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+decision_id
+'action_result'
+●●●●●● 1mm □
+action_result
+●●●●●● 3mm △
+decision_id
+'success'
+●●●●●● 1mm □
+success
+●●●●●● 3mm △
+decision_id
+'stage'
+●●●●●● 1mm □
+'complete'
+enforcer
+●●●●●● 1mm □
+MockCognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enforcer
+●●●●●● 1mm □△
+'decision_1'
+'Task completed successfully'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+enforcer
+'decision_1'
+'stage'
+'complete'
+enforcer
+'decision_1'
+'success'
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestHallucinationGuard
+'Test hallucination mitigation pipeline.'
+●●●●●● 1mm □
+test_hallucination_guard_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test HallucinationGuard initialization.'
+●●●●●● 2mm △
+MockHallucinationGuard
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+multi_llm_client
+repo_access
+confidence_scorer
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+multi_llm_client
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_access
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+confidence_scorer
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+guard
+●●●●●● 1mm □
+MockHallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+guard
+●●●●●● 2mm □
+guard
+●●●●●● 2mm □
+guard
+0
+●●●●●● 1mm □
+test_repository_grounding
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Layer 1: Repository grounding.'
+●●●●●● 2mm △
+MockHallucinationGuard
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_repository_grounding
+●●●●●● 1mm □△
+self
+content
+mentioned_files
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+verified_files
+●●●●●● 1mm □
+missing_files
+●●●●●● 1mm □
+f
+mentioned_files
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+verified_files
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm □
+missing_files
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'is_grounded'
+'verified_files'
+'missing_files'
+'grounding_score'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_files
+●●●●●● 2mm □△
+0
+verified_files
+missing_files
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+verified_files
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mentioned_files
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+guard
+●●●●●● 1mm □
+MockHallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+guard
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+guard
+●●●●●● 1mm □△
+'Check main.py and utils.py and missing.py'
+'main.py'
+'utils.py'
+'missing.py'
+●●●●●● 2mm □△
+result
+'is_grounded'
+●●●●●● 1mm □
+'missing.py'
+result
+'missing_files'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+result
+'grounding_score'
+●●●●●● 1mm □△
+0.666
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □
+test_cross_model_consensus
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Layer 2: Cross-model consensus.'
+●●●●●● 2mm △
+MockHallucinationGuard
+●●●●●● 1mm □
+check_consensus
+●●●●●● 1mm □△
+self
+prompt
+primary_response
+num_models
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+responses
+●●●●●● 1mm □
+primary_response
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_models
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+'Similar response '
+i
+●●●●●● 2mm □△
+agreement_score
+●●●●●● 1mm □
+0.85
+●●●●●● 3mm ○
+'has_consensus'
+'agreement_score'
+'num_models_consulted'
+'consensus_content'
+agreement_score
+0.7
+agreement_score
+num_models
+primary_response
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+guard
+●●●●●● 1mm □
+MockHallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+guard
+●●●●●● 1mm □△
+'What is quicksort?'
+'Quicksort is a divide-and-conquer algorithm...'
+●●●●●● 2mm □△
+result
+'has_consensus'
+●●●●●● 3mm □△○
+result
+'agreement_score'
+0.85
+result
+'num_models_consulted'
+3
+●●●●●● 1mm □
+test_contradiction_detection
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Layer 3: Contradiction detection.'
+●●●●●● 2mm △
+MockHallucinationGuard
+●●●●●● 1mm □
+check_contradictions
+●●●●●● 1mm □△
+self
+content
+knowledge_base
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+contradictions
+●●●●●● 1mm □
+knowledge
+knowledge_base
+●●●●●● 2mm □
+'Python is typed'
+knowledge
+'Python is untyped'
+content
+contradictions
+●●●●●● 1mm □△
+'claim'
+'contradicts'
+'confidence'
+'Python is untyped'
+knowledge
+0.9
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'has_contradictions'
+'contradictions'
+'contradiction_score'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradictions
+●●●●●● 2mm □△
+0
+contradictions
+1.0
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradictions
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.2
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+guard
+●●●●●● 1mm □
+MockHallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+guard
+●●●●●● 1mm □△
+'Python is untyped language'
+'Python is typed (dynamically)'
+●●●●●● 2mm □△
+result
+'has_contradictions'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'contradictions'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_full_verification_pipeline
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete verification pipeline.'
+●●●●●● 2mm △
+MockHallucinationGuard
+●●●●●● 1mm □
+verify_content
+●●●●●● 1mm □△
+self
+prompt
+content
+task_type
+enable_consensus
+enable_grounding
+enable_contradiction_check
+enable_trust_verification
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TaskType
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+scores
+●●●●●● 1mm □
+●●●●●● 2mm □
+enable_grounding
+scores
+●●●●●● 1mm □△
+0.9
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_consensus
+scores
+●●●●●● 1mm □△
+0.85
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_contradiction_check
+scores
+●●●●●● 1mm □△
+0.95
+●●●●●● 2mm □△
+●●●●●● 2mm □
+enable_trust_verification
+scores
+●●●●●● 1mm □△
+0.88
+●●●●●● 2mm □△
+avg_score
+●●●●●● 1mm □
+scores
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+MockVerificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockVerificationResult
+guard
+●●●●●● 1mm □
+MockHallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+guard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+result
+0.7
+result
+0.6
+●●●●●● 2mm △
+TestGenesisKeyAssignment
+'Test Genesis Key assignment functionality.'
+●●●●●● 1mm □
+test_genesis_key_format
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Genesis Key format.'
+●●●●●● 1mm □
+assign_genesis_key
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'GK-LLM-'
+task_id
+●●●●●● 1mm ○
+key
+●●●●●● 1mm □
+assign_genesis_key
+●●●●●● 1mm □△
+'test_task_001'
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □△
+'GK-LLM-'
+●●●●●● 2mm □△
+'test_task_001'
+key
+●●●●●● 1mm □
+test_genesis_key_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Genesis Key metadata creation.'
+●●●●●● 1mm □
+create_genesis_metadata
+●●●●●● 1mm □△
+task_id
+task_type
+user_id
+prompt
+content_length
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'task_id'
+'task_type'
+'user_id'
+'prompt'
+'content_length'
+'timestamp'
+task_id
+task_type
+user_id
+prompt
+500
+content_length
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+metadata
+●●●●●● 1mm □
+create_genesis_metadata
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+'task_id'
+'task_001'
+metadata
+'task_type'
+'code_generation'
+metadata
+'user_id'
+'user_123'
+●●●●●● 2mm △
+TestLearningMemoryIntegration
+'Test learning memory integration.'
+●●●●●● 1mm □
+test_learning_data_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test learning data structure creation.'
+●●●●●● 1mm □
+create_learning_data
+●●●●●● 1mm □△
+task_type
+prompt
+content
+verified
+confidence_score
+trust_score
+●●●●●● 2mm □△
+TaskType
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'context'
+'expected'
+'actual'
+'task_type'
+'prompt'
+task_type
+prompt
+'content'
+'verified'
+content
+verified
+'confidence_score'
+'trust_score'
+confidence_score
+trust_score
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+data
+●●●●●● 1mm □
+create_learning_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'context'
+'task_type'
+'code_generation'
+data
+'expected'
+'verified'
+●●●●●● 3mm □△○
+data
+'actual'
+'confidence_score'
+0.95
+●●●●●● 1mm □
+test_learning_integration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test integration with learning memory manager.'
+●●●●●● 2mm △
+MockLearningMemoryManager
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+ingest_learning_data
+●●●●●● 1mm □△
+self
+learning_type
+learning_data
+source
+user_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+1
+example
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+'learn_'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+example
+manager
+●●●●●● 1mm □
+MockLearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'learn_1'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manager
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestQueryMethods
+'Test orchestrator query methods.'
+●●●●●● 1mm □
+test_get_task_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting task result by ID.'
+●●●●●● 2mm △
+MockTaskResult
+task_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+dataclass
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MockTaskResult
+●●●●●● 1mm □△
+'task_001'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+MockTaskResult
+●●●●●● 1mm □△
+'task_002'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+MockTaskResult
+●●●●●● 1mm □△
+'task_003'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_task_result
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+result
+●●●●●● 3mm △
+●●●●●● 2mm □
+result
+task_id
+●●●●●● 3mm ○
+result
+●●●●●● 3mm ○
+●●●●●● 2mm □
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'task_002'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_recent_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting recent tasks.'
+●●●●●● 2mm △
+MockTaskResult
+task_id
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MockTaskResult
+●●●●●● 1mm □△
+'task_'
+i
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+150
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_recent_tasks
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+50
+recent
+1
+'task_149'
+●●●●●● 1mm □
+test_get_stats_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stats with no completed tasks.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'total_tasks'
+'success_rate'
+'avg_duration_ms'
+'avg_trust_score'
+'avg_confidence_score'
+0
+0.0
+0.0
+0.0
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'total_tasks'
+0
+stats
+'success_rate'
+0.0
+●●●●●● 1mm □
+test_get_stats_with_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stats with completed tasks.'
+●●●●●● 2mm △
+MockTaskResult
+success
+●●●●●● 3mm △
+duration_ms
+●●●●●● 3mm ○
+trust_score
+●●●●●● 3mm ○
+confidence_score
+●●●●●● 3mm ○
+dataclass
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MockTaskResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+100.0
+0.9
+0.95
+●●●●●● 2mm □△
+MockTaskResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+200.0
+0.85
+0.9
+●●●●●● 2mm □△
+MockTaskResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+50.0
+0.3
+0.2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+t
+●●●●●● 3mm △
+t
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_tasks'
+'success_rate'
+'avg_duration_ms'
+'avg_trust_score'
+'avg_confidence_score'
+total
+successful
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'total_tasks'
+3
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+stats
+'success_rate'
+●●●●●● 1mm □△
+0.666
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+stats
+'avg_duration_ms'
+●●●●●● 1mm □△
+116.67
+●●●●●● 2mm □△
+0.1
+●●●●●● 2mm △
+TestExternalVerification
+'Test external verification functionality.'
+●●●●●● 1mm □
+test_external_verifier_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ExternalVerifier initialization.'
+●●●●●● 2mm △
+MockExternalVerifier
+DOCUMENTATION_SOURCES
+●●●●●● 1mm □
+'python'
+'javascript'
+'https://docs.python.org/3/'
+'https://developer.mozilla.org/'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+enable_web_search
+enable_doc_lookup
+search_timeout
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+10.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_web_search
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_doc_lookup
+●●●●●● 3mm △
+●●●●●● 1mm □
+search_timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+verifier
+●●●●●● 1mm □
+MockExternalVerifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verifier
+●●●●●● 3mm □△○
+verifier
+●●●●●● 3mm □△○
+verifier
+5.0
+●●●●●● 1mm □
+test_verify_technical_claim
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test technical claim verification.'
+●●●●●● 2mm △
+MockExternalVerifier
+●●●●●● 1mm □
+verify_technical_claim
+●●●●●● 1mm □△
+self
+claim
+context
+technologies
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+''
+●●●●●● 2mm □
+is_verified
+●●●●●● 1mm □
+'sorted()'
+claim
+'list'
+claim
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'claim'
+'is_verified'
+'confidence'
+'sources'
+claim
+is_verified
+is_verified
+0.85
+0.3
+is_verified
+'Python documentation'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+verifier
+●●●●●● 1mm □
+MockExternalVerifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+verifier
+●●●●●● 1mm □△
+"Python's sorted() function returns a new list"
+●●●●●● 2mm □△
+result
+'is_verified'
+●●●●●● 3mm □△○
+result
+'confidence'
+0.85
+●●●●●● 2mm △
+TestTaskExecutionPipeline
+'Test the complete task execution pipeline.'
+●●●●●● 1mm □
+test_task_lifecycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete task lifecycle.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □△○
+uuid
+task_id
+●●●●●● 1mm □
+'task_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+'prompt'
+prompt
+result
+●●●●●● 1mm □
+'task_id'
+'success'
+'content'
+'trust_score'
+task_id
+●●●●●● 3mm □△○
+'Response: '
+prompt
+50
+0.9
+●●●●●● 3mm △
+task_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+0
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Test prompt'
+TaskType
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_task_failure_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test task failure handling.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+should_fail
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+task_id
+●●●●●● 1mm □
+'task_001'
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+'prompt'
+prompt
+●●●●●● 2mm □
+should_fail
+result
+●●●●●● 1mm □
+'task_id'
+'success'
+'content'
+'error'
+'trust_score'
+task_id
+●●●●●● 1mm □
+''
+'LLM generation failed'
+0.0
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+'task_id'
+'success'
+'content'
+'trust_score'
+task_id
+●●●●●● 3mm □△○
+'Success'
+0.9
+●●●●●● 3mm △
+task_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Test'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+result
+'trust_score'
+0.0
+'error'
+result
+●●●●●● 1mm □
+test_audit_trail_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test audit trail creation during execution.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+execute_with_audit
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 1mm □
+audit_trail
+●●●●●● 1mm □△
+'step'
+'decision_id'
+'timestamp'
+'cognitive_enforcement'
+'decision_001'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'model'
+'duration_ms'
+'timestamp'
+'llm_generation'
+'deepseek-coder'
+150.0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'is_verified'
+'confidence'
+'timestamp'
+'hallucination_verification'
+●●●●●● 3mm □△○
+0.9
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'audit_trail'
+●●●●●● 3mm □△○
+audit_trail
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Test prompt'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'audit_trail'
+●●●●●● 2mm □△
+3
+result
+'audit_trail'
+0
+'step'
+'cognitive_enforcement'
+result
+'audit_trail'
+1
+'step'
+'llm_generation'
+result
+'audit_trail'
+2
+'step'
+'hallucination_verification'
+●●●●●● 2mm △
+TestErrorHandling
+'Test error handling in the orchestrator.'
+●●●●●● 1mm □
+test_llm_generation_failure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling of LLM generation failure.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+_generate_llm_response
+●●●●●● 1mm □△
+self
+task_request
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Model not available'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'prompt'
+prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+'content'
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+''
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+'OK'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Test'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 1mm □
+'Model not available'
+result
+'error'
+●●●●●● 1mm □
+test_verification_failure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling of verification failure.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+_verify_content
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+MockVerificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockVerificationResult
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+require_verification
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+content
+●●●●●● 1mm □
+'Generated content'
+●●●●●● 2mm □
+require_verification
+verification
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verification
+●●●●●● 3mm ○
+'success'
+'content'
+'trust_score'
+'confidence_score'
+'warning'
+●●●●●● 3mm □△○
+verification
+verification
+verification
+'Content verification failed'
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+content
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Test'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+result
+'trust_score'
+0.2
+'warning'
+result
+●●●●●● 1mm □
+test_cognitive_layer_unavailable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling when cognitive layer is unavailable.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_integrate_layer1
+●●●●●● 1mm □△
+self
+task_request
+content
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'warning'
+'Cognitive Layer 1 not available'
+●●●●●● 3mm ○
+'success'
+●●●●●● 3mm □△○
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'content'
+'GK-001'
+●●●●●● 2mm □△
+'warning'
+result
+●●●●●● 1mm □
+test_learning_memory_unavailable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling when learning memory is unavailable.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_integrate_learning_memory
+●●●●●● 1mm □△
+self
+task_request
+content
+verification
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'learn_001'
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □
+'GK-001'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestGlobalInstance
+'Test global orchestrator instance management.'
+●●●●●● 1mm □
+test_get_llm_orchestrator_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test singleton behavior of get_llm_orchestrator.'
+_global_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+session
+embedding_model
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+_global_instance
+●●●●●● 2mm □
+_global_instance
+●●●●●● 1mm □
+'session'
+'embedding_model'
+'knowledge_base_path'
+●●●●●● 3mm △○
+embedding_model
+knowledge_base_path
+●●●●●● 3mm ○
+_global_instance
+instance1
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance1
+'session'
+'session1'
+instance2
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance2
+'session'
+'session1'
+instance1
+instance2
+●●●●●● 2mm △
+TestIntegration
+'Integration tests for the complete orchestrator.'
+●●●●●● 1mm □
+test_full_pipeline_mock
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test full pipeline with mocked components.'
+●●●●●● 2mm △
+FullMockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'success'
+'content'
+'model_name'
+'duration_ms'
+●●●●●● 3mm □△○
+'Generated code'
+'deepseek-coder'
+200.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MockVerificationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'decision_001'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+decision_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'task_id'
+'success'
+'content'
+'trust_score'
+'confidence_score'
+'model_used'
+'decision_id'
+'task_001'
+●●●●●● 3mm □△○
+verification
+verification
+verification
+llm_response
+'model_name'
+decision_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+FullMockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Write sorting code'
+TaskType
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+result
+'content'
+'Verified code'
+result
+'trust_score'
+0.88
+result
+'decision_id'
+'decision_001'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_concurrent_task_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test tracking of concurrent tasks.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+start_task
+●●●●●● 1mm □△
+self
+task_id
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+'prompt'
+'started'
+prompt
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+complete_task
+●●●●●● 1mm □△
+self
+task_id
+result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+task_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+'task_1'
+'Prompt 1'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+'task_2'
+'Prompt 2'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+'task_3'
+'Prompt 3'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+3
+orchestrator
+●●●●●● 1mm □△
+'task_2'
+'task_id'
+'success'
+'task_2'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+2
+'task_2'
+orchestrator
+orchestrator
+●●●●●● 1mm □△
+'task_1'
+'task_id'
+'success'
+'task_1'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+'task_3'
+'task_id'
+'success'
+'task_3'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+3
+●●●●●● 2mm △
+TestPerformance
+'Test performance-related functionality.'
+●●●●●● 1mm □
+test_response_caching
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test response caching mechanism.'
+●●●●●● 2mm △
+MockCachingClient
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+cache_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+cache_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+_get_cache_key
+●●●●●● 1mm □△
+self
+prompt
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □△○
+hashlib
+key
+●●●●●● 1mm □
+prompt
+':'
+task_type
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+cache_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+task_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cache_key
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △
+cache_key
+●●●●●● 3mm △
+1
+result
+●●●●●● 1mm □
+'content'
+'cached'
+'Response to '
+prompt
+●●●●●● 1mm □
+●●●●●● 3mm △
+cache_key
+●●●●●● 1mm □
+result
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+client
+●●●●●● 1mm □
+MockCachingClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result1
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'Test prompt'
+TaskType
+●●●●●● 2mm □△
+client
+1
+client
+0
+result2
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'Test prompt'
+TaskType
+●●●●●● 2mm □△
+client
+1
+client
+1
+●●●●●● 1mm □
+test_duration_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test task duration tracking.'
+●●●●●● 2mm △
+MockOrchestrator
+●●●●●● 1mm □
+execute_with_timing
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+'success'
+'duration_ms'
+●●●●●● 3mm □△○
+duration_ms
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+orchestrator
+●●●●●● 1mm □
+MockOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'Test'
+●●●●●● 2mm □△
+result
+'duration_ms'
+10.0
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

@@ -1,0 +1,1174 @@
+## neuro_symbolic_reasoner.py
+'\nUnified Neuro-Symbolic Reasoner - True Neuro-Symbolic Integration\n\nCombines neural (fuzzy, pattern-based) and symbolic (precise, rule-based)\nreasoning into a unified system where both inform each other.\n\nKey Features:\n- Bidirectional integration (neural ↔ symbolic)\n- Joint inference combining both approaches\n- Trust-weighted fusion\n- Context-aware reasoning\n'
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+Set
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+get_embedding_model
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+ml_intelligence.trust_aware_embedding
+●●●●●● 2mm □△○
+TrustAwareEmbeddingModel
+TrustContext
+●●●●●● 3mm □△○
+ml_intelligence.neural_to_symbolic_rule_generator
+●●●●●● 2mm □△○
+NeuralToSymbolicRuleGenerator
+SymbolicRule
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+ImportError
+LearningMemoryManager
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ReasoningResult
+'Unified reasoning result combining neural and symbolic'
+query
+●●●●●● 1mm ○
+neural_results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+symbolic_results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+fused_results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+neural_confidence
+●●●●●● 3mm ○
+symbolic_confidence
+●●●●●● 3mm ○
+fusion_confidence
+●●●●●● 3mm ○
+reasoning_trace
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+datetime
+●●●●●● 2mm □
+●●●●●● 1mm □
+__post_init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+confidence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Single confidence score for decision-making (fusion-weighted).'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+dataclass
+●●●●●● 2mm △
+NeuroSymbolicReasoner
+'\n    Unified neuro-symbolic reasoning system.\n    \n    This implements true bidirectional integration:\n    - Neural finds similar concepts (fuzzy search)\n    - Symbolic provides trusted facts (precise knowledge)\n    - Both inform each other in joint inference\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+retriever
+embedding_model
+trust_aware_model
+learning_memory
+rule_generator
+neural_weight
+symbolic_weight
+trust_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+DocumentRetriever
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □○
+TrustAwareEmbeddingModel
+●●●●●● 2mm □○
+LearningMemoryManager
+●●●●●● 2mm □○
+NeuralToSymbolicRuleGenerator
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+0.5
+0.5
+0.5
+'\n        Initialize neuro-symbolic reasoner.\n        \n        Args:\n            retriever: DocumentRetriever for neural search\n            embedding_model: EmbeddingModel for neural component\n            trust_aware_model: TrustAwareEmbeddingModel for trust-enhanced search\n            learning_memory: LearningMemoryManager for symbolic knowledge\n            rule_generator: NeuralToSymbolicRuleGenerator for rule creation\n            neural_weight: Weight of neural component (0-1)\n            symbolic_weight: Weight of symbolic component (0-1)\n            trust_threshold: Minimum trust for symbolic results\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_aware_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_memory
+●●●●●● 3mm △
+●●●●●● 1mm □
+rule_generator
+total_weight
+●●●●●● 1mm □
+neural_weight
+●●●●●● 3mm ○
+symbolic_weight
+●●●●●● 3mm △
+●●●●●● 1mm □
+total_weight
+0
+neural_weight
+●●●●●● 3mm □△
+total_weight
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □
+total_weight
+0
+symbolic_weight
+●●●●●● 3mm □△
+total_weight
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_threshold
+logger
+●●●●●● 1mm □△
+'[NEURO-SYMBOLIC] Initialized with neural_weight='
+●●●●●● 3mm △
+'.2f'
+', symbolic_weight='
+●●●●●● 3mm △
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+reason
+●●●●●● 1mm □△
+self
+query
+context
+limit
+include_trace
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+10
+●●●●●● 3mm □△○
+'\n        Perform unified neuro-symbolic reasoning.\n        \n        Process:\n        1. Neural search: Find similar concepts (fuzzy)\n        2. Symbolic query: Get trusted facts (precise)\n        3. Cross-inform: Each informs the other\n        4. Fusion: Combine both with joint inference\n        \n        Args:\n            query: Query text\n            context: Optional context for reasoning\n            limit: Maximum results to return\n            include_trace: Include reasoning trace\n            \n        Returns:\n            ReasoningResult with fused neural-symbolic results\n        '
+context
+●●●●●● 1mm □
+context
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reasoning_trace
+●●●●●● 1mm □
+neural_results
+neural_confidence
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+reasoning_trace
+'neural_search'
+●●●●●● 1mm □
+'results_count'
+'confidence'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neural_results
+●●●●●● 2mm □△
+neural_confidence
+symbolic_results
+symbolic_confidence
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+reasoning_trace
+'symbolic_query'
+●●●●●● 1mm □
+'results_count'
+'confidence'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+symbolic_results
+●●●●●● 2mm □△
+symbolic_confidence
+symbolic_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+symbolic_results
+query
+●●●●●● 2mm □△
+neural_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+neural_results
+●●●●●● 2mm □△
+reasoning_trace
+'cross_inform'
+●●●●●● 1mm □
+'neural_ranked_symbolic'
+'symbolic_weighted_neural'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+symbolic_results
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neural_results
+●●●●●● 2mm □△
+fused_results
+fusion_confidence
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+neural_results
+symbolic_results
+query
+●●●●●● 2mm □△
+reasoning_trace
+'fusion'
+●●●●●● 1mm □
+'fused_count'
+'confidence'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused_results
+●●●●●● 2mm □△
+fusion_confidence
+result
+●●●●●● 1mm □
+ReasoningResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+elapsed_ms
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+logger
+●●●●●● 1mm □△
+'[NEURO-SYMBOLIC] Reasoning completed in '
+elapsed_ms
+'.1f'
+'ms, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fused_results
+●●●●●● 2mm □△
+' fused results'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ReasoningResult
+●●●●●● 1mm □
+_neural_search
+●●●●●● 1mm □△
+self
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+'Perform neural (fuzzy) search.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'No retriever available, returning empty neural results'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+scores
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+chunk
+chunks
+confidence
+●●●●●● 1mm □
+scores
+np
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm □
+confidence
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm ○
+chunks
+limit
+confidence
+Exception
+logger
+●●●●●● 1mm □△
+'Neural search failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+Tuple
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_symbolic_query
+●●●●●● 1mm □△
+self
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+'Perform symbolic (precise) query.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[NEURO-SYMBOLIC] No learning memory (symbolic results empty). Wire LearningMemoryManager in Layer4 or disable neuro-symbolic to silence.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningPattern
+results
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'get_training_data'
+●●●●●● 2mm □△
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+examples
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_safe_parse
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'text'
+val
+●●●●●● 3mm ○
+ctx
+●●●●●● 1mm □
+_safe_parse
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+_safe_parse
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+context_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+output_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+out
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+out
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+context_text
+' '
+output_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+results
+●●●●●● 1mm □△
+'id'
+'text'
+'content'
+'trust_score'
+'source'
+'example_type'
+example
+text
+text
+example
+example
+example
+●●●●●● 2mm □△
+●●●●●● 3mm □
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+example
+examples
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_safe_parse
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'text'
+val
+●●●●●● 3mm ○
+ctx
+●●●●●● 1mm □
+_safe_parse
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+_safe_parse
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+context_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+output_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+out
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+out
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+context_text
+' '
+output_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+results
+●●●●●● 1mm □△
+'id'
+'text'
+'content'
+'trust_score'
+'source'
+'example_type'
+example
+text
+text
+example
+example
+example
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to query learning examples: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+trust_scores
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+r
+results
+confidence
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+np
+●●●●●● 1mm □△
+trust_scores
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+confidence
+●●●●●● 1mm □
+0.0
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+limit
+confidence
+Exception
+logger
+●●●●●● 1mm □△
+'Symbolic query failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+Tuple
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_neural_rank_symbolic
+●●●●●● 1mm □△
+self
+symbolic_results
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Use neural similarity to rank symbolic results.\n        \n        Neural informs symbolic: Similarity scores help prioritize\n        which symbolic facts are most relevant.\n        '
+●●●●●● 2mm □
+symbolic_results
+●●●●●● 3mm ○
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+result
+symbolic_results
+result_text
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result_text
+result_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result_text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sklearn.metrics.pairwise
+●●●●●● 2mm □△○
+cosine_similarity
+similarity
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+query_embedding
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+result_embedding
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+0
+result
+'neural_similarity'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+'neural_similarity'
+●●●●●● 1mm □
+0.0
+symbolic_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+symbolic_results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_symbolic_weight_neural
+●●●●●● 1mm □△
+self
+neural_results
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Use symbolic trust to weight neural results.\n        \n        Symbolic informs neural: Trust scores adjust neural\n        similarity scores.\n        '
+●●●●●● 2mm □
+neural_results
+●●●●●● 3mm ○
+result
+neural_results
+trust_score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'confidence_score'
+0.5
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+neural_score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+combined_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □△
+neural_score
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+trust_score
+result
+'trust_weighted_score'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+combined_score
+●●●●●● 2mm □△
+result
+'trust_score'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+trust_score
+●●●●●● 2mm □△
+filtered
+●●●●●● 1mm □
+r
+r
+neural_results
+r
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+filtered
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+filtered
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_fuse_results
+●●●●●● 1mm □△
+self
+neural_results
+symbolic_results
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'\n        Fuse neural and symbolic results with joint inference.\n        \n        Creates a unified result set where:\n        - Results appear once (deduplication)\n        - Scores combine neural similarity + symbolic trust\n        - High trust boosts, low trust reduces\n        '
+result_map
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+neural_results
+●●●●●● 2mm □△
+result_id
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+'neural_'
+i
+result_map
+result_id
+●●●●●● 1mm □
+'source'
+'fusion_score'
+result
+'neural'
+result
+●●●●●● 1mm □△
+'trust_weighted_score'
+result
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+i
+result
+●●●●●● 2mm □
+●●●●●● 1mm □△
+symbolic_results
+●●●●●● 2mm □△
+result_id
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'id'
+●●●●●● 2mm □△
+'symbolic_'
+i
+●●●●●● 2mm □
+result_id
+result_map
+existing
+●●●●●● 1mm □
+result_map
+result_id
+neural_score
+●●●●●● 1mm □
+existing
+●●●●●● 1mm □△
+'fusion_score'
+0.0
+●●●●●● 2mm □△
+symbolic_score
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □△
+neural_score
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+symbolic_score
+result_map
+result_id
+●●●●●● 1mm □
+'source'
+'fusion_score'
+existing
+result
+'both'
+combined
+●●●●●● 3mm □
+result_map
+result_id
+●●●●●● 1mm □
+'source'
+'fusion_score'
+result
+'symbolic'
+result
+●●●●●● 1mm □△
+'trust_score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+fused_results
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+result_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fused_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fused_results
+fusion_scores
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'fusion_score'
+0.0
+●●●●●● 2mm □△
+r
+fused_results
+fusion_confidence
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+fusion_scores
+●●●●●● 2mm □△
+●●●●●● 3mm □
+fusion_confidence
+●●●●●● 1mm □
+0.0
+●●●●●● 3mm ○
+fused_results
+fusion_confidence
+Tuple
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm □
+explain_reasoning
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+ReasoningResult
+'Generate human-readable explanation of reasoning process.'
+lines
+●●●●●● 1mm □
+'Neuro-Symbolic Reasoning for: '
+result
+''
+'Neural Search: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' results (confidence: '
+result
+'.2f'
+')'
+'Symbolic Query: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' results (confidence: '
+result
+'.2f'
+')'
+'Fused Results: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' results (confidence: '
+result
+'.2f'
+')'
+''
+'Top Fused Results:'
+i
+result_item
+●●●●●● 2mm □
+●●●●●● 1mm □△
+result
+5
+1
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+result_item
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+result_item
+●●●●●● 1mm □△
+'fusion_score'
+0.0
+●●●●●● 2mm □△
+text_preview
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result_item
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+result_item
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+lines
+●●●●●● 1mm □△
+'  '
+i
+'. ['
+source
+'] (score: '
+score
+'.3f'
+') '
+text_preview
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_neuro_symbolic_reasoner
+●●●●●● 1mm □△
+retriever
+learning_memory
+neural_weight
+symbolic_weight
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+DocumentRetriever
+●●●●●● 2mm □○
+LearningMemoryManager
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+0.5
+0.5
+'\n    Get neuro-symbolic reasoner instance.\n    \n    Args:\n        retriever: DocumentRetriever for neural search\n        learning_memory: LearningMemoryManager for symbolic knowledge\n        neural_weight: Weight of neural component\n        symbolic_weight: Weight of symbolic component\n        \n    Returns:\n        NeuroSymbolicReasoner instance\n    '
+●●●●●● 3mm ○
+NeuroSymbolicReasoner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+NeuroSymbolicReasoner

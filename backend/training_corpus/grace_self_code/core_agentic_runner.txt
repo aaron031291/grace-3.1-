@@ -1,0 +1,543 @@
+## agentic_runner.py
+'\nAgentic Runner — Background task spawner for all brain domains.\n\nAllows any brain action to be submitted as a non-blocking agentic task.\nResults are stored in-memory (with optional persistence) and polled via task_id.\n\nUsage from any brain:\n    spawn_task(brain="deterministic", action="scan", payload={})\n    → returns {"task_id": "task_abc123", "status": "queued"}\n\nThen poll:\n    get_task(task_id)\n    → returns {"task_id": "...", "status": "done", "result": {...}, "elapsed_ms": 1500}\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+TASK_TTL_SECONDS
+●●●●●● 1mm □
+3600
+●●●●●● 2mm △
+AgentTask
+task_id
+●●●●●● 1mm ○
+brain
+●●●●●● 1mm ○
+action
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+status
+●●●●●● 1mm ○
+'queued'
+result
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+queued_at
+●●●●●● 1mm ○
+''
+started_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+elapsed_ms
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+AgentTaskRunner
+'\n    In-process thread-pool based agentic task runner.\n    All brain actions can be dispatched here to run asynchronously.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_workers
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+4
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+AgentTask
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+max_workers
+●●●●●● 2mm □△
+●●●●●● 1mm □
+spawn
+●●●●●● 1mm □△
+self
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Spawn a brain action as a background task. Returns task_id.'
+task_id
+●●●●●● 1mm □
+'task_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+10
+task
+●●●●●● 1mm □
+AgentTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+task
+thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[Agent] Spawned task %s → %s/%s'
+task_id
+brain
+action
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_run_task
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Worker thread: acquires semaphore, calls the brain, stores result.'
+●●●●●● 3mm △
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+●●●●●● 3mm ○
+task
+●●●●●● 1mm □
+'running'
+task
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+task
+task
+task
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+result
+task
+●●●●●● 1mm □
+'done'
+task
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+elapsed
+1
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[Agent] Task %s done in %.0fms'
+task_id
+elapsed
+●●●●●● 2mm □△
+Exception
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+500
+task
+●●●●●● 1mm □
+'error'
+task
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+elapsed
+1
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[Agent] Task %s failed: %s'
+task_id
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_task
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get task status and result. Returns None if not found.'
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'task_id'
+'brain'
+'action'
+'status'
+'result'
+'error'
+'queued_at'
+'started_at'
+'completed_at'
+'elapsed_ms'
+task
+task
+task
+task
+task
+task
+task
+task
+task
+task
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_tasks
+●●●●●● 1mm □△
+self
+brain
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+30
+'List recent tasks, optionally filter by brain.'
+●●●●●● 3mm △
+tasks
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+brain
+tasks
+●●●●●● 1mm □
+t
+t
+tasks
+t
+brain
+tasks
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm ○
+'task_id'
+'brain'
+'action'
+'status'
+'queued_at'
+'elapsed_ms'
+t
+t
+t
+t
+t
+t
+t
+tasks
+●●●●●● 1mm □△
+●●●●●● 1mm □
+cancel_task
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Cancel a queued task. Cannot cancel already-running tasks.'
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+task
+'queued'
+task
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+cleanup_old
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Remove completed tasks older than TTL.'
+cutoff
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+TASK_TTL_SECONDS
+●●●●●● 3mm △
+to_delete
+●●●●●● 1mm □
+tid
+task
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'done'
+'error'
+'cancelled'
+task
+task_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task_time
+cutoff
+to_delete
+●●●●●● 1mm □△
+tid
+●●●●●● 2mm □△
+Exception
+tid
+to_delete
+●●●●●● 3mm △
+tid
+_runner
+●●●●●● 2mm □○
+AgentTaskRunner
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_agent_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_runner
+●●●●●● 2mm □
+_runner
+●●●●●● 1mm □
+AgentTaskRunner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_runner
+AgentTaskRunner
+●●●●●● 1mm □
+spawn_task
+●●●●●● 1mm □△
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Public API: spawn a brain action as a background agentic task.'
+task_id
+●●●●●● 1mm □
+get_agent_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'task_id'
+'status'
+'brain'
+'action'
+task_id
+'queued'
+brain
+action
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_task
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Public API: get task status and result.'
+r
+●●●●●● 1mm □
+get_agent_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 3mm ○
+'error'
+'task_id'
+'task not found'
+task_id
+●●●●●● 3mm ○
+r
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_tasks
+●●●●●● 1mm □△
+brain
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+30
+'Public API: list recent tasks.'
+●●●●●● 3mm ○
+get_agent_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△

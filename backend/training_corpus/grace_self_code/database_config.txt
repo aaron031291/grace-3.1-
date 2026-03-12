@@ -1,0 +1,379 @@
+## config.py
+'\nDatabase configuration module supporting multiple SQL databases.\nHandles connection strings and engine configuration for various database backends.\n'
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm △
+DatabaseType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Supported database types.'
+SQLITE
+●●●●●● 1mm □
+'sqlite'
+POSTGRESQL
+●●●●●● 1mm □
+'postgresql'
+MYSQL
+●●●●●● 1mm □
+'mysql'
+MARIADB
+●●●●●● 1mm □
+'mariadb'
+●●●●●● 2mm △
+DatabaseConfig
+'Configuration for database connections.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_type
+host
+port
+username
+password
+database
+database_path
+pool_size
+max_overflow
+pool_pre_ping
+echo
+sslmode
+●●●●●● 2mm □△
+DatabaseType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+DatabaseType
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'grace'
+●●●●●● 2mm □
+5
+10
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+●●●●●● 2mm □
+'\n        Initialize database configuration.\n        \n        Args:\n            db_type: Type of database (default: postgresql; sqlite, mysql, mariadb also supported)\n            host: Database host (required for remote databases)\n            port: Database port (optional, uses default if not specified)\n            username: Database username (required for remote databases)\n            password: Database password (required for remote databases)\n            database: Database name\n            database_path: Path for SQLite database file\n            pool_size: Number of connections to maintain in the pool\n            max_overflow: Maximum overflow size for connection pool\n            pool_pre_ping: Test connections before using them\n            echo: Echo SQL statements (useful for debugging)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+db_type
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+DatabaseType
+●●●●●● 1mm □△
+db_type
+●●●●●● 2mm □△
+db_type
+●●●●●● 3mm △
+●●●●●● 1mm □
+host
+●●●●●● 3mm △
+●●●●●● 1mm □
+port
+●●●●●● 3mm △
+●●●●●● 1mm □
+username
+●●●●●● 3mm △
+●●●●●● 1mm □
+password
+●●●●●● 3mm △
+●●●●●● 1mm □
+database
+●●●●●● 3mm △
+●●●●●● 1mm □
+database_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+pool_size
+5
+pool_size
+20
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_overflow
+10
+max_overflow
+30
+●●●●●● 3mm △
+●●●●●● 1mm □
+pool_pre_ping
+●●●●●● 3mm △
+●●●●●● 1mm □
+3600
+●●●●●● 3mm △
+●●●●●● 1mm □
+echo
+●●●●●● 3mm △
+●●●●●● 1mm □
+sslmode
+●●●●●● 1mm □
+from_env
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'\n        Create configuration from environment variables.\n        \n        Expected environment variables:\n            DATABASE_TYPE: Type of database (default: postgresql)\n            DATABASE_HOST: Database host\n            DATABASE_PORT: Database port\n            DATABASE_USER: Database username\n            DATABASE_PASSWORD: Database password\n            DATABASE_NAME: Database name (default: grace)\n            DATABASE_PATH: Path for SQLite database (default: ./data/grace.db)\n            DATABASE_ECHO: Echo SQL statements (default: false)\n        \n        Returns:\n            DatabaseConfig: Configuration instance\n        '
+db_type
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_TYPE'
+'postgresql'
+●●●●●● 2mm □△
+echo
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_ECHO'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+●●●●●● 3mm ○
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'DatabaseConfig'
+●●●●●● 1mm □
+get_connection_string
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Generate database connection string.\n        \n        Returns:\n            str: Database connection URL string\n            \n        Raises:\n            ValueError: If required parameters are missing for the database type\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+DatabaseType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+DatabaseType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+DatabaseType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+DatabaseType
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Unsupported database type: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_sqlite_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate SQLite connection string.'
+db_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+'./data/grace.db'
+Path
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sqlite:///'
+db_path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_postgresql_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate PostgreSQL connection string (postgresql+psycopg2). Supports DATABASE_SSLMODE (e.g. require for DigitalOcean).'
+●●●●●● 2mm □△○
+urllib.parse
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'PostgreSQL requires DATABASE_HOST and DATABASE_USER environment variables'
+●●●●●● 2mm □△
+port
+●●●●●● 1mm □
+●●●●●● 3mm △
+5432
+username
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+password_part
+●●●●●● 1mm □
+●●●●●● 3mm △
+':'
+urllib
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'@'
+'@'
+base
+●●●●●● 1mm □
+'postgresql+psycopg2://'
+username
+password_part
+●●●●●● 3mm △
+':'
+port
+'/'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+sep
+●●●●●● 1mm □
+'?'
+base
+'&'
+'?'
+base
+●●●●●● 1mm □
+base
+sep
+'sslmode='
+●●●●●● 3mm △
+●●●●●● 3mm ○
+base
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_mysql_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate MySQL connection string.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'MySQL requires DATABASE_HOST and DATABASE_USER environment variables'
+●●●●●● 2mm □△
+port
+●●●●●● 1mm □
+●●●●●● 3mm △
+3306
+password_part
+●●●●●● 1mm □
+●●●●●● 3mm △
+':'
+●●●●●● 3mm △
+'@'
+'@'
+●●●●●● 3mm ○
+'mysql+pymysql://'
+●●●●●● 3mm △
+password_part
+●●●●●● 3mm △
+':'
+port
+'/'
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_mariadb_url
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate MariaDB connection string.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'MariaDB requires DATABASE_HOST and DATABASE_USER environment variables'
+●●●●●● 2mm □△
+port
+●●●●●● 1mm □
+●●●●●● 3mm △
+3306
+password_part
+●●●●●● 1mm □
+●●●●●● 3mm △
+':'
+●●●●●● 3mm △
+'@'
+'@'
+●●●●●● 3mm ○
+'mariadb+pymysql://'
+●●●●●● 3mm △
+password_part
+●●●●●● 3mm △
+':'
+port
+'/'
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'String representation of configuration.'
+●●●●●● 3mm ○
+'DatabaseConfig(type='
+●●●●●● 3mm △
+', host='
+●●●●●● 3mm △
+', port='
+●●●●●● 3mm △
+', database='
+●●●●●● 3mm △
+', echo='
+●●●●●● 3mm △
+')'
+●●●●●● 1mm ○

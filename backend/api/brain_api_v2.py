@@ -684,6 +684,13 @@ def _code() -> dict:
         **_agentic_actions("code"),
     }
 
+def _deterministic() -> dict:
+    return {
+        "scan": lambda p: {"status": "mock"},
+        "fix": lambda p: {"status": "mock"},
+        **_agentic_actions("deterministic"),
+    }
+
 
 def _project_scoped_chat(p):
     """Chat scoped to a specific project — LLM sees project files as context."""

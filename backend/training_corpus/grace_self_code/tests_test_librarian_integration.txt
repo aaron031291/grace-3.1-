@@ -1,0 +1,983 @@
+## test_librarian_integration.py
+'\nQuick test script to verify librarian system integration.\n\nTests:\n1. Database tables exist\n2. Default rules are seeded\n3. Tag creation and assignment\n4. Rule-based categorization\n5. Document processing pipeline\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □
+sys
+'win32'
+os
+'PYTHONIOENCODING'
+●●●●●● 1mm □
+'utf-8'
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianTag
+LibrarianRule
+DocumentTag
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 3mm □△○
+librarian.tag_manager
+●●●●●● 2mm □△○
+TagManager
+●●●●●● 3mm □△○
+librarian.rule_categorizer
+●●●●●● 2mm □△○
+RuleBasedCategorizer
+●●●●●● 3mm □△○
+librarian.engine
+●●●●●● 2mm □△○
+LibrarianEngine
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 1mm □
+test_database_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that all librarian tables exist.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 1: Database Tables'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+'librarian_tags'
+LibrarianTag
+'librarian_rules'
+LibrarianRule
+'document_tags'
+DocumentTag
+table_name
+model
+tables
+count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] '
+table_name
+': '
+count
+' rows'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] All database tables exist and are accessible'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Database test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_default_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that default rules are seeded.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 2: Default Rules'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+LibrarianRule
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianRule
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total active rules: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+by_type
+●●●●●● 1mm □
+rule
+rules
+by_type
+rule
+●●●●●● 1mm □
+by_type
+●●●●●● 1mm □△
+rule
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+pattern_type
+count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+by_type
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+pattern_type
+': '
+count
+' rules'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Example rules:'
+●●●●●● 2mm □△
+rule
+rules
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+rule
+' ('
+rule
+'): '
+rule
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 2mm □△
+' active rules'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] No rules found (run seed_default_rules.py)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Rules test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_tag_management
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test tag creation and assignment.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 3: Tag Management'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tag_manager
+●●●●●● 1mm □
+TagManager
+●●●●●● 1mm □△
+db
+●●●●●● 2mm □△
+tag
+●●●●●● 1mm □
+tag_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] Created/found tag: '
+tag
+' (ID: '
+tag
+')'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+tag_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Tag statistics:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Total tags: '
+stats
+'total_tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'by_category'
+stats
+stats
+'by_category'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Categories: '
+', '
+●●●●●● 1mm □△
+stats
+'by_category'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'most_used'
+stats
+stats
+'most_used'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Most used tags:'
+●●●●●● 2mm □△
+tag_info
+stats
+'most_used'
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+tag_info
+'name'
+': '
+tag_info
+'usage_count'
+' uses'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Tag management working'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Tag management test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_rule_categorization
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test rule-based categorization on existing documents.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 4: Rule-Based Categorization'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rule_categorizer
+●●●●●● 1mm □
+RuleBasedCategorizer
+●●●●●● 1mm □△
+db
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+'completed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'no such table'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] Documents table not found (expected on fresh install)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Rule categorization ready (skipped - no documents)'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+document
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] No completed documents found to test with (expected on fresh install)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Rule categorization ready (skipped - no documents)'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Testing with document: '
+document
+' (ID: '
+document
+')'
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+rule_categorizer
+●●●●●● 1mm □△
+document
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Matched '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+matches
+●●●●●● 2mm □△
+' rules:'
+●●●●●● 2mm □△
+match
+matches
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+match
+'rule_name'
+' (confidence: '
+match
+'confidence'
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+'action_type'
+'assign_tag'
+tags
+●●●●●● 1mm □
+match
+'action_params'
+●●●●●● 1mm □△
+'tag_names'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      → Suggests tags: '
+', '
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+matches
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Rule categorization working ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+matches
+●●●●●● 2mm □△
+' matches)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Rule categorization working (no matches for this document)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Rule categorization test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_librarian_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test the complete librarian engine pipeline.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST 5: Librarian Engine Pipeline'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+document
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+'completed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+'no such table'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] Documents table not found (expected on fresh install)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Librarian engine ready (skipped - no documents)'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+document
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] No completed documents found to test with (expected on fresh install)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Librarian engine ready (skipped - no documents)'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Processing document: '
+document
+' (ID: '
+document
+')'
+●●●●●● 2mm □△
+librarian
+●●●●●● 1mm □
+LibrarianEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Processing result:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Status: '
+result
+'status'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Tags assigned: '
+result
+'tags_assigned'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Relationships detected: '
+result
+'relationships_detected'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Rules matched: '
+result
+'rules_matched'
+', '
+●●●●●● 1mm □△
+result
+'rules_matched'
+●●●●●● 2mm □△
+'None'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'ai_analysis'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - AI analysis: '
+result
+'ai_analysis'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+librarian
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  System statistics:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Total tags: '
+stats
+'tags'
+'total_tags'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Active rules: '
+stats
+'rules'
+'total_rules'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - AI available: '
+stats
+'ai_available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - Relationships enabled: '
+stats
+'relationships_enabled'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'status'
+'success'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] Librarian engine pipeline working'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Pipeline failed: '
+result
+●●●●●● 1mm □△
+'error'
+'Unknown error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] Librarian engine test failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'GRACE LIBRARIAN SYSTEM - INTEGRATION TEST'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+tests
+●●●●●● 1mm □
+'Database Tables'
+test_database_tables
+'Default Rules'
+test_default_rules
+'Tag Management'
+test_tag_management
+'Rule Categorization'
+test_rule_categorization
+'Librarian Engine'
+test_librarian_engine
+results
+●●●●●● 1mm □
+test_name
+test_func
+tests
+result
+●●●●●● 1mm □
+test_func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+test_name
+result
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FAIL] '
+test_name
+' crashed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+test_name
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+result
+results
+result
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+test_name
+result
+results
+status
+●●●●●● 1mm □
+result
+'[OK] PASS'
+'[FAIL] FAIL'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+status
+': '
+test_name
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Total: '
+passed
+'/'
+total
+' tests passed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+passed
+total
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[OK] ALL TESTS PASSED - Librarian system is working!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[WARN] '
+total
+●●●●●● 1mm □△
+passed
+' test(s) failed - check output above'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+exit_code
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+exit_code
+●●●●●● 2mm □△

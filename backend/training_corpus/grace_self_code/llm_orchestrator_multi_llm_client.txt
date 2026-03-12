@@ -1,0 +1,1939 @@
+## multi_llm_client.py
+'\nMulti-LLM Client - Manages multiple open-source LLMs via Ollama\n\nSupports:\n- DeepSeek Coder (code generation, debugging)\n- Qwen 2.5 Coder (code understanding)\n- DeepSeek-R1 (reasoning)\n- Mistral Small (fast queries)\n- Llama 3.x (general purpose)\n- Gemma 2 (validation tasks)\n\nFeatures:\n- Model selection based on task type\n- Load balancing\n- Failover with automatic retry\n- Performance tracking\n- Rate limiting\n- Response caching\n- Production-ready error handling\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+as_completed
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+OrderedDict
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RateLimiter
+'Token bucket rate limiter for LLM API calls.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+requests_per_minute
+requests_per_hour
+burst_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+60
+1000
+10
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_hour
+●●●●●● 3mm △
+●●●●●● 1mm □
+burst_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_hour
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+acquire
+●●●●●● 1mm □△
+self
+timeout
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+30.0
+'\n        Acquire a rate limit token. Blocks until available or timeout.\n\n        Returns:\n            True if acquired, False if timeout\n        '
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+timeout
+logger
+●●●●●● 1mm □△
+'[RATE LIMIT] Timeout waiting for rate limit token'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+_refill_tokens
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Refill tokens based on elapsed time.'
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+minute_elapsed
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+minute_elapsed
+60
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+now
+●●●●●● 1mm △
+minute_elapsed
+1
+refill
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+minute_elapsed
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+refill
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+now
+hour_elapsed
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+hour_elapsed
+3600
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+now
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current rate limit status.'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'minute_tokens_remaining'
+'hour_tokens_remaining'
+'requests_per_minute'
+'requests_per_hour'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+LRUCache
+'Thread-safe LRU cache for LLM responses.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_size
+ttl_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+1000
+3600
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+ttl_seconds
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+_make_key
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Create cache key from request parameters.'
+key_data
+●●●●●● 1mm □
+model_id
+':'
+system_prompt
+''
+':'
+prompt
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+key_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get cached response if available and not expired.'
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+model_id
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 2mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'[CACHE] Hit for key '
+key
+16
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+key
+●●●●●● 3mm □
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+set
+●●●●●● 1mm □△
+self
+prompt
+model_id
+response
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Cache a response.'
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+model_id
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+oldest_key
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+iter
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+oldest_key
+●●●●●● 3mm △
+oldest_key
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 1mm □
+clear
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear the cache.'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get cache statistics.'
+●●●●●● 3mm △
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'size'
+'max_size'
+'hits'
+'misses'
+'hit_rate'
+'ttl_seconds'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+total
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+total
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+RetryConfig
+'Configuration for retry behavior.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_retries
+base_delay
+max_delay
+exponential_base
+retry_on_errors
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 3mm □
+3
+1.0
+30.0
+2.0
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_retries
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_delay
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_delay
+●●●●●● 3mm △
+●●●●●● 1mm □
+exponential_base
+●●●●●● 3mm △
+●●●●●● 1mm □
+retry_on_errors
+ConnectionError
+TimeoutError
+requests
+●●●●●● 1mm □
+get_delay
+●●●●●● 1mm □△
+self
+attempt
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Calculate delay for attempt number (0-indexed).'
+delay
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □○
+attempt
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+delay
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+should_retry
+●●●●●● 1mm □△
+self
+error
+●●●●●● 2mm □△
+Exception
+'Check if error is retryable.'
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+error
+err_type
+●●●●●● 2mm □△
+err_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm △
+TaskType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of tasks for model selection.'
+CODE_GENERATION
+●●●●●● 1mm □
+'code_generation'
+CODE_DEBUGGING
+●●●●●● 1mm □
+'code_debugging'
+CODE_EXPLANATION
+●●●●●● 1mm □
+'code_explanation'
+CODE_REVIEW
+●●●●●● 1mm □
+'code_review'
+REASONING
+●●●●●● 1mm □
+'reasoning'
+PLANNING
+●●●●●● 1mm □
+'planning'
+VALIDATION
+●●●●●● 1mm □
+'validation'
+QUICK_QUERY
+●●●●●● 1mm □
+'quick_query'
+GENERAL
+●●●●●● 1mm □
+'general'
+●●●●●● 2mm △
+ModelCapability
+●●●●●● 3mm □△
+Enum
+Enum
+'Model capabilities.'
+CODE
+●●●●●● 1mm □
+'code'
+REASONING
+●●●●●● 1mm □
+'reasoning'
+SPEED
+●●●●●● 1mm □
+'speed'
+GENERAL
+●●●●●● 1mm □
+'general'
+●●●●●● 2mm △
+LLMModel
+'Configuration for an LLM model.'
+name
+●●●●●● 1mm ○
+model_id
+●●●●●● 1mm ○
+capabilities
+●●●●●● 3mm □△
+ModelCapability
+context_window
+●●●●●● 2mm ○
+recommended_tasks
+●●●●●● 3mm □△
+TaskType
+priority
+●●●●●● 2mm ○
+max_tokens
+●●●●●● 2mm ○
+2048
+temperature
+●●●●●● 3mm ○
+0.7
+dataclass
+●●●●●● 2mm △
+MultiLLMClient
+'\n    Manages multiple LLM models for different tasks.\n\n    Routes requests to appropriate models based on task type.\n    '
+MODEL_REGISTRY
+●●●●●● 1mm □
+'deepseek-coder-33b'
+'deepseek-coder-6.7b'
+'qwen2.5-coder-32b'
+'qwen2.5-coder-7b'
+'deepseek-r1-70b'
+'deepseek-r1-7b'
+'qwen2.5-72b'
+'qwen3-32b'
+'qwen3-14b'
+'mistral-small'
+'llama3.3-70b'
+'gemma2-27b'
+'mistral-7b'
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_url
+enable_cache
+enable_rate_limiting
+cache_ttl_seconds
+cache_max_size
+requests_per_minute
+requests_per_hour
+max_retries
+max_concurrent_requests
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+3600
+1000
+60
+1000
+3
+10
+'\n        Initialize Multi-LLM client with production hardening.\n\n        Args:\n            base_url: Ollama base URL\n            enable_cache: Enable response caching\n            enable_rate_limiting: Enable rate limiting\n            cache_ttl_seconds: Cache TTL in seconds\n            cache_max_size: Maximum cache entries\n            requests_per_minute: Rate limit per minute\n            requests_per_hour: Rate limit per hour\n            max_retries: Maximum retry attempts\n            max_concurrent_requests: Maximum concurrent requests for parallel ops\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+LLMModel
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_cache
+LRUCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_rate_limiting
+RateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+RetryConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_discover_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Discover which models are installed and available.'
+provider
+●●●●●● 1mm □
+settings
+●●●●●● 2mm □
+provider
+'openai'
+model_id
+●●●●●● 1mm □
+settings
+'gpt-4o'
+config
+●●●●●● 1mm □
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+model_id
+●●●●●● 1mm □
+config
+●●●●●● 3mm △
+model_id
+●●●●●● 1mm □
+'requests'
+'successes'
+'failures'
+'total_duration_ms'
+'avg_duration_ms'
+0
+0
+0
+0
+0
+logger
+●●●●●● 1mm □△
+'OpenAI Model configured: '
+model_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+installed_models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+installed_model_names
+●●●●●● 1mm □
+model
+'name'
+model
+installed_models
+model_key
+model_config
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_base_name
+●●●●●● 1mm □
+model_config
+●●●●●● 1mm □△
+':'
+●●●●●● 2mm □△
+0
+is_installed
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+installed
+●●●●●● 1mm □△
+model_base_name
+●●●●●● 2mm □△
+installed
+installed_model_names
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_installed
+●●●●●● 3mm △
+model_key
+●●●●●● 1mm □
+model_config
+●●●●●● 3mm △
+model_key
+●●●●●● 1mm □
+'requests'
+'successes'
+'failures'
+'total_duration_ms'
+'avg_duration_ms'
+0
+0
+0
+0
+0
+logger
+●●●●●● 1mm □△
+'Model available: '
+model_config
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Model not installed: '
+model_config
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'No registered models found. Using default fallback.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'fallback'
+●●●●●● 1mm □
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error discovering models: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'fallback'
+●●●●●● 1mm □
+LLMModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+select_model
+●●●●●● 1mm □△
+self
+task_type
+required_capabilities
+prefer_speed
+●●●●●● 2mm □△
+TaskType
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+ModelCapability
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n        Select best model for task.\n\n        Args:\n            task_type: Type of task\n            required_capabilities: Required model capabilities\n            prefer_speed: Prefer faster models\n\n        Returns:\n            Best matching model or None\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'No models available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+candidates
+●●●●●● 1mm □
+model
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_type
+model
+●●●●●● 2mm □
+candidates
+required_capabilities
+candidates
+●●●●●● 1mm □
+model
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+cap
+model
+cap
+required_capabilities
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidates
+candidates
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+required_capabilities
+candidates
+●●●●●● 1mm □
+model
+model
+candidates
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+cap
+model
+cap
+required_capabilities
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidates
+logger
+●●●●●● 1mm □△
+'No suitable model for task: '
+task_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+candidates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selected
+●●●●●● 1mm □
+candidates
+0
+logger
+●●●●●● 1mm □△
+'Selected model: '
+selected
+' for task: '
+task_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected
+●●●●●● 2mm □○
+LLMModel
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+task_type
+model_id
+temperature
+max_tokens
+system_prompt
+stream
+use_cache
+skip_rate_limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+TaskType
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+'\n        Generate response from selected model with production hardening.\n\n        Features:\n        - Response caching (for identical requests)\n        - Rate limiting (prevents resource exhaustion)\n        - Automatic retry with exponential backoff\n        - Fallback to alternative models on failure\n\n        Args:\n            prompt: User prompt\n            task_type: Type of task\n            model_id: Specific model ID (optional, auto-selects if not provided)\n            temperature: Sampling temperature\n            max_tokens: Maximum tokens to generate\n            system_prompt: System prompt\n            stream: Whether to stream response\n            use_cache: Whether to use response caching\n            skip_rate_limit: Skip rate limiting (use with caution)\n\n        Returns:\n            Response dictionary with content and metadata\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_id
+model
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+m
+m
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+m
+model_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+ValueError
+●●●●●● 1mm □△
+'No suitable model available'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_cache
+●●●●●● 3mm △
+stream
+cached
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+model
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cached
+cached
+'from_cache'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cached
+'duration_ms'
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[CACHE] Returning cached response for model '
+model
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cached
+●●●●●● 2mm □
+skip_rate_limit
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'Rate limit exceeded - request timeout'
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+●●●●●● 2mm □
+system_prompt
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+system_prompt
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+prompt
+●●●●●● 2mm □△
+model_key
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+k
+k
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+model
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_key
+●●●●●● 3mm △
+●●●●●● 3mm △
+model_key
+'requests'
+1
+response_text
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □
+model_key
+●●●●●● 3mm △
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+model_key
+stats
+'successes'
+1
+stats
+'total_duration_ms'
+duration_ms
+stats
+'avg_duration_ms'
+●●●●●● 1mm □
+stats
+'total_duration_ms'
+●●●●●● 3mm □△
+stats
+'successes'
+result
+●●●●●● 1mm □
+'content'
+'model_name'
+'model_id'
+'task_type'
+'duration_ms'
+'success'
+'from_cache'
+'timestamp'
+response_text
+model
+model
+task_type
+duration_ms
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_cache
+●●●●●● 3mm △
+stream
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+model
+result
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+duration_ms
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+logger
+●●●●●● 1mm □△
+'Error generating response: '
+e
+●●●●●● 2mm □△
+model_key
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+k
+k
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_id
+v
+model_id
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_key
+●●●●●● 3mm △
+●●●●●● 3mm △
+model_key
+'failures'
+1
+KeyError
+StopIteration
+●●●●●● 3mm ○
+'content'
+'model_name'
+'model_id'
+'task_type'
+'duration_ms'
+'success'
+'from_cache'
+'error'
+'timestamp'
+''
+●●●●●● 2mm □
+model_id
+task_type
+duration_ms
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_with_retry
+●●●●●● 1mm □△
+self
+model
+messages
+stream
+temperature
+max_tokens
+task_type
+●●●●●● 2mm □△
+LLMModel
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+TaskType
+'Generate response with automatic retry and fallback.'
+last_error
+●●●●●● 1mm □
+●●●●●● 2mm □
+tried_models
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+response_text
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response_text
+Exception
+last_error
+●●●●●● 1mm □
+e
+tried_models
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 2mm □
+attempt
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+delay
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+attempt
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[RETRY] Attempt '
+attempt
+●●●●●● 3mm ○
+1
+' failed: '
+e
+'. Retrying in '
+delay
+'.1f'
+'s...'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+delay
+●●●●●● 2mm □△
+●●●●●● 2mm □
+attempt
+1
+fallback
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+tried_models
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fallback
+logger
+●●●●●● 1mm □△
+'[FALLBACK] Switching to fallback model: '
+fallback
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+fallback
+●●●●●● 3mm □
+fallback
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+tried_models
+●●●●●● 2mm □△
+●●●●●● 1mm △
+fallback
+logger
+●●●●●● 1mm □△
+'[FALLBACK] Non-retryable error, switching to: '
+fallback
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+fallback
+last_error
+RuntimeError
+●●●●●● 1mm □△
+'All retry attempts exhausted'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_fallback_model
+●●●●●● 1mm □△
+self
+task_type
+exclude_models
+●●●●●● 2mm □△
+TaskType
+●●●●●● 1mm □○
+"Get a fallback model that hasn't been tried yet."
+candidates
+●●●●●● 1mm □
+model
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+exclude_models
+●●●●●● 2mm □
+candidates
+●●●●●● 3mm ○
+●●●●●● 2mm □
+task_suited
+●●●●●● 1mm □
+m
+m
+candidates
+task_type
+m
+●●●●●● 2mm □
+task_suited
+candidates
+●●●●●● 1mm □
+task_suited
+candidates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+candidates
+candidates
+0
+●●●●●● 2mm □
+●●●●●● 2mm □○
+LLMModel
+●●●●●● 1mm □
+generate_multiple
+●●●●●● 1mm □△
+self
+prompt
+task_type
+num_models
+system_prompt
+temperature
+parallel
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+3
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Generate responses from multiple models for consensus.\n\n        Args:\n            prompt: User prompt\n            task_type: Type of task\n            num_models: Number of models to use\n            system_prompt: System prompt\n            temperature: Sampling temperature\n            parallel: Execute requests in parallel (faster but uses more resources)\n\n        Returns:\n            List of responses from different models\n        '
+candidates
+●●●●●● 1mm □
+model
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_type
+model
+●●●●●● 2mm □
+candidates
+candidates
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selected_models
+●●●●●● 1mm □
+candidates
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+num_models
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+candidates
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parallel
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+selected_models
+●●●●●● 2mm □△
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+responses
+●●●●●● 1mm □
+●●●●●● 3mm □
+model
+selected_models
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+responses
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_multiple_parallel
+●●●●●● 1mm □△
+self
+prompt
+task_type
+models
+system_prompt
+temperature
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 3mm □△
+LLMModel
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+'Execute multiple model requests in parallel.'
+futures
+●●●●●● 1mm □
+responses
+●●●●●● 1mm □
+model
+models
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+futures
+●●●●●● 1mm □△
+model
+future
+●●●●●● 2mm □△
+model_name
+future
+futures
+result
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PARALLEL] Model '
+model_name
+' failed: '
+e
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □△
+'content'
+'model_name'
+'success'
+'error'
+'timestamp'
+''
+model_name
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+responses
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Async version of generate for concurrent operations.\n\n        Use this when you need to make multiple LLM calls concurrently\n        from async code.\n        '
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+3
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Async version of generate_multiple for concurrent operations.\n        '
+candidates
+●●●●●● 1mm □
+model
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_type
+model
+●●●●●● 2mm □
+candidates
+candidates
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selected_models
+●●●●●● 1mm □
+candidates
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+num_models
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+candidates
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model
+selected_models
+●●●●●● 3mm ○
+asyncio
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_available_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get list of available models with their configurations.'
+●●●●●● 3mm ○
+'key'
+'name'
+'model_id'
+'capabilities'
+'context_window'
+'recommended_tasks'
+'priority'
+'stats'
+key
+model
+model
+cap
+cap
+model
+model
+task
+task
+model
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+key
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_model_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get performance statistics for all models.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+reset_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Reset all model statistics.'
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+'requests'
+'successes'
+'failures'
+'total_duration_ms'
+'avg_duration_ms'
+0
+0
+0
+0
+0
+●●●●●● 1mm □
+get_system_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get comprehensive system status including all production hardening components.'
+status
+●●●●●● 1mm □
+'models'
+'performance'
+'available_count'
+'models'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+status
+'cache'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+status
+'rate_limiter'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'retry_config'
+●●●●●● 1mm □
+'max_retries'
+'base_delay'
+'max_delay'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+status
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+clear_cache
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear the response cache.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CACHE] Cache cleared'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+shutdown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Shutdown executor and cleanup resources.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SHUTDOWN] Thread pool executor shutdown'
+●●●●●● 2mm □△
+_multi_llm_client
+●●●●●● 2mm □○
+MultiLLMClient
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_multi_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global Multi-LLM client instance.'
+●●●●●● 2mm □
+_multi_llm_client
+●●●●●● 2mm □
+_multi_llm_client
+●●●●●● 1mm □
+MultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_multi_llm_client
+MultiLLMClient

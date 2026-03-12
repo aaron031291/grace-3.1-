@@ -1,0 +1,405 @@
+## auth.py
+'\nAuthentication and Session Security for GRACE\n\nProvides:\n- Secure session management\n- Authentication dependencies for FastAPI\n- Session validation\n'
+●●●●●● 2mm □△○
+secrets
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+Request
+Response
+HTTPException
+Depends
+Cookie
+●●●●●● 3mm □△○
+config
+●●●●●● 2mm □△○
+get_security_config
+●●●●●● 3mm □△○
+logging
+●●●●●● 2mm □△○
+get_security_logger
+●●●●●● 2mm △
+SessionManager
+'\n    Secure session management.\n\n    Features:\n    - Cryptographically secure session IDs\n    - Session expiration\n    - Server-side session validation (optional)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_session
+●●●●●● 1mm □△
+self
+user_id
+response
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Response
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+"\n        Create a new session for a user.\n\n        Args:\n            user_id: The user's Genesis ID\n            response: FastAPI response to set cookies\n            metadata: Optional session metadata\n\n        Returns:\n            Session ID\n        "
+session_id
+●●●●●● 1mm □
+'SS-'
+secrets
+●●●●●● 1mm □△
+16
+●●●●●● 2mm □△
+expires_at
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+session_id
+●●●●●● 1mm □
+'user_id'
+'created_at'
+'expires_at'
+'metadata'
+'last_activity'
+user_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expires_at
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+session_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+validate_session
+●●●●●● 1mm □△
+self
+session_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Validate a session ID.\n\n        Args:\n            session_id: The session ID to validate\n\n        Returns:\n            Session data if valid, None otherwise\n        '
+●●●●●● 2mm □
+session_id
+session_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △
+session_id
+expires_at
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+'expires_at'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expires_at
+●●●●●● 3mm △
+session_id
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △○
+'last_activity'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+invalidate_session
+●●●●●● 1mm □△
+self
+session_id
+response
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Response
+'\n        Invalidate a session (logout).\n\n        Args:\n            session_id: The session ID to invalidate\n            response: FastAPI response to clear cookies\n        '
+●●●●●● 2mm □
+session_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+session_id
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_user_sessions
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get all active sessions for a user.'
+●●●●●● 3mm ○
+'session_id'
+sid
+data
+sid
+data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'user_id'
+user_id
+●●●●●● 1mm □△
+●●●●●● 1mm □
+invalidate_all_user_sessions
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Invalidate all sessions for a user.'
+to_remove
+●●●●●● 1mm □
+sid
+sid
+data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'user_id'
+user_id
+sid
+to_remove
+●●●●●● 3mm △
+sid
+●●●●●● 1mm □
+cleanup_expired_sessions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Remove all expired sessions.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+to_remove
+●●●●●● 1mm □
+sid
+sid
+data
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+data
+'expires_at'
+●●●●●● 2mm □△
+now
+sid
+to_remove
+●●●●●● 3mm △
+sid
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+to_remove
+●●●●●● 2mm □△
+_session_manager
+●●●●●● 2mm □○
+SessionManager
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_session_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the session manager singleton.'
+●●●●●● 2mm □
+_session_manager
+●●●●●● 2mm □
+_session_manager
+●●●●●● 1mm □
+SessionManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_session_manager
+SessionManager
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+'\n    FastAPI dependency to get the current authenticated user.\n\n    Raises HTTPException if not authenticated.\n    '
+logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_id
+logger
+●●●●●● 1mm □△
+'API'
+●●●●●● 3mm □△
+'No Genesis ID'
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_id'
+'session_id'
+genesis_id
+session_id
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Cookie
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+"\n    FastAPI dependency to optionally get the current user.\n\n    Returns None if not authenticated (doesn't raise exception).\n    "
+●●●●●● 2mm □
+genesis_id
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'genesis_id'
+'session_id'
+genesis_id
+session_id
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+require_auth
+●●●●●● 1mm □△
+request
+●●●●●● 2mm □△
+Request
+'\n    FastAPI dependency that requires authentication.\n\n    Use as: @app.get("/protected", dependencies=[Depends(require_auth)])\n    '
+genesis_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'genesis_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_id
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_id
+●●●●●● 1mm □
+generate_csrf_token
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Generate a CSRF token.'
+●●●●●● 3mm ○
+secrets
+●●●●●● 1mm □△
+32
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+validate_csrf_token
+●●●●●● 1mm □△
+request
+token
+●●●●●● 2mm □△
+Request
+●●●●●● 1mm ○
+'\n    Validate a CSRF token.\n\n    The token should be sent in a header (X-CSRF-Token) and match\n    the token stored in the session/cookie.\n    '
+header_token
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-CSRF-Token'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+header_token
+token
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+secrets
+●●●●●● 1mm □△
+header_token
+token
+●●●●●● 2mm □△
+●●●●●● 3mm △

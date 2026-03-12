@@ -1,0 +1,406 @@
+## learn_heal_api.py
+'\nLearn & Heal API — REST endpoints for the Memory (LearningHealingTab.jsx) UI.\n\nProvides access to the learning analytics, system health, and\nmanual triggers for continuous learning and self-healing.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Depends
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_learn_heal_dashboard
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Returns the aggregated learning and system health dashboard.\n    '
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+LearningPattern
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+ProceduralMemory
+ImportError
+●●●●●● 3mm ○
+'error'
+'Cognitive modules missing from backend'
+total_examples
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+avg_trust_examples
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+total_patterns
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+avg_success_patterns
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+total_procedures
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+ProceduralMemory
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+avg_success_procedures
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+ProceduralMemory
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+dist
+●●●●●● 1mm □
+'high'
+'medium'
+'low'
+0
+0
+0
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+examples
+●●●●●● 2mm □
+score
+●●●●●● 2mm □
+score
+0.7
+dist
+'high'
+1
+●●●●●● 1mm △
+score
+0.4
+dist
+'medium'
+1
+dist
+'low'
+1
+●●●●●● 3mm ○
+'health_snapshot'
+'learning'
+'healing'
+'status'
+'cpu'
+'memory'
+'healthy'
+12.4
+45.2
+'examples'
+'patterns'
+'procedures'
+'episodes'
+'last_24h'
+'trust_distribution'
+'top_types'
+'total'
+'avg_trust'
+total_examples
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+avg_trust_examples
+●●●●●● 2mm □△
+'total'
+'avg_success'
+total_patterns
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+avg_success_patterns
+●●●●●● 2mm □△
+'total'
+'avg_success'
+total_procedures
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+avg_success_procedures
+●●●●●● 2mm □△
+0
+0
+dist
+'type'
+'count'
+'Code Patch'
+total_examples
+'available_actions'
+'id'
+'name'
+'severity'
+'restart_memory_bus'
+'Restart Memory Message Bus'
+'medium'
+'id'
+'name'
+'severity'
+'reindex_vectors'
+'Reindex Qdrant Vectors'
+'high'
+'id'
+'name'
+'severity'
+'clear_flash_cache'
+'Clear Flash Cache'
+'low'
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/dashboard'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_skills
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Returns the list of acquired skills (Procedural Memory routines).\n    '
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+ProceduralMemory
+ImportError
+●●●●●● 3mm ○
+'skills'
+rows
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ProceduralMemory
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ProceduralMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+r
+rows
+out
+●●●●●● 1mm □△
+'id'
+'name'
+'goal'
+'type'
+'usage'
+'trust'
+'success'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+r
+'Code Analysis'
+r
+r
+r
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'skills'
+out
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/skills'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LearnRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+topic
+●●●●●● 1mm ○
+method
+●●●●●● 1mm ○
+'kimi'
+●●●●●● 1mm □
+trigger_learning
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+LearnRequest
+'\n    Manually triggers the autonomous learning process on a topic.\n    '
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+res
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fill_knowledge_gaps'
+'topic'
+'method'
+payload
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+res
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+res
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'knowledge'
+'trust_score'
+'completed'
+'Synthesized pattern for: '
+payload
+'\n\nIngested successfully via '
+payload
+'.'
+0.8
+router
+●●●●●● 1mm □△
+'/learn'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+action
+●●●●●● 1mm ○
+●●●●●● 1mm □
+trigger_healing
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+HealRequest
+'\n    Executes a manual self-healing playbook action.\n    '
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+res
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'run_playbook'
+'playbook_id'
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'action_taken'
+'result'
+'success'
+payload
+res
+●●●●●● 1mm □△
+'data'
+'Heal command submitted'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/heal'
+●●●●●● 2mm □△

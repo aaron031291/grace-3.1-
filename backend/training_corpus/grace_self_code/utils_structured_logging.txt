@@ -1,0 +1,798 @@
+## structured_logging.py
+'\nStructured Logging Configuration\n================================\nJSON-formatted logging for production environments.\nSupports correlation IDs, context injection, and log levels.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+traceback
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+Optional
+●●●●●● 3mm □△○
+contextvars
+●●●●●● 2mm □△○
+ContextVar
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+wraps
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+request_id_var
+ContextVar
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+ContextVar
+●●●●●● 1mm □△
+'request_id'
+●●●●●● 2mm □△
+user_id_var
+ContextVar
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+ContextVar
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+session_id_var
+ContextVar
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+ContextVar
+●●●●●● 1mm □△
+'session_id'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+StructuredLogFormatter
+●●●●●● 3mm □△
+logging
+'\n    JSON log formatter for structured logging.\n    Outputs logs in a format suitable for log aggregation systems.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+service_name
+environment
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'grace'
+'development'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+service_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+environment
+●●●●●● 1mm □
+format
+●●●●●● 1mm □△
+self
+record
+●●●●●● 2mm □△
+logging
+'Format log record as JSON.'
+log_data
+●●●●●● 1mm □
+'timestamp'
+'level'
+'logger'
+'message'
+'service'
+'environment'
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'+00:00'
+'Z'
+●●●●●● 2mm □△
+record
+record
+record
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+log_data
+'location'
+●●●●●● 1mm □
+'file'
+'line'
+'function'
+'module'
+record
+record
+record
+record
+request_id
+●●●●●● 1mm □
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+request_id
+log_data
+'request_id'
+●●●●●● 1mm □
+request_id
+user_id
+●●●●●● 1mm □
+user_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_id
+log_data
+'user_id'
+●●●●●● 1mm □
+user_id
+session_id
+●●●●●● 1mm □
+session_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id
+log_data
+'session_id'
+●●●●●● 1mm □
+session_id
+●●●●●● 2mm □
+record
+log_data
+'exception'
+●●●●●● 1mm □
+'type'
+'message'
+'traceback'
+record
+0
+record
+0
+●●●●●● 2mm □
+record
+1
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+record
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+record
+0
+traceback
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+'extra_fields'
+●●●●●● 2mm □△
+log_data
+'extra'
+●●●●●● 1mm □
+record
+standard_attrs
+●●●●●● 1mm □
+'name'
+'msg'
+'args'
+'created'
+'filename'
+'funcName'
+'levelname'
+'levelno'
+'lineno'
+'module'
+'msecs'
+'pathname'
+'process'
+'processName'
+'relativeCreated'
+'stack_info'
+'exc_info'
+'exc_text'
+'thread'
+'threadName'
+'extra_fields'
+'message'
+extra
+●●●●●● 1mm □
+key
+value
+record
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+standard_attrs
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+extra
+key
+●●●●●● 1mm □
+value
+TypeError
+ValueError
+extra
+key
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □
+extra
+log_data
+●●●●●● 1mm □△
+'extra'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+extra
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+log_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+StructuredLogger
+●●●●●● 3mm □△
+logging
+'\n    Extended logger with structured logging support.\n    '
+●●●●●● 1mm □
+_log_with_extra
+●●●●●● 1mm □△
+self
+level
+msg
+extra_fields
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Log with extra structured fields.'
+●●●●●● 2mm □
+extra_fields
+kwargs
+●●●●●● 1mm □△
+'extra'
+●●●●●● 2mm □△
+'extra_fields'
+●●●●●● 1mm □
+extra_fields
+●●●●●● 3mm △
+●●●●●● 1mm □△
+level
+msg
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □
+info_with_context
+●●●●●● 1mm □△
+self
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Log info with extra context.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+logging
+msg
+extra_fields
+●●●●●● 2mm □△
+●●●●●● 1mm □
+error_with_context
+●●●●●● 1mm □△
+self
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Log error with extra context.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+logging
+msg
+extra_fields
+●●●●●● 2mm □△
+●●●●●● 1mm □
+warning_with_context
+●●●●●● 1mm □△
+self
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Log warning with extra context.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+logging
+msg
+extra_fields
+●●●●●● 2mm □△
+●●●●●● 1mm □
+debug_with_context
+●●●●●● 1mm □△
+self
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Log debug with extra context.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+logging
+msg
+extra_fields
+●●●●●● 2mm □△
+●●●●●● 1mm □
+setup_structured_logging
+●●●●●● 1mm □△
+service_name
+environment
+level
+json_output
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+'grace'
+'development'
+logging
+●●●●●● 3mm □△○
+'\n    Configure structured logging for the application.\n\n    Args:\n        service_name: Name of the service for log identification\n        environment: Environment name (development, staging, production)\n        level: Logging level\n        json_output: If True, output JSON format; if False, use standard format\n\n    Returns:\n        Configured root logger\n    '
+logging
+●●●●●● 1mm □△
+StructuredLogger
+●●●●●● 2mm □△
+root_logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root_logger
+●●●●●● 1mm □△
+level
+●●●●●● 2mm □△
+root_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+level
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_output
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+service_name
+environment
+●●●●●● 2mm □△
+●●●●●● 3mm □
+formatter
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+formatter
+●●●●●● 2mm □△
+root_logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+root_logger
+logging
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Get a structured logger instance.\n\n    Args:\n        name: Logger name (usually __name__)\n\n    Returns:\n        StructuredLogger instance\n    '
+●●●●●● 3mm ○
+logging
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+StructuredLogger
+●●●●●● 1mm □
+set_request_context
+●●●●●● 1mm □△
+request_id
+user_id
+session_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Set context variables for the current request.'
+●●●●●● 2mm □
+request_id
+request_id_var
+●●●●●● 1mm □△
+request_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_id
+user_id_var
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id
+session_id_var
+●●●●●● 1mm □△
+session_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Clear all request context variables.'
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+user_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+session_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_request_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Generate a unique request ID.'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+log_function_call
+●●●●●● 1mm □△
+logger
+●●●●●● 2mm □△
+logging
+●●●●●● 2mm □
+'\n    Decorator to log function entry and exit.\n\n    Usage:\n        @log_function_call()\n        def my_function():\n            pass\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+logger
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+func_name
+●●●●●● 1mm □
+func
+logger
+●●●●●● 1mm □△
+'Entering '
+func_name
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+logger
+●●●●●● 1mm □△
+'Exiting '
+func_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+logger
+●●●●●● 1mm □△
+'Error in '
+func_name
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+wrapper
+●●●●●● 3mm ○
+decorator
+●●●●●● 1mm □
+log_async_function_call
+●●●●●● 1mm □△
+logger
+●●●●●● 2mm □△
+logging
+●●●●●● 2mm □
+'\n    Decorator to log async function entry and exit.\n\n    Usage:\n        @log_async_function_call()\n        async def my_async_function():\n            pass\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 2mm □
+logger
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+func_name
+●●●●●● 1mm □
+func
+logger
+●●●●●● 1mm □△
+'Entering '
+func_name
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+logger
+●●●●●● 1mm □△
+'Exiting '
+func_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+logger
+●●●●●● 1mm □△
+'Error in '
+func_name
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+wrapper
+●●●●●● 3mm ○
+decorator
+●●●●●● 2mm △
+LoggingMiddleware
+'\n    ASGI middleware for request/response logging.\n\n    Usage:\n        app.add_middleware(LoggingMiddleware)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+app
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+app
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+'grace.http'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+scope
+'type'
+'http'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+scope
+receive
+send
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+request_id
+●●●●●● 1mm □
+generate_request_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+method
+●●●●●● 1mm □
+scope
+●●●●●● 1mm □△
+'method'
+'UNKNOWN'
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+scope
+●●●●●● 1mm □△
+'path'
+'/'
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Request started: '
+method
+' '
+path
+●●●●●● 2mm □△
+status_code
+●●●●●● 1mm □
+500
+●●●●●● 2mm □
+message
+'type'
+'http.response.start'
+status_code
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'status'
+500
+●●●●●● 2mm □△
+send
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+scope
+receive
+send_wrapper
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+log_level
+●●●●●● 1mm □
+status_code
+400
+logging
+status_code
+500
+logging
+logging
+●●●●●● 3mm △
+●●●●●● 1mm □△
+log_level
+'Request completed: '
+method
+' '
+path
+' - '
+status_code
+●●●●●● 2mm □△
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+__all__
+●●●●●● 1mm □
+'StructuredLogFormatter'
+'StructuredLogger'
+'setup_structured_logging'
+'get_logger'
+'set_request_context'
+'clear_request_context'
+'generate_request_id'
+'log_function_call'
+'log_async_function_call'
+'LoggingMiddleware'
+'request_id_var'
+'user_id_var'
+'session_id_var'

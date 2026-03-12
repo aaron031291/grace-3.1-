@@ -1,0 +1,377 @@
+## tracking_middleware.py
+'\nGenesis Tracking Middleware\n\nAutomatically tracks all requests, responses, and operations\nthrough FastAPI middleware and decorators.\n\nEvery API call, file operation, and database change gets a Genesis Key.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Callable
+Optional
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+Request
+Response
+●●●●●● 3mm □△○
+starlette.middleware.base
+●●●●●● 2mm □△○
+BaseHTTPMiddleware
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+wraps
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+genesis.comprehensive_tracker
+●●●●●● 2mm □△○
+ComprehensiveTracker
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisTrackingMiddleware
+●●●●●● 3mm □△
+BaseHTTPMiddleware
+BaseHTTPMiddleware
+'\n    Middleware that tracks all API requests with Genesis Keys.\n\n    Automatically creates Genesis Keys for:\n    - All incoming requests\n    - Responses\n    - Errors\n    '
+Request
+●●●●●● 1mm △○
+'\n        Process request and create Genesis Key.\n\n        Args:\n            request: FastAPI request\n            call_next: Next middleware/handler\n\n        Returns:\n            Response from handler\n        '
+●●●●●● 2mm □
+●●●●●● 3mm □△
+'/health'
+'/docs'
+'/openapi.json'
+●●●●●● 3mm ○
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+user_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-User-ID'
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-Session-ID'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_body
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+'POST'
+'PUT'
+'PATCH'
+request_body
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+request_body
+Exception
+genesis_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+genesis_key
+response
+●●●●●● 1mm □
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+processing_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+'X-Genesis-Key'
+●●●●●● 1mm □
+genesis_key_id
+●●●●●● 3mm ○
+response
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-MIDDLEWARE] Error tracking request: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Response
+●●●●●● 1mm □
+track_file_operation
+●●●●●● 1mm □△
+operation_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'file_operation'
+'\n    Decorator to track file operations with Genesis Keys.\n\n    Usage:\n        @track_file_operation("file_upload")\n        def upload_file(file_path, ...):\n            ...\n\n    Args:\n        operation_type: Type of file operation\n\n    Returns:\n        Decorator function\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+args
+args
+0
+●●●●●● 2mm □
+start_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+execution_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+decorator
+●●●●●● 1mm □
+track_database_operation
+●●●●●● 1mm □△
+table_name
+operation
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Decorator to track database operations with Genesis Keys.\n\n    Usage:\n        @track_database_operation("documents", "INSERT")\n        def create_document(...):\n            ...\n\n    Args:\n        table_name: Database table name\n        operation: Operation type (INSERT, UPDATE, DELETE)\n\n    Returns:\n        Decorator function\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS] Database operation error: '
+e
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+decorator
+●●●●●● 2mm △
+SessionTracker
+'\n    Context manager for tracking a complete session/operation.\n\n    Usage:\n        with SessionTracker("librarian-processing") as tracker:\n            tracker.track_ai_response(...)\n            tracker.track_file_ingestion(...)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session_name
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Initialize session tracker.\n\n        Args:\n            session_name: Name of session\n            user_id: User identifier\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+session_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+user_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__enter__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start tracking session.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+session_key
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'End tracking session.'
+●●●●●● 2mm □
+exc_type
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □

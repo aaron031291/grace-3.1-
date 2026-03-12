@@ -1,0 +1,1211 @@
+## live_integration.py
+'\nLive Integration Protocol (LIP) — Real-Time Component Integration\n\nWhen a developer vibe-codes a new component via Grace IDE, it auto-integrates\ninto Grace\'s internal world in REAL TIME:\n\n  File Created → Scan → Validate → Analyse → Trust Score → Compass Map →\n  Register → Grant Citizenship → Go Live\n\nCitizenship Levels:\n  VISITOR   — just arrived, monitored, limited access\n  RESIDENT  — basic integration, passed validation\n  CITIZEN   — full integration, trusted, can be called by other systems\n  ELDER     — core component, high trust, proven over time\n\nThe protocol ensures every new .py file becomes a "citizen" of Grace\'s\ncognitive world — the Architecture Compass updates, the Pipeline knows about it,\nTrust Engine scores it, and Grace can explain what it does.\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Set
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+IntegrationStage
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+DISCOVERED
+●●●●●● 1mm □
+'discovered'
+SYNTAX_OK
+●●●●●● 1mm □
+'syntax_ok'
+ANALYSED
+●●●●●● 1mm □
+'analysed'
+TRUST_SCORED
+●●●●●● 1mm □
+'trust_scored'
+COMPASS_MAPPED
+●●●●●● 1mm □
+'compass_mapped'
+REGISTERED
+●●●●●● 1mm □
+'registered'
+CITIZENSHIP_GRANTED
+●●●●●● 1mm □
+'citizenship_granted'
+LIVE
+●●●●●● 1mm □
+'live'
+FAILED
+●●●●●● 1mm □
+'failed'
+●●●●●● 2mm △
+CitizenshipLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+NONE
+●●●●●● 1mm □
+'none'
+VISITOR
+●●●●●● 1mm □
+'visitor'
+RESIDENT
+●●●●●● 1mm □
+'resident'
+CITIZEN
+●●●●●● 1mm □
+'citizen'
+ELDER
+●●●●●● 1mm □
+'elder'
+●●●●●● 2mm △
+ComponentCandidate
+file_path
+●●●●●● 1mm ○
+source_code
+●●●●●● 1mm ○
+file_hash
+●●●●●● 1mm ○
+classes
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+functions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+imports
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+purpose
+●●●●●● 1mm ○
+''
+capabilities
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+IntegrationStage
+IntegrationStage
+trust_score
+●●●●●● 3mm ○
+0.0
+citizenship
+CitizenshipLevel
+CitizenshipLevel
+errors
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+_LEDGER_PATH
+●●●●●● 1mm □
+BACKEND_DIR
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'citizenship_ledger.json'
+_ledger
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_ledger_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ledger
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+_LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+_ledger
+●●●●●● 1mm □
+●●●●●● 1mm □
+_save_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ledger_lock
+_LEDGER_PATH
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+_ledger
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_load_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+integrate_component
+●●●●●● 1mm □△
+file_path
+source_code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n    Full integration pipeline for a new component.\n    Takes a file from DISCOVERED to LIVE in one call.\n    Returns the integration result with citizenship level.\n    '
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+'.py'
+●●●●●● 3mm ○
+'error'
+'file'
+'Only Python files can be integrated'
+file_path
+●●●●●● 2mm □
+source_code
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+file_path
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'File not found: '
+file_path
+source_code
+●●●●●● 1mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+ComponentCandidate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_syntax
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidate
+IntegrationStage
+●●●●●● 3mm ○
+_result
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_analyse
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_trust
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_compass
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_register
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_citizenship
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_stage_live
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_result
+●●●●●● 1mm □△
+candidate
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_stage_syntax
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+'Validate Python syntax.'
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+n
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+imports
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+imports
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+imports
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+IntegrationStage
+SyntaxError
+c
+●●●●●● 1mm □
+IntegrationStage
+c
+●●●●●● 1mm □△
+'Syntax error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_stage_analyse
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+'Analyse what the component does — extract purpose and capabilities.'
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+docstring
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+''
+Exception
+docstring
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+docstring
+c
+●●●●●● 1mm □
+docstring
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+0
+200
+●●●●●● 3mm □
+c
+●●●●●● 1mm □
+'Module with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+' classes and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+' functions'
+capabilities
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+func
+c
+●●●●●● 2mm □
+'search'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'query'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'search'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'generate'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'create'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'generation'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'heal'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'fix'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'healing'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'learn'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'train'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'learning'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'score'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'trust'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'scoring'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'upload'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'ingest'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'ingestion'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'analyse'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'analyze'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'analysis'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'route'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'dispatch'
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+capabilities
+●●●●●● 1mm □△
+'routing'
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+capabilities
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+IntegrationStage
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_stage_trust
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+'Calculate initial trust score.'
+score
+●●●●●● 1mm □
+0.3
+●●●●●● 2mm □
+c
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+20
+score
+0.1
+grace_imports
+●●●●●● 1mm □
+i
+i
+c
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+i
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+'cognitive.'
+'api.'
+'llm_orchestrator.'
+'genesis.'
+●●●●●● 2mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+grace_imports
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.05
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'test'
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+c
+●●●●●● 2mm □△
+score
+0.05
+line_count
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line_count
+500
+score
+0.05
+●●●●●● 2mm □
+line_count
+1000
+score
+0.1
+●●●●●● 2mm □
+c
+c
+score
+0.15
+c
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+score
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+te
+●●●●●● 1mm □△
+'component_'
+comp_name
+'New: '
+comp_name
+c
+●●●●●● 2mm □△
+Exception
+c
+●●●●●● 1mm □
+IntegrationStage
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_stage_compass
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+'Update Architecture Compass with new component.'
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+COMPONENT_KNOWLEDGE
+rel_path
+●●●●●● 1mm □
+c
+COMPONENT_KNOWLEDGE
+rel_path
+●●●●●● 1mm □
+'purpose'
+'capabilities'
+'key_apis'
+c
+c
+c
+5
+compass
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+compass
+●●●●●● 1mm □
+●●●●●● 1mm □
+compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+IntegrationStage
+Exception
+c
+●●●●●● 1mm □△
+'Compass mapping: '
+e
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+IntegrationStage
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_stage_register
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+'Register in the citizenship ledger and event bus.'
+_ledger_lock
+_ledger
+c
+●●●●●● 1mm □
+'file_hash'
+'classes'
+'functions'
+'purpose'
+'capabilities'
+'trust_score'
+'citizenship'
+'integrated_at'
+'stage'
+c
+c
+c
+c
+c
+c
+c
+c
+c
+_save_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'component.registered'
+'file'
+'classes'
+'functions'
+'trust'
+c
+c
+c
+5
+c
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+c
+●●●●●● 1mm □
+IntegrationStage
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_stage_citizenship
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+'Grant citizenship level based on trust and validation.'
+●●●●●● 2mm □
+c
+0.7
+c
+c
+●●●●●● 1mm □
+CitizenshipLevel
+●●●●●● 1mm △
+c
+0.5
+c
+●●●●●● 1mm □
+CitizenshipLevel
+●●●●●● 2mm □
+c
+0.3
+c
+●●●●●● 1mm □
+CitizenshipLevel
+●●●●●● 3mm □
+c
+●●●●●● 1mm □
+CitizenshipLevel
+_ledger_lock
+●●●●●● 2mm □
+c
+_ledger
+_ledger
+c
+'citizenship'
+●●●●●● 1mm □
+c
+_save_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □
+IntegrationStage
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_stage_live
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+"Mark component as live — fully integrated into Grace's world."
+●●●●●● 3mm □△○
+cognitive.adaptive_test_generator
+●●●●●● 2mm □△○
+generate_tests_for_module
+test_result
+●●●●●● 1mm □
+generate_tests_for_module
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+●●●●●● 2mm □
+test_result
+●●●●●● 1mm □△
+'tests_passed'
+0
+●●●●●● 2mm □△
+0
+c
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+c
+●●●●●● 3mm ○
+0.05
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+c
+' '
+' '
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+c
+●●●●●● 1mm □
+IntegrationStage
+●●●●●● 3mm ○
+c
+ComponentCandidate
+●●●●●● 1mm □
+_result
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+ComponentCandidate
+●●●●●● 3mm ○
+'file_path'
+'stage'
+'trust_score'
+'citizenship'
+'purpose'
+'capabilities'
+'classes'
+'functions'
+'imports'
+'errors'
+'success'
+c
+c
+c
+c
+c
+c
+c
+c
+20
+c
+20
+c
+c
+IntegrationStage
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+integrate_directory
+●●●●●● 1mm □△
+dir_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Integrate all Python files in a directory.'
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+dir_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+dir_path
+Path
+●●●●●● 1mm □△
+dir_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Directory not found: '
+dir_path
+results
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+'__init__.py'
+rel
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+integrate_component
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'directory'
+'total'
+'successful'
+'failed'
+'results'
+dir_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+successful
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+successful
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_citizenship_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the full citizenship ledger.'
+_load_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ledger_lock
+citizens
+●●●●●● 1mm □
+k
+v
+k
+v
+_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'citizenship'
+●●●●●● 2mm □△
+'citizen'
+'elder'
+residents
+●●●●●● 1mm □
+k
+v
+k
+v
+_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'citizenship'
+●●●●●● 2mm □△
+'resident'
+visitors
+●●●●●● 1mm □
+k
+v
+k
+v
+_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'citizenship'
+●●●●●● 2mm □△
+'visitor'
+●●●●●● 3mm ○
+'total'
+'citizens'
+'residents'
+'visitors'
+'ledger'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_ledger
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+citizens
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+residents
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+visitors
+●●●●●● 2mm □△
+_ledger
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+promote_component
+●●●●●● 1mm □△
+file_path
+level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+"Manually promote a component's citizenship level."
+_ledger_lock
+●●●●●● 2mm □
+file_path
+_ledger
+●●●●●● 3mm ○
+'error'
+'Component not found: '
+file_path
+_ledger
+file_path
+'citizenship'
+●●●●●● 1mm □
+level
+_ledger
+file_path
+'promoted_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_save_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'promoted'
+'file'
+'level'
+●●●●●● 3mm □△○
+file_path
+level
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

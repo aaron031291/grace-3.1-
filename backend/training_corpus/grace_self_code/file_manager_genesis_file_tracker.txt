@@ -1,0 +1,628 @@
+## genesis_file_tracker.py
+'\nGenesis File Tracker\n\nCreates Genesis Keys for ALL file operations.\nComplete provenance and auditability.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisFileTracker
+'\n    Creates Genesis Keys for ALL file operations.\n    Complete provenance tracking for file management.\n\n    Grace Principle: Complete Tracking\n    - Every file operation creates a Genesis Key\n    - Full context: what/where/when/who/how/why\n    - Enables debugging, learning, and compliance\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+genesis_service
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Initialize Genesis File Tracker.\n\n        Args:\n            genesis_service: Service for creating Genesis Keys\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_service
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+track_file_upload
+●●●●●● 1mm □△
+self
+file_path
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'system'
+●●●●●● 2mm □
+'\n        Track file upload with complete context.\n\n        Args:\n            file_path: Path to uploaded file\n            user_id: User who uploaded\n            metadata: Additional metadata\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] No genesis service, skipping tracking'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+file_stats
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+metadata
+context
+●●●●●● 1mm □
+'operation'
+'file_size'
+'file_type'
+'source'
+'file_upload'
+file_stats
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □△
+'source'
+'user'
+●●●●●● 2mm □△
+metadata
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked upload: '
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+' by '
+user_id
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track upload: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_file_processing
+●●●●●● 1mm □△
+self
+file_id
+file_path
+processing_result
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Track file processing outcome.\n\n        Args:\n            file_id: Document ID\n            file_path: Path to file\n            processing_result: Processing results\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □
+'operation'
+'document_id'
+'chunks_created'
+'embeddings_generated'
+'processing_time'
+'quality_score'
+'strategy_used'
+'success'
+'file_processing'
+file_id
+processing_result
+●●●●●● 1mm □△
+'num_chunks'
+0
+●●●●●● 2mm □△
+processing_result
+●●●●●● 1mm □△
+'num_embeddings'
+0
+●●●●●● 2mm □△
+processing_result
+●●●●●● 1mm □△
+'duration'
+0
+●●●●●● 2mm □△
+processing_result
+●●●●●● 1mm □△
+'quality_score'
+0.5
+●●●●●● 2mm □△
+processing_result
+●●●●●● 1mm □△
+'strategy'
+'default'
+●●●●●● 2mm □△
+processing_result
+●●●●●● 1mm □△
+'success'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked processing: doc_id='
+file_id
+', chunks='
+context
+'chunks_created'
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track processing: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_health_check
+●●●●●● 1mm □△
+self
+health_result
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Track file system health check.\n\n        Args:\n            health_result: Health check results\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □
+'operation'
+'health_status'
+'anomalies_detected'
+'healing_actions_taken'
+'anomalies'
+'actions'
+'file_health_check'
+health_result
+●●●●●● 1mm □△
+'health_status'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+health_result
+●●●●●● 1mm □△
+'anomalies'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+health_result
+●●●●●● 1mm □△
+'healing_actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+health_result
+●●●●●● 1mm □△
+'anomalies'
+●●●●●● 2mm □△
+health_result
+●●●●●● 1mm □△
+'healing_actions'
+●●●●●● 2mm □△
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked health check: status='
+context
+'health_status'
+', anomalies='
+context
+'anomalies_detected'
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track health check: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_relationship_discovery
+●●●●●● 1mm □△
+self
+file_id
+relationships
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+'\n        Track file relationship detection.\n\n        Args:\n            file_id: Document ID\n            relationships: Discovered relationships\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+relationship_types
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'type'
+'unknown'
+●●●●●● 2mm □△
+r
+relationships
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+'operation'
+'document_id'
+'relationships_found'
+'relationship_types'
+'relationships'
+'relationship_discovery'
+file_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+relationships
+●●●●●● 2mm □△
+relationship_types
+relationships
+10
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked relationships: doc_id='
+file_id
+', count='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+relationships
+●●●●●● 2mm □△
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track relationships: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_intelligence_extraction
+●●●●●● 1mm □△
+self
+file_path
+intelligence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Track file intelligence extraction.\n\n        Args:\n            file_path: Path to file\n            intelligence: Extracted intelligence\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □
+'operation'
+'file_path'
+'quality_score'
+'complexity_level'
+'topics_detected'
+'entities_extracted'
+'topics'
+'summary'
+'intelligence_extraction'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+intelligence
+●●●●●● 1mm □△
+'quality_score'
+0.5
+●●●●●● 2mm □△
+intelligence
+●●●●●● 1mm □△
+'complexity_level'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+intelligence
+●●●●●● 1mm □△
+'detected_topics'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+intelligence
+●●●●●● 1mm □△
+'extracted_entities'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+intelligence
+●●●●●● 1mm □△
+'detected_topics'
+●●●●●● 2mm □△
+intelligence
+●●●●●● 1mm □△
+'content_summary'
+''
+●●●●●● 2mm □△
+200
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked intelligence: '
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+', quality='
+context
+'quality_score'
+'.2f'
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track intelligence: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_file_deletion
+●●●●●● 1mm □△
+self
+file_path
+user_id
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'system'
+'user_request'
+'\n        Track file deletion.\n\n        Args:\n            file_path: Path to deleted file\n            user_id: User who deleted\n            reason: Reason for deletion\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □
+'operation'
+'file_path'
+'file_name'
+'reason'
+'file_deletion'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+reason
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked deletion: '
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+' by '
+user_id
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track deletion: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_adaptive_learning
+●●●●●● 1mm □△
+self
+file_type
+strategy
+outcome
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Track adaptive learning from file processing.\n\n        Args:\n            file_type: Type of file\n            strategy: Strategy used\n            outcome: Processing outcome\n\n        Returns:\n            Genesis Key ID\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+context
+●●●●●● 1mm □
+'operation'
+'file_type'
+'strategy_used'
+'success'
+'quality_score'
+'processing_time'
+'learned_from'
+'adaptive_learning'
+file_type
+strategy
+outcome
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □△
+'quality_score'
+0.5
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □△
+'duration'
+0
+●●●●●● 2mm □△
+'processing_outcome'
+key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Tracked learning: '
+file_type
+', success='
+outcome
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+' → Key: '
+key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key_id
+Exception
+logger
+●●●●●● 1mm □△
+'[GENESIS-FILE-TRACKER] Failed to track learning: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+_genesis_tracker
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_genesis_file_tracker
+●●●●●● 1mm □△
+genesis_service
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n    Get or create GenesisFileTracker singleton.\n\n    Args:\n        genesis_service: Optional Genesis Key service\n\n    Returns:\n        GenesisFileTracker instance\n    '
+●●●●●● 2mm □
+_genesis_tracker
+●●●●●● 2mm □
+_genesis_tracker
+●●●●●● 1mm □
+GenesisFileTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_genesis_tracker
+GenesisFileTracker

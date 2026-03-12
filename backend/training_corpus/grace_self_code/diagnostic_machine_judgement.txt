@@ -1,0 +1,1542 @@
+## judgement.py
+'\nLayer 3 - Judgement: Decision Making Layer\n\nEvaluates interpreted data to produce:\n- Health score (overall system health)\n- Confidence score (certainty in diagnosis)\n- Risk vectors (potential future issues)\n- Drift detection (deviation from baseline)\n- Forensic analysis (root cause investigation)\n- AVN (Anomaly Violation Notification)\n- AVM (Anomaly Violation Monitor)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+interpreters
+●●●●●● 2mm □△○
+InterpretedData
+Pattern
+Anomaly
+InvariantCheck
+PatternType
+AnomalyType
+ClarityLevel
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealthStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'System health status levels.'
+HEALTHY
+●●●●●● 1mm □
+'healthy'
+DEGRADED
+●●●●●● 1mm □
+'degraded'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+UNKNOWN
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm △
+RiskLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Risk level classification.'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+DriftType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of system drift detected.'
+PERFORMANCE_DRIFT
+●●●●●● 1mm □
+'performance_drift'
+BEHAVIORAL_DRIFT
+●●●●●● 1mm □
+'behavioral_drift'
+QUALITY_DRIFT
+●●●●●● 1mm □
+'quality_drift'
+RESOURCE_DRIFT
+●●●●●● 1mm □
+'resource_drift'
+NO_DRIFT
+●●●●●● 1mm □
+'no_drift'
+●●●●●● 2mm △
+HealthScore
+'Comprehensive health assessment.'
+overall_score
+●●●●●● 3mm ○
+status
+HealthStatus
+component_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+degraded_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+critical_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trend
+●●●●●● 1mm ○
+'stable'
+dataclass
+●●●●●● 2mm △
+ConfidenceScore
+'Confidence in the diagnostic assessment.'
+overall_confidence
+●●●●●● 3mm ○
+data_completeness
+●●●●●● 3mm ○
+signal_clarity
+●●●●●● 3mm ○
+historical_correlation
+●●●●●● 3mm ○
+reasoning
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+RiskVector
+'A potential risk to the system.'
+risk_id
+●●●●●● 1mm ○
+risk_type
+●●●●●● 1mm ○
+level
+RiskLevel
+probability
+●●●●●● 3mm ○
+impact
+●●●●●● 3mm ○
+description
+●●●●●● 1mm ○
+affected_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mitigation_suggestions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_to_impact
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+DriftAnalysis
+'Analysis of system drift from baseline.'
+drift_type
+DriftType
+drift_magnitude
+●●●●●● 3mm ○
+baseline_value
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+current_value
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+drift_direction
+●●●●●● 1mm ○
+'neutral'
+affected_metrics
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recommendation
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+ForensicFinding
+'Forensic analysis finding for root cause.'
+finding_id
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+evidence
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 3mm ○
+0.0
+related_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timeline
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+AVNAlert
+'Anomaly Violation Notification alert.'
+alert_id
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+anomaly_type
+●●●●●● 1mm ○
+violation_type
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+message
+●●●●●● 1mm ○
+''
+details
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+acknowledged
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+AVMStatus
+'Anomaly Violation Monitor status.'
+monitor_id
+●●●●●● 1mm ○
+is_active
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+anomalies_detected
+●●●●●● 2mm ○
+0
+violations_detected
+●●●●●● 2mm ○
+0
+last_check
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+alert_threshold
+●●●●●● 2mm ○
+3
+current_alert_level
+●●●●●● 1mm ○
+'normal'
+dataclass
+●●●●●● 2mm △
+JudgementResult
+'Complete judgement result from Layer 3.'
+health
+HealthScore
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+confidence
+ConfidenceScore
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+risk_vectors
+●●●●●● 3mm □△
+RiskVector
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+drift_analysis
+●●●●●● 3mm □△
+DriftAnalysis
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+forensic_findings
+●●●●●● 3mm □△
+ForensicFinding
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avn_alerts
+●●●●●● 3mm □△
+AVNAlert
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avm_status
+AVMStatus
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recommended_action
+●●●●●● 1mm ○
+'none'
+judgement_timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+judgement_duration_ms
+●●●●●● 3mm ○
+0.0
+dataclass
+●●●●●● 2mm △
+JudgementLayer
+'\n    Layer 3 - Judgement: Makes decisions based on interpreted data.\n\n    This layer produces actionable assessments including:\n    - Health scores for system components\n    - Confidence in the diagnostic\n    - Risk vectors for potential issues\n    - Drift detection from baseline behavior\n    - Forensic analysis for root causes\n    - AVN (Anomaly Violation Notifications)\n    - AVM (Anomaly Violation Monitor) status\n    '
+BASELINES
+●●●●●● 1mm □
+'test_pass_rate'
+'cpu_percent'
+'memory_percent'
+'error_rate'
+'decision_confidence'
+'response_latency_ms'
+0.9
+30.0
+50.0
+0.02
+0.8
+100.0
+HEALTH_WEIGHTS
+●●●●●● 1mm □
+'tests'
+'services'
+'resources'
+'cognitive'
+'governance'
+'learning_memory'
+'genesis_qdrant'
+0.22
+0.22
+0.18
+0.14
+0.14
+0.05
+0.05
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+baselines
+avn_threshold
+enable_forensics
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+3
+●●●●●● 3mm □△○
+'Initialize the judgement layer.'
+●●●●●● 2mm □
+baselines
+●●●●●● 3mm △
+●●●●●● 1mm □△
+baselines
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+avn_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_forensics
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+judge
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+'Produce judgement from sensor and interpreted data.'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+JudgementResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+end_time
+result
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+result
+JudgementResult
+●●●●●● 1mm □
+_calculate_health_score
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+'Calculate overall system health score.'
+component_scores
+●●●●●● 1mm □
+degraded
+●●●●●● 1mm □
+critical
+●●●●●● 1mm □
+test_score
+●●●●●● 1mm □
+1.0
+●●●●●● 2mm □
+sensor_data
+test_score
+●●●●●● 1mm □
+sensor_data
+component_scores
+'tests'
+●●●●●● 1mm □
+test_score
+●●●●●● 2mm □
+test_score
+0.5
+critical
+●●●●●● 1mm □△
+'tests'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+test_score
+0.8
+degraded
+●●●●●● 1mm □△
+'tests'
+●●●●●● 2mm □△
+service_score
+●●●●●● 1mm □
+1.0
+●●●●●● 2mm □
+sensor_data
+healthy_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+●●●●●● 2mm □△
+service_score
+●●●●●● 1mm □
+healthy_count
+●●●●●● 3mm □△
+4
+component_scores
+'services'
+●●●●●● 1mm □
+service_score
+●●●●●● 2mm □
+service_score
+0.5
+critical
+●●●●●● 1mm □△
+'services'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+service_score
+0.75
+degraded
+●●●●●● 1mm □△
+'services'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+lm_health
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+sensor_data
+'learning_memory_health'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+gq_health
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+sensor_data
+'genesis_qdrant_health'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+component_scores
+'learning_memory'
+●●●●●● 1mm □
+lm_health
+1.0
+0.0
+component_scores
+'genesis_qdrant'
+●●●●●● 1mm □
+gq_health
+1.0
+0.0
+●●●●●● 2mm □
+lm_health
+degraded
+●●●●●● 1mm □△
+'learning_memory'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gq_health
+degraded
+●●●●●● 1mm □△
+'genesis_qdrant'
+●●●●●● 2mm □△
+resource_score
+●●●●●● 1mm □
+1.0
+●●●●●● 2mm □
+sensor_data
+cpu_health
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 3mm □△
+100
+mem_health
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 3mm □△
+100
+disk_health
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 3mm □△
+100
+resource_score
+●●●●●● 1mm □
+cpu_health
+●●●●●● 3mm ○
+mem_health
+●●●●●● 3mm ○
+disk_health
+●●●●●● 3mm □△
+3
+component_scores
+'resources'
+●●●●●● 1mm □
+resource_score
+●●●●●● 2mm □
+resource_score
+0.2
+critical
+●●●●●● 1mm □△
+'resources'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+resource_score
+0.4
+degraded
+●●●●●● 1mm □△
+'resources'
+●●●●●● 2mm □△
+cognitive_score
+●●●●●● 1mm □
+1.0
+●●●●●● 2mm □
+sensor_data
+●●●●●● 2mm □
+sensor_data
+0
+success_rate
+●●●●●● 1mm □
+sensor_data
+●●●●●● 3mm □△
+sensor_data
+confidence_factor
+●●●●●● 1mm □
+sensor_data
+cognitive_score
+●●●●●● 1mm □
+success_rate
+●●●●●● 3mm ○
+confidence_factor
+●●●●●● 3mm □△
+2
+component_scores
+'cognitive'
+●●●●●● 1mm □
+cognitive_score
+●●●●●● 2mm □
+cognitive_score
+0.5
+degraded
+●●●●●● 1mm □△
+'cognitive'
+●●●●●● 2mm □△
+governance_score
+●●●●●● 1mm □
+1.0
+invariant_passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+interpreted_data
+c
+●●●●●● 2mm □△
+invariant_total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+invariant_total
+0
+governance_score
+●●●●●● 1mm □
+invariant_passed
+●●●●●● 3mm □△
+invariant_total
+component_scores
+'governance'
+●●●●●● 1mm □
+governance_score
+●●●●●● 2mm □
+governance_score
+0.7
+critical
+●●●●●● 1mm □△
+'governance'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+governance_score
+0.9
+degraded
+●●●●●● 1mm □△
+'governance'
+●●●●●● 2mm □△
+overall
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+component_scores
+●●●●●● 1mm □△
+comp
+1.0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+weight
+comp
+weight
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+critical
+status
+●●●●●● 1mm □
+HealthStatus
+●●●●●● 1mm △
+degraded
+status
+●●●●●● 1mm □
+HealthStatus
+●●●●●● 2mm □
+overall
+0.8
+status
+●●●●●● 1mm □
+HealthStatus
+●●●●●● 3mm □
+status
+●●●●●● 1mm □
+HealthStatus
+trend
+●●●●●● 1mm □
+'stable'
+●●●●●● 2mm □
+interpreted_data
+high_severity
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+a
+0.7
+a
+interpreted_data
+●●●●●● 2mm □△
+trend
+●●●●●● 1mm □
+high_severity
+'degrading'
+'stable'
+●●●●●● 3mm ○
+HealthScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealthScore
+●●●●●● 1mm □
+_calculate_confidence
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+'Calculate confidence in the diagnostic assessment.'
+total_sensors
+●●●●●● 1mm □
+6
+available_sensors
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+data_completeness
+●●●●●● 1mm □
+available_sensors
+●●●●●● 3mm □△
+total_sensors
+signal_clarity
+●●●●●● 1mm □
+interpreted_data
+pattern_confidences
+●●●●●● 1mm □
+p
+p
+interpreted_data
+0.5
+historical_correlation
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+pattern_confidences
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+pattern_confidences
+●●●●●● 2mm □△
+overall
+●●●●●● 1mm □
+data_completeness
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+signal_clarity
+●●●●●● 2mm □△
+0.4
+●●●●●● 3mm ○
+historical_correlation
+●●●●●● 2mm □△
+0.3
+reasoning_parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+data_completeness
+0.8
+missing
+●●●●●● 1mm □
+total_sensors
+●●●●●● 1mm □△
+available_sensors
+reasoning_parts
+●●●●●● 1mm □△
+missing
+' sensors unavailable'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+signal_clarity
+0.7
+reasoning_parts
+●●●●●● 1mm □△
+'signal clarity is low'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+historical_correlation
+0.6
+reasoning_parts
+●●●●●● 1mm □△
+'limited historical correlation'
+●●●●●● 2mm □△
+reasoning
+●●●●●● 1mm □
+overall
+0.8
+'High confidence'
+', '
+●●●●●● 1mm □△
+reasoning_parts
+●●●●●● 2mm □△
+'Moderate confidence'
+●●●●●● 3mm ○
+ConfidenceScore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConfidenceScore
+●●●●●● 1mm □
+_identify_risk_vectors
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+'Identify potential risk vectors from the data.'
+risks
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+pass_rate
+●●●●●● 1mm □
+sensor_data
+●●●●●● 2mm □
+pass_rate
+0.9
+risks
+●●●●●● 1mm □△
+RiskVector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+●●●●●● 2mm □
+sensor_data
+70
+risks
+●●●●●● 1mm □△
+RiskVector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+unhealthy_services
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+●●●●●● 2mm □
+sensor_data
+unhealthy_services
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+unhealthy_services
+●●●●●● 1mm □△
+'llm'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+unhealthy_services
+●●●●●● 1mm □△
+'vector_db'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+unhealthy_services
+risks
+●●●●●● 1mm □△
+RiskVector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+violations
+●●●●●● 1mm □
+c
+c
+interpreted_data
+c
+●●●●●● 2mm □
+violations
+risks
+●●●●●● 1mm □△
+RiskVector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+risks
+●●●●●● 3mm □△
+RiskVector
+●●●●●● 1mm □
+_analyze_drift
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+'Analyze system drift from baselines.'
+drift_analyses
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm △
+'test_pass_rate'
+current
+●●●●●● 1mm □
+sensor_data
+drift_mag
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+current
+●●●●●● 1mm □△
+baseline
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+baseline
+●●●●●● 2mm □
+drift_mag
+0.1
+drift_analyses
+●●●●●● 1mm □△
+DriftAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+cpu_baseline
+●●●●●● 1mm □
+●●●●●● 3mm △
+'cpu_percent'
+cpu_current
+●●●●●● 1mm □
+sensor_data
+cpu_drift
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+cpu_current
+●●●●●● 1mm □△
+cpu_baseline
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+cpu_baseline
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cpu_drift
+0.3
+drift_analyses
+●●●●●● 1mm □△
+DriftAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+conf_baseline
+●●●●●● 1mm □
+●●●●●● 3mm △
+'decision_confidence'
+conf_current
+●●●●●● 1mm □
+sensor_data
+conf_drift
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+conf_current
+●●●●●● 1mm □△
+conf_baseline
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+conf_baseline
+0.1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conf_drift
+0.2
+drift_analyses
+●●●●●● 1mm □△
+DriftAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+drift_analyses
+drift_analyses
+●●●●●● 1mm □△
+DriftAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+drift_analyses
+●●●●●● 3mm □△
+DriftAnalysis
+●●●●●● 1mm □
+_forensic_analysis
+●●●●●● 1mm □△
+self
+sensor_data
+interpreted_data
+●●●●●● 2mm □△
+SensorData
+InterpretedData
+'Perform forensic analysis to identify root causes.'
+findings
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+sensor_data
+0
+●●●●●● 2mm □
+sensor_data
+sensor_data
+●●●●●● 3mm △
+1
+findings
+●●●●●● 1mm □△
+ForensicFinding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+dominant_error
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dominant_error
+1
+3
+●●●●●● 3mm △
+1
+findings
+●●●●●● 1mm □△
+ForensicFinding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+unhealthy
+●●●●●● 1mm □
+●●●●●● 2mm □
+sensor_data
+unhealthy
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+unhealthy
+●●●●●● 1mm □△
+'llm'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+unhealthy
+●●●●●● 3mm △
+1
+findings
+●●●●●● 1mm □△
+ForensicFinding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+anomaly
+interpreted_data
+●●●●●● 2mm □
+anomaly
+0.6
+●●●●●● 3mm △
+1
+findings
+●●●●●● 1mm □△
+ForensicFinding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+findings
+●●●●●● 3mm □△
+ForensicFinding
+●●●●●● 1mm □
+_generate_avn_alerts
+●●●●●● 1mm □△
+self
+interpreted_data
+●●●●●● 2mm □△
+InterpretedData
+'Generate Anomaly Violation Notification alerts.'
+alerts
+●●●●●● 1mm □
+anomaly
+interpreted_data
+●●●●●● 2mm □
+anomaly
+0.5
+●●●●●● 3mm △
+1
+severity
+●●●●●● 1mm □
+anomaly
+0.8
+'critical'
+'warning'
+alerts
+●●●●●● 1mm □△
+AVNAlert
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+check
+interpreted_data
+●●●●●● 2mm □
+check
+●●●●●● 3mm △
+1
+alerts
+●●●●●● 1mm □△
+AVNAlert
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+alerts
+●●●●●● 3mm □△
+AVNAlert
+●●●●●● 1mm □
+_update_avm_status
+●●●●●● 1mm □△
+self
+interpreted_data
+●●●●●● 2mm □△
+InterpretedData
+'Update Anomaly Violation Monitor status.'
+anomaly_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+interpreted_data
+●●●●●● 2mm □△
+violation_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+interpreted_data
+c
+●●●●●● 2mm □△
+total_issues
+●●●●●● 1mm □
+anomaly_count
+●●●●●● 3mm ○
+violation_count
+●●●●●● 2mm □
+total_issues
+●●●●●● 3mm △
+●●●●●● 2mm □△
+2
+alert_level
+●●●●●● 1mm □
+'critical'
+●●●●●● 1mm △
+total_issues
+●●●●●● 3mm △
+alert_level
+●●●●●● 1mm □
+'elevated'
+alert_level
+●●●●●● 1mm □
+'normal'
+●●●●●● 3mm ○
+AVMStatus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AVMStatus
+●●●●●● 1mm □
+_determine_action
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+JudgementResult
+'Determine recommended action based on judgement.'
+●●●●●● 2mm □
+result
+HealthStatus
+●●●●●● 2mm □
+result
+0.7
+●●●●●● 3mm ○
+'freeze'
+●●●●●● 3mm ○
+'alert'
+critical_risks
+●●●●●● 1mm □
+r
+r
+result
+r
+RiskLevel
+●●●●●● 2mm □
+critical_risks
+●●●●●● 2mm □
+result
+0.8
+●●●●●● 3mm ○
+'heal'
+●●●●●● 3mm ○
+'alert'
+high_risks
+●●●●●● 1mm □
+r
+r
+result
+r
+RiskLevel
+●●●●●● 2mm □
+high_risks
+result
+HealthStatus
+●●●●●● 3mm ○
+'alert'
+significant_drift
+●●●●●● 1mm □
+d
+d
+result
+d
+DriftType
+d
+0.2
+●●●●●● 2mm □
+significant_drift
+●●●●●● 3mm ○
+'monitor'
+●●●●●● 3mm ○
+'none'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+JudgementResult
+'Convert judgement result to dictionary for serialization.'
+●●●●●● 3mm ○
+'judgement_timestamp'
+'judgement_duration_ms'
+'recommended_action'
+'health'
+'confidence'
+'risk_vectors'
+'drift_analysis'
+'forensic_findings'
+'avn_alerts'
+'avm_status'
+'summary'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+result
+'overall_score'
+'status'
+'component_scores'
+'degraded_components'
+'critical_components'
+'trend'
+result
+result
+result
+result
+result
+result
+'overall_confidence'
+'data_completeness'
+'signal_clarity'
+'historical_correlation'
+'reasoning'
+result
+result
+result
+result
+result
+'risk_id'
+'risk_type'
+'level'
+'probability'
+'impact'
+'description'
+'affected_components'
+'mitigation_suggestions'
+'time_to_impact'
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+result
+'drift_type'
+'drift_magnitude'
+'baseline_value'
+'current_value'
+'drift_direction'
+'affected_metrics'
+'recommendation'
+d
+d
+d
+d
+d
+d
+d
+d
+result
+'finding_id'
+'category'
+'description'
+'confidence'
+'related_components'
+f
+f
+f
+f
+f
+f
+result
+'alert_id'
+'severity'
+'anomaly_type'
+'violation_type'
+'message'
+'timestamp'
+a
+a
+a
+a
+a
+a
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+a
+result
+'monitor_id'
+'is_active'
+'anomalies_detected'
+'violations_detected'
+'last_check'
+'current_alert_level'
+result
+result
+result
+result
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'health_status'
+'confidence_level'
+'total_risks'
+'critical_risks'
+'total_alerts'
+'avm_level'
+result
+result
+0.8
+'high'
+result
+0.5
+'medium'
+'low'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+result
+r
+RiskLevel
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

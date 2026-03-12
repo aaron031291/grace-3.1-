@@ -1,0 +1,155 @@
+## add_query_intelligence_tables.py
+'\nDatabase migration: Add query intelligence tables.\n\nCreates tables for tracking multi-tier query handling:\n- query_handling_log: Tracks tier usage and confidence scores\n- knowledge_gaps: Stores identified knowledge gaps\n- context_submissions: Records user-provided context\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+create_engine
+text
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+Base
+●●●●●● 1mm □
+upgrade
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create query intelligence tables.'
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS query_handling_log (\n                id SERIAL PRIMARY KEY,\n                query_id VARCHAR(255) UNIQUE NOT NULL,\n                query_text TEXT NOT NULL,\n                tier_used VARCHAR(50) NOT NULL,\n                confidence_score FLOAT,\n                \n                -- Tier 1: VectorDB metrics\n                vectordb_attempted BOOLEAN DEFAULT FALSE,\n                vectordb_quality FLOAT,\n                vectordb_result_count INTEGER,\n                \n                -- Tier 2: Model Knowledge metrics\n                model_attempted BOOLEAN DEFAULT FALSE,\n                model_confidence FLOAT,\n                uncertainty_detected BOOLEAN DEFAULT FALSE,\n                \n                -- Tier 3: Context Request metrics\n                context_requested BOOLEAN DEFAULT FALSE,\n                context_provided BOOLEAN DEFAULT FALSE,\n                \n                -- Outcome\n                final_success BOOLEAN DEFAULT FALSE,\n                response_time_ms INTEGER,\n                \n                -- Tracking\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                genesis_key_id VARCHAR(255),\n                user_id VARCHAR(255)\n            )\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS knowledge_gaps (\n                id SERIAL PRIMARY KEY,\n                query_id VARCHAR(255) NOT NULL,\n                gap_id VARCHAR(255) UNIQUE NOT NULL,\n                gap_topic VARCHAR(255) NOT NULL,\n                specific_question TEXT NOT NULL,\n                required BOOLEAN DEFAULT TRUE,\n                \n                -- Resolution tracking\n                resolved BOOLEAN DEFAULT FALSE,\n                resolution_source VARCHAR(50),\n                resolved_at TIMESTAMP,\n                \n                -- Metadata\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                \n                FOREIGN KEY (query_id) REFERENCES query_handling_log(query_id) ON DELETE CASCADE\n            )\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE TABLE IF NOT EXISTS context_submissions (\n                id SERIAL PRIMARY KEY,\n                query_id VARCHAR(255) NOT NULL,\n                gap_id VARCHAR(255),\n                submitted_context TEXT NOT NULL,\n                \n                -- Usage tracking\n                used_in_response BOOLEAN DEFAULT FALSE,\n                improved_response BOOLEAN,\n                \n                -- Trust scoring\n                trust_score FLOAT DEFAULT 0.5,\n                validated BOOLEAN DEFAULT FALSE,\n                \n                -- Tracking\n                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                user_id VARCHAR(255),\n                genesis_key_id VARCHAR(255),\n                \n                FOREIGN KEY (query_id) REFERENCES query_handling_log(query_id) ON DELETE CASCADE,\n                FOREIGN KEY (gap_id) REFERENCES knowledge_gaps(gap_id) ON DELETE SET NULL\n            )\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_query_handling_log_tier \n            ON query_handling_log(tier_used)\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_query_handling_log_created \n            ON query_handling_log(created_at DESC)\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_knowledge_gaps_query \n            ON knowledge_gaps(query_id)\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_knowledge_gaps_resolved \n            ON knowledge_gaps(resolved)\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_context_submissions_query \n            ON context_submissions(query_id)\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS idx_context_submissions_gap \n            ON context_submissions(gap_id)\n        '
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Query intelligence tables created successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+downgrade
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Drop query intelligence tables.'
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'DROP TABLE IF EXISTS context_submissions CASCADE'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'DROP TABLE IF EXISTS knowledge_gaps CASCADE'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'DROP TABLE IF EXISTS query_handling_log CASCADE'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Query intelligence tables dropped successfully'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Running query intelligence tables migration...'
+●●●●●● 2mm □△
+upgrade
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Migration complete!'
+●●●●●● 2mm □△

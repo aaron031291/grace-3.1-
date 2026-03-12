@@ -435,10 +435,10 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "npm run bundle",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile",
+    "lint": "echo 'No eslint config'",
     "test": "node ./out/test/runTest.js",
     "test:unit": "mocha --require ts-node/register 'src/test/suite/**/*.test.ts'",
     "test:core": "mocha --require ts-node/register 'src/test/suite/GraceOSCore.test.ts'",

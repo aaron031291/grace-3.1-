@@ -1,0 +1,922 @@
+## cognitive_retriever.py
+'\nCognitive Retrieval Service - Integration Layer\n\nConnects Cognitive Engine → RAG → Learning Memory\nEvery retrieval goes through OODA loop with decision logging and trust scoring.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+cognitive.engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+TrustScorer
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+KNOWLEDGE_BASE_PATH
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CognitiveRetriever
+'\n    Retrieval system integrated with Cognitive Engine.\n\n    Every query:\n    1. Starts OODA loop (Observe → Orient → Decide → Act)\n    2. Tracks ambiguity and decision quality\n    3. Feeds outcomes to Learning Memory\n    4. Updates trust scores based on results\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+retriever
+enable_cognitive
+enable_learning
+●●●●●● 2mm □△
+DocumentRetriever
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n        Initialize cognitive retriever.\n\n        Args:\n            retriever: Base document retriever\n            enable_cognitive: Enable cognitive engine integration\n            enable_learning: Enable learning memory integration\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_cognitive
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_learning
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+retrieve_with_cognition
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+keyword_weight
+user_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+5
+0.3
+0.3
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Retrieve documents using cognitive decision-making.\n\n        Implements OODA loop:\n        - Observe: Analyze query, check ambiguity\n        - Orient: Determine retrieval strategy\n        - Decide: Choose semantic vs hybrid vs reranking\n        - Act: Execute retrieval, track outcome\n\n        Args:\n            query: User query\n            limit: Max chunks to retrieve\n            score_threshold: Minimum score\n            keyword_weight: Weight for keyword matching\n            user_id: Genesis ID of user\n            genesis_key_id: Genesis Key for this query\n\n        Returns:\n            Dict with chunks, context, and cognitive metadata\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+limit
+score_threshold
+keyword_weight
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+'query'
+'query_length'
+'query_type'
+'has_keywords'
+'ambiguity_level'
+'requested_limit'
+'threshold'
+query
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+query_analysis
+'type'
+query_analysis
+'has_keywords'
+query_analysis
+'ambiguity'
+limit
+score_threshold
+●●●●●● 2mm □△
+constraints
+●●●●●● 1mm □
+'safety_critical'
+'impact_scope'
+'requires_high_confidence'
+●●●●●● 1mm □
+'local'
+score_threshold
+0.5
+context_info
+●●●●●● 1mm □
+'available_strategies'
+'query_characteristics'
+'performance_history'
+'semantic'
+'hybrid'
+'reranked'
+query_analysis
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+constraints
+context_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □
+alternatives
+●●●●●● 1mm □△
+'strategy'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'semantic'
+0.7
+0.9
+1.0
+1.0
+0.1
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □△
+'strategy'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'hybrid'
+0.85
+0.8
+0.8
+1.0
+0.3
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □△
+'strategy'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'reranked'
+0.9
+0.7
+0.6
+1.0
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+alternatives
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+selected_strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[COGNITIVE RETRIEVAL] Selected strategy: '
+selected_strategy
+'strategy'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+execute_retrieval
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+selected_strategy
+'strategy'
+●●●●●● 2mm □
+strategy
+'semantic'
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+strategy
+'hybrid'
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context_str
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'chunks'
+'context'
+'strategy_used'
+chunks
+context_str
+strategy
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+execute_retrieval
+●●●●●● 2mm □△
+retrieval_quality
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+elapsed_ms
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cognitive_metadata'
+'total'
+'query'
+result
+'decision_id'
+'strategy_selected'
+'ambiguity_level'
+'quality_score'
+'elapsed_ms'
+'ooda_phases_completed'
+context
+selected_strategy
+'strategy'
+query_analysis
+'ambiguity'
+retrieval_quality
+elapsed_ms
+'observe'
+'orient'
+'decide'
+'act'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'chunks'
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_basic_retrieve
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+keyword_weight
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'Fallback to basic retrieval without cognitive engine.'
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'chunks'
+'context'
+'strategy_used'
+'total'
+'query'
+chunks
+context
+'hybrid'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_analyze_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Analyze query characteristics to inform strategy.\n\n        Returns:\n            Dict with query analysis\n        '
+words
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+word_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+question_words
+●●●●●● 1mm □
+'what'
+'why'
+'how'
+'when'
+'where'
+'who'
+'which'
+is_question
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+qw
+●●●●●● 2mm □△
+qw
+question_words
+●●●●●● 2mm □△
+has_keywords
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+word
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+word
+●●●●●● 1mm □△
+'$'
+●●●●●● 2mm □△
+word
+words
+●●●●●● 2mm □△
+vague_words
+●●●●●● 1mm □
+'thing'
+'stuff'
+'some'
+'any'
+'about'
+'like'
+ambiguity_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+word
+words
+word
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vague_words
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ambiguity_count
+2
+ambiguity
+●●●●●● 1mm □
+'high'
+●●●●●● 1mm △
+ambiguity_count
+0
+ambiguity
+●●●●●● 1mm □
+'medium'
+ambiguity
+●●●●●● 1mm □
+'low'
+●●●●●● 2mm □
+is_question
+query_type
+●●●●●● 1mm □
+'question'
+●●●●●● 1mm △
+word_count
+3
+query_type
+●●●●●● 1mm □
+'keyword'
+query_type
+●●●●●● 1mm □
+'descriptive'
+●●●●●● 3mm ○
+'type'
+'word_count'
+'has_keywords'
+'ambiguity'
+'is_question'
+query_type
+word_count
+has_keywords
+ambiguity
+is_question
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_performance_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get historical performance data for strategy selection.\n\n        Queries learning memory for past retrieval performance.\n        '
+performance
+●●●●●● 1mm □
+'semantic_avg_quality'
+'hybrid_avg_quality'
+'reranked_avg_quality'
+0.7
+0.8
+0.85
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'learning_manager'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+'total_examples'
+stats
+stats
+'total_examples'
+0
+avg_trust
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+'average_trust_score'
+0.75
+●●●●●● 2mm □△
+performance
+'semantic_avg_quality'
+●●●●●● 1mm □
+avg_trust
+●●●●●● 2mm □△
+0.9
+performance
+'hybrid_avg_quality'
+●●●●●● 1mm □
+avg_trust
+●●●●●● 2mm □△
+0.95
+performance
+'reranked_avg_quality'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+avg_trust
+●●●●●● 2mm □△
+1.05
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not load performance history: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+performance
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_assess_retrieval_quality
+●●●●●● 1mm □△
+self
+query
+chunks
+query_analysis
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Assess quality of retrieval results.\n\n        Factors:\n        - Number of chunks returned\n        - Average confidence scores\n        - Score distribution\n        - Relevance to query type\n\n        Returns:\n            Quality score (0-1)\n        '
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+0.0
+coverage_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+5
+●●●●●● 2mm □△
+confidences
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'confidence_score'
+0.5
+●●●●●● 2mm □△
+c
+chunks
+avg_confidence
+●●●●●● 1mm □
+confidences
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+confidences
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+confidences
+●●●●●● 2mm □△
+0.5
+scores
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+c
+chunks
+●●●●●● 2mm □
+scores
+score_variance
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+2
+s
+scores
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+distribution_score
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+score_variance
+●●●●●● 2mm □△
+●●●●●● 3mm □
+distribution_score
+●●●●●● 1mm □
+0.5
+min_score
+●●●●●● 1mm □
+scores
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+0.0
+quality
+●●●●●● 1mm □
+coverage_score
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+avg_confidence
+●●●●●● 2mm □△
+0.4
+●●●●●● 3mm ○
+distribution_score
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+min_score
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+quality
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_record_learning_example
+●●●●●● 1mm □△
+self
+query
+strategy
+chunks
+quality_score
+decision_context
+user_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+DecisionContext
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'\n        Record this retrieval as a learning example.\n\n        Feeds to learning memory for future improvement.\n        '
+learning_data
+●●●●●● 1mm □
+'context'
+'expected'
+'actual'
+'query'
+'query_type'
+'ambiguity_level'
+query
+decision_context
+●●●●●● 1mm □△
+'observations'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'query_type'
+●●●●●● 2mm □△
+decision_context
+●●●●●● 1mm □△
+'observations'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'ambiguity_level'
+●●●●●● 2mm □△
+'strategy'
+'quality_threshold'
+strategy
+0.7
+'strategy'
+'quality_achieved'
+'chunks_returned'
+'avg_confidence'
+strategy
+quality_score
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'confidence_score'
+0
+●●●●●● 2mm □△
+c
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+quality_score
+0.8
+source
+●●●●●● 1mm □
+'system_observation_success'
+●●●●●● 1mm △
+quality_score
+0.3
+source
+●●●●●● 1mm □
+'system_observation_failure'
+source
+●●●●●● 1mm □
+'system_observation_success'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LEARNING] Recorded retrieval example with quality '
+quality_score
+'.2f'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to record learning example: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+provide_feedback
+●●●●●● 1mm □△
+self
+query
+chunks_used
+was_helpful
+user_id
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Record user feedback on retrieval quality.\n\n        This creates high-trust learning examples from direct user feedback.\n\n        Args:\n            query: Original query\n            chunks_used: List of chunk IDs that were used\n            was_helpful: Whether the results were helpful\n            user_id: Genesis ID of user\n            genesis_key_id: Genesis Key for this feedback\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+learning_data
+●●●●●● 1mm □
+'context'
+'expected'
+'actual'
+'query'
+'chunks_used'
+query
+chunks_used
+'helpful'
+●●●●●● 3mm □△○
+'helpful'
+was_helpful
+source
+●●●●●● 1mm □
+was_helpful
+'user_feedback_positive'
+'user_feedback_negative'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LEARNING] Recorded user feedback: '
+was_helpful
+'helpful'
+'not helpful'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to record user feedback: '
+e
+●●●●●● 2mm □△

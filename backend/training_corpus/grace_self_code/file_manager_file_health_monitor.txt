@@ -1,0 +1,1877 @@
+## file_health_monitor.py
+'\nGrace File Health Monitor\n\nContinuously monitors file system health.\nDetects and heals issues autonomously.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Set
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealthReport
+'File system health check report.'
+health_status
+●●●●●● 1mm ○
+anomalies
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+healing_actions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+recommendations
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+timestamp
+datetime
+dataclass
+●●●●●● 2mm △
+FileHealthMonitor
+'\n    Continuously monitors file system health.\n    Detects and heals issues autonomously.\n\n    Grace Principle: Self-Healing\n    - Proactive health monitoring\n    - Autonomous issue detection\n    - Trust-based healing execution\n    - Learning from outcomes\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+trust_level
+genesis_tracker
+dry_run
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+'knowledge_base'
+5
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Initialize File Health Monitor.\n\n        Args:\n            session: Database session\n            knowledge_base_path: Path to knowledge base\n            trust_level: Trust level for autonomous healing (0-9)\n            genesis_tracker: GenesisFileTracker for tracking\n            dry_run: If True, only report planned actions without mutating state\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_level
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_tracker
+●●●●●● 3mm △
+●●●●●● 1mm □
+dry_run
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Monitor initialized: trust_level='
+trust_level
+', kb='
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_embedding_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Lazily load the embedding model singleton.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Failed to load embedding model: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_qdrant_client
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get or create the Qdrant client if available.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Qdrant client is not connected'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+client
+●●●●●● 3mm ○
+client
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Failed to get Qdrant client: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+_build_chunker
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Build a chunker configured with project settings.'
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextChunker
+●●●●●● 3mm ○
+TextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_health_check_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Comprehensive file system health assessment.\n\n        Returns:\n            HealthReport with findings and actions\n        '
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Starting health check cycle...'
+●●●●●● 2mm □△
+anomalies
+●●●●●● 1mm □
+healing_actions
+●●●●●● 1mm □
+orphaned
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orphaned
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'count'
+'files'
+'orphaned_documents'
+'high'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+orphaned
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+5
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_actions
+●●●●●● 1mm □△
+'planned_remove_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned
+●●●●●● 2mm □△
+'_orphaned_records'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healed_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+orphaned
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healing_actions
+●●●●●● 1mm □△
+'removed_'
+healed_count
+'_orphaned_records'
+●●●●●● 2mm □△
+missing_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+missing_embeddings
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'count'
+'missing_embeddings'
+'medium'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+3
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_actions
+●●●●●● 1mm □△
+'planned_regenerate_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing_embeddings
+●●●●●● 2mm □△
+'_embeddings'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healed_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+missing_embeddings
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healing_actions
+●●●●●● 1mm □△
+'regenerated_'
+healed_count
+'_embeddings'
+●●●●●● 2mm □△
+corrupt_metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+corrupt_metadata
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'files'
+'corrupt_metadata'
+'medium'
+corrupt_metadata
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+5
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_actions
+●●●●●● 1mm □△
+'planned_rebuild_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+corrupt_metadata
+●●●●●● 2mm □△
+'_metadata_files'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healed_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+corrupt_metadata
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healing_actions
+●●●●●● 1mm □△
+'rebuilt_'
+healed_count
+'_metadata_files'
+●●●●●● 2mm □△
+duplicates
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+duplicates
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'groups'
+'total_duplicates'
+'duplicate_files'
+'low'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+duplicates
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+group
+●●●●●● 2mm □△
+group
+duplicates
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+7
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_actions
+●●●●●● 1mm □△
+'planned_merge_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+duplicates
+●●●●●● 2mm □△
+'_duplicate_groups'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+merged_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+duplicates
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healing_actions
+●●●●●● 1mm □△
+'merged_'
+merged_count
+'_duplicate_groups'
+●●●●●● 2mm □△
+inconsistent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+inconsistent
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'count'
+'vector_db_inconsistency'
+'high'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+inconsistent
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+5
+●●●●●● 2mm □
+●●●●●● 3mm △
+healing_actions
+●●●●●● 1mm □△
+'planned_sync_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+inconsistent
+●●●●●● 2mm □△
+'_vector_records'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healed_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+inconsistent
+●●●●●● 2mm □△
+●●●●●● 3mm □
+healing_actions
+●●●●●● 1mm □△
+'synced_'
+healed_count
+'_vector_records'
+●●●●●● 2mm □△
+health_status
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+recommendations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+HealthReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'health_status'
+'anomalies'
+'healing_actions'
+health_status
+anomalies
+healing_actions
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Health check complete: status='
+health_status
+', anomalies='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+', actions='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+healing_actions
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+HealthReport
+●●●●●● 1mm □
+_detect_orphaned_documents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Detect documents in DB with missing files.\n\n        Returns:\n            List of orphaned document IDs\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+orphaned
+●●●●●● 1mm □
+documents
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+documents
+●●●●●● 2mm □
+doc
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orphaned
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphaned
+●●●●●● 2mm □△
+' orphaned documents'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+orphaned
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error detecting orphaned docs: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_heal_orphaned_documents
+●●●●●● 1mm □△
+self
+orphaned_ids
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+'\n        Heal orphaned documents by removing from DB.\n\n        Returns:\n            Number of documents healed\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+healed_count
+●●●●●● 1mm □
+0
+doc_id
+orphaned_ids
+doc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+●●●●●● 3mm △
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+healed_count
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Healed '
+healed_count
+' orphaned documents'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+healed_count
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error healing orphaned docs: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_detect_missing_embeddings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Detect documents with missing vector embeddings.\n\n        Returns:\n            List of document IDs with missing embeddings\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+missing
+●●●●●● 1mm □
+documents
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+'completed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+documents
+chunk_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+doc
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk_count
+0
+missing
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing
+●●●●●● 2mm □△
+' docs with missing embeddings'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+missing
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error detecting missing embeddings: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_heal_missing_embeddings
+●●●●●● 1mm □△
+self
+missing_ids
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+'\n        Heal missing embeddings by re-processing files.\n\n        Returns:\n            Number healed\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+missing_ids
+●●●●●● 3mm ○
+0
+healed_count
+●●●●●● 1mm □
+0
+chunker
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedder
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embedder
+●●●●●● 2mm □
+qdrant
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Cannot heal missing embeddings without embedder and Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+doc_id
+missing_ids
+doc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+doc
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Skipping doc '
+doc_id
+': no file path'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Skipping doc '
+doc_id
+': file missing at '
+file_path
+●●●●●● 2mm □△
+text_content
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UnicodeDecodeError
+text_content
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Failed reading '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text_content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Skipping doc '
+doc_id
+': empty file'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+chunker
+●●●●●● 1mm □△
+text_content
+●●●●●● 2mm □△
+vectors
+●●●●●● 1mm □
+created_at
+●●●●●● 1mm □
+doc
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_base
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+doc_id
+'000'
+●●●●●● 2mm □△
+chunk_index
+chunk
+●●●●●● 2mm □
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+chunk
+'text'
+●●●●●● 2mm □△
+0
+vector_id
+●●●●●● 1mm □
+vector_base
+●●●●●● 3mm ○
+chunk_index
+chunk_metadata
+●●●●●● 1mm □
+'document_id'
+'chunk_index'
+'filename'
+'source'
+'created_at'
+doc_id
+chunk_index
+doc
+doc
+created_at
+vectors
+●●●●●● 1mm □△
+vector_id
+embedding
+chunk_metadata
+●●●●●● 2mm □△
+chunk_record
+●●●●●● 1mm □
+DocumentChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+chunk_record
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vectors
+success
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Failed upserting vectors for doc '
+doc_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+'completed'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed_count
+1
+●●●●●● 3mm ○
+healed_count
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error healing missing embeddings: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+healed_count
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_detect_corrupt_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Detect corrupted .metadata.json files.\n\n        Returns:\n            List of paths with corrupt metadata\n        '
+corrupt
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+corrupt
+●●●●●● 2mm □△○
+json
+metadata_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'.metadata.json'
+●●●●●● 2mm □
+metadata_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+metadata_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+json
+corrupt
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+metadata_file
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+corrupt
+●●●●●● 2mm □△
+' corrupt metadata files'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+corrupt
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error detecting corrupt metadata: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_heal_corrupt_metadata
+●●●●●● 1mm □△
+self
+corrupt_files
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Heal corrupt metadata by rebuilding from DB.\n\n        Returns:\n            Number healed\n        '
+●●●●●● 2mm □
+corrupt_files
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □△○
+file_manager.knowledge_base_manager
+●●●●●● 2mm □△○
+KnowledgeBaseManager
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+kb_manager
+●●●●●● 1mm □
+KnowledgeBaseManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+doc_by_path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Document
+●●●●●● 2mm □
+●●●●●● 3mm △
+documents
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_by_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc
+doc
+documents
+doc
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Skipping DB metadata merge: '
+e
+●●●●●● 2mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+'.metadata.json'
+relative_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stat
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'filename'
+'size'
+'modified'
+'created'
+file_path
+stat
+datetime
+●●●●●● 1mm □△
+stat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+stat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_match
+●●●●●● 1mm □
+doc_by_path
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_match
+entry
+●●●●●● 1mm □△
+'document_id'
+'content_hash'
+'source'
+doc_match
+doc_match
+doc_match
+●●●●●● 2mm □△
+metadata
+'files:'
+relative_path
+●●●●●● 1mm □
+entry
+kb_manager
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Rebuilt metadata for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metadata
+●●●●●● 2mm □△
+' files'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+corrupt_files
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error rebuilding metadata: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_detect_duplicates
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Detect duplicate files by content hash.\n\n        Returns:\n            List of duplicate groups (each group is list of doc IDs)\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+duplicates
+●●●●●● 1mm □
+hash_groups
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'count'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_hash
+count
+hash_groups
+doc_ids
+●●●●●● 1mm □
+doc
+doc
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duplicates
+●●●●●● 1mm □△
+doc_ids
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+duplicates
+●●●●●● 2mm □△
+' duplicate groups'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+duplicates
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error detecting duplicates: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_heal_duplicates
+●●●●●● 1mm □△
+self
+duplicate_groups
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+'\n        Heal duplicates by keeping newest, removing others.\n\n        Returns:\n            Number of groups healed\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0
+healed
+●●●●●● 1mm □
+0
+qdrant
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+group
+duplicate_groups
+docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+group
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+1
+keeper
+●●●●●● 1mm □
+docs
+0
+to_remove
+●●●●●● 1mm □
+docs
+1
+dup
+to_remove
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+dup
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_ids
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+chunk
+chunks
+●●●●●● 2mm □
+chunk
+vector_ids
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ValueError
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Skipping non-numeric vector id for chunk '
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant
+vector_ids
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dup
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed
+1
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Merged duplicate group of '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+' docs, kept '
+keeper
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+healed
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error merging duplicates: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+healed
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_check_vector_db_consistency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if vector DB is consistent with database.\n\n        Returns:\n            List of document IDs with inconsistencies\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+inconsistent
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+qdrant
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant
+●●●●●● 2mm □
+qdrant
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Skipping vector consistency: Qdrant unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+inconsistent
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+documents
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+'completed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+documents
+chunk_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+doc
+DocumentChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_ids
+●●●●●● 1mm □
+cid
+chunk_ids
+vector_ids
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+cid
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+TypeError
+ValueError
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Non-numeric vector id in doc '
+doc
+': '
+cid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vector_ids
+existing
+Set
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vector_ids
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+batch
+●●●●●● 1mm □
+vector_ids
+start
+start
+●●●●●● 3mm ○
+200
+points
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+points
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Qdrant retrieve failed for doc '
+doc
+': '
+e
+●●●●●● 2mm □△
+missing
+●●●●●● 1mm □
+vid
+vid
+vector_ids
+vid
+existing
+●●●●●● 2mm □
+missing
+inconsistent
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Doc '
+doc
+' missing '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing
+●●●●●● 2mm □△
+' vectors in Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+inconsistent
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error checking vector consistency: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+inconsistent
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_heal_vector_inconsistencies
+●●●●●● 1mm □△
+self
+inconsistent_ids
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+'\n        Heal vector DB inconsistencies.\n\n        Returns:\n            Number healed\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+inconsistent_ids
+●●●●●● 3mm ○
+0
+embedder
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embedder
+●●●●●● 2mm □
+qdrant
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Cannot heal vector inconsistencies without embedder/Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+healed
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+DocumentChunk
+doc_id
+inconsistent_ids
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+vectors
+●●●●●● 1mm □
+vector_base
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+doc_id
+'000'
+●●●●●● 2mm □△
+chunk
+chunks
+vector_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+vector_id
+●●●●●● 1mm □
+chunk
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 2mm □
+TypeError
+ValueError
+vector_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+vector_id
+●●●●●● 2mm □
+vector_id
+●●●●●● 1mm □
+vector_base
+●●●●●● 3mm ○
+chunk
+chunk
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+vector_id
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+●●●●●● 2mm □
+chunk
+metadata
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+Exception
+metadata
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'document_id'
+doc_id
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □△
+'chunk_index'
+chunk
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+0
+vectors
+●●●●●● 1mm □△
+vector_id
+embedding
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vectors
+success
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Failed to sync vectors for doc '
+doc_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed
+1
+●●●●●● 3mm ○
+healed
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-HEALTH] Error healing vector inconsistencies: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+healed
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_calculate_health_status
+●●●●●● 1mm □△
+self
+anomalies
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+"\n        Calculate overall health status.\n\n        Returns:\n            'healthy', 'degraded', 'warning', or 'critical'\n        "
+●●●●●● 2mm □
+anomalies
+●●●●●● 3mm ○
+'healthy'
+critical_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+anomalies
+a
+'severity'
+'critical'
+●●●●●● 2mm □△
+high_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+anomalies
+a
+'severity'
+'high'
+●●●●●● 2mm □△
+medium_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+anomalies
+a
+'severity'
+'medium'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+critical_count
+0
+●●●●●● 3mm ○
+'critical'
+●●●●●● 1mm △
+high_count
+2
+●●●●●● 3mm ○
+'warning'
+●●●●●● 2mm □
+high_count
+0
+medium_count
+3
+●●●●●● 3mm ○
+'degraded'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'healthy'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_recommendations
+●●●●●● 1mm □△
+self
+anomalies
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'\n        Generate recommendations based on anomalies.\n\n        Returns:\n            List of recommendation strings\n        '
+recommendations
+●●●●●● 1mm □
+anomaly
+anomalies
+●●●●●● 2mm □
+anomaly
+'type'
+'orphaned_documents'
+recommendations
+●●●●●● 1mm □△
+'Clean up '
+anomaly
+'count'
+' orphaned document records'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+anomaly
+'type'
+'missing_embeddings'
+recommendations
+●●●●●● 1mm □△
+'Re-ingest '
+anomaly
+'count'
+' files with missing embeddings'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+anomaly
+'type'
+'duplicate_files'
+recommendations
+●●●●●● 1mm □△
+'Review and merge '
+anomaly
+●●●●●● 1mm □△
+'total_duplicates'
+0
+●●●●●● 2mm □△
+' duplicate files'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+recommendations
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+_health_monitor
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_file_health_monitor
+●●●●●● 1mm □△
+session
+knowledge_base_path
+trust_level
+genesis_tracker
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'knowledge_base'
+5
+●●●●●● 2mm □
+'\n    Get or create FileHealthMonitor singleton.\n\n    Args:\n        session: Database session\n        knowledge_base_path: Path to knowledge base\n        trust_level: Trust level for healing (0-9)\n        genesis_tracker: Genesis tracker instance\n\n    Returns:\n        FileHealthMonitor instance\n    '
+●●●●●● 2mm □
+_health_monitor
+●●●●●● 2mm □
+_health_monitor
+●●●●●● 1mm □
+FileHealthMonitor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_health_monitor
+FileHealthMonitor

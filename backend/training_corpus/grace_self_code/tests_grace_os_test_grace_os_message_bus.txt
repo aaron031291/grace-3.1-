@@ -1,0 +1,520 @@
+## test_grace_os_message_bus.py
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+●●●●●● 3mm □△○
+grace_os.kernel.message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+grace_os.kernel.layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+grace_os.kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+●●●●●● 3mm □△○
+grace_os.layers.base_layer
+●●●●●● 2mm □△○
+BaseLayer
+●●●●●● 2mm △
+MockLayerA
+●●●●●● 3mm □△
+BaseLayer
+BaseLayer
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L_A'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cap_a'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'msg_for_a'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 3mm ○
+LayerResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LayerResponse
+●●●●●● 2mm △
+MockLayerB
+●●●●●● 3mm □△
+BaseLayer
+BaseLayer
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L_B'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cap_b'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'msg_for_b'
+'broadcast_msg'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 2mm □
+message
+'msg_for_b'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'broadcast_msg'
+●●●●●● 3mm ○
+LayerResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LayerResponse
+●●●●●● 2mm △
+MockFailingLayer
+●●●●●● 3mm □△
+BaseLayer
+BaseLayer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+bus
+registry
+fail_count
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+fail_count
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L_Fail'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'fail_test'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Intentional failure'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+LayerResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LayerResponse
+●●●●●● 2mm △
+MockCycleLayer
+●●●●●● 3mm □△
+BaseLayer
+BaseLayer
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L_Cycle'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cycle'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LayerResponse
+●●●●●● 1mm □
+bus_and_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bus
+●●●●●● 1mm □
+MessageBus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bus
+●●●●●● 1mm □
+1
+registry
+●●●●●● 1mm □
+LayerRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+bus
+registry
+pytest
+bus
+registry
+●●●●●● 1mm □
+bus_and_registry
+layer_a
+●●●●●● 1mm □
+MockLayerA
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_a
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+response
+'success'
+response
+'received'
+'data'
+123
+response
+95.0
+pytest
+bus
+registry
+●●●●●● 1mm □
+bus_and_registry
+layer_a
+●●●●●● 1mm □
+MockLayerA
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_b
+●●●●●● 1mm □
+MockLayerB
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_a
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layer_b
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+response
+'success'
+response
+'L_A'
+response
+'received'
+'from'
+'B'
+pytest
+bus
+registry
+●●●●●● 1mm □
+bus_and_registry
+●●●●●● 2mm △
+RetryFailLayer
+●●●●●● 3mm □△
+MockFailingLayer
+MockFailingLayer
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L_Retry'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'retry_test'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+layer_fail
+●●●●●● 1mm □
+RetryFailLayer
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_fail
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+response
+'success'
+layer_fail
+3
+pytest
+bus
+registry
+●●●●●● 1mm □
+bus_and_registry
+●●●●●● 2mm △
+ExhaustFailLayer
+●●●●●● 3mm □△
+MockFailingLayer
+MockFailingLayer
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L_Exhaust'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'exhaust_test'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+layer_fail
+●●●●●● 1mm □
+ExhaustFailLayer
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_fail
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'FAILED RESPONSE WAS: '
+response
+●●●●●● 2mm □△
+response
+'failure'
+'Handler exception'
+response
+'error'
+layer_fail
+4
+pytest
+bus
+registry
+●●●●●● 1mm □
+bus_and_registry
+layer_cycle
+●●●●●● 1mm □
+MockCycleLayer
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+response
+'failure'
+'Max recursion depth exceeded'
+response
+'error'
+pytest
+bus
+registry
+●●●●●● 1mm □
+bus_and_registry
+layer_b1
+●●●●●● 1mm □
+MockLayerB
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_b2
+●●●●●● 1mm □
+MockLayerB
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+layer_b1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layer_b2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+responses
+●●●●●● 2mm □△
+2
+r
+responses
+r
+'success'
+r
+'msg'
+'B got broadcast'
+pytest

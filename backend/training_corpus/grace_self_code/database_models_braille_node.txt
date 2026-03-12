@@ -1,0 +1,80 @@
+## braille_node.py
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Text
+Boolean
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm △
+BrailleSandboxNode
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Stores Python files as deterministic Braille nodes in the Sandbox.\n    Mapped directly to the GRACE DETERMINISTIC LANGUAGE SPECIFICATION v1.0.\n    '
+__tablename__
+●●●●●● 1mm □
+'braille_sandbox_nodes'
+genesis_key
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+braille_encoding
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+master_loop
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ast_content
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+is_active
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+"<BrailleSandboxNode(key='"
+●●●●●● 3mm △
+"', loop='"
+●●●●●● 3mm △
+"')>"

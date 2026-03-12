@@ -1,0 +1,423 @@
+## graph_persistence.py
+'\nMAGMA Graph Persistence Layer\n==============================\nBacks the in-memory MAGMA graphs with database storage.\n\nTwo operations:\n  1. save() — persist current graph state to DB (called on every mutation)\n  2. load() — rehydrate graphs from DB on startup\n\nUses the established run_in_executor pattern for non-blocking async.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.memory_graph_models
+●●●●●● 2mm □△○
+GraphNodeRecord
+GraphEdgeRecord
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraphPersistence
+'Saves and loads MAGMA graph nodes/edges to/from the database.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+workspace_id
+●●●●●● 1mm □
+save_node
+●●●●●● 1mm □△
+self
+graph_type
+node
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Persist a single graph node to the database.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GraphNodeRecord
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_json
+●●●●●● 1mm □
+node
+json
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+meta
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+node
+'metadata'
+●●●●●● 2mm □△
+node
+meta
+●●●●●● 1mm □
+k
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+datetime
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+k
+v
+node
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+existing
+●●●●●● 1mm □
+node
+existing
+●●●●●● 1mm □
+embedding_json
+existing
+●●●●●● 1mm □
+meta
+existing
+●●●●●● 1mm □
+node
+existing
+●●●●●● 1mm □
+node
+●●●●●● 3mm □
+record
+●●●●●● 1mm □
+GraphNodeRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GraphPersist] Failed to save node '
+node
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+save_edge
+●●●●●● 1mm □△
+self
+graph_type
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Persist a single graph edge to the database.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GraphEdgeRecord
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+existing
+●●●●●● 1mm □
+edge
+existing
+●●●●●● 1mm □
+edge
+existing
+●●●●●● 1mm □
+edge
+●●●●●● 3mm □
+record
+●●●●●● 1mm □
+GraphEdgeRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GraphPersist] Failed to save edge '
+edge
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+load_graph
+●●●●●● 1mm □△
+self
+graph_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Load all nodes and edges for a graph type from the database.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+node_query
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GraphNodeRecord
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge_query
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GraphEdgeRecord
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+node_query
+●●●●●● 1mm □
+node_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge_query
+●●●●●● 1mm □
+edge_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nodes
+●●●●●● 1mm □
+record
+node_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+record
+embedding
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+json
+TypeError
+nodes
+●●●●●● 1mm □△
+'id'
+'node_type'
+'content'
+'embedding'
+'metadata'
+'genesis_key_id'
+'trust_score'
+'created_at'
+record
+record
+record
+embedding
+record
+record
+record
+record
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+record
+edge_query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □△
+'id'
+'source_id'
+'target_id'
+'relation_type'
+'weight'
+'confidence'
+'metadata'
+'genesis_key_id'
+record
+record
+record
+record
+record
+record
+record
+record
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'nodes'
+'edges'
+nodes
+edges
+Exception
+logger
+●●●●●● 1mm □△
+'[GraphPersist] Failed to load graph '
+graph_type
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'nodes'
+'edges'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get persistence statistics.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+node_counts
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GraphNodeRecord
+func
+●●●●●● 1mm □△
+GraphNodeRecord
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GraphNodeRecord
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+edge_counts
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GraphEdgeRecord
+func
+●●●●●● 1mm □△
+GraphEdgeRecord
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GraphEdgeRecord
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'nodes_by_graph'
+'edges_by_graph'
+'total_nodes'
+'total_edges'
+node_counts
+edge_counts
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+node_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+edge_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GraphPersist] Failed to get stats: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_nodes'
+'total_edges'
+0
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_graph_persistence
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+GraphPersistence
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+GraphPersistence

@@ -1,0 +1,300 @@
+## ooda.py
+'\nOODA Loop Implementation for Grace.\n\nImplements Invariant 1: OODA as the Primary Control Loop.\nAll execution flows through Observe → Orient → Decide → Act.\n'
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Callable
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm △
+OODAPhase
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Phases of the OODA loop.'
+OBSERVE
+●●●●●● 1mm □
+'observe'
+ORIENT
+●●●●●● 1mm □
+'orient'
+DECIDE
+●●●●●● 1mm □
+'decide'
+ACT
+●●●●●● 1mm □
+'act'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+●●●●●● 2mm △
+OODAState
+'State of the OODA loop execution.'
+current_phase
+OODAPhase
+OODAPhase
+observations
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orientation
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+action_result
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+started_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+completed_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+OODALoop
+'\n    OODA (Observe-Orient-Decide-Act) Loop controller.\n\n    Ensures all operations follow the canonical control loop pattern.\n    No direct execution paths bypass this loop.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+OODAState
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+OODAPhase
+●●●●●● 1mm □
+observe
+●●●●●● 1mm □△
+self
+observations
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        OBSERVE: Gather information about the problem.\n\n        What is the actual problem? What facts do we have?\n\n        Args:\n            observations: Dictionary of observed facts\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+OODAPhase
+ValueError
+●●●●●● 1mm □△
+'Cannot observe in phase '
+●●●●●● 3mm △
+'. OODA loop must start with OBSERVE.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+observations
+●●●●●● 3mm △
+●●●●●● 1mm □△
+OODAPhase
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+orient
+●●●●●● 1mm □△
+self
+context
+constraints
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        ORIENT: Understand the context and constraints.\n\n        What context matters? What are the constraints?\n\n        Args:\n            context: Contextual information\n            constraints: Constraints on the solution space\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+OODAPhase
+ValueError
+●●●●●● 1mm □△
+'Cannot orient in phase '
+●●●●●● 3mm △
+'. Must complete OBSERVE first.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'context'
+'constraints'
+context
+constraints
+●●●●●● 3mm △
+●●●●●● 1mm □△
+OODAPhase
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+decide
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        DECIDE: Choose a plan of action.\n\n        What is the plan? What are the alternatives?\n\n        Args:\n            decision: The selected decision/plan\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+OODAPhase
+ValueError
+●●●●●● 1mm □△
+'Cannot decide in phase '
+●●●●●● 3mm △
+'. Must complete OBSERVE and ORIENT first.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+decision
+●●●●●● 3mm △
+●●●●●● 1mm □△
+OODAPhase
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+act
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+Any
+'\n        ACT: Execute the decided action with monitoring.\n\n        Args:\n            action: Function to execute\n\n        Returns:\n            Result of action execution\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+OODAPhase
+ValueError
+●●●●●● 1mm □△
+'Cannot act in phase '
+●●●●●● 3mm △
+'. Must complete OBSERVE, ORIENT, and DECIDE first.'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+OODAPhase
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Any
+●●●●●● 1mm □
+reset
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Reset the OODA loop for a new cycle.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+OODAState
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_advance_phase
+●●●●●● 1mm □△
+self
+next_phase
+●●●●●● 2mm □△
+OODAPhase
+'\n        Advance to the next phase.\n\n        Args:\n            next_phase: Phase to advance to\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+next_phase
+●●●●●● 2mm □
+next_phase
+OODAPhase
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_phase_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get the history of phases executed.\n\n        Returns:\n            List of phases in order\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OODAPhase
+●●●●●● 1mm □
+is_complete
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if the OODA loop has completed.\n\n        Returns:\n            True if all phases completed\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+OODAPhase
+●●●●●● 3mm △
+●●●●●● 1mm □
+validate_completion
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Validate that all phases were executed in order.\n\n        Returns:\n            True if loop executed correctly\n        '
+expected_phases
+●●●●●● 1mm □
+OODAPhase
+OODAPhase
+OODAPhase
+OODAPhase
+●●●●●● 3mm ○
+●●●●●● 3mm △
+expected_phases
+●●●●●● 3mm △

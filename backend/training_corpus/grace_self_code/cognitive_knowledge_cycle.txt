@@ -1,0 +1,941 @@
+## knowledge_cycle.py
+'\nKnowledge Expansion Cycle — Seed → Discover → Score → Enrich → Reingest\n\nTrust-aware iterative loop that:\n1. Starts from a verified seed (100% trust)\n2. Discovers related data (Oracle DB, web search, APIs)\n3. Scores everything through Trust Engine (chunk-level 0-100)\n4. Enriches with Kimi (reasoning, context, enhancement, KB audit)\n5. Validates through hallucination guard\n6. Reingests high-trust data back into the knowledge base\n7. Repeats with depth limits and cost controls\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CycleConfig
+max_depth
+●●●●●● 2mm ○
+3
+max_records_per_cycle
+●●●●●● 2mm ○
+20
+trust_floor
+●●●●●● 3mm ○
+60.0
+auto_accept_threshold
+●●●●●● 3mm ○
+80.0
+max_kimi_calls
+●●●●●● 2mm ○
+50
+dedup_enabled
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+dataclass
+●●●●●● 2mm △
+CycleResult
+cycle_id
+●●●●●● 1mm ○
+''
+seed
+●●●●●● 1mm ○
+''
+depth
+●●●●●● 2mm ○
+0
+records_discovered
+●●●●●● 2mm ○
+0
+records_scored
+●●●●●● 2mm ○
+0
+records_enriched
+●●●●●● 2mm ○
+0
+records_accepted
+●●●●●● 2mm ○
+0
+records_rejected
+●●●●●● 2mm ○
+0
+records_human_review
+●●●●●● 2mm ○
+0
+kimi_calls_used
+●●●●●● 2mm ○
+0
+gaps_identified
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 3mm ○
+0
+status
+●●●●●● 1mm ○
+'pending'
+dataclass
+●●●●●● 2mm △
+KnowledgeExpansionCycle
+'\n    Iterative knowledge expansion with trust gates at every stage.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+config
+●●●●●● 2mm □△
+CycleConfig
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+config
+CycleConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm ○
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+CycleResult
+●●●●●● 1mm □
+run_cycle
+●●●●●● 1mm □△
+self
+seed
+seed_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'\n        Run one full expansion cycle from a seed.\n        '
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+CycleResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current_queries
+●●●●●● 1mm □
+seed
+all_enriched
+●●●●●● 1mm □
+depth
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+depth
+●●●●●● 3mm ○
+1
+logger
+●●●●●● 1mm □△
+'[CYCLE] Depth '
+depth
+●●●●●● 3mm ○
+1
+'/'
+●●●●●● 3mm △
+', queries: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_queries
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+discovered
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_queries
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+discovered
+●●●●●● 2mm □△
+●●●●●● 2mm □
+discovered
+●●●●●● 2mm □
+●●●●●● 3mm △
+discovered
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+discovered
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+discovered
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scored
+●●●●●● 2mm □△
+above_floor
+●●●●●● 1mm □
+r
+r
+scored
+r
+'trust'
+●●●●●● 3mm △
+below_floor
+●●●●●● 1mm □
+r
+r
+scored
+r
+'trust'
+●●●●●● 3mm △
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+below_floor
+●●●●●● 2mm □△
+●●●●●● 2mm □
+above_floor
+enriched
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+above_floor
+seed_context
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+enriched
+●●●●●● 2mm □△
+record
+enriched
+●●●●●● 2mm □
+record
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+result
+1
+all_enriched
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+1
+gaps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+enriched
+seed
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+gaps
+5
+●●●●●● 2mm □△
+current_queries
+●●●●●● 1mm □
+gaps
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[CYCLE] Kimi call limit reached ('
+●●●●●● 3mm △
+')'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'completed'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+CycleResult
+●●●●●● 1mm □
+_discover
+●●●●●● 1mm □△
+self
+queries
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+discovered
+●●●●●● 1mm □
+query
+queries
+●●●●●● 3mm △
+discovered
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+discovered
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+discovered
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+discovered
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+discovered
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_search_oracle
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+patterns
+●●●●●● 1mm □
+FeedbackLoop
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'source'
+'trust'
+p
+●●●●●● 1mm □△
+'input'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+' '
+●●●●●● 3mm ○
+p
+●●●●●● 1mm □△
+'expected'
+''
+●●●●●● 2mm □△
+'oracle'
+p
+●●●●●● 1mm □△
+'trust'
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+p
+patterns
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_search_rag
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'source'
+'trust'
+'metadata'
+c
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+'rag'
+c
+●●●●●● 1mm □△
+'score'
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+c
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+c
+chunks
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_search_flash_cache
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search FlashCache for cached external references.'
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+refs
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+ref
+refs
+summary
+●●●●●● 1mm □
+ref
+●●●●●● 1mm □△
+'summary'
+''
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+ref
+●●●●●● 1mm □△
+'source_name'
+''
+●●●●●● 2mm □△
+uri
+●●●●●● 1mm □
+ref
+●●●●●● 1mm □△
+'source_uri'
+''
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+ref
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+content
+●●●●●● 1mm □
+summary
+name
+': '
+summary
+name
+' ('
+uri
+')'
+results
+●●●●●● 1mm □△
+'content'
+'source'
+'trust'
+'metadata'
+content
+'flash_cache'
+trust
+'uri'
+uri
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_search_magma
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+query_results
+results
+●●●●●● 1mm □
+query_results
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'source'
+'trust'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+'magma'
+70
+r
+results
+r
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_deduplicate
+●●●●●● 1mm □△
+self
+records
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+unique
+●●●●●● 1mm □
+r
+records
+h
+●●●●●● 1mm □
+●●●●●● 2mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+h
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+h
+●●●●●● 2mm □△
+unique
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+unique
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_score
+●●●●●● 1mm □△
+self
+records
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+engine
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+records
+comp
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'cycle_'
+r
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+'Cycle: '
+r
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+r
+'trust'
+●●●●●● 1mm □
+comp
+Exception
+●●●●●● 3mm ○
+records
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_enrich
+●●●●●● 1mm □△
+self
+records
+context
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+records
+enriched
+●●●●●● 1mm □
+r
+records
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+enriched
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enhanced
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+'Analyse and enrich this knowledge:\n\n'
+content
+2000
+'\n\nContext: '
+context
+500
+'\n\nProvide: 1) Reasoning about relationships 2) Additional context 3) Enhanced version'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+enhanced
+r
+'enriched_content'
+●●●●●● 1mm □
+enhanced
+r
+'enrichment_source'
+●●●●●● 1mm □
+'kimi'
+r
+'trust'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100
+r
+●●●●●● 1mm □△
+'trust'
+50
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+10
+●●●●●● 2mm □△
+Exception
+enriched
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+enriched
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_reingest
+●●●●●● 1mm □△
+self
+record
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+content
+●●●●●● 1mm □
+record
+●●●●●● 1mm □△
+'enriched_content'
+record
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+ingest
+ingest
+●●●●●● 1mm □△
+content
+3000
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_audit_gaps
+●●●●●● 1mm □△
+self
+enriched
+seed
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+enriched_summary
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+100
+r
+enriched
+10
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+'Original topic: '
+seed
+'\n\nKnowledge gathered so far:\n'
+enriched_summary
+"\n\nWhat's MISSING? List 3-5 specific knowledge gaps as short queries."
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+response
+lines
+●●●●●● 1mm □
+l
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'0123456789.-) '
+●●●●●● 2mm □△
+l
+response
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+l
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+l
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+lines
+5
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cycle_id'
+'seed'
+'depth'
+'discovered'
+'accepted'
+'rejected'
+'human_review'
+'gaps'
+'kimi_calls'
+'duration_ms'
+'status'
+r
+r
+r
+r
+r
+r
+r
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+r
+r
+r
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+_cycle
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_knowledge_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_cycle
+●●●●●● 2mm □
+_cycle
+●●●●●● 1mm □
+KnowledgeExpansionCycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cycle
+KnowledgeExpansionCycle

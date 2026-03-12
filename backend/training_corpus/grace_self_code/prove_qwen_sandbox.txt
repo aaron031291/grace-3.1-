@@ -1,0 +1,98 @@
+## prove_qwen_sandbox.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.physics.qwen_z3_pipeline
+●●●●●● 2mm □△○
+QwenZ3Pipeline
+●●●●●● 3mm □△○
+cognitive.physics.z3_sandbox
+●●●●●● 2mm □△○
+Z3Sandbox
+●●●●●● 1mm □
+test_qwen_sandbox
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n========== SPINDLE QWEN SANDBOX TEST =========='
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+QwenZ3Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sandbox
+●●●●●● 1mm □
+Z3Sandbox
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_rule
+●●●●●● 1mm □
+'Standard users cannot delete active databases.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n[PHASE 1] Asking Qwen to Generate Formal Proof for: '"
+test_rule
+"'"
+●●●●●● 2mm □△
+z3_code
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+test_rule
+●●●●●● 2mm □△
+●●●●●● 2mm □
+z3_code
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAILED] Pipeline returned no code.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[PHASE 2] Qwen Output:\n'
+z3_code
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[PHASE 3] Executing in Z3 subprocess sandbox...'
+●●●●●● 2mm □△
+success
+output
+●●●●●● 1mm □
+sandbox
+●●●●●● 1mm □△
+z3_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[PASSED] Sandbox verified the logic: '
+output
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FAILED] Sandbox rejected the logic: '
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_qwen_sandbox
+●●●●●● 1mm □△
+●●●●●● 2mm □△

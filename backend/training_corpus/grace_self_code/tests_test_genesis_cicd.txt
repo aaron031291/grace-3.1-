@@ -1,0 +1,1330 @@
+## test_genesis_cicd.py
+'\nComprehensive Component Tests for Genesis CI/CD System\n\nTests the complete CI/CD functionality:\n- Pipeline definitions and management\n- Stage execution\n- Genesis Key tracking\n- Run management\n- Artifact collection\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+patch
+MagicMock
+AsyncMock
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPipelineStatus
+'Test PipelineStatus enum'
+●●●●●● 1mm □
+test_all_statuses_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected statuses are defined'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStatus
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'PENDING'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'QUEUED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'RUNNING'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'SUCCESS'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'FAILED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'CANCELLED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PipelineStatus
+'SKIPPED'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_status_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test status string values'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStatus
+PipelineStatus
+'pending'
+PipelineStatus
+'queued'
+PipelineStatus
+'running'
+PipelineStatus
+'success'
+PipelineStatus
+'failed'
+●●●●●● 2mm △
+TestStageType
+'Test StageType enum'
+●●●●●● 1mm □
+test_all_stage_types_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected stage types are defined'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+StageType
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'CHECKOUT'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'INSTALL'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'LINT'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'TEST'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'BUILD'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'SECURITY'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'DEPLOY'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'NOTIFY'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+StageType
+'CUSTOM'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestStageResult
+'Test StageResult dataclass'
+●●●●●● 1mm □
+test_stage_result_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a stage result'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+StageResult
+PipelineStatus
+result
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'test-stage'
+result
+PipelineStatus
+result
+'2025-01-01T00:00:00'
+result
+0
+result
+''
+result
+''
+result
+●●●●●● 1mm □
+test_stage_result_with_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stage result with output'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+StageResult
+PipelineStatus
+result
+●●●●●● 1mm □
+StageResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+10.0
+result
+'Test passed'
+●●●●●● 2mm △
+TestPipelineStage
+'Test PipelineStage dataclass'
+●●●●●● 1mm □
+test_pipeline_stage_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a pipeline stage'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStage
+StageType
+stage
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+'install'
+stage
+StageType
+stage
+'pip install -r requirements.txt'
+stage
+600
+stage
+●●●●●● 1mm □
+stage
+●●●●●● 1mm □
+test_pipeline_stage_with_dependencies
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stage with dependencies'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStage
+StageType
+stage
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage
+'install'
+'lint'
+stage
+300
+●●●●●● 2mm △
+TestPipeline
+'Test Pipeline dataclass'
+●●●●●● 1mm □
+test_pipeline_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a pipeline'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+'test-pipeline'
+pipeline
+'Test Pipeline'
+pipeline
+'A test pipeline'
+pipeline
+pipeline
+●●●●●● 1mm □
+test_pipeline_with_stages
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test pipeline with stages'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+PipelineStage
+StageType
+stages
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+pipeline
+●●●●●● 2mm □△
+2
+pipeline
+'push'
+'pull_request'
+●●●●●● 2mm △
+TestPipelineRun
+'Test PipelineRun dataclass'
+●●●●●● 1mm □
+test_pipeline_run_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a pipeline run'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineRun
+PipelineStatus
+run
+●●●●●● 1mm □
+PipelineRun
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run
+'run-001'
+run
+'ci'
+run
+'gk-cicd-abc123'
+run
+PipelineStatus
+run
+'manual'
+run
+'main'
+●●●●●● 1mm □
+test_pipeline_run_with_commit
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test run with commit info'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineRun
+PipelineStatus
+run
+●●●●●● 1mm □
+PipelineRun
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run
+'feature/test'
+run
+'abc123def'
+run
+'Add new feature'
+●●●●●● 2mm △
+TestGenesisKeyAction
+'Test GenesisKeyAction constants'
+●●●●●● 1mm □
+test_action_constants
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test action constants are defined'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisKeyAction
+GenesisKeyAction
+'cicd:pipeline:trigger'
+GenesisKeyAction
+'cicd:pipeline:stage'
+GenesisKeyAction
+'cicd:pipeline:complete'
+GenesisKeyAction
+'cicd:build:artifact'
+GenesisKeyAction
+'cicd:test:execution'
+GenesisKeyAction
+'cicd:deploy'
+●●●●●● 2mm △
+TestGenesisCICD
+'Test GenesisCICD class'
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary workspace'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+self
+temp_workspace
+●●●●●● 2mm □△
+'Create CI/CD instance with temp directories'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisCICD
+●●●●●● 3mm ○
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_cicd_initialization
+●●●●●● 1mm □△
+self
+cicd
+temp_workspace
+●●●●●● 2mm □△
+'Test CI/CD initializes correctly'
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+5
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cicd
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_default_pipelines_registered
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test default pipelines are registered'
+'grace-ci'
+cicd
+'grace-quick'
+cicd
+'grace-deploy'
+cicd
+●●●●●● 1mm □
+test_grace_ci_pipeline_stages
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test GRACE CI pipeline has expected stages'
+pipeline
+●●●●●● 1mm □
+cicd
+'grace-ci'
+stage_names
+●●●●●● 1mm □
+s
+s
+pipeline
+'checkout'
+stage_names
+'install-backend'
+stage_names
+'test-backend'
+stage_names
+'build'
+stage_names
+●●●●●● 1mm □
+test_generate_genesis_key
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test Genesis Key generation'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisKeyAction
+key
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+GenesisKeyAction
+'pipeline_id'
+'run_id'
+'test'
+'001'
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □△
+'gk-cicd-'
+●●●●●● 2mm □△
+key
+cicd
+cicd
+key
+'action'
+GenesisKeyAction
+●●●●●● 1mm □
+test_get_pipeline
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test getting pipeline by ID'
+pipeline
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+'grace-ci'
+●●●●●● 2mm □△
+pipeline
+●●●●●● 2mm □
+pipeline
+'GRACE CI Pipeline'
+cicd
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_list_pipelines
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test listing all pipelines'
+pipelines
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+pipelines
+●●●●●● 2mm □△
+3
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+p
+'id'
+●●●●●● 2mm □△
+p
+pipelines
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_register_pipeline
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test registering a new pipeline'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+new_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+new_pipeline
+●●●●●● 2mm □△
+'custom-pipeline'
+cicd
+cicd
+'custom-pipeline'
+'Custom Pipeline'
+●●●●●● 2mm △
+TestGenesisCICDAsync
+'Test async CI/CD operations'
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary workspace'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+self
+temp_workspace
+●●●●●● 2mm □△
+'Create CI/CD instance'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisCICD
+●●●●●● 3mm ○
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test triggering a pipeline'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStatus
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run
+●●●●●● 2mm □
+run
+'grace-quick'
+run
+PipelineStatus
+run
+●●●●●● 1mm □△
+'gk-cicd-'
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test triggering non-existent pipeline'
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test getting a run by ID'
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+retrieved
+●●●●●● 2mm □
+retrieved
+run
+cicd
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test listing runs'
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+runs
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+runs
+●●●●●● 2mm □△
+3
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test filtering runs by pipeline ID'
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quick_runs
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ci_runs
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+'grace-quick'
+r
+quick_runs
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+'grace-ci'
+r
+ci_runs
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test cancelling a run'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStatus
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+updated_run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+updated_run
+PipelineStatus
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test cancelling non-existent run'
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+'nonexistent-run'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pytest
+'Test getting Genesis Keys for a run'
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+1
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test stopping CI/CD system'
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □
+pytest
+●●●●●● 2mm △
+TestGenesisCICDStageExecution
+'Test stage execution'
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary workspace'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+self
+temp_workspace
+●●●●●● 2mm □△
+'Create CI/CD instance'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisCICD
+●●●●●● 3mm ○
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test executing a simple stage'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStage
+StageType
+PipelineStatus
+stage
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 3mm □△
+'workspace'
+●●●●●● 3mm □△
+'test-run'
+workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+PipelineStatus
+result
+0
+'Hello World'
+result
+result
+0
+pytest
+'Test executing a failing stage'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStage
+StageType
+PipelineStatus
+stage
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 3mm □△
+'workspace'
+●●●●●● 3mm □△
+'test-run'
+workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+PipelineStatus
+result
+0
+pytest
+'Test stage with environment variables'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStage
+StageType
+PipelineStatus
+stage
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 3mm □△
+'workspace'
+●●●●●● 3mm □△
+'test-run'
+workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+PipelineStatus
+pytest
+●●●●●● 2mm △
+TestGenesisCICDPipelineExecution
+'Test full pipeline execution'
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary workspace'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+self
+temp_workspace
+●●●●●● 2mm □△
+'Create CI/CD instance'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisCICD
+●●●●●● 3mm ○
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test executing a simple custom pipeline'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+PipelineStage
+StageType
+PipelineStatus
+simple_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+simple_pipeline
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+updated_run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+run
+●●●●●● 2mm □△
+updated_run
+PipelineStatus
+PipelineStatus
+PipelineStatus
+PipelineStatus
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestGlobalFunctions
+'Test global convenience functions'
+●●●●●● 1mm □
+test_get_cicd_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_cicd returns singleton'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+get_cicd
+_cicd_instance
+●●●●●● 2mm □△○
+genesis.cicd
+●●●●●● 1mm □
+cicd_module
+cicd_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+cicd1
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd2
+●●●●●● 1mm □
+get_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd1
+cicd2
+'Test init_cicd function'
+●●●●●● 2mm □△○
+genesis.cicd
+●●●●●● 1mm □
+cicd_module
+cicd_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+cicd_module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd_module
+●●●●●● 2mm □
+cicd_module
+●●●●●● 3mm □△○
+cicd_module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test shutdown_cicd function'
+●●●●●● 2mm □△○
+genesis.cicd
+●●●●●● 1mm □
+cicd_module
+cicd_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+cicd_module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd_module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd_module
+●●●●●● 2mm □
+pytest
+●●●●●● 2mm △
+TestCICDIntegration
+'Integration tests for CI/CD system'
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary workspace'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+self
+temp_workspace
+●●●●●● 2mm □△
+'Create CI/CD instance'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisCICD
+●●●●●● 3mm ○
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test complete pipeline lifecycle'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+PipelineStage
+StageType
+PipelineStatus
+test_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+test_pipeline
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run
+PipelineStatus
+run
+'abc123'
+run
+●●●●●● 1mm □△
+'gk-cicd-'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test pipeline behavior when dependency fails'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+PipelineStage
+StageType
+failing_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+failing_pipeline
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test continue_on_error behavior'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+Pipeline
+PipelineStage
+StageType
+continue_pipeline
+●●●●●● 1mm □
+Pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+continue_pipeline
+●●●●●● 2mm □△
+run
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestCICDErrorHandling
+'Test error handling in CI/CD'
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary workspace'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+self
+temp_workspace
+●●●●●● 2mm □△
+'Create CI/CD instance'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+GenesisCICD
+●●●●●● 3mm ○
+GenesisCICD
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test stage timeout handling'
+●●●●●● 3mm □△○
+genesis.cicd
+●●●●●● 2mm □△○
+PipelineStage
+StageType
+PipelineStatus
+slow_stage
+●●●●●● 1mm □
+PipelineStage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+temp_workspace
+●●●●●● 3mm □△
+'workspace'
+●●●●●● 3mm □△
+'timeout-test'
+workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+PipelineStatus
+'timed out'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_invalid_pipeline_id
+●●●●●● 1mm □△
+self
+cicd
+●●●●●● 2mm □△
+'Test handling of invalid pipeline ID'
+result
+●●●●●● 1mm □
+cicd
+●●●●●● 1mm □△
+'definitely-not-a-real-pipeline'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+'Test trigger with invalid pipeline raises error'
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

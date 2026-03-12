@@ -1,0 +1,40 @@
+## __init__.py
+"\nGrace Librarian System\n\nA comprehensive file management and organization system that automatically:\n- Categorizes and tags documents using hybrid rules + AI analysis\n- Tracks relationships between documents (citations, prerequisites, versions, etc.)\n- Manages approval workflows for sensitive operations\n- Maintains complete audit trail of all actions\n\nThe librarian handles files from all sources:\n- User uploads via UI\n- Human-created content\n- Grace's autonomous actions\n\nCore Components:\n- LibrarianEngine: Central orchestrator for all operations\n- TagManager: Tag lifecycle management and search\n- RuleBasedCategorizer: Pattern matching for automatic categorization\n- AIContentAnalyzer: LLM-based content analysis\n- RelationshipManager: Document relationship detection and graphs\n- ApprovalWorkflow: Permission checking and approval queue\n- ActionExecutor: Atomic action execution with rollback\n\nUsage:\n    from librarian.engine import LibrarianEngine\n    from database.session import SessionLocal\n    from embedding import get_embedding_model\n    from llm_orchestrator.factory import get_llm_client\n\n    librarian = LibrarianEngine(\n        db_session=SessionLocal(),\n        embedding_model=get_embedding_model(),\n        llm_client=get_llm_client()\n    )\n\n    # Process a single document\n    librarian.process_document(document_id=123)\n\n    # Process multiple documents\n    librarian.process_batch([123, 456, 789])\n\n    # Reprocess entire knowledge base\n    librarian.reprocess_all_documents()\n"
+__version__
+●●●●●● 1mm □
+'1.0.0'
+__author__
+●●●●●● 1mm □
+'Grace AI'
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+LibrarianEngine
+●●●●●● 3mm □△○
+tag_manager
+●●●●●● 2mm □△○
+TagManager
+●●●●●● 3mm □△○
+rule_categorizer
+●●●●●● 2mm □△○
+RuleBasedCategorizer
+●●●●●● 3mm □△○
+ai_analyzer
+●●●●●● 2mm □△○
+AIContentAnalyzer
+●●●●●● 3mm □△○
+relationship_manager
+●●●●●● 2mm □△○
+RelationshipManager
+●●●●●● 3mm □△○
+approval_workflow
+●●●●●● 2mm □△○
+ApprovalWorkflow
+__all__
+●●●●●● 1mm □
+'LibrarianEngine'
+'TagManager'
+'RuleBasedCategorizer'
+'AIContentAnalyzer'
+'RelationshipManager'
+'ApprovalWorkflow'

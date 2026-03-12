@@ -1,0 +1,844 @@
+## genesis_key_models.py
+'\nGenesis Key models for comprehensive version control and tracking.\n\nGenesis Keys track every input, change, and action in the system with\ncomplete metadata for what, where, when, why, who, and how.\n'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Integer
+Float
+DateTime
+JSON
+Text
+Boolean
+Index
+Enum
+●●●●●● 1mm □
+SQLEnum
+ForeignKey
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm □△○
+enum
+●●●●●● 2mm △
+GenesisKeyType
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Types of Genesis Keys - tracks ALL inputs and changes.'
+USER_INPUT
+●●●●●● 1mm □
+'user_input'
+USER_UPLOAD
+●●●●●● 1mm □
+'user_upload'
+AI_RESPONSE
+●●●●●● 1mm □
+'ai_response'
+AI_CODE_GENERATION
+●●●●●● 1mm □
+'ai_code_generation'
+CODING_AGENT_ACTION
+●●●●●● 1mm □
+'coding_agent_action'
+CODE_CHANGE
+●●●●●● 1mm □
+'code_change'
+FILE_OPERATION
+●●●●●● 1mm □
+'file_operation'
+FILE_INGESTION
+●●●●●● 1mm □
+'file_ingestion'
+API_REQUEST
+●●●●●● 1mm □
+'api_request'
+EXTERNAL_API_CALL
+●●●●●● 1mm □
+'external_api_call'
+WEB_FETCH
+●●●●●● 1mm □
+'web_fetch'
+DATABASE_CHANGE
+●●●●●● 1mm □
+'database_change'
+LIBRARIAN_ACTION
+●●●●●● 1mm □
+'librarian_action'
+LEARNING_COMPLETE
+●●●●●● 1mm □
+'learning_complete'
+GAP_IDENTIFIED
+●●●●●● 1mm □
+'gap_identified'
+PRACTICE_OUTCOME
+●●●●●● 1mm □
+'practice_outcome'
+CONFIGURATION
+●●●●●● 1mm □
+'configuration'
+SYSTEM_EVENT
+●●●●●● 1mm □
+'system_event'
+ERROR
+●●●●●● 1mm □
+'error'
+FIX
+●●●●●● 1mm □
+'fix'
+ROLLBACK
+●●●●●● 1mm □
+'rollback'
+●●●●●● 2mm △
+GenesisKeyStatus
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Status of a Genesis Key.'
+ACTIVE
+●●●●●● 1mm □
+'active'
+ARCHIVED
+●●●●●● 1mm □
+'archived'
+ROLLED_BACK
+●●●●●● 1mm □
+'rolled_back'
+ERROR
+●●●●●● 1mm □
+'error'
+FIXED
+●●●●●● 1mm □
+'fixed'
+●●●●●● 2mm △
+FixSuggestionStatus
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Status of fix suggestions.'
+PENDING
+●●●●●● 1mm □
+'pending'
+APPLIED
+●●●●●● 1mm □
+'applied'
+REJECTED
+●●●●●● 1mm □
+'rejected'
+EXPIRED
+●●●●●● 1mm □
+'expired'
+●●●●●● 2mm △
+GenesisKey
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Genesis Key - tracks every action with comprehensive metadata.\n\n    Each Genesis Key captures:\n    - What: The action/change that occurred\n    - Where: Location in code/system\n    - When: Timestamp\n    - Who: User/system identifier\n    - Why: Purpose/reason for change\n    - How: Method/mechanism used\n    '
+__tablename__
+●●●●●● 1mm □
+'genesis_key'
+key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parent_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+GenesisKeyType
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+GenesisKeyStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+user_profile
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+what_description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+where_location
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+when_timestamp
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+why_reason
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+who_actor
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+how_method
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+line_number
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+function_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+code_before
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+code_after
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+is_error
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+error_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+error_traceback
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+has_fix_suggestion
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+fix_applied
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+fix_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+commit_sha
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+branch_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+version_number
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+metadata_human
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+metadata_ai
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+archived_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+archive_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+input_data
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+output_data
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+context_data
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+fix_suggestions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'FixSuggestion'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_key_type_status'
+'key_type'
+'status'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_user_session'
+'user_id'
+'session_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_error_fix'
+'is_error'
+'has_fix_suggestion'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_timestamp'
+'when_timestamp'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_file_path'
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<GenesisKey(key_id='
+●●●●●● 3mm △
+', type='
+●●●●●● 3mm △
+', who='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+FixSuggestion
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Fix suggestions for errors detected by Genesis Key system.\n\n    Provides one-click solutions like spell-check for code.\n    '
+__tablename__
+●●●●●● 1mm □
+'fix_suggestion'
+suggestion_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+ForeignKey
+●●●●●● 1mm □△
+'genesis_key.key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+suggestion_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+severity
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fix_code
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+fix_diff
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+FixSuggestionStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+applied_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+applied_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fix_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'GenesisKey'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_status_severity'
+'status'
+'severity'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<FixSuggestion(id='
+●●●●●● 3mm △
+', type='
+●●●●●● 3mm △
+', status='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+GenesisKeyArchive
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Daily archives of Genesis Keys for organization and reporting.\n\n    Every 24 hours, keys are collected and stored with a generated report.\n    '
+__tablename__
+●●●●●● 1mm □
+'genesis_key_archive'
+archive_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+archive_date
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+key_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+error_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+fix_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+user_count
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+most_active_user
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+most_changed_file
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+most_common_error
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_summary
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+report_data
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+archive_file_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_file_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_archive_date'
+'archive_date'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<GenesisKeyArchive(date='
+●●●●●● 3mm △
+', keys='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+UserProfile
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    User profiles for tracking actions with Genesis Keys.\n\n    Each user gets a Genesis-generated ID for action tracking.\n    '
+__tablename__
+●●●●●● 1mm □
+'user_profile'
+user_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+username
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+email
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+first_seen
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+last_seen
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+total_actions
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+total_changes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+total_errors
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+total_fixes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+preferences
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+user_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_last_seen'
+'last_seen'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<UserProfile(user_id='
+●●●●●● 3mm △
+', username='
+●●●●●● 3mm △
+')>'

@@ -178,19 +178,6 @@ All user actions, inputs, and outputs are tracked here from the first login.
                     except Exception as backup_err:
                         logger.error("Failed to backup corrupted file: %s", backup_err)
                     logger.error("JSON decode error in %s: %s", file_path, e)
-                    
-                    # Pass this manually handled error to the central Self-Healing Error Pipeline
-                    try:
-                        from self_healing.error_pipeline import get_error_pipeline
-                        get_error_pipeline().handle(
-                            e, 
-                            context={"file_path": file_path, "backup_path": backup_path},
-                            module="genesis.kb_integration",
-                            function="_write_key_to_file"
-                        )
-                    except Exception as he:
-                        logger.debug("Error pipeline not available to handle JSON decode error: %s", he)
-                        
                     keys_data = {
                         "user_id": user_id,
                         "session_id": session_id,

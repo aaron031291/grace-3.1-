@@ -1,0 +1,1218 @@
+## active_learning_sampler.py
+'\nActive Learning Sampler - Optimal Training Example Selection\n\nIntelligently selects the most valuable examples for training to\nmaximize learning efficiency with minimal data.\n\nStrategies:\n- Uncertainty Sampling\n- Query-by-Committee\n- Expected Model Change\n- Diversity Sampling\n- Core-Set Selection\n- Adversarial Sampling\n'
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Tuple
+Dict
+Callable
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+heapq
+●●●●●● 3mm □△○
+sklearn.cluster
+●●●●●● 2mm □△○
+KMeans
+●●●●●● 3mm □△○
+sklearn.metrics.pairwise
+●●●●●● 2mm □△○
+euclidean_distances
+●●●●●● 2mm △
+SamplingStrategy
+●●●●●● 3mm □△
+Enum
+Enum
+'Active learning sampling strategies'
+UNCERTAINTY
+●●●●●● 1mm □
+'uncertainty'
+ENTROPY
+●●●●●● 1mm □
+'entropy'
+MARGIN
+●●●●●● 1mm □
+'margin'
+QUERY_BY_COMMITTEE
+●●●●●● 1mm □
+'query_by_committee'
+EXPECTED_MODEL_CHANGE
+●●●●●● 1mm □
+'expected_model_change'
+DIVERSITY
+●●●●●● 1mm □
+'diversity'
+CORESET
+●●●●●● 1mm □
+'coreset'
+ADVERSARIAL
+●●●●●● 1mm □
+'adversarial'
+●●●●●● 2mm △
+SampleScore
+'Score for a candidate sample'
+sample_idx
+●●●●●● 2mm ○
+score
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 1mm □
+__lt__
+●●●●●● 1mm □△
+self
+other
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+other
+dataclass
+●●●●●● 2mm △
+UncertaintySampler
+'\n    Uncertainty-based sampling\n\n    Selects examples where the model is most uncertain\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+device
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 1mm □
+compute_uncertainty
+●●●●●● 1mm □△
+self
+x
+num_mc_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+20
+'\n        Compute uncertainty scores using MC Dropout\n\n        Args:\n            x: Input samples [N, features]\n            num_mc_samples: Number of MC samples\n\n        Returns:\n            Uncertainty scores [N]\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_mc_samples
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+uncertainty
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+uncertainty
+np
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+n_samples
+num_mc_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+20
+'\n        Select most uncertain samples\n\n        Args:\n            unlabeled_x: Unlabeled samples [N, features]\n            n_samples: Number of samples to select\n            num_mc_samples: MC samples for uncertainty\n\n        Returns:\n            List of selected indices\n        '
+uncertainties
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_x
+num_mc_samples
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+uncertainties
+●●●●●● 2mm □△
+1
+n_samples
+●●●●●● 3mm ○
+top_indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+EntropySampler
+'\n    Entropy-based sampling for classification\n\n    Selects examples with maximum prediction entropy\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+device
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 1mm □
+compute_entropy
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'\n        Compute prediction entropy\n\n        Args:\n            x: Input samples [N, features]\n\n        Returns:\n            Entropy scores [N]\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logits
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+probs
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+logits
+●●●●●● 2mm □△
+entropy
+●●●●●● 1mm □
+probs
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+probs
+●●●●●● 3mm ○
+1e-10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+entropy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+n_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+'Select samples with highest entropy'
+entropies
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_x
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+entropies
+●●●●●● 2mm □△
+1
+n_samples
+●●●●●● 3mm ○
+top_indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+MarginSampler
+'\n    Margin-based sampling\n\n    Selects examples where the margin between top-2 predictions is smallest\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+device
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 1mm □
+compute_margin
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'\n        Compute margin scores (difference between top-2 predictions)\n\n        Args:\n            x: Input samples [N, features]\n\n        Returns:\n            Margin scores [N] (lower = more uncertain)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logits
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+probs
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+logits
+●●●●●● 2mm □△
+top2_probs
+_
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+probs
+●●●●●● 2mm □△
+margin
+●●●●●● 1mm □
+top2_probs
+0
+●●●●●● 1mm □△
+top2_probs
+1
+●●●●●● 3mm ○
+margin
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+n_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+'Select samples with smallest margin'
+margins
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_x
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+margins
+●●●●●● 2mm □△
+n_samples
+●●●●●● 3mm ○
+top_indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+QueryByCommittee
+'\n    Query-by-Committee sampling\n\n    Uses disagreement among multiple models\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+models
+device
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+models
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 1mm □
+compute_disagreement
+●●●●●● 1mm □△
+self
+x
+method
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm ○
+'vote_entropy'
+"\n        Compute committee disagreement\n\n        Args:\n            x: Input samples [N, features]\n            method: 'vote_entropy' or 'variance'\n\n        Returns:\n            Disagreement scores [N]\n        "
+predictions
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+●●●●●● 2mm □
+method
+'vote_entropy'
+votes
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+disagreement
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+x
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+vote_counts
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+votes
+i
+●●●●●● 2mm □△
+vote_probs
+●●●●●● 1mm □
+vote_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+entropy
+●●●●●● 1mm □
+vote_probs
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+vote_probs
+●●●●●● 3mm ○
+1e-10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+disagreement
+●●●●●● 1mm □△
+entropy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+np
+●●●●●● 1mm □△
+disagreement
+●●●●●● 2mm □△
+●●●●●● 1mm △
+method
+'variance'
+disagreement
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+disagreement
+ValueError
+●●●●●● 1mm □△
+'Unknown method: '
+method
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+n_samples
+method
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'vote_entropy'
+'Select samples with highest disagreement'
+disagreement
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_x
+method
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+disagreement
+●●●●●● 2mm □△
+1
+n_samples
+●●●●●● 3mm ○
+top_indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+ExpectedModelChangeSampler
+'\n    Expected Model Change (EMC) sampling\n\n    Selects examples that would most change the model if labeled\n    Approximated by gradient magnitude\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+device
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 1mm □
+compute_gradient_magnitude
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'\n        Compute gradient magnitude for each sample\n\n        Args:\n            x: Input samples [N, features]\n\n        Returns:\n            Gradient magnitudes [N]\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+output
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+pseudo_loss
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pseudo_loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+grad_magnitude
+●●●●●● 1mm □
+x
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+grad_magnitude
+np
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+n_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+'Select samples with largest gradient magnitude'
+grad_magnitudes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_x
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+grad_magnitudes
+●●●●●● 2mm □△
+1
+n_samples
+●●●●●● 3mm ○
+top_indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+DiversitySampler
+'\n    Diversity-based sampling\n\n    Selects diverse samples using K-Means clustering\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+n_samples
+embeddings
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+np
+●●●●●● 2mm □
+'\n        Select diverse samples using K-Means\n\n        Args:\n            unlabeled_x: Unlabeled samples [N, features]\n            n_samples: Number of samples to select\n            embeddings: Pre-computed embeddings (optional)\n\n        Returns:\n            List of selected indices\n        '
+●●●●●● 2mm □
+embeddings
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_x
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+embeddings
+●●●●●● 1mm □
+unlabeled_x
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kmeans
+●●●●●● 1mm □
+KMeans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kmeans
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □
+euclidean_distances
+●●●●●● 1mm □△
+embeddings
+kmeans
+●●●●●● 2mm □△
+selected_indices
+●●●●●● 1mm □
+cluster_idx
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n_samples
+●●●●●● 2mm □△
+cluster_distances
+●●●●●● 1mm □
+distances
+cluster_idx
+nearest_idx
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+cluster_distances
+●●●●●● 2mm □△
+selected_indices
+●●●●●● 1mm □△
+nearest_idx
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected_indices
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+CoreSetSampler
+'\n    Core-Set selection\n\n    Selects a representative subset that covers the data distribution\n    Using greedy k-Center algorithm\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_x
+labeled_x
+n_samples
+embeddings_unlabeled
+embeddings_labeled
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm □○
+torch
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+np
+●●●●●● 2mm □○
+np
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Greedy k-Center core-set selection\n\n        Args:\n            unlabeled_x: Unlabeled samples\n            labeled_x: Already labeled samples (optional)\n            n_samples: Number of samples to select\n            embeddings_unlabeled: Embeddings for unlabeled\n            embeddings_labeled: Embeddings for labeled\n\n        Returns:\n            List of selected indices\n        '
+●●●●●● 2mm □
+embeddings_unlabeled
+●●●●●● 2mm □
+embeddings_unlabeled
+●●●●●● 1mm □
+unlabeled_x
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+labeled_x
+●●●●●● 2mm □
+embeddings_labeled
+●●●●●● 2mm □
+selected_embeddings
+●●●●●● 1mm □
+embeddings_labeled
+●●●●●● 3mm □
+selected_embeddings
+●●●●●● 1mm □
+embeddings_unlabeled
+0
+1
+selected_indices
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n_samples
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □
+euclidean_distances
+●●●●●● 1mm □△
+embeddings_unlabeled
+selected_embeddings
+●●●●●● 2mm □△
+min_distances
+●●●●●● 1mm □
+distances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+next_idx
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+min_distances
+●●●●●● 2mm □△
+selected_indices
+●●●●●● 1mm □△
+next_idx
+●●●●●● 2mm □△
+selected_embeddings
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+selected_embeddings
+embeddings_unlabeled
+next_idx
+next_idx
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected_indices
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+ActiveLearningSampler
+'\n    Main Active Learning Sampler\n\n    Orchestrates different sampling strategies\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+strategy
+committee_models
+device
+●●●●●● 2mm □△
+SamplingStrategy
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+SamplingStrategy
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+strategy
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+UncertaintySampler
+●●●●●● 1mm □△
+model
+device
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EntropySampler
+●●●●●● 1mm □△
+model
+device
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MarginSampler
+●●●●●● 1mm □△
+model
+device
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ExpectedModelChangeSampler
+●●●●●● 1mm □△
+model
+device
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DiversitySampler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CoreSetSampler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+committee_models
+●●●●●● 3mm △
+●●●●●● 1mm □
+QueryByCommittee
+●●●●●● 1mm □△
+committee_models
+device
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+select_samples
+●●●●●● 1mm □△
+self
+unlabeled_pool
+n_samples
+labeled_pool
+embeddings_unlabeled
+embeddings_labeled
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+torch
+●●●●●● 2mm □○
+np
+●●●●●● 2mm □○
+np
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Select samples using configured strategy\n\n        Args:\n            unlabeled_pool: Pool of unlabeled samples\n            n_samples: Number to select\n            labeled_pool: Already labeled samples (for core-set)\n            embeddings_unlabeled: Pre-computed embeddings\n            embeddings_labeled: Pre-computed embeddings for labeled\n\n        Returns:\n            List of selected indices\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+ValueError
+●●●●●● 1mm □△
+'QBC requires committee_models'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+embeddings_unlabeled
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+labeled_pool
+n_samples
+embeddings_unlabeled
+embeddings_labeled
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown strategy: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+hybrid_selection
+●●●●●● 1mm □△
+self
+unlabeled_pool
+n_samples
+weights
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+SamplingStrategy
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'\n        Hybrid selection combining multiple strategies\n\n        Args:\n            unlabeled_pool: Pool of unlabeled samples\n            n_samples: Number to select\n            weights: Strategy weights (normalized automatically)\n\n        Returns:\n            List of selected indices\n        '
+●●●●●● 2mm □
+weights
+●●●●●● 2mm □
+weights
+●●●●●● 1mm □
+SamplingStrategy
+SamplingStrategy
+0.5
+0.5
+total_weight
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+weights
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+weights
+●●●●●● 1mm □
+k
+v
+●●●●●● 3mm □△
+total_weight
+k
+v
+weights
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_scores
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+strategy
+weight
+weights
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+strategy
+SamplingStrategy
+scores
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 1mm △
+strategy
+SamplingStrategy
+scores
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 2mm □
+strategy
+SamplingStrategy
+scores
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 3mm □
+scores
+●●●●●● 1mm □
+scores
+●●●●●● 1mm □△
+scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1e-08
+all_scores
+weight
+●●●●●● 2mm □△
+scores
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+all_scores
+●●●●●● 2mm □△
+1
+n_samples
+●●●●●● 3mm ○
+top_indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+_active_sampler_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_active_sampler
+●●●●●● 1mm □△
+model
+strategy
+committee_models
+●●●●●● 2mm □△
+SamplingStrategy
+●●●●●● 3mm □△
+SamplingStrategy
+●●●●●● 2mm □
+'Get active learning sampler instance'
+●●●●●● 2mm □
+_active_sampler_instance
+●●●●●● 2mm □
+_active_sampler_instance
+●●●●●● 1mm □
+ActiveLearningSampler
+●●●●●● 1mm □△
+model
+strategy
+committee_models
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_active_sampler_instance
+ActiveLearningSampler

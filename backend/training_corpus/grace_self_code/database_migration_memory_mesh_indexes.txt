@@ -1,0 +1,513 @@
+## migration_memory_mesh_indexes.py
+'\nMemory Mesh Scalability Migration - Composite Indexes\n\nAdds composite indexes for common query patterns in Memory Mesh:\n- Learning examples by type + trust\n- Genesis Key lookups\n- Episode temporal + trust queries\n- Procedure success rate filtering\n- Document lookups\n\nExpected Performance Improvement: 5-10x faster queries\n'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_validate_identifier
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Validate that a name is a safe SQL identifier (alphanumeric + underscore only).'
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+'^[a-zA-Z_][a-zA-Z0-9_]*$'
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+index_name
+table
+columns
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+"Safely create index, ignoring if table doesn't exist.\n\n    Note: SQL identifiers cannot be parameterized, so we validate them instead.\n    All values must match [a-zA-Z_][a-zA-Z0-9_]* pattern.\n    "
+●●●●●● 2mm □
+_validate_identifier
+●●●●●● 1mm □△
+index_name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Invalid index name: '
+index_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+_validate_identifier
+●●●●●● 1mm □△
+table
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Invalid table name: '
+table
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+col_part
+columns
+●●●●●● 1mm □△
+','
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'DESC'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'ASC'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+col_part
+_validate_identifier
+●●●●●● 1mm □△
+col_part
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Invalid column name: '
+col_part
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+'\n            CREATE INDEX IF NOT EXISTS '
+index_name
+'\n            ON '
+table
+'('
+columns
+')\n        '
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created '
+index_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sqlite3
+●●●●●● 2mm □
+'no such table'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Skipping '
+index_name
+' - table '
+table
+" doesn't exist"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Error creating '
+index_name
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+upgrade
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'backend/data/grace.db'
+'Add composite indexes for Memory Mesh scalability'
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA busy_timeout=60000'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_count
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[MIGRATION] Adding Memory Mesh composite indexes...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_learning_type_trust'
+'learning_examples'
+'example_type, trust_score DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_learning_genesis_key'
+'learning_examples'
+'genesis_key_id'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_learning_trust_desc'
+'learning_examples'
+'trust_score DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_learning_episodic_id'
+'learning_examples'
+'episodic_episode_id'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_learning_procedure_id'
+'learning_examples'
+'procedure_id'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_episode_genesis_trust'
+'episodes'
+'genesis_key_id, trust_score DESC, timestamp DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_episode_timestamp_desc'
+'episodes'
+'timestamp DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_episode_trust_score'
+'episodes'
+'trust_score DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_procedure_type_success'
+'procedures'
+'procedure_type, success_rate DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_procedure_success_desc'
+'procedures'
+'success_rate DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_chunk_document_id'
+'document_chunks'
+'document_id'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_chunk_embedding_vector_id'
+'document_chunks'
+'embedding_vector_id'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_document_content_hash'
+'documents'
+'content_hash'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_document_file_path'
+'documents'
+'file_path'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_document_status'
+'documents'
+'status'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_document_created_at'
+'documents'
+'created_at DESC'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_genesis_key_type_status'
+'genesis_keys'
+'key_type, status'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_genesis_key_user_id'
+'genesis_keys'
+'user_id'
+●●●●●● 2mm □△
+created_count
+1
+●●●●●● 2mm □
+safe_create_index
+●●●●●● 1mm □△
+cursor
+'idx_genesis_key_timestamp'
+'genesis_keys'
+'when_timestamp DESC'
+●●●●●● 2mm □△
+created_count
+1
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIGRATION] Created '
+created_count
+' indexes successfully'
+●●●●●● 2mm □△
+tables_to_analyze
+●●●●●● 1mm □
+'learning_examples'
+'episodes'
+'procedures'
+'document_chunks'
+'documents'
+'genesis_keys'
+table
+tables_to_analyze
+●●●●●● 2mm □
+_validate_identifier
+●●●●●● 1mm □△
+table
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'ANALYZE '
+table
+●●●●●● 2mm □△
+sqlite3
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIGRATION] Table statistics updated'
+●●●●●● 2mm □△
+sqlite3
+logger
+●●●●●● 1mm □△
+'[MIGRATION] Error creating indexes: '
+e
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+downgrade
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'backend/data/grace.db'
+'Remove composite indexes'
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA busy_timeout=60000'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIGRATION] Removing Memory Mesh composite indexes...'
+●●●●●● 2mm □△
+indexes
+●●●●●● 1mm □
+'idx_learning_type_trust'
+'idx_learning_genesis_key'
+'idx_learning_trust_desc'
+'idx_learning_episodic_id'
+'idx_learning_procedure_id'
+'idx_episode_genesis_trust'
+'idx_episode_timestamp_desc'
+'idx_episode_trust_score'
+'idx_procedure_type_success'
+'idx_procedure_success_desc'
+'idx_chunk_document_id'
+'idx_chunk_embedding_vector_id'
+'idx_document_content_hash'
+'idx_document_file_path'
+'idx_document_status'
+'idx_document_created_at'
+'idx_genesis_key_type_status'
+'idx_genesis_key_user_id'
+'idx_genesis_key_timestamp'
+idx
+indexes
+●●●●●● 2mm □
+_validate_identifier
+●●●●●● 1mm □△
+idx
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'DROP INDEX IF EXISTS '
+idx
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Dropped '
+idx
+●●●●●● 2mm □△
+sqlite3
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIGRATION] All indexes removed'
+●●●●●● 2mm □△
+sqlite3
+logger
+●●●●●● 1mm □△
+'[MIGRATION] Error removing indexes: '
+e
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Running Memory Mesh index migration...'
+●●●●●● 2mm □△
+upgrade
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Migration complete!'
+●●●●●● 2mm □△

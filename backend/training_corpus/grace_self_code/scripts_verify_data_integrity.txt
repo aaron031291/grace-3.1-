@@ -1,0 +1,1455 @@
+## verify_data_integrity.py
+'\nData Integrity Verification System for Grace AI Research Repository Ingestion\n\nThis script provides comprehensive verification that:\n1. All repositories were cloned correctly\n2. All files are accessible and readable\n3. All ingested documents match source files\n4. Vector embeddings are stored correctly\n5. Database records are complete and accurate\n\nUsage:\n    python verify_data_integrity.py [--detailed] [--category CATEGORY]\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Tuple
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+asdict
+●●●●●● 2mm □△○
+sqlite3
+backend_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RepositoryStats
+'Statistics for a single repository.'
+name
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+path
+●●●●●● 1mm ○
+exists
+●●●●●● 3mm △
+file_count
+●●●●●● 2mm ○
+total_size_bytes
+●●●●●● 2mm ○
+git_valid
+●●●●●● 3mm △
+sample_files
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+IngestionStats
+'Statistics for ingested data.'
+total_documents
+●●●●●● 2mm ○
+total_chunks
+●●●●●● 2mm ○
+documents_by_category
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+documents_by_repository
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+total_embeddings
+●●●●●● 2mm ○
+database_size_mb
+●●●●●● 3mm ○
+vector_db_collections
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+dataclass
+●●●●●● 2mm △
+IntegrityReport
+'Complete integrity verification report.'
+timestamp
+●●●●●● 1mm ○
+repositories
+●●●●●● 3mm □△
+RepositoryStats
+ingestion
+IngestionStats
+verification_checks
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+issues_found
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+summary
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm △○
+dataclass
+●●●●●● 2mm △
+DataIntegrityVerifier
+'Verifies data integrity across the entire ingestion pipeline.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+ai_research_path
+database_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Initialize verifier.\n\n        Args:\n            ai_research_path: Path to ai_research directory\n            database_path: Path to SQLite database\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+ai_research_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+database_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'Initializing database connection...'
+●●●●●● 2mm □△
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Connecting to Qdrant...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+verify_repository
+●●●●●● 1mm □△
+self
+repo_path
+category
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+"\n        Verify a single repository's integrity.\n\n        Args:\n            repo_path: Path to repository\n            category: Repository category\n\n        Returns:\n            RepositoryStats with verification results\n        "
+logger
+●●●●●● 1mm □△
+'Verifying repository: '
+repo_path
+●●●●●● 2mm □△
+exists
+●●●●●● 1mm □
+repo_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exists
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Repository does not exist: '
+repo_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RepositoryStats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+git_dir
+●●●●●● 1mm □
+repo_path
+●●●●●● 3mm □△
+'.git'
+git_valid
+●●●●●● 1mm □
+git_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+git_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+git_valid
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Not a valid git repository: '
+repo_path
+●●●●●● 2mm □△
+file_count
+●●●●●● 1mm □
+0
+total_size
+●●●●●● 1mm □
+0
+sample_files
+●●●●●● 1mm □
+root
+dirs
+files
+os
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'.git'
+dirs
+dirs
+●●●●●● 1mm □△
+'.git'
+●●●●●● 2mm □△
+file
+files
+file_count
+1
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+file
+total_size
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sample_files
+●●●●●● 2mm □△
+5
+rel_path
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+sample_files
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+rel_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Could not stat file: '
+file_path
+' - '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RepositoryStats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RepositoryStats
+●●●●●● 1mm □
+verify_all_repositories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Verify all repositories in ai_research directory.\n\n        Returns:\n            List of RepositoryStats for all repositories\n        '
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'VERIFYING ALL REPOSITORIES'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+all_stats
+●●●●●● 1mm □
+category_dir
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+category
+●●●●●● 1mm □
+category_dir
+logger
+●●●●●● 1mm □△
+'\nCategory: '
+category
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+repo_dir
+category_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+repo_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+repo_dir
+category
+●●●●●● 2mm □△
+all_stats
+●●●●●● 1mm □△
+stats
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  ✓ '
+stats
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'    Files: '
+stats
+','
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'    Size: '
+stats
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+'.2f'
+' MB'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+logger
+●●●●●● 1mm □△
+'    ⚠ Not a valid git repository'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_stats
+●●●●●● 3mm □△
+RepositoryStats
+●●●●●● 1mm □
+verify_database_integrity
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Verify database integrity and gather statistics.\n\n        Returns:\n            IngestionStats with database verification results\n        '
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'VERIFYING DATABASE INTEGRITY'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_documents
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total documents in database: '
+total_documents
+','
+●●●●●● 2mm □△
+total_chunks
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total chunks in database: '
+total_chunks
+','
+●●●●●● 2mm □△
+docs_by_category
+●●●●●● 1mm □
+categories
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+"SELECT DISTINCT source FROM documents WHERE source LIKE 'ai_research/%'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+category_path
+categories
+●●●●●● 2mm □
+category_path
+category_path
+●●●●●● 1mm □△
+'ai_research/'
+●●●●●● 2mm □△
+category
+●●●●●● 1mm □
+category_path
+●●●●●● 1mm □△
+'ai_research/'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+0
+count
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+'ai_research/'
+category
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docs_by_category
+category
+●●●●●● 1mm □
+count
+logger
+●●●●●● 1mm □△
+'\nDocuments by category:'
+●●●●●● 2mm □△
+category
+count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+docs_by_category
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  '
+category
+': '
+count
+','
+●●●●●● 2mm □△
+docs_by_repo
+●●●●●● 1mm □
+repos
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'SELECT DISTINCT tags FROM documents WHERE tags IS NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tags_json
+repos
+●●●●●● 2mm □
+tags_json
+tags
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+tags_json
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+tags_json
+●●●●●● 2mm □△
+tags_json
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+tags
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+1
+repo_name
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+1
+tags
+1
+tags
+0
+docs_by_repo
+repo_name
+●●●●●● 1mm □
+docs_by_repo
+●●●●●● 1mm □△
+repo_name
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+json
+logger
+●●●●●● 1mm □△
+'\nDocuments by repository:'
+●●●●●● 2mm □△
+repo
+count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+docs_by_repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+logger
+●●●●●● 1mm □△
+'  '
+repo
+': '
+count
+','
+●●●●●● 2mm □△
+total_embeddings
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nTotal embeddings stored: '
+total_embeddings
+','
+●●●●●● 2mm □△
+db_size_bytes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+db_size_mb
+●●●●●● 1mm □
+db_size_bytes
+●●●●●● 3mm □△
+1024
+●●●●●● 2mm □△
+1024
+logger
+●●●●●● 1mm □△
+'Database size: '
+db_size_mb
+'.2f'
+' MB'
+●●●●●● 2mm □△
+vector_collections
+●●●●●● 1mm □
+collections
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collection
+collections
+collection_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+collection
+●●●●●● 2mm □△
+vector_collections
+collection
+●●●●●● 1mm □
+collection_info
+logger
+●●●●●● 1mm □△
+'\nVector database collections:'
+●●●●●● 2mm □△
+collection
+count
+vector_collections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  '
+collection
+': '
+count
+','
+' vectors'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Could not verify Qdrant collections: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'⚠ Could not verify Qdrant: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionStats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+IngestionStats
+●●●●●● 1mm □
+verify_file_to_database_mapping
+●●●●●● 1mm □△
+self
+sample_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'\n        Verify that files on disk match database records.\n\n        Args:\n            sample_size: Number of random files to verify\n\n        Returns:\n            Dict with verification results\n        '
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'VERIFYING FILE-TO-DATABASE MAPPING (sample size: '
+sample_size
+')'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'files_checked'
+'files_found_in_db'
+'files_missing_in_db'
+'content_matches'
+'content_mismatches'
+0
+0
+0
+0
+0
+sample_docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+●●●●●● 1mm □△
+'ai_research/%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+sample_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+sample_docs
+results
+'files_checked'
+1
+file_path_rel
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+doc
+metadata
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+doc
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+doc
+file_path_rel
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+json
+●●●●●● 2mm □
+file_path_rel
+file_path_rel
+●●●●●● 1mm □
+doc
+'/'
+doc
+full_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+file_path_rel
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'files_found_in_db'
+1
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1000000
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'rb'
+●●●●●● 2mm □△
+f
+file_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+file_hash
+results
+'content_matches'
+1
+●●●●●● 3mm □
+results
+'content_mismatches'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Content mismatch: '
+file_path_rel
+' (expected '
+doc
+8
+'..., got '
+file_hash
+8
+'...)'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Could not verify content: '
+file_path_rel
+' - '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'files_missing_in_db'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'File not found on disk: '
+file_path_rel
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Files checked: '
+results
+'files_checked'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Files found in database: '
+results
+'files_found_in_db'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Files missing: '
+results
+'files_missing_in_db'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Content matches: '
+results
+'content_matches'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Content mismatches: '
+results
+'content_mismatches'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+run_full_verification
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Run complete data integrity verification.\n\n        Returns:\n            IntegrityReport with all verification results\n        '
+logger
+●●●●●● 1mm □△
+'\n'
+'#'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'# GRACE DATA INTEGRITY VERIFICATION'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'# Started: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+repo_stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapping_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification_checks
+●●●●●● 1mm □
+'all_repos_exist'
+'all_repos_have_git'
+'database_has_documents'
+'database_has_chunks'
+'embeddings_stored'
+'vector_db_connected'
+'file_mapping_valid'
+'content_integrity'
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+stat
+stat
+repo_stats
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+stat
+stat
+repo_stats
+●●●●●● 2mm □△
+ingestion_stats
+0
+ingestion_stats
+0
+ingestion_stats
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ingestion_stats
+●●●●●● 2mm □△
+0
+mapping_results
+●●●●●● 1mm □△
+'files_found_in_db'
+0
+●●●●●● 2mm □△
+0
+mapping_results
+●●●●●● 1mm □△
+'content_mismatches'
+0
+●●●●●● 2mm □△
+0
+total_files
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+stat
+stat
+repo_stats
+●●●●●● 2mm □△
+total_size_gb
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+stat
+stat
+repo_stats
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+total_repos
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+repo_stats
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+'total_repositories'
+'total_files_on_disk'
+'total_size_gb'
+'total_documents_ingested'
+'total_chunks_created'
+'total_embeddings'
+'database_size_mb'
+'ingestion_coverage_pct'
+'all_checks_passed'
+'issues_count'
+'warnings_count'
+total_repos
+total_files
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_size_gb
+2
+●●●●●● 2mm □△
+ingestion_stats
+ingestion_stats
+ingestion_stats
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ingestion_stats
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+total_files
+0
+ingestion_stats
+●●●●●● 3mm □△
+total_files
+●●●●●● 2mm □△
+100
+0
+2
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+verification_checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+IntegrityReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+'#'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'# VERIFICATION COMPLETE'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Summary:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total repositories: '
+summary
+'total_repositories'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total files on disk: '
+summary
+'total_files_on_disk'
+','
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total size: '
+summary
+'total_size_gb'
+'.2f'
+' GB'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Documents ingested: '
+summary
+'total_documents_ingested'
+','
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Chunks created: '
+summary
+'total_chunks_created'
+','
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Embeddings stored: '
+summary
+'total_embeddings'
+','
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Database size: '
+summary
+'database_size_mb'
+'.2f'
+' MB'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Ingestion coverage: '
+summary
+'ingestion_coverage_pct'
+'.2f'
+'%'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nVerification Checks:'
+●●●●●● 2mm □△
+check
+passed
+verification_checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+passed
+'✓ PASS'
+'✗ FAIL'
+logger
+●●●●●● 1mm □△
+'  '
+status
+': '
+check
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nIssues: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+issue
+●●●●●● 3mm △
+10
+logger
+●●●●●● 1mm □△
+'  ✗ '
+issue
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+10
+logger
+●●●●●● 1mm □△
+'  ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+' more issues'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nWarnings: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+warning
+●●●●●● 3mm △
+10
+logger
+●●●●●● 1mm □△
+'  ⚠ '
+warning
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+10
+logger
+●●●●●● 1mm □△
+'  ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+' more warnings'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+summary
+'all_checks_passed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+logger
+●●●●●● 1mm □△
+'\n🎉 ALL INTEGRITY CHECKS PASSED! Data is complete and intact.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'\n⚠ Some issues or checks failed. Review the report above.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+IntegrityReport
+●●●●●● 1mm □
+save_report
+●●●●●● 1mm □△
+self
+report
+output_file
+●●●●●● 2mm □△
+IntegrityReport
+●●●●●● 1mm ○
+'\n        Save verification report to JSON file.\n\n        Args:\n            report: IntegrityReport to save\n            output_file: Path to output file\n        '
+logger
+●●●●●● 1mm □△
+'\nSaving report to: '
+output_file
+●●●●●● 2mm □△
+report_dict
+●●●●●● 1mm □
+'timestamp'
+'repositories'
+'ingestion'
+'verification_checks'
+'issues_found'
+'warnings'
+'summary'
+report
+asdict
+●●●●●● 1mm □△
+stat
+●●●●●● 2mm □△
+stat
+report
+asdict
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+report
+report
+report
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_file
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+report_dict
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Report saved successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point.'
+●●●●●● 2mm □△○
+argparse
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--output'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--sample-size'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+ai_research_path
+●●●●●● 1mm □
+project_root
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'ai_research'
+database_path
+●●●●●● 1mm □
+project_root
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+verifier
+●●●●●● 1mm □
+DataIntegrityVerifier
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ai_research_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+database_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+verifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_path
+●●●●●● 1mm □
+project_root
+●●●●●● 3mm □△
+args
+verifier
+●●●●●● 1mm □△
+report
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+'all_checks_passed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

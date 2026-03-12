@@ -1,0 +1,94 @@
+## migrate_add_genesis_keys.py
+'\nDatabase migration to add Genesis Key tables.\n\nRun this script to create the Genesis Key tracking system tables.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+create_engine
+text
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+FixSuggestion
+GenesisKeyArchive
+UserProfile
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create Genesis Key tables.'
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+database_url
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+database_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Creating Genesis Key tables...'
+●●●●●● 2mm □△
+BaseModel
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Genesis Key tables created successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - genesis_key'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - fix_suggestion'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - genesis_key_archive'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - user_profile'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△

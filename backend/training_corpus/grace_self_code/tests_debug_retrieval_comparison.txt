@@ -1,0 +1,400 @@
+## debug_retrieval_comparison.py
+'\nDebug retrieval issues - compare working vs non-working documents.\n'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 2mm □△○
+json
+db_path
+●●●●●● 1mm □
+'grace.db'
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DOCUMENT COMPARISON: WORKING vs NON-WORKING'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n        SELECT id, filename, status, total_chunks, extracted_text_length, \n               confidence_score, source_reliability, content_quality\n        FROM documents\n        ORDER BY created_at DESC\n    '
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFound '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+' documents:\n'
+●●●●●● 2mm □△
+i
+doc_id
+filename
+status
+chunks
+text_len
+conf_score
+source_rel
+content_qual
+●●●●●● 2mm □
+●●●●●● 1mm □△
+docs
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+i
+'. '
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ID: '
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Status: '
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Chunks: '
+chunks
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Text length: '
+text_len
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Confidence scores:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Overall: '
+conf_score
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Source reliability: '
+source_rel
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Content quality: '
+content_qual
+'.3f'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            SELECT COUNT(*) FROM document_chunks WHERE document_id = ?\n        '
+doc_id
+●●●●●● 2mm □△
+actual_chunks
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+cursor
+●●●●●● 1mm □△
+'\n            SELECT COUNT(*) FROM document_chunks \n            WHERE document_id = ? AND embedding_vector_id IS NOT NULL\n        '
+doc_id
+●●●●●● 2mm □△
+chunks_with_vectors
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Chunks in DB: '
+actual_chunks
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Chunks with vectors: '
+chunks_with_vectors
+●●●●●● 2mm □△
+●●●●●● 2mm □
+actual_chunks
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ⚠️  WARNING: No chunks found in database!'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+chunks_with_vectors
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ⚠️  WARNING: No vector IDs assigned!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✓ All chunks have vectors'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n            SELECT id, text_content, confidence_score, embedding_vector_id\n            FROM document_chunks \n            WHERE document_id = ?\n            LIMIT 1\n        '
+doc_id
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+chunk_id
+text
+chunk_conf
+vector_id
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   First chunk:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - ID: '
+chunk_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Vector ID: '
+vector_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Confidence: '
+chunk_conf
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Text length: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - Text preview: '
+text
+60
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+' '
+●●●●●● 2mm □△
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TESTING RETRIEVAL FOR EACH DOCUMENT'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfminer'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nLoading embedding model...'
+●●●●●● 2mm □△
+embedder
+●●●●●● 1mm □
+EmbeddingModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Loaded\n'
+●●●●●● 2mm □△
+test_queries
+●●●●●● 1mm □
+'Pakistan GDP volatility'
+'economic growth'
+'hello world'
+'data analysis'
+doc_id
+filename
+_
+_
+_
+_
+_
+_
+docs
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n📄 Testing retrieval for: '
+filename
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n                SELECT text_content FROM document_chunks \n                WHERE document_id = ? LIMIT 1\n            '
+doc_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+sample_text
+●●●●●● 1mm □
+result
+0
+50
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   Using sample text: '"
+sample_text
+"...'"
+●●●●●● 2mm □△
+query_embedding
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+sample_text
+●●●●●● 2mm □△
+0
+search_results
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matching
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+search_results
+r
+'payload'
+'document_id'
+doc_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✓ Search returned '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+search_results
+●●●●●● 2mm □△
+' results'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ✓ '
+matching
+' results from this document'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matching
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ⚠️  Document chunks not in search results!'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ❌ Search error: '
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠️  Could not test retrieval: '
+e
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△

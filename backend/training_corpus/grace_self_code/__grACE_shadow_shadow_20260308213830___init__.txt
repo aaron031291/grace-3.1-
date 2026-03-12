@@ -1,0 +1,10 @@
+## shadow_20260308213830___init__.py
+result
+●●●●●● 1mm □
+numerator
+●●●●●● 3mm □△
+denominator
+ZeroDivisionError
+result
+●●●●●● 1mm □
+●●●●●● 2mm □

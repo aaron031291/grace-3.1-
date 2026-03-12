@@ -1,0 +1,621 @@
+## workspace_api.py
+"\nWorkspace API — Grace's internal platform management.\n=====================================================\nReplaces GitHub: version control, CI/CD, project management.\nAll self-contained, no third-party dependencies.\nFully async from macro to micro level.\n\nEndpoints:\n  Workspaces:  create, list, get\n  VCS:         snapshot, history, diff, rollback, branches\n  Pipelines:   run, history, load YAML\n"
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+List
+Dict
+Any
+●●●●●● 2mm □△○
+logging
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CreateWorkspaceRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+workspace_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+name
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+root_path
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+owner_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+description
+●●●●●● 1mm ○
+''
+config
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm △
+SnapshotRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+file_path
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+''
+author
+●●●●●● 1mm ○
+'grace'
+branch_name
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+SnapshotDirectoryRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+directory_path
+●●●●●● 1mm ○
+''
+message
+●●●●●● 1mm ○
+''
+author
+●●●●●● 1mm ○
+'grace'
+extensions
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+DiffRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+file_path
+●●●●●● 1mm ○
+version_a
+●●●●●● 2mm ○
+version_b
+●●●●●● 2mm ○
+●●●●●● 2mm △
+RollbackRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+file_path
+●●●●●● 1mm ○
+target_version
+●●●●●● 2mm ○
+author
+●●●●●● 1mm ○
+'grace'
+●●●●●● 2mm △
+CreateBranchRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+name
+●●●●●● 1mm ○
+from_branch
+●●●●●● 1mm ○
+'main'
+●●●●●● 2mm △
+RunPipelineRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+pipeline_name
+●●●●●● 1mm ○
+yaml_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+stages
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+trigger
+●●●●●● 1mm ○
+'manual'
+triggered_by
+●●●●●● 1mm ○
+'grace'
+working_dir
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+environment
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+CreateWorkspaceRequest
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+create_workspace
+result
+●●●●●● 1mm □
+create_workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+result
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_track
+●●●●●● 1mm □△
+'system_event'
+'Workspace created: '
+req
+req
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+list_workspaces
+●●●●●● 3mm ○
+'workspaces'
+list_workspaces
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SnapshotRequest
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+vcs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'created'
+_track
+●●●●●● 1mm □△
+'code_change'
+'VCS snapshot: '
+req
+' v'
+result
+●●●●●● 1mm □△
+'version'
+●●●●●● 2mm □△
+workspace_id
+●●●●●● 2mm □△
+_publish_vcs_event
+●●●●●● 1mm □△
+workspace_id
+'file_versioned'
+'file_path'
+'version'
+'author'
+req
+result
+●●●●●● 1mm □△
+'version'
+●●●●●● 2mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/snapshot'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SnapshotDirectoryRequest
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+vcs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_track
+●●●●●● 1mm □△
+'system_event'
+'Directory snapshot: '
+req
+' ('
+result
+●●●●●● 1mm □△
+'created'
+0
+●●●●●● 2mm □△
+' new)'
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/snapshot-directory'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+50
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'history'
+vcs
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/history/{file_path:path}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+DiffRequest
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+vcs
+●●●●●● 1mm □△
+req
+req
+req
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/diff'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+RollbackRequest
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+vcs
+●●●●●● 1mm □△
+req
+req
+●●●●●● 2mm □△
+_track
+●●●●●● 1mm □△
+'code_change'
+'VCS rollback: '
+req
+' → v'
+req
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/rollback'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+vcs
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/content/{file_path:path}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'files'
+vcs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/files'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+CreateBranchRequest
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+vcs
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'error'
+result
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_track
+●●●●●● 1mm □△
+'system_event'
+'Branch created: '
+req
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/branches'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+genesis.internal_vcs
+●●●●●● 2mm □△○
+get_vcs
+vcs
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'branches'
+vcs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/{workspace_id}/vcs/branches'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+RunPipelineRequest
+●●●●●● 3mm □△○
+genesis.internal_pipeline
+●●●●●● 2mm □△○
+get_pipeline_runner
+PipelineConfig
+runner
+●●●●●● 1mm □
+get_pipeline_runner
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+req
+config
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 1mm △
+req
+config
+●●●●●● 1mm □
+PipelineConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_track
+●●●●●● 1mm □△
+'system_event'
+'Pipeline '
+req
+': '
+result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+workspace_id
+●●●●●● 2mm □△
+_publish_vcs_event
+●●●●●● 1mm □△
+workspace_id
+'pipeline_completed'
+'pipeline'
+'status'
+'run_id'
+req
+result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'run_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/{workspace_id}/pipelines/run'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+20
+●●●●●● 3mm □△○
+genesis.internal_pipeline
+●●●●●● 2mm □△○
+get_pipeline_runner
+runner
+●●●●●● 1mm □
+get_pipeline_runner
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'runs'
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/{workspace_id}/pipelines/history'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Publish workspace events to Layer 1 message bus for cross-system integration.'
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+ComponentType
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+bus
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception

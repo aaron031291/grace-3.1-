@@ -1,0 +1,211 @@
+## ollama_resolver.py
+'\nShared Ollama model resolution: exact existence check and fallback chain.\n\nUsed by consensus_engine and factory so the same resolved model name is used\neverywhere (avoids "model not found" when the configured tag is not pulled).\n'
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+CODE_FALLBACKS
+●●●●●● 1mm □
+'qwen2.5-coder:32b'
+'qwen3:32b'
+'qwen2.5-coder:7b'
+'qwen3:14b'
+'qwen2.5:7b'
+REASON_FALLBACKS
+●●●●●● 1mm □
+'qwen3:32b'
+'qwen2.5-coder:32b'
+'qwen3:14b'
+'qwen2.5:7b'
+FAST_FALLBACKS
+●●●●●● 1mm □
+'qwen3:14b'
+'qwen2.5:7b'
+'qwen3:32b'
+'qwen2.5-coder:32b'
+DOCUMENT_FALLBACKS
+●●●●●● 1mm □
+'qwen3:32b'
+'qwen2.5-coder:32b'
+'qwen3:14b'
+'qwen2.5:7b'
+●●●●●● 1mm □
+ollama_model_exists
+●●●●●● 1mm □△
+model_name
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Return True only if the exact model name is present in Ollama /api/tags.'
+●●●●●● 2mm □△○
+urllib.request
+●●●●●● 2mm □△○
+json
+●●●●●● 1mm □
+_json
+url
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_URL'
+'http://localhost:11434'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'/api/tags'
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+resp
+data
+●●●●●● 1mm □
+_json
+●●●●●● 1mm □△
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+available
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+m
+data
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+needle
+●●●●●● 1mm □
+':'
+model_name
+model_name
+model_name
+':latest'
+●●●●●● 3mm ○
+needle
+available
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+resolve_ollama_model
+●●●●●● 1mm □△
+role
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n    Return an Ollama model name that exists for the given role.\n    Uses configured setting first, then fallback list. Role: 'reason', 'code', 'fast', or 'document'.\n    "
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+Exception
+●●●●●● 3mm ○
+'qwen3:32b'
+●●●●●● 2mm □
+role
+'reason'
+configured
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_REASON'
+''
+●●●●●● 2mm □△
+'qwen3:32b'
+fallbacks
+●●●●●● 1mm □
+REASON_FALLBACKS
+●●●●●● 1mm △
+role
+'code'
+configured
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_CODE'
+''
+●●●●●● 2mm □△
+'qwen2.5-coder:32b'
+fallbacks
+●●●●●● 1mm □
+CODE_FALLBACKS
+●●●●●● 2mm □
+role
+'fast'
+configured
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_FAST'
+''
+●●●●●● 2mm □△
+'qwen3:14b'
+fallbacks
+●●●●●● 1mm □
+FAST_FALLBACKS
+●●●●●● 1mm △
+role
+'document'
+configured
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_MODEL_DOCUMENT'
+''
+●●●●●● 2mm □△
+'qwen3:32b'
+fallbacks
+●●●●●● 1mm □
+DOCUMENT_FALLBACKS
+●●●●●● 3mm ○
+'qwen3:32b'
+●●●●●● 2mm □
+ollama_model_exists
+●●●●●● 1mm □△
+configured
+settings
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+configured
+fallback
+fallbacks
+●●●●●● 2mm □
+ollama_model_exists
+●●●●●● 1mm □△
+fallback
+settings
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Ollama model %s not found; using %s for %s'
+configured
+fallback
+role
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+fallback
+●●●●●● 3mm ○
+configured
+●●●●●● 1mm ○

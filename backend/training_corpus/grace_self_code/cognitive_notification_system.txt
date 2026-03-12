@@ -1,0 +1,306 @@
+## notification_system.py
+'\nNotification System — Alerts via console, file, and webhook.\n\nChannels:\n  - Console: prints to server logs\n  - File: writes to data/notifications/\n  - Webhook: POST to configured URL (Slack, Discord, etc.)\n  - UI: pushed to event bus → Activity Feed\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+NOTIF_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'notifications'
+WEBHOOK_URL
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'GRACE_WEBHOOK_URL'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm △
+NotificationSystem
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+●●●●●● 1mm □
+alert
+●●●●●● 1mm □△
+self
+title
+message
+severity
+channel
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'info'
+'all'
+'Send an alert through all configured channels.'
+notif
+●●●●●● 1mm □
+'id'
+'title'
+'message'
+'severity'
+'timestamp'
+'channels_sent'
+'notif_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+title
+message
+severity
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+channel
+'all'
+'console'
+icon
+●●●●●● 1mm □
+'critical'
+'high'
+'medium'
+'low'
+'info'
+'🔴'
+'🟠'
+'🟡'
+'🟢'
+'ℹ️'
+●●●●●● 1mm □△
+severity
+'📢'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ALERT] '
+icon
+' ['
+severity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'] '
+title
+': '
+message
+●●●●●● 2mm □△
+notif
+'channels_sent'
+●●●●●● 1mm □△
+'console'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+channel
+'all'
+'file'
+NOTIF_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d'
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+NOTIF_DIR
+●●●●●● 3mm □△
+'alerts_'
+ts
+'.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+notif
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+notif
+'channels_sent'
+●●●●●● 1mm □△
+'file'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+channel
+'all'
+'ui'
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'notification.alert'
+'title'
+'message'
+'severity'
+title
+message
+severity
+●●●●●● 2mm □△
+notif
+'channels_sent'
+●●●●●● 1mm □△
+'ui'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+channel
+'all'
+'webhook'
+WEBHOOK_URL
+●●●●●● 2mm □△○
+requests
+requests
+●●●●●● 1mm □△
+WEBHOOK_URL
+●●●●●● 2mm □△
+notif
+'channels_sent'
+●●●●●● 1mm □△
+'webhook'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+notif
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+200
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+100
+●●●●●● 3mm ○
+notif
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_recent
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_today
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+n
+n
+●●●●●● 3mm △
+n
+'timestamp'
+10
+today
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_notifications
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+NotificationSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△

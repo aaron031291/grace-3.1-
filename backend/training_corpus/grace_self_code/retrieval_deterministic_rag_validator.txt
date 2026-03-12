@@ -1,0 +1,1497 @@
+## deterministic_rag_validator.py
+'\nDeterministic RAG Validator\n=============================\nPure deterministic analysis of the RAG pipeline — no LLM needed.\n\nChecks:\n1.  Embedding Model: Can the model file/config be found and loaded?\n2.  Qdrant Connectivity: Is the vector DB reachable, does the collection exist?\n3.  Collection Schema: Does the Qdrant collection have correct vector dimensions?\n4.  Document-Chunk Consistency: DB chunks match Qdrant vectors (no orphans)\n5.  Ingestion Pipeline Wiring: ingestion service → embedder → vector DB chain intact\n6.  Retriever Wiring: retriever → embedder → vector DB chain intact\n7.  RAG Prompt Integrity: Prompt templates exist and are well-formed\n8.  Knowledge Base File Tracking: Files on disk vs. ingested documents\n9.  Connector Registration: RAG + Ingestion connectors registered in Layer 1\n10. Import Chain: All RAG module imports resolve\n11. Confidence Scoring: Chunk confidence scores within valid range (0-1)\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RAGIssue
+'A single deterministic RAG validation issue.'
+check
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+fix_suggestion
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+RAGValidationReport
+'Full deterministic RAG validation report.'
+timestamp
+●●●●●● 1mm ○
+total_issues
+●●●●●● 2mm ○
+critical_count
+●●●●●● 2mm ○
+warning_count
+●●●●●● 2mm ○
+info_count
+●●●●●● 2mm ○
+checks_run
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'total_issues'
+'critical_count'
+'warning_count'
+'info_count'
+'checks_run'
+'issues'
+'stats'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+check_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify the embedding model configuration is valid and the model\n    file or HuggingFace identifier exists.\n    '
+issues
+●●●●●● 1mm □
+embedder_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+'embedder.py'
+●●●●●● 2mm □
+embedder_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+source
+●●●●●● 1mm □
+embedder_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+has_class
+●●●●●● 1mm □
+'class EmbeddingModel'
+source
+has_embed
+●●●●●● 1mm □
+'def embed_text'
+source
+has_singleton
+●●●●●● 1mm □
+'get_embedding_model'
+source
+●●●●●● 2mm □
+has_class
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+has_embed
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+has_singleton
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+settings_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'settings.py'
+●●●●●● 2mm □
+settings_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+settings_source
+●●●●●● 1mm □
+settings_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'EMBEDDING'
+settings_source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_qdrant_connectivity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if Qdrant is reachable and the documents collection exists.'
+issues
+●●●●●● 1mm □
+client_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'vector_db'
+●●●●●● 3mm □△
+'client.py'
+●●●●●● 2mm □
+client_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □△○
+urllib.request
+qdrant_url
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant_url
+qdrant_url
+●●●●●● 1mm □△
+'https://'
+●●●●●● 2mm □△
+api_key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_API_KEY'
+''
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+qdrant_url
+'/collections'
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+urllib
+●●●●●● 1mm □△
+'http://localhost:6333/collections'
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+base
+●●●●●● 1mm □
+qdrant_url
+●●●●●● 1mm □△
+'https://'
+●●●●●● 2mm □△
+qdrant_url
+'http://localhost:6333'
+api_key
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'QDRANT_API_KEY'
+''
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+base
+'/collections/documents'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+collection_info
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+vector_count
+●●●●●● 1mm □
+collection_info
+●●●●●● 1mm □△
+'points_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vector_count
+0
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_document_chunk_consistency
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify DB documents and chunks are consistent:\n    - Documents with status=completed should have chunks\n    - Chunks should reference existing documents\n    - Chunk confidence scores should be in [0, 1]\n    '
+issues
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'documents'
+tables
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □
+'document_chunks'
+tables
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+empty_docs
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n            SELECT d.id, d.filename, d.status\n            FROM documents d\n            WHERE d.status = 'completed'\n              AND d.id NOT IN (SELECT DISTINCT document_id FROM document_chunks)\n        "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+empty_docs
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+orphan_chunks
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'\n            SELECT COUNT(*)\n            FROM document_chunks dc\n            WHERE dc.document_id NOT IN (SELECT id FROM documents)\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+orphan_chunks
+0
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+bad_confidence
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'\n            SELECT COUNT(*)\n            FROM document_chunks\n            WHERE confidence_score < 0 OR confidence_score > 1\n        '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+bad_confidence
+0
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+no_vector_id
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n            SELECT COUNT(*)\n            FROM document_chunks\n            WHERE embedding_vector_id IS NULL OR embedding_vector_id = ''\n        "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+total_chunks
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM document_chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+total_chunks
+0
+no_vector_id
+total_chunks
+●●●●●● 2mm □△
+0.1
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+failed_docs
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"\n            SELECT COUNT(*) FROM documents WHERE status = 'failed'\n        "
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+failed_docs
+0
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_ingestion_pipeline_wiring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify the ingestion pipeline chain:\n    ingestion/service.py → embedding/embedder.py → vector_db/client.py\n    '
+issues
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □
+'ingestion/service.py'
+'TextIngestionService'
+'EmbeddingModel'
+'get_qdrant_client'
+'embedding/embedder.py'
+'EmbeddingModel'
+'SentenceTransformer'
+'vector_db/client.py'
+'QdrantVectorDB'
+'QdrantClient'
+file_path
+main_class
+expected_deps
+●●●●●● 3mm □
+full_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+main_class
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+dep
+expected_deps
+●●●●●● 2mm □
+dep
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_retriever_wiring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Verify the retriever chain:\n    retrieval/retriever.py → embedding → vector_db → database models\n    '
+issues
+●●●●●● 1mm □
+retriever_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'retrieval'
+●●●●●● 3mm □△
+'retriever.py'
+●●●●●● 2mm □
+retriever_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+source
+●●●●●● 1mm □
+retriever_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+required_refs
+●●●●●● 1mm □
+'EmbeddingModel'
+'get_qdrant_client'
+'Document'
+'DocumentChunk'
+'embedding model integration'
+'vector DB connection'
+'document model for metadata'
+'chunk model for text retrieval'
+ref
+purpose
+required_refs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ref
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+methods
+●●●●●● 1mm □
+'retrieve'
+'retrieve_hybrid'
+'build_context'
+method
+methods
+●●●●●● 2mm □
+'def '
+method
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cog_retriever
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'retrieval'
+●●●●●● 3mm □△
+'cognitive_retriever.py'
+●●●●●● 2mm □
+cog_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cog_source
+●●●●●● 1mm □
+cog_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'retrieve_and_rank'
+cog_source
+●●●●●● 2mm □
+'def retrieve_and_rank'
+source
+'retrieve_and_rank'
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_rag_prompt_integrity
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify RAG prompt templates exist and contain required elements.'
+issues
+●●●●●● 1mm □
+prompt_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'utils'
+●●●●●● 3mm □△
+'rag_prompt.py'
+●●●●●● 2mm □
+prompt_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+source
+●●●●●● 1mm □
+prompt_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 2mm □
+'def build_rag_prompt'
+source
+'def build_rag_system_prompt'
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'context'
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_knowledge_base_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Check if knowledge_base files on disk align with ingested documents in DB.\n    '
+issues
+●●●●●● 1mm □
+kb_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 2mm □
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+kb_files
+●●●●●● 1mm □
+skip_dirs
+●●●●●● 1mm □
+'__pycache__'
+'.git'
+'node_modules'
+ext
+'*.txt'
+'*.md'
+'*.pdf'
+'*.json'
+'*.csv'
+f
+kb_path
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+f
+skip
+skip_dirs
+●●●●●● 2mm □△
+kb_files
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+ingested_count
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'documents'
+tables
+ingested_count
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'completed'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+kb_files
+●●●●●● 2mm □△
+0
+ingested_count
+0
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+kb_files
+●●●●●● 2mm □△
+ingested_count
+●●●●●● 2mm □△
+2
+ingested_count
+0
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_rag_connector_registration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify RAG and Ingestion connectors exist and are registered in Layer 1.'
+issues
+●●●●●● 1mm □
+connectors
+●●●●●● 1mm □
+'rag_connector.py'
+'ingestion_connector.py'
+'RAGConnector'
+'RAG'
+'IngestionConnector'
+'Ingestion'
+connector_dir
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'layer1'
+●●●●●● 3mm □△
+'components'
+filename
+class_name
+label
+connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filepath
+●●●●●● 1mm □
+connector_dir
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+class_name
+source
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+init_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'layer1'
+●●●●●● 3mm □△
+'initialize.py'
+●●●●●● 2mm □
+init_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+init_source
+●●●●●● 1mm □
+init_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'RAGConnector'
+init_source
+'rag'
+init_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'IngestionConnector'
+init_source
+'ingestion'
+init_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_rag_import_chain
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify all RAG pipeline files parse without syntax errors.'
+issues
+●●●●●● 1mm □
+critical_files
+●●●●●● 1mm □
+'retrieval/retriever.py'
+'retrieval/cognitive_retriever.py'
+'retrieval/reranker.py'
+'ingestion/service.py'
+'embedding/embedder.py'
+'vector_db/client.py'
+'utils/rag_prompt.py'
+rel_path
+critical_files
+full_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+rel_path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+check_rag_api_wiring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify RAG-related API routers are registered in app.py.'
+issues
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'app.py'
+●●●●●● 2mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+app_source
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expected_routers
+●●●●●● 1mm □
+'retrieve'
+'ingest'
+'retrieval API endpoints'
+'ingestion API endpoints'
+router_name
+purpose
+expected_routers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+'from api.'
+router_name
+'api.'
+router_name
+router_name
+'_router'
+router_name
+'.router'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+app_source
+p
+patterns
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+RAGIssue
+●●●●●● 1mm □
+run_rag_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Run the complete deterministic RAG validation pipeline.\n    No LLM needed. Pure structural + data analysis.\n    '
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_issues
+●●●●●● 3mm □△
+RAGIssue
+checks_run
+●●●●●● 1mm □
+checks
+●●●●●● 1mm □
+'embedding_model'
+check_embedding_model
+'qdrant_connectivity'
+check_qdrant_connectivity
+'document_chunk_consistency'
+check_document_chunk_consistency
+'ingestion_pipeline'
+check_ingestion_pipeline_wiring
+'retriever_wiring'
+check_retriever_wiring
+'rag_prompt'
+check_rag_prompt_integrity
+'kb_tracking'
+check_knowledge_base_tracking
+'connector_registration'
+check_rag_connector_registration
+'import_chain'
+check_rag_import_chain
+'api_wiring'
+check_rag_api_wiring
+name
+checker
+checks
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-RAG] Running '
+name
+'...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+checks_run
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+Exception
+all_issues
+●●●●●● 1mm □△
+RAGIssue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+checks_run
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+stats
+●●●●●● 1mm □
+_gather_rag_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+RAGValidationReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-RAG] Complete: '
+report
+' issues ('
+report
+' critical, '
+report
+' warning, '
+report
+' info) in '
+elapsed
+'.0f'
+'ms'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+RAGValidationReport
+●●●●●● 1mm □
+_gather_rag_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Gather basic RAG pipeline statistics.'
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'total_documents'
+'completed_documents'
+'failed_documents'
+'total_chunks'
+'chunks_with_vectors'
+'avg_confidence'
+'kb_files_on_disk'
+'qdrant_reachable'
+0
+0
+0
+0
+0
+0.0
+0
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'documents'
+tables
+stats
+'total_documents'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM documents'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'completed_documents'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'completed'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'failed_documents'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status = 'failed'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+'document_chunks'
+tables
+stats
+'total_chunks'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM document_chunks'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'chunks_with_vectors'
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM document_chunks WHERE embedding_vector_id IS NOT NULL AND embedding_vector_id != ''"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+avg
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+'SELECT AVG(confidence_score) FROM document_chunks WHERE confidence_score IS NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+stats
+'avg_confidence'
+●●●●●● 1mm □
+avg
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg
+3
+●●●●●● 2mm □△
+0.0
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+kb_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 2mm □
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+0
+ext
+'*.txt'
+'*.md'
+'*.pdf'
+'*.json'
+'*.csv'
+count
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+kb_path
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stats
+'kb_files_on_disk'
+●●●●●● 1mm □
+count
+●●●●●● 2mm □△○
+urllib.request
+urllib
+●●●●●● 1mm □△
+'http://localhost:6333/collections'
+●●●●●● 2mm □△
+stats
+'qdrant_reachable'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

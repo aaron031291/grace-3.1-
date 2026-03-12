@@ -1,0 +1,734 @@
+## auto_router.py
+'\nAuto-Router — Grace decides which brain to call.\n\nInstead of the user specifying brain + action, they just describe\nwhat they want and Grace routes to the optimal brain based on:\n  1. Keyword matching against brain action descriptions\n  2. Hebbian synaptic weights (prefer brains that succeed)\n  3. Historical success rates per action\n  4. Adaptive trust scores\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BRAIN_KEYWORDS
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+'deterministic'
+'chat'
+'message'
+'send'
+'talk'
+'conversation'
+'prompt'
+'say'
+'discuss'
+'file'
+'folder'
+'directory'
+'read'
+'write'
+'create'
+'delete'
+'upload'
+'browse'
+'tree'
+'document'
+'search'
+'governance'
+'rule'
+'policy'
+'approve'
+'reject'
+'persona'
+'genesis'
+'key'
+'permission'
+'compliance'
+'consensus'
+'model'
+'models'
+'llm'
+'predict'
+'train'
+'intelligence'
+'analyze'
+'diagnose'
+'test'
+'logic'
+'ooda'
+'ambiguity'
+'deep learning'
+'health'
+'runtime'
+'status'
+'monitor'
+'probe'
+'trigger'
+'heal'
+'restart'
+'pause'
+'resume'
+'backup'
+'performance'
+'cpu'
+'memory'
+'synapse'
+'embedding'
+'architecture'
+'component'
+'dependency'
+'blueprint'
+'trace'
+'schema'
+'brains'
+'apis'
+'models'
+'llm'
+'database'
+'databases'
+'graphs'
+'paths'
+'way'
+'source'
+'api'
+'web'
+'whitelist'
+'cache'
+'data'
+'import'
+'fetch'
+'task'
+'schedule'
+'plan'
+'time'
+'deadline'
+'priority'
+'todo'
+'planner'
+'code'
+'project'
+'generate'
+'codebase'
+'programming'
+'function'
+'class'
+'build'
+'compile'
+'deploy'
+'deterministic'
+'scan'
+'ast'
+'syntax'
+'verify'
+'no llm'
+'rule only'
+'phase 0'
+'parse'
+'import check'
+ACTION_KEYWORDS
+●●●●●● 1mm □
+'chat/send'
+'chat/consensus'
+'ai/dl_predict'
+'ai/dl_train'
+'ai/cognitive_report'
+'ai/ooda'
+'system/health_map'
+'system/runtime'
+'system/probe'
+'system/auto_cycle'
+'system/intelligence'
+'system/embedding_config'
+'system/architecture_explain'
+'system/architecture_find'
+'system/architecture_connected'
+'system/architecture_diagnose'
+'system/architecture_map'
+'system/brain_directory'
+'system/models_summary'
+'system/schema_info'
+'system/graphs_info'
+'system/deterministic_first_loop'
+'deterministic/scan'
+'deterministic/fix'
+'deterministic/first_loop'
+'files/browse'
+'files/search'
+'govern/genesis_stats'
+'govern/coding_contract'
+'tasks/time_sense'
+'send'
+'message'
+'chat'
+'talk'
+'consensus'
+'all models'
+'roundtable'
+'deliberate'
+'predict'
+'forecast'
+'what will happen'
+'train'
+'learn'
+'fit'
+'model'
+'report'
+'cognitive'
+'full analysis'
+'observe'
+'orient'
+'decide'
+'act'
+'ooda'
+'health'
+'status'
+'components'
+'map'
+'runtime'
+'uptime'
+'running'
+'probe'
+'test'
+'check'
+'alive'
+'autonomous'
+'ouroboros'
+'self-heal'
+'cycle'
+'intelligence'
+'report'
+'analysis'
+'embedding'
+'embedding model'
+'what embedding'
+'vector model'
+'which model for embeddings'
+'what does component'
+'explain component'
+'what is pipeline'
+'what does trust_engine do'
+'component does'
+'what can handle'
+'which component'
+'capability'
+'who handles'
+'trace capability'
+'trace path'
+'path from'
+'connected'
+'dependency graph'
+'data flow from'
+'how connected'
+'architecture diagnose'
+'bottlenecks'
+'isolated modules'
+'dependency issues'
+'full architecture'
+'architecture map'
+'all components'
+'component map'
+'blueprint'
+'brains'
+'apis'
+'api map'
+'list actions'
+'what brains'
+'brain directory'
+'all endpoints'
+'what can i call'
+'models summary'
+'all models'
+'llm models'
+'what models'
+'embedding and llm'
+'which llm'
+'which models'
+'what llm'
+'list llm'
+'list models'
+'available llm'
+'available models'
+'llm in the system'
+'models in the system'
+'what embedding'
+'schema'
+'databases'
+'database'
+'db config'
+'what database'
+'qdrant'
+'storage'
+'tables'
+'graphs'
+'graph'
+'component graph'
+'vector store'
+'magma'
+'deterministic first'
+'phase 0'
+'genesis probe ast'
+'deterministic loop'
+'probe then fix'
+'determinism before llm'
+'deterministic scan'
+'ast scan'
+'syntax check'
+'rule only scan'
+'parse check'
+'deterministic fix'
+'auto fix'
+'rule fix'
+'ast fix'
+'deterministic first loop'
+'phase 0 loop'
+'deterministic loop'
+'browse'
+'list'
+'directory'
+'search'
+'find'
+'look for'
+'genesis'
+'keys'
+'tracking'
+'coding contract'
+'governance coding contract'
+'governance contract'
+'rules for coding'
+'what rules apply to code'
+'time'
+'when'
+'schedule'
+●●●●●● 1mm □
+get_nearest_actions
+●●●●●● 1mm □△
+query
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'\n    Neighbor-by-neighbor: score every (brain, action) by keyword overlap with query.\n    When NLP routing has low confidence, suggest these as "did you mean?" options.\n    '
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □
+action_path
+keywords
+ACTION_KEYWORDS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+brain
+action
+●●●●●● 1mm □
+action_path
+●●●●●● 1mm □△
+'/'
+1
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+kw
+keywords
+kw
+query_lower
+●●●●●● 2mm □△
+●●●●●● 2mm □
+score
+0
+scored
+●●●●●● 1mm □△
+'brain'
+'action'
+'path'
+'score'
+brain
+action
+action_path
+score
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scored
+top_k
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+auto_route
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Determine the best brain + action for a natural language query.\n\n    Returns: (brain, action, confidence)\n    '
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+words
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+re
+●●●●●● 1mm □△
+'\\w+'
+query_lower
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+brain_scores
+●●●●●● 1mm □
+brain
+keywords
+BRAIN_KEYWORDS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+kw
+keywords
+kw
+query_lower
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+mesh
+●●●●●● 1mm □
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hebbian_boost
+●●●●●● 1mm □
+mesh
+●●●●●● 1mm □△
+'external'
+brain
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0.5
+score
+hebbian_boost
+●●●●●● 2mm □△
+2
+Exception
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+brain
+●●●●●● 2mm □△
+score
+trust
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+0.5
+Exception
+brain_scores
+brain
+●●●●●● 1mm □
+score
+best_brain
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+brain_scores
+●●●●●● 2mm □△
+brain_confidence
+●●●●●● 1mm □
+brain_scores
+best_brain
+action_scores
+●●●●●● 1mm □
+action_path
+keywords
+ACTION_KEYWORDS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action_path
+●●●●●● 1mm □△
+best_brain
+●●●●●● 3mm ○
+'/'
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+action_path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+kw
+keywords
+kw
+query_lower
+●●●●●● 2mm □△
+action_scores
+action
+●●●●●● 1mm □
+score
+●●●●●● 2mm □
+action_scores
+best_action
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+action_scores
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+_build_directory
+d
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+best_action
+●●●●●● 1mm □
+d
+best_brain
+'actions'
+0
+Exception
+best_action
+●●●●●● 1mm □
+'list'
+max_possible
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+kws
+●●●●●● 2mm □△
+kws
+BRAIN_KEYWORDS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+brain_confidence
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+max_possible
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+best_brain
+best_action
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+confidence
+3
+●●●●●● 2mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+LOW_CONFIDENCE_THRESHOLD
+●●●●●● 1mm □
+0.25
+_ARCHITECTURE_HINTS
+●●●●●● 1mm □
+'llm'
+'model'
+'models'
+'embedding'
+'architecture'
+'schema'
+'brain'
+'api'
+'database'
+'graph'
+'component'
+'path'
+'trace'
+'which '
+'what '
+'list '
+'available '
+●●●●●● 1mm □
+_looks_like_architecture_query
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+q
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+h
+q
+h
+_ARCHITECTURE_HINTS
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+smart_call
+●●●●●● 1mm □△
+query
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n    Smart call — just describe what you want, Grace routes it.\n    When NLP match is weak (low confidence), adds nearest_actions: neighbor-by-neighbor\n    suggestions so the UI can show "Did you mean: ...?"\n    If routed to chat/send without chat_id and query looks like architecture, retry with system/models_summary.\n    '
+brain
+action
+confidence
+●●●●●● 1mm □
+auto_route
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+payload
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+brain
+action
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+brain
+'chat'
+action
+'send'
+payload
+●●●●●● 1mm □△
+'chat_id'
+●●●●●● 2mm □△
+_looks_like_architecture_query
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'models_summary'
+●●●●●● 2mm □△
+result
+'routing'
+●●●●●● 1mm □
+'query'
+'brain'
+'action'
+'confidence'
+'auto_routed'
+'fallback'
+query
+'system'
+'models_summary'
+confidence
+●●●●●● 3mm □△○
+'chat/send required chat_id; rerouted to system/models_summary'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+result
+'routing'
+●●●●●● 1mm □
+'query'
+'brain'
+'action'
+'confidence'
+'auto_routed'
+query
+brain
+action
+confidence
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+confidence
+LOW_CONFIDENCE_THRESHOLD
+result
+'routing'
+'nearest_actions'
+●●●●●● 1mm □
+get_nearest_actions
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+result
+'routing'
+'low_confidence_hint'
+●●●●●● 1mm □
+'No strong match. Try one of the suggested actions below, or rephrase.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△

@@ -1,0 +1,206 @@
+## migrate_add_telemetry.py
+'\nMigration script to add telemetry and self-modeling tables to Grace.\n\nRun this script to add the operation tracking, baselines, drift detection,\nand replay tables to the database.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+inspect
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+PerformanceBaseline
+DriftAlert
+OperationReplay
+SystemState
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+migrate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Add telemetry tables to the database.'
+logger
+●●●●●● 1mm □△
+'Starting telemetry tables migration...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+existing_tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+telemetry_tables
+●●●●●● 1mm □
+'operation_log'
+OperationLog
+'performance_baseline'
+PerformanceBaseline
+'drift_alert'
+DriftAlert
+'operation_replay'
+OperationReplay
+'system_state'
+SystemState
+tables_created
+●●●●●● 1mm □
+tables_skipped
+●●●●●● 1mm □
+table_name
+model_class
+telemetry_tables
+●●●●●● 2mm □
+table_name
+existing_tables
+logger
+●●●●●● 1mm □△
+"Table '"
+table_name
+"' already exists, skipping..."
+●●●●●● 2mm □△
+tables_skipped
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"Creating table '"
+table_name
+"'..."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model_class
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 3mm □
+tables_created
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nMigration complete!'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables_created
+●●●●●● 2mm □△
+' tables: '
+', '
+●●●●●● 1mm □△
+tables_created
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tables_skipped
+logger
+●●●●●● 1mm □△
+'Skipped '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables_skipped
+●●●●●● 2mm □△
+' existing tables: '
+', '
+●●●●●● 1mm □△
+tables_skipped
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+final_tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+table_name
+_
+telemetry_tables
+●●●●●● 2mm □
+table_name
+final_tables
+logger
+●●●●●● 1mm □△
+"✓ Verified table '"
+table_name
+"' exists"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"✗ Table '"
+table_name
+"' was not created!"
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nSelf-modeling mechanism is now active.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace can now track operations, learn baselines, and detect drift.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△

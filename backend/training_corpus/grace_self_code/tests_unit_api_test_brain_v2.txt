@@ -1,0 +1,238 @@
+## test_brain_v2.py
+'\nTests for Brain Controller v2 — POST /api/v2/{domain}/{action}\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm △
+TestBrainV2Routing
+●●●●●● 1mm □
+test_directory_returns_all_domains
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/directory'
+●●●●●● 2mm □△
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'total_domains'
+8
+data
+'total_actions'
+70
+●●●●●● 1mm □
+test_invalid_domain_returns_error
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/nonexistent/action'
+●●●●●● 2mm □△
+r
+400
+500
+●●●●●● 1mm □
+test_invalid_action_returns_error
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/system/nonexistent_action'
+●●●●●● 2mm □△
+r
+400
+500
+'Unknown action'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'detail'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_brain_directory_lists_all_8_domains
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/directory'
+●●●●●● 2mm □△
+domains
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'domains'
+expected
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+domains
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+expected
+●●●●●● 1mm □
+test_each_domain_has_actions
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/directory'
+●●●●●● 2mm □△
+domain
+info
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'domains'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+info
+'actions'
+●●●●●● 2mm □△
+0
+'Domain '
+domain
+' has no actions'
+●●●●●● 1mm □
+test_empty_payload_accepted
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/system/runtime'
+●●●●●● 2mm □△
+r
+200
+500
+●●●●●● 1mm □
+test_response_has_required_fields
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/v2/system/runtime'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'ok'
+data
+'domain'
+data
+'action'
+data
+'latency_ms'
+data
+●●●●●● 2mm △
+TestBrainOrchestration
+●●●●●● 1mm □
+test_orchestrate_endpoint_exists
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/brain/orchestrate'
+●●●●●● 2mm □△
+r
+200
+●●●●●● 1mm □
+test_orchestrate_empty_steps
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/brain/orchestrate'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'total'
+0
+data
+'succeeded'
+0
+●●●●●● 1mm □
+test_orchestrate_invalid_brain
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/brain/orchestrate'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'total'
+1
+data
+'failed'
+1

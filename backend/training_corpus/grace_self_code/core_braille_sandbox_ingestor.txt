@@ -1,0 +1,303 @@
+## braille_sandbox_ingestor.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+database.models.braille_node
+●●●●●● 2mm □△○
+BrailleSandboxNode
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BrailleIngestor
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm △
+●●●●●● 1mm □
+'__pycache__'
+'.venv'
+'venv'
+'node_modules'
+'.git'
+'.fix_backups'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'OP'
+'SE'
+'AI'
+'ML'
+'DL'
+'DS'
+'SR'
+'GR'
+'HO'
+'LN'
+'CG'
+'GV'
+'OR'
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+●●●●●● 1mm □
+determine_category_and_loop
+●●●●●● 1mm □△
+self
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Infers the best Braille specification category and loop assignment \n        based on the file path and content.\n        '
+●●●●●● 2mm □
+'cognitive'
+file_path
+'brain'
+file_path
+●●●●●● 3mm ○
+'CG'
+'COGNITION'
+'●●●●●● 1mm ○'
+●●●●●● 1mm △
+'self_healing'
+file_path
+'error'
+file_path
+'healing'
+file_path
+●●●●●● 3mm ○
+'HO'
+'HOMEOSTASIS'
+'●●●●●● 1mm □'
+●●●●●● 2mm □
+'learning'
+file_path
+'knowledge'
+file_path
+●●●●●● 3mm ○
+'LN'
+'LEARNING'
+'●●●●●● 2mm □'
+●●●●●● 1mm △
+'governance'
+file_path
+'trust'
+file_path
+●●●●●● 3mm ○
+'GV'
+'GOVERNANCE'
+'●●●●●● 3mm △'
+●●●●●● 2mm □
+'orchestrator'
+file_path
+'tasks'
+file_path
+'agent'
+file_path
+●●●●●● 3mm ○
+'OR'
+'ORCHESTRATION'
+'●●●●●● 3mm □'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'SE'
+'ORCHESTRATION'
+'●●●●●● 1mm □△'
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+category
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+category
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+category
+●●●●●● 1mm □
+count
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+'GRACE-'
+category
+'-'
+count
+'03d'
+●●●●●● 1mm □
+run_ingestion
+●●●●●● 1mm □△
+self
+root_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+logger
+●●●●●● 1mm □△
+'Starting Braille Sandbox ingestion from '
+root_dir
+●●●●●● 2mm □△
+nodes_created
+●●●●●● 1mm □
+0
+r
+d
+f
+os
+●●●●●● 1mm □△
+root_dir
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+sub
+sub
+d
+sub
+●●●●●● 3mm △
+file
+f
+●●●●●● 2mm □
+file
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+full_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+r
+file
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'r'
+●●●●●● 2mm □△
+py_file
+content
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+cat
+loop
+braille
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_path
+content
+●●●●●● 2mm □△
+gen_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+cat
+●●●●●● 2mm □△
+existing_node
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+BrailleSandboxNode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing_node
+existing_node
+●●●●●● 1mm □
+content
+existing_node
+●●●●●● 1mm □
+gen_key
+existing_node
+●●●●●● 1mm □
+braille
+existing_node
+●●●●●● 1mm □
+loop
+●●●●●● 3mm □
+new_node
+●●●●●● 1mm □
+BrailleSandboxNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+new_node
+●●●●●● 2mm □△
+nodes_created
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to ingest Python file '
+full_path
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Successfully ingested '
+nodes_created
+' Python files into BrailleSandboxNodes.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+nodes_created
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Failed to copy sandbox nodes to database: '
+e
+●●●●●● 2mm □△
+e

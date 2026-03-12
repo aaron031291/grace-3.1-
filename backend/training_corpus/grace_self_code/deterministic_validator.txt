@@ -1,0 +1,1261 @@
+## deterministic_validator.py
+'\nDeterministic Validation Pipeline\n===================================\nFinds broken wiring, silent failures, import issues, unwired routers,\nbroken references, and stale logic WITHOUT using any LLM reasoning.\n\nThis is pure deterministic code analysis — AST parsing, import checking,\npattern matching, and structural verification. No non-determinism.\n\nCategories:\n1. Import Validation: Can every import resolve?\n2. Router Wiring: Are all API routers registered in app.py?\n3. Silent Failure Detection: Find except:pass, bare excepts, swallowed errors\n4. Broken References: Imports to non-existent modules\n5. Stub Detection: TODO, pass, placeholder, simplified implementations\n6. Layer 1 Initialization: Are connectors initialized at startup?\n7. Configuration Validation: Missing required settings\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+importlib.util
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+Issue
+'A single deterministic validation issue.'
+category
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+file
+●●●●●● 1mm ○
+line
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+message
+●●●●●● 1mm ○
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+fix_suggestion
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ValidationReport
+'Full deterministic validation report.'
+timestamp
+●●●●●● 1mm ○
+total_issues
+●●●●●● 2mm ○
+critical_count
+●●●●●● 2mm ○
+warning_count
+●●●●●● 2mm ○
+info_count
+●●●●●● 2mm ○
+categories
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+issues
+●●●●●● 3mm □△
+Issue
+files_scanned
+●●●●●● 2mm ○
+scan_time_ms
+●●●●●● 3mm ○
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'total_issues'
+'critical_count'
+'warning_count'
+'info_count'
+'categories'
+'issues'
+'files_scanned'
+'scan_time_ms'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+detect_silent_failures
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Find except blocks that swallow errors without logging.\n    These are the #1 source of invisible bugs.\n    '
+issues
+●●●●●● 1mm □
+skip_dirs
+●●●●●● 1mm □
+'__pycache__'
+'venv'
+'node_modules'
+'.git'
+'mcp_repos'
+py_file
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+py_file
+skip
+skip_dirs
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+UnicodeDecodeError
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+body
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+body
+has_logging
+●●●●●● 1mm □
+●●●●●● 1mm □
+has_raise
+●●●●●● 1mm □
+●●●●●● 1mm □
+is_bare_pass
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+body
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+●●●●●● 1mm □△
+body
+0
+ast
+●●●●●● 2mm □△
+stmt
+body
+sub
+ast
+●●●●●● 1mm □△
+stmt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+sub
+ast
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □
+sub
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'error'
+'warning'
+'info'
+'debug'
+'exception'
+'critical'
+has_logging
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'print'
+'logging'
+has_logging
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+sub
+ast
+●●●●●● 2mm □△
+has_raise
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+is_bare_pass
+has_logging
+has_raise
+handler_type
+●●●●●● 1mm □
+'bare except'
+●●●●●● 2mm □
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+handler_type
+●●●●●● 1mm □
+'except '
+node
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+handler_type
+●●●●●● 1mm □
+'except '
+ast
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+has_logging
+has_raise
+is_bare_pass
+all_pass_or_assign
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+s
+ast
+ast
+ast
+ast
+ast
+●●●●●● 2mm □△
+s
+body
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_pass_or_assign
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+detect_unwired_routers
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Find API router files in backend/api/ that are NOT registered in app.py.\n    '
+issues
+●●●●●● 1mm □
+api_dir
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'api'
+app_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'app.py'
+●●●●●● 2mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+api_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+app_source
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+py_file
+api_dir
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+py_file
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+py_file
+'__init__.py'
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+UnicodeDecodeError
+has_router
+●●●●●● 1mm □
+●●●●●● 1mm □
+router_prefix
+●●●●●● 1mm □
+●●●●●● 2mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+target
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+target
+ast
+●●●●●● 2mm □△
+target
+'router'
+has_router
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+kw
+node
+●●●●●● 2mm □
+kw
+'prefix'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+router_prefix
+●●●●●● 1mm □
+kw
+●●●●●● 2mm □
+has_router
+module_name
+●●●●●● 1mm □
+py_file
+import_patterns
+●●●●●● 1mm □
+'from api.'
+module_name
+'api.'
+module_name
+module_name
+'_router'
+module_name
+'.router'
+is_registered
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+app_source
+p
+import_patterns
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_registered
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+detect_broken_imports
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+"\n    Find imports that reference modules/packages that don't exist.\n    Only checks local project imports (not pip packages).\n    "
+issues
+●●●●●● 1mm □
+skip_dirs
+●●●●●● 1mm □
+'__pycache__'
+'venv'
+'node_modules'
+'.git'
+'mcp_repos'
+'knowledge_base'
+known_broken
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+py_file
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+py_file
+skip
+skip_dirs
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+UnicodeDecodeError
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+module_path
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'.'
+'/'
+●●●●●● 2mm □△
+top_level
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+local_dirs
+●●●●●● 1mm □
+d
+d
+root
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+top_level
+local_dirs
+possible_paths
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+module_path
+'.py'
+root
+●●●●●● 3mm □△
+module_path
+●●●●●● 3mm □△
+'__init__.py'
+exists
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+possible_paths
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exists
+node
+known_broken
+known_broken
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+detect_stubs
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Find TODO, placeholder, simplified implementations that indicate\n    incomplete functionality.\n    '
+issues
+●●●●●● 1mm □
+skip_dirs
+●●●●●● 1mm □
+'__pycache__'
+'venv'
+'node_modules'
+'.git'
+'mcp_repos'
+'knowledge_base'
+'tests'
+patterns
+●●●●●● 1mm □
+'TODO'
+'warning'
+'FIXME'
+'warning'
+'HACK'
+'info'
+'placeholder'
+'info'
+'simplified'
+'info'
+py_file
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+skip
+py_file
+skip
+skip_dirs
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+Exception
+rel_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+line_num
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stripped
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+'"""'
+stripped
+"'''"
+stripped
+pattern
+severity
+patterns
+●●●●●● 2mm □
+pattern
+stripped
+stripped
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stripped
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'comment'
+stripped
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern
+'TODO'
+'# TODO'
+line
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+check_layer1_initialization
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Verify that Layer 1 connectors are actually initialized at app startup.\n    '
+issues
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'app.py'
+●●●●●● 2mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+app_source
+●●●●●● 1mm □
+app_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'initialize_layer1'
+app_source
+'Layer1MessageBus'
+app_source
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+init_file
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'layer1'
+●●●●●● 3mm □△
+'initialize.py'
+●●●●●● 2mm □
+init_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+init_source
+●●●●●● 1mm □
+init_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'initialize_layer1'
+init_source
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+validate_configuration
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Check for configuration issues — missing required values,\n    empty strings for required keys, etc.\n    '
+issues
+●●●●●● 1mm □
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+critical_checks
+●●●●●● 1mm □
+'LLM_PROVIDER'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_PROVIDER'
+''
+●●●●●● 2mm □△
+'LLM provider not configured'
+provider
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_PROVIDER'
+'ollama'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+provider
+'kimi'
+critical_checks
+●●●●●● 1mm □△
+'KIMI_API_KEY'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+'Kimi is the LLM provider but KIMI_API_KEY is empty'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+provider
+'openai'
+critical_checks
+●●●●●● 1mm □△
+'LLM_API_KEY'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_API_KEY'
+''
+●●●●●● 2mm □△
+'OpenAI is the LLM provider but LLM_API_KEY is empty'
+●●●●●● 2mm □△
+name
+value
+msg
+critical_checks
+●●●●●● 2mm □
+value
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+optional_checks
+●●●●●● 1mm □
+'KIMI_API_KEY'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+'Kimi API key not configured — consensus engine limited'
+'OPUS_API_KEY'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_API_KEY'
+''
+●●●●●● 2mm □△
+'Opus API key not configured — consensus engine limited'
+'SERPAPI_KEY'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'SERPAPI_KEY'
+''
+●●●●●● 2mm □△
+'SerpAPI key not configured — internet search disabled'
+name
+value
+msg
+optional_checks
+●●●●●● 2mm □
+value
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+validate_kimi_opus
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Validate Kimi and Opus are properly wired and can actually connect.\n    Goes beyond just checking if API key is set.\n    '
+issues
+●●●●●● 1mm □
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+kimi_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kimi_key
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+client
+●●●●●● 1mm □
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+models
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+models
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+opus_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+opus_key
+●●●●●● 3mm □△○
+llm_orchestrator.opus_client
+●●●●●● 2mm □△○
+OpusLLMClient
+client
+●●●●●● 1mm □
+OpusLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+Issue
+●●●●●● 1mm □
+run_full_validation
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+Path
+BACKEND_ROOT
+'\n    Run the complete deterministic validation pipeline.\n    No LLM needed. Pure structural analysis.\n    '
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_issues
+●●●●●● 3mm □△
+Issue
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running silent failure detection...'
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+detect_silent_failures
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running router wiring check...'
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+detect_unwired_routers
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running broken import detection...'
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+detect_broken_imports
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running Layer 1 initialization check...'
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+check_layer1_initialization
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running configuration validation...'
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+validate_configuration
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running Kimi/Opus connectivity validation...'
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □△
+validate_kimi_opus
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running Genesis Key validation...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.deterministic_genesis_validator
+●●●●●● 2mm □△○
+run_genesis_validation
+genesis_report
+●●●●●● 1mm □
+run_genesis_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gi
+genesis_report
+all_issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Genesis validation failed: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Running RAG pipeline validation...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.deterministic_rag_validator
+●●●●●● 2mm □△○
+run_rag_validation
+rag_report
+●●●●●● 1mm □
+run_rag_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ri
+rag_report
+all_issues
+●●●●●● 1mm □△
+Issue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] RAG validation failed: '
+e
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+py_files
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+_
+root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+categories
+●●●●●● 1mm □
+issue
+all_issues
+categories
+issue
+●●●●●● 1mm □
+categories
+●●●●●● 1mm □△
+issue
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+report
+●●●●●● 1mm □
+ValidationReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DETERMINISTIC-VALIDATOR] Complete: '
+report
+' issues ('
+report
+' critical, '
+report
+' warning, '
+report
+' info) in '
+report
+' files ('
+elapsed
+'.0f'
+'ms)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+ValidationReport

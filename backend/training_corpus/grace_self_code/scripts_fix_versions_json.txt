@@ -1,0 +1,637 @@
+## fix_versions_json.py
+'\nRepair script for .genesis_file_versions.json:\n1. Fixes truncated/incomplete JSON at end of file\n2. Rewrites all absolute Linux paths to be relative (os-agnostic)\n3. Reports which referenced files are missing on this machine\n4. Removes entries for non-existent files (optional)\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+JSON_FILE
+●●●●●● 1mm □
+BACKEND_DIR
+●●●●●● 3mm □△
+'.genesis_file_versions.json'
+BACKUP_FILE
+●●●●●● 1mm □
+BACKEND_DIR
+●●●●●● 3mm □△
+'.genesis_file_versions.json.bak'
+OLD_PREFIX
+●●●●●● 1mm □
+'/home/zair/Documents/grace/test/grace-3.1-/backend/'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  Source: '
+JSON_FILE
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  Backend dir: '
+BACKEND_DIR
+●●●●●● 2mm □△
+raw
+●●●●●● 1mm □
+JSON_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  File size: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+','
+' chars, '
+raw
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+','
+' lines'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fix_truncated_json
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Attempt to fix truncated JSON by trimming to the last valid complete entry.'
+text
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\x00 \t\r\n'
+●●●●●● 2mm □△
+depth
+●●●●●● 1mm □
+0
+in_string
+●●●●●● 1mm □
+●●●●●● 1mm □
+escape_next
+●●●●●● 1mm □
+●●●●●● 1mm □
+last_comma_at
+●●●●●● 1mm □
+1
+i
+ch
+●●●●●● 2mm □
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+escape_next
+escape_next
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+ch
+'\\'
+in_string
+escape_next
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+ch
+'"'
+escape_next
+in_string
+●●●●●● 1mm □
+in_string
+●●●●●● 2mm □
+in_string
+●●●●●● 2mm □
+ch
+'{'
+'['
+depth
+1
+●●●●●● 1mm △
+ch
+'}'
+']'
+depth
+1
+●●●●●● 2mm □
+ch
+','
+depth
+1
+last_comma_at
+●●●●●● 1mm □
+i
+●●●●●● 2mm □
+depth
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  JSON is already balanced — no truncation fix needed.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  JSON is truncated (unclosed depth='
+depth
+'), trimming to last complete entry …'
+●●●●●● 2mm □△
+cutpoints
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+m
+re
+●●●●●● 1mm □△
+'"last_updated"\\s*:\\s*"[^"]+"\\s*\\n?\\s*}'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cutpoints
+cutpoints
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+m
+re
+●●●●●● 1mm □△
+'"version_count"\\s*:\\s*\\d+'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cutpoints
+cut
+●●●●●● 1mm □
+cutpoints
+1
+end
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'}'
+cut
+●●●●●● 2mm □△
+●●●●●● 2mm □
+end
+1
+text
+●●●●●● 1mm □
+text
+end
+●●●●●● 3mm ○
+1
+depth2
+●●●●●● 1mm □
+0
+in_str2
+●●●●●● 1mm □
+●●●●●● 1mm □
+esc2
+●●●●●● 1mm □
+●●●●●● 1mm □
+ch
+text
+●●●●●● 2mm □
+esc2
+esc2
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+ch
+'\\'
+in_str2
+esc2
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+ch
+'"'
+in_str2
+●●●●●● 1mm □
+in_str2
+●●●●●● 2mm □
+in_str2
+●●●●●● 2mm □
+ch
+'{'
+'['
+depth2
+1
+●●●●●● 1mm △
+ch
+'}'
+']'
+depth2
+1
+closing
+●●●●●● 1mm □
+''
+stack_chars
+●●●●●● 1mm □
+d
+●●●●●● 1mm □
+0
+in_s
+●●●●●● 1mm □
+●●●●●● 1mm □
+es
+●●●●●● 1mm □
+●●●●●● 1mm □
+ch
+text
+●●●●●● 2mm □
+es
+es
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+ch
+'\\'
+in_s
+es
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+ch
+'"'
+in_s
+●●●●●● 1mm □
+in_s
+●●●●●● 2mm □
+in_s
+●●●●●● 2mm □
+ch
+'{'
+stack_chars
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ch
+'['
+stack_chars
+●●●●●● 1mm □△
+']'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ch
+'}'
+']'
+stack_chars
+stack_chars
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+closing
+●●●●●● 1mm □
+'\n'
+●●●●●● 3mm ○
+''
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+stack_chars
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+text
+●●●●●● 3mm ○
+closing
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  Appended closing: '
+closing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+fixed_raw
+●●●●●● 1mm □
+fix_truncated_json
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+fixed_raw
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  JSON parsed OK — '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' file entries'
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ERROR] JSON still invalid after fix attempt: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'        Manual inspection needed. Aborting.'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+missing
+●●●●●● 1mm □
+fixed_count
+●●●●●● 1mm □
+0
+removed_keys
+●●●●●● 1mm □
+files_dict
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+new_files
+●●●●●● 1mm □
+key
+entry
+files_dict
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+field
+'file_path'
+'absolute_path'
+val
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+field
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+fixed_val
+●●●●●● 1mm □
+val
+●●●●●● 2mm □
+OLD_PREFIX
+fixed_val
+rel
+●●●●●● 1mm □
+fixed_val
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+OLD_PREFIX
+●●●●●● 2mm □△
+fixed_val
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+rel
+●●●●●● 2mm □△
+fixed_count
+1
+●●●●●● 1mm △
+val
+●●●●●● 1mm □△
+'/home/'
+●●●●●● 2mm □△
+val
+●●●●●● 1mm □△
+'/root/'
+●●●●●● 2mm □△
+match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'/backend/(.*)'
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+fixed_val
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fixed_count
+1
+fixed_val
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+fixed_val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+entry
+field
+●●●●●● 1mm □
+fixed_val
+version
+entry
+●●●●●● 1mm □△
+'versions'
+●●●●●● 2mm □△
+abs_path
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'absolute_path'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+abs_path
+Path
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+missing
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+new_files
+key
+●●●●●● 1mm □
+entry
+data
+'files'
+●●●●●● 1mm □
+new_files
+data
+'last_path_fix'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'path_fix_backend_dir'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  Writing backup → '
+BACKUP_FILE
+●●●●●● 2mm □△
+BACKUP_FILE
+●●●●●● 1mm □△
+raw
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[FIX]  Saving fixed JSON → '
+JSON_FILE
+●●●●●● 2mm □△
+JSON_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+'files'
+●●●●●● 2mm □△
+missing_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing
+●●●●●● 2mm □△
+present_count
+●●●●●● 1mm □
+total
+●●●●●● 1mm □△
+missing_count
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total entries   : '
+total
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Paths fixed     : '
+fixed_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Files present   : '
+present_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Files MISSING   : '
+missing_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+missing
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nMissing files (entries kept but file not found on disk):'
+●●●●●● 2mm □△
+p
+missing
+30
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗  '
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing
+●●●●●● 2mm □△
+30
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  … and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+missing
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+30
+' more'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nAll referenced files exist on disk ✓'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[FIX]  Done. Restart the backend to pick up the repaired JSON.'
+●●●●●● 2mm □△

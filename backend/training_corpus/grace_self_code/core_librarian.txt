@@ -1,0 +1,615 @@
+## librarian.py
+'\nLibrarian — auto-categorization, tagging, versioning of all documents.\n\nEvery upload goes through the librarian:\n  1. Extract metadata (title, type, language, size)\n  2. Auto-categorize into folder structure\n  3. Tag with keywords\n  4. Version track (every save creates a version)\n  5. Index for search\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+CATEGORY_MAP
+●●●●●● 1mm □
+'code'
+'docs'
+'data'
+'config'
+'media'
+'web'
+'tests'
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+'.go'
+'.rs'
+'.java'
+'.c'
+'.cpp'
+'.rb'
+'.php'
+'.md'
+'.txt'
+'.rst'
+'.doc'
+'.docx'
+'.pdf'
+'.json'
+'.yaml'
+'.yml'
+'.csv'
+'.xml'
+'.sql'
+'.toml'
+'.env'
+'.ini'
+'.cfg'
+'.conf'
+'.toml'
+'.png'
+'.jpg'
+'.gif'
+'.svg'
+'.mp4'
+'.mp3'
+'.html'
+'.css'
+'.scss'
+'.test.py'
+'.test.js'
+'.spec.ts'
+'.test.ts'
+_document_index
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_version_history
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_document
+●●●●●● 1mm □△
+file_path
+content
+project_id
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'upload'
+'\n    Process a document through the librarian pipeline.\n    Auto-categorize, tag, version, index.\n    '
+name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+category
+●●●●●● 1mm □
+'other'
+cat
+extensions
+CATEGORY_MAP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+extensions
+category
+●●●●●● 1mm □
+cat
+tags
+●●●●●● 1mm □
+_extract_tags
+●●●●●● 1mm □△
+content
+ext
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+'name'
+'extension'
+'category'
+'tags'
+'size'
+'lines'
+'hash'
+'project_id'
+'source'
+'ingested_at'
+name
+ext
+category
+tags
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+content_hash
+project_id
+source
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+_version_history
+_version_history
+file_path
+●●●●●● 1mm □
+version
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_version_history
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+_version_history
+file_path
+●●●●●● 1mm □△
+'version'
+'hash'
+'size'
+'timestamp'
+'source'
+version
+content_hash
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 2mm □△
+metadata
+'version'
+●●●●●● 1mm □
+version
+_document_index
+●●●●●● 1mm □△
+'path'
+'name'
+'category'
+'tags'
+'project_id'
+'size'
+'version'
+'indexed_at'
+'content_preview'
+file_path
+name
+category
+tags
+project_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+version
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_document_index
+●●●●●● 2mm □△
+5000
+_document_index
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.tracing
+●●●●●● 2mm □△○
+light_track
+light_track
+●●●●●● 1mm □△
+'file_ingestion'
+'Librarian: '
+name
+' → '
+category
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+' tags, v'
+version
+')'
+'librarian'
+'librarian'
+category
+project_id
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_extract_tags
+●●●●●● 1mm □△
+content
+ext
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Extract keyword tags from content.'
+tags
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.py'
+match
+re
+●●●●●● 1mm □△
+'^(?:from|import)\\s+([\\w.]+)'
+content
+re
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □△
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+match
+re
+●●●●●● 1mm □△
+'^(?:class|def)\\s+(\\w+)'
+content
+re
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □△
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+match
+re
+●●●●●● 1mm □△
+'(?:import|from)\\s+[\'\\"]([^\'\\"]+)[\'\\"]'
+content
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □△
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+match
+re
+●●●●●● 1mm □△
+'(?:function|class|const)\\s+(\\w+)'
+content
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □△
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.md'
+'.txt'
+match
+re
+●●●●●● 1mm □△
+'^#+\\s+(.+)$'
+content
+re
+●●●●●● 2mm □△
+tags
+●●●●●● 1mm □△
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+30
+●●●●●● 2mm □△
+keywords
+●●●●●● 1mm □
+'api'
+'database'
+'auth'
+'login'
+'user'
+'admin'
+'test'
+'config'
+'deploy'
+'build'
+'error'
+'fix'
+'feature'
+content_lower
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+keywords
+●●●●●● 2mm □
+kw
+content_lower
+tags
+●●●●●● 1mm □△
+kw
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+20
+●●●●●● 1mm □△
+●●●●●● 1mm □
+search_documents
+●●●●●● 1mm □△
+query
+project_id
+category
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+''
+''
+20
+'Search across all indexed documents.'
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+doc
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_document_index
+●●●●●● 2mm □△
+●●●●●● 2mm □
+project_id
+doc
+●●●●●● 1mm □△
+'project_id'
+●●●●●● 2mm □△
+project_id
+●●●●●● 2mm □
+category
+doc
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+category
+score
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+query_lower
+doc
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+3
+●●●●●● 2mm □
+query_lower
+doc
+●●●●●● 1mm □△
+'content_preview'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+2
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+query_lower
+tag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tag
+doc
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+score
+1
+●●●●●● 2mm □
+score
+0
+results
+●●●●●● 1mm □△
+'score'
+doc
+score
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+limit
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_versions
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get version history for a file.'
+●●●●●● 3mm ○
+_version_history
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_document_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get librarian statistics.'
+by_category
+●●●●●● 1mm □
+doc
+_document_index
+cat
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'category'
+'other'
+●●●●●● 2mm □△
+by_category
+cat
+●●●●●● 1mm □
+by_category
+●●●●●● 1mm □△
+cat
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+'total_indexed'
+'total_versioned'
+'by_category'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_document_index
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_version_history
+●●●●●● 2mm □△
+by_category
+●●●●●● 2mm □△
+●●●●●● 1mm □
+cross_project_search
+●●●●●● 1mm □△
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+30
+'Search across ALL projects.'
+●●●●●● 3mm ○
+search_documents
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm □△

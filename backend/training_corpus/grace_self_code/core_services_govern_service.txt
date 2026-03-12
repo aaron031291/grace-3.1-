@@ -1,0 +1,729 @@
+## govern_service.py
+'Governance domain service — direct calls, no HTTP.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+RULES_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'governance_rules'
+PERSONA_FILE
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'persona_config.json'
+●●●●●● 1mm □
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RULES_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PERSONA_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+PERSONA_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+PERSONA_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'personal'
+'professional'
+''
+''
+●●●●●● 1mm □
+update_persona
+●●●●●● 1mm □△
+personal
+professional
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+current
+●●●●●● 1mm □
+get_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+personal
+●●●●●● 2mm □
+current
+'personal'
+●●●●●● 1mm □
+personal
+●●●●●● 2mm □
+professional
+●●●●●● 2mm □
+current
+'professional'
+●●●●●● 1mm □
+professional
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PERSONA_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+current
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+current
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □
+●●●●●● 2mm □
+RULES_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'documents'
+'categories'
+cat
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+RULES_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+cat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+docs
+●●●●●● 1mm □△
+'id'
+'filename'
+'category'
+'size'
+cat
+'/'
+f
+f
+cat
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'documents'
+'total'
+docs
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_rule_content
+●●●●●● 1mm □△
+doc_id
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fp
+●●●●●● 1mm □
+RULES_DIR
+●●●●●● 3mm □△
+doc_id
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+●●●●●● 3mm ○
+'id'
+'content'
+doc_id
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+save_rule_content
+●●●●●● 1mm □△
+doc_id
+content
+●●●●●● 2mm □△
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fp
+●●●●●● 1mm □
+RULES_DIR
+●●●●●● 3mm □△
+doc_id
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+fp
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'saved'
+doc_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+governance.governance_engine
+●●●●●● 2mm □△○
+GovernanceEngine
+engine
+●●●●●● 1mm □
+GovernanceEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'pillars'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'self_governance'
+'human_oversight'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'timestamp'
+'status'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'basic'
+●●●●●● 1mm □
+get_approvals
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT * FROM governance_decisions WHERE status='pending' ORDER BY id DESC LIMIT 20"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'approvals'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+rows
+Exception
+●●●●●● 3mm ○
+'approvals'
+●●●●●● 1mm □
+approve_action
+●●●●●● 1mm □△
+decision_id
+action
+reason
+●●●●●● 2mm □△
+''
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'UPDATE governance_decisions SET status=:s, resolved_at=:t WHERE id=:id'
+●●●●●● 2mm □△
+'s'
+'t'
+'id'
+action
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'decision_id'
+'action'
+decision_id
+action
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+kpi.kpi_tracker
+●●●●●● 2mm □△○
+get_tracker
+tracker
+●●●●●● 1mm □
+get_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'trust_score'
+0.5
+●●●●●● 1mm □
+trigger_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+TriggerSource
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'healed'
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'gc_only'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+trigger_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'triggered'
+Exception
+●●●●●● 3mm ○
+'status'
+'logged'
+●●●●●● 1mm □
+record_gap
+●●●●●● 1mm □△
+what
+target
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □
+'Record a knowledge/code/test gap via Genesis (used by autonomous loop and brain).'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'target'
+'recorded'
+target
+target
+200
+''
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 1mm □
+genesis_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+total
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+errors
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'total_keys'
+'total_errors'
+total
+errors
+Exception
+●●●●●● 3mm ○
+'total_keys'
+0
+●●●●●● 1mm □
+genesis_keys
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+20
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+keys
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'keys'
+'key_id'
+'key_type'
+'what'
+'when'
+k
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+k
+k
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+k
+keys
+Exception
+●●●●●● 3mm ○
+'keys'
+●●●●●● 1mm □
+approvals_history
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+30
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+rows
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT * FROM governance_decisions ORDER BY id DESC LIMIT '
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'history'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+rows
+Exception
+●●●●●● 3mm ○
+'history'
+●●●●●● 1mm □
+adaptive_overrides
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+20
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+AdaptiveOverride
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+overrides
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+AdaptiveOverride
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+AdaptiveOverride
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'overrides'
+o
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+o
+overrides
+Exception
+●●●●●● 3mm ○
+'error'
+'overrides'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+approve_override
+●●●●●● 1mm □△
+override_id
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+AdaptiveOverride
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+override
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+AdaptiveOverride
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+override
+●●●●●● 3mm ○
+'error'
+'Override not found'
+override
+●●●●●● 1mm □
+action
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'override_id'
+'action'
+'status'
+override_id
+action
+'updated'
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△

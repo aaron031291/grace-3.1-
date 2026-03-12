@@ -1,0 +1,523 @@
+## session.py
+'\nDatabase session management module.\nProvides session factory and context managers for database operations.\n\nIncludes automatic retry logic for transient SQLite "database is locked"\nerrors so callers never need to handle them manually.\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+sessionmaker
+Session
+●●●●●● 3mm □△○
+sqlalchemy.exc
+●●●●●● 2mm □△○
+OperationalError
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Generator
+Optional
+●●●●●● 3mm □△○
+contextlib
+●●●●●● 2mm □△○
+contextmanager
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+connection
+●●●●●● 2mm □△○
+DatabaseConnection
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 2mm □○
+sessionmaker
+●●●●●● 2mm □
+_RETRY_MAX
+●●●●●● 1mm □
+3
+_RETRY_BACKOFF_S
+●●●●●● 1mm □
+0.5
+●●●●●● 1mm □
+_is_lock_error
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+Exception
+msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'database is locked'
+msg
+'locked'
+msg
+●●●●●● 3mm △
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Initialize the session factory with the database engine.\n    \n    Returns:\n        sessionmaker: Session factory\n    '
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SessionLocal
+●●●●●● 1mm □
+sessionmaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SessionLocal
+sessionmaker
+●●●●●● 1mm □
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Dependency injection for FastAPI - yields a new database session.\n    Retries commit up to _RETRY_MAX times on transient lock errors.\n    \n    Usage:\n        @app.get("/items/")\n        def read_items(session: Session = Depends(get_session)):\n            return session.query(Item).all()\n    \n    Yields:\n        Session: SQLAlchemy session instance\n    '
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+_commit_with_retry
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+HTTPException
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+e
+HTTPException
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database session error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Generator
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Alternative alias for get_session().\n\n    Yields:\n        Session: SQLAlchemy session instance\n    '
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Generator
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Get the session factory for creating sessions directly.\n\n    Useful for background tasks and thread-based operations\n    that need to manage their own session lifecycle.\n\n    Returns:\n        sessionmaker: Session factory that can be called to create sessions\n\n    Example:\n        session_factory = get_session_factory()\n        session = session_factory()\n        try:\n            # do work\n            session.commit()\n        finally:\n            session.close()\n    '
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SessionLocal
+sessionmaker
+_cb_failures
+●●●●●● 1mm □
+0
+_cb_open_until
+●●●●●● 1mm □
+0.0
+_CB_THRESHOLD
+●●●●●● 1mm □
+10
+_CB_RECOVERY_S
+●●●●●● 1mm □
+30
+_cb_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_cb_record_failure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Record a DB failure. Returns True if circuit is now open.'
+_cb_lock
+_cb_failures
+1
+●●●●●● 2mm □
+_cb_failures
+_CB_THRESHOLD
+_cb_open_until
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_CB_RECOVERY_S
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_cb_record_success
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cb_lock
+_cb_failures
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+_cb_failures
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+_cb_open_until
+●●●●●● 1mm □
+0.0
+●●●●●● 2mm □
+●●●●●● 1mm □
+_cb_is_open
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cb_lock
+●●●●●● 2mm □
+_cb_open_until
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cb_open_until
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Context manager for database sessions.\n    Provides a transactional scope around a series of operations.\n    Retries commit on transient lock errors.\n\n    Self-healing:\n    - Schema drift (UndefinedColumn/Table) → runs auto_migrate, then signals\n      the error_pipeline so the fix is learned and tracked.\n    - All other errors → reported to error_pipeline for coding-agent routing.\n    - Circuit breaker: if DB fails repeatedly, trips open for 30s to avoid\n      hammering a dead database.\n    '
+●●●●●● 2mm □
+_cb_is_open
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'Database circuit breaker OPEN — too many consecutive failures. Will retry in '
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+_cb_open_until
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'.0f'
+'s.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+_commit_with_retry
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+_cb_record_success
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+err_str
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+_SCHEMA_SIGNALS
+●●●●●● 1mm □
+'UndefinedColumn'
+'UndefinedTable'
+'does not exist'
+'no such column'
+'no such table'
+is_schema_error
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+sig
+err_str
+sig
+_SCHEMA_SIGNALS
+●●●●●● 2mm □△
+'psycopg2'
+err_str
+'sqlite'
+err_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_schema_error
+logger
+●●●●●● 1mm □△
+'[SESSION] Schema drift — running auto-migrate: %s'
+err_str
+200
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.auto_migrate
+●●●●●● 2mm □△○
+run_auto_migrate
+engine
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □
+run_auto_migrate
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+changes
+logger
+●●●●●● 1mm □△
+'[SESSION] ✅ Schema healed: %d change(s): %s'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+changes
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SESSION] Auto-migrate failed: %s'
+migrate_err
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+importlib
+ep_mod
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+'self_healing.error_pipeline'
+●●●●●● 2mm □△
+ep_mod
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Exception
+_cb_record_failure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database session_scope error: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contextmanager
+Generator
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+batch_session_scope
+●●●●●● 1mm □△
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+1000
+'\n    Context manager optimised for high-volume bulk inserts.\n\n    Yields (session, flush_batch) — call flush_batch() after adding\n    `batch_size` objects to flush and clear the identity map, keeping\n    memory bounded on large ingests.\n\n    Example::\n\n        with batch_session_scope(batch_size=250) as (session, flush):\n            for i, row in enumerate(rows):\n                session.add(SomeModel(**row))\n                if (i + 1) % 250 == 0:\n                    flush()\n    '
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+counter
+●●●●●● 1mm □
+'n'
+0
+●●●●●● 1mm □
+flush_batch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+counter
+'n'
+1
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OperationalError
+●●●●●● 2mm □
+_is_lock_error
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Batch flush hit lock — retrying after rollback'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+_RETRY_BACKOFF_S
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+flush_batch
+_commit_with_retry
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Batch session committed (%d flushes)'
+counter
+'n'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Batch session error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contextmanager
+●●●●●● 1mm □
+_commit_with_retry
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Attempt session.commit(), retrying on transient lock errors.'
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+_RETRY_MAX
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+OperationalError
+●●●●●● 2mm □
+_is_lock_error
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+attempt
+_RETRY_MAX
+wait
+●●●●●● 1mm □
+_RETRY_BACKOFF_S
+●●●●●● 2mm □△
+attempt
+logger
+●●●●●● 1mm □△
+'Database locked on commit (attempt %d/%d), retrying in %.1fs …'
+attempt
+_RETRY_MAX
+wait
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+wait
+●●●●●● 2mm □△
+●●●●●● 3mm □
+_track_db_error
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_track_db_error
+●●●●●● 1mm □△
+exc
+●●●●●● 2mm □△
+Exception
+'Fire-and-forget Genesis key for DB errors.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □

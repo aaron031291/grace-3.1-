@@ -1,0 +1,1471 @@
+## external_sources.py
+'\nExternal sources for knowledge gap filling — software engineering focus.\n\nUsed by reverse_knn.fill_gaps_actively to pull from:\n- GitHub (repos; optional GITHUB_TOKEN)\n- Stack Overflow (Stack Exchange API)\n- arXiv (research papers)\n- Wikipedia (concepts, algorithms, standards)\n- Hacker News (Algolia)\n- Dev.to (articles by tag)\n- PyPI (Python packages, XML-RPC)\n- MDN (Mozilla Developer Network: web APIs, JS, CSS, HTML)\n- Semantic Scholar (CS/SE papers; optional API key)\n- npm (JavaScript/Node packages)\n- IETF RFC (protocols, standards, datatracker API)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+urllib.parse
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+fetch_github
+●●●●●● 1mm □△
+topic
+max_results
+token
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+3
+●●●●●● 2mm □
+'\n    Search GitHub repositories by topic. Optional GITHUB_TOKEN for higher rate limit.\n    Returns list of { title, link, snippet, source: "github" }.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+' in:name,description,readme'
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://api.github.com/search/repositories?q='
+q
+'&per_page='
+max_results
+'&sort=stars'
+headers
+●●●●●● 1mm □
+'Accept'
+'User-Agent'
+'application/vnd.github.v3+json'
+'Grace/1.0'
+●●●●●● 2mm □
+token
+headers
+'Authorization'
+●●●●●● 1mm □
+'Bearer '
+token
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 2mm □
+r
+403
+'rate limit'
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'GitHub rate limit hit; set GITHUB_TOKEN for higher limit'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+data
+●●●●●● 1mm □△
+'items'
+●●●●●● 2mm □△
+max_results
+title
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'full_name'
+''
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+link
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'html_url'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'description'
+●●●●●● 2mm □△
+''
+500
+●●●●●● 2mm □
+snippet
+item
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+'Topics: '
+●●●●●● 3mm ○
+', '
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+5
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'github'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'GitHub fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_stackoverflow
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search Stack Overflow via Stack Exchange API (no key required).\n    Returns list of { title, link, snippet, source: "stackoverflow" }.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=relevance&q='
+q
+'&site=stackoverflow&pagesize='
+max_results
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+data
+●●●●●● 1mm □△
+'items'
+●●●●●● 2mm □△
+max_results
+title
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+''
+200
+link
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'<[^>]+>'
+''
+item
+●●●●●● 1mm □△
+'body'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □△
+400
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'stackoverflow'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Stack Overflow fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_arxiv
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search arXiv for research papers (no key required).\n    Returns list of { title, link, snippet, source: "arxiv" }.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'http://export.arxiv.org/api/query?search_query=all:'
+q
+'&max_results='
+max_results
+'&sortBy=relevance'
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+text
+●●●●●● 1mm □
+r
+●●●●●● 2mm □△○
+xml.etree.ElementTree
+●●●●●● 1mm □
+ET
+root
+●●●●●● 1mm □
+ET
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+ns
+●●●●●● 1mm □
+'atom'
+'http://www.w3.org/2005/Atom'
+entry
+root
+●●●●●● 1mm □△
+'atom:entry'
+ns
+●●●●●● 2mm □△
+max_results
+title_el
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'atom:title'
+ns
+●●●●●● 2mm □△
+summary_el
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'atom:summary'
+ns
+●●●●●● 2mm □△
+id_el
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'atom:id'
+ns
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+title_el
+●●●●●● 2mm □
+title_el
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+200
+''
+snippet
+●●●●●● 1mm □
+summary_el
+●●●●●● 2mm □
+summary_el
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+500
+''
+link
+●●●●●● 1mm □
+id_el
+●●●●●● 2mm □
+id_el
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □
+title
+link
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'arxiv'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'arXiv fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_wikipedia
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search Wikipedia (software engineering concepts, algorithms, standards). No key required.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch='
+q
+'&srlimit='
+max_results
+'&format=json'
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+data
+●●●●●● 1mm □△
+'query'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'search'
+●●●●●● 2mm □△
+max_results
+title
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'snippet'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'<[^>]+>'
+''
+snippet
+●●●●●● 2mm □△
+page_id
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'pageid'
+''
+●●●●●● 2mm □△
+link
+●●●●●● 1mm □
+title
+'https://en.wikipedia.org/wiki/'
+urllib
+●●●●●● 1mm □△
+title
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+''
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+snippet
+500
+title
+'wikipedia'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Wikipedia fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_hackernews
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search Hacker News via Algolia (no key required). Good for SWE discussions and tools.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://hn.algolia.com/api/v1/search?query='
+q
+'&hitsPerPage='
+max_results
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hit
+data
+●●●●●● 1mm □△
+'hits'
+●●●●●● 2mm □△
+max_results
+title
+●●●●●● 1mm □
+hit
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+''
+200
+link
+●●●●●● 1mm □
+hit
+●●●●●● 1mm □△
+'url'
+●●●●●● 2mm □△
+'https://news.ycombinator.com/item?id='
+hit
+●●●●●● 1mm □△
+'objectID'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+hit
+●●●●●● 1mm □△
+'story_text'
+●●●●●● 2mm □△
+hit
+●●●●●● 1mm □△
+'comment_text'
+●●●●●● 2mm □△
+title
+400
+snippet
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'<[^>]+>'
+''
+snippet
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'hackernews'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Hacker News fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_devto
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+"\n    Fetch Dev.to articles by tag (software engineering). No key required for read.\n    Uses first word of topic as tag; falls back to 'programming' if too short.\n    "
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+tag
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+topic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+'programming'
+tag
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[^a-zA-Z0-9]'
+''
+tag
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+20
+'programming'
+url
+●●●●●● 1mm □
+'https://dev.to/api/articles?tag='
+tag
+'&per_page='
+max_results
+'&top=7'
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+max_results
+title
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+''
+200
+link
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'url'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'description'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'body_markdown'
+●●●●●● 2mm □△
+title
+400
+snippet
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'<[^>]+>'
+''
+snippet
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'devto'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Dev.to fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_pypi
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search PyPI for Python packages (XML-RPC search). No key required.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+xmlrpc.client
+client
+●●●●●● 1mm □
+xmlrpc
+●●●●●● 1mm □△
+'https://pypi.org/pypi'
+●●●●●● 2mm □△
+hits
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'name'
+topic
+'or'
+●●●●●● 2mm □△
+max_results
+h
+hits
+name
+●●●●●● 1mm □
+h
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+h
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+''
+400
+link
+●●●●●● 1mm □
+name
+'https://pypi.org/project/'
+name
+'/'
+''
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+name
+link
+summary
+name
+'pypi'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'PyPI fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_mdn
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search MDN (Mozilla Developer Network) for web APIs, JavaScript, CSS, HTML. No key required.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://developer.mozilla.org/en-US/search.json?q='
+q
+'&locale=en-US'
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+data
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+max_results
+title
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+''
+200
+snippet
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+''
+400
+slug
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'slug'
+''
+●●●●●● 2mm □△
+locale
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'locale'
+'en-US'
+●●●●●● 2mm □△
+link
+●●●●●● 1mm □
+slug
+'https://developer.mozilla.org/'
+locale
+'/docs/'
+slug
+''
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'mdn'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'MDN fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_semantic_scholar
+●●●●●● 1mm □△
+topic
+max_results
+api_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+3
+●●●●●● 2mm □
+'\n    Search Semantic Scholar for CS/SE research papers. Optional API key for higher rate limit.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://api.semanticscholar.org/graph/v1/paper/search?query='
+q
+'&limit='
+max_results
+'&fields=title,url,abstract,year'
+headers
+●●●●●● 1mm □
+'User-Agent'
+'Grace/1.0'
+●●●●●● 2mm □
+api_key
+headers
+'x-api-key'
+●●●●●● 1mm □
+api_key
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+data
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+max_results
+title
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+''
+200
+link
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'url'
+''
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'abstract'
+●●●●●● 2mm □△
+''
+400
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'semantic_scholar'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Semantic Scholar fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_npm
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search npm registry for JavaScript/Node packages. No key required.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://registry.npmjs.org/-/v1/search?text='
+q
+'&size='
+max_results
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+obj
+data
+●●●●●● 1mm □△
+'objects'
+●●●●●● 2mm □△
+max_results
+pkg
+●●●●●● 1mm □
+obj
+●●●●●● 1mm □△
+'package'
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+pkg
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+pkg
+●●●●●● 1mm □△
+'description'
+●●●●●● 2mm □△
+''
+400
+link
+●●●●●● 1mm □
+pkg
+●●●●●● 1mm □△
+'links'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'npm'
+'https://www.npmjs.com/package/'
+name
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+name
+link
+summary
+name
+'npm'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'npm fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_ietf_rfc
+●●●●●● 1mm □△
+topic
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'\n    Search IETF datatracker for RFCs and drafts (protocols, standards). No key required.\n    '
+results
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+q
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+'https://datatracker.ietf.org/api/v1/doc/document/?title__icontains='
+q
+'&format=json&limit='
+max_results
+r
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+●●●●●● 3mm ○
+results
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+data
+●●●●●● 1mm □△
+'objects'
+data
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+max_results
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'title'
+●●●●●● 2mm □△
+name
+200
+●●●●●● 2mm □
+title
+link
+●●●●●● 1mm □
+name
+'https://datatracker.ietf.org/doc/'
+name
+'/'
+''
+snippet
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'abstract'
+●●●●●● 2mm □△
+title
+400
+results
+●●●●●● 1mm □△
+'title'
+'link'
+'snippet'
+'source'
+title
+link
+snippet
+title
+'ietf_rfc'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'IETF RFC fetch failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fetch_all_external
+●●●●●● 1mm □△
+topic
+max_per_source
+github_token
+include_github
+include_stackoverflow
+include_arxiv
+include_wikipedia
+include_hackernews
+include_devto
+include_pypi
+include_mdn
+include_semantic_scholar
+include_npm
+include_ietf_rfc
+semantic_scholar_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+2
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n    Fetch from all software-engineering sources. Returns combined list with source tag.\n    '
+out
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+include_github
+out
+●●●●●● 1mm □△
+fetch_github
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_stackoverflow
+out
+●●●●●● 1mm □△
+fetch_stackoverflow
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_arxiv
+out
+●●●●●● 1mm □△
+fetch_arxiv
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_wikipedia
+out
+●●●●●● 1mm □△
+fetch_wikipedia
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_hackernews
+out
+●●●●●● 1mm □△
+fetch_hackernews
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_devto
+out
+●●●●●● 1mm □△
+fetch_devto
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_pypi
+out
+●●●●●● 1mm □△
+fetch_pypi
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_mdn
+out
+●●●●●● 1mm □△
+fetch_mdn
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_semantic_scholar
+out
+●●●●●● 1mm □△
+fetch_semantic_scholar
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_npm
+out
+●●●●●● 1mm □△
+fetch_npm
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_ietf_rfc
+out
+●●●●●● 1mm □△
+fetch_ietf_rfc
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

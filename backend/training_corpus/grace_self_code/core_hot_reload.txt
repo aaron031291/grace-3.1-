@@ -1,0 +1,620 @@
+## hot_reload.py
+'\nHot Code Reload — swap modules without stopping Grace.\n\nPreserves state, rolls back on failure. Full hot-reload (config + code) via\nPOST /api/runtime/hot-reload or brain system/hot_reload_all.\nOptional: set HOT_RELOAD_WATCH=1 to auto-reload when .py files are saved.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+WATCH_ENABLED
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'HOT_RELOAD_WATCH'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'1'
+'true'
+'yes'
+_state_store
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_reload_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_reload_history
+●●●●●● 1mm □△
+●●●●●● 1mm □
+hot_reload_module
+●●●●●● 1mm □△
+module_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Reload a Python module without stopping the process.\n\n    1. Preserve __state__ if module defines it\n    2. Reload the module\n    3. Restore state\n    4. Rollback on failure\n\n    Usage:\n        hot_reload_module("core.services.chat_service")\n    '
+_reload_lock
+result
+●●●●●● 1mm □
+'module'
+'status'
+'ts'
+module_path
+'unknown'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_path
+sys
+result
+'status'
+●●●●●● 1mm □
+'not_loaded'
+result
+'error'
+●●●●●● 1mm □
+module_path
+' not in sys.modules'
+_reload_history
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+old_module
+●●●●●● 1mm □
+sys
+module_path
+old_state
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+old_module
+'__state__'
+●●●●●● 2mm □△
+old_state
+●●●●●● 1mm □
+old_module
+_state_store
+module_path
+●●●●●● 1mm □
+old_state
+importlib
+●●●●●● 1mm □△
+old_module
+●●●●●● 2mm □△
+new_module
+●●●●●● 1mm □
+sys
+module_path
+●●●●●● 2mm □
+old_state
+●●●●●● 2mm □
+new_module
+●●●●●● 1mm □
+old_state
+result
+'status'
+●●●●●● 1mm □
+'reloaded'
+result
+'state_preserved'
+●●●●●● 1mm □
+old_state
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+sys
+module_path
+●●●●●● 1mm □
+old_module
+result
+'status'
+●●●●●● 1mm □
+'failed'
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+result
+'rolled_back'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+_reload_history
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_reload_history
+●●●●●● 2mm □△
+100
+_reload_history
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+hot_reload_service
+●●●●●● 1mm □△
+service_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Reload a core service module by name.'
+module_map
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'data'
+'tasks'
+'code'
+'system'
+'brain'
+'pipeline'
+'cognitive_pipeline'
+'unified_memory'
+'intelligence'
+'hebbian'
+'security'
+'tracing'
+'model_updater'
+'commit_batch'
+'runtime_triggers'
+'genesis_tracker'
+'autonomous_loop'
+'hot_reload'
+'core.services.chat_service'
+'core.services.files_service'
+'core.services.govern_service'
+'core.services.data_service'
+'core.services.tasks_service'
+'core.services.code_service'
+'core.services.system_service'
+'api.brain_api_v2'
+'core.coding_pipeline'
+'cognitive.pipeline'
+'cognitive.unified_memory'
+'core.intelligence'
+'core.hebbian'
+'core.security'
+'core.tracing'
+'cognitive.model_updater'
+'core.commit_batch_trigger'
+'api.runtime_triggers_api'
+'api._genesis_tracker'
+'api.autonomous_loop_api'
+'core.hot_reload'
+module_path
+●●●●●● 1mm □
+module_map
+●●●●●● 1mm □△
+service_name
+service_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hot_reload_module
+●●●●●● 1mm □△
+module_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reload all core service modules so runtime updates apply without restart.'
+services
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'data'
+'tasks'
+'code'
+'system'
+'brain'
+'cognitive_pipeline'
+'unified_memory'
+'model_updater'
+'commit_batch'
+'runtime_triggers'
+'genesis_tracker'
+'autonomous_loop'
+results
+●●●●●● 1mm □
+svc
+services
+results
+svc
+●●●●●● 1mm □
+hot_reload_service
+●●●●●● 1mm □△
+svc
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'reloaded'
+'failed'
+'not_loaded'
+'results'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'status'
+'reloaded'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'status'
+'failed'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'status'
+'not_loaded'
+●●●●●● 2mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_reload_history
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_reload_history
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+save_and_reload
+●●●●●● 1mm □△
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Save a file and hot-reload its module.'
+result
+●●●●●● 1mm □
+'file'
+'saved'
+'reloaded'
+file_path
+●●●●●● 1mm □
+●●●●●● 1mm □
+p
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+backup
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+backup
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+result
+'saved'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+module_path
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+'/'
+'.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_path
+●●●●●● 1mm □△
+'backend.'
+●●●●●● 2mm □△
+module_path
+●●●●●● 1mm □
+module_path
+8
+reload_result
+●●●●●● 1mm □
+hot_reload_module
+●●●●●● 1mm □△
+module_path
+●●●●●● 2mm □△
+result
+'reloaded'
+●●●●●● 1mm □
+reload_result
+'status'
+'reloaded'
+result
+'reload_detail'
+●●●●●● 1mm □
+reload_result
+●●●●●● 2mm □
+reload_result
+'status'
+'failed'
+backup
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+backup
+●●●●●● 2mm □△
+result
+'rolled_back'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_file_path_to_module
+●●●●●● 1mm □△
+backend_root
+file_path
+●●●●●● 2mm □△
+Path
+Path
+'Convert backend-relative .py path to importable module name.'
+rel
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+backend_root
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel
+'.py'
+rel
+'__init__.py'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+parts
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+rel
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rel
+●●●●●● 3mm ○
+'.'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+ValueError
+IndexError
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+_watch_stop
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_watch_started
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+_reload_watcher_loop
+●●●●●● 1mm □△
+backend_root
+interval
+●●●●●● 2mm □△
+Path
+●●●●●● 3mm ○
+2.0
+'Background loop: when a .py file mtime changes, hot-reload that module.'
+last_mtimes
+●●●●●● 1mm □○
+Path
+●●●●●● 3mm ○
+_watch_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+py
+backend_root
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py
+●●●●●● 2mm □△
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py
+●●●●●● 2mm □△
+mtime
+●●●●●● 1mm □
+py
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+OSError
+prev
+●●●●●● 1mm □
+last_mtimes
+●●●●●● 1mm □△
+py
+●●●●●● 2mm □△
+last_mtimes
+py
+●●●●●● 1mm □
+mtime
+●●●●●● 2mm □
+prev
+●●●●●● 2mm □
+mtime
+prev
+mod
+●●●●●● 1mm □
+_file_path_to_module
+●●●●●● 1mm □△
+backend_root
+py
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mod
+mod
+sys
+mod
+'core.hot_reload'
+hot_reload_module
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Hot-reload (watch): %s'
+mod
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Reload watcher: %s'
+e
+●●●●●● 2mm □△
+_watch_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start_reload_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start background file watcher for auto hot-reload on save (if HOT_RELOAD_WATCH=1).'
+●●●●●● 2mm □
+WATCH_ENABLED
+_watch_started
+●●●●●● 3mm ○
+_watch_started
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+backend_root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Hot-reload watcher started (backend=%s)'
+backend_root
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop_reload_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Signal hot-reload watcher to stop (for graceful shutdown).'
+_watch_stop
+●●●●●● 1mm □△
+●●●●●● 2mm □△

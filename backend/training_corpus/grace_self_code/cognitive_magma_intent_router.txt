@@ -1,0 +1,1032 @@
+## intent_router.py
+'\nMagma Memory - Intent-Aware Router\n\nRoutes queries to appropriate retrieval strategies based on:\n1. Intent Classification - What type of information is being sought\n2. Anchor Identification - Key concepts/entities in the query\n3. Graph Selection - Which relation graphs to query\n4. Retrieval Policy - How to traverse and combine results\n\nThis is the entry point for the Magma query process.\n'
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Set
+Tuple
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+QueryIntent
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of query intents.'
+FACTUAL_LOOKUP
+●●●●●● 1mm □
+'factual_lookup'
+DEFINITION
+●●●●●● 1mm □
+'definition'
+EXPLANATION
+●●●●●● 1mm □
+'explanation'
+RELATIONSHIP
+●●●●●● 1mm □
+'relationship'
+COMPARISON
+●●●●●● 1mm □
+'comparison'
+SIMILARITY
+●●●●●● 1mm □
+'similarity'
+TEMPORAL_SEQUENCE
+●●●●●● 1mm □
+'temporal_sequence'
+TEMPORAL_RANGE
+●●●●●● 1mm □
+'temporal_range'
+HISTORY
+●●●●●● 1mm □
+'history'
+CAUSE
+●●●●●● 1mm □
+'cause'
+EFFECT
+●●●●●● 1mm □
+'effect'
+REASON
+●●●●●● 1mm □
+'reason'
+HOW_TO
+●●●●●● 1mm □
+'how_to'
+STEPS
+●●●●●● 1mm □
+'steps'
+PROCESS
+●●●●●● 1mm □
+'process'
+EXPLORE
+●●●●●● 1mm □
+'explore'
+LIST
+●●●●●● 1mm □
+'list'
+FIND
+●●●●●● 1mm □
+'find'
+UNKNOWN
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm △
+AnchorType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of anchors identified in queries.'
+CONCEPT
+●●●●●● 1mm □
+'concept'
+ENTITY
+●●●●●● 1mm □
+'entity'
+EVENT
+●●●●●● 1mm □
+'event'
+TIME
+●●●●●● 1mm □
+'time'
+ACTION
+●●●●●● 1mm □
+'action'
+ATTRIBUTE
+●●●●●● 1mm □
+'attribute'
+●●●●●● 2mm △
+Anchor
+'An identified anchor in a query.'
+text
+●●●●●● 1mm ○
+anchor_type
+AnchorType
+start_pos
+●●●●●● 2mm ○
+end_pos
+●●●●●● 2mm ○
+confidence
+●●●●●● 3mm ○
+0.5
+normalized_form
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+QueryAnalysis
+'Complete analysis of a query.'
+original_query
+●●●●●● 1mm ○
+normalized_query
+●●●●●● 1mm ○
+primary_intent
+QueryIntent
+secondary_intents
+●●●●●● 3mm □△
+QueryIntent
+anchors
+●●●●●● 3mm □△
+Anchor
+target_graphs
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+retrieval_policy
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+IntentClassifier
+'\n    Classifies query intent using pattern matching and heuristics.\n\n    For production, this would be replaced with an ML model.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+'(?:what is|define|meaning of|definition of)\\s+'
+'^what\\s+(?:does|is)\\s+\\w+\\s+mean'
+'(?:explain|how does|how do|describe how)\\s+'
+'(?:tell me about|explain to me)\\s+'
+'(?:how (?:is|are)|what is the (?:relationship|connection|link) between)\\s+'
+'(?:related to|connected to|linked to)\\s+'
+'(?:compare|difference between|contrast|versus|vs\\.?)\\s+'
+'(?:better|worse|similar|different)\\s+(?:than|from)\\s+'
+'(?:similar to|like|resembles|related concepts)\\s+'
+'(?:alternatives? to|other options? for)\\s+'
+'(?:what happened|what occurs?) (?:after|before|next|then)\\s+'
+'(?:following|preceding|subsequent to)\\s+'
+'(?:between|from .* to|during)\\s+'
+'(?:in the period|timeframe|timeline)\\s+'
+'(?:history of|historical|past|evolution of)\\s+'
+'(?:origins? of|how did .* develop)\\s+'
+'(?:what causes?|cause of|reason for|why does)\\s+'
+'(?:leads? to|results? in|triggers?)\\s+'
+'(?:effect of|effects? of|impact of|consequence of)\\s+'
+'(?:what happens when|result of)\\s+'
+'(?:why|reason|because of|due to)\\s+'
+'(?:what makes?|what causes?)\\s+'
+'(?:how (?:to|do|can) I|how should I)\\s+'
+'(?:way to|method for|approach to)\\s+'
+'(?:steps? (?:to|for)|procedure for)\\s+'
+'(?:instructions? for|guide to)\\s+'
+'(?:process of|workflow for|pipeline)\\s+'
+'(?:how does .* work|mechanism)\\s+'
+'(?:list|enumerate|show all|all the)\\s+'
+'(?:what are the|give me all)\\s+'
+'(?:find|search|look for|locate)\\s+'
+'(?:where (?:is|are|can I find))\\s+'
+●●●●●● 1mm □
+classify
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Classify query intent.\n\n        Returns:\n            Tuple of (primary_intent, secondary_intents, confidence)\n        '
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+intent_scores
+●●●●●● 1mm □○
+QueryIntent
+●●●●●● 3mm ○
+intent
+patterns
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+patterns
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+pattern
+query_lower
+●●●●●● 2mm □△
+intent_scores
+intent
+●●●●●● 1mm □
+intent_scores
+●●●●●● 1mm □△
+intent
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1.0
+●●●●●● 2mm □
+intent_scores
+●●●●●● 3mm ○
+QueryIntent
+0.3
+sorted_intents
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+intent_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+primary_intent
+●●●●●● 1mm □
+sorted_intents
+0
+0
+primary_score
+●●●●●● 1mm □
+sorted_intents
+0
+1
+secondary_intents
+●●●●●● 1mm □
+intent
+intent
+score
+sorted_intents
+1
+score
+0.5
+●●●●●● 2mm □△
+primary_score
+total_score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+intent_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+total_score
+0
+primary_score
+●●●●●● 3mm □△
+total_score
+0.5
+●●●●●● 3mm ○
+primary_intent
+secondary_intents
+confidence
+Tuple
+QueryIntent
+●●●●●● 3mm □△
+QueryIntent
+●●●●●● 3mm ○
+●●●●●● 2mm △
+AnchorIdentifier
+'\n    Identifies anchors (key concepts/entities) in queries.\n\n    Uses pattern matching and heuristics for anchor extraction.\n    For production, would use NER and entity linking.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'the'
+'a'
+'an'
+'is'
+'are'
+'was'
+'were'
+'be'
+'been'
+'being'
+'have'
+'has'
+'had'
+'do'
+'does'
+'did'
+'will'
+'would'
+'could'
+'should'
+'may'
+'might'
+'must'
+'shall'
+'can'
+'to'
+'of'
+'in'
+'for'
+'on'
+'with'
+'at'
+'by'
+'from'
+'as'
+'into'
+'through'
+'during'
+'before'
+'after'
+'above'
+'below'
+'between'
+'under'
+'again'
+'further'
+'then'
+'once'
+'here'
+'there'
+'when'
+'where'
+'why'
+'how'
+'all'
+'each'
+'few'
+'more'
+'most'
+'other'
+'some'
+'such'
+'no'
+'nor'
+'not'
+'only'
+'own'
+'same'
+'so'
+'than'
+'too'
+'very'
+'just'
+'and'
+'but'
+'if'
+'or'
+'because'
+'until'
+'while'
+'about'
+'against'
+'between'
+'into'
+'through'
+'during'
+'before'
+'after'
+'above'
+'below'
+'what'
+'which'
+'who'
+'whom'
+'this'
+'that'
+'these'
+'those'
+'am'
+'it'
+'its'
+'their'
+'my'
+'your'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\\b\\d{4}\\b'
+'\\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\\b'
+'\\b(?:yesterday|today|tomorrow|last week|next week|last month|this year)\\b'
+'\\b\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}\\b'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\\b(?:create|build|make|develop|implement|design)\\b'
+'\\b(?:fix|solve|resolve|debug|repair)\\b'
+'\\b(?:learn|study|understand|analyze|research)\\b'
+'\\b(?:run|execute|deploy|start|stop)\\b'
+●●●●●● 1mm □
+identify
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Identify anchors in a query.\n\n        Returns:\n            List of identified Anchor objects\n        '
+anchors
+●●●●●● 1mm □
+query_lower
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+●●●●●● 3mm △
+match
+re
+●●●●●● 1mm □△
+pattern
+query_lower
+re
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □△
+Anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pattern
+●●●●●● 3mm △
+match
+re
+●●●●●● 1mm □△
+pattern
+query_lower
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □△
+Anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+match
+re
+●●●●●● 1mm □△
+'\\b[A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*\\b'
+query
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+anchors
+●●●●●● 1mm □△
+Anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+match
+re
+●●●●●● 1mm □△
+'"([^"]+)"'
+query
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □△
+Anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+words
+●●●●●● 1mm □
+query_lower
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+word
+●●●●●● 2mm □
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+clean_word
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[^\\w]'
+''
+word
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clean_word
+clean_word
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+clean_word
+●●●●●● 2mm □△
+2
+already_captured
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+clean_word
+a
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+a
+anchors
+●●●●●● 2mm □△
+●●●●●● 2mm □
+already_captured
+start
+●●●●●● 1mm □
+query_lower
+●●●●●● 1mm □△
+clean_word
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start
+0
+anchors
+●●●●●● 1mm □△
+Anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+seen_texts
+●●●●●● 1mm □
+unique_anchors
+●●●●●● 1mm □
+anchor
+anchors
+key
+●●●●●● 1mm □
+anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+seen_texts
+anchor
+seen_texts
+key
+seen_texts
+key
+●●●●●● 1mm □
+anchor
+unique_anchors
+●●●●●● 1mm □△
+anchor
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+unique_anchors
+●●●●●● 3mm □△
+Anchor
+●●●●●● 2mm △
+GraphSelector
+'\n    Selects which relation graphs to query based on intent and anchors.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+QueryIntent
+'semantic'
+'semantic'
+'causal'
+'semantic'
+'entity'
+'semantic'
+'semantic'
+'entity'
+'temporal'
+'temporal'
+'temporal'
+'causal'
+'causal'
+'causal'
+'causal'
+'semantic'
+'causal'
+'semantic'
+'causal'
+'temporal'
+'causal'
+'temporal'
+'semantic'
+'semantic'
+'entity'
+'temporal'
+'causal'
+'entity'
+'semantic'
+'semantic'
+'entity'
+'semantic'
+'entity'
+'temporal'
+'causal'
+●●●●●● 1mm □
+select
+●●●●●● 1mm □△
+self
+intent
+anchors
+●●●●●● 2mm □△
+QueryIntent
+●●●●●● 3mm □△
+Anchor
+'\n        Select graphs to query.\n\n        Returns:\n            List of graph names to query\n        '
+graphs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+intent
+'semantic'
+●●●●●● 2mm □△
+anchor_types
+●●●●●● 1mm □
+a
+a
+anchors
+●●●●●● 2mm □
+AnchorType
+anchor_types
+●●●●●● 2mm □
+'temporal'
+graphs
+graphs
+●●●●●● 1mm □△
+0
+'temporal'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+AnchorType
+anchor_types
+●●●●●● 2mm □
+'entity'
+graphs
+graphs
+●●●●●● 1mm □△
+0
+'entity'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+AnchorType
+anchor_types
+●●●●●● 2mm □
+'causal'
+graphs
+graphs
+●●●●●● 1mm □△
+'causal'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+graphs
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+RetrievalPolicySelector
+'\n    Selects the retrieval policy based on query analysis.\n\n    Policies determine how to traverse graphs and combine results.\n    '
+POLICIES
+●●●●●● 1mm □
+'single_graph'
+'multi_graph_union'
+'multi_graph_intersection'
+'graph_traversal'
+'temporal_window'
+'causal_chain'
+'hybrid'
+'Query single most relevant graph'
+'Query multiple graphs, union results'
+'Query multiple graphs, intersect results'
+'Start from anchor, traverse relationships'
+'Retrieve within temporal window'
+'Follow causal chains from anchor'
+'Combine vector similarity with graph traversal'
+●●●●●● 1mm □
+select
+●●●●●● 1mm □△
+self
+intent
+anchors
+graphs
+●●●●●● 2mm □△
+QueryIntent
+●●●●●● 3mm □△
+Anchor
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Select retrieval policy.\n\n        Returns:\n            Policy name\n        '
+●●●●●● 2mm □
+intent
+QueryIntent
+QueryIntent
+QueryIntent
+●●●●●● 3mm ○
+'temporal_window'
+●●●●●● 2mm □
+intent
+QueryIntent
+QueryIntent
+QueryIntent
+●●●●●● 3mm ○
+'causal_chain'
+●●●●●● 2mm □
+intent
+QueryIntent
+QueryIntent
+●●●●●● 3mm ○
+'graph_traversal'
+●●●●●● 2mm □
+intent
+QueryIntent
+QueryIntent
+QueryIntent
+●●●●●● 3mm ○
+'hybrid'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+1
+●●●●●● 3mm ○
+'multi_graph_union'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anchors
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+'graph_traversal'
+●●●●●● 3mm ○
+'hybrid'
+●●●●●● 1mm ○
+●●●●●● 2mm △
+IntentAwareRouter
+'\n    Main router that analyzes queries and determines retrieval strategy.\n\n    This is the entry point for Magma query processing.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+IntentClassifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AnchorIdentifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraphSelector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+RetrievalPolicySelector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-ROUTER] Intent-Aware Router initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+analyze_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Analyze a query to determine retrieval strategy.\n\n        Args:\n            query: User query string\n\n        Returns:\n            QueryAnalysis with complete routing information\n        '
+normalized
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+primary_intent
+secondary_intents
+intent_confidence
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+normalized
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+target_graphs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+primary_intent
+anchors
+●●●●●● 2mm □△
+retrieval_policy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+primary_intent
+anchors
+target_graphs
+●●●●●● 2mm □△
+anchor_confidence
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+a
+anchors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anchors
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+overall_confidence
+●●●●●● 1mm □
+intent_confidence
+●●●●●● 3mm ○
+anchor_confidence
+●●●●●● 3mm □△
+2
+analysis
+●●●●●● 1mm □
+QueryAnalysis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-ROUTER] Query analyzed: intent='
+primary_intent
+', anchors='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anchors
+●●●●●● 2mm □△
+', graphs='
+target_graphs
+', policy='
+retrieval_policy
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+QueryAnalysis
+●●●●●● 1mm □
+_normalize_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Normalize query for processing.'
+normalized
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+normalized
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\s+'
+' '
+normalized
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+normalized
+●●●●●● 1mm ○
+●●●●●● 1mm □
+route
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Route a query and return routing decision.\n\n        Args:\n            query: User query string\n\n        Returns:\n            Dict with routing information\n        '
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'query'
+'intent'
+'secondary_intents'
+'anchors'
+'target_graphs'
+'retrieval_policy'
+'confidence'
+analysis
+analysis
+i
+i
+analysis
+'text'
+'type'
+'confidence'
+a
+a
+a
+a
+analysis
+analysis
+analysis
+analysis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_anchor_embeddings_needed
+●●●●●● 1mm □△
+self
+analysis
+●●●●●● 2mm □△
+QueryAnalysis
+'\n        Get list of anchor texts that need embeddings for similarity search.\n\n        Returns:\n            List of anchor texts requiring embedding\n        '
+●●●●●● 3mm ○
+a
+a
+analysis
+a
+AnchorType
+AnchorType
+●●●●●● 3mm □△
+●●●●●● 1mm ○

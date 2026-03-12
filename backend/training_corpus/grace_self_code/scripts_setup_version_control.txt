@@ -1,0 +1,645 @@
+## setup_version_control.py
+'\nSetup Script for Autonomous Version Control System.\n\nInstalls and configures:\n1. Git post-commit hook (Git → Genesis Keys)\n2. File system watcher (Real-time file tracking)\n3. Layer 1 version control connector (Automatic tracking)\n\nRun this script once to enable fully autonomous version control in GRACE.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+backend_dir
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+setup_git_hook
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Install Git post-commit hook.'
+●●●●●● 3mm □△○
+genesis.git_genesis_bridge
+●●●●●● 2mm □△○
+get_git_genesis_bridge
+logger
+●●●●●● 1mm □△
+'Setting up Git post-commit hook...'
+●●●●●● 2mm □△
+bridge
+●●●●●● 1mm □
+get_git_genesis_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'✓ Git post-commit hook installed successfully'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Now every Git commit will automatically create Genesis Keys'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✗ Failed to install Git post-commit hook'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Error setting up Git hook: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_symbiotic_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test symbiotic version control system.'
+●●●●●● 3mm □△○
+genesis.symbiotic_version_control
+●●●●●● 2mm □△○
+get_symbiotic_version_control
+logger
+●●●●●● 1mm □△
+'Testing symbiotic version control...'
+●●●●●● 2mm □△
+symbiotic
+●●●●●● 1mm □
+get_symbiotic_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+symbiotic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Symbiotic version control operational'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total files tracked: '
+stats
+'version_control'
+●●●●●● 1mm □△
+'total_files_tracked'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total versions: '
+stats
+'version_control'
+●●●●●● 1mm □△
+'total_versions'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Genesis Key integration: '
+stats
+●●●●●● 1mm □△
+'integration_percentage'
+0
+●●●●●● 2mm □△
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Error testing symbiotic version control: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+check_layer1_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if version control connector is registered in Layer 1.'
+●●●●●● 3mm □△○
+layer1.components.version_control_connector
+●●●●●● 2mm □△○
+get_version_control_connector
+logger
+●●●●●● 1mm □△
+'Checking Layer 1 integration...'
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □
+get_version_control_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Version control connector available'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Operations tracked: '
+stats
+●●●●●● 1mm □△
+'operations_tracked'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Status: '
+stats
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Error checking Layer 1 integration: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+install_watchdog_if_needed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Install watchdog library if not available.'
+●●●●●● 2mm □△○
+watchdog
+logger
+●●●●●● 1mm □△
+'✓ watchdog library already installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+ImportError
+logger
+●●●●●● 1mm □△
+'Installing watchdog library for file system monitoring...'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+subprocess
+subprocess
+●●●●●● 1mm □△
+sys
+'-m'
+'pip'
+'install'
+'watchdog'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ watchdog library installed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'✗ Failed to install watchdog: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Please run: pip install watchdog'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+show_usage_examples
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Show usage examples for the version control system.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'AUTONOMOUS VERSION CONTROL - USAGE EXAMPLES'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n1. AUTOMATIC FILE TRACKING (via File Ingestion):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   When you upload/ingest files, they're automatically version-tracked:"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```python'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   # File gets uploaded → Auto-creates Genesis Key + Version'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   POST /api/ingest/file'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n2. GIT INTEGRATION (via Post-Commit Hook):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Every Git commit now creates Genesis Keys:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```bash'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   git add .'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   git commit -m "Fix bug"'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   # → Automatically creates Genesis Keys for changed files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n3. FILE SYSTEM WATCHER (Real-Time Monitoring):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Start watching workspace for file changes:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```python'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   from genesis.file_watcher import start_watching_workspace'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   start_watching_workspace()  # Auto-tracks all file changes'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n4. MANUAL TRACKING (Symbiotic API):'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Track file changes programmatically:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```python'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   from genesis.symbiotic_version_control import get_symbiotic_version_control'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   symbiotic = get_symbiotic_version_control()'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   result = symbiotic.track_file_change('
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"       file_path='backend/app.py',"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"       user_id='GU-123...',"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"       change_description='Updated authentication'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   )'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n5. VIEW VERSION HISTORY:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Get complete history for a file:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```python'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"   history = symbiotic.get_complete_history('FILE-abc123...')"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   # Shows unified timeline of Genesis Keys + Versions'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n6. ROLLBACK TO VERSION:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Restore a file to a previous version:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```python'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   result = symbiotic.rollback_to_version('
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"       file_genesis_key='FILE-abc123...',"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'       version_number=3'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   )'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ```'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'All systems are now configured for AUTONOMOUS operation!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main setup function.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' GRACE AUTONOMOUS VERSION CONTROL SETUP'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'Step 1: Checking dependencies...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Install watchdog library'
+install_watchdog_if_needed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nStep 2: Setting up Git integration...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Git post-commit hook'
+setup_git_hook
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nStep 3: Testing symbiotic version control...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Symbiotic version control'
+test_symbiotic_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nStep 4: Checking Layer 1 integration...'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Layer 1 connector'
+check_layer1_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SETUP SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+name
+success
+results
+status
+●●●●●● 1mm □
+success
+'✓ SUCCESS'
+'✗ FAILED'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+name
+'.<50'
+' '
+status
+●●●●●● 2mm □△
+all_success
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+success
+_
+success
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_success
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n🎉 All systems configured successfully!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Version control is now FULLY AUTONOMOUS.'
+●●●●●● 2mm □△
+show_usage_examples
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n⚠️  Some components failed to set up.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Please check the errors above and resolve them.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Version control may not be fully autonomous.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_success
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

@@ -1,0 +1,839 @@
+## episodic_memory.py
+"\nEpisodic Memory - Concrete Experiences\n\nStores what happened, when it happened, and what the outcome was.\nThis is different from semantic knowledge - it's experiential.\n\nOPTIMIZED: Now supports semantic similarity using embeddings\n"
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Float
+Text
+DateTime
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+validates
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_to_json_str
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'{}'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+TypeError
+ValueError
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+val
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+'raw'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+Episode
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+"\n    Single episodic memory - a concrete experience.\n    All dict-like fields stored as Text (JSON strings) to avoid\n    SQLite 'dict is not supported' binding errors.\n    "
+__tablename__
+●●●●●● 1mm □
+'episodes'
+__table_args__
+●●●●●● 1mm □
+'extend_existing'
+●●●●●● 3mm □△○
+problem
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+predicted_outcome
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+prediction_error
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 2mm □△
+decision_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+episode_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_coerce_json
+●●●●●● 1mm □△
+self
+key
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_to_json_str
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+validates
+●●●●●● 1mm □△
+'action'
+'outcome'
+'predicted_outcome'
+'episode_metadata'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+EpisodicBuffer
+'\n    Manages episodic memory storage and retrieval.\n\n    OPTIMIZED: Now supports semantic similarity using embeddings\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+embedder
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedder
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Lazy load embedder for semantic similarity'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Semantic similarity enabled'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Embedder not available, using text matching: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+record_episode
+●●●●●● 1mm □△
+self
+problem
+action
+outcome
+predicted_outcome
+trust_score
+source
+genesis_key_id
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+0.5
+'system'
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Record a new episode.\n        '
+prediction_error
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+outcome
+predicted_outcome
+●●●●●● 2mm □△
+episode
+●●●●●● 1mm □
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episode
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+episode
+Episode
+●●●●●● 1mm □
+_calculate_prediction_error
+●●●●●● 1mm □△
+self
+actual
+predicted
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Calculate error between predicted and actual.'
+●●●●●● 2mm □
+predicted
+●●●●●● 3mm ○
+0.0
+matching_keys
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+actual
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+predicted
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matching_keys
+●●●●●● 3mm ○
+1.0
+errors
+●●●●●● 1mm □
+key
+matching_keys
+●●●●●● 2mm □
+actual
+key
+predicted
+key
+errors
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+●●●●●● 3mm □
+errors
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+errors
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+recall_similar
+●●●●●● 1mm □△
+self
+problem
+k
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+5
+0.5
+'\n        Recall similar past episodes.\n\n        OPTIMIZED: Uses embedding-based semantic similarity when available,\n        falls back to word overlap when embedder is not available.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+k
+min_trust
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Semantic recall failed, using fallback: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+k
+min_trust
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Episode
+●●●●●● 1mm □
+_recall_similar_semantic
+●●●●●● 1mm □△
+self
+problem
+k
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'\n        Recall episodes using semantic similarity (embedding-based).\n        '
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+0
+query_embedding
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+query_embedding
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+min_trust
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □
+ep
+episodes
+ep_embedding
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query_embedding
+ep_embedding
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+similarity
+ep
+●●●●●● 2mm □△
+Exception
+text_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+ep
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+text_score
+ep
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Semantic recall found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scored
+●●●●●● 2mm □△
+' episodes'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ep
+_
+ep
+scored
+k
+●●●●●● 3mm □△
+Episode
+●●●●●● 1mm □
+_recall_similar_text
+●●●●●● 1mm □△
+self
+problem
+k
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'\n        Recall episodes using text-based word overlap (fallback).\n        '
+episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □
+ep
+episodes
+relevance
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+ep
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+relevance
+ep
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ep
+_
+ep
+scored
+k
+●●●●●● 3mm □△
+Episode
+●●●●●● 1mm □
+_cosine_similarity
+●●●●●● 1mm □△
+self
+a
+b
+●●●●●● 2mm □△
+np
+np
+'Calculate cosine similarity between two vectors.'
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_calculate_relevance_text
+●●●●●● 1mm □△
+self
+query
+episode_problem
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Calculate relevance score using word overlap (fallback).'
+query_words
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+episode_words
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+episode_problem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query_words
+episode_words
+●●●●●● 3mm ○
+0.0
+overlap
+●●●●●● 1mm □
+query_words
+●●●●●● 3mm △
+episode_words
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+overlap
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query_words
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+generate_episode_embedding
+●●●●●● 1mm □△
+self
+episode
+●●●●●● 2mm □△
+Episode
+'\n        Generate and store embedding for an episode.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episode
+●●●●●● 2mm □△
+0
+episode
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+embedding
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embedding
+Exception
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Error generating embedding: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+index_all_episodes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"\n        Generate embeddings for all episodes that don't have them.\n        Returns count of episodes indexed.\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Cannot index - no embedder available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodes
+logger
+●●●●●● 1mm □△
+'[EPISODIC] All episodes already indexed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+problems
+●●●●●● 1mm □
+ep
+ep
+episodes
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+ep
+emb
+●●●●●● 3mm □
+●●●●●● 1mm □△
+episodes
+embeddings
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+emb
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[EPISODIC] Indexed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+' episodes'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+recall_by_topic
+●●●●●● 1mm □△
+self
+conversation_id
+topic
+k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+3
+'Recall episodes by topic.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Episode
