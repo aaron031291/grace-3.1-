@@ -146,6 +146,18 @@ class QwenCodingNet:
                     result["status"] = "verification_failed"
                     result["revision_hint"] = v_result.revision_hint
                     verified = False
+                    
+                    # 6.5 Attempt self-healing on Verification Failure (Feedback Loop)
+                    healed_code = self._self_heal(code, {"error": "Verification Failed: " + v_result.revision_hint}, ghost)
+                    if healed_code:
+                        # Re-verify the healed code
+                        v_recheck = vpass.verify(healed_code, task, ghost_context=ghost_ctx)
+                        if v_recheck.accepted:
+                            code = healed_code
+                            result["code"] = code
+                            result["status"] = "healed_verification"
+                            verified = True
+                            ghost.append("verify_passed", f"Trust={v_recheck.trust_score:.2f} (After Heal)")
                 else:
                     ghost.append("verify_passed", f"Trust={v_result.trust_score:.2f}")
             except Exception as _ve:
@@ -432,14 +444,17 @@ class QwenCodingNet:
 
                 if isinstance(code, str):
                     code = code.strip()
-                    if code.startswith("```python"):
-                        code = code[9:]
-                    if code.startswith("```"):
-                        code = code[3:]
-                    if code.endswith("```"):
-                        code = code[:-3]
+                    import re
+                    m = re.search(r'```(?:python)?\s*(.*?)```', code, re.DOTALL | re.IGNORECASE)
+                    if m:
+                        code = m.group(1).strip()
+                    else:
+                        code = code.strip("`").strip()
+                        if code.startswith("python"):
+                            code = code[6:].strip()
+                            
                     ghost.append("code_generated", code[:200])
-                    return code.strip()
+                    return code
 
             finally:
                 exit_loop("blueprint_build")

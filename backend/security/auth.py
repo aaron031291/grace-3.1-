@@ -11,8 +11,7 @@ import secrets
 import hashlib
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
-from fastapi import Request, Response, HTTPException, Depends, Cookie
-from fastapi.status import HTTP_401_UNAUTHORIZED
+from fastapi import Request, Response, HTTPException, Depends, Cookie, status
 
 from .config import get_security_config
 from .logging import get_security_logger
@@ -195,7 +194,7 @@ async def get_current_user(
     if not genesis_id:
         logger.log_access_denied("API", request, "No Genesis ID")
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required. Please login.",
             headers={"WWW-Authenticate": "Cookie"},
         )
@@ -243,7 +242,7 @@ def require_auth(request: Request):
     genesis_id = request.cookies.get("genesis_id")
     if not genesis_id:
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required",
         )
     return genesis_id

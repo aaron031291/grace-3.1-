@@ -614,6 +614,13 @@ class LauncherHandler(http.server.BaseHTTPRequestHandler):
             )
             _run_terminal_command(f"/code {prompt}")
             self._json({"ok": True, "spindle_triggered": True})
+        elif self.path == "/start-spindle":
+            bat_path = BASE_DIR / "start_spindle.bat"
+            if sys.platform == "win32":
+                _run_terminal_command(f"start cmd /c \"{bat_path}\"")
+            else:
+                _run_terminal_command(f"bash \"{bat_path}\" &")
+            self._json({"ok": True})
         else:
             self.send_error(404)
 
@@ -834,8 +841,12 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 <script>
 // SPINDLE FRONTEND WIRING: Catch unhandled UI errors and pipe them to the builder
 window.onerror = function(msg, url, line, col, error) {
+  let errorMsg = msg;
+  if (typeof msg === 'object' && msg !== null) {
+      errorMsg = msg.message || msg.name || JSON.stringify(msg);
+  }
   const errPayload = {
-    msg: msg,
+    msg: errorMsg,
     url: url || window.location.href,
     line: line,
     col: col,
@@ -849,13 +860,15 @@ window.onerror = function(msg, url, line, col, error) {
   // Show a toast
   const t = document.createElement('div');
   t.style = "position:fixed;bottom:20px;right:20px;background:var(--red);color:#fff;padding:12px;border-radius:8px;z-index:9999;font-size:12px;font-family:'JetBrains Mono',monospace;";
-  t.innerHTML = "<b>Spindle Alert:</b> UI Error reported.<br>" + msg;
+  t.innerHTML = "<b>Spindle Alert:</b> UI Error reported.<br>" + errorMsg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 5000);
   return false;
 };
 window.addEventListener('unhandledrejection', function(event) {
-  window.onerror(event.reason, null, 0, 0, event.reason);
+  let reason = event.reason;
+  let msg = reason ? (reason.message || reason) : 'Unhandled Rejection';
+  window.onerror(msg, null, 0, 0, reason instanceof Error ? reason : null);
 });
 </script>
 
@@ -881,6 +894,7 @@ window.addEventListener('unhandledrejection', function(event) {
   <div class="sidebar-section">
     <div class="sec-label">Controls</div>
     <button class="btn btn-primary" id="btn-start" onclick="startGrace()">⚡ Launch Grace</button>
+    <button class="btn btn-warn" id="btn-spindle" style="background:var(--accent2);color:white;margin-bottom:6px;" onclick="startSpindle()">🧬 Launch Spindle</button>
     <button class="btn btn-danger" id="btn-stop" onclick="stopGrace()" disabled>⏹ Stop Grace</button>
     <button class="btn btn-warn" id="btn-test" style="background:var(--red);color:white;" onclick="triggerBrokenFunction()">🐞 Test Spindle Healer</button>
     <button class="btn btn-warn" id="btn-restart" onclick="restartGrace()" disabled>🔄 Restart</button>
@@ -1039,6 +1053,10 @@ async function api(path, method='GET') {
 async function startGrace() {
   await api('/start', 'POST');
   updatePhase('booting');
+}
+async function startSpindle() {
+  await api('/start-spindle', 'POST');
+  document.getElementById('term-area').innerHTML += '<div class="term-line-sys">[SYS] Launching Isolated Spindle Daemon...</div>';
 }
 async function stopGrace() { await api('/stop', 'POST'); }
 async function restartGrace() { await api('/fix/restart', 'POST'); }

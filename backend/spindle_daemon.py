@@ -85,10 +85,39 @@ class SpindleDaemon:
     def handle_event(self, topic: str, data: dict):
         """React to Genesis Keys or other Grace events."""
         if topic == "genesis.key_created" or topic.startswith("healing"):
-            # Mock autonomous reaction: we received a structural signal, let's act on it
             logger.info(f"[SPINDLE] Autonomous action triggered by {topic}")
-            # E.g., spawn coding task, run tests, etc.
-            self._publish("audit.spindle", {"action": "analyzed_event", "target": topic})
+            
+            # Extract actionable problem from event payload
+            problem = data.get("error", data.get("message", data.get("description", str(data))))
+            logger.info(f"[SPINDLE] Synthesizing fix for: {problem}")
+            
+            prompt = (
+                f"Spindle Autonomous Daemon intercepted a structural event/warning:\n"
+                f"Topic: {topic}\nDetails: {problem}\n"
+                f"Analyze the system state and write Python code to proactively self-heal or optimize this issue."
+            )
+            
+            try:
+                from cognitive.qwen_coding_net import generate_code
+                # Execute full autonomous pipeline: design -> build -> test -> Z3 proof -> deploy
+                result = generate_code(prompt, use_pipeline=True)
+                
+                status = result.get("status")
+                if status in ["deployed", "healed_and_deployed", "completed"]:
+                    logger.info(f"[SPINDLE] Successfully deployed autonomous fix! Status: {status}")
+                    self._publish("audit.spindle", {
+                        "action": "applied_fix", 
+                        "target": topic, 
+                        "code_len": len(result.get("code", "")),
+                        "trust_score": result.get("trust_score")
+                    })
+                else:
+                    logger.warning(f"[SPINDLE] Fix generation did not deploy. Status: {status}")
+                    self._publish("audit.spindle", {"action": "healing_blocked", "target": topic, "reason": status})
+                    
+            except Exception as e:
+                logger.error(f"[SPINDLE] Coding Net exception during autonomous response: {e}")
+                self._publish("audit.spindle", {"action": "error", "target": topic, "error": str(e)})
 
 if __name__ == "__main__":
     daemon = SpindleDaemon()
