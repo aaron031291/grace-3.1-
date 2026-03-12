@@ -1,0 +1,38 @@
+## __init__.py
+'\nLLM Orchestration System for GRACE\n\nManages multiple open-source LLMs with:\n- Read-only repository access\n- Cognitive framework enforcement\n- Hallucination mitigation\n- Layer 1 + Learning Memory integration\n- Inter-LLM collaboration\n- Autonomous learning loops\n'
+●●●●●● 3mm □△○
+multi_llm_client
+●●●●●● 2mm □△○
+MultiLLMClient
+LLMModel
+●●●●●● 3mm □△○
+repo_access
+●●●●●● 2mm □△○
+RepositoryAccessLayer
+●●●●●● 3mm □△○
+hallucination_guard
+●●●●●● 2mm □△○
+HallucinationGuard
+ConsensusResult
+●●●●●● 3mm □△○
+cognitive_enforcer
+●●●●●● 2mm □△○
+CognitiveEnforcer
+●●●●●● 3mm □△○
+llm_collaboration
+●●●●●● 2mm □△○
+LLMCollaborationHub
+●●●●●● 3mm □△○
+learning_integration
+●●●●●● 2mm □△○
+LearningIntegration
+__all__
+●●●●●● 1mm □
+'MultiLLMClient'
+'LLMModel'
+'RepositoryAccessLayer'
+'HallucinationGuard'
+'ConsensusResult'
+'CognitiveEnforcer'
+'LLMCollaborationHub'
+'LearningIntegration'

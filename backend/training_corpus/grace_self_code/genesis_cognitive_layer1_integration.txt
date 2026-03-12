@@ -1,0 +1,758 @@
+## cognitive_layer1_integration.py
+'\nCognitive Layer 1 Integration - OODA Loop + 12 Invariants for All Inputs\n\nThis module wraps the Layer 1 Integration with the Cognitive Engine,\nensuring ALL Layer 1 inputs flow through:\n- OODA Loop (Observe → Orient → Decide → Act)\n- 12 Invariant Validation\n- Deterministic Decision-Making\n- Complete Audit Trail\n\nIntegration Flow:\nLayer 1 Input → Cognitive Engine (OODA + Invariants) → Genesis Pipeline → World Model\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+List
+Any
+Callable
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+genesis.layer1_integration
+●●●●●● 2mm □△○
+Layer1Integration
+●●●●●● 3mm □△○
+cognitive.engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+cognitive.decision_log
+●●●●●● 2mm □△○
+DecisionLogger
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CognitiveLayer1Integration
+'\n    Layer 1 Integration with Cognitive Engine enforcement.\n\n    Every Layer 1 input flows through OODA loop and invariant validation.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+Layer1Integration
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DecisionLogger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_execute_with_cognitive_enforcement
+●●●●●● 1mm □△
+self
+operation_name
+problem_statement
+goal
+success_criteria
+action
+requires_determinism
+is_safety_critical
+impact_scope
+is_reversible
+reversibility_justification
+observations
+constraints
+context_info
+planning_timeout_seconds
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+'local'
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+30
+'\n        Execute an operation through the complete OODA loop with invariant validation.\n\n        Args:\n            operation_name: Name of the operation\n            problem_statement: Clear problem statement\n            goal: What success looks like\n            success_criteria: Measurable success criteria\n            action: Function to execute\n            requires_determinism: If True, enforces deterministic execution\n            is_safety_critical: If True, marks as safety-critical\n            impact_scope: Blast radius (local, component, systemic)\n            is_reversible: Whether operation can be reversed\n            reversibility_justification: Justification for irreversible operations\n            observations: Observed facts\n            constraints: Constraints on decision\n            context_info: Contextual information\n            planning_timeout_seconds: Planning timeout\n\n        Returns:\n            Tuple of (result, decision_context)\n        '
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_reversible
+reversibility_justification
+context
+●●●●●● 1mm □
+reversibility_justification
+context
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+observations
+'operation'
+'timestamp'
+operation_name
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+constraints
+'safety_critical'
+'impact_scope'
+is_safety_critical
+impact_scope
+context_info
+'determinism_required'
+'reversible'
+requires_determinism
+is_reversible
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'description'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'execute_layer1_operation'
+'Execute '
+operation_name
+' through Layer 1 pipeline'
+1.0
+1.0
+1.0
+is_reversible
+1.0
+0.5
+0.2
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+selected_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+action
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+context
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Any
+DecisionContext
+●●●●●● 1mm □
+process_user_input
+●●●●●● 1mm □△
+self
+user_input
+user_id
+input_type
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+'chat'
+●●●●●● 2mm □
+'\n        Process user input through Cognitive Layer 1.\n\n        Flows through:\n        1. Cognitive Engine (OODA + Invariants)\n        2. Layer 1 → Genesis Key → Version Control → Librarian → Memory → RAG → World Model\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE L1] Processing user input from '
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_file_upload
+●●●●●● 1mm □△
+self
+file_content
+file_name
+file_type
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+"\n        Process file upload through Cognitive Layer 1.\n\n        File uploads are potentially IRREVERSIBLE (can't unlearn data),\n        so we enforce higher cognitive scrutiny.\n        "
+logger
+●●●●●● 1mm □△
+"[COGNITIVE L1] Processing file upload '"
+file_name
+"' from "
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'deterministic_execution'
+'irreversible_operation'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_external_api
+●●●●●● 1mm □△
+self
+api_name
+api_endpoint
+api_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process external API data through Cognitive Layer 1.\n\n        External data requires trust assessment (future enhancement).\n        '
+logger
+●●●●●● 1mm □△
+"[COGNITIVE L1] Processing external API '"
+api_name
+"' data"
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_web_scraping
+●●●●●● 1mm □△
+self
+url
+html_content
+parsed_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process web scraping data through Cognitive Layer 1.\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE L1] Processing web scraping from '
+url
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_memory_mesh
+●●●●●● 1mm □△
+self
+memory_type
+memory_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process memory mesh data through Cognitive Layer 1.\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE L1] Processing memory mesh ('
+memory_type
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_learning_memory
+●●●●●● 1mm □△
+self
+learning_type
+learning_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process learning memory through Cognitive Layer 1.\n\n        Learning is CRITICAL - flows to episodic/procedural memory.\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE L1] Processing learning memory ('
+learning_type
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'deterministic_execution'
+'safety_critical'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_whitelist
+●●●●●● 1mm □△
+self
+whitelist_type
+whitelist_data
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Process whitelist operations through Cognitive Layer 1.\n\n        Whitelist changes are SAFETY-CRITICAL and SYSTEMIC.\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE L1] Processing whitelist ('
+whitelist_type
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'deterministic_execution'
+'safety_critical'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+process_system_event
+●●●●●● 1mm □△
+self
+event_type
+event_data
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Process system events through Cognitive Layer 1.\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE L1] Processing system event ('
+event_type
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'cognitive'
+●●●●●● 1mm □
+'decision_id'
+'ooda_loop_completed'
+'invariants_validated'
+'decision_logged'
+context
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_layer1_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get Layer 1 statistics with cognitive metadata.'
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'cognitive_integration'
+●●●●●● 1mm □
+'enabled'
+'ooda_loop_enforced'
+'invariants_validated'
+'decision_logging'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+12
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_layer1_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Verify Layer 1 structure.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_decision_history
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'\n        Get recent decision history.\n\n        Args:\n            limit: Maximum number of decisions to return\n\n        Returns:\n            List of decision summaries\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_active_decisions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get all currently active decision contexts.\n\n        Returns:\n            List of active decision contexts\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+DecisionContext
+_cognitive_layer1
+●●●●●● 2mm □○
+CognitiveLayer1Integration
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cognitive_layer1_integration
+●●●●●● 1mm □△
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Get or create global Cognitive Layer 1 integration instance.'
+●●●●●● 2mm □
+_cognitive_layer1
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+_cognitive_layer1
+●●●●●● 1mm □
+CognitiveLayer1Integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cognitive_layer1
+CognitiveLayer1Integration

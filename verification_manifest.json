@@ -1,0 +1,74 @@
+{
+  "timestamp_utc": "2026-03-06T05:58:02.680479+00:00",
+  "repo_root": "C:\\Users\\aaron\\Desktop\\grace-3.1--Aaron-new2",
+  "checks": [
+    {
+      "id": "backend_requirements",
+      "name": "Backend requirements.txt",
+      "required": true,
+      "passed": true,
+      "detail": "exists (844 bytes)"
+    },
+    {
+      "id": "backend_venv",
+      "name": "Backend venv",
+      "required": true,
+      "passed": true,
+      "detail": "venv present"
+    },
+    {
+      "id": "backend_db",
+      "name": "Backend database (migrations run)",
+      "required": true,
+      "passed": true,
+      "detail": "exists (42369024 bytes)"
+    },
+    {
+      "id": "backend_app",
+      "name": "Backend app.py",
+      "required": true,
+      "passed": true,
+      "detail": "exists"
+    },
+    {
+      "id": "backend_dirs",
+      "name": "Backend api/core/database dirs",
+      "required": true,
+      "passed": true,
+      "detail": "api, core, database present"
+    },
+    {
+      "id": "backend_verify_script",
+      "name": "Backend verify_system.py (imports + brain)",
+      "required": true,
+      "passed": true,
+      "detail": "verify_system.py passed"
+    },
+    {
+      "id": "frontend_package",
+      "name": "Frontend package.json",
+      "required": true,
+      "passed": true,
+      "detail": "exists"
+    },
+    {
+      "id": "frontend_node_modules",
+      "name": "Frontend node_modules",
+      "required": true,
+      "passed": true,
+      "detail": "present"
+    },
+    {
+      "id": "frontend_build",
+      "name": "Frontend production build (dist/)",
+      "required": false,
+      "passed": true,
+      "detail": "dist/ present"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "required_failed": 0
+  }
+}

@@ -1,0 +1,428 @@
+## repository.py
+'\nDatabase repository base class for common CRUD operations.\nProvides reusable methods for database operations.\n'
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+select
+desc
+asc
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+TypeVar
+Generic
+Type
+Optional
+List
+Any
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+T
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'T'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BaseRepository
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+T
+'\n    Base repository class providing common CRUD operations.\n    \n    Can be extended for specific models:\n        class UserRepository(BaseRepository[User]):\n            def __init__(self, session: Session):\n                super().__init__(session, User)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+model
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Type
+T
+'\n        Initialize repository.\n        \n        Args:\n            session: SQLAlchemy session\n            model: SQLAlchemy model class\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 1mm □
+create
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Create and store a new model instance.\n        \n        Args:\n            **kwargs: Model attributes\n            \n        Returns:\n            T: Created model instance\n        '
+instance
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+instance
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+instance
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created '
+●●●●●● 3mm △
+': '
+instance
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+instance
+T
+●●●●●● 1mm □
+get
+●●●●●● 1mm □△
+self
+id
+●●●●●● 2mm □△
+Any
+'\n        Get model by primary key.\n        \n        Args:\n            id: Primary key value\n            \n        Returns:\n            Optional[T]: Model instance or None if not found\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+T
+●●●●●● 1mm □
+get_all
+●●●●●● 1mm □△
+self
+skip
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+0
+100
+'\n        Get all models with pagination.\n        \n        Args:\n            skip: Number of records to skip\n            limit: Maximum number of records to return\n            \n        Returns:\n            List[T]: List of model instances\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+T
+●●●●●● 1mm □
+update
+●●●●●● 1mm □△
+self
+id
+●●●●●● 2mm □△
+Any
+'\n        Update a model instance.\n        \n        Args:\n            id: Primary key value\n            **kwargs: Attributes to update\n            \n        Returns:\n            Optional[T]: Updated model instance or None if not found\n        '
+instance
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+instance
+key
+value
+kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+instance
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+instance
+key
+value
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+instance
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Updated '
+●●●●●● 3mm △
+': '
+instance
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+instance
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+T
+●●●●●● 1mm □
+delete
+●●●●●● 1mm □△
+self
+id
+●●●●●● 2mm □△
+Any
+'\n        Delete a model instance.\n        \n        Args:\n            id: Primary key value\n            \n        Returns:\n            bool: True if deleted, False if not found\n        '
+instance
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+instance
+●●●●●● 3mm △
+●●●●●● 1mm □△
+instance
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleted '
+●●●●●● 3mm △
+': '
+instance
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+filter
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Filter models by attributes.\n        \n        Args:\n            **kwargs: Attributes to filter by\n            \n        Returns:\n            List[T]: List of matching model instances\n        '
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+key
+value
+kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+T
+●●●●●● 1mm □
+filter_first
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Filter and get first result.\n        \n        Args:\n            **kwargs: Attributes to filter by\n            \n        Returns:\n            Optional[T]: First matching model instance or None\n        '
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+key
+value
+kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+T
+●●●●●● 1mm □
+count
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Count total records.\n        \n        Returns:\n            int: Total number of records\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Check if a record exists.\n        \n        Args:\n            **kwargs: Attributes to filter by\n            \n        Returns:\n            bool: True if record exists, False otherwise\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+bulk_create
+●●●●●● 1mm □△
+self
+instances
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+T
+'\n        Create multiple instances at once.\n        \n        Args:\n            instances: List of model instances\n            \n        Returns:\n            List[T]: Created instances\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+instances
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+instances
+●●●●●● 2mm □△
+' '
+●●●●●● 3mm △
+' instances'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+instances
+●●●●●● 3mm □△
+T
+●●●●●● 1mm □
+bulk_delete
+●●●●●● 1mm □△
+self
+ids
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Any
+'\n        Delete multiple instances by ID.\n        \n        Args:\n            ids: List of primary key values\n            \n        Returns:\n            int: Number of deleted records\n        '
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ids
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Deleted '
+count
+' '
+●●●●●● 3mm △
+' instances'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+●●●●●● 2mm ○
+●●●●●● 1mm □
+clear
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Delete all records.\n        \n        Returns:\n            int: Number of deleted records\n        '
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cleared all '
+●●●●●● 3mm △
+' records ('
+count
+' deleted)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+●●●●●● 2mm ○

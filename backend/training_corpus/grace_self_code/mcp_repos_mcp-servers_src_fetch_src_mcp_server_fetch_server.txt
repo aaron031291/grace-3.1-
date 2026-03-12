@@ -1,0 +1,512 @@
+## server.py
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Annotated
+Tuple
+●●●●●● 3mm □△○
+urllib.parse
+●●●●●● 2mm □△○
+urlparse
+urlunparse
+●●●●●● 2mm □△○
+markdownify
+●●●●●● 2mm □△○
+readabilipy.simple_json
+●●●●●● 3mm □△○
+mcp.shared.exceptions
+●●●●●● 2mm □△○
+McpError
+●●●●●● 3mm □△○
+mcp.server
+●●●●●● 2mm □△○
+Server
+●●●●●● 3mm □△○
+mcp.server.stdio
+●●●●●● 2mm □△○
+stdio_server
+●●●●●● 3mm □△○
+mcp.types
+●●●●●● 2mm □△○
+ErrorData
+GetPromptResult
+Prompt
+PromptArgument
+PromptMessage
+TextContent
+Tool
+INVALID_PARAMS
+INTERNAL_ERROR
+●●●●●● 3mm □△○
+protego
+●●●●●● 2mm □△○
+Protego
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+AnyUrl
+DEFAULT_USER_AGENT_AUTONOMOUS
+●●●●●● 1mm □
+'ModelContextProtocol/1.0 (Autonomous; +https://github.com/modelcontextprotocol/servers)'
+DEFAULT_USER_AGENT_MANUAL
+●●●●●● 1mm □
+'ModelContextProtocol/1.0 (User-Specified; +https://github.com/modelcontextprotocol/servers)'
+●●●●●● 1mm □
+extract_content_from_html
+●●●●●● 1mm □△
+html
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract and convert HTML content to Markdown format.\n\n    Args:\n        html: Raw HTML content to process\n\n    Returns:\n        Simplified markdown version of the content\n    '
+ret
+●●●●●● 1mm □
+readabilipy
+●●●●●● 1mm □△
+html
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ret
+'content'
+●●●●●● 3mm ○
+'<error>Page failed to be simplified from HTML</error>'
+content
+●●●●●● 1mm □
+markdownify
+●●●●●● 1mm □△
+ret
+'content'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+content
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_robots_txt_url
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the robots.txt URL for a given website URL.\n\n    Args:\n        url: Website URL to get robots.txt for\n\n    Returns:\n        URL of the robots.txt file\n    '
+parsed
+●●●●●● 1mm □
+urlparse
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+robots_url
+●●●●●● 1mm □
+urlunparse
+●●●●●● 1mm □△
+parsed
+parsed
+'/robots.txt'
+''
+''
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+robots_url
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Check if the URL can be fetched by the user agent according to the robots.txt file.\n    Raises a McpError if not.\n    '
+●●●●●● 3mm □△○
+httpx
+●●●●●● 2mm □△○
+AsyncClient
+HTTPError
+robot_txt_url
+●●●●●● 1mm □
+get_robots_txt_url
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+AsyncClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+robot_txt_url
+●●●●●● 2mm □△
+HTTPError
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+401
+403
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+400
+response
+500
+●●●●●● 3mm ○
+robot_txt
+●●●●●● 1mm □
+response
+processed_robot_txt
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+line
+line
+robot_txt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+robot_parser
+●●●●●● 1mm □
+Protego
+●●●●●● 1mm □△
+processed_robot_txt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+robot_parser
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+user_agent
+●●●●●● 2mm □△
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+'\n    Fetch the URL and return the content in a form ready for the LLM, as well as a prefix string with status information.\n    '
+●●●●●● 3mm □△○
+httpx
+●●●●●● 2mm □△○
+AsyncClient
+HTTPError
+AsyncClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+HTTPError
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+400
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+page_raw
+●●●●●● 1mm □
+response
+content_type
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'content-type'
+''
+●●●●●● 2mm □△
+is_page_html
+●●●●●● 1mm □
+'<html'
+page_raw
+100
+'text/html'
+content_type
+content_type
+●●●●●● 2mm □
+is_page_html
+force_raw
+●●●●●● 3mm ○
+extract_content_from_html
+●●●●●● 1mm □△
+page_raw
+●●●●●● 2mm □△
+''
+●●●●●● 3mm ○
+page_raw
+'Content type '
+content_type
+' cannot be simplified to markdown, but here is the raw content:\n'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm △
+Fetch
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Parameters for fetching a URL.'
+url
+Annotated
+AnyUrl
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_length
+Annotated
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start_index
+Annotated
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+raw
+Annotated
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Run the fetch MCP server.\n\n    Args:\n        custom_user_agent: Optional custom User-Agent string to use for requests\n        ignore_robots_txt: Whether to ignore robots.txt restrictions\n        proxy_url: Optional proxy URL to use for requests\n    '
+server
+●●●●●● 1mm □
+Server
+●●●●●● 1mm □△
+'mcp-fetch'
+●●●●●● 2mm □△
+user_agent_autonomous
+●●●●●● 1mm □
+custom_user_agent
+DEFAULT_USER_AGENT_AUTONOMOUS
+user_agent_manual
+●●●●●● 1mm □
+custom_user_agent
+DEFAULT_USER_AGENT_MANUAL
+●●●●●● 3mm ○
+Tool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tool
+●●●●●● 3mm ○
+Prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Prompt
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+Fetch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □
+url
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ignore_robots_txt
+check_may_autonomously_fetch_url
+●●●●●● 1mm □△
+url
+user_agent_autonomous
+proxy_url
+●●●●●● 2mm □△
+content
+prefix
+●●●●●● 1mm □
+fetch_url
+●●●●●● 1mm □△
+url
+user_agent_autonomous
+●●●●●● 2mm □△
+original_length
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+original_length
+content
+●●●●●● 1mm □
+'<error>No more content available.</error>'
+●●●●●● 3mm □
+truncated_content
+●●●●●● 1mm □
+content
+args
+args
+●●●●●● 3mm ○
+args
+●●●●●● 1mm △
+truncated_content
+content
+●●●●●● 1mm □
+'<error>No more content available.</error>'
+content
+●●●●●● 1mm □
+truncated_content
+actual_content_length
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+truncated_content
+●●●●●● 2mm □△
+remaining_content
+●●●●●● 1mm □
+original_length
+●●●●●● 1mm □△
+args
+●●●●●● 3mm ○
+actual_content_length
+●●●●●● 2mm □
+actual_content_length
+args
+remaining_content
+0
+next_start
+●●●●●● 1mm □
+args
+●●●●●● 3mm ○
+actual_content_length
+content
+'\n\n<error>Content truncated. Call the fetch tool with a start_index of '
+next_start
+' to get more content.</error>'
+●●●●●● 3mm ○
+TextContent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+TextContent
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+arguments
+'url'
+arguments
+McpError
+●●●●●● 1mm □△
+ErrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+arguments
+'url'
+content
+prefix
+●●●●●● 1mm □
+fetch_url
+●●●●●● 1mm □△
+url
+user_agent_manual
+●●●●●● 2mm □△
+McpError
+●●●●●● 3mm ○
+GetPromptResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GetPromptResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GetPromptResult
+options
+●●●●●● 1mm □
+server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stdio_server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+read_stream
+write_stream
+server
+●●●●●● 1mm □△
+read_stream
+write_stream
+options
+●●●●●● 2mm □△
+●●●●●● 2mm □

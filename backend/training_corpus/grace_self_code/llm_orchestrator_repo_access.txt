@@ -1,0 +1,1266 @@
+## repo_access.py
+'\nRepository Access Layer - Read-Only Access to GRACE Systems\n\nProvides LLMs with read-only access to:\n- Source code repository (file tree, contents)\n- Genesis Keys (universal tracking)\n- Librarian (semantic organization)\n- Immutable Memory (episodic, procedural, patterns)\n- RAG System (document retrieval)\n- World Model (system state)\n- Mesh Memory (learning memory, episodes, procedures)\n- Ingestion Data (training data, learning examples)\n\nAll access is READ-ONLY and logged for audit.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+database
+●●●●●● 2mm □△○
+session
+●●●●●● 1mm □
+db_session
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianTag
+DocumentRelationship
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+LearningPattern
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RepositoryAccessLayer
+'\n    Provides LLMs with read-only access to GRACE systems.\n\n    All operations are non-mutating and logged.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize repository access layer.\n\n        Args:\n            session: Database session\n            knowledge_base_path: Path to knowledge base\n            embedding_model: Embedding model for semantic search\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+Path
+●●●●●● 1mm □△
+'backend/knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_log_access
+●●●●●● 1mm □△
+self
+operation
+details
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Log read access for audit trail.'
+log_entry
+●●●●●● 1mm □
+'timestamp'
+'operation'
+'details'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+operation
+details
+●●●●●● 3mm △
+●●●●●● 1mm □△
+log_entry
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[READ-ONLY ACCESS] '
+operation
+': '
+details
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_file_tree
+●●●●●● 1mm □△
+self
+root_path
+max_depth
+exclude_patterns
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+5
+●●●●●● 2mm □
+"\n        Get repository file tree structure.\n\n        Args:\n            root_path: Root path (default: current directory)\n            max_depth: Maximum depth to traverse\n            exclude_patterns: Patterns to exclude (e.g., ['__pycache__', '.git'])\n\n        Returns:\n            File tree structure\n        "
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_file_tree'
+'root_path'
+'max_depth'
+root_path
+max_depth
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+root_path
+'.'
+●●●●●● 2mm □△
+exclude
+●●●●●● 1mm □
+exclude_patterns
+'__pycache__'
+'.git'
+'node_modules'
+'venv'
+'.venv'
+●●●●●● 1mm □
+build_tree
+●●●●●● 1mm □△
+path
+depth
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm ○
+0
+●●●●●● 2mm □
+depth
+max_depth
+●●●●●● 3mm ○
+'truncated'
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+'name'
+'type'
+'path'
+path
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'directory'
+'file'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+children
+●●●●●● 1mm □
+child
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+pattern
+child
+pattern
+exclude
+●●●●●● 2mm □△
+child_tree
+●●●●●● 1mm □
+build_tree
+●●●●●● 1mm □△
+child
+depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+child_tree
+children
+●●●●●● 1mm □△
+child_tree
+●●●●●● 2mm □△
+result
+'children'
+●●●●●● 1mm □
+children
+PermissionError
+result
+'error'
+●●●●●● 1mm □
+'Permission denied'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+build_tree
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+read_file
+●●●●●● 1mm □△
+self
+file_path
+max_lines
+line_range
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Read file contents (read-only).\n\n        Args:\n            file_path: Path to file\n            max_lines: Maximum lines to read\n            line_range: (start, end) line numbers\n\n        Returns:\n            File contents and metadata\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'read_file'
+'file_path'
+'max_lines'
+file_path
+max_lines
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'path'
+'File not found'
+file_path
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'path'
+'Path is not a file'
+file_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line_range
+start
+end
+●●●●●● 1mm □
+line_range
+lines
+●●●●●● 1mm □
+lines
+start
+end
+●●●●●● 1mm △
+max_lines
+lines
+●●●●●● 1mm □
+lines
+max_lines
+●●●●●● 3mm ○
+'path'
+'content'
+'line_count'
+'size_bytes'
+'modified'
+file_path
+''
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'path'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+search_code
+●●●●●● 1mm □△
+self
+pattern
+file_pattern
+max_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'*.py'
+50
+'\n        Search for code pattern in repository.\n\n        Args:\n            pattern: Search pattern (regex)\n            file_pattern: File glob pattern\n            max_results: Maximum results\n\n        Returns:\n            List of matches with context\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'search_code'
+'pattern'
+'file_pattern'
+pattern
+file_pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+results
+●●●●●● 1mm □
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+pattern_re
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+pattern
+re
+●●●●●● 2mm □△
+file_path
+root
+●●●●●● 1mm □△
+file_pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+max_results
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+excluded
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+excluded
+'__pycache__'
+'.git'
+'venv'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+line_num
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+f
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_re
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'file'
+'line'
+'content'
+'match'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+line_num
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+max_results
+OSError
+UnicodeDecodeError
+Exception
+logger
+●●●●●● 1mm □△
+'Error searching code: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_genesis_key
+●●●●●● 1mm □△
+self
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get Genesis Key by ID.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_genesis_key'
+'genesis_key_id'
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'genesis_key_id'
+'entity_type'
+'source_path'
+'parent_key_id'
+'immutable_hash'
+'version_tag'
+'semantic_tags'
+'relationships'
+'created_at'
+key
+key
+key
+key
+key
+key
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+search_genesis_keys
+●●●●●● 1mm □△
+self
+entity_type
+semantic_tags
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+100
+'Search Genesis Keys.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'search_genesis_keys'
+'entity_type'
+'semantic_tags'
+entity_type
+semantic_tags
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entity_type
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+GenesisKey
+entity_type
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_key_id'
+'entity_type'
+'source_path'
+'semantic_tags'
+'created_at'
+key
+key
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+keys
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_librarian_tags
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get Librarian tags.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_librarian_tags'
+'limit'
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+tags
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianTag
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'genesis_key_id'
+'tag_type'
+'tag_value'
+'confidence_score'
+'created_at'
+tag
+tag
+tag
+tag
+tag
+tag
+tag
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tag
+tags
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_librarian_relationships
+●●●●●● 1mm □△
+self
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get Librarian relationships for a Genesis Key.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_librarian_relationships'
+'genesis_key_id'
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+relationships
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentRelationship
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentRelationship
+genesis_key_id
+●●●●●● 1mm ○
+DocumentRelationship
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'source_key_id'
+'target_key_id'
+'relationship_type'
+'confidence_score'
+'created_at'
+rel
+rel
+rel
+rel
+rel
+rel
+rel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel
+relationships
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+rag_query
+●●●●●● 1mm □△
+self
+query
+limit
+score_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+5
+0.5
+'Query RAG system for relevant documents.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'rag_query'
+'query'
+'limit'
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Retriever not initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+Exception
+logger
+●●●●●● 1mm □△
+'RAG query error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_document
+●●●●●● 1mm □△
+self
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Get document by ID.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_document'
+'document_id'
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+doc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Document
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'id'
+'filename'
+'file_path'
+'source'
+'file_type'
+'description'
+'confidence_score'
+'created_at'
+doc
+doc
+doc
+doc
+doc
+doc
+doc
+doc
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_document_chunks
+●●●●●● 1mm □△
+self
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Get all chunks for a document.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_document_chunks'
+'document_id'
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+chunks
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+document_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'chunk_index'
+'text_content'
+'confidence_score'
+'char_start'
+'char_end'
+chunk
+chunk
+chunk
+chunk
+chunk
+chunk
+chunk
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_learning_examples
+●●●●●● 1mm □△
+self
+min_trust_score
+example_type
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+0.7
+●●●●●● 2mm □
+100
+'Get learning examples (training data).'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_learning_examples'
+'min_trust_score'
+'example_type'
+'limit'
+min_trust_score
+example_type
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+min_trust_score
+●●●●●● 2mm □△
+●●●●●● 2mm □
+example_type
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LearningExample
+example_type
+●●●●●● 2mm □△
+examples
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'example_type'
+'input_context'
+'expected_output'
+'actual_output'
+'trust_score'
+'source'
+'times_validated'
+'times_invalidated'
+'created_at'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+●●●●●● 2mm □△
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ex
+examples
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_learning_patterns
+●●●●●● 1mm □△
+self
+min_trust_score
+pattern_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+0.7
+●●●●●● 2mm □
+'Get learned patterns.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_learning_patterns'
+'min_trust_score'
+'pattern_type'
+min_trust_score
+pattern_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningPattern
+min_trust_score
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern_type
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LearningPattern
+pattern_type
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'pattern_name'
+'pattern_type'
+'preconditions'
+'actions'
+'expected_outcomes'
+'trust_score'
+'success_rate'
+'sample_size'
+'times_applied'
+'times_succeeded'
+'times_failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+pattern
+patterns
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_system_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current system statistics.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'get_system_stats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+stats
+●●●●●● 1mm □
+'documents'
+'chunks'
+'learning_examples'
+'genesis_keys'
+'timestamp'
+'total'
+'avg_confidence'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+Document
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+'total'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+DocumentChunk
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+'total'
+'avg_trust'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+'total'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_access_log
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent access log entries.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+clear_access_log
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear access log.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_repo_access
+●●●●●● 2mm □○
+RepositoryAccessLayer
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_repo_access
+●●●●●● 1mm □△
+session
+embedding_model
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create global repository access instance.'
+●●●●●● 2mm □
+_repo_access
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+embedding_model
+●●●●●● 2mm □
+_repo_access
+●●●●●● 1mm □
+RepositoryAccessLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_repo_access
+RepositoryAccessLayer

@@ -1,0 +1,261 @@
+## migrate_add_metadata_columns.py
+'\nMigration script to add metadata columns to documents table.\nRun this script to migrate the database schema.\n'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DB_PATH
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 1mm □
+column_exists
+●●●●●● 1mm □△
+connection
+table_name
+column_name
+●●●●●● 2mm □△
+'Check if a column exists in a table.'
+cursor
+●●●●●● 1mm □
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'PRAGMA table_info('
+table_name
+')'
+●●●●●● 2mm □△
+columns
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+col
+1
+column_name
+col
+columns
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_column
+●●●●●● 1mm □△
+connection
+table_name
+column_name
+column_def
+●●●●●● 2mm □△
+"Add a column to a table if it doesn't exist."
+●●●●●● 2mm □
+column_exists
+●●●●●● 1mm □△
+connection
+table_name
+column_name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Column '
+column_name
+' already exists in '
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cursor
+●●●●●● 1mm □
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'ALTER TABLE '
+table_name
+' ADD COLUMN '
+column_name
+' '
+column_def
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Added column '
+column_name
+' to '
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sqlite3
+logger
+●●●●●● 1mm □△
+'Error adding column '
+column_name
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+migrate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Apply all pending migrations.'
+●●●●●● 2mm □
+DB_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database file not found at '
+DB_PATH
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+connection
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+DB_PATH
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Connected to database at '
+DB_PATH
+●●●●●● 2mm □△
+columns_to_add
+●●●●●● 1mm □
+'upload_method'
+'trust_score'
+'description'
+'tags'
+'document_metadata'
+"VARCHAR(50) NOT NULL DEFAULT 'ui-upload'"
+'REAL NOT NULL DEFAULT 0.0'
+'TEXT'
+'TEXT'
+'TEXT'
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+column_name
+column_def
+columns_to_add
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+add_column
+●●●●●● 1mm □△
+connection
+'documents'
+column_name
+column_def
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+indexes
+●●●●●● 1mm □
+'CREATE INDEX IF NOT EXISTS idx_upload_method ON documents(upload_method)'
+'CREATE INDEX IF NOT EXISTS idx_trust_score ON documents(trust_score)'
+index_sql
+indexes
+cursor
+●●●●●● 1mm □△
+index_sql
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created index: '
+index_sql
+●●●●●● 1mm □△
+'idx_'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+sqlite3
+logger
+●●●●●● 1mm □△
+'Index might already exist: '
+e
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Migration completed successfully!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+sqlite3
+logger
+●●●●●● 1mm □△
+'Database error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Unexpected error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✅ Migration successful'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'❌ Migration failed'
+●●●●●● 2mm □△

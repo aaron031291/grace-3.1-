@@ -1,0 +1,236 @@
+## sandbox_api.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+BackgroundTasks
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+●●●●●● 3mm □△○
+sse_starlette.sse
+●●●●●● 2mm □△○
+EventSourceResponse
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_experiments
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+SandboxExperimentRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+hypothesis
+●●●●●● 1mm ○
+target_sources
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+domain
+●●●●●● 1mm ○
+'Global'
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Simulates querying the Whitelist sources in a read-only dry-run.'
+active_experiments
+experiment_id
+'status'
+●●●●●● 1mm □
+'running'
+steps
+●●●●●● 1mm □
+'[SANDBOX] Booting Isolated Inference Engine...'
+'[SANDBOX] Hypothesis: "'
+hypothesis
+'"'
+'[ROUTING] Targeting '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+target_sources
+●●●●●● 2mm □△
+' Whitelist sources...'
+src
+target_sources
+steps
+●●●●●● 1mm □△
+'[FETCHING] Reading data from '
+src
+' (Read-Only)...'
+●●●●●● 2mm □△
+steps
+●●●●●● 1mm □△
+'[ANALYSIS] Synthesizing external RAG context...'
+'[ANALYSIS] Found 4 verified data points matching hypothesis.'
+'[SYSTEM] Compiling Sandbox Discovery Report.'
+'[SYSTEM] ⚠️ WARNING: These findings exist ONLY in the Sandbox overlay. They have not been committed to Magma Memory.'
+'[SYSTEM] Experiment complete. Awaiting Human Promotion.'
+●●●●●● 2mm □△
+step
+steps
+asyncio
+●●●●●● 1mm □△
+1.2
+●●●●●● 2mm □△
+log_entry
+●●●●●● 1mm □
+'['
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%H:%M:%S'
+●●●●●● 2mm □△
+'] '
+step
+active_experiments
+experiment_id
+'logs'
+●●●●●● 1mm □△
+log_entry
+●●●●●● 2mm □△
+active_experiments
+experiment_id
+'status'
+●●●●●● 1mm □
+'completed'
+Exception
+active_experiments
+experiment_id
+'status'
+●●●●●● 1mm □
+'failed'
+active_experiments
+experiment_id
+'logs'
+●●●●●● 1mm □△
+'[ERROR] Sandbox crashed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SandboxExperimentRequest
+BackgroundTasks
+'Spawns an isolated experiment.'
+exp_id
+●●●●●● 1mm □
+'EXP-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+active_experiments
+exp_id
+●●●●●● 1mm □
+'status'
+'logs'
+'hypothesis'
+'pending'
+req
+background_tasks
+●●●●●● 1mm □△
+mock_sandbox_worker
+exp_id
+req
+req
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'experiment_id'
+'status'
+exp_id
+'pending'
+router
+●●●●●● 1mm □△
+'/experiment'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'SSE endpoint to stream sandbox logs to the UI.'
+●●●●●● 2mm □
+experiment_id
+active_experiments
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_index
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+exp
+●●●●●● 1mm □
+active_experiments
+●●●●●● 1mm □△
+experiment_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+current_logs
+●●●●●● 1mm □
+exp
+'logs'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_logs
+●●●●●● 2mm □△
+last_index
+log
+current_logs
+last_index
+'data'
+log
+last_index
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+current_logs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+'status'
+'completed'
+'failed'
+'data'
+'[END OF STREAM] Status: '
+exp
+'status'
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+EventSourceResponse
+●●●●●● 1mm □△
+log_generator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/stream/{experiment_id}'
+●●●●●● 2mm □△

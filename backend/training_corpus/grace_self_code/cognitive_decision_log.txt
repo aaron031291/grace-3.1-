@@ -1,0 +1,744 @@
+## decision_log.py
+"\nDecision Logger for Grace's Cognitive Engine.\n\nImplements Invariant 6: Observability Is Mandatory.\nAll decisions are logged with full rationale and alternatives.\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+TYPE_CHECKING
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+core.datetime_utils
+●●●●●● 2mm □△○
+as_naive_utc
+●●●●●● 2mm □
+TYPE_CHECKING
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+DecisionContext
+●●●●●● 2mm △
+DecisionLogger
+'\n    Logs all decisions with full context and rationale.\n\n    Implements Invariant 6: If behavior cannot be inspected, it is invalid.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+log_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+"\n        Initialize the decision logger.\n\n        Args:\n            log_dir: Directory to write decision logs (None = don't write files)\n        "
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_dir
+Path
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+log_decision_start
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+'DecisionContext'
+'\n        Log the start of a decision process.\n\n        Args:\n            context: Decision context\n        '
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'problem_statement'
+'goal'
+'success_criteria'
+'parent_decision_id'
+'decision_start'
+context
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+context
+context
+context
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_alternatives
+●●●●●● 1mm □△
+self
+decision_id
+alternatives
+selected
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Log alternative paths considered and which was selected.\n\n        Implements Invariant 12: Forward Simulation tracking.\n\n        Args:\n            decision_id: ID of the decision\n            alternatives: List of all alternatives considered\n            selected: The selected alternative\n        '
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'alternatives_count'
+'alternatives'
+'selected'
+'alternatives_considered'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alternatives
+●●●●●● 2mm □△
+alternatives
+selected
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_decision_complete
+●●●●●● 1mm □△
+self
+context
+result
+●●●●●● 2mm □△
+'DecisionContext'
+Any
+'\n        Log the completion of a decision.\n\n        Args:\n            context: Decision context\n            result: Result of the action\n        '
+_now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'duration_seconds'
+'result_summary'
+'ambiguity_state'
+'impact_scope'
+'was_reversible'
+'complexity_score'
+'benefit_score'
+'decision_complete'
+context
+_now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+_now
+●●●●●● 1mm □△
+as_naive_utc
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+500
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+context
+context
+context
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_decision_finalized
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+'DecisionContext'
+'\n        Log finalization of a decision.\n\n        Args:\n            context: Decision context\n        '
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'decision_finalized'
+context
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_decision_aborted
+●●●●●● 1mm □△
+self
+context
+reason
+●●●●●● 2mm □△
+'DecisionContext'
+●●●●●● 1mm ○
+'\n        Log abortion of a decision.\n\n        Args:\n            context: Decision context\n            reason: Reason for aborting\n        '
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'reason'
+'ambiguity_state'
+'decision_aborted'
+context
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reason
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_warning
+●●●●●● 1mm □△
+self
+decision_id
+message
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Log a warning for a decision.\n\n        Args:\n            decision_id: ID of the decision\n            message: Warning message\n        '
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'message'
+'warning'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_invariant_violation
+●●●●●● 1mm □△
+self
+decision_id
+invariant_number
+violation
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'\n        Log an invariant violation.\n\n        Args:\n            decision_id: ID of the decision\n            invariant_number: Which invariant was violated\n            violation: Description of the violation\n        '
+entry
+●●●●●● 1mm □
+'event'
+'decision_id'
+'timestamp'
+'invariant_number'
+'violation'
+'invariant_violation'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+invariant_number
+violation
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_decision_log
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get all log entries for a specific decision.\n\n        Args:\n            decision_id: ID of the decision\n\n        Returns:\n            List of log entries\n        '
+●●●●●● 3mm ○
+entry
+entry
+●●●●●● 3mm △
+entry
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+decision_id
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all_logs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get all log entries.\n\n        Returns:\n            List of all log entries\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_recent_decisions
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'\n        Get recent decisions with their metadata.\n\n        Args:\n            limit: Maximum number of decisions to return\n\n        Returns:\n            List of decision dictionaries with status and metadata\n        '
+decisions
+●●●●●● 1mm □
+entry
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □△
+'event'
+●●●●●● 2mm □△
+'decision_start'
+decision_id
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'in_progress'
+e
+●●●●●● 3mm △
+●●●●●● 2mm □
+e
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+decision_id
+●●●●●● 2mm □
+e
+●●●●●● 1mm □△
+'event'
+●●●●●● 2mm □△
+'decision_complete'
+status
+●●●●●● 1mm □
+'completed'
+●●●●●● 1mm △
+e
+●●●●●● 1mm □△
+'event'
+●●●●●● 2mm □△
+'decision_aborted'
+status
+●●●●●● 1mm □
+'aborted'
+●●●●●● 2mm □
+e
+●●●●●● 1mm □△
+'event'
+●●●●●● 2mm □△
+'decision_finalized'
+status
+●●●●●● 1mm □
+'finalized'
+decisions
+●●●●●● 1mm □△
+'decision_id'
+'problem_statement'
+'goal'
+'success_criteria'
+'timestamp'
+'status'
+decision_id
+entry
+●●●●●● 1mm □△
+'problem_statement'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'goal'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'success_criteria'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+status
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decisions
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm ○
+decisions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_active_decisions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get currently active (non-completed) decisions.\n\n        Returns:\n            List of active decision dictionaries\n        '
+all_decisions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+d
+d
+all_decisions
+d
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'in_progress'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_write_log_entry
+●●●●●● 1mm □△
+self
+entry
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Write a log entry to file if log_dir is set.\n\n        Args:\n            entry: Log entry to write\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+date_str
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'decisions_'
+date_str
+'.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'decision_id'
+entry
+decision_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+entry
+'decision_id'
+'.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+generate_decision_report
+●●●●●● 1mm □△
+self
+decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Generate a human-readable report for a decision.\n\n        Args:\n            decision_id: ID of the decision\n\n        Returns:\n            Formatted report string\n        '
+entries
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entries
+●●●●●● 3mm ○
+'No logs found for decision '
+decision_id
+report_lines
+●●●●●● 1mm □
+'Decision Report: '
+decision_id
+'='
+●●●●●● 2mm □△
+60
+''
+entry
+entries
+event
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'event'
+'unknown'
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'timestamp'
+'unknown'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'['
+timestamp
+'] '
+event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event
+'decision_start'
+report_lines
+●●●●●● 1mm □△
+'  Problem: '
+entry
+●●●●●● 1mm □△
+'problem_statement'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'  Goal: '
+entry
+●●●●●● 1mm □△
+'goal'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'  Success Criteria: '
+entry
+●●●●●● 1mm □△
+'success_criteria'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+event
+'alternatives_considered'
+report_lines
+●●●●●● 1mm □△
+'  Alternatives: '
+entry
+●●●●●● 1mm □△
+'alternatives_count'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'  Selected: '
+entry
+●●●●●● 1mm □△
+'selected'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'name'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event
+'decision_complete'
+report_lines
+●●●●●● 1mm □△
+'  Duration: '
+entry
+●●●●●● 1mm □△
+'duration_seconds'
+●●●●●● 2mm □△
+'s'
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'  Impact: '
+entry
+●●●●●● 1mm □△
+'impact_scope'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+'  Reversible: '
+entry
+●●●●●● 1mm □△
+'was_reversible'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+event
+'warning'
+report_lines
+●●●●●● 1mm □△
+'  [WARN] '
+entry
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event
+'invariant_violation'
+report_lines
+●●●●●● 1mm □△
+'  [FAIL] Invariant '
+entry
+●●●●●● 1mm □△
+'invariant_number'
+●●●●●● 2mm □△
+': '
+entry
+●●●●●● 1mm □△
+'violation'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report_lines
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+report_lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○

@@ -1,0 +1,508 @@
+## reports.py
+'\nDaily Report System — auto-generates reports of everything Grace achieved.\n\nReports include:\n  - Genesis key activity summary\n  - Brain actions executed\n  - Errors found and fixed\n  - Trust score changes\n  - Pipeline runs and outcomes\n  - Autonomous loop cycles\n  - Code changes tracked\n\nReports are LLM-named, timestamped, stored in data/reports/,\ndownloadable and exportable.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+REPORTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'reports'
+●●●●●● 1mm □
+generate_daily_report
+●●●●●● 1mm □△
+hours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+24
+"Generate a comprehensive report of Grace's activity."
+REPORTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+'generated_at'
+'window_hours'
+'sections'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hours
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+miner
+●●●●●● 1mm □
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+miner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sections'
+'genesis_keys'
+●●●●●● 1mm □
+'total_keys'
+'type_distribution'
+'error_clusters'
+'temporal_patterns'
+'repeated_failures'
+patterns
+●●●●●● 1mm □△
+'keys_analyzed'
+0
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+'type_distribution'
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+'error_clusters'
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+'temporal_patterns'
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+'repeated_failures'
+●●●●●● 2mm □△
+Exception
+report
+'sections'
+'genesis_keys'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+report
+'sections'
+'trust'
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+report
+'sections'
+'trust'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_loop_state
+_loop_log
+report
+'sections'
+'autonomous'
+●●●●●● 1mm □
+'state'
+'recent_cycles'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_loop_state
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_loop_log
+●●●●●● 2mm □△
+Exception
+report
+'sections'
+'autonomous'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.hebbian
+●●●●●● 2mm □△○
+get_hebbian_mesh
+mesh
+●●●●●● 1mm □
+get_hebbian_mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sections'
+'synapses'
+●●●●●● 1mm □
+'strongest'
+'total_connections'
+mesh
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mesh
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+'sections'
+'synapses'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+health
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'problems'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+health
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+report
+'sections'
+'health'
+●●●●●● 1mm □
+health
+'data'
+Exception
+report
+'sections'
+'health'
+●●●●●● 1mm □
+title
+●●●●●● 1mm □
+_generate_title
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+'title'
+●●●●●● 1mm □
+title
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+safe_title
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+' -_'
+c
+''
+c
+title
+●●●●●● 2mm □△
+60
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+filename
+●●●●●● 1mm □
+timestamp
+'_'
+safe_title
+'.json'
+filepath
+●●●●●● 1mm □
+REPORTS_DIR
+●●●●●● 3mm □△
+filename
+filepath
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'title'
+'filename'
+'path'
+'sections'
+'generated_at'
+'downloadable'
+title
+filename
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+report
+'sections'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report
+'generated_at'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_generate_title
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Use LLM to generate a meaningful report title.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+keys
+●●●●●● 1mm □
+report
+'sections'
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_keys'
+0
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+'sections'
+●●●●●● 1mm □△
+'genesis_keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'error_clusters'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+report
+'sections'
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fast'
+'prompt'
+'models'
+'Generate a SHORT title (max 8 words) for a daily report. Stats: '
+keys
+' operations, '
+errors
+' error types, '
+problems
+' problems. Return ONLY the title, nothing else.'
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+r
+'data'
+●●●●●● 1mm □△
+'individual_responses'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+title
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+title
+●●●●●● 2mm □△
+80
+●●●●●● 3mm ○
+title
+●●●●●● 1mm □△
+'"'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+"'"
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'Grace Daily Report '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+list_reports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all saved reports.'
+REPORTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+REPORTS_DIR
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+reports
+●●●●●● 1mm □△
+'filename'
+'title'
+'generated_at'
+'sections'
+'size_kb'
+f
+data
+●●●●●● 1mm □△
+'title'
+f
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'generated_at'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'sections'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1024
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+reports
+●●●●●● 1mm □△
+'filename'
+'title'
+f
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+reports
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_report
+●●●●●● 1mm □△
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a specific report.'
+filepath
+●●●●●● 1mm □
+REPORTS_DIR
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Report not found'
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

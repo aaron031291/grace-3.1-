@@ -1,0 +1,2562 @@
+## connection_validator.py
+"\nConnection Status Validator\n============================\nComprehensive validation of ALL system connections.\n\nMaps every connection in the system, checks whether it's actually connected,\nand validates that each connection is doing its job properly.\n\nConnection Categories:\n1. Infrastructure: Database, Qdrant, LLM Provider, Embedding Model\n2. External APIs: SerpAPI, Kimi, Opus\n3. Layer 1 Connectors: Message bus component registrations\n4. Background Services: Diagnostic engine, autonomous loop, file watcher, etc.\n5. WebSocket: Real-time client connections\n"
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ConnectionCategory
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+INFRASTRUCTURE
+●●●●●● 1mm □
+'infrastructure'
+EXTERNAL_API
+●●●●●● 1mm □
+'external_api'
+LAYER1_CONNECTOR
+●●●●●● 1mm □
+'layer1_connector'
+BACKGROUND_SERVICE
+●●●●●● 1mm □
+'background_service'
+WEBSOCKET
+●●●●●● 1mm □
+'websocket'
+●●●●●● 2mm △
+ConnectionStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+CONNECTED
+●●●●●● 1mm □
+'connected'
+DISCONNECTED
+●●●●●● 1mm □
+'disconnected'
+DEGRADED
+●●●●●● 1mm □
+'degraded'
+NOT_CONFIGURED
+●●●●●● 1mm □
+'not_configured'
+UNKNOWN
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm △
+ValidationResult
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+PASS
+●●●●●● 1mm □
+'pass'
+FAIL
+●●●●●● 1mm □
+'fail'
+SKIP
+●●●●●● 1mm □
+'skip'
+WARN
+●●●●●● 1mm □
+'warn'
+●●●●●● 2mm △
+ActionValidation
+'Result of validating a single action/capability of a connection.'
+action_name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+result
+ValidationResult
+latency_ms
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ConnectionReport
+'Full report for a single connection.'
+name
+●●●●●● 1mm ○
+category
+ConnectionCategory
+status
+ConnectionStatus
+connected
+●●●●●● 3mm △
+latency_ms
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+action_validations
+●●●●●● 3mm □△
+ActionValidation
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+validated_at
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+actions_passing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+●●●●●● 3mm △
+a
+ValidationResult
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+actions_failing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+●●●●●● 3mm △
+a
+ValidationResult
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+actions_total
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+asdict
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+d
+'actions_passing'
+●●●●●● 1mm □
+●●●●●● 3mm △
+d
+'actions_failing'
+●●●●●● 1mm □
+●●●●●● 3mm △
+d
+'actions_total'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+d
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+SystemConnectionReport
+'Full system-wide connection validation report.'
+status
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+total_connections
+●●●●●● 2mm ○
+connected_count
+●●●●●● 2mm ○
+disconnected_count
+●●●●●● 2mm ○
+degraded_count
+●●●●●● 2mm ○
+connections
+●●●●●● 3mm □△
+ConnectionReport
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_actions_validated
+●●●●●● 2mm ○
+0
+total_actions_passing
+●●●●●● 2mm ○
+0
+total_actions_failing
+●●●●●● 2mm ○
+0
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'timestamp'
+'total_connections'
+'connected_count'
+'disconnected_count'
+'degraded_count'
+'total_actions_validated'
+'total_actions_passing'
+'total_actions_failing'
+'connections'
+'categories'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_category_summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+conn
+●●●●●● 3mm △
+cat
+●●●●●● 1mm □
+conn
+●●●●●● 2mm □
+cat
+summary
+summary
+cat
+●●●●●● 1mm □
+'total'
+'connected'
+'disconnected'
+'degraded'
+0
+0
+0
+0
+summary
+cat
+'total'
+1
+●●●●●● 2mm □
+conn
+summary
+cat
+'connected'
+1
+●●●●●● 1mm △
+conn
+ConnectionStatus
+summary
+cat
+'degraded'
+1
+summary
+cat
+'disconnected'
+1
+●●●●●● 3mm ○
+summary
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+dataclass
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+fn
+●●●●●● 2mm □△
+'Execute fn and return (result, latency_ms).'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+latency
+2
+●●●●●● 2mm □△
+Exception
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+latency
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □
+validate_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate database connection and actions.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+result
+latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+DatabaseConnection
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+latency
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 2mm □
+result
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+sess_result
+sess_latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+_test_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+sess_result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tables_result
+tables_latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+_check_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+tables_result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+'db_type'
+'pool_pre_ping'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+config
+'value'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+config
+'pool_pre_ping'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+ConnectionStatus
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+'health_check returned False'
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Import/init error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+_test_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+inspect
+●●●●●● 1mm □
+sa_inspect
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+sa_inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'table_count'
+'tables'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+tables
+20
+●●●●●● 1mm □
+validate_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate Qdrant vector database connection and actions.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+qdrant
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+latency
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+result
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'Not connected'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+collections_result
+coll_latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+qdrant
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+collections_result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+'collections'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+collections_result
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Import/init error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_llm_provider
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate LLM provider connection and actions.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+provider_name
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_PROVIDER'
+'unknown'
+●●●●●● 2mm □△
+ImportError
+provider_name
+●●●●●● 1mm □
+'unknown'
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+latency
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+result
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+provider_name
+' not responding'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □
+'provider'
+provider_name
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+models_result
+models_latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+client
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+models_result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model_count
+●●●●●● 1mm □
+models_result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models_result
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+'models_available'
+●●●●●● 1mm □
+model_count
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+configured_model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'LLM_MODEL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+configured_model
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+client
+'model_exists'
+●●●●●● 2mm □△
+exists_result
+exists_latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+client
+●●●●●● 1mm □△
+configured_model
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+exists_result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Import/init error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate embedding model connection and actions.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedder
+embedder
+●●●●●● 1mm □
+get_embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+embedder
+●●●●●● 1mm □△
+'connection validation test'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+latency
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 2mm □
+result
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'shape'
+●●●●●● 2mm □△
+result
+0
+0
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+dimension
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+result
+0
+result
+1
+report
+●●●●●● 1mm □
+'dimension'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+dimension
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+ConnectionStatus
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+'Embedding returned empty result'
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Import/init error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_serpapi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate SerpAPI connection.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+api_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'SERPAPI_KEY'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'SERPAPI_API_KEY'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+api_key
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'SERPAPI_KEY not set'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+search.serpapi_service
+●●●●●● 2mm □△○
+SerpAPIService
+service
+●●●●●● 1mm □
+SerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+service
+'test_connection'
+●●●●●● 2mm □△
+result
+latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+service
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+latency
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+result
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+Exception
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'test_connection returned False'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+ConnectionStatus
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+ConnectionStatus
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+'API key configured (no test_connection method)'
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate Kimi API connection.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+api_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_API_KEY'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'KIMI_MODEL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+api_key
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'KIMI_API_KEY not set'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □
+'model'
+'configured'
+model
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_opus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate Opus API connection.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+api_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_API_KEY'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_MODEL'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+api_key
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'OPUS_API_KEY not set'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □
+'model'
+'configured'
+model
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate all Layer 1 message bus connector registrations and actions.'
+reports
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+ComponentType
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registered
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+bus
+'_components'
+●●●●●● 2mm □△
+registered
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+bus
+'components'
+●●●●●● 2mm □△
+registered
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+autonomous_actions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+bus
+'_autonomous_actions'
+●●●●●● 2mm □△
+action
+bus
+comp
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'component'
+action
+●●●●●● 1mm □△
+'from_component'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp_key
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+comp
+'value'
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp_key
+autonomous_actions
+autonomous_actions
+comp_key
+●●●●●● 1mm □
+autonomous_actions
+comp_key
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+request_handlers
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+bus
+'_request_handlers'
+●●●●●● 2mm □△
+comp
+handlers
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_key
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+comp
+'value'
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+request_handlers
+comp_key
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+handlers
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+handlers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+handlers
+subscriptions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+bus
+'_subscriptions'
+●●●●●● 2mm □△
+topic
+subs
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sub
+subs
+comp
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+sub
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sub
+●●●●●● 1mm □△
+'component'
+'unknown'
+●●●●●● 2mm □△
+'unknown'
+comp_key
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+comp
+'value'
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp_key
+subscriptions
+subscriptions
+comp_key
+●●●●●● 1mm □
+subscriptions
+comp_key
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+connector_spec
+●●●●●● 1mm □
+ComponentType
+ComponentType
+ComponentType
+ComponentType
+ComponentType
+ComponentType
+'expected_actions'
+'expected_handlers'
+'expected_subscriptions'
+'description'
+6
+3
+2
+'Memory Mesh - Learning memory integration'
+'expected_actions'
+'expected_handlers'
+'expected_subscriptions'
+'description'
+3
+3
+1
+'Genesis Keys - Universal tracking'
+'expected_actions'
+'expected_handlers'
+'expected_subscriptions'
+'description'
+4
+2
+1
+'RAG - Retrieval-augmented generation'
+'expected_actions'
+'expected_handlers'
+'expected_subscriptions'
+'description'
+3
+2
+0
+'Ingestion - File processing'
+'expected_actions'
+'expected_handlers'
+'expected_subscriptions'
+'description'
+2
+3
+1
+'LLM Orchestration - Multi-LLM coordination'
+'expected_actions'
+'expected_handlers'
+'expected_subscriptions'
+'description'
+3
+2
+0
+'Version Control - Git/version tracking'
+comp_type
+spec
+connector_spec
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_key
+●●●●●● 1mm □
+comp_type
+is_registered
+●●●●●● 1mm □
+comp_type
+registered
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+actual_actions
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+autonomous_actions
+●●●●●● 1mm □△
+comp_key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+expected_actions
+●●●●●● 1mm □
+spec
+'expected_actions'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+actual_handlers
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+request_handlers
+●●●●●● 1mm □△
+comp_key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+expected_handlers
+●●●●●● 1mm □
+spec
+'expected_handlers'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+actual_subs
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+subscriptions
+●●●●●● 1mm □△
+comp_key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+expected_subs
+●●●●●● 1mm □
+spec
+'expected_subscriptions'
+●●●●●● 2mm □
+expected_subs
+0
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_registered
+report
+●●●●●● 1mm □
+ConnectionStatus
+reports
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+comp
+registered
+comp_key
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+comp
+'value'
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+connector_spec
+reports
+●●●●●● 1mm □△
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+reports
+●●●●●● 1mm □△
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+reports
+●●●●●● 1mm □△
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+reports
+●●●●●● 3mm □△
+ConnectionReport
+●●●●●● 1mm □
+validate_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate diagnostic engine is running.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+engine
+'state'
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+engine
+'value'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+is_running
+●●●●●● 1mm □
+state
+'stopped'
+'unavailable'
+'unknown'
+report
+●●●●●● 1mm □
+is_running
+ConnectionStatus
+ConnectionStatus
+report
+●●●●●● 1mm □
+is_running
+report
+●●●●●● 1mm □
+'state'
+state
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+engine
+'get_health_summary'
+●●●●●● 2mm □△
+summary_result
+latency
+●●●●●● 1mm □
+_timed
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+summary_result
+Exception
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Not available: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_autonomous_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate autonomous loop is running.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_loop_state
+_stop_event
+is_running
+●●●●●● 1mm □
+_loop_state
+●●●●●● 1mm □△
+'running'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+is_running
+ConnectionStatus
+ConnectionStatus
+report
+●●●●●● 1mm □
+is_running
+report
+●●●●●● 1mm □
+'state'
+_loop_state
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Not available: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate continuous learning orchestrator.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+get_continuous_learning_status
+status
+●●●●●● 1mm □
+get_continuous_learning_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_running
+●●●●●● 1mm □
+status
+status
+●●●●●● 1mm □△
+'running'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+report
+●●●●●● 1mm □
+is_running
+ConnectionStatus
+ConnectionStatus
+report
+●●●●●● 1mm □
+is_running
+report
+●●●●●● 1mm □
+status
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Module not available'
+Exception
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+start_continuous_learning
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Status check unavailable: '
+e
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Not available: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_file_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate file watcher service.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.file_watcher
+●●●●●● 2mm □△○
+get_watcher_status
+status
+●●●●●● 1mm □
+get_watcher_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_running
+●●●●●● 1mm □
+status
+status
+●●●●●● 1mm □△
+'running'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+report
+●●●●●● 1mm □
+is_running
+ConnectionStatus
+ConnectionStatus
+report
+●●●●●● 1mm □
+is_running
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+AttributeError
+●●●●●● 3mm □△○
+genesis.file_watcher
+●●●●●● 2mm □△○
+start_watching_workspace
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Module importable but status check not available'
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Module not available'
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate ML Intelligence orchestrator.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.integration_orchestrator
+●●●●●● 2mm □△○
+MLIntelligenceOrchestrator
+orchestrator
+●●●●●● 1mm □
+MLIntelligenceOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+orchestrator
+'enabled_features'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □
+'features'
+'feature_count'
+features
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Not available: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_genesis_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate Genesis Key tracking middleware.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+disabled
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'DISABLE_GENESIS_TRACKING'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+disabled
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Genesis tracking disabled via DISABLE_GENESIS_TRACKING'
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 3mm □△○
+genesis.middleware
+●●●●●● 2mm □△○
+GenesisKeyMiddleware
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ImportError
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Module not available: '
+e
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Error: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_websocket_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Validate WebSocket connection manager.'
+report
+●●●●●● 1mm □
+ConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.realtime
+●●●●●● 2mm □△○
+get_connection_manager
+manager
+●●●●●● 1mm □
+get_connection_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client_count
+●●●●●● 1mm □
+manager
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+report
+●●●●●● 1mm □
+'connected_clients'
+client_count
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+clients
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+ActionValidation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+report
+●●●●●● 1mm □
+ConnectionStatus
+report
+●●●●●● 1mm □
+'Not available: '
+e
+●●●●●● 3mm ○
+report
+ConnectionReport
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+include_layer1
+include_background
+include_external
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n    Validate ALL system connections and return comprehensive report.\n\n    This is the single source of truth for connection status across\n    the entire system.\n    '
+connections
+●●●●●● 3mm □△
+ConnectionReport
+logger
+●●●●●● 1mm □△
+'[CONNECTION-VALIDATOR] Checking infrastructure connections...'
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_llm_provider
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_external
+logger
+●●●●●● 1mm □△
+'[CONNECTION-VALIDATOR] Checking external API connections...'
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_serpapi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_opus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_layer1
+logger
+●●●●●● 1mm □△
+'[CONNECTION-VALIDATOR] Checking Layer 1 connector registrations...'
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_layer1_connectors
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_background
+logger
+●●●●●● 1mm □△
+'[CONNECTION-VALIDATOR] Checking background services...'
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_autonomous_loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_file_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_genesis_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connections
+●●●●●● 1mm □△
+validate_websocket_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connected_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+connections
+c
+●●●●●● 2mm □△
+disconnected_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+connections
+c
+ConnectionStatus
+●●●●●● 2mm □△
+degraded_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+connections
+c
+ConnectionStatus
+●●●●●● 2mm □△
+not_configured_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+connections
+c
+ConnectionStatus
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+connections
+●●●●●● 2mm □△
+total_actions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+connections
+●●●●●● 2mm □△
+total_passing
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+connections
+●●●●●● 2mm □△
+total_failing
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+c
+c
+connections
+●●●●●● 2mm □△
+infra_disconnected
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+connections
+c
+ConnectionCategory
+c
+ConnectionStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □
+infra_disconnected
+0
+overall_status
+●●●●●● 1mm □
+'critical'
+●●●●●● 1mm △
+disconnected_count
+2
+overall_status
+●●●●●● 1mm □
+'degraded'
+●●●●●● 2mm □
+disconnected_count
+0
+degraded_count
+0
+overall_status
+●●●●●● 1mm □
+'partial'
+●●●●●● 3mm □
+overall_status
+●●●●●● 1mm □
+'all_connected'
+report
+●●●●●● 1mm □
+SystemConnectionReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONNECTION-VALIDATOR] Complete: '
+connected_count
+'/'
+total
+' connected, '
+total_passing
+'/'
+total_actions
+' actions passing, status='
+overall_status
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+SystemConnectionReport

@@ -1,0 +1,38 @@
+## datetime_utils.py
+'\nTimezone-safe datetime helpers.\n\nUse when subtracting datetimes that may be timezone-aware (e.g. from DB or ISO strings)\nfrom datetime.utcnow() to avoid "can\'t subtract offset-naive and offset-aware datetimes".\n'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 1mm □
+as_naive_utc
+●●●●●● 1mm □△
+dt
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+datetime
+'\n    Convert a datetime to naive UTC for use in (datetime.utcnow() - x) style math.\n    If dt is None, returns None. If dt is naive, returns it unchanged (assumes UTC).\n    If dt is aware, converts to UTC and strips tzinfo.\n    '
+●●●●●● 2mm □
+dt
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+dt
+●●●●●● 2mm □
+●●●●●● 3mm ○
+dt
+●●●●●● 3mm ○
+dt
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+datetime

@@ -1,0 +1,446 @@
+## auto_migrate.py
+"\ndatabase/auto_migrate.py\n─────────────────────────────────────────────────────────────────────────────\nGrace's Self-Healing Schema Migration System\n─────────────────────────────────────────────────────────────────────────────\nRuns at startup (called from app.py lifespan) and:\n  1. Inspects the live PostgreSQL schema.\n  2. Compares it against every SQLAlchemy model registered in\n     database.base.Base.\n  3. Automatically adds any missing columns, tables, and enum values.\n  4. Logs each change to Grace's learning system so she can track\n     drift patterns over time.\n\nNever drops columns—only adds new ones (safe, forward-only migration).\n"
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+●●●●●● 2mm □△○
+sqlalchemy
+●●●●●● 1mm □
+sa
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+inspect
+text
+●●●●●● 3mm □△○
+sqlalchemy.engine
+●●●●●● 2mm □△○
+Engine
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+ENUM_COLUMN_MAP
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+'genesiskeytype'
+'genesiskeystatus'
+'genesiskeytype'
+'file_op'
+'code_change'
+'ai_response'
+'user_action'
+'api_request'
+'error'
+'learning'
+'system_event'
+'agent_action'
+'test_run'
+'learning_complete'
+'gap_identified'
+'audit_event'
+'mission_created'
+'research'
+'fix_applied'
+'schema_migration'
+'healing_event'
+'genesiskeystatus'
+'active'
+'archived'
+'deleted'
+'flagged'
+'pending'
+'resolved'
+_PY_TO_PG
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'String'
+'Text'
+'Float'
+'Integer'
+'Boolean'
+'DateTime'
+'JSON'
+'LargeBinary'
+'VARCHAR'
+'TEXT'
+'DOUBLE PRECISION'
+'INTEGER'
+'BOOLEAN'
+'TIMESTAMP WITHOUT TIME ZONE'
+'JSONB'
+'BYTEA'
+●●●●●● 1mm □
+_pg_type_for_column
+●●●●●● 1mm □△
+col
+●●●●●● 2mm □△
+sa
+'Best-effort PostgreSQL type from a SQLAlchemy Column.'
+type_name
+●●●●●● 1mm □
+●●●●●● 3mm □
+●●●●●● 1mm □△
+col
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_PY_TO_PG
+●●●●●● 1mm □△
+type_name
+'TEXT'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_existing_columns
+●●●●●● 1mm □△
+conn
+table_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT column_name FROM information_schema.columns WHERE table_name = :t'
+●●●●●● 2mm □△
+'t'
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+row
+0
+row
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_existing_enum_values
+●●●●●● 1mm □△
+conn
+type_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT e.enumlabel FROM pg_type t JOIN pg_enum e ON t.oid = e.enumtypid WHERE t.typname = :n'
+●●●●●● 2mm □△
+'n'
+type_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+row
+0
+row
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_ensure_enum_values
+●●●●●● 1mm □△
+conn
+type_name
+desired
+changes
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+existing
+●●●●●● 1mm □
+_get_existing_enum_values
+●●●●●● 1mm □△
+conn
+type_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 3mm ○
+val
+desired
+●●●●●● 2mm □
+val
+existing
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TYPE '
+type_name
+" ADD VALUE IF NOT EXISTS '"
+val
+"'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+msg
+●●●●●● 1mm □
+'enum:'
+type_name
+' +'
+val
+changes
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Added enum value: %s -> %s'
+type_name
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+run_auto_migrate
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+Engine
+'\n    Inspect all registered SQLAlchemy models and apply any missing schema\n    changes to the database.\n\n    Returns a list of change descriptions (empty = nothing needed).\n    '
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+Base
+changes
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+conn
+●●●●●● 2mm □△
+existing_tables
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mapper
+Base
+model
+●●●●●● 1mm □
+mapper
+table
+sa
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+model
+'__table__'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+table
+●●●●●● 2mm □
+table_name
+●●●●●● 1mm □
+table
+●●●●●● 2mm □
+table_name
+existing_tables
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Creating missing table: %s'
+table_name
+●●●●●● 2mm □△
+table
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □△
+'table:+'
+table_name
+●●●●●● 2mm □△
+existing_tables
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+existing_cols
+●●●●●● 1mm □
+_get_existing_columns
+●●●●●● 1mm □△
+conn
+table_name
+●●●●●● 2mm □△
+col
+table
+col_name
+●●●●●● 1mm □
+col
+●●●●●● 2mm □
+col_name
+existing_cols
+●●●●●● 2mm □
+col
+col
+'id'
+'created_at'
+'updated_at'
+pg_type
+●●●●●● 1mm □
+_pg_type_for_column
+●●●●●● 1mm □△
+col
+●●●●●● 2mm □△
+nullable_clause
+●●●●●● 1mm □
+col
+''
+" NOT NULL DEFAULT ''"
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE '
+table_name
+' ADD COLUMN IF NOT EXISTS '
+col_name
+' '
+pg_type
+nullable_clause
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+changes
+●●●●●● 1mm □△
+'col:'
+table_name
+'.'
+col_name
+'('
+pg_type
+')'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Added column %s.%s (%s)'
+table_name
+col_name
+pg_type
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Could not add %s.%s: %s'
+table_name
+col_name
+col_err
+●●●●●● 2mm □△
+_
+type_name
+desired_vals
+ENUM_COLUMN_MAP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_ensure_enum_values
+●●●●●● 1mm □△
+conn
+type_name
+desired_vals
+changes
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Migration failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+changes
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □
+changes
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Applied %d schema change(s) in %.0fms: %s'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+elapsed
+changes
+●●●●●● 2mm □△
+_record_learning
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[AUTO-MIGRATE] Schema is up to date (%.0fms)'
+elapsed
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+changes
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_record_learning
+●●●●●● 1mm □△
+changes
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+"Feed schema drift discoveries into Grace's learning system."
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+backend.core.clarity_framework
+●●●●●● 2mm □△○
+ClarityFramework
+cf
+●●●●●● 1mm □
+ClarityFramework
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □

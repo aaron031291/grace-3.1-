@@ -1,0 +1,960 @@
+## integration_orchestrator.py
+"\nML Intelligence Integration Orchestrator\n\nIntegrates all ML/DL components with Grace's existing autonomous learning system.\n\nFeatures:\n- Replaces rule-based trust scoring with neural trust scorer\n- Adds online learning to embedding models\n- Uses bandit algorithms for topic selection\n- Applies meta-learning for hyperparameter optimization\n- Provides uncertainty estimates for predictions\n- Selects optimal training examples via active learning\n- Improves representations with contrastive learning\n"
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Tuple
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ML_ORCHESTRATOR_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+get_neural_trust_scorer
+●●●●●● 3mm □△○
+ml_intelligence.multi_armed_bandit
+●●●●●● 2mm □△○
+get_bandit
+BanditAlgorithm
+BanditContext
+●●●●●● 3mm □△○
+ml_intelligence.meta_learning
+●●●●●● 2mm □△○
+get_meta_learner
+●●●●●● 3mm □△○
+ml_intelligence.uncertainty_quantification
+●●●●●● 2mm □△○
+get_uncertainty_quantifier
+●●●●●● 3mm □△○
+ml_intelligence.active_learning_sampler
+●●●●●● 2mm □△○
+get_active_sampler
+SamplingStrategy
+ML_ORCHESTRATOR_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'ML Orchestrator dependencies not available: '
+e
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_neural_trust_scorer
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_bandit
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_meta_learner
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_uncertainty_quantifier
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_active_sampler
+●●●●●● 1mm □
+●●●●●● 2mm □
+BanditAlgorithm
+●●●●●● 1mm □
+●●●●●● 2mm □
+BanditContext
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm △
+SamplingStrategy
+●●●●●● 3mm □△
+Enum
+Enum
+UNCERTAINTY
+●●●●●● 1mm □
+'uncertainty'
+DIVERSITY
+●●●●●● 1mm □
+'diversity'
+RANDOM
+●●●●●● 1mm □
+'random'
+●●●●●● 2mm △
+MLIntelligenceOrchestrator
+'\n    Main orchestrator for ML Intelligence integration\n\n    Coordinates all ML/DL components with existing systems\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'neural_trust_scoring'
+'bandit_exploration'
+'meta_learning'
+'uncertainty_estimation'
+'active_learning'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'neural_trust_predictions'
+'bandit_selections'
+'meta_learning_recommendations'
+'uncertainty_estimates'
+'active_samples_selected'
+0
+0
+0
+0
+0
+●●●●●● 1mm □
+initialize
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize all ML components'
+●●●●●● 2mm □
+●●●●●● 3mm △
+'neural_trust_scoring'
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_neural_trust_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'bandit_exploration'
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_bandit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'meta_learning'
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_meta_learner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Initialization error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+compute_trust_score
+●●●●●● 1mm □△
+self
+learning_example
+use_neural
+fallback_to_rules
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+'\n        Compute trust score for learning example\n\n        Args:\n            learning_example: Learning example dict\n            use_neural: Whether to use neural scorer\n            fallback_to_rules: Whether to fallback to rule-based if neural fails\n\n        Returns:\n            (trust_score, uncertainty)\n        '
+●●●●●● 2mm □
+use_neural
+●●●●●● 3mm △
+●●●●●● 3mm △
+'neural_trust_scoring'
+trust_score
+uncertainty
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'neural_trust_predictions'
+1
+●●●●●● 3mm ○
+trust_score
+uncertainty
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Neural trust scoring failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fallback_to_rules
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Tuple
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_rule_based_trust_score
+●●●●●● 1mm □△
+self
+learning_example
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Fallback rule-based trust scoring'
+source_reliability
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'source_reliability'
+0.5
+●●●●●● 2mm □△
+outcome_quality
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'outcome_quality'
+0.5
+●●●●●● 2mm □△
+consistency_score
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'consistency_score'
+0.5
+●●●●●● 2mm □△
+validation_count
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'times_validated'
+0
+●●●●●● 2mm □△
+invalidation_count
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'times_invalidated'
+0
+●●●●●● 2mm □△
+validation_score
+●●●●●● 1mm □
+validation_count
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+validation_count
+●●●●●● 3mm ○
+invalidation_count
+1
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+source_reliability
+●●●●●● 2mm □△
+0.4
+●●●●●● 3mm ○
+outcome_quality
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+consistency_score
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+validation_score
+●●●●●● 2mm □△
+0.1
+created_at
+●●●●●● 1mm □
+learning_example
+●●●●●● 1mm □△
+'created_at'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+created_at
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+created_at
+●●●●●● 2mm □△
+age_days
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+created_at
+decay_rate
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+90
+recency_weight
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+decay_rate
+●●●●●● 2mm □△
+age_days
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trust_score
+●●●●●● 2mm □△
+recency_weight
+●●●●●● 3mm ○
+●●●●●● 1mm □
+update_trust_from_outcome
+●●●●●● 1mm □△
+self
+learning_example
+outcome_success
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+'\n        Update trust model based on observed outcome\n\n        Args:\n            learning_example: Learning example that was used\n            outcome_success: Whether outcome was successful\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'neural_trust_scoring'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+learning_example
+outcome_success
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'neural_trust_predictions'
+●●●●●● 2mm □○
+100
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Trust update failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+select_next_learning_topic
+●●●●●● 1mm □△
+self
+available_topics
+context
+exclude_topics
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n        Select next topic to learn using bandit algorithm\n\n        Args:\n            available_topics: List of topic dicts with 'topic_id', 'topic_name', 'features'\n            context: Optional context dict for contextual bandits\n            exclude_topics: Topic IDs to exclude\n\n        Returns:\n            Selected topic_id\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'bandit_exploration'
+available
+●●●●●● 1mm □
+t
+t
+available_topics
+t
+'topic_id'
+exclude_topics
+●●●●●● 2mm □
+available
+●●●●●● 3mm ○
+np
+●●●●●● 1mm □△
+t
+'topic_id'
+t
+available
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+available_topics
+0
+'topic_id'
+topic
+available_topics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bandit_context
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+context
+bandit_context
+●●●●●● 1mm □
+BanditContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selected_topic_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'bandit_selections'
+1
+●●●●●● 3mm ○
+selected_topic_id
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Bandit selection failed: '
+e
+●●●●●● 2mm □△
+available
+●●●●●● 1mm □
+t
+t
+available_topics
+t
+'topic_id'
+exclude_topics
+●●●●●● 2mm □
+available
+●●●●●● 3mm ○
+np
+●●●●●● 1mm □△
+t
+'topic_id'
+t
+available
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+available_topics
+0
+'topic_id'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+update_topic_reward
+●●●●●● 1mm □△
+self
+topic_id
+success
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Update bandit with observed reward for topic\n\n        Args:\n            topic_id: Topic that was learned\n            success: Whether learning was successful\n            context: Optional context\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'bandit_exploration'
+reward
+●●●●●● 1mm □
+success
+1.0
+0.0
+bandit_context
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+context
+bandit_context
+●●●●●● 1mm □
+BanditContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic_id
+reward
+bandit_context
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Bandit reward update failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_learning_recommendations
+●●●●●● 1mm □△
+self
+task_type
+task_metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n        Get meta-learning recommendations for learning approach\n\n        Args:\n            task_type: Type of learning task\n            task_metadata: Additional task metadata\n\n        Returns:\n            Dict with hyperparameter recommendations\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+'meta_learning'
+●●●●●● 3mm ○
+'suggested_hyperparams'
+'best_known_configs'
+'num_historical_examples'
+'learning_rate'
+'batch_size'
+'num_epochs'
+'dropout'
+'weight_decay'
+0.001
+32
+10
+0.2
+0.0001
+0
+recommendations
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+task_metadata
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'meta_learning_recommendations'
+1
+●●●●●● 3mm ○
+recommendations
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Meta-learning recommendation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'suggested_hyperparams'
+'error'
+'learning_rate'
+'batch_size'
+'num_epochs'
+0.001
+32
+10
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_uncertainty_estimate
+●●●●●● 1mm □△
+self
+model
+input_data
+num_samples
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'\n        Get uncertainty estimate for prediction\n\n        Args:\n            model: Neural network model\n            input_data: Input tensor\n            num_samples: Number of MC samples\n\n        Returns:\n            Dict with prediction and uncertainty info\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+'uncertainty_estimation'
+●●●●●● 3mm ○
+'prediction'
+'uncertainty'
+'is_reliable'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+UncertaintyQuantifier
+●●●●●● 3mm △
+●●●●●● 1mm □
+UncertaintyQuantifier
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+estimate
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'uncertainty_estimates'
+1
+●●●●●● 3mm ○
+'prediction'
+'epistemic_uncertainty'
+'aleatoric_uncertainty'
+'total_uncertainty'
+'confidence_interval'
+'is_reliable'
+estimate
+estimate
+estimate
+estimate
+estimate
+estimate
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Uncertainty estimation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'prediction'
+'uncertainty'
+'error'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+select_training_examples
+●●●●●● 1mm □△
+self
+unlabeled_pool
+n_samples
+model
+strategy
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+SamplingStrategy
+●●●●●● 2mm □
+SamplingStrategy
+'\n        Select most valuable training examples\n\n        Args:\n            unlabeled_pool: Pool of unlabeled examples (tensor)\n            n_samples: Number of examples to select\n            model: Model for uncertainty estimation\n            strategy: Sampling strategy\n\n        Returns:\n            List of selected indices\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+'active_learning'
+model
+●●●●●● 2mm □
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+unlabeled_pool
+torch
+●●●●●● 2mm □△
+indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+n_samples
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+ActiveLearningSampler
+●●●●●● 3mm △
+●●●●●● 1mm □
+ActiveLearningSampler
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+selected_indices
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+unlabeled_pool
+n_samples
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'active_samples_selected'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+selected_indices
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected_indices
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Active learning selection failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+unlabeled_pool
+torch
+●●●●●● 2mm □△
+indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+indices
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+n_samples
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unlabeled_pool
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get ML Intelligence statistics'
+stats
+●●●●●● 1mm □
+'enabled_features'
+'usage_stats'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+stats
+'neural_trust_scorer'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+stats
+'bandit'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm □
+save_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save all ML models'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Neural trust scorer saved'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Bandit state saved'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Meta-learner state saved'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] All models saved successfully'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Save failed: '
+e
+●●●●●● 2mm □△
+_orchestrator_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_ml_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get singleton ML Intelligence orchestrator'
+●●●●●● 2mm □
+_orchestrator_instance
+●●●●●● 2mm □
+_orchestrator_instance
+●●●●●● 1mm □
+MLIntelligenceOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_orchestrator_instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_orchestrator_instance
+MLIntelligenceOrchestrator
+●●●●●● 1mm □
+enhance_learning_memory_with_ml
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Integrate ML Intelligence with existing learning memory system\n\n    Call this during system initialization to enable ML enhancements\n    '
+orchestrator
+●●●●●● 1mm □
+get_ml_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Enhanced learning memory system with ML/DL components'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Features enabled:'
+●●●●●● 2mm □△
+feature
+enabled
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+enabled
+'✓'
+'✗'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+status
+' '
+feature
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+orchestrator
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[ML Intelligence] Enhancement failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □

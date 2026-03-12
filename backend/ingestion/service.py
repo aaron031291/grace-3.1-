@@ -14,7 +14,6 @@ import numpy as np
 
 from embedding import EmbeddingModel
 from vector_db.client import get_qdrant_client
-from confidence_scorer import ConfidenceScorer
 from database import session as db_session
 from database.session import initialize_session_factory
 from models.database_models import Document, DocumentChunk
@@ -272,12 +271,8 @@ class TextIngestionService:
         # NOTE: Do NOT cache qdrant_client at init time — use get_qdrant_client() each
         # time to always get the live singleton (handles reconnects, circuit breaker, etc.)
 
-        # Initialize confidence scorer
-        self.confidence_scorer = ConfidenceScorer(
-            embedding_model=embedding_model,
-            qdrant_client=get_qdrant_client(),
-            collection_name=collection_name,
-        )
+        # Initialize confidence scorer (removed by user)
+        self.confidence_scorer = None
 
         # Initialize Qdrant collection if not exists
         if self.embedding_model:
@@ -351,9 +346,6 @@ class TextIngestionService:
         Returns:
             Tuple of (document_id, status_message)
         """
-        # Sanitize input to prevent PostgreSQL NUL byte errors
-        text_content = text_content.replace("\x00", "")
-        
         logger.info(f"[INGEST_FAST] Starting fast ingestion for: {filename}")
         logger.info(f"[INGEST_FAST] Text content length: {len(text_content)} characters")
         logger.info(f"[INGEST_FAST] Metadata: {metadata}")
@@ -628,9 +620,6 @@ class TextIngestionService:
         Returns:
             Tuple of (document_id, status_message)
         """
-        # Sanitize input to prevent PostgreSQL NUL byte errors
-        text_content = text_content.replace("\x00", "")
-        
         db = self._get_db_session()
         
         try:

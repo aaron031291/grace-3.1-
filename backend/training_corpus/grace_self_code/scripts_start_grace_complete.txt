@@ -1,0 +1,881 @@
+## start_grace_complete.py
+'\nComplete Grace Startup Script (backend-internal full init).\n\nFor normal startup from project root use: start_everything.bat or python grace_start.py.\n\nInitializes and activates ALL Grace systems:\n1. Version control setup (Git hooks, file watcher)\n2. Database migrations\n3. ML Intelligence initialization\n4. Cognitive Blueprint activation\n5. Self-healing system\n6. Mirror self-modeling\n7. Layer 1 integration\n8. Autonomous learning\n9. FastAPI backend server\n\nRun this script to start Grace with all features enabled.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_header
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'Print formatted header'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_step
+●●●●●● 1mm □△
+number
+text
+●●●●●● 2mm □△
+'Print formatted step'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n['
+number
+'/9] '
+text
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_success
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'Print success message'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [OK] '
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_error
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'Print error message'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [ERROR] '
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+print_warning
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'Print warning message'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  [WARN] '
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_python_version
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check Python version'
+version
+●●●●●● 1mm □
+sys
+●●●●●● 2mm □
+version
+3
+version
+3
+version
+8
+print_error
+●●●●●● 1mm □△
+'Python 3.8+ required, found '
+version
+'.'
+version
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+print_success
+●●●●●● 1mm □△
+'Python '
+version
+'.'
+version
+'.'
+version
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+install_dependencies
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Install required dependencies'
+print_step
+●●●●●● 1mm □△
+1
+'Installing dependencies'
+●●●●●● 2mm □△
+requirements_file
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'requirements.txt'
+●●●●●● 2mm □
+requirements_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_warning
+●●●●●● 1mm □△
+'No requirements.txt found, skipping...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+sys
+'-m'
+'pip'
+'install'
+'-r'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+requirements_file
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+0
+print_success
+●●●●●● 1mm □△
+'Dependencies installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+print_error
+●●●●●● 1mm □△
+'Failed to install dependencies: '
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+subprocess
+print_error
+●●●●●● 1mm □△
+'Dependency installation timed out'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+print_error
+●●●●●● 1mm □△
+'Error installing dependencies: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+setup_version_control
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Setup version control system'
+print_step
+●●●●●● 1mm □△
+2
+'Setting up version control'
+●●●●●● 2mm □△
+setup_script
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'scripts'
+●●●●●● 3mm □△
+'setup_version_control.py'
+●●●●●● 2mm □
+setup_script
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_warning
+●●●●●● 1mm □△
+'Version control setup script not found, skipping...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+sys
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+setup_script
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+0
+print_success
+●●●●●● 1mm □△
+'Version control setup complete'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+print_warning
+●●●●●● 1mm □△
+'Version control setup had issues: '
+result
+200
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_warning
+●●●●●● 1mm □△
+'Version control setup error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+check_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check database connection'
+print_step
+●●●●●● 1mm □△
+3
+'Checking database'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Database connection verified'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_error
+●●●●●● 1mm □△
+'Database error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+run_migrations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run database migrations'
+print_step
+●●●●●● 1mm □△
+4
+'Running database migrations'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Database migrations complete'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_error
+●●●●●● 1mm □△
+'Migration error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+check_llm_provider
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check LLM service provider'
+print_step
+●●●●●● 1mm □△
+5
+'Checking LLM service'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+provider
+●●●●●● 1mm □
+settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+provider
+' service running with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+' model(s)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models
+model_names
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+m
+'name'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+m
+models
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Models: '
+', '
+●●●●●● 1mm □△
+model_names
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+print_warning
+●●●●●● 1mm □△
+provider
+' service not responding - AI features will be unavailable'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+provider
+'OLLAMA'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Start Ollama: ollama serve'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_warning
+●●●●●● 1mm □△
+'LLM check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+check_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check Qdrant service'
+print_step
+●●●●●● 1mm □△
+6
+'Checking Qdrant vector database'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Qdrant running with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+collections
+●●●●●● 2mm □△
+' collection(s)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+print_warning
+●●●●●● 1mm □△
+'Qdrant not running - ingestion will be unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Start Qdrant: docker run -p 6333:6333 qdrant/qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_warning
+●●●●●● 1mm □△
+'Qdrant check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+initialize_ml_intelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Initialize ML Intelligence'
+print_step
+●●●●●● 1mm □△
+7
+'Initializing ML Intelligence'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.integration_orchestrator
+●●●●●● 2mm □△○
+MLIntelligenceOrchestrator
+orchestrator
+●●●●●● 1mm □
+MLIntelligenceOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+enabled
+●●●●●● 1mm □
+k
+k
+v
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+print_success
+●●●●●● 1mm □△
+'ML Intelligence ready - '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+enabled
+●●●●●● 2mm □△
+' features enabled'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      Features: '
+', '
+●●●●●● 1mm □△
+enabled
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+print_warning
+●●●●●● 1mm □△
+'ML Intelligence unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      System will use rule-based fallbacks'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+verify_systems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify all systems are ready'
+print_step
+●●●●●● 1mm □△
+8
+'Verifying all systems'
+●●●●●● 2mm □△
+systems
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+CognitiveEngine
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+systems
+●●●●●● 1mm □△
+'Cognitive Blueprint'
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Cognitive Blueprint ready'
+●●●●●● 2mm □△
+Exception
+print_warning
+●●●●●● 1mm □△
+'Cognitive Blueprint: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+systems
+●●●●●● 1mm □△
+'Self-Healing System'
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Self-Healing System ready'
+●●●●●● 2mm □△
+Exception
+print_warning
+●●●●●● 1mm □△
+'Self-Healing: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+systems
+●●●●●● 1mm □△
+'Mirror Self-Modeling'
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Mirror Self-Modeling ready'
+●●●●●● 2mm □△
+Exception
+print_warning
+●●●●●● 1mm □△
+'Mirror: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.initialize
+●●●●●● 2mm □△○
+initialize_layer1
+systems
+●●●●●● 1mm □△
+'Layer 1 Integration'
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Layer 1 Integration ready'
+●●●●●● 2mm □△
+Exception
+print_warning
+●●●●●● 1mm □△
+'Layer 1: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_learning
+●●●●●● 2mm □△○
+get_learning_orchestrator
+systems
+●●●●●● 1mm □△
+'Autonomous Learning'
+●●●●●● 2mm □△
+print_success
+●●●●●● 1mm □△
+'Autonomous Learning ready'
+●●●●●● 2mm □△
+Exception
+print_warning
+●●●●●● 1mm □△
+'Autonomous Learning: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n      '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+systems
+●●●●●● 2mm □△
+'/5 core systems operational'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+start_server
+●●●●●● 1mm □△
+port
+host
+●●●●●● 2mm □△
+8000
+'0.0.0.0'
+'Start FastAPI server'
+print_step
+●●●●●● 1mm □△
+9
+'Starting Grace API server on '
+host
+':'
+port
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  GRACE COMPLETE SYSTEM - READY TO START'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Server will start on: http://'
+host
+':'
+port
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  API documentation: http://'
+host
+':'
+port
+'/docs'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Health check: http://'
+host
+':'
+port
+'/health'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Press Ctrl+C to stop\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+uvicorn
+uvicorn
+●●●●●● 1mm □△
+'app:app'
+●●●●●● 2mm □△
+KeyboardInterrupt
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n\nGrace shutting down...'
+●●●●●● 2mm □△
+Exception
+print_error
+●●●●●● 1mm □△
+'Server error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main startup sequence'
+print_header
+●●●●●● 1mm □△
+'GRACE COMPLETE SYSTEM STARTUP'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nInitializing all autonomous systems...\n'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+steps
+●●●●●● 1mm □
+'Python version'
+check_python_version
+'Dependencies'
+●●●●●● 3mm □△○
+'Version control'
+setup_version_control
+'Database'
+check_database
+'Migrations'
+run_migrations
+'LLM'
+check_llm_provider
+'Qdrant'
+check_qdrant
+'ML Intelligence'
+initialize_ml_intelligence
+'System verification'
+verify_systems
+failed
+●●●●●● 1mm □
+step_name
+step_func
+steps
+●●●●●● 2mm □
+step_func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □△
+step_name
+●●●●●● 2mm □△
+Exception
+print_error
+●●●●●● 1mm □△
+step_name
+' failed: '
+e
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □△
+step_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  WARNING: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failed
+●●●●●● 2mm □△
+' step(s) had issues:'
+●●●●●● 2mm □△
+step
+failed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+step
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  Continuing anyway...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+start_server
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

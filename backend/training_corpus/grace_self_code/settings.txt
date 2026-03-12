@@ -1,0 +1,1009 @@
+## settings.py
+'\nSettings module that loads configuration from environment variables.\nProvides centralized configuration for the application.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+ENV_FILE
+●●●●●● 1mm □
+BACKEND_DIR
+●●●●●● 3mm □△
+'.env'
+load_dotenv
+●●●●●● 1mm □△
+ENV_FILE
+●●●●●● 2mm □△
+KNOWLEDGE_BASE_PATH
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+Settings
+'Application settings loaded from environment variables.'
+OLLAMA_URL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_URL'
+'http://localhost:11434'
+●●●●●● 2mm □△
+OLLAMA_LLM_DEFAULT
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_LLM_DEFAULT'
+'qwen3:14b'
+●●●●●● 2mm □△
+EMBEDDING_DEFAULT
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'EMBEDDING_DEFAULT'
+'all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+EMBEDDING_MODEL_PATH
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+EMBEDDING_DEFAULT
+●●●●●● 2mm □△
+EMBEDDING_DEVICE
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'EMBEDDING_DEVICE'
+'cuda'
+●●●●●● 2mm □△
+EMBEDDING_NORMALIZE
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'EMBEDDING_NORMALIZE'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+LIGHTWEIGHT_MODE
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'LIGHTWEIGHT_MODE'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SKIP_EMBEDDING_LOAD
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SKIP_QDRANT_CHECK
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SKIP_QDRANT_CHECK'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SKIP_OLLAMA_CHECK
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SKIP_OLLAMA_CHECK'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SKIP_AUTO_INGESTION
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SKIP_AUTO_INGESTION'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+HEALING_SIMULATION_MODE
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'HEALING_SIMULATION_MODE'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SUPPRESS_INGESTION_ERRORS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SUPPRESS_INGESTION_ERRORS'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+DISABLE_GENESIS_TRACKING
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'DISABLE_GENESIS_TRACKING'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+DATABASE_TYPE
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_TYPE'
+'postgresql'
+●●●●●● 2mm □△
+DATABASE_HOST
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_HOST'
+'localhost'
+●●●●●● 2mm □△
+DATABASE_PORT
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'DATABASE_PORT'
+'0'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+DATABASE_USER
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_USER'
+''
+●●●●●● 2mm □△
+DATABASE_PASSWORD
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_PASSWORD'
+''
+●●●●●● 2mm □△
+DATABASE_NAME
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_NAME'
+'grace'
+●●●●●● 2mm □△
+DATABASE_PATH
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_PATH'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+DATABASE_ECHO
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'DATABASE_ECHO'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+DATABASE_SSLMODE
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_SSLMODE'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+QDRANT_HOST
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'QDRANT_HOST'
+'localhost'
+●●●●●● 2mm □△
+QDRANT_PORT
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'QDRANT_PORT'
+'6333'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+QDRANT_API_KEY
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'QDRANT_API_KEY'
+''
+●●●●●● 2mm □△
+QDRANT_URL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+QDRANT_COLLECTION_NAME
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'QDRANT_COLLECTION_NAME'
+'documents'
+●●●●●● 2mm □△
+QDRANT_TIMEOUT
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'QDRANT_TIMEOUT'
+'30'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+INGESTION_CHUNK_SIZE
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'INGESTION_CHUNK_SIZE'
+'512'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+INGESTION_CHUNK_OVERLAP
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'INGESTION_CHUNK_OVERLAP'
+'50'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+LIBRARIAN_AUTO_PROCESS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'LIBRARIAN_AUTO_PROCESS'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+LIBRARIAN_USE_AI
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'LIBRARIAN_USE_AI'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+LIBRARIAN_DETECT_RELATIONSHIPS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'LIBRARIAN_DETECT_RELATIONSHIPS'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+LIBRARIAN_AI_CONFIDENCE_THRESHOLD
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'LIBRARIAN_AI_CONFIDENCE_THRESHOLD'
+'0.6'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+LIBRARIAN_SIMILARITY_THRESHOLD
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'LIBRARIAN_SIMILARITY_THRESHOLD'
+'0.7'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES'
+'20'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+LIBRARIAN_AI_MODEL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'LIBRARIAN_AI_MODEL'
+'mistral:7b'
+●●●●●● 2mm □△
+DEBUG
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'DEBUG'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+LOG_LEVEL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'LOG_LEVEL'
+'INFO'
+●●●●●● 2mm □△
+MAX_NUM_PREDICT
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'MAX_NUM_PREDICT'
+'512'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+DISABLE_CONTINUOUS_LEARNING
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'DISABLE_CONTINUOUS_LEARNING'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+DISABLE_PROACTIVE_HEALING
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'DISABLE_PROACTIVE_HEALING'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SUPPRESS_GENESIS_ERRORS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SUPPRESS_GENESIS_ERRORS'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SUPPRESS_QDRANT_ERRORS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SUPPRESS_QDRANT_ERRORS'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SUPPRESS_EMBEDDING_ERRORS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SUPPRESS_EMBEDDING_ERRORS'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+EXCLUDE_GENESIS_FROM_INGESTION
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'EXCLUDE_GENESIS_FROM_INGESTION'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+CONSENSUS_BATCH_SCHEDULE
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'CONSENSUS_BATCH_SCHEDULE'
+'daily'
+●●●●●● 2mm □△
+CONSENSUS_MAX_BATCH_SIZE
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'CONSENSUS_MAX_BATCH_SIZE'
+'5'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SERPAPI_KEY
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'SERPAPI_KEY'
+''
+●●●●●● 2mm □△
+SERPAPI_ENABLED
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SERPAPI_ENABLED'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SERPAPI_MAX_RESULTS
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'SERPAPI_MAX_RESULTS'
+'5'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+SERPAPI_AUTO_SCRAPE
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'SERPAPI_AUTO_SCRAPE'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GITHUB_TOKEN
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'GITHUB_TOKEN'
+''
+●●●●●● 2mm □△
+GAP_FILL_GITHUB
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_GITHUB'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_STACKOVERFLOW
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_STACKOVERFLOW'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_ARXIV
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_ARXIV'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_WIKIPEDIA
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_WIKIPEDIA'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_HACKERNEWS
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_HACKERNEWS'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_DEVTO
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_DEVTO'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_PYPI
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_PYPI'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_MDN
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_MDN'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_SEMANTIC_SCHOLAR
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_SEMANTIC_SCHOLAR'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_NPM
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_NPM'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+GAP_FILL_IETF_RFC
+●●●●●● 3mm △
+os
+●●●●●● 1mm □△
+'GAP_FILL_IETF_RFC'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+SEMANTIC_SCHOLAR_API_KEY
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'SEMANTIC_SCHOLAR_API_KEY'
+''
+●●●●●● 2mm □△
+LLM_PROVIDER
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'LLM_PROVIDER'
+'ollama'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LLM_API_KEY
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'LLM_API_KEY'
+''
+●●●●●● 2mm □△
+LLM_MODEL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'LLM_MODEL'
+''
+●●●●●● 2mm □△
+KIMI_API_KEY
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'KIMI_API_KEY'
+''
+●●●●●● 2mm □△
+KIMI_BASE_URL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'KIMI_BASE_URL'
+'https://api.moonshot.ai/v1'
+●●●●●● 2mm □△
+KIMI_MODEL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'KIMI_MODEL'
+'kimi-k2.5'
+●●●●●● 2mm □△
+OPUS_API_KEY
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OPUS_API_KEY'
+''
+●●●●●● 2mm □△
+OPUS_BASE_URL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OPUS_BASE_URL'
+'https://api.anthropic.com/v1'
+●●●●●● 2mm □△
+OPUS_MODEL
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OPUS_MODEL'
+'claude-sonnet-4-20250514'
+●●●●●● 2mm □△
+OLLAMA_MODEL_CODE
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_CODE'
+'qwen2.5-coder:32b'
+●●●●●● 2mm □△
+OLLAMA_MODEL_REASON
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_REASON'
+'qwen3:32b'
+●●●●●● 2mm □△
+OLLAMA_MODEL_FAST
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_FAST'
+'qwen3:14b'
+●●●●●● 2mm □△
+OLLAMA_MODEL_DOCUMENT
+●●●●●● 1mm ○
+os
+●●●●●● 1mm □△
+'OLLAMA_MODEL_DOCUMENT'
+'qwen3:32b'
+●●●●●● 2mm □△
+KNOWLEDGE_BASE_PATH
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+validate
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'\n        Validate that all required settings are properly configured.\n        \n        Returns:\n            bool: True if all settings are valid\n            \n        Raises:\n            ValueError: If required settings are missing or invalid\n        '
+errors
+●●●●●● 1mm □
+●●●●●● 2mm □
+cls
+'openai'
+●●●●●● 2mm □
+cls
+errors
+●●●●●● 1mm □△
+"LLM_API_KEY is required when LLM_PROVIDER is 'openai'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+cls
+●●●●●● 1mm □
+'gpt-4o'
+●●●●●● 1mm △
+cls
+'ollama'
+●●●●●● 2mm □
+cls
+errors
+●●●●●● 1mm □△
+'OLLAMA_URL is not set'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+cls
+●●●●●● 1mm □
+cls
+errors
+●●●●●● 1mm □△
+"Unsupported LLM_PROVIDER: '"
+cls
+"'. Must be 'ollama' or 'openai'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+'ollama'
+●●●●●● 2mm □
+cls
+errors
+●●●●●● 1mm □△
+'OLLAMA_URL is not set'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+errors
+●●●●●● 1mm □△
+'OLLAMA_LLM_DEFAULT is not set'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+errors
+●●●●●● 1mm □△
+'EMBEDDING_DEFAULT is not set'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+'cuda'
+'cpu'
+errors
+●●●●●● 1mm □△
+"EMBEDDING_DEVICE must be 'cuda' or 'cpu', got '"
+cls
+"'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors
+ValueError
+●●●●●● 1mm □△
+'Settings validation failed:\n  - '
+●●●●●● 3mm ○
+'\n  - '
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Get all settings as a dictionary.'
+●●●●●● 3mm ○
+'OLLAMA_URL'
+'OLLAMA_LLM_DEFAULT'
+'EMBEDDING_DEFAULT'
+'EMBEDDING_MODEL_PATH'
+'EMBEDDING_DEVICE'
+'EMBEDDING_NORMALIZE'
+'DATABASE_TYPE'
+'DATABASE_HOST'
+'DATABASE_PORT'
+'DATABASE_USER'
+'DATABASE_NAME'
+'DATABASE_PATH'
+'DATABASE_ECHO'
+'QDRANT_HOST'
+'QDRANT_PORT'
+'QDRANT_COLLECTION_NAME'
+'QDRANT_TIMEOUT'
+'INGESTION_CHUNK_SIZE'
+'INGESTION_CHUNK_OVERLAP'
+'LIBRARIAN_AUTO_PROCESS'
+'LIBRARIAN_USE_AI'
+'LIBRARIAN_DETECT_RELATIONSHIPS'
+'LIBRARIAN_AI_CONFIDENCE_THRESHOLD'
+'LIBRARIAN_SIMILARITY_THRESHOLD'
+'LIBRARIAN_MAX_RELATIONSHIP_CANDIDATES'
+'LIBRARIAN_AI_MODEL'
+'DEBUG'
+'LOG_LEVEL'
+'MAX_NUM_PREDICT'
+'SKIP_QDRANT_CHECK'
+'SKIP_OLLAMA_CHECK'
+'SKIP_AUTO_INGESTION'
+'SKIP_EMBEDDING_LOAD'
+'LIGHTWEIGHT_MODE'
+'HEALING_SIMULATION_MODE'
+'DISABLE_GENESIS_TRACKING'
+'SUPPRESS_INGESTION_ERRORS'
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'String representation of settings.'
+settings
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+'Settings Configuration:'
+key
+value
+settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'URL'
+key
+'PATH'
+key
+lines
+●●●●●● 1mm □△
+'  '
+key
+': '
+value
+●●●●●● 2mm □△
+●●●●●● 3mm □
+lines
+●●●●●● 1mm □△
+'  '
+key
+': '
+value
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+settings
+●●●●●● 1mm □
+Settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Warning: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Using default values for missing settings'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+Settings
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDetailed Settings:'
+●●●●●● 2mm □△
+key
+value
+Settings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+key
+': '
+value
+●●●●●● 2mm □△

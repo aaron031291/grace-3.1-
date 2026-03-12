@@ -1,0 +1,270 @@
+## test_api_cognitive.py
+'\nTests for Cognitive System API endpoints.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestCognitiveStatus
+'Test cognitive system status endpoints.'
+●●●●●● 1mm □
+test_get_cognitive_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting cognitive engine status via stats/summary.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/cognitive/stats/summary'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_cognitive_health
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test cognitive engine health check via stats.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/cognitive/stats/summary'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestCognitiveEngine
+'Test cognitive engine operations.'
+●●●●●● 1mm □
+test_process_cognitive_query
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test processing a query through cognitive engine via layer1.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/cognitive/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_cognitive_observe
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test cognitive observation via decisions endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/cognitive/decisions/recent'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_cognitive_orient
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test cognitive orientation via layer1 cognitive.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/layer1/cognitive/decisions'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestMemoryMesh
+'Test memory mesh endpoints.'
+●●●●●● 1mm □
+test_get_memory_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting memory mesh status via learning memory.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/learning-memory/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_store_memory
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test storing a memory entry via learning memory.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/learning-memory/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_retrieve_memories
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test retrieving memories via learning memory.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/learning-memory/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+pytest
+●●●●●● 2mm △
+TestContradictionDetection
+'Test contradiction detection endpoints.'
+●●●●●● 1mm □
+test_detect_contradictions
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test contradiction detection via ingest search.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/search'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_get_contradiction_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting contradiction detection history via cognitive.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/cognitive/stats/summary'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestLearningSubagents
+'Test learning subagent endpoints.'
+●●●●●● 1mm □
+test_get_subagent_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting learning subagent status via autonomous learning.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/autonomous-learning/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_create_learning_task
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a learning task via proactive learning.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/proactive-learning/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_get_learning_progress
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting learning progress via autonomous learning.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/autonomous-learning/status'
+●●●●●● 2mm □△
+response
+200
+404
+500
+pytest

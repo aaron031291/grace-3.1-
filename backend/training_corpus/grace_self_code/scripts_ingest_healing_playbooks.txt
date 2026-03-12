@@ -1,0 +1,247 @@
+## ingest_healing_playbooks.py
+"\ningest_healing_playbooks.py\nReads all YAML playbooks in backend/self_healing/playbooks and uploads them\ninto Grace's Unified Memory and Magma Cognitive Bridge as structured knowledge.\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+glob
+●●●●●● 2mm □△○
+yaml
+●●●●●● 2mm □△○
+json
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive
+●●●●●● 2mm □△○
+magma_bridge
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+●●●●●● 1mm □
+ingest_all_playbooks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+playbooks_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'self_healing'
+'playbooks'
+●●●●●● 2mm □△
+yaml_files
+●●●●●● 1mm □
+glob
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+playbooks_dir
+'*.yaml'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+yaml_files
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'No yaml playbooks found.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+yaml_files
+●●●●●● 2mm □△
+' playbooks. Ensuring Memory connections...'
+●●●●●● 2mm □△
+unified_mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success_count
+●●●●●● 1mm □
+0
+yaml_path
+yaml_files
+filename
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+yaml_path
+●●●●●● 2mm □△
+playbook_name
+●●●●●● 1mm □
+filename
+●●●●●● 1mm □△
+'.yaml'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+yaml_path
+'r'
+●●●●●● 2mm □△
+f
+playbook_data
+●●●●●● 1mm □
+yaml
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+trigger
+●●●●●● 1mm □
+playbook_data
+●●●●●● 1mm □△
+'trigger'
+'unknown'
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+playbook_data
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+remediation
+●●●●●● 1mm □
+playbook_data
+●●●●●● 1mm □△
+'remediation'
+●●●●●● 2mm □△
+conditions
+●●●●●● 1mm □
+playbook_data
+●●●●●● 1mm □△
+'conditions'
+●●●●●● 2mm □△
+steps
+●●●●●● 1mm □
+step
+remediation
+steps
+●●●●●● 1mm □△
+'['
+step
+●●●●●● 1mm □△
+'module'
+'sys'
+●●●●●● 2mm □△
+'.'
+step
+●●●●●● 1mm □△
+'function'
+'func'
+●●●●●● 2mm □△
+'] '
+step
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Ingesting playbook: '
+playbook_name
+' (Trigger: '
+trigger
+')'
+●●●●●● 2mm □△
+magma_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+raw_text
+●●●●●● 1mm □
+"Self-Healing Playbook '"
+playbook_name
+"' triggered by '"
+trigger
+"'. Description: "
+description
+'. Steps to resolve: '
+json
+●●●●●● 1mm □△
+steps
+●●●●●● 2mm □△
+magma_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unified_mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success_count
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+" → Successfully ingested '"
+playbook_name
+"'."
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+" ❌ Failed to ingest '"
+playbook_name
+"': "
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nCompleted! Successfully uploaded '
+success_count
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+yaml_files
+●●●●●● 2mm □△
+" playbooks to Grace's memory mesh."
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'false'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_QDRANT_CHECK'
+'false'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'DISABLE_CONTINUOUS_LEARNING'
+'true'
+●●●●●● 2mm □△
+ingest_all_playbooks
+●●●●●● 1mm □△
+●●●●●● 2mm □△

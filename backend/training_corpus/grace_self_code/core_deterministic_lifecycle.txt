@@ -1,0 +1,2101 @@
+## deterministic_lifecycle.py
+'\nDeterministic Component Lifecycle Manager\n==========================================\nFull agentic deterministic lifecycle for any component:\n\n    REGISTER → LOG → PROBE → TEST → SCAN → FIX → REASON → HEAL → VERIFY → LOOP\n\nThe hallucination-proof, recursive self-healing chain:\n\n  1. REGISTER:  Component discovered/added → Genesis Key created, deterministic log\n  2. LOG:       Every lifecycle event is deterministically logged (AST-verified)\n  3. PROBE:     Is it alive? HTTP probe, import check, instantiation test\n  4. TEST:      Does it work correctly? Deterministic I/O tests (component_validator)\n  5. SCAN:      If unhealthy → full deterministic scan (syntax, imports, deps, wiring)\n  6. FIX:       Try deterministic auto-fix first (no LLM) — DeterministicAutoFixer\n  7. REASON:    If deterministic fix fails → LLM reasoning (constrained by facts)\n  8. HEAL:      Self-heal via coding agent / healing coordinator if needed\n  9. VERIFY:    Re-probe + re-test after fix — confirm it actually works\n 10. LOOP:      Recursive until healthy or max iterations reached → escalate\n\nAll steps tracked via Genesis Keys with full provenance.\nIntegrates: probe_agent, deterministic_bridge, component_validator,\n            coding_pipeline, healing_coordinator, circuit_breaker, genesis_triggers\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+importlib
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Callable
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+core.deterministic_logger
+●●●●●● 2mm □△○
+log_event
+log_component_registered
+log_component_alive
+log_component_dead
+log_scan_started
+log_scan_result
+log_fix_attempted
+log_fix_result
+log_heal_escalated
+log_verify_result
+get_event_log
+get_event_summary
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+MAX_RECURSIVE_ITERATIONS
+●●●●●● 1mm □
+5
+PROBE_TIMEOUT_SECONDS
+●●●●●● 1mm □
+5
+●●●●●● 2mm △
+ComponentRegistration
+'A registered component in the lifecycle system.'
+component_id
+●●●●●● 1mm ○
+label
+●●●●●● 1mm ○
+file_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+health_url
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+import_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+class_name
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dependencies
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registered_at
+●●●●●● 1mm ○
+''
+status
+●●●●●● 1mm ○
+'unknown'
+last_probed
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+probe_latency_ms
+●●●●●● 3mm ○
+0
+consecutive_failures
+●●●●●● 2mm ○
+0
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+LifecycleResult
+'Result of a full lifecycle cycle for a component.'
+component_id
+●●●●●● 1mm ○
+started_at
+●●●●●● 1mm ○
+completed_at
+●●●●●● 1mm ○
+''
+iterations
+●●●●●● 2mm ○
+0
+final_status
+●●●●●● 1mm ○
+'unknown'
+steps
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues_found
+●●●●●● 2mm ○
+0
+issues_fixed
+●●●●●● 2mm ○
+0
+deterministic_fixes
+●●●●●● 2mm ○
+0
+llm_fixes
+●●●●●● 2mm ○
+0
+escalated
+●●●●●● 3mm △
+●●●●●● 1mm □
+healthy
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+asdict
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+_registry
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ComponentRegistration
+_registry_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+register_component
+●●●●●● 1mm □△
+component_id
+label
+file_path
+health_url
+import_path
+class_name
+dependencies
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Register a component in the deterministic lifecycle system.\n    Creates a Genesis Key for the registration event.\n    '
+reg
+●●●●●● 1mm □
+ComponentRegistration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_registry_lock
+_registry
+component_id
+●●●●●● 1mm □
+reg
+log_component_registered
+●●●●●● 1mm □△
+component_id
+file_path
+'label'
+'health_url'
+'import_path'
+'dependencies'
+label
+health_url
+import_path
+dependencies
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+result
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'key_id'
+●●●●●● 2mm □△
+reg
+●●●●●● 1mm □
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[LIFECYCLE] Registered component: '
+component_id
+' ('
+label
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+reg
+ComponentRegistration
+●●●●●● 1mm □
+auto_discover_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Auto-discover components from existing registries\n    (component_health, semantic_search, Layer 1 connectors).\n    '
+discovered
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+COMPONENT_REGISTRY
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reg
+●●●●●● 1mm □
+register_component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+discovered
+●●●●●● 1mm □△
+reg
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Component health registry not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+COMPONENTS
+comp_id
+info
+COMPONENTS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp_id
+_registry
+reg
+●●●●●● 1mm □
+register_component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+discovered
+●●●●●● 1mm □△
+reg
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+discovered
+●●●●●● 3mm □△
+ComponentRegistration
+●●●●●● 1mm □
+probe_component
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Deterministic liveness probe for a component.\n    Tries (in order): HTTP probe, import check, file existence.\n    '
+reg
+●●●●●● 1mm □
+_registry
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+●●●●●● 3mm ○
+'alive'
+'error'
+●●●●●● 1mm □
+'Component '
+component_id
+' not registered'
+result
+●●●●●● 1mm □
+'component_id'
+'alive'
+'method'
+'latency_ms'
+'error'
+component_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+0
+●●●●●● 2mm □
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+●●●●●● 2mm □△○
+urllib.request
+urllib
+●●●●●● 1mm □△
+reg
+●●●●●● 2mm □△
+result
+'alive'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'method'
+●●●●●● 1mm □
+'http'
+result
+'latency_ms'
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+reg
+●●●●●● 1mm □
+'alive'
+reg
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reg
+●●●●●● 1mm □
+result
+'latency_ms'
+reg
+●●●●●● 1mm □
+0
+log_component_alive
+●●●●●● 1mm □△
+component_id
+result
+'latency_ms'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □
+reg
+mod
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+reg
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mod
+reg
+●●●●●● 2mm □△
+result
+'alive'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'method'
+●●●●●● 1mm □
+'import'
+●●●●●● 1mm △
+reg
+result
+'alive'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'method'
+●●●●●● 1mm □
+'import'
+result
+'error'
+●●●●●● 1mm □
+'Class '
+reg
+' not found in '
+reg
+result
+'latency_ms'
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □
+result
+'alive'
+reg
+full_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+reg
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'alive'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'method'
+●●●●●● 1mm □
+'file_ast'
+result
+'latency_ms'
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+SyntaxError
+result
+'error'
+●●●●●● 1mm □
+'Syntax error: '
+e
+' (line '
+e
+')'
+●●●●●● 3mm □
+result
+'error'
+●●●●●● 1mm □
+'File not found: '
+reg
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'alive'
+reg
+●●●●●● 1mm □
+'alive'
+reg
+●●●●●● 1mm □
+0
+log_component_alive
+●●●●●● 1mm □△
+component_id
+result
+'latency_ms'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+reg
+1
+●●●●●● 3mm □
+reg
+●●●●●● 1mm □
+'dead'
+●●●●●● 3mm □
+log_component_dead
+●●●●●● 1mm □△
+component_id
+result
+●●●●●● 1mm □△
+'error'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+reg
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reg
+●●●●●● 1mm □
+result
+'latency_ms'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+probe_all_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Probe all registered components and return a health map.'
+results
+●●●●●● 1mm □
+alive_count
+●●●●●● 1mm □
+0
+dead_count
+●●●●●● 1mm □
+0
+_registry_lock
+component_ids
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp_id
+component_ids
+probe
+●●●●●● 1mm □
+probe_component
+●●●●●● 1mm □△
+comp_id
+●●●●●● 2mm □△
+results
+comp_id
+●●●●●● 1mm □
+probe
+●●●●●● 2mm □
+probe
+'alive'
+alive_count
+1
+●●●●●● 3mm □
+dead_count
+1
+●●●●●● 3mm ○
+'total'
+'alive'
+'dead'
+'components'
+'probed_at'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+alive_count
+dead_count
+results
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+test_component
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Run deterministic I/O tests via component_validator.\n    Falls back to a basic import+instantiation test if no test cases defined.\n    '
+result
+●●●●●● 1mm □
+'component_id'
+'tested'
+'passed'
+'failed'
+'pass_rate'
+component_id
+●●●●●● 1mm □
+0
+0
+0.0
+●●●●●● 3mm □△○
+core.component_validator
+●●●●●● 2mm □△○
+get_report_card
+card
+●●●●●● 1mm □
+get_report_card
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+card
+card
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'not_validated'
+result
+'tested'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'passed'
+●●●●●● 1mm □
+card
+●●●●●● 1mm □△
+'passed'
+0
+●●●●●● 2mm □△
+result
+'failed'
+●●●●●● 1mm □
+card
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+result
+'pass_rate'
+●●●●●● 1mm □
+card
+●●●●●● 1mm □△
+'pass_rate'
+0
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+card
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+reg
+●●●●●● 1mm □
+_registry
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+reg
+full_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+reg
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'tested'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'passed'
+●●●●●● 1mm □
+1
+result
+'pass_rate'
+●●●●●● 1mm □
+100.0
+result
+'status'
+●●●●●● 1mm □
+'healthy'
+SyntaxError
+result
+'tested'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'failed'
+●●●●●● 1mm □
+1
+result
+'status'
+●●●●●● 1mm □
+'failing'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+scan_component
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Run deterministic scan on a component.\n    Uses the deterministic bridge for system-wide checks,\n    plus targeted file analysis for the specific component.\n    '
+log_scan_started
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'component_id'
+'problems'
+'total_problems'
+'critical'
+component_id
+0
+0
+reg
+●●●●●● 1mm □
+_registry
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+reg
+full_path
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+reg
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+SyntaxError
+result
+'problems'
+●●●●●● 1mm □△
+'type'
+'file'
+'line'
+'message'
+'severity'
+'deterministic'
+'syntax_error'
+reg
+e
+e
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+module_path
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'.'
+'/'
+●●●●●● 2mm □△
+top_level
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+local_dirs
+●●●●●● 1mm □
+d
+d
+BACKEND_ROOT
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+top_level
+local_dirs
+possible
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+module_path
+'.py'
+BACKEND_ROOT
+●●●●●● 3mm □△
+module_path
+●●●●●● 3mm □△
+'__init__.py'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+possible
+●●●●●● 2mm □△
+result
+'problems'
+●●●●●● 1mm □△
+'type'
+'file'
+'line'
+'module'
+'severity'
+'deterministic'
+'broken_import'
+reg
+node
+node
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □
+result
+'problems'
+●●●●●● 1mm □△
+'type'
+'file'
+'severity'
+'deterministic'
+'missing_file'
+reg
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+reg
+dep
+reg
+dep_reg
+●●●●●● 1mm □
+_registry
+●●●●●● 1mm □△
+dep
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dep_reg
+dep_reg
+'dead'
+result
+'problems'
+●●●●●● 1mm □△
+'type'
+'dependency'
+'severity'
+'deterministic'
+'dependency_dead'
+dep
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+det_report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_problems
+●●●●●● 1mm □
+p
+det_report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+pfile
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+'file'
+p
+●●●●●● 1mm □△
+'module'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+reg
+reg
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+pfile
+●●●●●● 2mm □△
+component_problems
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm △
+reg
+component_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+pfile
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_problems
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+result
+'problems'
+●●●●●● 1mm □△
+component_problems
+●●●●●● 2mm □△
+Exception
+result
+'total_problems'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'problems'
+●●●●●● 2mm □△
+result
+'critical'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+result
+'problems'
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+●●●●●● 2mm □△
+log_scan_result
+●●●●●● 1mm □△
+component_id
+result
+'total_problems'
+result
+'critical'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fix_deterministic
+●●●●●● 1mm □△
+component_id
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'\n    Attempt to fix problems deterministically — no LLM needed.\n    Uses DeterministicAutoFixer for known patterns.\n    '
+result
+●●●●●● 1mm □
+'component_id'
+'attempted'
+'fixed'
+'unfixed'
+'fixes_applied'
+component_id
+0
+0
+●●●●●● 2mm □
+problems
+●●●●●● 3mm ○
+result
+log_fix_attempted
+●●●●●● 1mm □△
+component_id
+'deterministic_auto_fix'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+DeterministicAutoFixer
+fixer
+●●●●●● 1mm □
+DeterministicAutoFixer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixes
+●●●●●● 1mm □
+fixer
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+result
+'attempted'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+result
+'fixed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fixes
+●●●●●● 2mm □△
+result
+'fixes_applied'
+●●●●●● 1mm □
+fixes
+fixed_types
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+f
+fixes
+result
+'unfixed'
+●●●●●● 1mm □
+p
+p
+problems
+p
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+fixed_types
+●●●●●● 2mm □
+fixes
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 3mm □△○
+'deterministic ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fixes
+●●●●●● 2mm □△
+' fixes)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'unfixed'
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 1mm □
+'deterministic ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'unfixed'
+●●●●●● 2mm □△
+' remaining)'
+●●●●●● 2mm □△
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+result
+'unfixed'
+●●●●●● 1mm □
+problems
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 1mm □
+'deterministic (error: '
+e
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+reason_with_llm
+●●●●●● 1mm □△
+component_id
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'\n    Feed deterministic facts to LLM for reasoning about unfixed problems.\n    The LLM only sees verified facts — no guessing.\n    '
+result
+●●●●●● 1mm □
+'component_id'
+'reasoning_requested'
+'llm_response'
+'fix_suggestion'
+component_id
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+problems
+result
+'reasoning_requested'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+result
+log_heal_escalated
+●●●●●● 1mm □△
+component_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+' unfixed problems'
+●●●●●● 2mm □△
+facts
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+'- ['
+p
+●●●●●● 1mm □△
+'type'
+'unknown'
+●●●●●● 2mm □△
+'] '
+p
+●●●●●● 1mm □△
+'file'
+p
+●●●●●● 1mm □△
+'module'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' '
+p
+●●●●●● 1mm □△
+'line'
+●●●●●● 2mm □△
+'line '
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'line'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+': '
+''
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+problems
+10
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+"DETERMINISTIC FACTS for component '"
+component_id
+"' (verified, not guessed):\n"
+facts
+'\n\n1. Explain the root cause of these problems.\n2. Provide the EXACT fix for each problem.\n3. Return ONLY corrected code if applicable.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+llm_result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'generate'
+'prompt'
+prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm_result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+result
+'llm_response'
+●●●●●● 1mm □
+llm_result
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+2000
+result
+'fix_suggestion'
+●●●●●● 1mm □
+result
+'llm_response'
+Exception
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+heal_component
+●●●●●● 1mm □△
+component_id
+problems
+llm_reasoning
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'\n    Self-heal the component using available healing infrastructure:\n    1. Healing coordinator (diagnose → agree → fix)\n    2. Coding pipeline (if code fix needed)\n    3. Service-specific healing (DB reconnect, Qdrant reconnect, etc.)\n    '
+result
+●●●●●● 1mm □
+'component_id'
+'healing_attempted'
+'healing_method'
+'healed'
+component_id
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 1mm □
+log_fix_attempted
+●●●●●● 1mm □△
+component_id
+'self_heal'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.healing_coordinator
+●●●●●● 2mm □△○
+HealingCoordinator
+coordinator
+●●●●●● 1mm □
+HealingCoordinator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problem_text
+●●●●●● 1mm □
+'; '
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+p
+problems
+5
+●●●●●● 2mm □△
+heal_result
+●●●●●● 1mm □
+coordinator
+●●●●●● 1mm □△
+problem_text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+heal_result
+heal_result
+●●●●●● 1mm □△
+'resolved'
+●●●●●● 2mm □△
+result
+'healing_method'
+●●●●●● 1mm □
+'healing_coordinator'
+result
+'healed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 3mm □△○
+'healing_coordinator'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm □△○
+cognitive.self_healing
+●●●●●● 2mm □△○
+SelfHealer
+healer
+●●●●●● 1mm □
+SelfHealer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+heal_result
+●●●●●● 1mm □
+healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+heal_result
+heal_result
+●●●●●● 1mm □△
+'healed'
+●●●●●● 2mm □△
+result
+'healing_method'
+●●●●●● 1mm □
+'self_healer'
+result
+'healed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 3mm □△○
+'self_healer'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 2mm □
+llm_reasoning
+llm_reasoning
+●●●●●● 1mm □△
+'fix_suggestion'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+fix_result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'deterministic_fix'
+'task'
+'Fix component '
+component_id
+': '
+llm_reasoning
+'fix_suggestion'
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fix_result
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+result
+'healing_method'
+●●●●●● 1mm □
+'coding_agent'
+result
+'healed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 3mm □△○
+'coding_agent'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+log_fix_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 1mm □
+'all_methods_exhausted'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_lifecycle
+●●●●●● 1mm □△
+component_id
+max_iterations
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+MAX_RECURSIVE_ITERATIONS
+'\n    Run the full deterministic lifecycle for a component.\n\n    The recursive chain:\n        PROBE → TEST → SCAN → FIX(deterministic) → REASON(LLM) → HEAL → VERIFY → LOOP\n\n    Each iteration:\n    1. Probe: alive?\n    2. Test: correct?\n    3. If unhealthy → Scan (find problems deterministically)\n    4. Fix deterministically (no LLM)\n    5. If unfixed → LLM reasoning (constrained by facts)\n    6. If LLM suggests fix → Heal (coding agent / self-healer)\n    7. Verify (re-probe + re-test)\n    8. If still broken and iterations remain → LOOP (recursive)\n    '
+result
+●●●●●● 1mm □
+LifecycleResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+log_event
+●●●●●● 1mm □△
+'LIFECYCLE_STARTED'
+component_id
+'Starting deterministic lifecycle (max '
+max_iterations
+' iterations)'
+●●●●●● 2mm □△
+iteration
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+max_iterations
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+iteration
+step_data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'iteration'
+'actions'
+iteration
+probe
+●●●●●● 1mm □
+probe_component
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+step_data
+'probe'
+●●●●●● 1mm □
+probe
+step_data
+'actions'
+●●●●●● 1mm □△
+'probe'
+●●●●●● 2mm □△
+test
+●●●●●● 1mm □
+test_component
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+step_data
+'test'
+●●●●●● 1mm □
+test
+step_data
+'actions'
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+is_healthy
+●●●●●● 1mm □
+probe
+'alive'
+test
+●●●●●● 1mm □△
+'pass_rate'
+0
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □
+is_healthy
+step_data
+'status'
+●●●●●● 1mm □
+'healthy'
+result
+●●●●●● 1mm □△
+step_data
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+'healthy'
+log_verify_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 3mm □△○
+iteration
+●●●●●● 2mm □△
+scan
+●●●●●● 1mm □
+scan_component
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+step_data
+'scan'
+●●●●●● 1mm □
+scan
+step_data
+'actions'
+●●●●●● 1mm □△
+'scan'
+●●●●●● 2mm □△
+result
+scan
+'total_problems'
+●●●●●● 2mm □
+scan
+'total_problems'
+0
+probe
+'alive'
+step_data
+'status'
+●●●●●● 1mm □
+'unreachable_no_code_issues'
+result
+●●●●●● 1mm □△
+step_data
+●●●●●● 2mm □△
+heal
+●●●●●● 1mm □
+heal_component
+●●●●●● 1mm □△
+component_id
+'type'
+'message'
+'unreachable'
+probe
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+step_data
+'heal'
+●●●●●● 1mm □
+heal
+step_data
+'actions'
+●●●●●● 1mm □△
+'heal'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+heal
+'healed'
+log_verify_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 1mm □
+iteration
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+log_heal_escalated
+●●●●●● 1mm □△
+component_id
+'unreachable, no code issues, healing failed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+det_fix
+●●●●●● 1mm □
+fix_deterministic
+●●●●●● 1mm □△
+component_id
+scan
+'problems'
+●●●●●● 2mm □△
+step_data
+'deterministic_fix'
+●●●●●● 1mm □
+det_fix
+step_data
+'actions'
+●●●●●● 1mm □△
+'deterministic_fix'
+●●●●●● 2mm □△
+result
+det_fix
+'fixed'
+result
+det_fix
+'fixed'
+●●●●●● 2mm □
+det_fix
+'unfixed'
+step_data
+'status'
+●●●●●● 1mm □
+'fixed_deterministically'
+result
+●●●●●● 1mm □△
+step_data
+●●●●●● 2mm □△
+log_verify_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 1mm □
+iteration
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+reason_with_llm
+●●●●●● 1mm □△
+component_id
+det_fix
+'unfixed'
+●●●●●● 2mm □△
+step_data
+'llm_reasoning'
+●●●●●● 1mm □
+'requested'
+'has_suggestion'
+llm
+'reasoning_requested'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+llm
+●●●●●● 1mm □△
+'fix_suggestion'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+step_data
+'actions'
+●●●●●● 1mm □△
+'llm_reasoning'
+●●●●●● 2mm □△
+heal
+●●●●●● 1mm □
+heal_component
+●●●●●● 1mm □△
+component_id
+det_fix
+'unfixed'
+llm
+●●●●●● 2mm □△
+step_data
+'heal'
+●●●●●● 1mm □
+heal
+step_data
+'actions'
+●●●●●● 1mm □△
+'heal'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+heal
+'healed'
+result
+1
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+det_fix
+'unfixed'
+●●●●●● 2mm □△
+step_data
+'status'
+●●●●●● 1mm □
+'healed_via_'
+heal
+●●●●●● 1mm □△
+'healing_method'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+step_data
+'status'
+●●●●●● 1mm □
+'healing_failed'
+result
+●●●●●● 1mm □△
+step_data
+●●●●●● 2mm □△
+log_verify_result
+●●●●●● 1mm □△
+component_id
+●●●●●● 1mm □
+iteration
+●●●●●● 2mm □△
+●●●●●● 2mm □
+heal
+'healed'
+iteration
+max_iterations
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+log_heal_escalated
+●●●●●● 1mm □△
+component_id
+'Max iterations ('
+max_iterations
+') reached, still unhealthy'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+result
+result
+●●●●●● 1mm □
+'degraded'
+●●●●●● 1mm △
+result
+result
+●●●●●● 1mm □
+'escalated'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+log_event
+●●●●●● 1mm □△
+'LIFECYCLE_COMPLETE'
+component_id
+'Lifecycle complete: '
+result
+' ('
+result
+' iterations, '
+result
+' found, '
+result
+' fixed)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+LifecycleResult
+●●●●●● 1mm □
+run_lifecycle_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run the lifecycle for ALL registered components.'
+●●●●●● 2mm □
+_registry
+auto_discover_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+healthy
+●●●●●● 1mm □
+0
+unhealthy
+●●●●●● 1mm □
+0
+escalated
+●●●●●● 1mm □
+0
+_registry_lock
+component_ids
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp_id
+component_ids
+lifecycle
+●●●●●● 1mm □
+run_lifecycle
+●●●●●● 1mm □△
+comp_id
+●●●●●● 2mm □△
+results
+comp_id
+●●●●●● 1mm □
+lifecycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lifecycle
+healthy
+1
+●●●●●● 1mm △
+lifecycle
+escalated
+1
+unhealthy
+1
+●●●●●● 3mm ○
+'total_components'
+'healthy'
+'unhealthy'
+'escalated'
+'results'
+'completed_at'
+'event_summary'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+healthy
+unhealthy
+escalated
+results
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_event_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+lifecycle_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Quick lifecycle scan: probe all components, scan unhealthy ones.\n    Does NOT attempt fixes — read-only diagnostic.\n    '
+●●●●●● 2mm □
+_registry
+auto_discover_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+probes
+●●●●●● 1mm □
+probe_all_components
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scans
+●●●●●● 1mm □
+comp_id
+probe
+probes
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+probe
+'alive'
+scans
+comp_id
+●●●●●● 1mm □
+scan_component
+●●●●●● 1mm □△
+comp_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'probe_summary'
+'unhealthy_scans'
+'scanned_at'
+'event_log'
+'total'
+'alive'
+'dead'
+probes
+'total'
+probes
+'alive'
+probes
+'dead'
+scans
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_event_log
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get all registered components.'
+_registry_lock
+●●●●●● 3mm ○
+k
+asdict
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_component_status
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get lifecycle status for a single component.'
+reg
+●●●●●● 1mm □
+_registry
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reg
+●●●●●● 3mm ○
+'error'
+'Component '
+component_id
+' not registered'
+●●●●●● 3mm ○
+'registration'
+'event_log'
+asdict
+●●●●●● 1mm □△
+reg
+●●●●●● 2mm □△
+get_event_log
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

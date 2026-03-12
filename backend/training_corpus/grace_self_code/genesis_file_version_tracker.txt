@@ -1,0 +1,1226 @@
+## file_version_tracker.py
+'\nFile Version Control through Genesis Keys.\n\nTracks file changes and versions using Genesis Keys:\n- Every file gets a FILE-prefix Genesis Key\n- Every change to a file creates a new version Genesis Key\n- Versions are linked to the original file Genesis Key\n- Complete history of all file changes\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+List
+Any
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileVersionTracker
+'\n    Tracks file versions through Genesis Keys.\n\n    Structure:\n    - FILE-xxxxx (Original file Genesis Key)\n      ├─ VER-xxxxx-1 (Version 1)\n      ├─ VER-xxxxx-2 (Version 2)\n      └─ VER-xxxxx-3 (Version 3)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_path
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'.genesis_file_versions.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_default_base_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get default base path.'
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+backend_dir
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_load_or_create_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load or create file version metadata, repairing corruption and stale paths.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+json
+ValueError
+logger
+●●●●●● 1mm □△
+'[VERSION-TRACKER] Metadata file unreadable ('
+e
+'), backing up and recreating'
+●●●●●● 2mm □△
+backup_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'.corrupt.bak'
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+●●●●●● 3mm △
+backup_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VERSION-TRACKER] Corrupt backup saved: '
+backup_path
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+'version'
+'created_at'
+'files'
+'1.0'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'version'
+'created_at'
+'files'
+'1.0'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_fix_stale_paths
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Rewrite absolute paths that belong to a different machine or OS.\n        Paths are updated to be absolute on the current machine by resolving\n        them relative to the current base_path.\n        '
+●●●●●● 2mm □△○
+re
+changed
+●●●●●● 1mm □
+●●●●●● 1mm □
+current_backend
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key
+entry
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+field
+'file_path'
+'absolute_path'
+val
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+field
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+val
+is_foreign
+●●●●●● 1mm □
+val
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+os
+'\\'
+'\\Users\\'
+val
+os
+'/'
+●●●●●● 2mm □
+is_foreign
+match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[/\\\\]backend[/\\\\](.*)'
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □
+match
+rel
+●●●●●● 1mm □
+match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+os
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+os
+●●●●●● 2mm □△
+new_val
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+current_backend
+rel
+●●●●●● 2mm □△
+entry
+field
+●●●●●● 1mm □
+new_val
+changed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+changed
+logger
+●●●●●● 1mm □△
+'[VERSION-TRACKER] Stale paths updated to current machine, saving metadata'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save file version metadata.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+●●●●●● 3mm △
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compute_file_hash
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Compute SHA256 hash of file content.'
+sha256_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'rb'
+●●●●●● 2mm □△
+f
+byte_block
+iter
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+4096
+●●●●●● 2mm □△
+b''
+●●●●●● 2mm □△
+sha256_hash
+●●●●●● 1mm □△
+byte_block
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sha256_hash
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_file_version
+●●●●●● 1mm □△
+self
+file_genesis_key
+file_path
+user_id
+version_note
+auto_detect_change
+session
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n        Track a new version of a file.\n\n        Args:\n            file_genesis_key: FILE-prefix Genesis Key for the file\n            file_path: Path to the file (relative or absolute)\n            user_id: User making the change\n            version_note: Note about this version\n            auto_detect_change: Whether to auto-detect if file changed\n\n        Returns:\n            Version information\n        '
+local_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+close_session
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+local_session
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+abs_file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+abs_file_path
+●●●●●● 1mm □
+file_path
+logger
+●●●●●● 1mm □△
+'[VERSION-TRACKER] Path received: file_path='
+file_path
+', is_abs='
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+', abs_file_path='
+abs_file_path
+', base_path='
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+abs_file_path
+●●●●●● 2mm □△
+alt_path
+●●●●●● 1mm □
+●●●●●● 2mm □
+base_prefix
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'auto_search'
+●●●●●● 2mm □△
+kb_prefix
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'knowledge_base'
+'auto_search'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+abs_file_path
+●●●●●● 2mm □△
+abs_file_path
+●●●●●● 1mm □△
+base_prefix
+●●●●●● 2mm □△
+alt_path
+●●●●●● 1mm □
+abs_file_path
+●●●●●● 1mm □△
+base_prefix
+kb_prefix
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □
+rel_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+file_path
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □
+alt_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'knowledge_base'
+rel_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+alt_path
+os
+●●●●●● 1mm □△
+alt_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VERSION-TRACKER] Fallback path resolved: '
+alt_path
+●●●●●● 2mm □△
+abs_file_path
+●●●●●● 1mm □
+alt_path
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+abs_file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+abs_file_path
+●●●●●● 1mm □△
+'-shm'
+●●●●●● 2mm □△
+abs_file_path
+●●●●●● 1mm □△
+'-wal'
+●●●●●● 2mm □△
+'.db-shm'
+abs_file_path
+'.db-wal'
+abs_file_path
+logger
+●●●●●● 1mm □△
+'File vanished before tracking (ephemeral): %s'
+abs_file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'File vanished before tracking: %s'
+abs_file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'changed'
+'version_number'
+'version_key_id'
+'message'
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+'File not found (vanished)'
+●●●●●● 2mm □
+file_genesis_key
+●●●●●● 3mm △
+'files'
+●●●●●● 3mm △
+'files'
+file_genesis_key
+●●●●●● 1mm □
+'file_genesis_key'
+'file_path'
+'absolute_path'
+'created_at'
+'version_count'
+'versions'
+'last_hash'
+file_genesis_key
+file_path
+abs_file_path
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+file_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+'files'
+file_genesis_key
+current_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+abs_file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+auto_detect_change
+file_info
+'last_hash'
+current_hash
+logger
+●●●●●● 1mm □△
+'File '
+file_path
+" hasn't changed since last version"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_genesis_key'
+'version_number'
+'changed'
+'message'
+file_genesis_key
+file_info
+'version_count'
+●●●●●● 1mm □
+'File content unchanged'
+file_info
+'version_count'
+1
+version_number
+●●●●●● 1mm □
+file_info
+'version_count'
+version_key_id
+●●●●●● 1mm □
+'VER-'
+file_genesis_key
+●●●●●● 1mm □△
+'FILE-'
+''
+●●●●●● 2mm □△
+'-'
+version_number
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+abs_file_path
+'r'
+●●●●●● 2mm □△
+f
+file_content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UnicodeDecodeError
+file_content
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Binary file detected: '
+file_path
+●●●●●● 2mm □△
+file_stats
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_file_path
+●●●●●● 2mm □△
+version_key
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+version_key_db_id
+●●●●●● 1mm □
+version_key
+Exception
+AttributeError
+local_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+version_key
+●●●●●● 1mm □
+local_session
+●●●●●● 1mm □△
+version_key
+●●●●●● 2mm □△
+local_session
+●●●●●● 1mm □△
+version_key
+●●●●●● 2mm □△
+version_key_db_id
+●●●●●● 1mm □
+version_key
+Exception
+logger
+●●●●●● 1mm □△
+'[VERSION-TRACKER] Could not get key_id for version_key, using fallback: '
+e
+●●●●●● 2mm □△
+version_key_db_id
+●●●●●● 1mm □
+version_key_id
+version_info
+●●●●●● 1mm □
+'version_number'
+'version_key_id'
+'genesis_key_db_id'
+'timestamp'
+'file_hash'
+'file_size'
+'user_id'
+'version_note'
+'has_content'
+version_number
+version_key_id
+version_key_db_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current_hash
+file_stats
+user_id
+'system'
+version_note
+file_content
+●●●●●● 2mm □
+file_info
+'versions'
+●●●●●● 1mm □△
+version_info
+●●●●●● 2mm □△
+file_info
+'last_hash'
+●●●●●● 1mm □
+current_hash
+file_info
+'last_updated'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+local_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created version '
+version_number
+' for file '
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_genesis_key'
+'version_key_id'
+'version_number'
+'genesis_key_db_id'
+'changed'
+'file_hash'
+'timestamp'
+file_genesis_key
+version_key_id
+version_number
+version_key
+●●●●●● 3mm □△○
+current_hash
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to create file version: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+local_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+local_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+close_session
+local_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_file_versions
+●●●●●● 1mm □△
+self
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get all versions for a file.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_version_details
+●●●●●● 1mm □△
+self
+file_genesis_key
+version_number
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Get details for a specific version.'
+file_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_info
+●●●●●● 3mm ○
+●●●●●● 2mm □
+version
+file_info
+'versions'
+●●●●●● 2mm □
+version
+'version_number'
+version_number
+●●●●●● 3mm ○
+version
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_latest_version
+●●●●●● 1mm □△
+self
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the latest version for a file.'
+file_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_info
+file_info
+'versions'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+file_info
+'versions'
+1
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_version_diff
+●●●●●● 1mm □△
+self
+file_genesis_key
+version1
+version2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'\n        Get differences between two versions.\n\n        Returns:\n            Dictionary with version comparison info\n        '
+v1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+version1
+●●●●●● 2mm □△
+v2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+version2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+v1
+v2
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'file_genesis_key'
+'version1'
+'version2'
+'hash_changed'
+'size_diff'
+'time_diff'
+'version1_info'
+'version2_info'
+file_genesis_key
+version1
+version2
+v1
+'file_hash'
+v2
+'file_hash'
+v2
+'file_size'
+●●●●●● 1mm □△
+v1
+'file_size'
+datetime
+●●●●●● 1mm □△
+v2
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+v1
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v1
+v2
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_all_tracked_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all files being tracked.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_file_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get statistics about tracked files.'
+total_files
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'files'
+●●●●●● 2mm □△
+total_versions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+info
+'version_count'
+info
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_files_tracked'
+'total_versions'
+'average_versions_per_file'
+'created_at'
+total_files
+total_versions
+total_files
+0
+total_versions
+●●●●●● 3mm □△
+total_files
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'created_at'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+auto_track_directory
+●●●●●● 1mm □△
+self
+directory_path
+user_id
+recursive
+file_pattern
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n        Automatically track all files in a directory.\n\n        Args:\n            directory_path: Directory to track\n            user_id: User ID\n            recursive: Whether to recurse into subdirectories\n            file_pattern: Optional glob pattern (e.g., "*.py")\n\n        Returns:\n            Summary of tracking operation\n        '
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+directory_path
+●●●●●● 2mm □△
+abs_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+directory_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+abs_dir
+●●●●●● 1mm □
+directory_path
+tracked
+●●●●●● 1mm □
+skipped
+●●●●●● 1mm □
+errors
+●●●●●● 1mm □
+●●●●●● 2mm □
+recursive
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □
+file_pattern
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+abs_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+file_pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+files
+●●●●●● 1mm □
+p
+p
+Path
+●●●●●● 1mm □△
+abs_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm △
+file_pattern
+files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+abs_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+file_pattern
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+p
+p
+Path
+●●●●●● 1mm □△
+abs_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+files
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+'__'
+●●●●●● 2mm □△
+skipped
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 3mm △
+●●●●●● 2mm □△
+file_genesis_key
+●●●●●● 1mm □
+'FILE-'
+hashlib
+●●●●●● 1mm □△
+rel_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'changed'
+tracked
+●●●●●● 1mm □△
+'file_path'
+'file_genesis_key'
+'version_number'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+file_genesis_key
+result
+'version_number'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+skipped
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+errors
+●●●●●● 1mm □△
+'file_path'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Error tracking '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'directory'
+'total_files_scanned'
+'tracked'
+'skipped'
+'errors'
+'tracked_files'
+'skipped_files'
+'error_details'
+directory_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tracked
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+skipped
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+tracked
+skipped
+errors
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_file_version_tracker
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get a file version tracker instance.'
+●●●●●● 3mm ○
+FileVersionTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileVersionTracker

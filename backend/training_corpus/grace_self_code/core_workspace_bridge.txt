@@ -1,0 +1,611 @@
+## workspace_bridge.py
+'\nWorkspace Bridge — syncs folders and Dev tab via Genesis keys.\n\nEvery file write from ANY source (folder UI, Dev tab, AI agent) goes\nthrough this bridge. Both sides stay in sync automatically.\n\nThe bridge:\n  1. Tracks every write with a Genesis key (source, timestamp, hash)\n  2. Broadcasts file_changed events via the event bus\n  3. Auto-scans uploaded documents and suggests usage\n  4. Manages workspace context for project-scoped chat\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_workspace_contexts
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+_file_events
+●●●●●● 1mm □△
+_event_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+write_file
+●●●●●● 1mm □△
+path
+content
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'unknown'
+'\n    Universal file write — every write goes through here.\n    Tracks via Genesis key, broadcasts event, updates workspace context.\n    '
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm □
+P
+target
+●●●●●● 1mm □
+P
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+gk_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+gk_id
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+event
+●●●●●● 1mm □
+'type'
+'path'
+'source'
+'genesis_key'
+'hash'
+'timestamp'
+'file_changed'
+path
+source
+gk_id
+content_hash
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_event_lock
+_file_events
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_file_events
+●●●●●● 2mm □△
+500
+_file_events
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'file.changed'
+event
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.realtime_sync
+●●●●●● 2mm □△○
+on_file_write
+workspace
+●●●●●● 1mm □
+_get_workspace
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+''
+on_file_write
+●●●●●● 1mm □△
+path
+source
+workspace
+●●●●●● 2mm □△
+Exception
+workspace
+●●●●●● 1mm □
+_get_workspace
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+workspace
+_update_context
+●●●●●● 1mm □△
+workspace
+path
+content
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.librarian
+●●●●●● 2mm □△○
+ingest_document
+ingest_document
+●●●●●● 1mm □△
+path
+content
+workspace
+''
+source
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'saved'
+'path'
+'genesis_key'
+'hash'
+'source'
+●●●●●● 3mm □△○
+path
+gk_id
+content_hash
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □
+read_file
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Universal file read.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm □
+P
+target
+●●●●●● 1mm □
+P
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'path'
+'File not found'
+path
+●●●●●● 3mm ○
+'content'
+'path'
+'size'
+'modified'
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+scan_upload
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Scan an uploaded document and suggest how to use it in the system.\n    Called automatically when a file is uploaded to any workspace folder.\n    '
+file_ext
+●●●●●● 1mm □
+'.'
+path
+path
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+file_name
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+analysis
+●●●●●● 1mm □
+'file'
+'type'
+'size_chars'
+'detected_purpose'
+'suggestions'
+file_name
+file_ext
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+'unknown'
+content_lower
+●●●●●● 1mm □
+content
+2000
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+content_lower
+w
+'api'
+'endpoint'
+'route'
+'http'
+'rest'
+●●●●●● 2mm □△
+analysis
+'detected_purpose'
+●●●●●● 1mm □
+'api_specification'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Use as API governance rule — LLMs will generate matching endpoints'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+content_lower
+w
+'schema'
+'table'
+'column'
+'create table'
+'model'
+●●●●●● 2mm □△
+analysis
+'detected_purpose'
+●●●●●● 1mm □
+'database_schema'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Use as schema governance — LLMs will generate matching data models'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+content_lower
+w
+'import'
+'def '
+'class '
+'function'
+'const '
+'export'
+●●●●●● 2mm □△
+analysis
+'detected_purpose'
+●●●●●● 1mm □
+'source_code'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Use as code blueprint — LLMs will follow this coding pattern'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+content_lower
+w
+'requirement'
+'specification'
+'user story'
+'acceptance'
+●●●●●● 2mm □△
+analysis
+'detected_purpose'
+●●●●●● 1mm □
+'requirements'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Use as requirements spec — pipeline will validate against these'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+content_lower
+w
+'test'
+'assert'
+'expect'
+'describe'
+'it('
+●●●●●● 2mm □△
+analysis
+'detected_purpose'
+●●●●●● 1mm □
+'test_suite'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Use as test template — code agent will generate matching tests'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_ext
+'env'
+'ini'
+'cfg'
+'conf'
+'toml'
+'yaml'
+'yml'
+analysis
+'detected_purpose'
+●●●●●● 1mm □
+'configuration'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Use as environment config — system will follow these settings'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+analysis
+'suggestions'
+analysis
+'suggestions'
+●●●●●● 1mm □△
+'Upload as reference document — available to all LLM calls for context'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fast'
+'prompt'
+'models'
+'I uploaded a file to Grace:\n\nFilename: '
+file_name
+'\nType: '
+file_ext
+'\nFirst 500 chars:\n'
+content
+500
+'\n\nIn one sentence, what is this file and how should Grace use it?'
+'kimi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+r
+'data'
+●●●●●● 1mm □△
+'individual_responses'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+analysis
+'ai_summary'
+●●●●●● 1mm □
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+analysis
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_recent_events
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Get recent file events.'
+_event_lock
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_file_events
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_workspace_context
+●●●●●● 1mm □△
+workspace
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the cached context for a workspace.'
+●●●●●● 3mm ○
+_workspace_contexts
+●●●●●● 1mm □△
+workspace
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_workspace
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract workspace name from path.'
+parts
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'projects'
+parts
+idx
+●●●●●● 1mm □
+parts
+●●●●●● 1mm □△
+'projects'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+idx
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+parts
+idx
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+'governance_rules'
+parts
+●●●●●● 3mm ○
+'governance'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_update_context
+●●●●●● 1mm □△
+workspace
+path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Update workspace context cache.'
+existing
+●●●●●● 1mm □
+_workspace_contexts
+●●●●●● 1mm □△
+workspace
+''
+●●●●●● 2mm □△
+file_name
+●●●●●● 1mm □
+path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+snippet
+●●●●●● 1mm □
+'\n--- '
+file_name
+' ---\n'
+content
+300
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+existing
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snippet
+●●●●●● 2mm □△
+15000
+existing
+●●●●●● 1mm □
+existing
+10000
+_workspace_contexts
+workspace
+●●●●●● 1mm □
+existing
+●●●●●● 3mm ○
+snippet

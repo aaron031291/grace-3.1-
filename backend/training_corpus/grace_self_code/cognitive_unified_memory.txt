@@ -1,0 +1,1126 @@
+## unified_memory.py
+'\nUnified Memory — Single access point for ALL Grace memory systems.\n\nThis is the ONE entry point for memory. All other memory modules are internal;\ncallers should use only:\n\n  from cognitive.unified_memory import get_unified_memory\n  mem = get_unified_memory()\n\nUnified memory combines:\n  - Episodic Memory (concrete past experiences) — via cognitive.episodic_memory\n  - Procedural Memory (learned skills) — via cognitive.procedural_memory\n  - Learning Memory (training examples + patterns) — via cognitive.learning_memory\n  - Memory Mesh (integration) — via cognitive.memory_mesh_integration when session+kb_path available\n  - Magma (graph-based context) — via cognitive.magma_bridge\n  - Flash Cache (external reference cache) — via cognitive.flash_cache\n\nAll storage and recall go through the same session-based backends (EpisodicBuffer,\nLearningMemoryManager, ProceduralRepository) so there is one code path and one schema.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_DEFAULT_KB_PATH
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GRACE_KNOWLEDGE_BASE_PATH'
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get a DB session. Caller must close it (or use as context).'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 1mm □
+SL
+●●●●●● 3mm ○
+SL
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Session not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+_coerce_dict
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+'Coerce to dict for episode action/outcome.'
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+val
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+val
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+parsed
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+parsed
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parsed
+'raw'
+val
+Exception
+●●●●●● 3mm ○
+'raw'
+val
+●●●●●● 3mm ○
+'raw'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+UnifiedMemory
+'Single interface for all Grace memory systems. Use get_unified_memory() to get the singleton.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'UnifiedMemory'
+●●●●●● 1mm □
+store_episode
+●●●●●● 1mm □△
+self
+problem
+action
+outcome
+trust
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+0.5
+'system'
+'Store a concrete experience. Uses EpisodicBuffer.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+store_decision
+store_decision
+●●●●●● 1mm □△
+problem
+200
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+200
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+outcome
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Store episode failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+store_learning
+●●●●●● 1mm □△
+self
+input_ctx
+expected
+actual
+trust
+source
+example_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+0.5
+'system'
+'general'
+'Store a learning example. Uses LearningMemoryManager.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+mgr
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+_DEFAULT_KB_PATH
+●●●●●● 2mm □△
+learning_data
+●●●●●● 1mm □
+'context'
+'expected'
+'actual'
+_coerce_dict
+●●●●●● 1mm □△
+input_ctx
+●●●●●● 2mm □△
+_coerce_dict
+●●●●●● 1mm □△
+expected
+●●●●●● 2mm □△
+actual
+_coerce_dict
+●●●●●● 1mm □△
+actual
+●●●●●● 2mm □△
+_coerce_dict
+●●●●●● 1mm □△
+expected
+●●●●●● 2mm □△
+mgr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Store learning failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+store_procedure
+●●●●●● 1mm □△
+self
+name
+goal
+steps
+trust
+proc_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+0.5
+'general'
+'Store a learned skill/procedure. Uses ProceduralRepository.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+ProceduralRepository
+repo
+●●●●●● 1mm □
+ProceduralRepository
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+procedure
+●●●●●● 1mm □
+repo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+procedure
+●●●●●● 1mm □
+trust
+procedure
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Store procedure failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+recall_episodes
+●●●●●● 1mm □△
+self
+query
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+''
+10
+0.0
+'Recall past experiences. Uses EpisodicBuffer when query given, else recent list.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+Episode
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm □
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+episodes
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+e
+episodes
+ts
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'timestamp'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'created_at'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □△
+'problem'
+'action'
+'outcome'
+'trust'
+'source'
+'created_at'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'problem'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'action'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'outcome'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'trust_score'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+e
+'source'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ts
+'isoformat'
+●●●●●● 2mm □△
+ts
+ts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+Exception
+logger
+●●●●●● 1mm □△
+'Recall episodes failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+recall_learnings
+●●●●●● 1mm □△
+self
+query
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+''
+10
+0.0
+'Recall learning examples. Uses LearningExample via session.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+q
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+r
+rows
+ic
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'input_context'
+''
+●●●●●● 2mm □△
+'{}'
+eo
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'expected_output'
+''
+●●●●●● 2mm □△
+'{}'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ic
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ic
+●●●●●● 2mm □△
+300
+ic
+●●●●●● 1mm □
+ic
+300
+●●●●●● 3mm ○
+'...'
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+eo
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+eo
+●●●●●● 2mm □△
+300
+eo
+●●●●●● 1mm □
+eo
+300
+●●●●●● 3mm ○
+'...'
+out
+●●●●●● 1mm □△
+'input'
+'expected'
+'trust'
+'source'
+'type'
+ic
+eo
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'trust_score'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'source'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'example_type'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+Exception
+logger
+●●●●●● 1mm □△
+'Recall learnings failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+recall_procedures
+●●●●●● 1mm □△
+self
+query
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+''
+10
+0.0
+'Recall learned procedures. Uses Procedure via session.'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+Procedure
+q
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rows
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+r
+rows
+steps
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'steps'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+steps_str
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+steps
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+steps
+300
+steps
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+steps
+●●●●●● 2mm □△
+300
+''
+out
+●●●●●● 1mm □△
+'name'
+'goal'
+'steps'
+'trust'
+'success_rate'
+'usage_count'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'name'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'goal'
+''
+●●●●●● 2mm □△
+''
+steps_str
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'trust_score'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'success_rate'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'usage_count'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+Exception
+logger
+●●●●●● 1mm □△
+'Recall procedures failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+search_all
+●●●●●● 1mm □△
+self
+query
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+20
+0.0
+'Search across ALL memory systems at once.'
+results
+●●●●●● 1mm □
+'episodes'
+'learnings'
+'procedures'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+query_context
+ctx
+●●●●●● 1mm □
+query_context
+●●●●●● 1mm □△
+query
+200
+●●●●●● 2mm □△
+results
+'magma'
+●●●●●● 1mm □
+ctx
+'context'
+ctx
+500
+Exception
+results
+'magma'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+refs
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+results
+'flash_cache'
+●●●●●● 1mm □
+'name'
+'uri'
+'trust'
+r
+●●●●●● 1mm □△
+'source_name'
+''
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'source_uri'
+''
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+r
+refs
+Exception
+results
+'flash_cache'
+●●●●●● 1mm □
+results
+'total'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+k
+v
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+'total'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Aggregate statistics across all memory systems (ORM-based counts).'
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+_get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+LearningPattern
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+Episode
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+Procedure
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+name
+model
+'learning_examples'
+LearningExample
+'episodes'
+Episode
+'procedures'
+Procedure
+'learning_patterns'
+LearningPattern
+count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+model
+'trust_score'
+●●●●●● 2mm □△
+avg
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □
+avg
+●●●●●● 1mm □
+0
+stats
+name
+●●●●●● 1mm □
+'count'
+'avg_trust'
+count
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+avg
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+Exception
+stats
+name
+●●●●●● 1mm □
+'count'
+'avg_trust'
+0
+0
+Exception
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc_stats
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'flash_cache'
+●●●●●● 1mm □
+'entries'
+fc_stats
+●●●●●● 1mm □△
+'total_entries'
+0
+●●●●●● 2mm □△
+Exception
+stats
+'flash_cache'
+●●●●●● 1mm □
+'entries'
+0
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+get_stats
+●●●●●● 1mm □
+magma_stats
+stats
+'magma'
+●●●●●● 1mm □
+magma_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+stats
+'magma'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return the singleton UnifiedMemory instance. This is THE entry point for all Grace memory.'
+●●●●●● 3mm ○
+UnifiedMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UnifiedMemory

@@ -1,0 +1,1276 @@
+## memory_mesh_snapshot.py
+'\nMemory Mesh Snapshot System\n\nCreates immutable snapshots of the entire memory mesh state.\nThis allows recovery, versioning, and persistent storage of learned knowledge.\n\nThe immutable memory stores:\n1. All learning examples with trust scores\n2. All episodic memories\n3. All procedural memories\n4. All extracted patterns\n5. Complete statistics and metadata\n\nSnapshots are saved as .genesis_immutable_memory_mesh.json\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+LearningPattern
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+Episode
+●●●●●● 3mm □△○
+cognitive.procedural_memory
+●●●●●● 2mm □△○
+Procedure
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MemoryMeshSnapshot
+'\n    Creates and manages immutable snapshots of memory mesh.\n\n    The snapshot is a complete, recoverable state of all learned knowledge.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm □△
+'.genesis_immutable_memory_mesh.json'
+●●●●●● 1mm □
+create_snapshot
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Create complete snapshot of current memory mesh state.\n\n        Returns:\n            Complete memory mesh snapshot\n        '
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Creating immutable snapshot...'
+●●●●●● 2mm □△
+snapshot
+●●●●●● 1mm □
+'snapshot_metadata'
+'learning_memory'
+'episodic_memory'
+'procedural_memory'
+'pattern_memory'
+'statistics'
+'integrity'
+'timestamp'
+'version'
+'type'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'1.0'
+'memory_mesh_immutable_snapshot'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Snapshot created: '
+snapshot
+'statistics'
+'total_memories'
+' total memories'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshot
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_snapshot_learning_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Snapshot all learning examples.'
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_examples'
+'examples'
+'by_type'
+'by_source'
+'trust_distribution'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+'id'
+'type'
+'input_context'
+'expected_output'
+'actual_output'
+'trust_score'
+'source_reliability'
+'outcome_quality'
+'consistency_score'
+'recency_weight'
+'source'
+'source_user_id'
+'genesis_key_id'
+'times_referenced'
+'times_validated'
+'times_invalidated'
+'last_used'
+'file_path'
+'episodic_episode_id'
+'procedure_id'
+'metadata'
+'created_at'
+'updated_at'
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ex
+ex
+ex
+ex
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ex
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ex
+examples
+●●●●●● 3mm △
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_snapshot_episodic_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Snapshot all episodic memories.'
+episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_episodes'
+'episodes'
+'high_trust_episodes'
+'avg_prediction_error'
+'recent_episodes'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+'id'
+'problem'
+'action'
+'outcome'
+'predicted_outcome'
+'prediction_error'
+'trust_score'
+'source'
+'genesis_key_id'
+'decision_id'
+'timestamp'
+'embedding'
+'metadata'
+'created_at'
+'updated_at'
+ep
+ep
+ep
+ep
+ep
+ep
+ep
+ep
+ep
+ep
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ep
+ep
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ep
+episodes
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ep
+ep
+episodes
+ep
+0.7
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+ep
+episodes
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episodes
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_snapshot_procedural_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Snapshot all learned procedures.'
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_procedures'
+'procedures'
+'high_success_procedures'
+'avg_success_rate'
+'by_type'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+'id'
+'name'
+'goal'
+'type'
+'steps'
+'preconditions'
+'trust_score'
+'success_rate'
+'usage_count'
+'success_count'
+'supporting_examples'
+'learned_from_episode_id'
+'embedding'
+'metadata'
+'created_at'
+'updated_at'
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+proc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proc
+procedures
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+p
+p
+procedures
+p
+0.7
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+p
+procedures
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+procedures
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_snapshot_pattern_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Snapshot all extracted patterns.'
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_patterns'
+'patterns'
+'high_success_patterns'
+'avg_sample_size'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+'id'
+'name'
+'type'
+'preconditions'
+'actions'
+'expected_outcomes'
+'trust_score'
+'success_rate'
+'sample_size'
+'supporting_examples'
+'times_applied'
+'times_succeeded'
+'times_failed'
+'linked_procedures'
+'created_at'
+'updated_at'
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+pat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pat
+patterns
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+p
+p
+patterns
+p
+0.7
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+p
+patterns
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+0.0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Calculate comprehensive statistics.'
+learning_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+episodic_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+procedural_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern_count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+high_trust_learning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+0.7
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+high_trust_episodes
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+0.7
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+high_success_procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+0.7
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_memories'
+'learning_examples'
+'episodic_memories'
+'procedural_memories'
+'extracted_patterns'
+'high_trust_learning'
+'high_trust_episodes'
+'high_success_procedures'
+'trust_ratio'
+'episodic_trust_ratio'
+'procedural_success_ratio'
+learning_count
+●●●●●● 3mm ○
+episodic_count
+●●●●●● 3mm ○
+procedural_count
+●●●●●● 3mm ○
+pattern_count
+learning_count
+episodic_count
+procedural_count
+pattern_count
+high_trust_learning
+high_trust_episodes
+high_success_procedures
+learning_count
+0
+high_trust_learning
+●●●●●● 3mm □△
+learning_count
+0.0
+episodic_count
+0
+high_trust_episodes
+●●●●●● 3mm □△
+episodic_count
+0.0
+procedural_count
+0
+high_success_procedures
+●●●●●● 3mm □△
+procedural_count
+0.0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_integrity_hash
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Calculate hash for integrity verification.'
+●●●●●● 2mm □△○
+hashlib
+hash_input
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'_mesh_snapshot'
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+hash_input
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_group_by_type
+●●●●●● 1mm □△
+self
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningExample
+'Group examples by type.'
+types
+●●●●●● 1mm □
+ex
+examples
+types
+ex
+●●●●●● 1mm □
+types
+●●●●●● 1mm □△
+ex
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+types
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_group_by_source
+●●●●●● 1mm □△
+self
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningExample
+'Group examples by source.'
+sources
+●●●●●● 1mm □
+ex
+examples
+sources
+ex
+●●●●●● 1mm □
+sources
+●●●●●● 1mm □△
+ex
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+sources
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_calculate_trust_distribution
+●●●●●● 1mm □△
+self
+examples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningExample
+'Calculate trust score distribution.'
+distribution
+●●●●●● 1mm □
+'very_high_0.9+'
+'high_0.7-0.9'
+'medium_0.5-0.7'
+'low_0.3-0.5'
+'very_low_<0.3'
+0
+0
+0
+0
+0
+ex
+examples
+●●●●●● 2mm □
+ex
+0.9
+distribution
+'very_high_0.9+'
+1
+●●●●●● 1mm △
+ex
+0.7
+distribution
+'high_0.7-0.9'
+1
+●●●●●● 2mm □
+ex
+0.5
+distribution
+'medium_0.5-0.7'
+1
+●●●●●● 1mm △
+ex
+0.3
+distribution
+'low_0.3-0.5'
+1
+distribution
+'very_low_<0.3'
+1
+●●●●●● 3mm ○
+distribution
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_group_procedures_by_type
+●●●●●● 1mm □△
+self
+procedures
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Procedure
+'Group procedures by type.'
+types
+●●●●●● 1mm □
+proc
+procedures
+types
+proc
+●●●●●● 1mm □
+types
+●●●●●● 1mm □△
+proc
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+types
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_get_recent_count
+●●●●●● 1mm □△
+self
+items
+days
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+7
+'Count items from last N days.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+days
+●●●●●● 2mm □△
+24
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+item
+item
+items
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+item
+'timestamp'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+save_snapshot
+●●●●●● 1mm □△
+self
+snapshot
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Save snapshot to immutable JSON file.\n\n        Args:\n            snapshot: Snapshot to save (or create new one)\n\n        Returns:\n            Path to saved snapshot\n        '
+●●●●●● 2mm □
+snapshot
+●●●●●● 2mm □
+snapshot
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+snapshot
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Saved to: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+load_snapshot
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"\n        Load snapshot from file.\n\n        Returns:\n            Loaded snapshot or None if doesn't exist\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] No snapshot file found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+snapshot
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Loaded snapshot from '
+snapshot
+'snapshot_metadata'
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshot
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+restore_from_snapshot
+●●●●●● 1mm □△
+self
+snapshot
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Restore memory mesh from snapshot.\n\n        WARNING: This will overwrite current memory mesh!\n\n        Args:\n            snapshot: Snapshot to restore from\n\n        Returns:\n            Restoration statistics\n        '
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Starting restoration - this will overwrite current data!'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+'learning_examples_restored'
+'episodes_restored'
+'procedures_restored'
+'patterns_restored'
+0
+0
+0
+0
+ex_data
+snapshot
+'learning_memory'
+'examples'
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+ex_data
+'id'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+key
+value
+ex_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+'created_at'
+'updated_at'
+'last_used'
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+existing
+key
+value
+●●●●●● 2mm □△
+●●●●●● 3mm □
+example
+●●●●●● 1mm □
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+stats
+'learning_examples_restored'
+1
+ep_data
+snapshot
+'episodic_memory'
+'episodes'
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Episode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Episode
+ep_data
+'id'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+episode
+●●●●●● 1mm □
+Episode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+episode
+●●●●●● 2mm □△
+stats
+'episodes_restored'
+1
+proc_data
+snapshot
+'procedural_memory'
+'procedures'
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Procedure
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Procedure
+proc_data
+'id'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+procedure
+●●●●●● 1mm □
+Procedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+procedure
+●●●●●● 2mm □△
+stats
+'procedures_restored'
+1
+pat_data
+snapshot
+'pattern_memory'
+'patterns'
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningPattern
+pat_data
+'id'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+pattern
+●●●●●● 1mm □
+LearningPattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+stats
+'patterns_restored'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Restoration complete: '
+stats
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_versioned_snapshot
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Create snapshot with timestamp in filename.\n\n        Returns:\n            Path to versioned snapshot\n        '
+snapshot
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+versioned_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'.genesis_immutable_memory_mesh_'
+timestamp
+'.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+versioned_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+snapshot
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MEMORY-MESH-SNAPSHOT] Versioned snapshot saved: '
+versioned_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+versioned_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+compare_snapshots
+●●●●●● 1mm □△
+self
+snapshot1
+snapshot2
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Compare two snapshots to see what changed.\n\n        Returns:\n            Difference report\n        '
+●●●●●● 3mm ○
+'snapshot1_time'
+'snapshot2_time'
+'learning_diff'
+'episodic_diff'
+'procedural_diff'
+'pattern_diff'
+'trust_quality_change'
+snapshot1
+'snapshot_metadata'
+'timestamp'
+snapshot2
+'snapshot_metadata'
+'timestamp'
+'added'
+'old_count'
+'new_count'
+snapshot2
+'statistics'
+'learning_examples'
+●●●●●● 1mm □△
+snapshot1
+'statistics'
+'learning_examples'
+snapshot1
+'statistics'
+'learning_examples'
+snapshot2
+'statistics'
+'learning_examples'
+'added'
+'old_count'
+'new_count'
+snapshot2
+'statistics'
+'episodic_memories'
+●●●●●● 1mm □△
+snapshot1
+'statistics'
+'episodic_memories'
+snapshot1
+'statistics'
+'episodic_memories'
+snapshot2
+'statistics'
+'episodic_memories'
+'added'
+'old_count'
+'new_count'
+snapshot2
+'statistics'
+'procedural_memories'
+●●●●●● 1mm □△
+snapshot1
+'statistics'
+'procedural_memories'
+snapshot1
+'statistics'
+'procedural_memories'
+snapshot2
+'statistics'
+'procedural_memories'
+'added'
+'old_count'
+'new_count'
+snapshot2
+'statistics'
+'extracted_patterns'
+●●●●●● 1mm □△
+snapshot1
+'statistics'
+'extracted_patterns'
+snapshot1
+'statistics'
+'extracted_patterns'
+snapshot2
+'statistics'
+'extracted_patterns'
+'old_trust_ratio'
+'new_trust_ratio'
+'improvement'
+snapshot1
+'statistics'
+'trust_ratio'
+snapshot2
+'statistics'
+'trust_ratio'
+snapshot2
+'statistics'
+'trust_ratio'
+●●●●●● 1mm □△
+snapshot1
+'statistics'
+'trust_ratio'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+create_memory_mesh_snapshot
+●●●●●● 1mm □△
+session
+knowledge_base_path
+save
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Path
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n    Convenience function to create memory mesh snapshot.\n\n    Args:\n        session: Database session\n        knowledge_base_path: Path to knowledge base\n        save: Whether to save to file\n\n    Returns:\n        Snapshot data\n    '
+snapshotter
+●●●●●● 1mm □
+MemoryMeshSnapshot
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+knowledge_base_path
+●●●●●● 2mm □△
+snapshot
+●●●●●● 1mm □
+snapshotter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+save
+snapshotter
+●●●●●● 1mm □△
+snapshot
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshot
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

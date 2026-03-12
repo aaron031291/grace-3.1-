@@ -1,0 +1,519 @@
+## live_console_api.py
+"\nLive Console API — Real-time interaction with Kimi + Opus while Grace is running.\n\nEndpoints the user can call from their browser to talk to both models\nabout Grace's LIVE state:\n  - /api/console/ask — ask Kimi+Opus anything about the running system\n  - /api/console/diagnose — both models diagnose current errors\n  - /api/console/fix — both models suggest fixes for current problems\n  - /api/console/status — full system status in plain English\n"
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+traceback
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ConsoleQuery
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+message
+●●●●●● 1mm ○
+use_consensus
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+"Full system status — what's working and what's broken RIGHT NOW."
+status
+●●●●●● 1mm □
+'backend'
+'errors'
+'warnings'
+'models'
+'database'
+'services'
+'running'
+'unknown'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+initialize_session_factory
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 2mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 1mm □
+SL
+db
+●●●●●● 1mm □
+SL
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'database'
+●●●●●● 1mm □
+'connected'
+Exception
+status
+'database'
+●●●●●● 1mm □
+'error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+status
+'errors'
+●●●●●● 1mm □△
+'Database: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+●●●●●● 2mm □△○
+requests
+r
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+settings
+'/models'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+models
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+status
+'models'
+'kimi'
+●●●●●● 1mm □
+'status'
+'model_count'
+'connected'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+●●●●●● 3mm □
+status
+'models'
+'kimi'
+●●●●●● 1mm □
+'status'
+'error: HTTP '
+r
+●●●●●● 3mm □
+status
+'errors'
+●●●●●● 1mm □△
+'Kimi: HTTP '
+r
+●●●●●● 2mm □△
+●●●●●● 3mm □
+status
+'models'
+'kimi'
+●●●●●● 1mm □
+'status'
+'no API key'
+●●●●●● 3mm □
+status
+'warnings'
+●●●●●● 1mm □△
+'Kimi: no API key configured'
+●●●●●● 2mm □△
+Exception
+status
+'models'
+'kimi'
+●●●●●● 1mm □
+'status'
+'error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+80
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+status
+'models'
+'opus'
+●●●●●● 1mm □
+'status'
+'model'
+'configured'
+settings
+●●●●●● 3mm □
+status
+'models'
+'opus'
+●●●●●● 1mm □
+'status'
+'no API key'
+●●●●●● 3mm □
+status
+'warnings'
+●●●●●● 1mm □△
+'Opus: no API key configured'
+●●●●●● 2mm □△
+Exception
+status
+'models'
+'opus'
+●●●●●● 1mm □
+'status'
+'error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△○
+requests
+r
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+'http://localhost:11434/api/tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+200
+models
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+status
+'models'
+'ollama'
+●●●●●● 1mm □
+'status'
+'models'
+'connected'
+m
+'name'
+m
+models
+5
+●●●●●● 3mm □
+status
+'models'
+'ollama'
+●●●●●● 1mm □
+'status'
+'not running'
+●●●●●● 3mm □
+status
+'warnings'
+●●●●●● 1mm □△
+'Ollama: not running'
+●●●●●● 2mm □△
+Exception
+status
+'models'
+'ollama'
+●●●●●● 1mm □
+'status'
+'not running'
+status
+'warnings'
+●●●●●● 1mm □△
+'Ollama: not running — local models unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'services'
+'flash_cache'
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+'total_entries'
+0
+●●●●●● 2mm □△
+' entries'
+Exception
+status
+'services'
+'flash_cache'
+●●●●●● 1mm □
+'error'
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+NAMED_LOOPS
+status
+'services'
+'loops'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+NAMED_LOOPS
+●●●●●● 2mm □△
+' registered'
+Exception
+status
+'services'
+'loops'
+●●●●●● 1mm □
+'error'
+●●●●●● 2mm □
+status
+'errors'
+status
+'summary'
+●●●●●● 1mm □
+'Grace is running. All systems operational.'
+●●●●●● 3mm □
+status
+'summary'
+●●●●●● 1mm □
+'Grace is running with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+status
+'errors'
+●●●●●● 2mm □△
+' error(s): '
+'; '
+●●●●●● 1mm □△
+status
+'errors'
+3
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+status
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+ConsoleQuery
+'Ask Kimi+Opus anything about the running system.'
+current_status
+●●●●●● 1mm □
+live_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+'Grace is running. Status: '
+current_status
+●●●●●● 1mm □△
+'summary'
+'unknown'
+●●●●●● 2mm □△
+Exception
+context
+●●●●●● 1mm □
+'Grace is running.'
+●●●●●● 2mm □
+query
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'models_used'
+'confidence'
+'individual'
+result
+result
+result
+'model'
+'response'
+r
+'model_name'
+r
+'response'
+1000
+r
+result
+r
+●●●●●● 1mm □△
+'response'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'suggestion'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'Check API keys in .env file'
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'model'
+response
+'opus'
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ask'
+●●●●●● 2mm □△
+'Both models diagnose current errors in the running system.'
+current_status
+●●●●●● 1mm □
+live_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_status
+●●●●●● 1mm □△
+'errors'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'diagnosis'
+'errors'
+'No errors detected. Grace is healthy.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'errors'
+'warnings'
+'diagnosis'
+'confidence'
+current_status
+'errors'
+current_status
+●●●●●● 1mm □△
+'warnings'
+●●●●●● 2mm □△
+result
+result
+Exception
+●●●●●● 3mm ○
+'errors'
+'diagnosis'
+current_status
+'errors'
+'Consensus unavailable: '
+e
+'. Check API keys.'
+router
+●●●●●● 1mm □△
+'/diagnose'
+●●●●●● 2mm □△
+'One sentence: is Grace healthy?'
+status
+●●●●●● 1mm □
+live_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'health'
+status
+●●●●●● 1mm □△
+'summary'
+'Unknown'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/health-plain'
+●●●●●● 2mm □△

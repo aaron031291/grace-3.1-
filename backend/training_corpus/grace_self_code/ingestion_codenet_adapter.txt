@@ -1,0 +1,1227 @@
+## codenet_adapter.py
+'\nCodeNet Data Source Adapter for GRACE\n\nIntegrates IBM\'s Project CodeNet dataset into GRACE\'s ingestion pipeline.\nFocuses on extracting actionable learning signals rather than bulk ingestion:\n  - Error pattern pairs (rejected → accepted for the same problem)\n  - Code similarity groups (multiple solutions to the same problem)\n  - Performance metrics (runtime/memory data for optimization learning)\n\nUsage:\n    adapter = CodeNetAdapter("/path/to/Project_CodeNet")\n    samples = adapter.load_curated_subset(languages=["Python", "Java"], max_per_problem=5)\n    signals = adapter.extract_learning_signals(problem_id="p00001")\n'
+●●●●●● 2mm □△○
+csv
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SubmissionStatus
+●●●●●● 3mm □△
+Enum
+Enum
+ACCEPTED
+●●●●●● 1mm □
+'Accepted'
+WRONG_ANSWER
+●●●●●● 1mm □
+'Wrong Answer'
+TIME_LIMIT_EXCEEDED
+●●●●●● 1mm □
+'Time Limit Exceeded'
+MEMORY_LIMIT_EXCEEDED
+●●●●●● 1mm □
+'Memory Limit Exceeded'
+RUNTIME_ERROR
+●●●●●● 1mm □
+'Runtime Error'
+COMPILE_ERROR
+●●●●●● 1mm □
+'Compile Error'
+OUTPUT_LIMIT_EXCEEDED
+●●●●●● 1mm □
+'Output Limit Exceeded'
+OTHER
+●●●●●● 1mm □
+'Other'
+●●●●●● 1mm □
+from_string
+●●●●●● 1mm □△
+cls
+s
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+mapping
+●●●●●● 1mm □
+'accepted'
+'wrong answer'
+'time limit exceeded'
+'memory limit exceeded'
+'runtime error'
+'compile error'
+'output limit exceeded'
+cls
+cls
+cls
+cls
+cls
+cls
+cls
+●●●●●● 3mm ○
+mapping
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'SubmissionStatus'
+●●●●●● 2mm △
+CodeNetSample
+submission_id
+●●●●●● 1mm ○
+problem_id
+●●●●●● 1mm ○
+language
+●●●●●● 1mm ○
+status
+SubmissionStatus
+cpu_time_ms
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+memory_kb
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+code_size_bytes
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+source_code
+●●●●●● 1mm ○
+''
+file_path
+●●●●●● 1mm ○
+''
+dataclass
+●●●●●● 2mm △
+LearningPair
+'A rejected/accepted pair for the same problem — ideal for pattern learning.'
+problem_id
+●●●●●● 1mm ○
+language
+●●●●●● 1mm ○
+rejected
+CodeNetSample
+accepted
+CodeNetSample
+error_type
+●●●●●● 1mm ○
+''
+performance_delta_ms
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+SimilarityGroup
+'Multiple solutions to the same problem across languages.'
+problem_id
+●●●●●● 1mm ○
+solutions
+●●●●●● 3mm □△
+CodeNetSample
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+languages
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+s
+s
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+dataclass
+LANGUAGE_EXTENSIONS
+●●●●●● 1mm □
+'C'
+'C++'
+'Java'
+'Python'
+'Ruby'
+'Go'
+'JavaScript'
+'Rust'
+'C#'
+'PHP'
+'Kotlin'
+'Swift'
+'Scala'
+'Haskell'
+'COBOL'
+'FORTRAN'
+'Pascal'
+'.c'
+'.cpp'
+'.java'
+'.py'
+'.rb'
+'.go'
+'.js'
+'.rs'
+'.cs'
+'.php'
+'.kt'
+'.swift'
+'.scala'
+'.hs'
+'.cbl'
+'.f'
+'.pas'
+SUPPORTED_LANGUAGES
+●●●●●● 1mm □
+'Python'
+'Java'
+'C++'
+'C'
+'JavaScript'
+'Go'
+'Rust'
+'Ruby'
+●●●●●● 2mm △
+CodeNetAdapter
+"\n    Adapter for loading and processing IBM Project CodeNet data\n    into GRACE's ingestion and learning systems.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+codenet_root
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+codenet_root
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'metadata'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_validate_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileNotFoundError
+●●●●●● 1mm □△
+'CodeNet root not found: '
+●●●●●● 3mm △
+'. Download from https://developer.ibm.com/exchanges/data/all/project-codenet/'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Metadata directory not found at '
+●●●●●● 3mm △
+'. Some features will be unavailable.'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_problems
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+d
+d
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'p'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+load_problem_metadata
+●●●●●● 1mm □△
+self
+problem_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+csv_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+problem_id
+'.csv'
+●●●●●● 2mm □
+csv_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rows
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+csv_path
+'r'
+●●●●●● 2mm □△
+f
+reader
+●●●●●● 1mm □
+csv
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+row
+reader
+rows
+●●●●●● 1mm □△
+row
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+rows
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+load_sample
+●●●●●● 1mm □△
+self
+problem_id
+submission_id
+language
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+lang_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+problem_id
+●●●●●● 3mm □△
+language
+●●●●●● 2mm □
+lang_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+ext
+●●●●●● 1mm □
+LANGUAGE_EXTENSIONS
+●●●●●● 1mm □△
+language
+''
+●●●●●● 2mm □△
+source_file
+●●●●●● 1mm □
+lang_dir
+●●●●●● 3mm □△
+submission_id
+ext
+●●●●●● 2mm □
+source_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+lang_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+submission_id
+source_file
+●●●●●● 1mm □
+f
+●●●●●● 3mm ○
+●●●●●● 2mm □
+source_code
+●●●●●● 1mm □
+source_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not read '
+source_file
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+CodeNetSample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+CodeNetSample
+●●●●●● 1mm □
+load_curated_subset
+●●●●●● 1mm □△
+self
+languages
+max_per_problem
+max_problems
+accepted_only
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+5
+1000
+●●●●●● 1mm □
+"\n        Load a curated subset of CodeNet samples suitable for GRACE's ingestion.\n\n        Args:\n            languages: Filter to these languages (default: SUPPORTED_LANGUAGES)\n            max_per_problem: Max accepted submissions per problem per language\n            max_problems: Max number of problems to process\n            accepted_only: Only load accepted submissions\n        "
+languages
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+languages
+SUPPORTED_LANGUAGES
+●●●●●● 2mm □△
+samples
+●●●●●● 1mm □
+problems
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_problems
+problem_id
+problems
+metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+●●●●●● 2mm □△
+by_lang
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+row
+metadata
+lang
+●●●●●● 1mm □
+row
+●●●●●● 1mm □△
+'language'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lang
+languages
+status
+●●●●●● 1mm □
+row
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+accepted_only
+status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'accepted'
+by_lang
+●●●●●● 1mm □△
+lang
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+row
+●●●●●● 2mm □△
+lang
+rows
+by_lang
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+accepted
+●●●●●● 1mm □
+r
+r
+rows
+r
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'accepted'
+selected
+●●●●●● 1mm □
+accepted
+accepted
+max_per_problem
+rows
+max_per_problem
+row
+selected
+sid
+●●●●●● 1mm □
+row
+●●●●●● 1mm □△
+'submission_id'
+''
+●●●●●● 2mm □△
+sample
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+sid
+lang
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sample
+sample
+●●●●●● 1mm □
+SubmissionStatus
+●●●●●● 1mm □△
+row
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sample
+●●●●●● 1mm □
+_safe_float
+●●●●●● 1mm □△
+row
+●●●●●● 1mm □△
+'cpu_time'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sample
+●●●●●● 1mm □
+_safe_float
+●●●●●● 1mm □△
+row
+●●●●●● 1mm □△
+'memory'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sample
+●●●●●● 1mm □
+_safe_int
+●●●●●● 1mm □△
+row
+●●●●●● 1mm □△
+'code_size'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+samples
+●●●●●● 1mm □△
+sample
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Loaded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+samples
+●●●●●● 2mm □△
+' curated CodeNet samples from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+' problems'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+samples
+●●●●●● 3mm □△
+CodeNetSample
+●●●●●● 1mm □
+extract_learning_signals
+●●●●●● 1mm □△
+self
+problem_id
+languages
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+"\n        Extract learning pairs (rejected → accepted) for a problem.\n        These map directly to GRACE's FeedbackProcessor LearningSignal format.\n        "
+languages
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+languages
+SUPPORTED_LANGUAGES
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+●●●●●● 2mm □△
+pairs
+●●●●●● 1mm □
+by_lang
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+row
+metadata
+lang
+●●●●●● 1mm □
+row
+●●●●●● 1mm □△
+'language'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lang
+languages
+status
+●●●●●● 1mm □
+row
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+by_lang
+●●●●●● 1mm □△
+lang
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+row
+●●●●●● 2mm □△
+lang
+status_groups
+by_lang
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+accepted
+●●●●●● 1mm □
+status_groups
+●●●●●● 1mm □△
+'accepted'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+accepted
+best_accepted
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+accepted
+●●●●●● 2mm □△
+accepted_sample
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+best_accepted
+'submission_id'
+lang
+●●●●●● 2mm □△
+●●●●●● 2mm □
+accepted_sample
+accepted_sample
+●●●●●● 1mm □
+SubmissionStatus
+accepted_sample
+●●●●●● 1mm □
+_safe_float
+●●●●●● 1mm □△
+best_accepted
+●●●●●● 1mm □△
+'cpu_time'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_types
+●●●●●● 1mm □
+'wrong answer'
+'time limit exceeded'
+'memory limit exceeded'
+'runtime error'
+error_type
+error_types
+rejected_rows
+●●●●●● 1mm □
+status_groups
+●●●●●● 1mm □△
+error_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rejected_rows
+rejected_row
+●●●●●● 1mm □
+rejected_rows
+0
+rejected_sample
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+rejected_row
+'submission_id'
+lang
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rejected_sample
+rejected_sample
+●●●●●● 1mm □
+SubmissionStatus
+●●●●●● 1mm □△
+error_type
+●●●●●● 2mm □△
+rejected_sample
+●●●●●● 1mm □
+_safe_float
+●●●●●● 1mm □△
+rejected_row
+●●●●●● 1mm □△
+'cpu_time'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+perf_delta
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+accepted_sample
+rejected_sample
+perf_delta
+●●●●●● 1mm □
+rejected_sample
+●●●●●● 1mm □△
+accepted_sample
+pairs
+●●●●●● 1mm □△
+LearningPair
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pairs
+●●●●●● 3mm □△
+LearningPair
+●●●●●● 1mm □
+build_similarity_groups
+●●●●●● 1mm □△
+self
+problem_ids
+min_languages
+max_per_language
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+2
+1
+"\n        Build groups of semantically equivalent solutions (same problem, different languages).\n        Useful for training GRACE's embedding model on cross-language similarity.\n        "
+problem_ids
+●●●●●● 1mm □
+problem_ids
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+500
+groups
+●●●●●● 1mm □
+problem_id
+problem_ids
+metadata
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+●●●●●● 2mm □△
+accepted_by_lang
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+row
+metadata
+●●●●●● 2mm □
+row
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'accepted'
+lang
+●●●●●● 1mm □
+row
+●●●●●● 1mm □△
+'language'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lang
+SUPPORTED_LANGUAGES
+accepted_by_lang
+●●●●●● 1mm □△
+lang
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+row
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+accepted_by_lang
+●●●●●● 2mm □△
+min_languages
+group
+●●●●●● 1mm □
+SimilarityGroup
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lang
+rows
+accepted_by_lang
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+best
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+rows
+●●●●●● 2mm □△
+sample
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem_id
+best
+'submission_id'
+lang
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sample
+sample
+●●●●●● 1mm □
+SubmissionStatus
+sample
+●●●●●● 1mm □
+_safe_float
+●●●●●● 1mm □△
+best
+●●●●●● 1mm □△
+'cpu_time'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+group
+●●●●●● 1mm □△
+sample
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+group
+●●●●●● 2mm □△
+min_languages
+groups
+●●●●●● 1mm □△
+group
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Built '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+groups
+●●●●●● 2mm □△
+' similarity groups from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problem_ids
+●●●●●● 2mm □△
+' problems'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+groups
+●●●●●● 3mm □△
+SimilarityGroup
+●●●●●● 1mm □
+to_ingestion_documents
+●●●●●● 1mm □△
+self
+samples
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+CodeNetSample
+"\n        Convert CodeNet samples to the document format expected by\n        GRACE's ingestion service (TextIngestionService.ingest_text).\n        "
+documents
+●●●●●● 1mm □
+sample
+samples
+metadata
+●●●●●● 1mm □
+'source'
+'problem_id'
+'language'
+'status'
+'submission_id'
+'codenet'
+sample
+sample
+sample
+sample
+●●●●●● 2mm □
+sample
+●●●●●● 2mm □
+metadata
+'cpu_time_ms'
+●●●●●● 1mm □
+sample
+●●●●●● 2mm □
+sample
+●●●●●● 2mm □
+metadata
+'memory_kb'
+●●●●●● 1mm □
+sample
+●●●●●● 2mm □
+sample
+●●●●●● 2mm □
+metadata
+'code_size_bytes'
+●●●●●● 1mm □
+sample
+documents
+●●●●●● 1mm □△
+'text'
+'title'
+'source_path'
+'metadata'
+sample
+'CodeNet/'
+sample
+'/'
+sample
+'/'
+sample
+sample
+metadata
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+documents
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+to_feedback_signals
+●●●●●● 1mm □△
+self
+pairs
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LearningPair
+"\n        Convert learning pairs to the signal format expected by\n        GRACE's FeedbackProcessor.\n        "
+signals
+●●●●●● 1mm □
+pair
+pairs
+signals
+●●●●●● 1mm □△
+'signal_type'
+'context'
+'outcome'
+'confidence'
+'patterns'
+'correction'
+'problem_id'
+'language'
+'error_type'
+'rejected_code_snippet'
+'accepted_code_snippet'
+pair
+pair
+pair
+pair
+500
+pair
+500
+'corrected_'
+pair
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+pair
+'wrong answer'
+0.9
+0.7
+_extract_diff_patterns
+●●●●●● 1mm □△
+pair
+pair
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+signals
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_safe_float
+●●●●●● 1mm □△
+val
+default
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+default
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+ValueError
+TypeError
+●●●●●● 3mm ○
+default
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_safe_int
+●●●●●● 1mm □△
+val
+default
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+val
+●●●●●● 2mm □
+●●●●●● 3mm ○
+default
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+val
+●●●●●● 2mm □△
+ValueError
+TypeError
+●●●●●● 3mm ○
+default
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_extract_diff_patterns
+●●●●●● 1mm □△
+rejected
+accepted
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Extract high-level diff patterns between rejected and accepted code.'
+patterns
+●●●●●● 1mm □
+r_lines
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+rejected
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+a_lines
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+accepted
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added
+●●●●●● 1mm □
+a_lines
+●●●●●● 1mm □△
+r_lines
+removed
+●●●●●● 1mm □
+r_lines
+●●●●●● 1mm □△
+a_lines
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+accepted
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rejected
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.7
+patterns
+●●●●●● 1mm □△
+'significant_simplification'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+accepted
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rejected
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1.5
+patterns
+●●●●●● 1mm □△
+'added_complexity'
+●●●●●● 2mm □△
+line
+added
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stripped
+●●●●●● 1mm □△
+'if '
+●●●●●● 2mm □△
+stripped
+●●●●●● 1mm □△
+'elif '
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+'added_condition'
+●●●●●● 2mm □△
+line
+added
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'try'
+stripped
+'except'
+stripped
+'catch'
+stripped
+patterns
+●●●●●● 1mm □△
+'added_error_handling'
+●●●●●● 2mm □△
+line
+added
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'sort'
+stripped
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □△
+'added_sorting'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+patterns
+patterns
+●●●●●● 1mm □△
+'structural_change'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+5
+●●●●●● 3mm □△
+●●●●●● 1mm ○

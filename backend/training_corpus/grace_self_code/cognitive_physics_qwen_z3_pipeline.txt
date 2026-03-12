@@ -1,0 +1,115 @@
+## qwen_z3_pipeline.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+QwenZ3Pipeline
+'\n    Translates Natural Language constraints into Formal Z3 SMT logic.\n    Provides strict template scaffolding to prevent LLM hallucinations.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_z3_constraint
+●●●●●● 1mm □△
+self
+natural_language_rule
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Takes a natural language rule (e.g., "Standard users cannot delete active databases")\n        and returns a formal Python Z3 AST string.\n        '
+prompt
+●●●●●● 1mm □
+'\n        You are a formal verification engineer. Translate the following English constraint into a precise Z3 SMT assertion.\n        \n        Available BitVec boolean masks (Assume they are already defined variables):\n        - self.domain_mask\n        - self.intent_mask\n        - self.state_mask\n        - self.ctx_mask\n        \n        Available Constants:\n        Domains: DOMAIN_DATABASE, DOMAIN_API, DOMAIN_MEMORY, DOMAIN_NETWORK, DOMAIN_SYS_CONF\n        Intents: INTENT_START, INTENT_STOP, INTENT_DELETE, INTENT_QUERY, INTENT_GRANT, INTENT_REPAIR\n        States: STATE_FAILED, STATE_IMMUTABLE, STATE_ACTIVE, STATE_UNKNOWN, STATE_STOPPED\n        Contexts: PRIV_ADMIN, PRIV_USER, PRIV_SYSTEM, CTX_MAINTENANCE, CTX_EMERGENCY, CTX_ELEVATED\n        \n        Rule to Translate: "'
+natural_language_rule
+'"\n        \n        You MUST output ONLY valid Python code using the `z3` library. \n        Use `self.solver.add(...)` and `Implies(..., ...)`.\n        Do not include markdown blocks, just the raw code string.\n        \n        Example Output for "Cannot delete immutable":\n        self.solver.add(\n            Implies(\n                And((self.intent_mask & INTENT_DELETE) != 0, (self.state_mask & STATE_IMMUTABLE) != 0),\n                False\n            )\n        )\n        '
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+code_snippet
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+code_snippet
+●●●●●● 1mm □△
+'```python'
+●●●●●● 2mm □△
+code_snippet
+●●●●●● 1mm □
+code_snippet
+9
+●●●●●● 2mm □
+code_snippet
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code_snippet
+●●●●●● 1mm □
+code_snippet
+3
+●●●●●● 2mm □
+code_snippet
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+code_snippet
+●●●●●● 1mm □
+code_snippet
+3
+●●●●●● 3mm ○
+code_snippet
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Qwen failed to generate Z3 constraint: '
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Z3 Generation Pipeline crashed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○

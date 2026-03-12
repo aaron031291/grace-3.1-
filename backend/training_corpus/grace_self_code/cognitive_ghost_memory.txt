@@ -1,0 +1,619 @@
+## ghost_memory.py
+'\nGhost Memory — Silent real-time cache alongside every conversation.\n\nHolds EVERYTHING silently. Resets when task is done.\nBefore reset, captures reflection for the playbook.\n\nThree layers:\n  1. Ghost Cache (RAM) — full context of current task\n  2. Self-Mirror — reflection before reset\n  3. Playbook — long-term evolving knowledge\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+PLAYBOOK_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'ghost_playbook'
+●●●●●● 2mm △
+GhostMemory
+'Silent real-time cache that sits beside every conversation.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+''
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0
+●●●●●● 3mm △
+●●●●●● 2mm ○
+0
+●●●●●● 3mm △
+●●●●●● 2mm ○
+0
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'GhostMemory'
+●●●●●● 1mm □
+start_task
+●●●●●● 1mm □△
+self
+task_description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Begin tracking a new task.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'ghost_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'task_start'
+task_description
+●●●●●● 2mm □△
+●●●●●● 1mm □
+append
+●●●●●● 1mm □△
+self
+event_type
+content
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'Silently append to the ghost cache.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'content'
+'metadata'
+'ts'
+'turn'
+event_type
+content
+3000
+metadata
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+event_type
+'error'
+'failure'
+'crash'
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm □
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+200
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+100
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+self
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+2000
+'Get relevant context for the LLM — silently injected.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+''
+parts
+●●●●●● 1mm □
+token_count
+●●●●●● 1mm □
+0
+entry
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+'['
+entry
+'type'
+'] '
+entry
+'content'
+200
+est_tokens
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+4
+●●●●●● 2mm □
+token_count
+●●●●●● 3mm ○
+est_tokens
+max_tokens
+parts
+●●●●●● 1mm □△
+0
+line
+●●●●●● 2mm □△
+token_count
+est_tokens
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+is_task_done
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check if the current task appears complete.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+6
+●●●●●● 3mm △
+3
+'\n        Task is done. Reflect, save to playbook, reset cache.\n        Returns the reflection.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'status'
+'no_task'
+reflection
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+reflection
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+●●●●●● 1mm □
+'reflection'
+'turns'
+'duration_s'
+reflection
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+result
+●●●●●● 3mm △
+●●●●●● 1mm □
+_reflect
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Self-mirror: Grace reflects on what happened.'
+errors
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+e
+'type'
+'error'
+'failure'
+successes
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+e
+'type'
+'success'
+'pass'
+'code_generated'
+code_entries
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+e
+'type'
+'code'
+'code_generated'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+0
+pattern
+●●●●●● 1mm □
+'clean_success'
+confidence
+●●●●●● 1mm □
+0.9
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+pattern
+●●●●●● 1mm □
+'recovered_success'
+confidence
+●●●●●● 1mm □
+0.7
+pattern
+●●●●●● 1mm □
+'struggled_success'
+confidence
+●●●●●● 1mm □
+0.5
+task_desc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+0
+'content'
+'unknown'
+●●●●●● 3mm ○
+'task_id'
+'pattern_name'
+'task'
+'what_worked'
+'errors_encountered'
+'total_turns'
+'confidence'
+'timestamp'
+'duration_s'
+'would_do_differently'
+●●●●●● 3mm △
+pattern
+task_desc
+200
+successes
+successes
+1
+'content'
+200
+'unknown'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 3mm △
+confidence
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+3
+'Try fewer iterations'
+'Same approach'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_save_to_playbook
+●●●●●● 1mm □△
+self
+reflection
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Save reflection to the long-term playbook.'
+PLAYBOOK_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+PLAYBOOK_DIR
+●●●●●● 3mm □△
+reflection
+'pattern_name'
+'_'
+ts
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+reflection
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'active_task'
+'cache_size'
+'total_turns'
+'error_free_turns'
+'task_done'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+evolve_playbook
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Nightly: merge similar patterns, boost successful ones.'
+PLAYBOOK_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+f
+PLAYBOOK_DIR
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'pattern_name'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+name
+patterns
+patterns
+name
+●●●●●● 1mm □
+patterns
+name
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+Exception
+merged
+●●●●●● 1mm □
+0
+name
+entries
+patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries
+●●●●●● 2mm □△
+3
+best
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+entries
+●●●●●● 2mm □△
+best
+'merged_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries
+●●●●●● 2mm □△
+best
+'avg_confidence'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+e
+entries
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries
+●●●●●● 2mm □△
+f
+PLAYBOOK_DIR
+●●●●●● 1mm □△
+name
+'_*.json'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PLAYBOOK_DIR
+●●●●●● 3mm □△
+name
+'_merged.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+best
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+merged
+1
+●●●●●● 3mm ○
+'patterns_total'
+'merged'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+merged
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+GhostMemory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GhostMemory

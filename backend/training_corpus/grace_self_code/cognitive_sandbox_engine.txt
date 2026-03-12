@@ -1,0 +1,1203 @@
+## sandbox_engine.py
+"\nSandbox Experimentation Engine — Grace's Autonomous Testing Lab\n\nGrace can autonomously propose and run experiments in a sandboxed\nenvironment that runs in parallel with the live system:\n\n1. PROPOSE: Grace identifies an optimization or new approach\n2. SANDBOX: Experiment runs in isolation (no live system impact)\n3. TRACK: KPIs, metrics, and performance tracked for 30-60 days\n4. COMPARE: Sandbox results compared against live system baseline\n5. REPORT: Analytics report generated with pros/cons\n6. CONSENSUS: Kimi/Opus weigh in on whether to adopt\n7. NOTIFY: User gets a notification with the full analysis\n8. ADOPT: If approved, sandbox code/config merged into live\n\nExperiments can test:\n  - Communication pathways (JSON vs structured text vs hybrid)\n  - API routing strategies\n  - Learning algorithms\n  - Trust scoring formulas\n  - LLM prompt templates\n  - Memory retrieval strategies\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+core.datetime_utils
+●●●●●● 2mm □△○
+as_naive_utc
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+EXPERIMENTS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'experiments'
+●●●●●● 2mm △
+ExperimentStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+PROPOSED
+●●●●●● 1mm □
+'proposed'
+RUNNING
+●●●●●● 1mm □
+'running'
+TRACKING
+●●●●●● 1mm □
+'tracking'
+ANALYSING
+●●●●●● 1mm □
+'analysing'
+AWAITING_APPROVAL
+●●●●●● 1mm □
+'awaiting_approval'
+APPROVED
+●●●●●● 1mm □
+'approved'
+REJECTED
+●●●●●● 1mm □
+'rejected'
+ADOPTED
+●●●●●● 1mm □
+'adopted'
+●●●●●● 2mm △
+ExperimentMetric
+name
+●●●●●● 1mm ○
+baseline_value
+●●●●●● 3mm ○
+current_value
+●●●●●● 3mm ○
+target_value
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+improved
+●●●●●● 3mm △
+●●●●●● 1mm □
+delta_percent
+●●●●●● 3mm ○
+0.0
+dataclass
+●●●●●● 2mm △
+Experiment
+●●●●●● 1mm △
+●●●●●● 1mm ○
+title
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+hypothesis
+●●●●●● 1mm ○
+domain
+●●●●●● 1mm ○
+status
+ExperimentStatus
+created_at
+●●●●●● 1mm ○
+tracking_days
+●●●●●● 2mm ○
+60
+end_date
+●●●●●● 1mm ○
+''
+metrics
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checkpoints
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config_changes
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm ○
+'grace'
+consensus_result
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+final_report
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'title'
+'description'
+'hypothesis'
+'domain'
+'status'
+'created_at'
+'tracking_days'
+'end_date'
+'metrics'
+'checkpoints'
+'baseline'
+'current'
+'config_changes'
+'source'
+'consensus_result'
+'final_report'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+ExperimentStatus
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+dataclass
+●●●●●● 1mm □
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+EXPERIMENTS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+path
+●●●●●● 1mm □
+EXPERIMENTS_DIR
+●●●●●● 3mm □△
+exp_id
+'.json'
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Experiment
+●●●●●● 1mm □
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+Experiment
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+EXPERIMENTS_DIR
+●●●●●● 3mm □△
+exp
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+propose_and_start_experiment
+●●●●●● 1mm □△
+title
+description
+hypothesis
+domain
+tracking_days
+config_changes
+source
+use_consensus
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'general'
+60
+●●●●●● 2mm □
+'grace'
+●●●●●● 3mm □△○
+"\n    Autonomously propose AND start an experiment. No permission needed.\n    Only the END RESULT needs human approval (aye/nay).\n\n    Uses 4-layer decision architecture:\n      Layer 1: All models deliberate independently on the experiment design\n      Layer 2: Consensus on whether experiment is safe to run\n      Layer 3: Align to Grace's current needs\n      Layer 4: Verify no conflicts with running experiments\n    "
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_consensus
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+decision
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+decision
+500
+●●●●●● 2mm □
+'no'
+decision
+50
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+0.8
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+'Blocked by consensus: '
+decision
+200
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+exp
+Exception
+exp
+●●●●●● 1mm □
+_capture_baseline_metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'experiment.proposed'
+'id'
+'title'
+'domain'
+exp
+title
+domain
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+exp
+Experiment
+●●●●●● 1mm □
+start_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Start tracking an experiment.'
+exp
+●●●●●● 1mm □
+_load_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 3mm ○
+'error'
+'Experiment not found'
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'started'
+'id'
+'end_date'
+●●●●●● 3mm □△○
+exp_id
+exp
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_checkpoint
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Record a metrics checkpoint for an experiment.'
+exp
+●●●●●● 1mm □
+_load_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 3mm ○
+'error'
+'Experiment not found'
+current
+●●●●●● 1mm □
+_capture_baseline_metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checkpoint
+●●●●●● 1mm □
+'timestamp'
+'metrics'
+'day'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+current
+exp
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+as_naive_utc
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+key
+exp
+●●●●●● 2mm □
+key
+current
+exp
+key
+0
+delta
+●●●●●● 1mm □
+current
+key
+●●●●●● 1mm □△
+exp
+key
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+exp
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+checkpoint
+key
+'_delta_pct'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+delta
+2
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+checkpoint
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+current
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'checkpoint_recorded'
+'day'
+'metrics'
+●●●●●● 3mm □△○
+checkpoint
+'day'
+current
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+analyse_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n    Analyse an experiment's results.\n    Compares baseline to current, identifies improvements/regressions.\n    "
+exp
+●●●●●● 1mm □
+_load_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 3mm ○
+'error'
+'Experiment not found'
+exp
+●●●●●● 1mm □
+ExperimentStatus
+comparisons
+●●●●●● 1mm □
+key
+exp
+baseline_val
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+current_val
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+delta
+●●●●●● 1mm □
+current_val
+●●●●●● 1mm □△
+baseline_val
+delta_pct
+●●●●●● 1mm □
+baseline_val
+0
+delta
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+baseline_val
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+0
+improved
+●●●●●● 1mm □
+key
+'trust_score'
+'learning_count'
+'integration_health'
+delta
+0
+delta
+0
+comparisons
+●●●●●● 1mm □△
+'metric'
+'baseline'
+'current'
+'delta'
+'delta_percent'
+'improved'
+key
+baseline_val
+current_val
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+delta
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+delta_pct
+2
+●●●●●● 2mm □△
+improved
+●●●●●● 2mm □△
+improved_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+comparisons
+c
+'improved'
+●●●●●● 2mm □△
+total_metrics
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comparisons
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+'experiment_id'
+'title'
+'hypothesis'
+'comparisons'
+'improved_metrics'
+'total_metrics'
+'improvement_rate'
+'recommendation'
+'checkpoints_recorded'
+'days_tracked'
+exp_id
+exp
+exp
+comparisons
+improved_count
+total_metrics
+total_metrics
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+improved_count
+●●●●●● 3mm □△
+total_metrics
+3
+●●●●●● 2mm □△
+0
+improved_count
+total_metrics
+●●●●●● 3mm □△
+2
+'adopt'
+'reject'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+exp
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+as_naive_utc
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+exp
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+analysis
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+analysis
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+approve_experiment
+●●●●●● 1mm □△
+exp_id
+approved
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'Approve or reject an experiment for adoption.'
+exp
+●●●●●● 1mm □
+_load_experiment
+●●●●●● 1mm □△
+exp_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 3mm ○
+'error'
+'Experiment not found'
+exp
+●●●●●● 1mm □
+approved
+ExperimentStatus
+ExperimentStatus
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'status'
+'approved'
+exp_id
+exp
+approved
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_autonomous_experiment
+●●●●●● 1mm □△
+title
+hypothesis
+domain
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'general'
+'\n    Fully autonomous experiment. No permission needed to START.\n    Only the end result needs human approval (aye/nay).\n\n    Flow:\n      1. All 4 models deliberate on the experiment design (consensus)\n      2. Experiment auto-starts and tracks for 60 days\n      3. Grace tries 3 different approaches if first fails\n      4. 30% improvement threshold to call it a success\n      5. If all 3 approaches fail → logged, monitored, revisited later\n      6. Pulls from GitHub, ArXiv for research\n      7. Trust scores and KPIs tracked via genesis keys\n    '
+SUCCESS_THRESHOLD
+●●●●●● 1mm □
+0.3
+MAX_APPROACHES
+●●●●●● 1mm □
+3
+result
+●●●●●● 1mm □
+'title'
+'hypothesis'
+'status'
+'approaches_tried'
+'best_improvement'
+'experiment_id'
+title
+hypothesis
+'starting'
+0
+0
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+design
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'consensus_design'
+●●●●●● 1mm □
+design
+1000
+Exception
+result
+'consensus_design'
+●●●●●● 1mm □
+'Consensus unavailable'
+exp
+●●●●●● 1mm □
+propose_and_start_experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'experiment_id'
+●●●●●● 1mm □
+exp
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+MAX_APPROACHES
+●●●●●● 2mm □△
+result
+'approaches_tried'
+●●●●●● 1mm □
+attempt
+●●●●●● 3mm ○
+1
+checkpoint
+●●●●●● 1mm □
+record_checkpoint
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 2mm □
+checkpoint
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+baseline
+●●●●●● 1mm □
+exp
+key
+baseline
+●●●●●● 2mm □
+key
+checkpoint
+●●●●●● 1mm □△
+'metrics'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+baseline
+key
+0
+improvement
+●●●●●● 1mm □
+checkpoint
+'metrics'
+key
+●●●●●● 1mm □△
+baseline
+key
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+baseline
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+improvement
+result
+'best_improvement'
+result
+'best_improvement'
+●●●●●● 1mm □
+improvement
+●●●●●● 2mm □
+result
+'best_improvement'
+SUCCESS_THRESHOLD
+result
+'status'
+●●●●●● 1mm □
+'success_awaiting_approval'
+exp
+●●●●●● 1mm □
+ExperimentStatus
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □
+result
+'best_improvement'
+SUCCESS_THRESHOLD
+result
+'status'
+●●●●●● 1mm □
+'deferred'
+result
+'reason'
+●●●●●● 1mm □
+'All '
+MAX_APPROACHES
+' approaches tried. Best improvement: '
+result
+'best_improvement'
+●●●●●● 2mm □△
+100
+'.1f'
+'% (need '
+SUCCESS_THRESHOLD
+●●●●●● 2mm □△
+100
+'.0f'
+'%). Logged for revisit when Grace has more knowledge.'
+exp
+●●●●●● 1mm □
+ExperimentStatus
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_save_experiment
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_experiments
+●●●●●● 1mm □△
+status
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'List all experiments, optionally filtered by status.'
+_ensure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+experiments
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+EXPERIMENTS_DIR
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+data
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+status
+experiments
+●●●●●● 1mm □△
+'id'
+'title'
+'domain'
+'status'
+'source'
+'created_at'
+'tracking_days'
+'checkpoints'
+data
+'id'
+data
+'title'
+data
+●●●●●● 1mm □△
+'domain'
+''
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'source'
+''
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'created_at'
+''
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'tracking_days'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+'checkpoints'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+experiments
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_capture_baseline_metrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Capture current system metrics as a baseline.'
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'trust_score'
+●●●●●● 1mm □
+d
+●●●●●● 1mm □△
+'overall_trust'
+0
+●●●●●● 2mm □△
+Exception
+metrics
+'trust_score'
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+get_llm_usage_stats
+stats
+●●●●●● 1mm □
+get_llm_usage_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'llm_latency_ms'
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+'avg_latency_ms'
+0
+●●●●●● 2mm □△
+metrics
+'llm_error_rate'
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+'error_rate'
+0
+●●●●●● 2mm □△
+metrics
+'llm_total_calls'
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+'total_calls'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.central_orchestrator
+●●●●●● 2mm □△○
+get_orchestrator
+health
+●●●●●● 1mm □
+get_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'integration_health'
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'health_percent'
+0
+●●●●●● 2mm □△
+Exception
+metrics
+'integration_health'
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem_stats
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+v
+mem_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+metrics
+'memory_entries'
+●●●●●● 1mm □
+total
+Exception
+metrics
+'memory_entries'
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○

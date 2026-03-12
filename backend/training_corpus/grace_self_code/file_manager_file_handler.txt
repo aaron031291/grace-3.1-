@@ -1,0 +1,1403 @@
+## file_handler.py
+'\nFile handler for extracting text from various file types.\nSupports TXT, MD, PDF, DOCX, XLSX, and other text-based formats.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Tuple
+Optional
+●●●●●● 2mm □△○
+mimetypes
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfminer'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfminer.pdfpage'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfminer.pdfdocument'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfminer.pdfparser'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfminer.converter'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+'pdfplumber'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileHandler
+'Handles extraction of text from different file types.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.txt'
+'.md'
+'.json'
+'.xml'
+'.csv'
+'.py'
+'.js'
+'.jsx'
+'.ts'
+'.tsx'
+'.java'
+'.cpp'
+'.c'
+'.h'
+'.cs'
+'.php'
+'.rb'
+'.go'
+'.rs'
+'.swift'
+'.kt'
+'.scala'
+'.sh'
+'.bash'
+'.sql'
+'.html'
+'.css'
+'.scss'
+'.yaml'
+'.yml'
+'.toml'
+'.pdf'
+'.docx'
+'.doc'
+'.xlsx'
+'.xls'
+'.pptx'
+'.ppt'
+'.mp3'
+'.wav'
+'.m4a'
+'.flac'
+'.ogg'
+'.aac'
+'.mp4'
+'.avi'
+'.mov'
+'.mkv'
+'.webm'
+'.flv'
+'text/plain'
+'text/markdown'
+'application/json'
+'application/xml'
+'text/csv'
+'text/x-python'
+'text/javascript'
+'text/javascript'
+'text/typescript'
+'text/typescript'
+'text/x-java'
+'text/x-c++src'
+'text/x-csrc'
+'text/x-chdr'
+'text/x-csharp'
+'text/x-php'
+'text/x-ruby'
+'text/x-go'
+'text/x-rust'
+'text/x-swift'
+'text/x-kotlin'
+'text/x-scala'
+'text/x-sh'
+'text/x-sh'
+'text/x-sql'
+'text/html'
+'text/css'
+'text/x-scss'
+'text/yaml'
+'text/yaml'
+'text/x-toml'
+'application/pdf'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'application/msword'
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+'application/vnd.ms-excel'
+'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+'application/vnd.ms-powerpoint'
+'audio/mpeg'
+'audio/wav'
+'audio/mp4'
+'audio/flac'
+'audio/ogg'
+'audio/aac'
+'video/mp4'
+'video/x-msvideo'
+'video/quicktime'
+'video/x-matroska'
+'video/webm'
+'video/x-flv'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get file type from path.'
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Extract text from file.\n\n        Args:\n            file_path: Path to the file\n\n        Returns:\n            Tuple of (text_content, error_message)\n            If successful, error_message is None\n        '
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'File not found: '
+file_path
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.txt'
+'.md'
+'.json'
+'.xml'
+'.csv'
+'.py'
+'.js'
+'.jsx'
+'.ts'
+'.tsx'
+'.java'
+'.cpp'
+'.c'
+'.h'
+'.cs'
+'.php'
+'.rb'
+'.go'
+'.rs'
+'.swift'
+'.kt'
+'.scala'
+'.sh'
+'.bash'
+'.sql'
+'.html'
+'.css'
+'.scss'
+'.yaml'
+'.yml'
+'.toml'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.pdf'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.docx'
+'.doc'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.xlsx'
+'.xls'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.pptx'
+'.ppt'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.mp3'
+'.wav'
+'.m4a'
+'.flac'
+'.ogg'
+'.aac'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.mp4'
+'.avi'
+'.mov'
+'.mkv'
+'.webm'
+'.flv'
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+''
+'Unsupported file type: '
+ext
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_text_file
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from TXT or MD files.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+UnicodeDecodeError
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error reading text file '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error reading file: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error reading text file '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error reading file: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_pdf
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from PDF file with fallback mechanisms for encoding issues.'
+pdfplumber_logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'pdfplumber'
+●●●●●● 2mm □△
+pdfminer_logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'pdfminer'
+●●●●●● 2mm □△
+old_pdfplumber_level
+●●●●●● 1mm □
+pdfplumber_logger
+old_pdfminer_level
+●●●●●● 1mm □
+pdfminer_logger
+pdfplumber_logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+pdfminer_logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+pdfplumber
+text_parts
+●●●●●● 1mm □
+pdfplumber
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+pdf
+page_num
+page
+●●●●●● 2mm □
+●●●●●● 1mm □△
+pdf
+1
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+page
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+text
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □△
+'[Page '
+page_num
+']\n'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_layout
+●●●●●● 1mm □
+page
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text_layout
+text_layout
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+text_layout
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text_layout
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □△
+'[Page '
+page_num
+']\n'
+text_layout
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error extracting page '
+page_num
+': '
+page_error
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text_parts
+●●●●●● 3mm ○
+''
+'No text content found in PDF'
+final_text
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+text_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+FileHandler
+●●●●●● 1mm □△
+final_text
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'PDF extraction resulted in mostly unreadable text, falling back to alternative method'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+final_text
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error extracting PDF content with primary method: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'pdfplumber not installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'PDF support not available. Install pdfplumber.'
+pdfplumber_logger
+●●●●●● 1mm □△
+old_pdfplumber_level
+●●●●●● 2mm □△
+pdfminer_logger
+●●●●●● 1mm □△
+old_pdfminer_level
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_pdf_fallback
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Fallback PDF extraction using PyPDF2 if pdfplumber fails.'
+pdf2_logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'PyPDF2'
+●●●●●● 2mm □△
+old_level
+●●●●●● 1mm □
+pdf2_logger
+pdf2_logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+PyPDF2
+●●●●●● 2mm □△○
+PdfReader
+pdf2_logger
+●●●●●● 1mm □△
+old_level
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □
+pdf_reader
+●●●●●● 1mm □
+PdfReader
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+page_num
+page
+●●●●●● 2mm □
+●●●●●● 1mm □△
+pdf_reader
+1
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+page
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+text
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □△
+'[Page '
+page_num
+']\n'
+text
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error extracting page '
+page_num
+' with fallback: '
+page_error
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text_parts
+●●●●●● 3mm ○
+''
+'No text content found in PDF (fallback method)'
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+text_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error with PyPDF2 fallback: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'PDF extraction failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'PyPDF2 not installed for fallback PDF extraction'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'PDF extraction failed and fallback library not available'
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_clean_text
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Clean extracted text by removing encoding artifacts and control characters.\n        \n        Args:\n            text: Raw extracted text\n            \n        Returns:\n            Cleaned text\n        '
+●●●●●● 2mm □
+text
+●●●●●● 3mm ○
+text
+text
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+char
+char
+text
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+char
+●●●●●● 2mm □△
+32
+char
+'\n\r\t'
+●●●●●● 2mm □△
+replacements
+●●●●●● 1mm □
+'\x80'
+''
+'\x93'
+'"'
+'\x94'
+'"'
+'\x97'
+'—'
+'\x96'
+'–'
+'\x92'
+"'"
+old
+new
+replacements
+text
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+old
+new
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line
+text
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+line
+line
+lines
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_is_valid_text
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Check if extracted text is valid and readable.\n        \n        Returns True if text has normal word patterns.\n        Returns False if text is mostly control/encoding artifacts.\n        \n        Args:\n            text: Text to validate\n            \n        Returns:\n            Whether the text appears to be valid\n        '
+●●●●●● 2mm □
+text
+●●●●●● 3mm ○
+●●●●●● 1mm □
+cleaned
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+words
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b[a-zA-Z0-9\\u0100-\\uFFFF]+\\b'
+cleaned
+●●●●●● 2mm □△
+●●●●●● 2mm □
+words
+avg_word_length
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+w
+words
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+has_words
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+5
+word_length_ok
+●●●●●● 1mm □
+2
+avg_word_length
+25
+●●●●●● 3mm ○
+has_words
+word_length_ok
+printable_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+char
+cleaned
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+char
+●●●●●● 2mm □△
+32
+char
+'\n\r\t'
+●●●●●● 2mm □△
+total_count
+●●●●●● 1mm □
+cleaned
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cleaned
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_count
+0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+readability
+●●●●●● 1mm □
+printable_count
+●●●●●● 3mm □△
+total_count
+●●●●●● 3mm ○
+readability
+0.6
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+_extract_docx
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from DOCX or DOC files.'
+●●●●●● 3mm □△○
+docx
+●●●●●● 2mm □△○
+Document
+doc
+●●●●●● 1mm □
+Document
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □
+para
+doc
+●●●●●● 2mm □
+para
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □△
+para
+●●●●●● 2mm □△
+table
+doc
+row
+table
+row_text
+●●●●●● 1mm □
+cell
+row
+row_text
+●●●●●● 1mm □△
+cell
+●●●●●● 2mm □△
+●●●●●● 2mm □
+row_text
+text_parts
+●●●●●● 1mm □△
+' | '
+●●●●●● 1mm □△
+row_text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+text_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'No text content found in DOCX'
+●●●●●● 3mm ○
+text
+●●●●●● 2mm □
+ImportError
+logger
+●●●●●● 1mm □△
+'python-docx not installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'DOCX support not available. Install python-docx.'
+Exception
+logger
+●●●●●● 1mm □△
+'Error processing DOCX '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error processing DOCX: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_excel
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from XLSX or XLS files.'
+●●●●●● 2mm □△○
+openpyxl
+wb
+●●●●●● 1mm □
+openpyxl
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □
+sheet_name
+wb
+sheet
+●●●●●● 1mm □
+wb
+sheet_name
+text_parts
+●●●●●● 1mm □△
+'[Sheet: '
+sheet_name
+']'
+●●●●●● 2mm □△
+row
+sheet
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+row_text
+●●●●●● 1mm □
+cell
+row
+●●●●●● 2mm □
+cell
+●●●●●● 2mm □
+row_text
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+cell
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+row_text
+text_parts
+●●●●●● 1mm □△
+' | '
+●●●●●● 1mm □△
+row_text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+text_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'No text content found in Excel file'
+●●●●●● 3mm ○
+text
+●●●●●● 2mm □
+ImportError
+logger
+●●●●●● 1mm □△
+'openpyxl not installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Excel support not available. Install openpyxl.'
+Exception
+logger
+●●●●●● 1mm □△
+'Error processing Excel '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error processing Excel: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_pptx
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from PPTX or PPT files.'
+●●●●●● 3mm □△○
+pptx
+●●●●●● 2mm □△○
+Presentation
+prs
+●●●●●● 1mm □
+Presentation
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □
+slide_num
+slide
+●●●●●● 2mm □
+●●●●●● 1mm □△
+prs
+1
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □△
+'[Slide '
+slide_num
+']'
+●●●●●● 2mm □△
+shape
+slide
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+shape
+'text'
+●●●●●● 2mm □△
+shape
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text_parts
+●●●●●● 1mm □△
+shape
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'\n\n'
+●●●●●● 1mm □△
+text_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'No text content found in PowerPoint file'
+●●●●●● 3mm ○
+text
+●●●●●● 2mm □
+ImportError
+logger
+●●●●●● 1mm □△
+'python-pptx not installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'PowerPoint support not available. Install python-pptx.'
+Exception
+logger
+●●●●●● 1mm □△
+'Error processing PowerPoint '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error processing PowerPoint: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_audio
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from audio files using speech recognition.'
+●●●●●● 2mm □△○
+speech_recognition
+●●●●●● 1mm □
+sr
+●●●●●● 3mm □△○
+pydub
+●●●●●● 2mm □△○
+AudioSegment
+●●●●●● 2mm □△○
+tempfile
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.wav'
+logger
+●●●●●● 1mm □△
+'Converting '
+ext
+' audio to WAV format...'
+●●●●●● 2mm □△
+audio
+●●●●●● 1mm □
+AudioSegment
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+temp_wav
+temp_wav_path
+●●●●●● 1mm □
+temp_wav
+audio
+●●●●●● 1mm □△
+temp_wav_path
+●●●●●● 2mm □△
+working_file
+●●●●●● 1mm □
+temp_wav_path
+Exception
+logger
+●●●●●● 1mm □△
+'Error converting audio format: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error converting audio format: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+working_file
+●●●●●● 1mm □
+file_path
+recognizer
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sr
+●●●●●● 1mm □△
+working_file
+●●●●●● 2mm □△
+source
+audio_data
+●●●●●● 1mm □
+recognizer
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+recognizer
+●●●●●● 1mm □△
+audio_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+●●●●●● 2mm □
+sr
+●●●●●● 3mm ○
+''
+'Could not understand audio'
+sr
+●●●●●● 3mm ○
+''
+'Speech recognition service error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.wav'
+os
+●●●●●● 1mm □△
+working_file
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+working_file
+●●●●●● 2mm □△
+OSError
+ImportError
+logger
+●●●●●● 1mm □△
+'Audio processing libraries not installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Audio support not available. Install speech_recognition and pydub packages.'
+Exception
+logger
+●●●●●● 1mm □△
+'Error processing audio '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error processing audio: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_video
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Extract text from video files by extracting audio and transcribing.'
+●●●●●● 3mm □△○
+moviepy.editor
+●●●●●● 2mm □△○
+VideoFileClip
+●●●●●● 2mm □△○
+tempfile
+logger
+●●●●●● 1mm □△
+'Extracting audio from video: '
+file_path
+●●●●●● 2mm □△
+video
+●●●●●● 1mm □
+VideoFileClip
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+temp_audio
+temp_audio_path
+●●●●●● 1mm □
+temp_audio
+video
+●●●●●● 1mm □△
+temp_audio_path
+●●●●●● 2mm □△
+video
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+error
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+temp_audio_path
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+temp_audio_path
+●●●●●● 2mm □△
+OSError
+●●●●●● 2mm □
+error
+●●●●●● 3mm ○
+''
+'Video processed but audio transcription failed: '
+error
+●●●●●● 3mm ○
+text
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error extracting audio from video: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error extracting audio from video: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'Video processing libraries not installed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Video support not available. Install moviepy package.'
+Exception
+logger
+●●●●●● 1mm □△
+'Error processing video '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'Error processing video: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+extract_file_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Extract text from a file.\n    \n    Args:\n        file_path: Path to the file\n        \n    Returns:\n        Tuple of (text_content, error_message)\n    '
+●●●●●● 3mm ○
+FileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○

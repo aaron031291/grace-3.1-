@@ -1,0 +1,492 @@
+## verify_resources.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+grace_mcp.orchestrator
+●●●●●● 2mm □△○
+MCPOrchestrator
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- Verifying Resource Templates Implementation ---'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+MCPOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Initializing orchestrator...'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Failed to initialize orchestrator'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nListing resource templates...'
+●●●●●● 2mm □△
+templates
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+templates
+●●●●●● 2mm □△
+' templates'
+●●●●●● 2mm □△
+has_logs_template
+●●●●●● 1mm □
+●●●●●● 1mm □
+t
+templates
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' - '
+t
+'name'
+': '
+t
+'uri_template'
+' ('
+t
+'mime_type'
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+t
+'uri_template'
+'logs://{pid}'
+has_logs_template
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+has_logs_template
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"❌ 'logs://{pid}' template not found"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"✅ 'logs://{pid}' template found"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nStarting a dummy process (ping localhost)...'
+●●●●●● 2mm □△
+start_result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+start_result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Failed to start process: '
+start_result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+pid
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+start_result
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Start result: '
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+pid_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'PID (\\d+)'
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pid_match
+pid
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+pid_match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pid
+pid_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'PID: (\\d+)'
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pid_match
+pid
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+pid_match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pid
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'PID not found in output, checking list_processes...'
+●●●●●● 2mm □△
+proc_list
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'list_processes'
+●●●●●● 2mm □△
+proc_content
+●●●●●● 1mm □
+proc_list
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Active processes: '
+proc_content
+●●●●●● 2mm □△
+ping_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'PID: (\\d+), Command: .*ping'
+proc_content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ping_match
+pid
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+ping_match
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Found ping PID via list_processes: '
+pid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pid
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Could not determine PID'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Process started with PID: '
+pid
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Waiting 3 seconds for output...'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+uri
+●●●●●● 1mm □
+'logs://'
+pid
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nReading resource: '
+uri
+●●●●●● 2mm □△
+resource_result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+uri
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resource_result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Failed to read resource: '
+resource_result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Resource read successfully!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+log_content
+●●●●●● 1mm □
+resource_result
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- Log Content Preview ---'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_content
+●●●●●● 2mm □△
+500
+log_content
+500
+●●●●●● 3mm ○
+'...'
+log_content
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'---------------------------'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Logs are non-empty'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠️ Logs are empty (process might be slow or failed)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- LLM-in-the-loop Test ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Asking LLM to analyze logs for PID '
+pid
+'...'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+"I've started a 'ping' process with PID "
+pid
+". Please use the 'read_resource' tool with the URI 'logs://"
+pid
+"' to read its current logs, tell me what the ping results look like, and then confirm if the process seems to be working correctly."
+chat_result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chat_result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ LLM Chat Response:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+chat_result
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tool_calls
+●●●●●● 1mm □
+chat_result
+●●●●●● 1mm □△
+'tool_calls_made'
+●●●●●● 2mm □△
+used_read_resource
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+tc
+●●●●●● 1mm □△
+'tool'
+●●●●●● 2mm □△
+'read_resource'
+tc
+tool_calls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+used_read_resource
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n✅ Success: LLM used the 'read_resource' tool!"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\n❌ Failure: LLM did NOT use the 'read_resource' tool."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tool calls made: '
+tc
+●●●●●● 1mm □△
+'tool'
+●●●●●● 2mm □△
+tc
+tool_calls
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ LLM Chat failed: '
+chat_result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking audit log...'
+●●●●●● 2mm □△
+recent
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+found_audit
+●●●●●● 1mm □
+●●●●●● 1mm □
+entry
+recent
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'resource_read'
+entry
+●●●●●● 1mm □△
+'resource_uri'
+●●●●●● 2mm □△
+uri
+found_audit
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Found audit entry for '
+uri
+●●●●●● 2mm □△
+●●●●●● 2mm □
+found_audit
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Audit entry for resource read not found'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nStopping process...'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+'kill_process'
+'pid'
+pid
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Verification Complete ---'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+verify_resource_templates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

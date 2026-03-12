@@ -1,0 +1,1071 @@
+## codebase_hub_api.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Query
+Body
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+WORKSPACE_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GENESIS_TRACKING_FILE
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'.genesis_file_versions.json'
+GENESIS_SNAPSHOTS_DIR
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'.genesis_snapshots'
+os
+●●●●●● 1mm □△
+GENESIS_SNAPSHOTS_DIR
+●●●●●● 2mm □△
+EXCLUDED_DIRS
+●●●●●● 1mm □
+'.git'
+'node_modules'
+'.venv'
+'venv'
+'__pycache__'
+'.pytest_cache'
+●●●●●● 2mm △
+FileSaveRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+path
+●●●●●● 1mm ○
+content
+●●●●●● 1mm ○
+●●●●●● 2mm △
+FileCreateRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+project_name
+●●●●●● 1mm ○
+●●●●●● 3mm □
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_next_version
+●●●●●● 1mm □△
+versions
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'Calculate linear version v1.X -> v1.(X+1)'
+●●●●●● 2mm □
+versions
+●●●●●● 3mm ○
+'v1.0'
+latest_version
+●●●●●● 1mm □
+versions
+1
+●●●●●● 1mm □△
+'linear_version'
+'v1.0'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+latest_version
+●●●●●● 1mm □△
+'v'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+latest_version
+1
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+v_minor
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+parts
+1
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+'v1.'
+v_minor
+●●●●●● 3mm ○
+1
+Exception
+●●●●●● 3mm ○
+'v1.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+versions
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+record_genesis_block
+●●●●●● 1mm □△
+file_path
+content
+trigger
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Manual Edit'
+'Creates an immutable linear version block linked to a Genesis Key'
+●●●●●● 2mm □
+GENESIS_TRACKING_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_data
+●●●●●● 1mm □
+'version'
+'files'
+'1.0'
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+GENESIS_TRACKING_FILE
+'r'
+●●●●●● 2mm □△
+f
+genesis_data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+Exception
+genesis_data
+●●●●●● 1mm □
+'version'
+'files'
+'1.0'
+abs_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □△
+file_id
+●●●●●● 1mm □
+'FILE-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+target_fid
+●●●●●● 1mm □
+●●●●●● 2mm □
+fid
+record
+genesis_data
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+record
+●●●●●● 1mm □△
+'absolute_path'
+●●●●●● 2mm □△
+abs_path
+record
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+abs_path
+target_fid
+●●●●●● 1mm □
+fid
+●●●●●● 2mm □
+target_fid
+target_fid
+●●●●●● 1mm □
+file_id
+genesis_data
+'files'
+target_fid
+●●●●●● 1mm □
+'file_genesis_key'
+'absolute_path'
+'file_path'
+'versions'
+target_fid
+abs_path
+abs_path
+file_record
+●●●●●● 1mm □
+genesis_data
+'files'
+target_fid
+versions
+●●●●●● 1mm □
+file_record
+●●●●●● 1mm □△
+'versions'
+●●●●●● 2mm □△
+linear_ver
+●●●●●● 1mm □
+get_next_version
+●●●●●● 1mm □△
+versions
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+'GK-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_version
+●●●●●● 1mm □
+'linear_version'
+'genesis_key'
+'timestamp'
+'trigger'
+'file_size'
+'status'
+linear_ver
+genesis_key
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+'active'
+snapshot_path
+●●●●●● 1mm □
+GENESIS_SNAPSHOTS_DIR
+●●●●●● 3mm □△
+genesis_key
+'.txt'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snapshot_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to write snapshot '
+genesis_key
+': '
+e
+●●●●●● 2mm □△
+v
+versions
+v
+'status'
+●●●●●● 1mm □
+'superseded'
+versions
+●●●●●● 1mm □△
+new_version
+●●●●●● 2mm □△
+file_record
+'versions'
+●●●●●● 1mm □
+versions
+file_record
+'last_updated'
+●●●●●● 1mm □
+new_version
+'timestamp'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+GENESIS_TRACKING_FILE
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+genesis_data
+f
+●●●●●● 2mm □△
+'List root directories as projects'
+projects
+●●●●●● 1mm □
+'root'
+item
+os
+●●●●●● 1mm □△
+WORKSPACE_ROOT
+●●●●●● 2mm □△
+item_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+item
+●●●●●● 2mm □
+item_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+EXCLUDED_DIRS
+projects
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+projects
+router
+●●●●●● 1mm □△
+'/projects'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+build_tree
+●●●●●● 1mm □△
+dir_path
+rel_base
+●●●●●● 2mm □△
+Path
+Path
+tree
+●●●●●● 1mm □
+items
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+dir_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+item
+items
+●●●●●● 2mm □
+item
+EXCLUDED_DIRS
+item_path
+●●●●●● 1mm □
+dir_path
+●●●●●● 3mm □△
+item
+rel_path
+●●●●●● 1mm □
+item_path
+●●●●●● 1mm □△
+rel_base
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+'name'
+'path'
+'type'
+item
+rel_path
+item_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'directory'
+'file'
+●●●●●● 2mm □
+item_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+'children'
+●●●●●● 1mm □
+build_tree
+●●●●●● 1mm □△
+item_path
+rel_base
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+tree
+●●●●●● 1mm ○
+'Get project file tree'
+●●●●●● 2mm □
+project_name
+'root'
+project_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □
+project_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+project_name
+●●●●●● 2mm □
+project_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'path'
+'type'
+'children'
+project_name
+project_name
+'root'
+project_name
+''
+'directory'
+build_tree
+●●●●●● 1mm □△
+project_path
+WORKSPACE_ROOT
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/tree/{project_name}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+'Read file content and return its Genesis lineage'
+file_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+path
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_history
+●●●●●● 1mm □
+●●●●●● 2mm □
+GENESIS_TRACKING_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+GENESIS_TRACKING_FILE
+'r'
+●●●●●● 2mm □△
+f
+tracker
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+abs_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+abs_path_lower
+●●●●●● 1mm □
+abs_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fid
+record
+tracker
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+record
+●●●●●● 1mm □△
+'absolute_path'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+abs_path_lower
+record
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+abs_path_lower
+v
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+record
+●●●●●● 1mm □△
+'versions'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_history
+●●●●●● 1mm □△
+'version'
+'genesis_key'
+'timestamp'
+'author'
+'message'
+'status'
+v
+●●●●●● 1mm □△
+'linear_version'
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'genesis_key'
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+' '
+v
+●●●●●● 1mm □△
+'trigger'
+''
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'trigger'
+'Manual Edit'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+●●●●●● 2mm □△
+0
+'User'
+v
+●●●●●● 1mm □△
+'trigger'
+'Manual Edit'
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'content'
+'genesis_history'
+path
+content
+genesis_history
+UnicodeDecodeError
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/file'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+'Read a specific historical snapshot of a file by genesis key'
+snapshot_path
+●●●●●● 1mm □
+GENESIS_SNAPSHOTS_DIR
+●●●●●● 3mm □△
+genesis_key
+'.txt'
+●●●●●● 2mm □
+snapshot_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+snapshot_path
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+'genesis_key'
+'content'
+genesis_key
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/file/version'
+●●●●●● 2mm □△
+FileSaveRequest
+'Save file content and hook into Genesis Linear Versioning'
+file_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+req
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+record_genesis_block
+●●●●●● 1mm □△
+req
+req
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'path'
+●●●●●● 3mm □△○
+req
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/file'
+●●●●●● 2mm □△
+FileCreateRequest
+'Create a new file or directory'
+target_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+req
+●●●●●● 2mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+req
+'directory'
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+target_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □
+record_genesis_block
+●●●●●● 1mm □△
+req
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'path'
+●●●●●● 3mm □△○
+req
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/file/create'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+'Delete a file or directory'
+target_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+path
+●●●●●● 2mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+target_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+target_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+●●●●●● 3mm □△○
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/file'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RenameRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+old_path
+●●●●●● 1mm ○
+new_name
+●●●●●● 1mm ○
+RenameRequest
+old_path
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+req
+●●●●●● 2mm □
+old_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_path
+●●●●●● 1mm □
+old_path
+●●●●●● 3mm □△
+req
+●●●●●● 2mm □
+new_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+old_path
+●●●●●● 1mm □△
+new_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'new_path'
+●●●●●● 3mm □△○
+new_path
+●●●●●● 1mm □△
+WORKSPACE_ROOT
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/rename'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MoveRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+source_path
+●●●●●● 1mm ○
+dest_path
+●●●●●● 1mm ○
+MoveRequest
+src
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+req
+dest
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+req
+●●●●●● 2mm □
+src
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dest
+●●●●●● 1mm □
+dest
+dest_file
+●●●●●● 1mm □
+dest
+●●●●●● 3mm □△
+src
+●●●●●● 2mm □
+dest_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+src
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+dest_file
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'new_path'
+●●●●●● 3mm □△○
+dest_file
+●●●●●● 1mm □△
+WORKSPACE_ROOT
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/move'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AnalyzeRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+path
+●●●●●● 1mm ○
+model
+●●●●●● 1mm ○
+'kimi'
+AnalyzeRequest
+target
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+req
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+asyncio
+asyncio
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'analysis'
+●●●●●● 3mm □△○
+'Analysis complete for '
+req
+' using '
+req
+'.\nFile seems well structured and contains '
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes.'
+router
+●●●●●● 1mm □△
+'/analyze'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+UploadFile
+File
+●●●●●● 1mm ○
+UploadFile
+Query
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+File
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+directory
+●●●●●● 2mm □
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_file
+●●●●●● 1mm □
+target_dir
+●●●●●● 3mm □△
+file
+content
+●●●●●● 1mm □
+file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+target_file
+'wb'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'path'
+●●●●●● 3mm □△○
+target_file
+●●●●●● 1mm □△
+WORKSPACE_ROOT
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/upload'
+●●●●●● 2mm □△

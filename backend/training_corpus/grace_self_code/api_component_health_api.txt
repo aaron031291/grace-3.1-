@@ -1,0 +1,2694 @@
+## component_health_api.py
+"\nComponent Health API — behavioral profiling, health map, timeline,\nproblems list, and auto-remediation via Genesis key time-series.\n\nEvery Grace component emits Genesis keys. This API aggregates them into:\n  - Behavioral profiles (expected activity windows, anomaly detection)\n  - Health map (green/yellow/orange/red per component)\n  - Timeline view (drill-down into a component's history)\n  - Problems list (all current issues, color-coded)\n  - Remediation rules (auto-fix or suggest for approval)\n"
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Query
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+List
+Dict
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 1mm □
+_time
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+COMPONENT_REGISTRY
+●●●●●● 1mm □
+'chat_engine'
+'llm_orchestrator'
+'consensus_engine'
+'retrieval'
+'ingestion'
+'database'
+'genesis_tracker'
+'diagnostic_engine'
+'self_healing'
+'continuous_learning'
+'file_watcher'
+'ollama_service'
+'qdrant_service'
+'kimi_service'
+'opus_service'
+'embedding'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Chat Engine'
+'ai_response'
+'user_input'
+'chat'
+'prompt'
+'app.send_prompt'
+'app.chat'
+60
+●●●●●● 1mm □
+'llm_orchestrator'
+'database'
+'retrieval'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'LLM Orchestrator'
+'ai_response'
+'external_api_call'
+'llm'
+'ollama'
+'kimi'
+'opus'
+'llm_orchestrator'
+30
+●●●●●● 3mm □△○
+'ollama_service'
+'kimi_service'
+'opus_service'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Consensus Engine'
+'ai_response'
+'consensus'
+'roundtable'
+'consensus_engine'
+●●●●●● 2mm □
+●●●●●● 1mm □
+'llm_orchestrator'
+'kimi_service'
+'opus_service'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'RAG Retrieval'
+'ai_response'
+'rag'
+'retrieval'
+'search'
+'retriever'
+'retrieve'
+30
+●●●●●● 1mm □
+'qdrant_service'
+'embedding'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Document Ingestion'
+'file_ingestion'
+'file_op'
+'ingestion'
+'ingest'
+'ingestion'
+'file_manager'
+●●●●●● 2mm □
+●●●●●● 1mm □
+'database'
+'qdrant_service'
+'embedding'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Database'
+'database_change'
+'system_event'
+'database'
+'db'
+'sqlite'
+'database'
+'session'
+15
+●●●●●● 3mm □△○
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Genesis Tracking'
+'genesis'
+'genesis'
+'tracker'
+5
+●●●●●● 3mm □△○
+'database'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Diagnostic Engine'
+'system_event'
+'diagnostic'
+'heartbeat'
+'healing'
+'diagnostic'
+2
+●●●●●● 3mm □△○
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Self-Healing'
+'system_event'
+'fix'
+'healing'
+'self-heal'
+'auto-fix'
+'healing'
+'heal'
+●●●●●● 2mm □
+●●●●●● 1mm □
+'diagnostic_engine'
+'genesis_tracker'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Continuous Learning'
+'learning_complete'
+'practice_outcome'
+'learning'
+'continuous-learning'
+'training'
+'learning'
+'training'
+●●●●●● 2mm □
+●●●●●● 1mm □
+'database'
+'qdrant_service'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'File Watcher'
+'file_op'
+'code_change'
+'file-watcher'
+'watcher'
+'file_watcher'
+'watcher'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'genesis_tracker'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'health_check_url'
+'Ollama (Local LLM)'
+'ollama'
+'ollama'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'http://localhost:11434/api/tags'
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Qdrant (Vector DB)'
+'qdrant'
+'qdrant'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Kimi K2.5'
+'external_api_call'
+'kimi'
+'kimi'
+●●●●●● 2mm □
+●●●●●● 1mm □
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Opus 4.6'
+'external_api_call'
+'opus'
+'opus'
+●●●●●● 2mm □
+●●●●●● 1mm □
+'label'
+'key_types'
+'tags'
+'who_patterns'
+'expected_interval_min'
+'always_on'
+'dependencies'
+'Embedding Model'
+'embedding'
+'embedding'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+REMEDIATION_RULES
+●●●●●● 1mm □
+'id'
+'description'
+'condition'
+'action'
+'auto_execute'
+'severity'
+'restart_on_silence'
+'If always-on service has no activity for 1 hour, suggest restart'
+'always_on AND no_activity_minutes > 60'
+'suggest_restart'
+●●●●●● 1mm □
+'warning'
+'id'
+'description'
+'condition'
+'action'
+'auto_execute'
+'severity'
+'heal_on_errors'
+'If error rate > 30% in last 15 min, trigger healing'
+'error_rate > 0.3 AND window_minutes = 15'
+'trigger_healing'
+●●●●●● 3mm □△○
+'critical'
+'id'
+'description'
+'condition'
+'action'
+'auto_execute'
+'severity'
+'alert_degradation'
+'If response latency 2x baseline, alert degradation'
+'avg_latency > 2 * baseline_latency'
+'alert'
+●●●●●● 1mm □
+'warning'
+'id'
+'description'
+'condition'
+'action'
+'auto_execute'
+'severity'
+'gc_on_high_memory'
+'If memory > 85%, run GC'
+'memory_percent > 85'
+'gc_collect'
+●●●●●● 3mm □△○
+'warning'
+_approval_queue
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_approval_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+minutes
+component_id
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+60
+●●●●●● 2mm □
+500
+'Query Genesis keys from the database.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+since
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+q
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+since
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_id
+component_id
+COMPONENT_REGISTRY
+comp
+●●●●●● 1mm □
+COMPONENT_REGISTRY
+component_id
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+or_
+filters
+●●●●●● 1mm □
+tag
+comp
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+filters
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+'%"'
+tag
+'"%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+who
+comp
+●●●●●● 1mm □△
+'who_patterns'
+●●●●●● 2mm □△
+filters
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+'%'
+who
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+filters
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+or_
+●●●●●● 1mm □△
+filters
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'key_id'
+'key_type'
+'what'
+'who'
+'when'
+'where'
+'why'
+'how'
+'is_error'
+'error_type'
+'error_message'
+'tags'
+'file_path'
+'has_fix'
+'fix_applied'
+k
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+k
+'value'
+●●●●●● 2mm □△
+k
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+k
+k
+k
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+k
+k
+k
+k
+k
+k
+●●●●●● 1mm □
+●●●●●● 1mm □△
+k
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+k
+k
+k
+k
+k
+keys
+Exception
+logger
+●●●●●● 1mm □△
+'Could not query genesis keys: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get temporal context for health classification.'
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm ○
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_publish_health_change
+●●●●●● 1mm □△
+component_id
+old_status
+new_status
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Publish health changes to the event bus for system-wide awareness.'
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'system.health_changed'
+'component'
+'old_status'
+'new_status'
+'reason'
+component_id
+old_status
+new_status
+reason
+●●●●●● 2mm □△
+Exception
+_last_known_status
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+service_health
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+"Classify a component's health status."
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_keys
+●●●●●● 1mm □
+k
+keys
+tags
+●●●●●● 1mm □
+k
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+who
+●●●●●● 1mm □
+k
+●●●●●● 1mm □△
+'who'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matched
+●●●●●● 1mm □
+●●●●●● 1mm □
+tag
+comp
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tag
+tags
+matched
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+matched
+pat
+comp
+●●●●●● 1mm □△
+'who_patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pat
+who
+matched
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+matched
+comp_keys
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp_keys
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+comp_keys
+k
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_rate
+●●●●●● 1mm □
+total
+0
+errors
+●●●●●● 3mm □△
+total
+0
+last_seen
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+comp_keys
+last_seen
+●●●●●● 1mm □
+comp_keys
+0
+●●●●●● 1mm □△
+'when'
+●●●●●● 2mm □△
+minutes_since
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+last_seen
+dt
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+last_seen
+●●●●●● 2mm □△
+minutes_since
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+dt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+60
+Exception
+url_healthy
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'health_check_url'
+comp
+url_healthy
+●●●●●● 1mm □
+service_health
+●●●●●● 1mm □△
+comp_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'green'
+reason
+●●●●●● 1mm □
+'Healthy'
+●●●●●● 2mm □
+url_healthy
+●●●●●● 1mm □
+status
+●●●●●● 1mm □
+'red'
+reason
+●●●●●● 1mm □
+'Service unreachable'
+●●●●●● 1mm △
+error_rate
+0.5
+total
+3
+status
+●●●●●● 1mm □
+'red'
+reason
+●●●●●● 1mm □
+'High error rate: '
+error_rate
+'.0%'
+' ('
+errors
+'/'
+total
+')'
+●●●●●● 2mm □
+error_rate
+0.2
+total
+3
+status
+●●●●●● 1mm □
+'orange'
+reason
+●●●●●● 1mm □
+'Elevated errors: '
+error_rate
+'.0%'
+●●●●●● 1mm △
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 2mm □△
+minutes_since
+●●●●●● 2mm □
+minutes_since
+60
+status
+●●●●●● 1mm □
+'orange'
+reason
+●●●●●● 1mm □
+'No activity for '
+minutes_since
+'.0f'
+' min (always-on)'
+●●●●●● 2mm □
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 2mm □△
+total
+0
+status
+●●●●●● 1mm □
+'orange'
+reason
+●●●●●● 1mm □
+'No activity in window (always-on)'
+●●●●●● 1mm △
+comp
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+minutes_since
+expected
+●●●●●● 1mm □
+comp
+'expected_interval_min'
+●●●●●● 2mm □
+minutes_since
+expected
+●●●●●● 2mm □△
+3
+status
+●●●●●● 1mm □
+'orange'
+reason
+●●●●●● 1mm □
+'Silent for '
+minutes_since
+'.0f'
+' min (expected every '
+expected
+' min)'
+●●●●●● 1mm △
+minutes_since
+expected
+●●●●●● 2mm □△
+1.5
+status
+●●●●●● 1mm □
+'yellow'
+reason
+●●●●●● 1mm □
+'Idle '
+minutes_since
+'.0f'
+' min'
+●●●●●● 2mm □
+total
+0
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'yellow'
+reason
+●●●●●● 1mm □
+'Idle (expected)'
+prev
+●●●●●● 1mm □
+_last_known_status
+●●●●●● 1mm □△
+comp_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prev
+prev
+status
+_publish_health_change
+●●●●●● 1mm □△
+comp_id
+prev
+status
+reason
+●●●●●● 2mm □△
+_last_known_status
+comp_id
+●●●●●● 1mm □
+status
+●●●●●● 3mm ○
+'id'
+'label'
+'status'
+'reason'
+'total_events'
+'errors'
+'error_rate'
+'last_seen'
+'minutes_since'
+'always_on'
+'dependencies'
+comp_id
+comp
+●●●●●● 1mm □△
+'label'
+comp_id
+●●●●●● 2mm □△
+status
+reason
+total
+errors
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+error_rate
+3
+●●●●●● 2mm □△
+last_seen
+minutes_since
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+minutes_since
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check health for services with URLs or known endpoints.'
+●●●●●● 2mm □△○
+urllib.request
+results
+●●●●●● 1mm □
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+comp
+●●●●●● 1mm □△
+'health_check_url'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+url
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+results
+comp_id
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+results
+comp_id
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+cloud_url
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_URL'
+''
+●●●●●● 2mm □△
+api_key
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_API_KEY'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cloud_url
+●●●●●● 3mm □△○
+qdrant_client
+●●●●●● 2mm □△○
+QdrantClient
+●●●●●● 1mm □
+_QC
+_qc
+●●●●●● 1mm □
+_QC
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_qc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+'qdrant_service'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+host
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_HOST'
+'localhost'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+port
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'QDRANT_PORT'
+6333
+●●●●●● 2mm □△
+●●●●●● 3mm □
+urllib
+●●●●●● 1mm □△
+'http://'
+host
+':'
+port
+'/collections'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'qdrant_service'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+results
+'qdrant_service'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+'ollama_service'
+results
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+url
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OLLAMA_URL'
+''
+●●●●●● 2mm □△
+'http://localhost:11434'
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+url
+'/api/tags'
+●●●●●● 2mm □△
+results
+'ollama_service'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+results
+'ollama_service'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_evaluate_remediation
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Check remediation rules against component states.'
+actions
+●●●●●● 1mm □
+comp
+components
+●●●●●● 2mm □
+comp
+'status'
+'red'
+actions
+●●●●●● 1mm □△
+'component'
+'label'
+'rule'
+'severity'
+'reason'
+'action'
+'auto_execute'
+'status'
+comp
+'id'
+comp
+'label'
+comp
+'errors'
+0
+'heal_on_errors'
+'restart_on_silence'
+'critical'
+comp
+'reason'
+'trigger_healing'
+comp
+'errors'
+0
+'pending'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+comp
+'status'
+'orange'
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □△
+'component'
+'label'
+'rule'
+'severity'
+'reason'
+'action'
+'auto_execute'
+'status'
+comp
+'id'
+comp
+'label'
+'restart_on_silence'
+'warning'
+comp
+'reason'
+'suggest_restart'
+●●●●●● 1mm □
+'pending_approval'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+Query
+●●●●●● 1mm □△
+60
+●●●●●● 2mm □△
+'\n    Component health map — color-coded status for every component.\n    Green = healthy, Yellow = idle, Orange = degrading, Red = broken.\n    '
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+service_health
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □△
+classified
+●●●●●● 2mm □△
+status_counts
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+c
+components
+status_counts
+c
+'status'
+1
+problems
+●●●●●● 1mm □
+c
+c
+components
+c
+'status'
+'red'
+'orange'
+remediation
+●●●●●● 1mm □
+_evaluate_remediation
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+action
+remediation
+●●●●●● 2mm □
+action
+●●●●●● 1mm □△
+'auto_execute'
+●●●●●● 2mm □△
+_auto_execute_remediation
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+action
+'status'
+●●●●●● 1mm □
+'auto_executed'
+Exception
+action
+'status'
+●●●●●● 1mm □
+'failed: '
+e
+●●●●●● 1mm △
+action
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'pending_approval'
+_approval_lock
+_approval_queue
+●●●●●● 1mm □△
+'queued_at'
+action
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'components'
+'summary'
+'total'
+'problems'
+'remediation'
+'window_minutes'
+'generated_at'
+'time_context'
+components
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+status_counts
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+problems
+remediation
+window_minutes
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'period'
+'is_business_hours'
+'day_of_week'
+time_ctx
+●●●●●● 1mm □△
+'period'
+'unknown'
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □△
+'day_of_week'
+'unknown'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/map'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+Query
+●●●●●● 1mm □△
+60
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+200
+●●●●●● 2mm □△
+'\n    Timeline view for a single component — Genesis key activity,\n    gaps, errors, latency spikes, metadata.\n    '
+●●●●●● 2mm □
+component_id
+COMPONENT_REGISTRY
+HTTPException
+●●●●●● 1mm □△
+404
+'Unknown component: '
+component_id
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+COMPONENT_REGISTRY
+component_id
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gaps
+●●●●●● 1mm □
+prev_time
+●●●●●● 1mm □
+●●●●●● 2mm □
+k
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+k
+●●●●●● 1mm □△
+'when'
+●●●●●● 2mm □△
+prev_time
+dt
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+k
+'when'
+●●●●●● 2mm □△
+gap_min
+●●●●●● 1mm □
+dt
+●●●●●● 1mm □△
+prev_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+60
+expected
+●●●●●● 1mm □
+comp
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+expected
+gap_min
+expected
+●●●●●● 2mm □△
+2
+gaps
+●●●●●● 1mm □△
+'start'
+'end'
+'gap_minutes'
+'expected_minutes'
+prev_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+k
+'when'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+gap_min
+1
+●●●●●● 2mm □△
+expected
+●●●●●● 2mm □△
+prev_time
+●●●●●● 1mm □
+dt
+Exception
+●●●●●● 1mm △
+k
+●●●●●● 1mm □△
+'when'
+●●●●●● 2mm □△
+prev_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+k
+'when'
+●●●●●● 2mm □△
+Exception
+errors
+●●●●●● 1mm □
+k
+k
+keys
+k
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+deps
+●●●●●● 1mm □
+comp
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'component_id'
+'label'
+'always_on'
+'expected_interval_min'
+'dependencies'
+'events'
+'total_events'
+'errors'
+'error_count'
+'gaps'
+'window_minutes'
+component_id
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+deps
+keys
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+errors
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+gaps
+window_minutes
+router
+●●●●●● 1mm □△
+'/timeline/{component_id}'
+●●●●●● 2mm □△
+'\n    All current problems — color-coded, with diagnosis and remediation.\n    '
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+service_health
+●●●●●● 2mm □△
+●●●●●● 2mm □
+classified
+'status'
+'red'
+'orange'
+problems
+●●●●●● 1mm □△
+classified
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+remediation
+●●●●●● 1mm □
+_evaluate_remediation
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'problems'
+'total'
+'critical'
+'degrading'
+'remediation'
+'checked_at'
+problems
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+problems
+p
+'status'
+'red'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+problems
+p
+'status'
+'orange'
+●●●●●● 2mm □△
+remediation
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/problems'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Upstream and downstream dependencies for a component.'
+●●●●●● 2mm □
+component_id
+COMPONENT_REGISTRY
+HTTPException
+●●●●●● 1mm □△
+404
+'Unknown component: '
+component_id
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+COMPONENT_REGISTRY
+component_id
+upstream
+●●●●●● 1mm □
+comp
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+downstream
+●●●●●● 1mm □
+cid
+c
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_id
+c
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+downstream
+●●●●●● 1mm □△
+cid
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'component_id'
+'label'
+'upstream'
+'downstream'
+component_id
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+'id'
+'label'
+u
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+u
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'label'
+u
+●●●●●● 2mm □△
+u
+upstream
+'id'
+'label'
+d
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'label'
+d
+●●●●●● 2mm □△
+d
+downstream
+router
+●●●●●● 1mm □△
+'/dependencies/{component_id}'
+●●●●●● 2mm □△
+'Get pending remediation approvals.'
+_approval_lock
+●●●●●● 3mm ○
+'approvals'
+'total'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_approval_queue
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_approval_queue
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/approvals'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Approve a pending remediation action.'
+_approval_lock
+●●●●●● 2mm □
+index
+0
+index
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_approval_queue
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+404
+'Approval not found'
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+_approval_queue
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+_auto_execute_remediation
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+action
+'status'
+●●●●●● 1mm □
+'approved_and_executed'
+Exception
+action
+'status'
+●●●●●● 1mm □
+'approved_but_failed: '
+e
+●●●●●● 3mm ○
+action
+router
+●●●●●● 1mm □△
+'/approvals/{index}/approve'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'Reject a pending remediation action.'
+_approval_lock
+●●●●●● 2mm □
+index
+0
+index
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_approval_queue
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+404
+'Approval not found'
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+_approval_queue
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+action
+'status'
+●●●●●● 1mm □
+'rejected'
+●●●●●● 3mm ○
+action
+router
+●●●●●● 1mm □△
+'/approvals/{index}/reject'
+●●●●●● 2mm □△
+'Get all remediation rules.'
+●●●●●● 3mm ○
+'rules'
+REMEDIATION_RULES
+router
+●●●●●● 1mm □△
+'/rules'
+●●●●●● 2mm □△
+'Get the full component registry with expected behaviors.'
+●●●●●● 3mm ○
+'components'
+'total'
+cid
+'label'
+'always_on'
+'expected_interval_min'
+'dependencies'
+'tags'
+c
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+cid
+c
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPONENT_REGISTRY
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/registry'
+●●●●●● 2mm □△
+'\n    Data feed for the Mirror Self-Model — component health patterns\n    suitable for self-reflection and anomaly observation.\n    '
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+service_health
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □△
+classified
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+c
+c
+components
+c
+'status'
+'red'
+'orange'
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+timestamps
+●●●●●● 1mm □
+k
+'when'
+k
+keys
+k
+●●●●●● 1mm □△
+'when'
+●●●●●● 2mm □△
+activity
+●●●●●● 1mm □
+timestamps
+TimeSense
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+Exception
+activity
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'component_statuses'
+'problems'
+'total_events_1h'
+'error_count_1h'
+'activity_patterns'
+'time_context'
+'observation'
+c
+'id'
+c
+'status'
+c
+components
+'id'
+'status'
+'reason'
+p
+'id'
+p
+'status'
+p
+'reason'
+p
+problems
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+keys
+k
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+activity
+time_ctx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+' components degraded/broken out of '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+' total. Period: '
+time_ctx
+●●●●●● 1mm □△
+'period'
+'?'
+●●●●●● 2mm □△
+'. Events in last hour: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+'.'
+router
+●●●●●● 1mm □△
+'/mirror-feed'
+●●●●●● 2mm □△
+"\n    Detect orphan services — components that exist and are running\n    but receive zero business calls. Different from 'idle' because\n    the service is alive but nobody uses it.\n    "
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orphans
+●●●●●● 1mm □
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 2mm □△
+url_healthy
+●●●●●● 1mm □
+service_health
+●●●●●● 1mm □△
+comp_id
+●●●●●● 2mm □△
+comp_keys
+●●●●●● 1mm □
+_filter_keys_for_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+url_healthy
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp_keys
+●●●●●● 2mm □△
+0
+orphans
+●●●●●● 1mm □△
+'id'
+'label'
+'health_check'
+'business_calls_24h'
+'diagnosis'
+comp_id
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+'reachable'
+0
+'Service is alive but receives no business traffic — orphan candidate'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+url_healthy
+●●●●●● 2mm □
+comp
+●●●●●● 1mm □△
+'always_on'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp_keys
+●●●●●● 2mm □△
+0
+orphans
+●●●●●● 1mm □△
+'id'
+'label'
+'health_check'
+'business_calls_24h'
+'diagnosis'
+comp_id
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+'no_healthcheck'
+0
+'No health endpoint and no activity — may be orphaned'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'orphans'
+'total'
+'checked_at'
+orphans
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+orphans
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/orphans'
+●●●●●● 2mm □△
+"\n    ML-learned baselines — analyze historical Genesis key timestamps\n    to learn each component's natural activity rhythm and replace\n    static interval configs.\n    "
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+baselines
+●●●●●● 1mm □
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_keys
+●●●●●● 1mm □
+_filter_keys_for_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp_keys
+●●●●●● 2mm □△
+3
+baselines
+comp_id
+●●●●●● 1mm □
+'label'
+'sample_size'
+'learned'
+'reason'
+'configured_interval_min'
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comp_keys
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'insufficient data (< 3 events in 7 days)'
+comp
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+timestamps
+●●●●●● 1mm □
+k
+comp_keys
+●●●●●● 2mm □
+k
+●●●●●● 1mm □△
+'when'
+●●●●●● 2mm □△
+timestamps
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+k
+'when'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+3
+baselines
+comp_id
+●●●●●● 1mm □
+'label'
+'sample_size'
+'learned'
+'reason'
+'configured_interval_min'
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+●●●●●● 1mm □
+'insufficient valid timestamps'
+comp
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+timestamps
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+intervals
+●●●●●● 1mm □
+timestamps
+i
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△
+timestamps
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+60
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+avg_interval
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+intervals
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+intervals
+●●●●●● 2mm □△
+median_interval
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+intervals
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+intervals
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+2
+max_gap
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+intervals
+●●●●●● 2mm □△
+min_gap
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+intervals
+●●●●●● 2mm □△
+activity
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ts_strings
+●●●●●● 1mm □
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+timestamps
+activity
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+ts_strings
+●●●●●● 2mm □△
+Exception
+baselines
+comp_id
+●●●●●● 1mm □
+'label'
+'sample_size'
+'learned'
+'avg_interval_min'
+'median_interval_min'
+'max_gap_min'
+'min_gap_min'
+'configured_interval_min'
+'recommended_interval_min'
+'peak_hour'
+'peak_day'
+'quiet_hour'
+'busiest_period'
+comp
+●●●●●● 1mm □△
+'label'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timestamps
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg_interval
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+median_interval
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+max_gap
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+min_gap
+1
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □△
+'expected_interval_min'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+median_interval
+●●●●●● 2mm □△
+1.5
+0
+●●●●●● 2mm □△
+activity
+●●●●●● 1mm □△
+'peak_hour'
+●●●●●● 2mm □△
+activity
+●●●●●● 1mm □△
+'peak_day'
+●●●●●● 2mm □△
+activity
+●●●●●● 1mm □△
+'quiet_hour'
+●●●●●● 2mm □△
+activity
+●●●●●● 1mm □△
+'busiest_period'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'baselines'
+'total'
+'learned_count'
+baselines
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+baselines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+b
+baselines
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+b
+●●●●●● 1mm □△
+'learned'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/learned-baselines'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Correlation engine — when a component is degraded/broken,\n    check upstream dependencies to find the root cause.\n    Suppresses leaf alerts and identifies the actual source.\n    '
+●●●●●● 2mm □
+component_id
+COMPONENT_REGISTRY
+HTTPException
+●●●●●● 1mm □△
+404
+'Unknown component: '
+component_id
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+COMPONENT_REGISTRY
+component_id
+target
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+component_id
+comp
+keys
+service_health
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+'status'
+'green'
+●●●●●● 3mm ○
+'component_id'
+'status'
+'message'
+component_id
+'healthy'
+'Component is healthy — no correlation needed'
+upstream_ids
+●●●●●● 1mm □
+comp
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+upstream_statuses
+●●●●●● 1mm □
+root_causes
+●●●●●● 1mm □
+uid
+upstream_ids
+●●●●●● 2mm □
+uid
+COMPONENT_REGISTRY
+uc
+●●●●●● 1mm □
+COMPONENT_REGISTRY
+uid
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+uid
+uc
+keys
+service_health
+●●●●●● 2mm □△
+upstream_statuses
+●●●●●● 1mm □△
+classified
+●●●●●● 2mm □△
+●●●●●● 2mm □
+classified
+'status'
+'red'
+'orange'
+root_causes
+●●●●●● 1mm □△
+classified
+●●●●●● 2mm □△
+downstream_ids
+●●●●●● 1mm □
+cid
+cid
+c
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_id
+c
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+downstream_statuses
+●●●●●● 1mm □
+did
+downstream_ids
+●●●●●● 2mm □
+did
+COMPONENT_REGISTRY
+dc
+●●●●●● 1mm □
+COMPONENT_REGISTRY
+did
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+did
+dc
+keys
+service_health
+●●●●●● 2mm □△
+downstream_statuses
+●●●●●● 1mm □△
+classified
+●●●●●● 2mm □△
+is_leaf
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+root_causes
+●●●●●● 2mm □△
+0
+cascade_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+d
+downstream_statuses
+d
+'status'
+'red'
+'orange'
+●●●●●● 2mm □△
+diagnosis
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+root_causes
+root_names
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+r
+'label'
+r
+root_causes
+●●●●●● 2mm □△
+diagnosis
+●●●●●● 1mm □
+'UPSTREAM ROOT CAUSE: '
+root_names
+" — this component's failure is likely a downstream effect, not the root issue. Fix "
+root_names
+' first.'
+●●●●●● 1mm △
+cascade_count
+0
+diagnosis
+●●●●●● 1mm □
+'ROOT CAUSE IDENTIFIED: '
+target
+'label'
+' is the source — '
+cascade_count
+' downstream component(s) also affected.'
+diagnosis
+●●●●●● 1mm □
+'ISOLATED ISSUE: '
+target
+'label'
+' has no upstream failures — issue is local.'
+●●●●●● 3mm ○
+'component_id'
+'status'
+'reason'
+'is_leaf_failure'
+'root_causes'
+'upstream'
+'downstream_affected'
+'cascade_count'
+'diagnosis'
+'suppress_alert'
+component_id
+target
+'status'
+target
+'reason'
+is_leaf
+'id'
+'label'
+'status'
+'reason'
+r
+'id'
+r
+'label'
+r
+'status'
+r
+'reason'
+r
+root_causes
+'id'
+'label'
+'status'
+u
+'id'
+u
+'label'
+u
+'status'
+u
+upstream_statuses
+'id'
+'label'
+'status'
+d
+'id'
+d
+'label'
+d
+'status'
+d
+downstream_statuses
+d
+'status'
+'red'
+'orange'
+cascade_count
+diagnosis
+is_leaf
+router
+●●●●●● 1mm □△
+'/correlate/{component_id}'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_filter_keys_for_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Filter Genesis keys that belong to a specific component.'
+result
+●●●●●● 1mm □
+k
+keys
+tags
+●●●●●● 1mm □
+k
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+who
+●●●●●● 1mm □
+k
+●●●●●● 1mm □△
+'who'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tag
+comp
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tag
+tags
+result
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+pat
+comp
+●●●●●● 1mm □△
+'who_patterns'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pat
+who
+result
+●●●●●● 1mm □△
+k
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_auto_execute_remediation
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Execute a remediation action.'
+act
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'action'
+''
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+act
+'trigger_healing'
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+TriggerSource
+engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+act
+'gc_collect'
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+act
+'suggest_restart'
+logger
+●●●●●● 1mm □△
+'Restart suggested for %s — requires manual action'
+comp
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'No auto-execution for action: %s'
+act
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception

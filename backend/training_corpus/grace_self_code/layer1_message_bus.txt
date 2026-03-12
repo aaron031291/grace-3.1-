@@ -1,0 +1,940 @@
+## message_bus.py
+'\nLayer 1 Message Bus - Bidirectional Component Communication\n\nEnables all Layer 1 components to communicate, coordinate, and trigger\nautonomous actions intelligently.\n\nComponents:\n- Genesis Keys\n- Memory Mesh\n- Learning Memory\n- RAG (Retrieval)\n- Ingestion\n- World Model\n- Autonomous Learning\n- LLM Orchestration\n- Version Control\n- Librarian\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Callable
+List
+Optional
+Set
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MessageType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of messages in Layer 1 mesh.'
+REQUEST
+●●●●●● 1mm □
+'request'
+RESPONSE
+●●●●●● 1mm □
+'response'
+EVENT
+●●●●●● 1mm □
+'event'
+COMMAND
+●●●●●● 1mm □
+'command'
+NOTIFICATION
+●●●●●● 1mm □
+'notification'
+TRIGGER
+●●●●●● 1mm □
+'trigger'
+●●●●●● 2mm △
+ComponentType
+●●●●●● 3mm □△
+Enum
+Enum
+'Layer 1 components.'
+GENESIS_KEYS
+●●●●●● 1mm □
+'genesis_keys'
+VERSION_CONTROL
+●●●●●● 1mm □
+'version_control'
+LIBRARIAN
+●●●●●● 1mm □
+'librarian'
+MEMORY_MESH
+●●●●●● 1mm □
+'memory_mesh'
+LEARNING_MEMORY
+●●●●●● 1mm □
+'learning_memory'
+RAG
+●●●●●● 1mm □
+'rag'
+INGESTION
+●●●●●● 1mm □
+'ingestion'
+WORLD_MODEL
+●●●●●● 1mm □
+'world_model'
+AUTONOMOUS_LEARNING
+●●●●●● 1mm □
+'autonomous_learning'
+LLM_ORCHESTRATION
+●●●●●● 1mm □
+'llm_orchestration'
+COGNITIVE_ENGINE
+●●●●●● 1mm □
+'cognitive_engine'
+●●●●●● 2mm △
+Message
+'Message in Layer 1 communication mesh.'
+message_id
+●●●●●● 1mm ○
+message_type
+MessageType
+from_component
+ComponentType
+to_component
+●●●●●● 2mm □○
+ComponentType
+topic
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+datetime
+correlation_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+requires_response
+●●●●●● 3mm △
+●●●●●● 1mm □
+priority
+●●●●●● 2mm ○
+5
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+AutonomousAction
+'Autonomous action triggered by events.'
+action_id
+●●●●●● 1mm ○
+trigger_event
+●●●●●● 1mm ○
+conditions
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+action
+●●●●●● 1mm △○
+component
+ComponentType
+description
+●●●●●● 1mm ○
+enabled
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+dataclass
+●●●●●● 2mm △
+Layer1MessageBus
+'\n    Central message bus for Layer 1 component communication.\n\n    Enables:\n    - Bidirectional communication\n    - Event-driven architecture\n    - Autonomous action triggering\n    - Request-response patterns\n    - Publish-subscribe\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+ComponentType
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+asyncio
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Message
+●●●●●● 3mm △
+●●●●●● 1mm □
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □○
+ComponentType
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+AutonomousAction
+●●●●●● 3mm △
+asyncio
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_messages'
+'requests'
+'events'
+'commands'
+'autonomous_actions_triggered'
+0
+0
+0
+0
+0
+●●●●●● 1mm □
+register_component
+●●●●●● 1mm □△
+self
+component_type
+component_instance
+●●●●●● 2mm □△
+ComponentType
+Any
+'Register a component with the message bus.'
+●●●●●● 3mm △
+component_type
+●●●●●● 1mm □
+component_instance
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] ✓ Registered: '
+component_type
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_component
+●●●●●● 1mm □△
+self
+component_type
+●●●●●● 2mm □△
+ComponentType
+'Get registered component instance.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_type
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Any
+●●●●●● 1mm □
+register_autonomous_action
+●●●●●● 1mm □△
+self
+trigger_event
+action
+component
+description
+conditions
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+ComponentType
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 2mm □
+'\n        Register autonomous action that triggers on events.\n\n        Args:\n            trigger_event: Event topic to listen for\n            action: Async function to execute\n            component: Component that owns this action\n            description: Human-readable description\n            conditions: Optional conditions that must be met\n\n        Returns:\n            Action ID\n        '
+action_id
+●●●●●● 1mm □
+'action-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+autonomous_action
+●●●●●● 1mm □
+AutonomousAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+action_id
+●●●●●● 1mm □
+autonomous_action
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_event
+●●●●●● 3mm △
+●●●●●● 1mm □△
+autonomous_action
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] ⭐ Autonomous action registered: '
+component
+' → '
+description
+' (trigger: '
+trigger_event
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+action_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_action_handler
+●●●●●● 1mm □△
+self
+autonomous_action
+●●●●●● 2mm □△
+AutonomousAction
+'Create handler for autonomous action.'
+Message
+●●●●●● 2mm □
+autonomous_action
+●●●●●● 3mm ○
+conditions_met
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+condition
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+condition
+autonomous_action
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] Condition check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+conditions_met
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] Conditions not met for: '
+autonomous_action
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] 🤖 Executing autonomous action: '
+autonomous_action
+●●●●●● 2mm □△
+autonomous_action
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'autonomous_actions_triggered'
+1
+Exception
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] Autonomous action failed: '
+autonomous_action
+' - '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+handler
+●●●●●● 1mm △○
+●●●●●● 1mm □
+subscribe
+●●●●●● 1mm □△
+self
+topic
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'\n        Subscribe to a topic.\n\n        Args:\n            topic: Topic name (e.g., "learning.new_example")\n            handler: Async function to call when message published\n        '
+●●●●●● 2mm □
+topic
+●●●●●● 3mm △
+●●●●●● 3mm △
+topic
+●●●●●● 1mm □
+●●●●●● 3mm △
+topic
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] 📡 Subscribed to: '
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+ComponentType
+●●●●●● 2mm ○
+5
+'\n        Publish message to topic.\n\n        All subscribers will receive the message.\n        '
+message
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_messages'
+1
+●●●●●● 3mm △
+'events'
+1
+●●●●●● 2mm □
+topic
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] 📢 Publishing: '
+topic
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+topic
+●●●●●● 2mm □△
+' subscribers)'
+●●●●●● 2mm □△
+tasks
+●●●●●● 1mm □
+handler
+●●●●●● 3mm △
+topic
+tasks
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+handler
+message
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+tasks
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+Message
+'Safely call handler with error handling.'
+handler
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] Handler error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+register_request_handler
+●●●●●● 1mm □△
+self
+component
+topic
+handler
+●●●●●● 2mm □△
+ComponentType
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'\n        Register handler for requests to a component.\n\n        Args:\n            component: Component that handles requests\n            topic: Request topic (e.g., "get_user_contributions")\n            handler: Async function that returns response\n        '
+●●●●●● 2mm □
+component
+●●●●●● 3mm △
+●●●●●● 3mm △
+component
+●●●●●● 1mm □
+●●●●●● 3mm △
+component
+topic
+●●●●●● 1mm □
+handler
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] 🔧 Request handler: '
+component
+'/'
+topic
+●●●●●● 2mm □△
+ComponentType
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+ComponentType
+●●●●●● 3mm ○
+30.0
+'\n        Send request and wait for response.\n\n        Args:\n            to_component: Component to send request to\n            topic: Request topic\n            payload: Request data\n            from_component: Requesting component\n            timeout: Timeout in seconds\n\n        Returns:\n            Response payload\n        '
+message_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_messages'
+1
+●●●●●● 3mm △
+'requests'
+1
+future
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+message_id
+●●●●●● 1mm □
+future
+●●●●●● 2mm □
+to_component
+●●●●●● 3mm △
+topic
+●●●●●● 3mm △
+to_component
+handler
+●●●●●● 1mm □
+●●●●●● 3mm △
+to_component
+topic
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] 💬 Request: '
+from_component
+' → '
+to_component
+'/'
+topic
+●●●●●● 2mm □△
+response_payload
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message_id
+response_payload
+to_component
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] Request handler error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+message_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+message_id
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+error
+●●●●●● 1mm □
+'No handler for '
+to_component
+'/'
+topic
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] '
+error
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+message_id
+●●●●●● 1mm □△
+ValueError
+●●●●●● 1mm □△
+error
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+future
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+asyncio
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] Request timeout: '
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □
+message_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+message_id
+TimeoutError
+●●●●●● 1mm □△
+'Request timeout: '
+topic
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+ComponentType
+'Send response to pending request.'
+●●●●●● 2mm □
+correlation_id
+●●●●●● 3mm △
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+correlation_id
+response
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 3mm △
+correlation_id
+ComponentType
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+ComponentType
+'\n        Send command to component (no response expected).\n\n        Args:\n            to_component: Target component\n            command: Command name\n            payload: Command data\n            from_component: Sending component\n        '
+message
+●●●●●● 1mm □
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_messages'
+1
+●●●●●● 3mm △
+'commands'
+1
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] ⚡ Command: '
+from_component
+' → '
+to_component
+'/'
+command
+●●●●●● 2mm □△
+●●●●●● 2mm □
+to_component
+●●●●●● 3mm △
+command
+●●●●●● 3mm △
+to_component
+handler
+●●●●●● 1mm □
+●●●●●● 3mm △
+to_component
+command
+●●●●●● 3mm △
+●●●●●● 1mm □△
+handler
+message
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+ComponentType
+'\n        Trigger autonomous actions.\n\n        Similar to publish but specifically for autonomous workflows.\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_generate_message_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate unique message ID.'
+●●●●●● 3mm ○
+'msg-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_add_to_history
+●●●●●● 1mm □△
+self
+message
+●●●●●● 2mm □△
+Message
+'Add message to history with size limit.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_message_history
+●●●●●● 1mm □△
+self
+component
+message_type
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+ComponentType
+●●●●●● 2mm □○
+MessageType
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+100
+'Get message history with optional filters.'
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+component
+history
+●●●●●● 1mm □
+m
+m
+history
+m
+component
+m
+component
+●●●●●● 2mm □
+message_type
+history
+●●●●●● 1mm □
+m
+m
+history
+m
+message_type
+●●●●●● 3mm ○
+history
+limit
+●●●●●● 3mm □△
+Message
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get message bus statistics.'
+●●●●●● 3mm ○
+'registered_components'
+'components'
+'subscribers'
+'request_handlers'
+'autonomous_actions'
+'pending_requests'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+c
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topic
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+handlers
+●●●●●● 2mm □△
+topic
+handlers
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+handlers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+component
+handlers
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get list of registered autonomous actions.'
+●●●●●● 3mm ○
+'action_id'
+'component'
+'trigger_event'
+'description'
+'enabled'
+action
+action
+action
+action
+action
+action
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+enable_autonomous_action
+●●●●●● 1mm □△
+self
+action_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Enable autonomous action.'
+●●●●●● 2mm □
+action_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+action_id
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] ✓ Enabled action: '
+action_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+disable_autonomous_action
+●●●●●● 1mm □△
+self
+action_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Disable autonomous action.'
+●●●●●● 2mm □
+action_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+action_id
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] ✗ Disabled action: '
+action_id
+●●●●●● 2mm □△
+_message_bus
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global message bus instance.'
+●●●●●● 2mm □
+_message_bus
+●●●●●● 2mm □
+_message_bus
+●●●●●● 1mm □
+Layer1MessageBus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MESSAGE-BUS] 🚀 Initialized Layer 1 Message Bus'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_message_bus
+Layer1MessageBus
+●●●●●● 1mm □
+reset_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset message bus (for testing).'
+_message_bus
+●●●●●● 1mm □
+●●●●●● 2mm □

@@ -1,0 +1,209 @@
+## run_self_ingestion.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.braille_translator
+●●●●●● 2mm □△○
+BrailleTranslator
+●●●●●● 1mm □
+run_self_ingestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🧠 INITIATING GRACE AST -> BRAILLE SELF-INGESTION 🧠'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+output_dir
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'training_corpus'
+●●●●●● 3mm □△
+'grace_self_code'
+output_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+translator
+●●●●●● 1mm □
+BrailleTranslator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+processed_count
+●●●●●● 1mm □
+0
+error_count
+●●●●●● 1mm □
+0
+root
+dirs
+files
+os
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'training_corpus'
+root
+'__pycache__'
+root
+'.pytest_cache'
+root
+'venv'
+root
+file
+files
+●●●●●● 2mm □
+file
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+file
+rel_path
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+out_name
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+rel_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+'.txt'
+●●●●●● 2mm □△
+out_path
+●●●●●● 1mm □
+output_dir
+●●●●●● 3mm □△
+out_name
+braille_sequence
+●●●●●● 1mm □
+translator
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'## '
+file_path
+'\n'
+braille_sequence
+'\n'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+processed_count
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Translated: '
+rel_path
+' -> '
+out_name
+●●●●●● 2mm □△
+Exception
+error_count
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error parsing '
+rel_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'🎉 SELF-INGESTION COMPLETE 🎉'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Files Translated: '
+processed_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Errors: '
+error_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Output Directory: '
+output_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace will natively ingest these Braille files into Oracle/UM/FlashCache on her next boot.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+run_self_ingestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△

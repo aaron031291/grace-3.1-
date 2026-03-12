@@ -1,0 +1,239 @@
+## validation_pipeline.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'Simulate running a validation stage.'
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Starting '
+stage_name
+' for '
+target
+' (timeout: '
+timeout_seconds
+'s)'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'stage'
+'status'
+'score'
+stage_name
+'success'
+100
+Exception
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Stage '
+stage_name
+' failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'stage'
+'status'
+'error'
+stage_name
+'failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Run the 12-stage validation pipeline.\n    Uses asyncio.gather and per-stage timeouts.\n    '
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Running pipeline for task '
+task_id
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □
+'unit'
+'integration'
+'visual'
+'lighthouse'
+60
+180
+120
+90
+results
+●●●●●● 1mm □
+failed
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+database.mongo_client
+●●●●●● 2mm □△○
+get_db
+db
+●●●●●● 1mm □
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collection
+●●●●●● 1mm □
+db
+●●●●●● 2mm □
+db
+'validation_results'
+●●●●●● 2mm □
+Exception
+collection
+●●●●●● 1mm □
+●●●●●● 2mm □
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stage_name
+timeout
+stages
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+result
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+run_stage
+●●●●●● 1mm □△
+stage_name
+timeout
+target
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'failed'
+failed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+asyncio
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Stage '
+stage_name
+' timed out after '
+timeout
+'s'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'stage'
+'status'
+'error'
+stage_name
+'timeout'
+'Execution timed out'
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+asyncio
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Pipeline cancelled at stage '
+stage_name
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'stage'
+'status'
+stage_name
+'cancelled'
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+'task_id'
+'target'
+'status'
+'stages'
+'started_at'
+'completed_at'
+'duration_sec'
+task_id
+target
+failed
+'failed'
+'success'
+results
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+collection
+●●●●●● 2mm □
+collection
+●●●●●● 1mm □△
+summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Persisted results to MongoDB for '
+task_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[VALIDATION] Failed to persist to MongoDB: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[VALIDATION] MongoDB not configured, skipping persistence for '
+task_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+summary

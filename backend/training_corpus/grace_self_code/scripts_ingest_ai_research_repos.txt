@@ -1,0 +1,736 @@
+## ingest_ai_research_repos.py
+"\nScript to ingest all AI research repositories into Grace's training data.\n\nThis script processes the cloned repositories in data/ai_research and ingests\nrelevant documentation and code files into the knowledge base.\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Set
+backend_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+FileHandler
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AIResearchIngestionManager
+'Manages ingestion of AI research repositories.'
+SUPPORTED_EXTENSIONS
+●●●●●● 1mm □
+'.md'
+'.rst'
+'.txt'
+'.adoc'
+'.py'
+'.js'
+'.ts'
+'.tsx'
+'.jsx'
+'.java'
+'.go'
+'.rs'
+'.cpp'
+'.c'
+'.h'
+'.rb'
+'.php'
+'.scala'
+'.kt'
+'.json'
+'.yaml'
+'.yml'
+'.toml'
+'.xml'
+SKIP_DIRS
+●●●●●● 1mm □
+'.git'
+'__pycache__'
+'node_modules'
+'venv'
+'env'
+'.pytest_cache'
+'.mypy_cache'
+'dist'
+'build'
+'.next'
+'.nuxt'
+'coverage'
+'.tox'
+'vendor'
+'target'
+'bin'
+'obj'
+'_build'
+'.doctrees'
+'site'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+ai_research_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Initialize ingestion manager.\n\n        Args:\n            ai_research_path: Path to ai_research directory\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+ai_research_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing database connection...'
+●●●●●● 2mm □△
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database initialized successfully'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing embedding model...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Initializing ingestion service...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+should_ingest_file
+●●●●●● 1mm □△
+self
+filepath
+●●●●●● 2mm □△
+Path
+'\n        Check if file should be ingested.\n\n        Args:\n            filepath: Path to file\n\n        Returns:\n            bool: True if file should be ingested\n        '
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1000000
+logger
+●●●●●● 1mm □△
+'Skipping large file: '
+filepath
+' ('
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+read_file_content
+●●●●●● 1mm □△
+self
+filepath
+●●●●●● 2mm □△
+Path
+'\n        Read file content with proper encoding handling.\n\n        Args:\n            filepath: Path to file\n\n        Returns:\n            File content or None if unreadable\n        '
+file_ext
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_ext
+'.pdf'
+'.docx'
+'.doc'
+text
+error
+●●●●●● 1mm □
+FileHandler
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+logger
+●●●●●● 1mm □△
+'Extraction failed for '
+filepath
+': '
+error
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+text
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filepath
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UnicodeDecodeError
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filepath
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not read file '
+filepath
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Error reading file '
+filepath
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □
+ingest_repository
+●●●●●● 1mm □△
+self
+repo_path
+category
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+'\n        Ingest a single repository.\n\n        Args:\n            repo_path: Path to repository\n            category: Category (frameworks, enterprise, infrastructure, references)\n\n        Returns:\n            Dictionary with ingestion statistics\n        '
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Ingesting repository: '
+repo_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Category: '
+category
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+'repo_name'
+'category'
+'files_processed'
+'files_succeeded'
+'files_failed'
+'files_skipped'
+repo_path
+category
+0
+0
+0
+0
+root
+dirs
+files
+os
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+root_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+dirs
+●●●●●● 1mm □
+d
+d
+dirs
+d
+●●●●●● 3mm △
+filename
+files
+filepath
+●●●●●● 1mm □
+root_path
+●●●●●● 3mm □△
+filename
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+stats
+'files_skipped'
+1
+stats
+'files_processed'
+1
+rel_path
+●●●●●● 1mm □
+filepath
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Processing: '
+rel_path
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+logger
+●●●●●● 1mm □△
+'Could not read content from '
+rel_path
+●●●●●● 2mm □△
+stats
+'files_failed'
+1
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+50
+logger
+●●●●●● 1mm □△
+'Skipping empty/tiny file: '
+rel_path
+●●●●●● 2mm □△
+stats
+'files_skipped'
+1
+stats
+'files_processed'
+1
+doc_id
+message
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_id
+stats
+'files_succeeded'
+1
+logger
+●●●●●● 1mm □△
+'✓ Ingested: '
+rel_path
+' (doc_id='
+doc_id
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+stats
+'files_failed'
+1
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✗ Failed: '
+rel_path
+' - '
+message
+●●●●●● 2mm □△
+Exception
+stats
+'files_failed'
+1
+logger
+●●●●●● 1mm □△
+'✗ Error processing '
+rel_path
+': '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Repository: '
+repo_path
+' - COMPLETE'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Processed: '
+stats
+'files_processed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Succeeded: '
+stats
+'files_succeeded'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Failed: '
+stats
+'files_failed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Skipped: '
+stats
+'files_skipped'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_all_repositories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Ingest all repositories in ai_research directory.\n\n        Returns:\n            Dictionary with overall statistics\n        '
+logger
+●●●●●● 1mm □△
+'\n'
+'#'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'# AI Research Repository Ingestion'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'# Path: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+overall_stats
+●●●●●● 1mm □
+'total_repos'
+'total_files_processed'
+'total_files_succeeded'
+'total_files_failed'
+'total_files_skipped'
+'repositories'
+0
+0
+0
+0
+0
+category_dir
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+category
+●●●●●● 1mm □
+category_dir
+logger
+●●●●●● 1mm □△
+'\n'
+'*'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'* Category: '
+category
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+repo_dir
+category_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+repo_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+overall_stats
+'total_repos'
+1
+stats
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+repo_dir
+category
+●●●●●● 2mm □△
+overall_stats
+'repositories'
+●●●●●● 1mm □△
+stats
+●●●●●● 2mm □△
+overall_stats
+'total_files_processed'
+stats
+'files_processed'
+overall_stats
+'total_files_succeeded'
+stats
+'files_succeeded'
+overall_stats
+'total_files_failed'
+stats
+'files_failed'
+overall_stats
+'total_files_skipped'
+stats
+'files_skipped'
+logger
+●●●●●● 1mm □△
+'\n'
+'#'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'# OVERALL STATISTICS'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total Repositories: '
+overall_stats
+'total_repos'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total Files Processed: '
+overall_stats
+'total_files_processed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total Files Succeeded: '
+overall_stats
+'total_files_succeeded'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total Files Failed: '
+overall_stats
+'total_files_failed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Total Files Skipped: '
+overall_stats
+'total_files_skipped'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+overall_stats
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point.'
+project_root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+ai_research_path
+●●●●●● 1mm □
+project_root
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'ai_research'
+●●●●●● 2mm □
+ai_research_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'AI research directory not found: '
+ai_research_path
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+AIResearchIngestionManager
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ai_research_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Ingestion complete!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

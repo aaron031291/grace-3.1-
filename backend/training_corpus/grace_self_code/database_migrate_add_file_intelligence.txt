@@ -1,0 +1,96 @@
+## migrate_add_file_intelligence.py
+'\nDatabase Migration: Add File Intelligence Tables\n\nFile intelligence tables are now defined in models/file_intelligence_models.py\nand created by database/migration.create_tables() with all other app tables.\n\nThis script remains for backwards compatibility: it just runs the shared create_tables().\nRun once or rely on app startup create_tables() - no separate table creation needed.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Ensure file intelligence tables exist (via shared create_tables).'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'MIGRATION: File Intelligence Tables (via create_tables)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating all app tables (including file_intelligence, file_relationships, etc.)...'
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ file_intelligence, file_relationships, processing_strategies, file_health_checks'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Migration failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exit
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

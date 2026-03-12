@@ -1,0 +1,54 @@
+## cognitive_playbook_executor.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 3mm □△○
+events
+●●●●●● 2mm □△○
+CognitiveEvent
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'playbook_executor'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PlaybookExecutor
+'\n    Executes multi-step remediations or research missions.\n    Integrates with self-healing playbooks and agentic workflows.\n    '
+●●●●●● 1mm □
+execute
+●●●●●● 1mm □△
+self
+playbook_id
+event
+clarity_decision_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+CognitiveEvent
+●●●●●● 1mm ○
+'\n        Simulates executing a playbook retrieved from GhostMemory.\n        Emits to the immutable log.\n        '
+logger
+●●●●●● 1mm □△
+'Executing playbook '
+playbook_id
+' for event '
+event
+' under decision '
+clarity_decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'playbook_id'
+'decision_context'
+'mttr_achieved'
+'success'
+playbook_id
+clarity_decision_id
+15
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

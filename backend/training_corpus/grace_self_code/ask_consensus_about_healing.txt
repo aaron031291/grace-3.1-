@@ -1,0 +1,113 @@
+## ask_consensus_about_healing.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □
+sys
+'win32'
+sys
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+os
+'w'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+os
+'w'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+●●●●●● 1mm □
+log_output
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'consensus_interview.txt'
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_interview
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'consensus_interview.txt'
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+'--- Consensus Self-Healing Diagnostic Interview ---\n'
+●●●●●● 2mm □△
+log_output
+●●●●●● 1mm □△
+'Initializing Consensus Engine...'
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+"\n    We are trying to debug the autonomous self-healing pipeline in Grace. \n    The operator has the following questions for you (the consensus mechanism):\n\n    1. What exactly do you need to successfully self-heal the system autonomously?\n    2. Why can't you execute on errors safely right now? \n    3. Are you actually getting the error messages?\n    4. Where in the system architecture does the self-healing process break down or get stuck?\n\n    Please analyze the current Grace architecture, your available tools, the event bus pipeline, and the guardian governance rules. Provide a detailed, technical response answering these four questions.\n    "
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+log_output
+●●●●●● 1mm □△
+'\n=== CONSENSUS RESPONSE ===\n'
+result
+●●●●●● 2mm □△
+log_output
+●●●●●● 1mm □△
+'\n=== MODELS USED ===\n'
+result
+●●●●●● 2mm □△
+log_output
+●●●●●● 1mm □△
+'\n=== CONFIDENCE ===\n'
+result
+●●●●●● 2mm □△
+Exception
+log_output
+●●●●●● 1mm □△
+'\n=== EXCEPTION ===\n'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+run_interview
+●●●●●● 1mm □△
+●●●●●● 2mm □△

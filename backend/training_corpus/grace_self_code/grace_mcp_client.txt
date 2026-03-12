@@ -1,0 +1,700 @@
+## client.py
+'\nGrace OS — MCP Client.\n\nConnects to DesktopCommanderMCP (or any MCP server) via stdio transport.\nProvides methods to discover tools, call tools, and manage the connection.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 3mm □△○
+mcp
+●●●●●● 2mm □△○
+ClientSession
+StdioServerParameters
+●●●●●● 3mm □△○
+mcp.client.stdio
+●●●●●● 2mm □△○
+stdio_client
+●●●●●● 3mm □△○
+grace_mcp.audit_logger
+●●●●●● 2mm □△○
+AuditLogger
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MCPClient
+'\n    MCP Client that connects to DesktopCommanderMCP via stdio transport.\n    \n    Usage:\n        client = MCPClient()\n        await client.connect()\n        tools = await client.list_tools()\n        result = await client.call_tool("read_file", {"path": "/some/file.py"})\n        await client.disconnect()\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+server_command
+server_args
+audit_logger
+allowed_directories
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+AuditLogger
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+server_command
+●●●●●● 2mm □
+possible_roots
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+mcp_repo_path
+●●●●●● 1mm □
+●●●●●● 2mm □
+root
+possible_roots
+potential_path
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'mcp_repos'
+●●●●●● 3mm □△
+'DesktopCommanderMCP'
+●●●●●● 2mm □
+potential_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mcp_repo_path
+●●●●●● 1mm □
+potential_path
+●●●●●● 2mm □
+mcp_repo_path
+logger
+●●●●●● 1mm □△
+'[MCP] Could not find DesktopCommanderMCP directory automatically'
+●●●●●● 2mm □△
+mcp_repo_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'mcp_repos'
+●●●●●● 3mm □△
+'DesktopCommanderMCP'
+server_command
+●●●●●● 1mm □
+'node'
+server_args
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+mcp_repo_path
+●●●●●● 3mm □△
+'dist'
+●●●●●● 3mm □△
+'index.js'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+server_command
+●●●●●● 3mm △
+●●●●●● 1mm □
+server_args
+●●●●●● 3mm △
+●●●●●● 1mm □
+audit_logger
+AuditLogger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+allowed_directories
+●●●●●● 3mm △
+●●●●●● 2mm □○
+ClientSession
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+is_connected
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'Connect to the MCP server via stdio transport.'
+server_params
+●●●●●● 1mm □
+StdioServerParameters
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MCP] Connecting to server: '
+●●●●●● 3mm △
+' '
+' '
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+stdio_client
+●●●●●● 1mm □△
+server_params
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ClientSession
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MCP] ✅ Connected! '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' tools available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[MCP] ❌ Failed to connect: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+'Disconnect from the MCP server.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[MCP] Disconnected'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[MCP] Error during disconnect: '
+e
+●●●●●● 2mm □△
+'Fetch and cache the list of available tools.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'name'
+'description'
+'input_schema'
+tool
+tool
+''
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+tool
+'inputSchema'
+●●●●●● 2mm □△
+tool
+tool
+result
+'List available MCP resources.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'uri'
+'name'
+'description'
+'mime_type'
+r
+r
+r
+''
+r
+''
+r
+result
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'List available MCP resource templates.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'uri_template'
+'name'
+'description'
+'mime_type'
+t
+t
+t
+''
+t
+''
+t
+result
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'Read an MCP resource by URI.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'content'
+'success'
+'error'
+''
+●●●●●● 1mm □
+'Not connected'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+uri
+●●●●●● 2mm □△
+content_parts
+●●●●●● 1mm □
+content
+result
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+content
+'text'
+●●●●●● 2mm □△
+content
+content_parts
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+content
+'blob'
+●●●●●● 2mm □△
+content
+content_parts
+●●●●●● 1mm □△
+'[Binary data: '
+content
+']'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'success'
+'\n'
+●●●●●● 1mm □△
+content_parts
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[MCP] Failed to read resource '
+uri
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'success'
+'error'
+''
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Get list of available MCP tools.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'user'
+●●●●●● 2mm □
+"\n        Call an MCP tool and return the result.\n        \n        Args:\n            tool_name: Name of the MCP tool (e.g. 'read_file', 'write_file')\n            arguments: Tool arguments dict\n            calling_layer: Which Grace OS layer is calling (for audit/permissions)\n            session_id: Session ID for tracking\n            \n        Returns:\n            Dict with 'content', 'success', and 'error' keys\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'content'
+'success'
+'error'
+''
+●●●●●● 1mm □
+'MCP client not connected'
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MCP] Calling tool: '
+tool_name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MCP] Arguments: '
+json
+●●●●●● 1mm □△
+arguments
+●●●●●● 2mm □△
+500
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tool_name
+arguments
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+content_parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+result
+'content'
+●●●●●● 2mm □△
+result
+part
+result
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+part
+'text'
+●●●●●● 2mm □△
+content_parts
+●●●●●● 1mm □△
+part
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+part
+'data'
+●●●●●● 2mm □△
+content_parts
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+part
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+content_parts
+'\n'
+●●●●●● 1mm □△
+content_parts
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+is_error
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+result
+'isError'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'success'
+'error'
+'duration_ms'
+content
+is_error
+is_error
+content
+●●●●●● 2mm □
+duration_ms
+Exception
+duration_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+error_msg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MCP] Tool call failed: '
+tool_name
+' — '
+error_msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'content'
+'success'
+'error'
+'duration_ms'
+''
+●●●●●● 1mm □
+error_msg
+duration_ms
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_tools_as_openai_functions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Convert cached MCP tools into OpenAI function-calling format.\n        This is the bridge between MCP tool definitions and LLM tool calling.\n        \n        Returns:\n            List of OpenAI-compatible tool definitions\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+openai_tools
+●●●●●● 1mm □
+tool
+●●●●●● 3mm △
+skip_tools
+●●●●●● 1mm □
+'get_config'
+'set_config_value'
+'get_usage_stats'
+'give_feedback_to_desktop_commander'
+'get_recent_tool_calls'
+'list_searches'
+'get_more_search_results'
+'stop_search'
+●●●●●● 2mm □
+tool
+'name'
+skip_tools
+openai_tool
+●●●●●● 1mm □
+'type'
+'function'
+'function'
+'name'
+'description'
+'parameters'
+tool
+'name'
+tool
+'description'
+tool
+●●●●●● 1mm □△
+'input_schema'
+'type'
+'properties'
+'object'
+●●●●●● 2mm □△
+openai_tools
+●●●●●● 1mm □△
+openai_tool
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+openai_tools
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_tool_names
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get list of available tool names.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+t
+'name'
+t
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get MCP client status.'
+●●●●●● 3mm ○
+'connected'
+'server_command'
+'tools_available'
+'tool_names'
+'audit_stats'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

@@ -1,0 +1,1236 @@
+## world_model_api.py
+'\nWorld Model API — unified system state for the frontend WorldModelPanel.\n\nAggregates data from ALL Grace subsystems into a single coherent view:\n  - System health, connectivity, runtime status\n  - Knowledge base stats (collections, documents, embeddings)\n  - Source code map (components, files, functions)\n  - Database state (tables, row counts, size)\n  - Brain capabilities (all actions across all domains)\n  - Cognitive state (trust, synapses, learning)\n  - Genesis key activity\n  - Active sessions and projects\n\nThe /chat endpoint enables natural language queries about the world model\nusing semantic search + memory injector context.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+Request
+●●●●●● 3mm □△○
+fastapi.responses
+●●●●●● 2mm □△○
+JSONResponse
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Full system state snapshot for the WorldModelPanel.'
+state
+●●●●●● 1mm □
+'status'
+'timestamp'
+'operational'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+state
+'health'
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'healthy'
+'degraded'
+Exception
+state
+'health'
+●●●●●● 1mm □
+'unknown'
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_runtime_status
+state
+'runtime'
+●●●●●● 1mm □
+get_runtime_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+state
+'runtime'
+●●●●●● 1mm □
+'status'
+'unknown'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+state
+'connectivity'
+●●●●●● 1mm □
+'ollama'
+'kimi'
+'opus'
+'qdrant'
+'database'
+'configured'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+'configured'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+'configured'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+'configured'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+settings
+settings
+●●●●●● 2mm □△
+'type'
+'connected'
+settings
+state
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+'healthy'
+Exception
+state
+'connectivity'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.db_compat
+●●●●●● 2mm □△○
+get_table_stats
+get_db_size_mb
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+get_table_stats
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+state
+'knowledge_base'
+●●●●●● 1mm □
+'total_tables'
+'total_rows'
+'db_size_mb'
+'tables'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+v
+tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+0
+●●●●●● 2mm □△
+get_db_size_mb
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+k
+v
+k
+v
+tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+0
+Exception
+state
+'knowledge_base'
+●●●●●● 1mm □
+'total_tables'
+0
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+COMPONENTS
+state
+'source_code'
+●●●●●● 1mm □
+'total_components'
+'components'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 2mm □△
+'id'
+'file'
+'purpose'
+cid
+info
+'file'
+info
+'purpose'
+80
+cid
+info
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+30
+Exception
+state
+'source_code'
+●●●●●● 1mm □
+'total_components'
+0
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+_build_directory
+directory
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_actions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+d
+'actions'
+●●●●●● 2mm □△
+d
+directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+state
+'capabilities'
+●●●●●● 1mm □
+'total_actions'
+'domains'
+total_actions
+k
+'count'
+'description'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+'actions'
+●●●●●● 2mm □△
+v
+'description'
+k
+v
+directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+state
+'capabilities'
+●●●●●● 1mm □
+'total_actions'
+0
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+state
+'trust'
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+state
+'trust'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+GenesisStorageManager
+mgr
+●●●●●● 1mm □
+GenesisStorageManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state
+'genesis'
+●●●●●● 1mm □
+mgr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+state
+'genesis'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.worker_pool
+●●●●●● 2mm □△○
+pool_status
+state
+'workers'
+●●●●●● 1mm □
+pool_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+state
+'workers'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+get_llm_cache
+get_cost_tracker
+state
+'cache'
+●●●●●● 1mm □
+get_llm_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state
+'api_costs'
+●●●●●● 1mm □
+get_cost_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.memory_injector
+●●●●●● 2mm □△○
+get_snapshot_stats
+state
+'memory_injector'
+●●●●●● 1mm □
+get_snapshot_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+state
+router
+●●●●●● 1mm □△
+'/state'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm △
+IngestRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+payload
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+'api'
+IngestRequest
+"\n    Ingests raw external data, extracts semantic meaning, and permanently writes\n    any detected real-world physics constraints into Magma's Causal Graph.\n    "
+●●●●●● 3mm □△○
+cognitive.world_model.ingestor
+●●●●●● 2mm □△○
+get_world_model_ingestor
+ingestor
+●●●●●● 1mm □
+get_world_model_ingestor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ingestor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to route ingestion: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ingest'
+●●●●●● 2mm □△
+'\n    Returns the currently understood state of the world based on \n    all external sensor data ever ingested into the Magma Causal Graph.\n    '
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+get_magma_graphs
+graphs
+●●●●●● 1mm □
+get_magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nodes
+●●●●●● 1mm □
+'id'
+'content'
+'type'
+n
+n
+n
+n
+graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+'id'
+'source'
+'target'
+'relation'
+'confidence'
+e
+e
+e
+e
+e
+e
+graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'node_count'
+'edge_count'
+'nodes'
+'edges'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+nodes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edges
+●●●●●● 2mm □△
+nodes
+edges
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to load causal graph: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/causal-graph'
+●●●●●● 2mm □△
+'List all subsystems with their health status.'
+subsystems
+●●●●●● 1mm □
+checks
+●●●●●● 1mm □
+'Database'
+_check_database
+'LLM Provider'
+_check_llm
+'Qdrant Vector DB'
+_check_qdrant
+'Genesis Tracking'
+_check_genesis
+'Diagnostic Engine'
+_check_diagnostics
+'Autonomous Loop'
+_check_autonomous
+'Worker Pool (IO)'
+_check_worker_io
+'Worker Pool (CPU)'
+_check_worker_cpu
+'Semantic Search'
+_check_semantic
+'Memory Injector'
+_check_memory_injector
+'File Watcher'
+_check_file_watcher
+'Governance'
+_check_governance
+'Trust Engine'
+_check_trust
+'Coding Pipeline'
+_check_pipeline
+'LLM Cache'
+_check_cache
+name
+checker
+checks
+result
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subsystems
+●●●●●● 1mm □△
+'name'
+name
+result
+●●●●●● 2mm □△
+Exception
+subsystems
+●●●●●● 1mm □△
+'name'
+'status'
+'detail'
+name
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'subsystems'
+'total'
+'healthy'
+subsystems
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+subsystems
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+subsystems
+s
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'healthy'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/subsystems'
+●●●●●● 2mm □△
+Request
+"Chat with the world model — answers questions about Grace's internal state."
+body
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+include_state
+●●●●●● 1mm □
+body
+●●●●●● 1mm □△
+'include_system_state'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+query
+●●●●●● 3mm ○
+'response'
+'Please ask a question about the system.'
+semantic_results
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+semantic_search
+results
+●●●●●● 1mm □
+semantic_search
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+semantic_results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+Exception
+context_parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+semantic_results
+context_parts
+●●●●●● 1mm □△
+'SEMANTIC SEARCH RESULTS:'
+●●●●●● 2mm □△
+r
+semantic_results
+5
+context_parts
+●●●●●● 1mm □△
+'  - '
+r
+●●●●●● 1mm □△
+'id'
+'?'
+●●●●●● 2mm □△
+': '
+r
+●●●●●● 1mm □△
+'purpose'
+'?'
+●●●●●● 2mm □△
+' (file: '
+r
+●●●●●● 1mm □△
+'file'
+'?'
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_state
+●●●●●● 3mm □△○
+core.memory_injector
+●●●●●● 2mm □△○
+build_llm_context
+llm_context
+●●●●●● 1mm □
+build_llm_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm_context
+context_parts
+●●●●●● 1mm □△
+'\nSYSTEM STATE:\n'
+llm_context
+4000
+●●●●●● 2mm □△
+Exception
+system_prompt
+●●●●●● 1mm □
+"You are Grace AI's World Model. You have complete visibility into the system's health, components, trust scores, brain actions, database state, and cognitive systems. Answer questions about the system accurately and concisely using the provided data."
+full_prompt
+●●●●●● 1mm □
+"You are Grace's World Model — you know everything about the system's internal state.\nAnswer this question using the system data provided below.\n\n"
+''
+●●●●●● 1mm □△
+context_parts
+●●●●●● 2mm □△
+'\n\nQuestion: '
+query
+response
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+core.independent_models
+●●●●●● 2mm □△○
+run_with_failover
+result
+●●●●●● 1mm □
+run_with_failover
+●●●●●● 1mm □△
+full_prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'response'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+result
+'response'
+Exception
+logger
+●●●●●● 1mm □△
+'Cloud models failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Ollama fallback failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 2mm □
+semantic_results
+response
+●●●●●● 1mm □
+"No LLM available, but here's what I found in the system:\n\n"
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'- **'
+r
+●●●●●● 1mm □△
+'id'
+r
+●●●●●● 1mm □△
+'component_id'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'**: '
+r
+●●●●●● 1mm □△
+'purpose'
+'?'
+●●●●●● 2mm □△
+' (at `'
+r
+●●●●●● 1mm □△
+'file'
+'?'
+●●●●●● 2mm □△
+'`)'
+r
+semantic_results
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+search_system
+search_results
+●●●●●● 1mm □
+search_system
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+search_results
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+'No LLM available. System search results:\n\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'- `'
+f
+'path'
+'` ('
+f
+'category'
+'): '
+f
+●●●●●● 1mm □△
+'docstring'
+''
+●●●●●● 2mm □△
+150
+f
+search_results
+'files'
+8
+●●●●●● 2mm □△
+●●●●●● 3mm □
+response
+●●●●●● 1mm □
+'No LLM is available (set KIMI_API_KEY, OPUS_API_KEY in .env, or start Ollama). Could not answer your question.'
+Exception
+response
+●●●●●● 1mm □
+'No LLM is available. Start Ollama (`ollama serve`) or set KIMI_API_KEY / OPUS_API_KEY in your .env file.'
+●●●●●● 3mm ○
+'response'
+'query'
+'semantic_results'
+response
+query
+semantic_results
+5
+router
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+healthy
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+db_type
+●●●●●● 1mm □
+settings
+Exception
+db_type
+●●●●●● 1mm □
+'sqlite'
+●●●●●● 3mm ○
+'status'
+'type'
+healthy
+'healthy'
+'unhealthy'
+db_type
+●●●●●● 1mm □
+_check_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+running
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'detail'
+running
+'healthy'
+'degraded'
+running
+'LLM reachable'
+'LLM not responding'
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'degraded'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'detail'
+connected
+'healthy'
+'degraded'
+connected
+'Connected'
+'Not connected'
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'degraded'
+'Qdrant not configured'
+●●●●●● 1mm □
+_check_genesis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.genesis_storage
+●●●●●● 2mm □△○
+GenesisStorageManager
+stats
+●●●●●● 1mm □
+GenesisStorageManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'hot_count'
+'healthy'
+stats
+●●●●●● 1mm □△
+'hot_tier_count'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'detail'
+'degraded'
+'Genesis storage unavailable'
+●●●●●● 1mm □
+_check_diagnostics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_diagnostics_status
+result
+●●●●●● 1mm □
+get_diagnostics_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+result
+'healthy'
+'degraded'
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_autonomous
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_loop_api
+●●●●●● 2mm □△○
+_loop_state
+running
+●●●●●● 1mm □
+_loop_state
+●●●●●● 1mm □△
+'running'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'cycles'
+running
+'healthy'
+'stopped'
+_loop_state
+●●●●●● 1mm □△
+'cycle_count'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_worker_io
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.worker_pool
+●●●●●● 2mm □△○
+get_io_pool
+pool
+●●●●●● 1mm □
+get_io_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'active'
+'completed'
+'healthy'
+status
+'active'
+status
+'completed'
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_worker_cpu
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.worker_pool
+●●●●●● 2mm □△○
+get_cpu_pool
+pool
+●●●●●● 1mm □
+get_cpu_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'active'
+'completed'
+'healthy'
+status
+'active'
+status
+'completed'
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_semantic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.semantic_search
+●●●●●● 2mm □△○
+COMPONENTS
+●●●●●● 3mm ○
+'status'
+'components'
+'healthy'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPONENTS
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'degraded'
+●●●●●● 1mm □
+_check_memory_injector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.memory_injector
+●●●●●● 2mm □△○
+get_snapshot_stats
+stats
+●●●●●● 1mm □
+get_snapshot_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'snapshots'
+'healthy'
+stats
+●●●●●● 1mm □△
+'snapshots'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_file_watcher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+●●●●●● 3mm ○
+'status'
+'disabled'
+●●●●●● 3mm ○
+'status'
+'detail'
+'healthy'
+'Watching workspace'
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_governance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+list_rules
+rules
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'documents'
+'healthy'
+doc_count
+Exception
+●●●●●● 3mm ○
+'status'
+'degraded'
+●●●●●● 1mm □
+_check_trust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'models_tracked'
+'healthy'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.coding_pipeline
+●●●●●● 2mm □△○
+get_pipeline_progress
+progress
+●●●●●● 1mm □
+get_pipeline_progress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'healthy'
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'
+●●●●●● 1mm □
+_check_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+get_llm_cache
+stats
+●●●●●● 1mm □
+get_llm_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'hit_rate'
+'healthy'
+stats
+●●●●●● 1mm □△
+'hit_rate'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'unknown'

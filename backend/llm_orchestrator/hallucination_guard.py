@@ -25,8 +25,7 @@ import requests
 
 from .multi_llm_client import MultiLLMClient, TaskType
 from .repo_access import RepositoryAccessLayer
-from confidence_scorer.confidence_scorer import ConfidenceScorer
-from confidence_scorer.contradiction_detector import SemanticContradictionDetector
+
 
 logger = logging.getLogger(__name__)
 
@@ -370,8 +369,8 @@ class HallucinationGuard:
         self,
         multi_llm_client: Optional[MultiLLMClient] = None,
         repo_access: Optional[RepositoryAccessLayer] = None,
-        confidence_scorer: Optional[ConfidenceScorer] = None,
-        contradiction_detector: Optional[SemanticContradictionDetector] = None,
+        confidence_scorer: Optional[Any] = None,
+        contradiction_detector: Optional[Any] = None,
         external_verifier: Optional[ExternalVerifier] = None,
         enable_external_verification: bool = True
     ):
@@ -389,7 +388,7 @@ class HallucinationGuard:
         self.multi_llm = multi_llm_client
         self.repo_access = repo_access
         self.confidence_scorer = confidence_scorer
-        self.contradiction_detector = contradiction_detector or SemanticContradictionDetector()
+        self.contradiction_detector = contradiction_detector
         self.external_verifier = external_verifier or (ExternalVerifier() if enable_external_verification else None)
 
         # Verification log
@@ -1269,7 +1268,7 @@ _hallucination_guard: Optional[HallucinationGuard] = None
 def get_hallucination_guard(
     multi_llm_client: Optional[MultiLLMClient] = None,
     repo_access: Optional[RepositoryAccessLayer] = None,
-    confidence_scorer: Optional[ConfidenceScorer] = None
+    confidence_scorer: Optional[Any] = None
 ) -> HallucinationGuard:
     """Get or create global hallucination guard instance."""
     global _hallucination_guard

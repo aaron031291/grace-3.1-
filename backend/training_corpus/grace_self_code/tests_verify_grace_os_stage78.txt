@@ -1,0 +1,931 @@
+## verify_grace_os_stage78.py
+'\nGrace OS — Stage 7/8 Verification Test\n\nTests:\n- TrustScorekeeper: score recording, aggregation, threshold gates, decay\n- EventSystem: event emission, subscription, replay\n- Knowledge Store: OracleDB, ErrorPatterns, ProjectConventions\n- Config YAML: all 4 files parseable\n- Full pipeline with trust + events wired into MessageBus\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+yaml
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TaskType
+GENERAL
+●●●●●● 1mm □
+'general'
+●●●●●● 2mm △
+LLMOrchestrator
+●●●●●● 2mm △
+MCPClient
+mock_llm_mod
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_llm_mod
+●●●●●● 1mm □
+TaskType
+mock_llm_mod
+●●●●●● 1mm □
+LLMOrchestrator
+sys
+'llm_orchestrator.llm_orchestrator'
+●●●●●● 1mm □
+mock_llm_mod
+mock_mcp_mod
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mcp_mod
+●●●●●● 1mm □
+MCPClient
+sys
+'grace_mcp.client'
+●●●●●● 1mm □
+mock_mcp_mod
+●●●●●● 3mm □△○
+grace_os.kernel.message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+grace_os.kernel.layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+grace_os.kernel.trust_scorekeeper
+●●●●●● 2mm □△○
+TrustScorekeeper
+●●●●●● 3mm □△○
+grace_os.kernel.event_system
+●●●●●● 2mm □△○
+EventSystem
+●●●●●● 3mm □△○
+grace_os.kernel.session_manager
+●●●●●● 2mm □△○
+SessionManager
+●●●●●● 3mm □△○
+grace_os.layers.l1_runtime.runtime_layer
+●●●●●● 2mm □△○
+RuntimeLayer
+●●●●●● 3mm □△○
+grace_os.layers.l2_planning.planning_layer
+●●●●●● 2mm □△○
+PlanningLayer
+●●●●●● 3mm □△○
+grace_os.layers.l3_proposer.proposer_layer
+●●●●●● 2mm □△○
+ProposerLayer
+●●●●●● 3mm □△○
+grace_os.layers.l4_evaluator.evaluator_layer
+●●●●●● 2mm □△○
+EvaluatorLayer
+●●●●●● 3mm □△○
+grace_os.layers.l5_simulation.simulation_layer
+●●●●●● 2mm □△○
+SimulationLayer
+●●●●●● 3mm □△○
+grace_os.layers.l6_codegen.codegen_layer
+●●●●●● 2mm □△○
+CodegenLayer
+●●●●●● 3mm □△○
+grace_os.layers.l7_testing.testing_layer
+●●●●●● 2mm □△○
+TestingLayer
+●●●●●● 3mm □△○
+grace_os.layers.l8_verification.verification_layer
+●●●●●● 2mm □△○
+VerificationLayer
+●●●●●● 3mm □△○
+grace_os.layers.l9_deployment.deployment_layer
+●●●●●● 2mm □△○
+DeploymentLayer
+●●●●●● 3mm □△○
+grace_os.knowledge.oracle_db
+●●●●●● 2mm □△○
+OracleDB
+●●●●●● 3mm □△○
+grace_os.knowledge.error_patterns
+●●●●●● 2mm □△○
+ErrorPatterns
+●●●●●● 3mm □△○
+grace_os.knowledge.project_conventions
+●●●●●● 2mm □△○
+ProjectConventions
+●●●●●● 2mm △
+MockLLM
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 2mm △
+Result
+success
+●●●●●● 3mm △
+content
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 1mm □△
+dataclass
+sp
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'system_prompt'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'L2 Planning'
+sp
+'Decompose'
+prompt
+content
+●●●●●● 1mm □
+'[{"id": "t1", "description": "Create user model", "type": "codegen"}]'
+●●●●●● 1mm △
+'L3 Solution Proposer'
+sp
+content
+●●●●●● 1mm □
+'[{"id":"p1","approach":"ORM","tradeoffs":"Tight coupling","risk_score":20},{"id":"p2","approach":"Raw SQL","tradeoffs":"More code","risk_score":35},{"id":"p3","approach":"GraphQL","tradeoffs":"Overhead","risk_score":45}]'
+●●●●●● 2mm □
+'L4 Evaluator'
+sp
+content
+●●●●●● 1mm □
+'{"scores":[{"proposal_id":"p1","correctness":90,"performance":80,"maintainability":85,"risk":80,"total":84}],"selected":"p1"}'
+●●●●●● 1mm △
+'L5 Simulation'
+sp
+content
+●●●●●● 1mm □
+'{"risks":[],"edge_cases":["Null input"],"dependency_impacts":[],"contradictions":[],"impact_score":20,"recommendation":"proceed"}'
+●●●●●● 2mm □
+'L8 Verification'
+sp
+content
+●●●●●● 1mm □
+'{"verified":true,"requirements_met":["Model created"],"requirements_missed":[],"security_flags":[],"consistency_issues":[],"readability_score":90,"overall_trust":92}'
+●●●●●● 3mm □
+content
+●●●●●● 1mm □
+'class User:\n    pass'
+●●●●●● 3mm ○
+Result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockMCP
+●●●●●● 3mm ○
+'success'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_trust_scorekeeper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test TrustScorekeeper independently.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n── Test: TrustScorekeeper ──'
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+TrustScorekeeper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □△
+'session1'
+'L2_Planning'
+85.0
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □△
+'session1'
+'L6_Codegen'
+90.0
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □△
+'session1'
+'L7_Testing'
+80.0
+●●●●●● 2mm □△
+latest
+●●●●●● 1mm □
+ts
+●●●●●● 1mm □△
+'session1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+latest
+●●●●●● 2mm □△
+3
+'Expected 3 scores, got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+latest
+●●●●●● 2mm □△
+agg
+●●●●●● 1mm □
+ts
+●●●●●● 1mm □△
+'session1'
+●●●●●● 2mm □△
+agg
+0
+'Aggregate should be > 0, got '
+agg
+passed
+score
+●●●●●● 1mm □
+ts
+●●●●●● 1mm □△
+'session1'
+'deploy'
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+ts
+●●●●●● 1mm □△
+'session1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+3
+'Expected 3 history entries, got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Scores recorded: '
+latest
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Aggregate: '
+agg
+'.1f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Deploy gate: '
+passed
+'PASS'
+'FAIL'
+' ('
+score
+'.1f'
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ History entries: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_event_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test EventSystem independently.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n── Test: EventSystem ──'
+●●●●●● 2mm □△
+es
+●●●●●● 1mm □
+EventSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+captured
+●●●●●● 1mm □
+es
+●●●●●● 1mm □△
+'*'
+captured
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+es
+●●●●●● 1mm □△
+'SESSION_STARTED'
+'trace1'
+'SessionManager'
+'prompt'
+'test'
+●●●●●● 2mm □△
+es
+●●●●●● 1mm □△
+'MESSAGE_SENT'
+'trace1'
+'L2_Planning'
+'type'
+'DECOMPOSE'
+●●●●●● 2mm □△
+es
+●●●●●● 1mm □△
+'RESPONSE_RETURNED'
+'trace1'
+'L2_Planning'
+'status'
+'success'
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □
+es
+●●●●●● 1mm □△
+'trace1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+events
+●●●●●● 2mm □△
+3
+'Expected 3 events, got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+events
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+captured
+●●●●●● 2mm □△
+3
+'Expected 3 subscriber calls, got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+captured
+●●●●●● 2mm □△
+timeline
+●●●●●● 1mm □
+es
+●●●●●● 1mm □△
+'trace1'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Events emitted: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+events
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Subscribers notified: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+captured
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Timeline: '
+timeline
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_knowledge_store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test OracleDB, ErrorPatterns, ProjectConventions.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n── Test: Knowledge Store ──'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+OracleDB
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'task_results'
+'task1'
+'outcome'
+'duration'
+'success'
+2.5
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+'file_deps'
+'app.py'
+'models.py'
+'routes.py'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'task_results'
+'task1'
+●●●●●● 2mm □△
+result
+'outcome'
+'success'
+all_deps
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+'file_deps'
+●●●●●● 2mm □△
+'app.py'
+all_deps
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ OracleDB: stored and queried ('
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm □
+ErrorPatterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm □△
+'ImportError: No module named flask'
+'pip install flask'
+0.95
+●●●●●● 2mm □△
+ep
+●●●●●● 1mm □△
+'ImportError: No module named flask'
+'pip install flask'
+1.0
+●●●●●● 2mm □△
+fix
+●●●●●● 1mm □
+ep
+●●●●●● 1mm □△
+'ImportError: No module named flask'
+●●●●●● 2mm □△
+fix
+●●●●●● 2mm □
+fix
+'occurrences'
+2
+fuzzy
+●●●●●● 1mm □
+ep
+●●●●●● 1mm □△
+'importerror: no module named Flask'
+●●●●●● 2mm □△
+fuzzy
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ ErrorPatterns: recorded & matched (occurrences='
+fix
+'occurrences'
+')'
+●●●●●● 2mm □△
+pc
+●●●●●● 1mm □
+ProjectConventions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pc
+●●●●●● 1mm □△
+'Use snake_case for functions'
+●●●●●● 2mm □△
+pc
+●●●●●● 1mm □△
+'Avoid global variables'
+●●●●●● 2mm □△
+convs
+●●●●●● 1mm □
+pc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+convs
+●●●●●● 2mm □△
+2
+violations
+●●●●●● 1mm □
+pc
+●●●●●● 1mm □△
+'global counter = 0'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ ProjectConventions: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+convs
+●●●●●● 2mm □△
+' rules, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+' violations found'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_config_yaml
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that all config YAML files are parseable.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n── Test: Config YAML ──'
+●●●●●● 2mm □△
+config_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+'grace_os'
+'config'
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+'trust_thresholds.yaml'
+'layer_permissions.yaml'
+'model_routing.yaml'
+'retry_policies.yaml'
+fname
+files
+path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+config_dir
+fname
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+'Missing config: '
+path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+yaml
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □
+'Empty config: '
+fname
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ '
+fname
+' parsed ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+' top-level keys)'
+●●●●●● 2mm □△
+'Run full 9-layer pipeline with TrustScorekeeper + EventSystem wired in.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n── Test: Full Pipeline with Observability ──'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+TrustScorekeeper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □
+EventSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+bus
+●●●●●● 1mm □
+MessageBus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □
+LayerRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+MockLLM
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mcp
+●●●●●● 1mm □
+MockMCP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layers
+●●●●●● 1mm □
+RuntimeLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+PlanningLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+ProposerLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+EvaluatorLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+SimulationLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+CodegenLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+TestingLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+VerificationLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+DeploymentLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+layer
+layers
+layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_mgr
+●●●●●● 1mm □
+SessionManager
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+trace_id
+●●●●●● 1mm □
+session_mgr
+●●●●●● 1mm □△
+'Create a user model'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+aggregate
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+trust
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Trust scores recorded for '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+' layers'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Aggregate trust: '
+aggregate
+'.1f'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Score history entries: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+event_count
+●●●●●● 1mm □
+events
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+timeline
+●●●●●● 1mm □
+events
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Events emitted: '
+event_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Timeline sample: '
+timeline
+timeline
+0
+'none'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+session_mgr
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Session status: '
+status
+'status'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+7
+'Expected scores from 7+ layers, got '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+event_count
+10
+'Expected 10+ events, got '
+event_count
+●●●●●● 3mm ○
+status
+'status'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+65
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Grace OS — Stage 7/8 Verification'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+65
+●●●●●● 2mm □△
+test_trust_scorekeeper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_event_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_knowledge_store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_config_yaml
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+test_full_pipeline_with_observability
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+65
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+'completed'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ STAGE 7/8 VERIFICATION PASSED — Full observability operational!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ FAILED — Pipeline status: '
+status
+●●●●●● 2mm □△
+●●●●●● 3mm □
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+65
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
