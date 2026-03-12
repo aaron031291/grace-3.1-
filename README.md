@@ -421,47 +421,25 @@ grace-3.1-/
 │   │
 │   ├── cache/                  # Caching Layer
 │   │   └── redis_cache.py      # Redis-based caching service
+│   │   ├── venv_gpu/           # Python GPU Virtual Environment
+│   │   └── logs/               # Backend-specific logs
 │   ├── utils/                  # Shared Utilities
 │   │   ├── error_suppression.py  # Graceful error handling
 │   │   ├── rag_prompt.py       # RAG prompt templates
 │   │   └── structured_logging.py # JSON structured logs
 │   ├── scripts/                # Utility scripts (7 files)
-│   ├── setup/                  # Setup & initialization
-│   │   └── initializer.py      # Full system initializer
-│   └── tests/                  # Backend test suites (57 files)
+│   └── setup/                  # Setup & initialization
+│       └── initializer.py      # Full system initializer
 │
 ├── frontend/                   # React 19 Frontend
 │   ├── src/
 │   │   ├── App.jsx             # Main app with routing
 │   │   ├── main.jsx            # Entry point
 │   │   ├── components/         # UI Components (92 files)
-│   │   │   ├── ChatWindow.jsx  # Chat interface
-│   │   │   ├── FileBrowser.jsx # File management
-│   │   │   ├── CodeBaseTab.jsx # Code browser
-│   │   │   ├── CognitiveTab.jsx
-│   │   │   ├── LearningTab.jsx
-│   │   │   ├── LibrarianTab.jsx
-│   │   │   ├── GovernanceTab.jsx
-│   │   │   ├── GracePlanningTab.jsx
-│   │   │   ├── GraceTodosTab.jsx
-│   │   │   ├── MLIntelligenceTab.jsx
-│   │   │   ├── NotionTab.jsx
-│   │   │   ├── CICDDashboard.jsx
-│   │   │   ├── IngestionDashboard.jsx
-│   │   │   ├── WebScraper.jsx
-│   │   │   ├── VoiceButton.jsx
-│   │   │   └── ...
 │   │   ├── config/             # API configuration
 │   │   └── store/              # State management
 │   ├── package.json
 │   ├── Dockerfile              # Nginx production build
-│   │
-│   │   ├── version_control/    # Version control sub-components (11 files)
-│   │   │   ├── CommitTimeline.jsx
-│   │   │   ├── DiffViewer.jsx
-│   │   │   ├── GitTree.jsx
-│   │   │   ├── ModuleHistory.jsx
-│   │   │   └── RevertModal.jsx
 │   └── vite.config.js
 │
 ├── grace-os-vscode/            # VSCode Extension (TypeScript)
@@ -469,30 +447,53 @@ grace-3.1-/
 │   ├── package.json            # Extension manifest
 │   └── tsconfig.json
 │
+├── tools/                      # Developer & Maintenance Scripts
+│   ├── setup_memory_mesh.py
+│   ├── start_autonomous.py
+│   ├── fix_and_start.ps1       # Quick fix + restart script
+│   ├── fix_phase2_setup.py     # Phase 2 setup utility
+│   ├── RUN_DB_TEST.bat         # Database connection test (Windows)
+│   ├── RUN_DB_TEST.ps1         # Database connection test (PowerShell)
+│   ├── RUN_LEARNING_EXAMPLES_MIGRATION.bat  # Learning examples migration
+│   ├── verify_documents_chat.bat/.sh
+│   └── verify_system.bat/.sh
+│
+├── docs/                       # Documentation Library (229+ files)
+│   ├── FORENSIC_REPORT.md      # Forensic audit report
+│   ├── audit_report.tex        # LaTeX audit report
+│   └── ...                     # Architecture, API, deployment guides
+│
 ├── docker-compose.yml          # Full-stack Docker deployment
 ├── k8s/                        # Kubernetes manifests
-│   ├── deployment.yaml
-│   └── services.yaml
 ├── pipelines/                  # CI/CD pipeline definitions
-│   ├── grace-ci.yaml
-│   └── grace-deploy.yaml
-├── monitoring/                 # Monitoring configs
-│   └── grafana-dashboard.json
-├── .github/                    # GitHub integration
-│   ├── workflows/
-│   │   ├── ci.yml              # CI: lint, test, build
-│   │   └── cd.yml              # CD: deploy
-│   ├── ISSUE_TEMPLATE/
-│   └── pull_request_template.md
-├── tools/                      # Maintenance scripts
+├── monitoring/                 # Prometheus/Grafana configs
+├── .github/                    # GitHub Actions CI/CD workflows
 ├── tests/                      # Integration tests (11 files)
 ├── benchmarks/                 # Embedding benchmarks
 ├── knowledge_base/             # User knowledge base directory
-├── docs/                       # Documentation (229 files)
-├── start.bat / start.sh        # Unified start scripts
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-└── .gitignore
+├── data/                       # Application data & databases
+├── logs/                       # Application logs
+├── config/                     # Configuration files
+├── runpod/                     # RunPod cloud deployment configs
+├── playbooks/                  # Operational playbooks
+│
+├── start.bat / start.sh        # ★ Primary unified launch scripts
+├── start_grace.bat / .sh       # Aliased launch scripts
+├── start_grace_windows.py      # Python launcher (Windows)
+├── grace_launcher.py           # Grace launcher entry point
+├── grace_start.py              # Grace start helper
+├── Launch Grace.bat            # Double-click launcher
+├── RUN_GRACE_HERE.bat          # Context-menu launcher
+├── START_BACKEND_HERE.bat      # Backend-only launcher
+│
+├── .genesis_immutable_memory.json   # Immutable Genesis memory (path-locked)
+├── provenance_baseline.json         # File provenance baseline (path-locked)
+│
+├── README.md                   # Developer documentation
+├── USAGE.md                    # Client usage guide
+├── CHANGELOG.md                # Version history
+├── CONTRIBUTING.md             # Contribution guidelines
+└── .gitignore / .dockerignore / .editorconfig
 ```
 
 ---
