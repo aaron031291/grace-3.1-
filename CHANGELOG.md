@@ -24,6 +24,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI pipeline lint errors
 - Missing imports in various modules
 
+## [3.1.1] - 2026-03-12
+
+### Added
+- Created `USAGE.md` for client onboarding.
+
+### Changed
+- Migrated deprecated `datetime.utcnow()` to timezone-aware UTC timestamps system-wide.
+- Hardened React 19 frontend by resolving all remaining linting warnings, dead code, and fast-refresh issues.
+
+### Fixed
+- Resolved SQLite `sa_savepoint_4` database errors within the Genesis tracking system.
+- Fixed 500 Internal Server Errors in multi-tier RAG retrieval and chat endpoints.
+- Patched Qwen Model Pool initialization parameters and permissions.
+- Fixed test docstring syntax causing skips in pytest.
+
 ## [3.1.0] - 2026-01-14
 
 ### Added
@@ -121,6 +136,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 3.1.1 | 2026-03-12 | Enterprise stabilization, Genesis fixes, Lint cleanup |
 | 3.1.0 | 2026-01-14 | Production readiness (Docker, CI/CD, Security) |
 | 3.0.0 | 2026-01-01 | Major feature expansion (Cognitive, Learning, Agent) |
 | 2.0.0 | 2025-06-01 | RAG pipeline, Document ingestion |

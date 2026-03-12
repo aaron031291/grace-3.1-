@@ -64,6 +64,13 @@
 - **4-layer diagnostic machine** — sensors → interpreters → judgement → action
 - **Full-stack UI** — React 19 frontend with 40+ interactive tabs/panels
 
+### Current State (March 2026)
+GRACE 3.1- has recently completed a comprehensive stabilization phase for enterprise handoff:
+- **Transaction Integrity:** Resolved Genesis SQLite savepoint issues, ensuring immutable provenance data is robust during concurrent transactions.
+- **Frontend Hardening:** Finalized a massive lint cleanup across the React 19 frontend, resolving legacy hooks warnings, fast-refresh issues, and eliminating unused dependencies for a strict, error-free UI build.
+- **Backend Modernization:** Fully audited the codebase, migrating away from deprecated Python datetime methods (`datetime.utcnow()`) toward robust timezone-aware logic.
+- **RAG & Inference Stability:** Audited the Qwen Model Pool, fixing initialization logic and permission enforcements. Resolved internal server errors in the multi-tier retrieval endpoints.
+
 ---
 
 ## Architecture
@@ -921,6 +928,49 @@ A software engineering agent capable of autonomous code execution:
 
 ---
 
+### 11. GRACE Immune System & Proactive Healing
+Autonomous anomaly detection and self-repair frameworks:
+- **Immune System** (`immune_system.py`) — Detects and neutralizes system-level anomalies.
+- **Proactive Healing Engine** (`proactive_healing_engine.py`) — Automatically anticipates and resolves pipeline errors before failure.
+- **Learning & Healing** (`autonomous_healing_loop.py`) — Feeds error signatures into memory to prevent recurring issues.
+
+---
+
+### 12. Qwen Triad Orchestrator & Coding Net
+Specialized local LLM agent network for coding and architectural synthesis:
+- **Qwen Triad Orchestrator** (`qwen_triad_orchestrator.py`) — Coordinates multiple specialized LLMs for complex tasks.
+- **Qwen Coding Net** (`qwen_coding_net.py`) — Dedicated agent network for code syntax and logic validation.
+
+---
+
+### 13. Oracle & World Model
+High-level strategic reasoning and state prediction:
+- **Oracle API** (`oracle_api.py`) — Top-level reasoning abstraction for deep technical questions.
+- **World Model** (`world_model_api.py`) — Tracks and models the continuous state of the project.
+
+---
+
+### 14. Consensus Engine
+Multi-agent debate and validation framework:
+- **Consensus Engine** (`consensus_engine.py`) — Forces multiple agents to debate and reach a validated conclusion.
+- **Consensus Chat** (`ConsensusChat.jsx`) — Real-time UI for observing multi-agent debates.
+
+---
+
+### 15. Flash Cache & Ghost Memory
+Ultra-fast transient caching layer:
+- **Flash Cache** (`flash_cache.py`) — Sub-millisecond deterministic retrieval.
+- **Ghost Memory** (`ghost_memory.py`) — Background memory states for context preservation.
+
+---
+
+### 16. Business Intelligence (BI)
+System integrations for high-level technical analytics:
+- **BI Metrics Integration** (`bi_api.py`) — Real-time analytical rollups.
+- **BI Dashboard UI** (`BusinessIntelligenceTab.jsx`) — Graphical interpretation of system trends.
+
+---
+
 ## API Reference
 
 GRACE exposes **50+ API router modules** via FastAPI. Interactive documentation is available at `/docs` (Swagger) and `/redoc` (ReDoc) when the server is running.
@@ -1017,13 +1067,17 @@ The React 19 frontend provides a rich, interactive UI with **90 component files*
 | Component | Description |
 |-----------|-------------|
 | `ChatWindow` | Main chat interface with markdown rendering |
+| `ConsensusChat` | Multi-agent debate UI |
+| `ArchitectTab` | Architectural analysis and synthesis |
 | `ChatList` | Conversation sidebar with search |
 | `FileBrowser` | File upload, download, and browsing |
 | `CodeBaseTab` | Source code browsing and analysis |
 | `LibrarianTab` | AI document management dashboard |
 | `CognitiveTab` | Cognitive system visualization |
 | `LearningTab` | Learning progress and patterns |
+| `FlashCachePanel` | Ultra-fast caching controls |
 | `MLIntelligenceTab` | ML metrics and trust scores |
+| `BusinessIntelligenceTab` | BI analytics and metrics dashboard |
 | `GovernanceTab` | Governance workflow management |
 | `GracePlanningTab` | Concept-to-execution workflow |
 | `GraceTodosTab` | Drag-and-drop task management |
@@ -1039,6 +1093,8 @@ The React 19 frontend provides a rich, interactive UI with **90 component files*
 | `InsightsTab` | System insights |
 | `TelemetryTab` | Telemetry data viewer |
 | `MonitoringTab` | System health monitoring |
+| `SystemHealthTab` | Immune system & diagnostics view |
+| `DocsTab` | Integrated comprehensive documentation library |
 | `WebScraper` | URL scraping interface |
 | `VersionControl` | Genesis version control viewer |
 | `GenesisKeyPanel/Tab` | Genesis key explorer |
@@ -1236,6 +1292,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full version history.
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| **3.1.1** | 2026-03-12 | Stabilization Release — Full linting, Genesis savepoint fixes, timezone sync, and Qwen pool audit |
 | **3.1.0** | 2026-01-14 | Production readiness — Docker, CI/CD, Security |
 | **3.0.0** | 2026-01-01 | Cognitive system, Agent framework, ML Intelligence |
 | **2.0.0** | 2025-06-01 | RAG pipeline, Document ingestion |
