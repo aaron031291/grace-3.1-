@@ -1,0 +1,2248 @@
+## test_file_manager_comprehensive.py
+'\nComprehensive Test Suite for File Manager Module\n================================================\nTests for FileHandler and related file management utilities.\n\nCoverage:\n- FileHandler initialization and file type detection\n- Text file extraction (TXT, MD, code files)\n- PDF extraction with fallback mechanisms\n- DOCX and Excel extraction\n- Audio/Video file handling\n- Text cleaning and validation\n- Error handling for various file types\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+mock_open
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Tuple
+Optional
+List
+Dict
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+mock_pdfplumber
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'pdfplumber'
+●●●●●● 1mm □
+mock_pdfplumber
+mock_pypdf2
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'PyPDF2'
+●●●●●● 1mm □
+mock_pypdf2
+mock_docx
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'docx'
+●●●●●● 1mm □
+mock_docx
+mock_openpyxl
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'openpyxl'
+●●●●●● 1mm □
+mock_openpyxl
+mock_pptx
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'pptx'
+●●●●●● 1mm □
+mock_pptx
+mock_whisper
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'whisper'
+●●●●●● 1mm □
+mock_whisper
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestFileHandlerFileTypeDetection
+'Test file type detection.'
+●●●●●● 1mm □
+test_get_file_type_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file type detection for text files.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.txt'
+'.md'
+'.json'
+'text/plain'
+'text/markdown'
+'application/json'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SUPPORTED_TYPES
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+get_file_type
+●●●●●● 1mm □△
+'/path/to/file.txt'
+●●●●●● 2mm □△
+'text/plain'
+get_file_type
+●●●●●● 1mm □△
+'/path/to/file.md'
+●●●●●● 2mm □△
+'text/markdown'
+get_file_type
+●●●●●● 1mm □△
+'/path/to/file.json'
+●●●●●● 2mm □△
+'application/json'
+●●●●●● 1mm □
+test_get_file_type_code_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file type detection for code files.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.py'
+'.js'
+'.java'
+'.cpp'
+'.go'
+'.rs'
+'text/x-python'
+'text/javascript'
+'text/x-java'
+'text/x-c++src'
+'text/x-go'
+'text/x-rust'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SUPPORTED_TYPES
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+get_file_type
+●●●●●● 1mm □△
+'script.py'
+●●●●●● 2mm □△
+'text/x-python'
+get_file_type
+●●●●●● 1mm □△
+'app.js'
+●●●●●● 2mm □△
+'text/javascript'
+get_file_type
+●●●●●● 1mm □△
+'Main.java'
+●●●●●● 2mm □△
+'text/x-java'
+●●●●●● 1mm □
+test_get_file_type_documents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file type detection for document files.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.pdf'
+'.docx'
+'.xlsx'
+'application/pdf'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SUPPORTED_TYPES
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+get_file_type
+●●●●●● 1mm □△
+'document.pdf'
+●●●●●● 2mm □△
+'application/pdf'
+'wordprocessingml'
+get_file_type
+●●●●●● 1mm □△
+'document.docx'
+●●●●●● 2mm □△
+'spreadsheetml'
+get_file_type
+●●●●●● 1mm □△
+'data.xlsx'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_file_type_media
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file type detection for media files.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.mp3'
+'.wav'
+'.mp4'
+'.avi'
+'audio/mpeg'
+'audio/wav'
+'video/mp4'
+'video/x-msvideo'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SUPPORTED_TYPES
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+get_file_type
+●●●●●● 1mm □△
+'audio.mp3'
+●●●●●● 2mm □△
+'audio/mpeg'
+get_file_type
+●●●●●● 1mm □△
+'video.mp4'
+●●●●●● 2mm □△
+'video/mp4'
+●●●●●● 1mm □
+test_get_file_type_unsupported
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file type detection for unsupported files.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.txt'
+'text/plain'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SUPPORTED_TYPES
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+get_file_type
+●●●●●● 1mm □△
+'file.xyz'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+get_file_type
+●●●●●● 1mm □△
+'file.unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_file_type_case_insensitive
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file type detection is case insensitive.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.txt'
+'.pdf'
+'text/plain'
+'application/pdf'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SUPPORTED_TYPES
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+get_file_type
+●●●●●● 1mm □△
+'FILE.TXT'
+●●●●●● 2mm □△
+'text/plain'
+get_file_type
+●●●●●● 1mm □△
+'DOCUMENT.PDF'
+●●●●●● 2mm □△
+'application/pdf'
+●●●●●● 2mm △
+TestTextFileExtraction
+'Test text file extraction.'
+●●●●●● 1mm □
+test_extract_text_file_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful text file extraction.'
+●●●●●● 1mm □
+extract_text_file
+●●●●●● 1mm □△
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+content
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+'Sample text content'
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text_file
+●●●●●● 1mm □△
+'/path/to/file.txt'
+●●●●●● 2mm □△
+text
+'Sample text content'
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_text_file_utf8
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test UTF-8 text file extraction.'
+●●●●●● 1mm □
+extract_text_file
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+content
+●●●●●● 1mm □
+'UTF-8 content: ñ, ü, 中文'
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+UnicodeDecodeError
+●●●●●● 3mm ○
+''
+'Unicode error'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text_file
+●●●●●● 1mm □△
+'file.txt'
+●●●●●● 2mm □△
+'UTF-8'
+text
+'中文'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_text_file_fallback_encoding
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test fallback to latin-1 encoding.'
+●●●●●● 1mm □
+extract_text_file
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+UnicodeDecodeError
+●●●●●● 1mm □△
+'utf-8'
+b''
+0
+1
+'invalid'
+●●●●●● 2mm □△
+UnicodeDecodeError
+●●●●●● 3mm ○
+'Latin-1 content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text_file
+●●●●●● 1mm □△
+'file.txt'
+●●●●●● 2mm □△
+text
+'Latin-1 content'
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_text_file_not_found
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction of non-existent file.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+'File not found: '
+file_path
+●●●●●● 3mm ○
+'content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'/nonexistent/file.txt'
+●●●●●● 2mm □△
+text
+''
+'File not found'
+error
+●●●●●● 2mm △
+TestMarkdownExtraction
+'Test markdown file extraction.'
+●●●●●● 1mm □
+test_extract_markdown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test markdown file extraction preserves formatting.'
+●●●●●● 1mm □
+extract_markdown
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+md_content
+●●●●●● 1mm □
+'# Header\n\n**Bold** and *italic*\n\n- List item'
+text
+error
+●●●●●● 1mm □
+extract_markdown
+●●●●●● 1mm □△
+md_content
+●●●●●● 2mm □△
+'# Header'
+text
+'**Bold**'
+text
+●●●●●● 1mm □
+test_extract_markdown_with_code_blocks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test markdown with code blocks.'
+●●●●●● 1mm □
+extract_markdown
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+md_content
+●●●●●● 1mm □
+"```python\nprint('hello')\n```"
+text
+error
+●●●●●● 1mm □
+extract_markdown
+●●●●●● 1mm □△
+md_content
+●●●●●● 2mm □△
+'```python'
+text
+"print('hello')"
+text
+●●●●●● 2mm △
+TestCodeFileExtraction
+'Test code file extraction.'
+●●●●●● 1mm □
+test_extract_python_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Python file extraction.'
+●●●●●● 1mm □
+extract_code_file
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+code
+●●●●●● 1mm □
+"def hello():\n    print('Hello')"
+text
+error
+●●●●●● 1mm □
+extract_code_file
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+'def hello():'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_javascript_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test JavaScript file extraction.'
+●●●●●● 1mm □
+extract_code_file
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+code
+●●●●●● 1mm □
+"function hello() { console.log('Hello'); }"
+text
+error
+●●●●●● 1mm □
+extract_code_file
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+'function hello()'
+text
+●●●●●● 2mm △
+TestPDFExtraction
+'Test PDF file extraction.'
+●●●●●● 1mm □
+test_extract_pdf_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful PDF extraction.'
+●●●●●● 1mm □
+extract_pdf
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+pages
+●●●●●● 1mm □
+'[Page 1]\nContent from page 1'
+'[Page 2]\nContent from page 2'
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+pages
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_pdf
+●●●●●● 1mm □△
+'document.pdf'
+●●●●●● 2mm □△
+'[Page 1]'
+text
+'Content from page 1'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_pdf_with_layout
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test PDF extraction with layout preservation.'
+●●●●●● 1mm □
+extract_pdf_with_layout
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Column 1    Column 2\nData 1      Data 2'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_pdf_with_layout
+●●●●●● 1mm □△
+'table.pdf'
+●●●●●● 2mm □△
+'Column 1'
+text
+'Column 2'
+text
+●●●●●● 1mm □
+test_extract_pdf_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction from empty PDF.'
+●●●●●● 1mm □
+extract_pdf
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+''
+'No text content found in PDF'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_pdf
+●●●●●● 1mm □△
+'empty.pdf'
+●●●●●● 2mm □△
+text
+''
+'No text content'
+error
+●●●●●● 1mm □
+test_extract_pdf_fallback
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test PDF extraction fallback to PyPDF2.'
+●●●●●● 1mm □
+extract_pdf_fallback
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Fallback extracted content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_pdf_fallback
+●●●●●● 1mm □△
+'document.pdf'
+●●●●●● 2mm □△
+'Fallback extracted content'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_pdf_corrupted
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction from corrupted PDF.'
+●●●●●● 1mm □
+extract_pdf
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Exception
+●●●●●● 1mm □△
+'PDF is corrupted'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+''
+'Error reading PDF: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_pdf
+●●●●●● 1mm □△
+'corrupted.pdf'
+●●●●●● 2mm □△
+text
+''
+'corrupted'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestDocxExtraction
+'Test DOCX file extraction.'
+●●●●●● 1mm □
+test_extract_docx_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful DOCX extraction.'
+●●●●●● 1mm □
+extract_docx
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+paragraphs
+●●●●●● 1mm □
+'First paragraph'
+'Second paragraph'
+'Third paragraph'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+paragraphs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_docx
+●●●●●● 1mm □△
+'document.docx'
+●●●●●● 2mm □△
+'First paragraph'
+text
+'Second paragraph'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_docx_with_tables
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test DOCX extraction with tables.'
+●●●●●● 1mm □
+extract_docx
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+content
+●●●●●● 1mm □
+'Regular paragraph\nTable: Header1 | Header2\nData1 | Data2'
+●●●●●● 3mm ○
+content
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_docx
+●●●●●● 1mm □△
+'with_tables.docx'
+●●●●●● 2mm □△
+'Header1'
+text
+'Data1'
+text
+●●●●●● 1mm □
+test_extract_docx_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction from empty DOCX.'
+●●●●●● 1mm □
+extract_docx
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+''
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_docx
+●●●●●● 1mm □△
+'empty.docx'
+●●●●●● 2mm □△
+text
+''
+error
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestExcelExtraction
+'Test Excel file extraction.'
+●●●●●● 1mm □
+test_extract_excel_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful Excel extraction.'
+●●●●●● 1mm □
+extract_excel
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+rows
+●●●●●● 1mm □
+'Header1,Header2'
+'Data1,Data2'
+'Data3,Data4'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+rows
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_excel
+●●●●●● 1mm □△
+'data.xlsx'
+●●●●●● 2mm □△
+'Header1'
+text
+'Data1'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_excel_multiple_sheets
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Excel extraction with multiple sheets.'
+●●●●●● 1mm □
+extract_excel
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+sheets
+●●●●●● 1mm □
+'[Sheet1]\nData from sheet 1'
+'[Sheet2]\nData from sheet 2'
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 1mm □△
+sheets
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_excel
+●●●●●● 1mm □△
+'multi_sheet.xlsx'
+●●●●●● 2mm □△
+'[Sheet1]'
+text
+'[Sheet2]'
+text
+●●●●●● 1mm □
+test_extract_excel_empty_sheet
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Excel extraction with empty sheet.'
+●●●●●● 1mm □
+extract_excel
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+''
+'No data found in spreadsheet'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_excel
+●●●●●● 1mm □△
+'empty.xlsx'
+●●●●●● 2mm □△
+text
+''
+●●●●●● 2mm △
+TestAudioExtraction
+'Test audio file extraction (transcription).'
+●●●●●● 1mm □
+test_extract_audio_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful audio transcription.'
+●●●●●● 1mm □
+extract_audio
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'This is the transcribed audio content.'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_audio
+●●●●●● 1mm □△
+'audio.mp3'
+●●●●●● 2mm □△
+'transcribed audio'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_audio_unsupported_format
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction of unsupported audio format.'
+●●●●●● 1mm □
+extract_audio
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+supported
+●●●●●● 1mm □
+'.mp3'
+'.wav'
+'.m4a'
+●●●●●● 2mm □
+ext
+supported
+●●●●●● 3mm ○
+''
+'Unsupported audio format: '
+ext
+●●●●●● 3mm ○
+'Transcribed content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_audio
+●●●●●● 1mm □△
+'audio.xyz'
+●●●●●● 2mm □△
+text
+''
+'Unsupported'
+error
+●●●●●● 1mm □
+test_extract_audio_no_speech
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extraction from audio with no speech.'
+●●●●●● 1mm □
+extract_audio
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+''
+'No speech detected in audio'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_audio
+●●●●●● 1mm □△
+'music.mp3'
+●●●●●● 2mm □△
+text
+''
+'No speech'
+error
+●●●●●● 2mm △
+TestVideoExtraction
+'Test video file extraction.'
+●●●●●● 1mm □
+test_extract_video_audio_track
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extracting audio from video for transcription.'
+●●●●●● 1mm □
+extract_video
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Transcribed speech from video audio track.'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_video
+●●●●●● 1mm □△
+'video.mp4'
+●●●●●● 2mm □△
+'Transcribed speech'
+text
+error
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_extract_video_no_audio
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test video with no audio track.'
+●●●●●● 1mm □
+extract_video
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+''
+'Video has no audio track'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_video
+●●●●●● 1mm □△
+'silent.mp4'
+●●●●●● 2mm □△
+text
+''
+'no audio'
+error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestTextCleaning
+'Test text cleaning utilities.'
+●●●●●● 1mm □
+test_clean_text_removes_control_chars
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test removal of control characters.'
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm ○
+re
+●●●●●● 1mm □△
+'[\\x00-\\x08\\x0b-\\x0c\\x0e-\\x1f\\x7f]'
+''
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+dirty
+●●●●●● 1mm □
+'Hello\x00World\x1fTest'
+clean
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+dirty
+●●●●●● 2mm □△
+'\x00'
+clean
+'\x1f'
+clean
+'HelloWorldTest'
+clean
+●●●●●● 1mm □
+test_clean_text_normalizes_whitespace
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test whitespace normalization.'
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+re
+text
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[ \\t]+'
+' '
+text
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\n{3,}'
+'\n\n'
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+dirty
+●●●●●● 1mm □
+'Hello    World\n\n\n\n\nTest'
+clean
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+dirty
+●●●●●● 2mm □△
+'    '
+clean
+clean
+●●●●●● 1mm □△
+'\n\n\n'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_clean_text_preserves_content
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that cleaning preserves legitimate content.'
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm ○
+re
+●●●●●● 1mm □△
+'[\\x00-\\x08\\x0b-\\x0c\\x0e-\\x1f\\x7f]'
+''
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+original
+●●●●●● 1mm □
+'Hello, World! This is a test. Numbers: 123'
+cleaned
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+original
+●●●●●● 2mm □△
+cleaned
+original
+●●●●●● 2mm △
+TestTextValidation
+'Test text validation utilities.'
+●●●●●● 1mm □
+test_is_valid_text_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test valid text detection.'
+●●●●●● 1mm □
+is_valid_text
+●●●●●● 1mm □△
+text
+threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.5
+●●●●●● 2mm □
+text
+●●●●●● 3mm ○
+●●●●●● 1mm □
+printable
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+text
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'\n\r\t'
+●●●●●● 2mm □△
+ratio
+●●●●●● 1mm □
+printable
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ratio
+threshold
+●●●●●● 3mm △
+is_valid_text
+●●●●●● 1mm □△
+'Hello World!'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+is_valid_text
+●●●●●● 1mm □△
+'Valid text with numbers 123'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_valid_text_mostly_garbage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test detection of mostly garbage text.'
+●●●●●● 1mm □
+is_valid_text
+●●●●●● 1mm □△
+text
+threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.5
+●●●●●● 2mm □
+text
+●●●●●● 3mm ○
+●●●●●● 1mm □
+printable
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+text
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'\n\r\t'
+●●●●●● 2mm □△
+ratio
+●●●●●● 1mm □
+printable
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ratio
+threshold
+●●●●●● 3mm △
+garbage
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+1
+20
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+is_valid_text
+●●●●●● 1mm □△
+garbage
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_is_valid_text_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test empty text validation.'
+●●●●●● 1mm □
+is_valid_text
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+is_valid_text
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_valid_text
+●●●●●● 1mm □△
+'   '
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestExtractTextRouter
+'Test the main extract_text routing function.'
+●●●●●● 1mm □
+test_route_to_text_handler
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test routing to text file handler.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.txt'
+'.md'
+●●●●●● 3mm ○
+'Text content'
+●●●●●● 2mm □
+●●●●●● 3mm ○
+''
+'Unsupported'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'file.txt'
+●●●●●● 2mm □△
+text
+'Text content'
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'file.md'
+●●●●●● 2mm □△
+text
+'Text content'
+●●●●●● 1mm □
+test_route_to_pdf_handler
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test routing to PDF handler.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.pdf'
+●●●●●● 3mm ○
+'PDF content'
+●●●●●● 2mm □
+●●●●●● 3mm ○
+''
+'Unsupported'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'document.pdf'
+●●●●●● 2mm □△
+text
+'PDF content'
+●●●●●● 1mm □
+test_route_unsupported_type
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test routing for unsupported file type.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+supported
+●●●●●● 1mm □
+'.txt'
+'.pdf'
+'.docx'
+●●●●●● 2mm □
+ext
+supported
+●●●●●● 3mm ○
+''
+'Unsupported file type: '
+ext
+●●●●●● 3mm ○
+'Content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'file.xyz'
+●●●●●● 2mm □△
+text
+''
+'Unsupported'
+error
+●●●●●● 2mm △
+TestFileHandlerIntegration
+'Integration tests for FileHandler.'
+●●●●●● 1mm □
+test_full_extraction_workflow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete file extraction workflow.'
+●●●●●● 2mm △
+MockFileHandler
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.txt'
+'.pdf'
+'text/plain'
+'application/pdf'
+●●●●●● 1mm □
+get_file_type
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MockFileHandler
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+file_type
+●●●●●● 1mm □
+MockFileHandler
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_type
+●●●●●● 3mm ○
+''
+'Unsupported file type'
+●●●●●● 3mm ○
+'Content from '
+file_path
+●●●●●● 2mm □
+●●●●●● 1mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+handler
+●●●●●● 1mm □
+MockFileHandler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+error
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+'test.txt'
+●●●●●● 2mm □△
+'Content from'
+text
+error
+●●●●●● 2mm □
+text
+error
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+'test.xyz'
+●●●●●● 2mm □△
+text
+''
+'Unsupported'
+error
+●●●●●● 1mm □
+test_batch_extraction
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extracting multiple files.'
+●●●●●● 1mm □
+extract_batch
+●●●●●● 1mm □△
+file_paths
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+results
+●●●●●● 1mm □
+path
+file_paths
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.txt'
+'.pdf'
+results
+●●●●●● 1mm □△
+'path'
+'content'
+'error'
+path
+'Content from '
+path
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+●●●●●● 1mm □△
+'path'
+'content'
+'error'
+path
+''
+'Unsupported'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+files
+●●●●●● 1mm □
+'doc1.txt'
+'doc2.pdf'
+'doc3.xyz'
+results
+●●●●●● 1mm □
+extract_batch
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+3
+results
+0
+'error'
+●●●●●● 2mm □
+results
+1
+'error'
+●●●●●● 2mm □
+results
+2
+'error'
+'Unsupported'
+●●●●●● 2mm △
+TestFileHandlerErrors
+'Test error handling in file handler.'
+●●●●●● 1mm □
+test_file_permission_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling file permission errors.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+PermissionError
+●●●●●● 1mm □△
+'Permission denied'
+●●●●●● 2mm □△
+PermissionError
+●●●●●● 3mm ○
+''
+'Permission error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'protected.txt'
+●●●●●● 2mm □△
+text
+''
+'Permission'
+error
+●●●●●● 1mm □
+test_file_encoding_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling encoding errors.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+UnicodeDecodeError
+●●●●●● 1mm □△
+'utf-8'
+b''
+0
+1
+'invalid'
+●●●●●● 2mm □△
+UnicodeDecodeError
+●●●●●● 3mm ○
+'Fallback content'
+●●●●●● 2mm □
+●●●●●● 3mm ○
+''
+'Unable to decode file'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'binary.txt'
+●●●●●● 2mm □△
+text
+'Fallback content'
+●●●●●● 1mm □
+test_large_file_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling very large files.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+max_size_mb
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+100
+file_size_mb
+●●●●●● 1mm □
+150
+●●●●●● 2mm □
+file_size_mb
+max_size_mb
+●●●●●● 3mm ○
+''
+'File too large: '
+file_size_mb
+'MB (max: '
+max_size_mb
+'MB)'
+●●●●●● 3mm ○
+'Content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'huge.pdf'
+●●●●●● 2mm □△
+text
+''
+'too large'
+error
+●●●●●● 2mm △
+TestFileHandlerEdgeCases
+'Test edge cases in file handler.'
+●●●●●● 1mm □
+test_file_with_no_extension
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling files with no extension.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+●●●●●● 3mm ○
+''
+'Cannot determine file type: no extension'
+●●●●●● 3mm ○
+'Content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'README'
+●●●●●● 2mm □△
+'Cannot determine'
+error
+●●●●●● 1mm □
+test_hidden_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling hidden files (starting with .).'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+filename
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+filename
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Hidden file content'
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'Content'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'.gitignore'
+●●●●●● 2mm □△
+text
+'Hidden file content'
+●●●●●● 1mm □
+test_symlink_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling symbolic links.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+follow_symlinks
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'Content from resolved symlink'
+●●●●●● 2mm □
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'link.txt'
+●●●●●● 2mm □△
+'resolved symlink'
+text
+●●●●●● 1mm □
+test_unicode_filename
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling unicode characters in filename.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.txt'
+●●●●●● 3mm ○
+'Unicode file content'
+●●●●●● 2mm □
+●●●●●● 3mm ○
+''
+'Unsupported'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'文档.txt'
+●●●●●● 2mm □△
+text
+'Unicode file content'
+●●●●●● 1mm □
+test_path_with_spaces
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling paths with spaces.'
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ext
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.txt'
+●●●●●● 3mm ○
+'Content from '
+file_path
+●●●●●● 2mm □
+●●●●●● 3mm ○
+''
+'Unsupported'
+Tuple
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+text
+error
+●●●●●● 1mm □
+extract_text
+●●●●●● 1mm □△
+'/path with spaces/my document.txt'
+●●●●●● 2mm □△
+'path with spaces'
+text
+●●●●●● 2mm △
+TestSupportedTypes
+'Test supported file types constants.'
+●●●●●● 1mm □
+test_text_types_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test text file types are defined.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.txt'
+'.md'
+'.json'
+'.csv'
+'text/plain'
+'text/markdown'
+'application/json'
+'text/csv'
+'.txt'
+SUPPORTED_TYPES
+'.md'
+SUPPORTED_TYPES
+'.json'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+test_code_types_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test code file types are defined.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.py'
+'.js'
+'.ts'
+'.java'
+'text/x-python'
+'text/javascript'
+'text/typescript'
+'text/x-java'
+'.py'
+SUPPORTED_TYPES
+'.js'
+SUPPORTED_TYPES
+'.java'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+test_document_types_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test document file types are defined.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.pdf'
+'.docx'
+'.xlsx'
+'application/pdf'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+'.pdf'
+SUPPORTED_TYPES
+'.docx'
+SUPPORTED_TYPES
+'.xlsx'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+test_media_types_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test media file types are defined.'
+SUPPORTED_TYPES
+●●●●●● 1mm □
+'.mp3'
+'.wav'
+'.mp4'
+'.avi'
+'audio/mpeg'
+'audio/wav'
+'video/mp4'
+'video/x-msvideo'
+'.mp3'
+SUPPORTED_TYPES
+'.mp4'
+SUPPORTED_TYPES

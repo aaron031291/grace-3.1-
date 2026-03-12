@@ -1,0 +1,100 @@
+## __init__.py
+'\nLayer 1 - Universal Input and Communication Layer\n\nComplete autonomous system for bidirectional component communication.\n\nComponents:\n- Message Bus: Central routing and autonomous action triggering\n- Memory Mesh Connector: Learning memory integration\n- Genesis Keys Connector: Universal tracking\n- RAG Connector: Retrieval-augmented generation\n- Ingestion Connector: File processing\n- LLM Orchestration Connector: Multi-LLM coordination\n'
+●●●●●● 2mm □△○
+logging
+_logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+Message
+MessageType
+ComponentType
+AutonomousAction
+get_message_bus
+reset_message_bus
+ImportError
+_logger
+●●●●●● 1mm □△
+'Could not import message_bus: '
+e
+●●●●●● 2mm □△
+Layer1MessageBus
+●●●●●● 1mm □
+●●●●●● 2mm □
+Message
+●●●●●● 1mm □
+●●●●●● 2mm □
+MessageType
+●●●●●● 1mm □
+●●●●●● 2mm □
+ComponentType
+●●●●●● 1mm □
+●●●●●● 2mm □
+AutonomousAction
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_message_bus
+●●●●●● 1mm □
+●●●●●● 2mm □
+reset_message_bus
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+components
+●●●●●● 2mm □△○
+MemoryMeshConnector
+GenesisKeysConnector
+RAGConnector
+IngestionConnector
+LLMOrchestrationConnector
+VersionControlConnector
+get_version_control_connector
+ImportError
+_logger
+●●●●●● 1mm □△
+'Could not import components: '
+e
+●●●●●● 2mm □△
+MemoryMeshConnector
+●●●●●● 1mm □
+●●●●●● 2mm □
+GenesisKeysConnector
+●●●●●● 1mm □
+●●●●●● 2mm □
+RAGConnector
+●●●●●● 1mm □
+●●●●●● 2mm □
+IngestionConnector
+●●●●●● 1mm □
+●●●●●● 2mm □
+LLMOrchestrationConnector
+●●●●●● 1mm □
+●●●●●● 2mm □
+VersionControlConnector
+●●●●●● 1mm □
+●●●●●● 2mm □
+get_version_control_connector
+●●●●●● 1mm □
+●●●●●● 2mm □
+__all__
+●●●●●● 1mm □
+'Layer1MessageBus'
+'Message'
+'MessageType'
+'ComponentType'
+'AutonomousAction'
+'get_message_bus'
+'reset_message_bus'
+'MemoryMeshConnector'
+'GenesisKeysConnector'
+'RAGConnector'
+'IngestionConnector'
+'LLMOrchestrationConnector'
+'VersionControlConnector'
+'get_version_control_connector'

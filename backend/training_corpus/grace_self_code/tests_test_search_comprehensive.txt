@@ -1,0 +1,2121 @@
+## test_search_comprehensive.py
+'\nComprehensive Test Suite for Search Module\n==========================================\nTests for SerpAPI service and AutoSearch service.\n\nCoverage:\n- SerpAPIService initialization and search\n- AutoSearchService search and scrape workflow\n- Scraping status retrieval\n- Error handling\n- Integration tests\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+AsyncMock
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+sys
+mock_trafilatura
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_trafilatura
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'trafilatura'
+●●●●●● 1mm □
+mock_trafilatura
+mock_serpapi
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_serpapi
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'serpapi'
+●●●●●● 1mm □
+mock_serpapi
+mock_aiohttp
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_aiohttp
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'aiohttp'
+●●●●●● 1mm □
+mock_aiohttp
+mock_requests
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'requests'
+●●●●●● 1mm □
+mock_requests
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSerpAPIServiceInit
+'Test SerpAPIService initialization.'
+●●●●●● 1mm □
+test_init_with_api_key
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test initialization with API key.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+'default_key'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'google'
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+'test-api-key'
+service
+'google'
+●●●●●● 1mm □
+test_init_default
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test initialization with defaults.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+'default_key'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'google'
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+'default_key'
+●●●●●● 2mm △
+TestSerpAPIServiceSearch
+'Test SerpAPIService search operations.'
+●●●●●● 1mm □
+test_search_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful search.'
+mock_results
+●●●●●● 1mm □
+'organic_results'
+'title'
+'link'
+'snippet'
+'Result 1'
+'https://example.com/1'
+'Snippet 1'
+'title'
+'link'
+'snippet'
+'Result 2'
+'https://example.com/2'
+'Snippet 2'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'test-key'
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+num_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+●●●●●● 3mm ○
+mock_results
+●●●●●● 1mm □△
+'organic_results'
+●●●●●● 2mm □△
+num_results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test query'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+results
+0
+'title'
+'Result 1'
+results
+0
+'link'
+'https://example.com/1'
+●●●●●● 1mm □
+test_search_empty_results
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test search with no results.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'test-key'
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+num_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'nonexistent query'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+test_search_error_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test search error handling.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'test-key'
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+num_results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+●●●●●● 2mm □
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'API key required'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+●●●●●● 2mm □
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_search_with_location
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test search with location parameter.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'test-key'
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+num_results
+location
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+10
+●●●●●● 2mm □
+results
+●●●●●● 1mm □
+'title'
+'location'
+'Local result'
+location
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'local query'
+●●●●●● 2mm □△
+results
+0
+'location'
+'New York'
+●●●●●● 2mm △
+TestAutoSearchServiceInit
+'Test AutoSearchService initialization.'
+●●●●●● 1mm □
+test_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test AutoSearchService initialization.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+serpapi_key
+scraping_service
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+serpapi_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+scraping_service
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+'test-key'
+service
+●●●●●● 2mm □
+service
+●●●●●● 2mm △
+TestAutoSearchServiceSearchAndScrape
+'Test AutoSearchService search_and_scrape operations.'
+'Test successful search and scrape workflow.'
+mock_search_results
+●●●●●● 1mm □
+'title'
+'link'
+'Result 1'
+'https://example.com/1'
+'title'
+'link'
+'Result 2'
+'https://example.com/2'
+mock_scrape_results
+●●●●●● 1mm □
+'https://example.com/1'
+'https://example.com/2'
+'content'
+'status'
+'Content 1'
+'completed'
+'content'
+'status'
+'Content 2'
+'completed'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+search_results
+●●●●●● 1mm □
+mock_search_results
+num_results
+scraped_data
+●●●●●● 1mm □
+result
+search_results
+url
+●●●●●● 1mm □
+result
+'link'
+scraped_data
+url
+●●●●●● 1mm □
+mock_scrape_results
+●●●●●● 1mm □△
+url
+'status'
+'failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'query'
+'search_results'
+'scraped_data'
+query
+search_results
+scraped_data
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test query'
+●●●●●● 2mm □△
+result
+'query'
+'test query'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'search_results'
+●●●●●● 2mm □△
+2
+'https://example.com/1'
+result
+'scraped_data'
+result
+'scraped_data'
+'https://example.com/1'
+'status'
+'completed'
+pytest
+'Test search and scrape with no search results.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+●●●●●● 3mm ○
+'query'
+'search_results'
+'scraped_data'
+query
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'nonexistent query'
+●●●●●● 2mm □△
+result
+'search_results'
+result
+'scraped_data'
+pytest
+'Test search and scrape with some scrape failures.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+search_results
+●●●●●● 1mm □
+'title'
+'link'
+'Result 1'
+'https://example.com/1'
+'title'
+'link'
+'Result 2'
+'https://example.com/2'
+scraped_data
+●●●●●● 1mm □
+'https://example.com/1'
+'https://example.com/2'
+'content'
+'status'
+'Content 1'
+'completed'
+'content'
+'status'
+'error'
+●●●●●● 2mm □
+'failed'
+'Timeout'
+●●●●●● 3mm ○
+'query'
+'search_results'
+'scraped_data'
+query
+search_results
+scraped_data
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test query'
+●●●●●● 2mm □△
+result
+'scraped_data'
+'https://example.com/1'
+'status'
+'completed'
+result
+'scraped_data'
+'https://example.com/2'
+'status'
+'failed'
+pytest
+'Test search and scrape with folder path for saving.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+folder_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+folder_path
+●●●●●● 3mm ○
+'query'
+'search_results'
+'saved_to'
+query
+'title'
+'link'
+'Result'
+'https://example.com'
+folder_path
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+result
+'saved_to'
+'/tmp/results'
+service
+'/tmp/results'
+pytest
+'Test search and scrape error handling.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Exception
+●●●●●● 1mm □△
+'API Error'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'query'
+'error'
+'search_results'
+'scraped_data'
+query
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+'error'
+result
+result
+'error'
+'API Error'
+pytest
+●●●●●● 2mm △
+TestAutoSearchServiceScrapingStatus
+'Test scraping status retrieval.'
+●●●●●● 1mm □
+test_get_scraping_status_all_completed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting status when all scrapes completed.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'task1'
+'task2'
+'url'
+'status'
+'https://example.com/1'
+'completed'
+'url'
+'status'
+'https://example.com/2'
+'completed'
+●●●●●● 1mm □
+get_scraping_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+completed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'completed'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'failed'
+●●●●●● 2mm □△
+running
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'running'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'completed'
+'failed'
+'running'
+'scrapes'
+total
+completed
+failed
+running
+●●●●●● 3mm △
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'total'
+2
+status
+'completed'
+2
+status
+'failed'
+0
+status
+'running'
+0
+●●●●●● 1mm □
+test_get_scraping_status_some_failed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting status when some scrapes failed.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'task1'
+'task2'
+'url'
+'status'
+'https://example.com/1'
+'completed'
+'url'
+'status'
+'https://example.com/2'
+'failed'
+●●●●●● 1mm □
+get_scraping_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+completed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'completed'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'completed'
+'failed'
+total
+completed
+failed
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'completed'
+1
+status
+'failed'
+1
+●●●●●● 1mm □
+test_get_scraping_status_some_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting status when some scrapes still running.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'task1'
+'task2'
+'task3'
+'url'
+'status'
+'https://example.com/1'
+'completed'
+'url'
+'status'
+'https://example.com/2'
+'running'
+'url'
+'status'
+'https://example.com/3'
+'running'
+●●●●●● 1mm □
+get_scraping_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+completed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'completed'
+●●●●●● 2mm □△
+running
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'status'
+'running'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'completed'
+'running'
+total
+completed
+running
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'total'
+3
+status
+'completed'
+1
+status
+'running'
+2
+●●●●●● 1mm □
+test_get_scraping_status_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting status when no active scrapes.'
+●●●●●● 2mm △
+MockAutoSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_scraping_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'completed'
+'failed'
+'running'
+'scrapes'
+0
+0
+0
+0
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockAutoSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+'total'
+0
+status
+'scrapes'
+●●●●●● 2mm △
+TestWebScrapingService
+'Test WebScrapingService operations.'
+'Test successful URL scraping.'
+●●●●●● 2mm △
+MockWebScrapingService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'url'
+'content'
+'title'
+'status'
+url
+'Scraped content from the page'
+'Page Title'
+'success'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockWebScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'https://example.com'
+●●●●●● 2mm □△
+result
+'status'
+'success'
+result
+'content'
+'Scraped content from the page'
+result
+'url'
+'https://example.com'
+pytest
+'Test URL scraping with timeout.'
+●●●●●● 2mm △
+MockWebScrapingService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+30
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'url'
+'content'
+'status'
+'error'
+url
+●●●●●● 2mm □
+'error'
+'Request timed out'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockWebScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'https://slow-site.com'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'timed out'
+result
+'error'
+pytest
+'Test URL scraping with 404 response.'
+●●●●●● 2mm △
+MockWebScrapingService
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'url'
+'content'
+'status'
+'error'
+url
+●●●●●● 2mm □
+'error'
+'HTTP 404: Not Found'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockWebScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'https://example.com/nonexistent'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'404'
+result
+'error'
+pytest
+'Test scraping multiple URLs concurrently.'
+●●●●●● 2mm △
+MockWebScrapingService
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+results
+●●●●●● 1mm □
+i
+url
+●●●●●● 2mm □
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'url'
+'content'
+'status'
+url
+'Content from '
+url
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockWebScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+urls
+●●●●●● 1mm □
+'https://example.com/1'
+'https://example.com/2'
+'https://example.com/3'
+results
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+3
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+'status'
+'success'
+r
+results
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestContentExtraction
+'Test content extraction from HTML.'
+●●●●●● 1mm □
+test_extract_main_content
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extracting main content from HTML.'
+●●●●●● 2mm △
+MockContentExtractor
+●●●●●● 1mm □
+extract
+●●●●●● 1mm □△
+self
+html
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'<article>'
+html
+●●●●●● 3mm ○
+'Article content extracted'
+●●●●●● 3mm ○
+'Generic content'
+●●●●●● 1mm ○
+extractor
+●●●●●● 1mm □
+MockContentExtractor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+html
+●●●●●● 1mm □
+'<html><body><article>Article content</article></body></html>'
+content
+●●●●●● 1mm □
+extractor
+●●●●●● 1mm □△
+html
+●●●●●● 2mm □△
+'Article content extracted'
+content
+●●●●●● 1mm □
+test_extract_from_empty_html
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test extracting from empty HTML.'
+●●●●●● 2mm △
+MockContentExtractor
+●●●●●● 1mm □
+extract
+●●●●●● 1mm □△
+self
+html
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+html
+html
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+●●●●●● 3mm ○
+''
+●●●●●● 3mm ○
+'Some content'
+●●●●●● 1mm ○
+extractor
+●●●●●● 1mm □
+MockContentExtractor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+extractor
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+content
+''
+●●●●●● 1mm □
+test_extract_removes_scripts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that extraction removes script content.'
+●●●●●● 2mm △
+MockContentExtractor
+●●●●●● 1mm □
+extract
+●●●●●● 1mm □△
+self
+html
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Clean extracted text content'
+●●●●●● 1mm ○
+extractor
+●●●●●● 1mm □
+MockContentExtractor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+html
+●●●●●● 1mm □
+"<html><script>alert('xss')</script><body>Content</body></html>"
+content
+●●●●●● 1mm □
+extractor
+●●●●●● 1mm □△
+html
+●●●●●● 2mm □△
+'<script>'
+content
+'alert'
+content
+●●●●●● 2mm △
+TestSearchResultProcessing
+'Test search result processing.'
+●●●●●● 1mm □
+test_filter_valid_urls
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test filtering valid URLs from search results.'
+●●●●●● 1mm □
+filter_valid_urls
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+valid_schemes
+●●●●●● 1mm □
+'http'
+'https'
+urls
+●●●●●● 1mm □
+r
+results
+link
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+link
+●●●●●● 1mm □△
+scheme
+'://'
+●●●●●● 2mm □△
+scheme
+valid_schemes
+●●●●●● 2mm □△
+urls
+●●●●●● 1mm □△
+link
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+urls
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+results
+●●●●●● 1mm □
+'link'
+'https://example.com/1'
+'link'
+'http://example.com/2'
+'link'
+'ftp://example.com/3'
+'link'
+'javascript:void(0)'
+'link'
+''
+valid
+●●●●●● 1mm □
+filter_valid_urls
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+valid
+●●●●●● 2mm □△
+2
+'https://example.com/1'
+valid
+'http://example.com/2'
+valid
+●●●●●● 1mm □
+test_deduplicate_urls
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deduplicating URLs.'
+●●●●●● 1mm □
+deduplicate_urls
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+seen
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+unique
+●●●●●● 1mm □
+url
+urls
+●●●●●● 2mm □
+url
+seen
+seen
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+unique
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+unique
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+urls
+●●●●●● 1mm □
+'https://example.com/1'
+'https://example.com/2'
+'https://example.com/1'
+'https://example.com/3'
+'https://example.com/2'
+unique
+●●●●●● 1mm □
+deduplicate_urls
+●●●●●● 1mm □△
+urls
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unique
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_rank_results_by_relevance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ranking results by relevance score.'
+●●●●●● 1mm □
+rank_results
+●●●●●● 1mm □△
+results
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+r
+results
+score
+●●●●●● 1mm □
+0
+title
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+snippet
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_words
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+word
+query_words
+●●●●●● 2mm □
+word
+title
+score
+2
+●●●●●● 2mm □
+word
+snippet
+score
+1
+r
+'relevance_score'
+●●●●●● 1mm □
+score
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+results
+●●●●●● 1mm □
+'title'
+'snippet'
+'Unrelated topic'
+'Nothing here'
+'title'
+'snippet'
+'Python basics'
+'Introduction to coding'
+'title'
+'snippet'
+'Advanced Python'
+'Expert Python tips and Python best practices'
+ranked
+●●●●●● 1mm □
+rank_results
+●●●●●● 1mm □△
+results
+'Python'
+●●●●●● 2mm □△
+ranked
+0
+'title'
+'Advanced Python'
+ranked
+0
+'relevance_score'
+ranked
+1
+'relevance_score'
+●●●●●● 2mm △
+TestSearchIntegration
+'Integration tests for search workflow.'
+'Test complete search to scrape workflow.'
+●●●●●● 2mm △
+MockSearchService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'title'
+'link'
+'Result 1'
+'https://example.com/1'
+'title'
+'link'
+'Result 2'
+'https://example.com/2'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'url'
+'content'
+'status'
+url
+'Content'
+'success'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+scraped
+●●●●●● 1mm □
+r
+results
+scraped
+r
+'link'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+'link'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'query'
+'results'
+'scraped'
+query
+results
+scraped
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSearchService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test query'
+●●●●●● 2mm □△
+service
+service
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'results'
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'scraped'
+●●●●●● 2mm □△
+2
+pytest
+●●●●●● 2mm △
+TestSearchErrorHandling
+'Test error handling in search operations.'
+●●●●●● 1mm □
+test_api_key_missing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling missing API key.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'SerpAPI key is required'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+exc_info
+service
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+'key is required'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rate_limit_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling rate limit errors.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'test'
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+100
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+Exception
+●●●●●● 1mm □△
+'Rate limit exceeded'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+100
+pytest
+●●●●●● 1mm □△
+Exception
+●●●●●● 2mm □△
+exc_info
+service
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+'Rate limit'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+exc_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_network_error_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling network errors.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ConnectionError
+●●●●●● 1mm □△
+'Network unreachable'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ConnectionError
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+'Test handling scrape timeout errors.'
+●●●●●● 2mm △
+MockScrapingService
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+30
+●●●●●● 2mm □
+timeout
+1
+TimeoutError
+●●●●●● 1mm □△
+'Request timed out'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'url'
+'content'
+url
+'Content'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+TimeoutError
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+'https://example.com'
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestSearchEdgeCases
+'Test edge cases in search operations.'
+●●●●●● 1mm □
+test_empty_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching with empty query.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+query
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'title'
+'Result'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+test_special_characters_in_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching with special characters.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+encoded
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+'&'
+'%26'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'?'
+'%3F'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'title'
+'Results for: '
+encoded
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'test & query?'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_unicode_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching with unicode characters.'
+●●●●●● 2mm △
+MockSerpAPIService
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'title'
+query
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'测试查询'
+●●●●●● 2mm □△
+result
+0
+'title'
+'测试查询'
+●●●●●● 1mm □
+test_very_long_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching with very long query.'
+●●●●●● 2mm △
+MockSerpAPIService
+MAX_QUERY_LENGTH
+●●●●●● 1mm □
+256
+●●●●●● 1mm □
+search
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm △
+query
+●●●●●● 1mm □
+query
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'title'
+'query_length'
+'Results'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockSerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+long_query
+●●●●●● 1mm □
+'a'
+●●●●●● 2mm □△
+500
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+long_query
+●●●●●● 2mm □△
+result
+0
+'query_length'
+256
+'Test scraping invalid URL.'
+●●●●●● 2mm △
+MockScrapingService
+●●●●●● 1mm ○
+●●●●●● 2mm □
+url
+●●●●●● 1mm □△
+'http://'
+'https://'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'url'
+'status'
+'error'
+url
+'error'
+'Invalid URL scheme'
+●●●●●● 3mm ○
+'url'
+'status'
+url
+'success'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'not-a-valid-url'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'Invalid URL'
+result
+'error'
+pytest
+'Test scraping restricted domains.'
+●●●●●● 2mm △
+MockScrapingService
+RESTRICTED_DOMAINS
+●●●●●● 1mm □
+'localhost'
+'127.0.0.1'
+'0.0.0.0'
+●●●●●● 1mm ○
+domain
+●●●●●● 3mm △
+●●●●●● 2mm □
+domain
+url
+●●●●●● 3mm ○
+'url'
+'status'
+'error'
+url
+'error'
+'Restricted domain'
+●●●●●● 3mm ○
+'url'
+'status'
+url
+'success'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockScrapingService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'http://localhost:8080/test'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'Restricted'
+result
+'error'
+pytest

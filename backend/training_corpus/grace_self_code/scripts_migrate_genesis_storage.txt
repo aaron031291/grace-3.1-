@@ -1,0 +1,453 @@
+## migrate_genesis_storage.py
+'\nMigrate 131K+ Genesis keys into tiered storage structure.\n\nBefore: 871 MB, 131K keys (130K are SYSTEM_EVENT noise)\nAfter: ~50 MB, keeping all errors, learning, code changes, AI responses\n       Aggregating SYSTEM_EVENT noise into hourly summaries\n\nSteps:\n  1. Archive cold keys (>7 days) into compressed clusters\n  2. Delete SYSTEM_EVENT duplicates (keep 1 per minute, not per second)\n  3. Apply TTL expiry rules\n  4. Vacuum the database\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'SKIP_QDRANT_CHECK'
+'SKIP_OLLAMA_CHECK'
+'SKIP_AUTO_INGESTION'
+'DISABLE_CONTINUOUS_LEARNING'
+'SKIP_LLM_CHECK'
+'true'
+'true'
+'true'
+'true'
+'true'
+'true'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+session_scope
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  GENESIS KEY STORAGE MIGRATION'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'data/grace.db'
+●●●●●● 2mm □△
+before_size
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1048576
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+total_before
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nBefore: '
+total_before
+','
+' keys, '
+before_size
+'.1f'
+' MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n▶ Type distribution:'
+●●●●●● 2mm □△
+types
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT key_type, COUNT(*) as cnt FROM genesis_key GROUP BY key_type ORDER BY cnt DESC'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+types
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+t
+0
+': '
+t
+1
+','
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n▶ Deduplicating SYSTEM_EVENT (keep 1 per minute per actor)...'
+●●●●●● 2mm □△
+dedup_count
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"\n            DELETE FROM genesis_key WHERE id NOT IN (\n                SELECT MIN(id) FROM genesis_key\n                WHERE key_type = 'SYSTEM_EVENT'\n                GROUP BY who_actor, strftime('%Y-%m-%d %H:%M', when_timestamp)\n            ) AND key_type = 'SYSTEM_EVENT'\n        "
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Removed '
+dedup_count
+','
+' duplicate SYSTEM_EVENT keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n▶ Applying TTL expiry rules...'
+●●●●●● 2mm □△
+ttl_rules
+●●●●●● 1mm □
+'SYSTEM_EVENT'
+'API_REQUEST'
+'FILE_OPERATION'
+'AI_RESPONSE'
+'ERROR'
+'CODING_AGENT_ACTION'
+48
+48
+168
+168
+720
+720
+total_expired
+●●●●●● 1mm □
+0
+key_type
+hours
+ttl_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'DELETE FROM genesis_key WHERE key_type = :kt AND when_timestamp < :cutoff'
+●●●●●● 2mm □△
+'kt'
+'cutoff'
+key_type
+cutoff
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+key_type
+': expired '
+count
+','
+' keys (>'
+hours
+'h old)'
+●●●●●● 2mm □△
+total_expired
+count
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total expired: '
+total_expired
+','
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n▶ Creating cold archive...'
+●●●●●● 2mm □△
+archive_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'data/genesis_archive'
+●●●●●● 2mm □△
+archive_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cold_cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cold_keys
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT key_type, COUNT(*) as cnt FROM genesis_key WHERE when_timestamp < :cutoff GROUP BY key_type'
+●●●●●● 2mm □△
+'cutoff'
+cold_cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+archive_data
+●●●●●● 1mm □
+'archived_at'
+'cutoff'
+'summary'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cold_cutoff
+t
+0
+t
+1
+t
+cold_keys
+archive_file
+●●●●●● 1mm □
+archive_dir
+●●●●●● 3mm □△
+'archive_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+'.json'
+archive_file
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+archive_data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Archive saved: '
+archive_file
+●●●●●● 2mm □△
+total_after
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM genesis_key'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n▶ After cleanup: '
+total_after
+','
+' keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n▶ Running VACUUM to reclaim disk space...'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+'data/grace.db'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'PRAGMA busy_timeout=60000'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+'VACUUM'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+after_size
+●●●●●● 1mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1048576
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  MIGRATION COMPLETE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Keys: '
+total_before
+','
+' → '
+total_after
+','
+' ('
+total_before
+●●●●●● 1mm □△
+total_after
+','
+' removed)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Size: '
+before_size
+'.1f'
+' MB → '
+after_size
+'.1f'
+' MB ('
+before_size
+●●●●●● 1mm □△
+after_size
+'.1f'
+' MB freed)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Reduction: '
+before_size
+●●●●●● 1mm □△
+after_size
+●●●●●● 3mm □△
+before_size
+●●●●●● 2mm □△
+100
+'.0f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

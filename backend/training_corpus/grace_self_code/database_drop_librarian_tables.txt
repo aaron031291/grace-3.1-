@@ -1,0 +1,94 @@
+## drop_librarian_tables.py
+'Drop librarian tables for fresh migration.'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tables_to_drop
+●●●●●● 1mm □
+'librarian_audit'
+'librarian_actions'
+'librarian_rules'
+'document_relationships'
+'document_tags'
+'librarian_tags'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Dropping librarian tables...'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+table
+tables_to_drop
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'DROP TABLE IF EXISTS '
+table
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Dropped '
+table
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Error dropping '
+table
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Done!'
+●●●●●● 2mm □△

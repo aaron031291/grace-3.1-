@@ -1,0 +1,483 @@
+## logging.py
+'\nSecurity Event Logging for GRACE\n\nProvides centralized logging for security-related events:\n- Authentication attempts\n- Rate limit violations\n- Suspicious requests\n- Input validation failures\n- Access control events\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+●●●●●● 3mm □△○
+starlette.requests
+●●●●●● 2mm □△○
+Request
+●●●●●● 3mm □△○
+config
+●●●●●● 2mm □△○
+get_security_config
+security_logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'grace.security'
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 2mm □
+security_logger
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+formatter
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'[%(asctime)s] [SECURITY] %(levelname)s - %(message)s'
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+formatter
+●●●●●● 2mm □△
+security_logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SecurityLogger
+'\n    Centralized security event logger.\n\n    Logs security events with structured data for analysis and alerting.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+security_logger
+●●●●●● 1mm □
+_get_request_info
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Request
+'Extract relevant information from a request.'
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+forwarded_for
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-Forwarded-For'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+forwarded_for
+ip
+●●●●●● 1mm □
+forwarded_for
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ip
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+'unknown'
+●●●●●● 3mm ○
+'ip'
+'method'
+'path'
+'user_agent'
+'genesis_id'
+ip
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'User-Agent'
+'unknown'
+●●●●●● 2mm □△
+200
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'genesis_id'
+'anonymous'
+●●●●●● 2mm □△
+20
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+log_auth_attempt
+●●●●●● 1mm □△
+self
+success
+username
+request
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Log an authentication attempt.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+success
+●●●●●● 3mm ○
+request_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'event_type'
+'timestamp'
+'success'
+'username'
+'reason'
+'AUTH_ATTEMPT'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+username
+username
+50
+●●●●●● 2mm □
+reason
+request_info
+level
+●●●●●● 1mm □
+success
+logging
+logging
+●●●●●● 3mm △
+●●●●●● 1mm □△
+level
+json
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_rate_limit
+●●●●●● 1mm □△
+self
+request
+limit
+endpoint
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Log a rate limit violation.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+request_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'event_type'
+'timestamp'
+'limit'
+'endpoint'
+'RATE_LIMIT_EXCEEDED'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+limit
+endpoint
+request_info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_suspicious_request
+●●●●●● 1mm □△
+self
+request
+reason
+details
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Log a suspicious request.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+request_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'event_type'
+'timestamp'
+'reason'
+'details'
+'SUSPICIOUS_REQUEST'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reason
+details
+request_info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_validation_failure
+●●●●●● 1mm □△
+self
+field_name
+error
+request
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □
+'Log an input validation failure.'
+request_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'event_type'
+'timestamp'
+'field'
+'error'
+'VALIDATION_FAILURE'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+field_name
+error
+request_info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_access_denied
+●●●●●● 1mm □△
+self
+resource
+request
+reason
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Log an access denied event.'
+request_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'event_type'
+'timestamp'
+'resource'
+'reason'
+'ACCESS_DENIED'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+resource
+reason
+request_info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_security_event
+●●●●●● 1mm □△
+self
+event_type
+request
+details
+level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+logging
+'Log a generic security event.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+request_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'event_type'
+'timestamp'
+'details'
+event_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+details
+request_info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+level
+json
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_security_logger
+●●●●●● 2mm □○
+SecurityLogger
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the security logger singleton.'
+●●●●●● 2mm □
+_security_logger
+●●●●●● 2mm □
+_security_logger
+●●●●●● 1mm □
+SecurityLogger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_security_logger
+SecurityLogger
+●●●●●● 1mm □
+log_security_event
+●●●●●● 1mm □△
+event_type
+request
+details
+level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Request
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+logging
+'Convenience function to log a security event.'
+logger
+●●●●●● 1mm □
+get_security_logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+event_type
+●●●●●● 3mm □△
+details
+level
+●●●●●● 2mm □△

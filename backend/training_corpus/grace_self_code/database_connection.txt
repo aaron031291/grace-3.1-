@@ -1,0 +1,299 @@
+## connection.py
+'\nDatabase connection management module.\nHandles engine creation and connection pooling.\n\nSQLite anti-lock strategy:\n  - WAL journal mode for concurrent read/write access\n  - busy_timeout to auto-retry on lock instead of failing immediately\n  - Serialized connection pool (StaticPool) to prevent thread contention\n  - Session-level retry decorator for transient OperationalErrors\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+create_engine
+Engine
+event
+text
+●●●●●● 3mm □△○
+sqlalchemy.pool
+●●●●●● 2mm □△○
+StaticPool
+QueuePool
+NullPool
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+SQLITE_BUSY_TIMEOUT_MS
+●●●●●● 1mm □
+60000
+SQLITE_CONNECT_TIMEOUT_S
+●●●●●● 1mm □
+60
+●●●●●● 2mm △
+DatabaseConnection
+'Manages SQLAlchemy engine and connection lifecycle.'
+_instance
+●●●●●● 2mm □○
+'DatabaseConnection'
+●●●●●● 2mm □
+_engine
+●●●●●● 2mm □○
+Engine
+●●●●●● 2mm □
+_config
+●●●●●● 2mm □○
+DatabaseConfig
+●●●●●● 2mm □
+●●●●●● 1mm □
+__new__
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Singleton pattern - only one database connection instance.'
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 1mm □
+initialize
+●●●●●● 1mm □△
+cls
+config
+●●●●●● 2mm □△
+DatabaseConfig
+'\n        Initialize database connection with configuration.\n        \n        Args:\n            config: DatabaseConfig instance\n            \n        Returns:\n            DatabaseConnection: Singleton instance\n        '
+instance
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance
+●●●●●● 1mm □
+config
+instance
+●●●●●● 1mm □
+instance
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+instance
+●●●●●● 2mm □△
+'DatabaseConnection'
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'\n        Get the SQLAlchemy engine.\n        \n        Returns:\n            Engine: SQLAlchemy engine instance\n            \n        Raises:\n            RuntimeError: If database not initialized\n        '
+instance
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+instance
+●●●●●● 2mm □
+RuntimeError
+●●●●●● 1mm □△
+'Database not initialized. Call DatabaseConnection.initialize() first.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+instance
+●●●●●● 2mm □△
+Engine
+●●●●●● 1mm □
+get_config
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'\n        Get the database configuration.\n        \n        Returns:\n            DatabaseConfig: Current configuration\n            \n        Raises:\n            RuntimeError: If database not initialized\n        '
+instance
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+instance
+●●●●●● 2mm □
+RuntimeError
+●●●●●● 1mm □△
+'Database not initialized. Call DatabaseConnection.initialize() first.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+instance
+●●●●●● 2mm □△
+DatabaseConfig
+●●●●●● 1mm □
+_create_engine
+●●●●●● 1mm □△
+self
+config
+●●●●●● 2mm □△
+DatabaseConfig
+'\n        Create SQLAlchemy engine with appropriate configuration.\n        \n        Args:\n            config: DatabaseConfig instance\n            \n        Returns:\n            Engine: Configured SQLAlchemy engine\n        '
+connection_string
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Creating database engine for '
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+DatabaseType
+engine
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+connection_string
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_sqlite_pragma
+●●●●●● 1mm □△
+dbapi_conn
+_connection_record
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+dbapi_conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'PRAGMA journal_mode=WAL'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'PRAGMA busy_timeout='
+SQLITE_BUSY_TIMEOUT_MS
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'PRAGMA foreign_keys=ON'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'PRAGMA synchronous=NORMAL'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □△
+engine
+'connect'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'SQLite engine configured: WAL mode, busy_timeout='
+SQLITE_BUSY_TIMEOUT_MS
+'ms, connect_timeout='
+SQLITE_CONNECT_TIMEOUT_S
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+engine
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+connection_string
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database engine created successfully: '
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+engine
+Engine
+●●●●●● 1mm □
+close
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'Close database connection.'
+instance
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+instance
+instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Database connection closed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+health_check
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+'\n        Check if database connection is healthy.\n\n        Returns:\n            bool: True if connection is healthy, False otherwise\n        '
+engine
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connection
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Database health check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_db_connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Get the database connection singleton.\n    \n    Returns:\n        DatabaseConnection: Database connection instance\n    '
+●●●●●● 3mm ○
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection

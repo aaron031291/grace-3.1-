@@ -1,0 +1,470 @@
+## demo_telemetry.py
+"\nTest script for Grace's self-modeling telemetry system.\n\nThis script demonstrates:\n1. Running database migration to add telemetry tables\n2. Tracking operations with telemetry\n3. Viewing baselines and drift alerts\n4. Capturing system state\n"
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+telemetry.telemetry_service
+●●●●●● 2mm □△○
+get_telemetry_service
+●●●●●● 3mm □△○
+telemetry.decorators
+●●●●●● 2mm □△○
+track_operation
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationType
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace Self-Modeling Telemetry System - Test Script'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1/5] Initializing database connection...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Database initialized'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Failed to initialize database: '
+e
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2/5] Running telemetry table migration...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migrate_add_telemetry
+●●●●●● 2mm □△○
+migrate
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Migration complete'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Migration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3/5] Testing operation tracking...'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_ingestion_operation
+●●●●●● 1mm □△
+filename
+size_kb
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Simulated ingestion operation.'
+time
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'chunks'
+'success'
+10
+track_operation
+●●●●●● 1mm □△
+OperationType
+'test_ingestion'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_retrieval_operation
+●●●●●● 1mm □△
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Simulated retrieval operation.'
+time
+●●●●●● 1mm □△
+0.05
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'results'
+'scores'
+3
+0.9
+0.8
+0.7
+track_operation
+●●●●●● 1mm □△
+OperationType
+'test_retrieval'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Running test operations...'
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+test_ingestion_operation
+●●●●●● 1mm □△
+'doc_'
+i
+'.pdf'
+●●●●●● 2mm □△
+test_retrieval_operation
+●●●●●● 1mm □△
+'query_'
+i
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+test_ingestion_operation
+●●●●●● 1mm □△
+'large_doc.pdf'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Operations tracked successfully'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Operation tracking failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4/5] Capturing system state...'
+●●●●●● 2mm □△
+telemetry
+●●●●●● 1mm □
+get_telemetry_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □
+telemetry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ System state captured:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Ollama running: '
+state
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Qdrant connected: '
+state
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Documents: '
+state
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Chunks: '
+state
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - CPU: '
+state
+'.1f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - Memory: '
+state
+'.1f'
+'%'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ System state capture failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[5/5] Querying telemetry data...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+PerformanceBaseline
+DriftAlert
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_ops
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+OperationLog
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Recent operations ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_ops
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+op
+recent_ops
+status_icon
+●●●●●● 1mm □
+op
+'completed'
+'✓'
+'✗'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   '
+status_icon
+' '
+op
+': '
+op
+'.1f'
+'ms ('
+op
+')'
+●●●●●● 2mm □△
+baselines
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PerformanceBaseline
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Performance baselines ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+baselines
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+baseline
+baselines
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   - '
+baseline
+':'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Mean: '
+baseline
+'.1f'
+'ms, P95: '
+baseline
+'.1f'
+'ms, Success rate: '
+baseline
+'.1%'
+●●●●●● 2mm □△
+alerts
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+DriftAlert
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+DriftAlert
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Active drift alerts ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alerts
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+alert
+alerts
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ⚠ '
+alert
+' - '
+alert
+' (deviation: '
+alert
+'.1f'
+'%, severity: '
+alert
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ Query failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Test complete!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTelemetry API endpoints are now available:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - GET  /telemetry/operations      - View operation logs'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - GET  /telemetry/baselines        - View performance baselines'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - GET  /telemetry/drift-alerts     - View drift alerts'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - GET  /telemetry/system-state/current  - Current system state'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - GET  /telemetry/stats            - Aggregated statistics'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - GET  /telemetry/health           - Telemetry system health'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△

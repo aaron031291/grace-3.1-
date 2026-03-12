@@ -1,0 +1,554 @@
+## build_verification.py
+'\nDeterministic build verification — in-brain version.\n\nSame manifest and checks as scripts/verify_built.py, runnable from backend.\nUsed by system.verify_built and by the unified trigger loop (determinism trigger).\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Tuple
+BACKEND
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+REPO_ROOT
+●●●●●● 1mm □
+BACKEND
+FRONTEND
+●●●●●● 1mm □
+REPO_ROOT
+●●●●●● 3mm □△
+'frontend'
+●●●●●● 1mm □
+_check_backend_requirements
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'requirements.txt'
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'backend/requirements.txt not found'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'exists ('
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes)'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_backend_venv
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+venv
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'venv'
+●●●●●● 2mm □
+venv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'backend/venv not found (run setup_backend.bat)'
+py
+●●●●●● 1mm □
+os
+'nt'
+venv
+●●●●●● 3mm □△
+'Scripts'
+●●●●●● 3mm □△
+'python.exe'
+venv
+●●●●●● 3mm □△
+'bin'
+●●●●●● 3mm □△
+'python'
+●●●●●● 2mm □
+py
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'venv Python executable not found'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'venv present'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_backend_db
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'backend/data/grace.db not found (run migrations)'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'exists ('
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' bytes)'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_backend_app
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+BACKEND
+●●●●●● 3mm □△
+'app.py'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'backend/app.py not found'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'exists'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_backend_dirs
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+name
+'api'
+'core'
+'database'
+●●●●●● 2mm □
+BACKEND
+●●●●●● 3mm □△
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'backend/'
+name
+'/ missing'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'api, core, database present'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_backend_verify_script
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+venv_py
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+os
+'nt'
+'venv/Scripts/python.exe'
+'venv/bin/python'
+script
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'scripts'
+●●●●●● 3mm □△
+'verify_system.py'
+●●●●●● 2mm □
+venv_py
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+script
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'venv or scripts/verify_system.py missing'
+env
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+env
+'SKIP_EMBEDDING_LOAD'
+●●●●●● 1mm □
+'true'
+env
+'SKIP_QDRANT_CHECK'
+●●●●●● 1mm □
+'true'
+env
+'SKIP_OLLAMA_CHECK'
+●●●●●● 1mm □
+'true'
+env
+'SKIP_AUTO_INGESTION'
+●●●●●● 1mm □
+'true'
+env
+'DISABLE_CONTINUOUS_LEARNING'
+●●●●●● 1mm □
+'true'
+env
+'SKIP_LLM_CHECK'
+●●●●●● 1mm □
+'true'
+env
+'PYTHONIOENCODING'
+●●●●●● 1mm □
+'utf-8'
+r
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+venv_py
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+script
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+r
+r
+'non-zero exit'
+200
+●●●●●● 2mm □
+'ALL CHECKS PASSED'
+r
+'ALL CHECKS PASSED'
+r
+●●●●●● 3mm ○
+r
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'verify_system.py did not report ALL CHECKS PASSED'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'verify_system.py passed'
+subprocess
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'timeout'
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_frontend_package
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+FRONTEND
+●●●●●● 3mm □△
+'package.json'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'frontend/package.json not found'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'exists'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_frontend_node_modules
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+FRONTEND
+●●●●●● 3mm □△
+'node_modules'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'frontend/node_modules not found (run setup_frontend.bat)'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'present'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_check_frontend_build
+●●●●●● 1mm □△
+_
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+dist
+●●●●●● 1mm □
+FRONTEND
+●●●●●● 3mm □△
+'dist'
+●●●●●● 2mm □
+dist
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'frontend/dist not found (run: npm run build in frontend)'
+●●●●●● 2mm □
+dist
+●●●●●● 3mm □△
+'index.html'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'frontend/dist/index.html missing'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'dist/ present'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+BUILD_MANIFEST
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm △○
+●●●●●● 2mm □△
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'backend_requirements'
+'Backend requirements.txt'
+●●●●●● 3mm □△○
+_check_backend_requirements
+'backend_venv'
+'Backend venv'
+●●●●●● 3mm □△○
+_check_backend_venv
+'backend_db'
+'Backend database (migrations run)'
+●●●●●● 3mm □△○
+_check_backend_db
+'backend_app'
+'Backend app.py'
+●●●●●● 3mm □△○
+_check_backend_app
+'backend_dirs'
+'Backend api/core/database dirs'
+●●●●●● 3mm □△○
+_check_backend_dirs
+'backend_verify_script'
+'Backend verify_system.py (imports + brain)'
+●●●●●● 3mm □△○
+_check_backend_verify_script
+'frontend_package'
+'Frontend package.json'
+●●●●●● 3mm □△○
+_check_frontend_package
+'frontend_node_modules'
+'Frontend node_modules'
+●●●●●● 3mm □△○
+_check_frontend_node_modules
+'frontend_build'
+'Frontend production build (dist/)'
+●●●●●● 1mm □
+_check_frontend_build
+●●●●●● 1mm □
+run_verify_built_checks
+●●●●●● 1mm □△
+skip_verify_script
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n    Run all build verification checks. Returns manifest dict (timestamp_utc, checks, summary).\n    Used by system.verify_built brain action and by determinism trigger.\n    '
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'timestamp_utc'
+'repo_root'
+'checks'
+'summary'
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+REPO_ROOT
+●●●●●● 2mm □△
+'passed'
+'failed'
+'required_failed'
+0
+0
+0
+check_id
+name
+required
+check_fn
+BUILD_MANIFEST
+●●●●●● 2mm □
+skip_verify_script
+check_id
+'backend_verify_script'
+results
+'checks'
+●●●●●● 1mm □△
+'id'
+'name'
+'required'
+'passed'
+'detail'
+check_id
+name
+required
+●●●●●● 2mm □
+'skipped'
+●●●●●● 2mm □△
+passed
+detail
+●●●●●● 1mm □
+check_fn
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+Exception
+passed
+detail
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+results
+'checks'
+●●●●●● 1mm □△
+'id'
+'name'
+'required'
+'passed'
+'detail'
+check_id
+name
+required
+passed
+detail
+●●●●●● 2mm □△
+●●●●●● 2mm □
+passed
+results
+'summary'
+'passed'
+1
+●●●●●● 3mm □
+results
+'summary'
+'failed'
+1
+●●●●●● 1mm △
+required
+results
+'summary'
+'required_failed'
+1
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+all_required_passed
+●●●●●● 1mm □△
+manifest
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'True if every required check in the manifest passed.'
+●●●●●● 3mm ○
+manifest
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'required_failed'
+1
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △

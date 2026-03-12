@@ -1,0 +1,772 @@
+## realtime.py
+'\nGenesis Key Real-Time Event System\n\nMakes genesis keys tell Grace about things AS THEY HAPPEN:\n1. Event watchers — register callbacks for specific key types\n2. Alerting — threshold-based alerts (3 errors in 1 minute)\n3. Streaming aggregation — detect acceleration/deceleration\n4. Direct integration with immune system for instant response\n\nInstead of polling every 10-300 seconds, the immune system\ngets notified IMMEDIATELY when an error key is created.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Callable
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 3mm □△○
+core.datetime_utils
+●●●●●● 2mm □△○
+as_naive_utc
+●●●●●● 3mm □△○
+threading
+●●●●●● 2mm □△○
+Lock
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+Alert
+alert_type
+●●●●●● 1mm ○
+message
+●●●●●● 1mm ○
+severity
+●●●●●● 3mm ○
+data
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm ○
+''
+acknowledged
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+GenesisRealtimeEngine
+'\n    Watches genesis key creation in real-time.\n    Fires callbacks, detects patterns, triggers alerts.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Alert
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'type'
+'threshold'
+'window_seconds'
+'severity'
+'error_spike'
+3
+60
+0.8
+'type'
+'threshold'
+'window_seconds'
+'severity'
+'error_burst'
+10
+300
+0.9
+'type'
+'threshold_pct'
+'window_seconds'
+'severity'
+'high_error_rate'
+20
+120
+0.7
+●●●●●● 3mm △
+●●●●●● 1mm □
+Lock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_events'
+'total_errors'
+'total_alerts'
+'watchers_registered'
+0
+0
+0
+0
+●●●●●● 1mm □
+on_key_created
+●●●●●● 1mm □△
+self
+key_type
+what
+who
+where
+is_error
+error_type
+error_message
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'system'
+''
+●●●●●● 1mm □
+''
+''
+●●●●●● 2mm □
+'\n        Called every time a genesis key is created.\n        This is the real-time hook — fires instantly, no polling.\n        '
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+'key_type'
+'what'
+'who'
+'where'
+'is_error'
+'error_type'
+'error_message'
+'timestamp'
+'epoch'
+'data'
+key_type
+what
+who
+where
+is_error
+error_type
+error_message
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_events'
+1
+●●●●●● 2mm □
+is_error
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_errors'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key_type
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_error
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'__error__'
+event
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □
+watch
+●●●●●● 1mm □△
+self
+key_type
+callback
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+"\n        Register a callback for a specific key type.\n        Use '__error__' to watch all errors.\n        Use '__all__' to watch everything.\n        "
+●●●●●● 2mm □
+key_type
+●●●●●● 3mm △
+●●●●●● 3mm △
+key_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+key_type
+●●●●●● 1mm □△
+callback
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'watchers_registered'
+1
+●●●●●● 1mm □
+_fire_watchers
+●●●●●● 1mm □△
+self
+key_type
+event
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+cb
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key_type
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Watcher callback failed: '
+e
+●●●●●● 2mm □△
+cb
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'__all__'
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_check_alerts
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □
+event
+'is_error'
+●●●●●● 3mm ○
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rule
+●●●●●● 3mm △
+window
+●●●●●● 1mm □
+rule
+●●●●●● 1mm □△
+'window_seconds'
+60
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+window
+●●●●●● 3mm △
+recent_errors
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+e
+'epoch'
+cutoff
+●●●●●● 2mm □
+rule
+'type'
+'error_spike'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+rule
+'threshold'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'error_spike'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+' errors in '
+window
+'s (threshold: '
+rule
+'threshold'
+')'
+rule
+'severity'
+'error_count'
+'window'
+'recent'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+window
+e
+'what'
+100
+e
+recent_errors
+3
+●●●●●● 2mm □△
+●●●●●● 1mm △
+rule
+'type'
+'error_burst'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+rule
+'threshold'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'error_burst'
+'Error burst: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+' errors in '
+window
+'s'
+rule
+'severity'
+'error_count'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rule
+'type'
+'high_error_rate'
+●●●●●● 3mm △
+recent_all
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+e
+'epoch'
+cutoff
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_all
+●●●●●● 2mm □△
+5
+rate
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_all
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+rate
+rule
+'threshold_pct'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'high_error_rate'
+'Error rate: '
+rate
+'.0f'
+'% ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_all
+●●●●●● 2mm □△
+' in '
+window
+'s)'
+rule
+'severity'
+'error_rate'
+'errors'
+'total'
+rate
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_all
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_create_alert
+●●●●●● 1mm □△
+self
+alert_type
+message
+severity
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+existing
+●●●●●● 3mm △
+10
+●●●●●● 2mm □
+existing
+alert_type
+existing
+ts
+●●●●●● 1mm □
+as_naive_utc
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+existing
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ts
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+ts
+30
+●●●●●● 3mm ○
+alert
+●●●●●● 1mm □
+Alert
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alert
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_alerts'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'__alert__'
+'type'
+'message'
+'severity'
+'data'
+alert_type
+message
+severity
+data
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS ALERT] '
+alert_type
+': '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stream_stats
+●●●●●● 1mm □△
+self
+window_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+60
+'Real-time streaming stats — are errors accelerating?'
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+window_seconds
+half
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+window_seconds
+●●●●●● 3mm □△
+2
+●●●●●● 3mm △
+recent
+●●●●●● 1mm □
+e
+e
+●●●●●● 3mm △
+e
+'epoch'
+cutoff
+first_half
+●●●●●● 1mm □
+e
+e
+recent
+e
+'epoch'
+half
+second_half
+●●●●●● 1mm □
+e
+e
+recent
+e
+'epoch'
+half
+first_errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+e
+first_half
+e
+'is_error'
+●●●●●● 2mm □△
+second_errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+e
+second_half
+e
+'is_error'
+●●●●●● 2mm □△
+trend
+●●●●●● 1mm □
+'stable'
+●●●●●● 2mm □
+second_errors
+first_errors
+●●●●●● 2mm □△
+1.5
+trend
+●●●●●● 1mm □
+'accelerating'
+●●●●●● 1mm △
+second_errors
+first_errors
+●●●●●● 2mm □△
+0.5
+first_errors
+0
+trend
+●●●●●● 1mm □
+'decelerating'
+●●●●●● 3mm ○
+'window_seconds'
+'total_events'
+'total_errors'
+'error_rate'
+'trend'
+'first_half_errors'
+'second_half_errors'
+window_seconds
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+first_errors
+●●●●●● 3mm ○
+second_errors
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+first_errors
+●●●●●● 3mm ○
+second_errors
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+trend
+first_errors
+second_errors
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_recent
+●●●●●● 1mm □△
+self
+limit
+errors_only
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+20
+●●●●●● 1mm □
+●●●●●● 3mm △
+items
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+errors_only
+items
+●●●●●● 1mm □
+e
+e
+items
+e
+'is_error'
+●●●●●● 3mm ○
+items
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_alerts
+●●●●●● 1mm □△
+self
+unacknowledged_only
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+alerts
+●●●●●● 1mm □
+●●●●●● 3mm △
+50
+●●●●●● 2mm □
+unacknowledged_only
+alerts
+●●●●●● 1mm □
+a
+a
+alerts
+a
+●●●●●● 3mm ○
+'type'
+'message'
+'severity'
+'data'
+'timestamp'
+a
+a
+a
+a
+a
+a
+alerts
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+acknowledge_alerts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+a
+●●●●●● 3mm △
+a
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'alert_count'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a
+a
+●●●●●● 3mm △
+a
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+_engine
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_engine
+●●●●●● 2mm □
+_engine
+●●●●●● 1mm □
+GenesisRealtimeEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_engine
+GenesisRealtimeEngine

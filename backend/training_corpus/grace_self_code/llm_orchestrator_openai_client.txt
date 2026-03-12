@@ -1,0 +1,296 @@
+## openai_client.py
+'\nOpenAI LLM Client implementation.\n'
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+OpenAILLMClient
+●●●●●● 3mm □△
+BaseLLMClient
+BaseLLMClient
+'\n    Client for interacting with OpenAI API.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+base_url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'https://api.openai.com/v1'
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+settings
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+●●●●●● 3mm △
+●●●●●● 1mm □
+'Authorization'
+'Content-Type'
+'Bearer '
+●●●●●● 3mm △
+'application/json'
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+temperature
+max_tokens
+stream
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+messages
+●●●●●● 1mm □
+●●●●●● 2mm □
+system_prompt
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+system_prompt
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/chat/completions'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'temperature'
+'stream'
+model
+settings
+'gpt-4o'
+messages
+temperature
+●●●●●● 2mm □
+temperature
+0.7
+stream
+●●●●●● 2mm □
+max_tokens
+payload
+'max_tokens'
+●●●●●● 1mm □
+max_tokens
+payload
+●●●●●● 1mm □△
+kwargs
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Making OpenAI request to: '
+url
+' with model: '
+payload
+●●●●●● 1mm □△
+'model'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+logger
+●●●●●● 1mm □△
+'OpenAI error response ('
+response
+'): '
+response
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stream
+●●●●●● 3mm ○
+response
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+'choices'
+0
+'message'
+'content'
+Exception
+logger
+●●●●●● 1mm □△
+'OpenAI API request failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        For online providers, we just check if the API key is present and we can reach the API.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/models'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'data'
+Exception
+logger
+●●●●●● 1mm □△
+'Error fetching OpenAI models: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+models
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+m
+'id'
+model_name
+m
+models
+●●●●●● 2mm □△
+●●●●●● 3mm △

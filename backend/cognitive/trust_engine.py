@@ -47,13 +47,15 @@ class ComponentScore:
     component_id: str
     component_name: str
     chunks: List[ChunkScore] = field(default_factory=list)
-    trust_score: float = 50.0  # 0-100
+    trust_score: float = 50.0  # 0-100 rolling average
+    confidence_score: float = 0.0 # 0-100 based on data volume (N/300)
     previous_trust: float = 50.0
     trend: str = "stable"  # up, down, stable
     needs_verification: bool = False
     needs_remediation: bool = False
     remediation_type: Optional[str] = None  # "self_healing", "coding_agent", "human"
     last_updated: Optional[str] = None
+    execution_count: int = 0
 
 
 class TrustEngine:
@@ -104,8 +106,15 @@ class TrustEngine:
         # Calculate new trust from chunk scores
         if scored_chunks:
             avg_chunk_score = sum(c.score for c in scored_chunks) / len(scored_chunks)
-            # Blend: 70% new score, 30% previous trust (momentum)
-            comp.trust_score = round(avg_chunk_score * 0.7 + comp.previous_trust * 0.3, 1)
+            # KPI Trust is a strict rolling average of past events
+            comp.execution_count += 1
+            # Current value contribution: 1/N, previous sum contribution: (N-1)/N
+            # If N > 100, we cap the window at 100
+            window = min(comp.execution_count, 100)
+            comp.trust_score = round(((comp.previous_trust * (window - 1)) + avg_chunk_score) / window, 1)
+            
+            # Confidence score linearly scales with volume up to 300 data points
+            comp.confidence_score = min(100.0, round((comp.execution_count / 300.0) * 100.0, 1))
         
         comp.trend = "up" if comp.trust_score > comp.previous_trust else "down" if comp.trust_score < comp.previous_trust else "stable"
         comp.last_updated = datetime.now(timezone.utc).isoformat()
@@ -290,46 +299,56 @@ class TrustEngine:
         return chunks or [""]
 
     def _score_chunk(self, chunk: str, source: str) -> float:
-        """Score a chunk out of 100 using multi-factor confidence scoring."""
-        # Source reliability (35%)
-        source_scores = {"deterministic": 0.95, "internal": 0.85, "llm": 0.65, "unknown": 0.35}
-        source_reliability = source_scores.get(source, 0.5)
+        """Score a chunk out of 100 using deterministic 10-layer KPI rules."""
+        kpi_score = 100.0
+        issues = []
+        
+        # Layer 1: Minimum length check
+        if not chunk.strip() or len(chunk) < 10:
+            kpi_score -= 10
+            issues.append("Too short or empty")
+            
+        # Layer 2: Formatting/Syntax sanity
+        if chunk.count('(') != chunk.count(')'):
+            kpi_score -= 10
+            issues.append("Unbalanced parentheses")
+            
+        if chunk.count('[') != chunk.count(']'):
+            kpi_score -= 10
+            issues.append("Unbalanced brackets")
+            
+        if chunk.count('{') != chunk.count('}'):
+            kpi_score -= 10
+            issues.append("Unbalanced braces")
+            
+        # Layer 3: Forbidden tokens check
+        bad_tokens = ["TODO", "FIXME", "HACK", "raise NotImplementedError"]
+        if any(tok in chunk for tok in bad_tokens):
+            kpi_score -= 10
+            issues.append("Contains forbidden tokens (TODO/FIXME/etc)")
+            
+        # Layer 4: Import safety (no os.system etc if code)
+        if "import os" in chunk and "os.system" in chunk:
+            kpi_score -= 10
+            issues.append("Unsafe OS operations")
+            
+        # Layer 5: Has verifiable structure (Code detection)
+        if "def " in chunk or "class " in chunk:
+            # Code should have docstrings
+            if '"""' not in chunk and "'''" not in chunk:
+                kpi_score -= 10
+                issues.append("Missing docstrings")
+                
+        # Layer 6: Source verification
+        if source == "unknown":
+            kpi_score -= 10
+            issues.append("Unknown source")
+            
+        # Layer 7-10: Stubs for more advanced mechanical layers 
+        # (e.g. AST parsing, Sandbox execution, TF-IDF matching, Genesis Log)
+        # These would ideally hook into proper deterministic validators.
 
-        # Content quality (25%)
-        content_quality = 0.7
-        if not chunk.strip():
-            content_quality = 0.1
-        elif len(chunk) < 10:
-            content_quality = 0.3
-        if "TODO" in chunk or "FIXME" in chunk or "HACK" in chunk:
-            content_quality -= 0.15
-        if "def " in chunk or "class " in chunk or "function " in chunk:
-            content_quality += 0.1
-        if "error" in chunk.lower() and "handle" not in chunk.lower():
-            content_quality -= 0.1
-        content_quality = max(0, min(1, content_quality))
-
-        # Recency (10%) — all fresh content gets full recency
-        recency = 1.0
-
-        # Consensus (30%) — check against existing knowledge
-        consensus = 0.5  # neutral default
-        try:
-            from confidence_scorer.confidence_scorer import ConfidenceScorer
-            # Would do embedding-based consensus check with running services
-            consensus = 0.6  # Slightly positive since module exists
-        except Exception:
-            pass
-
-        # Weighted score (matches the confidence_scorer formula)
-        score = (
-            source_reliability * 0.35 +
-            content_quality * 0.25 +
-            consensus * 0.30 +
-            recency * 0.10
-        ) * 100
-
-        return max(0, min(100, round(score, 1)))
+        return max(0.0, min(100.0, round(kpi_score, 1)))
 
     def _get_verification_level(self, trust: float) -> str:
         if trust >= 80:

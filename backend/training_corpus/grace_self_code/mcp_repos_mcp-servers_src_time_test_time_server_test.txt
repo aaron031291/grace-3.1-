@@ -1,0 +1,675 @@
+## time_server_test.py
+●●●●●● 3mm □△○
+freezegun
+●●●●●● 2mm □△○
+freeze_time
+●●●●●● 3mm □△○
+mcp.shared.exceptions
+●●●●●● 2mm □△○
+McpError
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+patch
+●●●●●● 3mm □△○
+zoneinfo
+●●●●●● 2mm □△○
+ZoneInfo
+●●●●●● 3mm □△○
+mcp_server_time.server
+●●●●●● 2mm □△○
+TimeServer
+get_local_tz
+●●●●●● 1mm □
+test_get_current_time
+●●●●●● 1mm □△
+test_time
+timezone
+expected
+●●●●●● 2mm □△
+freeze_time
+●●●●●● 1mm □△
+test_time
+●●●●●● 2mm □△
+time_server
+●●●●●● 1mm □
+TimeServer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+time_server
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+result
+expected
+'timezone'
+result
+expected
+'datetime'
+result
+expected
+'is_dst'
+pytest
+●●●●●● 1mm □△
+'test_time,timezone,expected'
+'2024-01-01 12:00:00+00:00'
+'Europe/Warsaw'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T13:00:00+01:00'
+●●●●●● 1mm □
+'2024-01-01 12:00:00+00:00'
+'Europe/London'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/London'
+'2024-01-01T12:00:00+00:00'
+●●●●●● 1mm □
+'2024-01-01 12:00:00-00:00'
+'America/New_York'
+'timezone'
+'datetime'
+'is_dst'
+'America/New_York'
+'2024-01-01T07:00:00-05:00'
+●●●●●● 1mm □
+'2024-03-31 12:00:00+00:00'
+'Europe/Warsaw'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-03-31T14:00:00+02:00'
+●●●●●● 3mm □△○
+'2024-03-31 12:00:00+00:00'
+'Europe/London'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/London'
+'2024-03-31T13:00:00+01:00'
+●●●●●● 3mm □△○
+'2024-03-31 12:00:00-00:00'
+'America/New_York'
+'timezone'
+'datetime'
+'is_dst'
+'America/New_York'
+'2024-03-31T08:00:00-04:00'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_current_time_with_invalid_timezone
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_server
+●●●●●● 1mm □
+TimeServer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+McpError
+●●●●●● 2mm □△
+time_server
+●●●●●● 1mm □△
+'Invalid/Timezone'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_convert_time_errors
+●●●●●● 1mm □△
+source_tz
+time_str
+target_tz
+expected_error
+●●●●●● 2mm □△
+time_server
+●●●●●● 1mm □
+TimeServer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+McpError
+ValueError
+●●●●●● 2mm □△
+time_server
+●●●●●● 1mm □△
+source_tz
+time_str
+target_tz
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+'source_tz,time_str,target_tz,expected_error'
+'invalid_tz'
+'12:00'
+'Europe/London'
+"Invalid timezone: 'No time zone found with key invalid_tz'"
+'Europe/Warsaw'
+'12:00'
+'invalid_tz'
+"Invalid timezone: 'No time zone found with key invalid_tz'"
+'Europe/Warsaw'
+'25:00'
+'Europe/London'
+'Invalid time format. Expected HH:MM [24-hour format]'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_convert_time
+●●●●●● 1mm □△
+test_time
+source_tz
+time_str
+target_tz
+expected
+●●●●●● 2mm □△
+freeze_time
+●●●●●● 1mm □△
+test_time
+●●●●●● 2mm □△
+time_server
+●●●●●● 1mm □
+TimeServer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+time_server
+●●●●●● 1mm □△
+source_tz
+time_str
+target_tz
+●●●●●● 2mm □△
+result
+expected
+'source'
+'timezone'
+result
+expected
+'target'
+'timezone'
+result
+expected
+'source'
+'datetime'
+result
+expected
+'target'
+'datetime'
+result
+expected
+'source'
+'is_dst'
+result
+expected
+'target'
+'is_dst'
+result
+expected
+'time_difference'
+pytest
+●●●●●● 1mm □△
+'test_time,source_tz,time_str,target_tz,expected'
+'2024-01-01 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Europe/London'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Europe/London'
+'2024-01-01T11:00:00+00:00'
+●●●●●● 1mm □
+'-1.0h'
+'2024-01-01 00:00:00+00:00'
+'Europe/London'
+'12:00'
+'Europe/Warsaw'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/London'
+'2024-01-01T12:00:00+00:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T13:00:00+01:00'
+●●●●●● 1mm □
+'+1.0h'
+'2024-10-28 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'America/New_York'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-10-28T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'America/New_York'
+'2024-10-28T07:00:00-04:00'
+●●●●●● 3mm □△○
+'-5.0h'
+'2024-11-04 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'America/New_York'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-11-04T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'America/New_York'
+'2024-11-04T06:00:00-05:00'
+●●●●●● 1mm □
+'-6.0h'
+'2024-01-01 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Asia/Kathmandu'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Asia/Kathmandu'
+'2024-01-01T16:45:00+05:45'
+●●●●●● 1mm □
+'+4.75h'
+'2024-01-01 00:00:00+00:00'
+'Asia/Kathmandu'
+'12:00'
+'Europe/Warsaw'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Asia/Kathmandu'
+'2024-01-01T12:00:00+05:45'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T07:15:00+01:00'
+●●●●●● 1mm □
+'-4.75h'
+'2024-01-01 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Australia/Lord_Howe'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Australia/Lord_Howe'
+'2024-01-01T22:00:00+11:00'
+●●●●●● 3mm □△○
+'+10.0h'
+'2024-04-07 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Australia/Lord_Howe'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-04-07T12:00:00+02:00'
+●●●●●● 3mm □△○
+'timezone'
+'datetime'
+'is_dst'
+'Australia/Lord_Howe'
+'2024-04-07T20:30:00+10:30'
+●●●●●● 1mm □
+'+8.5h'
+'2024-01-01 00:00:00+00:00'
+'Europe/Warsaw'
+'23:00'
+'Pacific/Apia'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T23:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Pacific/Apia'
+'2024-01-02T11:00:00+13:00'
+●●●●●● 1mm □
+'+12.0h'
+'2024-03-21 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Asia/Tehran'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-03-21T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Asia/Tehran'
+'2024-03-21T14:30:00+03:30'
+●●●●●● 1mm □
+'+2.5h'
+'2016-04-30 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'America/Caracas'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2016-04-30T12:00:00+02:00'
+●●●●●● 3mm □△○
+'timezone'
+'datetime'
+'is_dst'
+'America/Caracas'
+'2016-04-30T05:30:00-04:30'
+●●●●●● 1mm □
+'-6.5h'
+'2024-10-27 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Asia/Jerusalem'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-10-27T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Asia/Jerusalem'
+'2024-10-27T13:00:00+02:00'
+●●●●●● 1mm □
+'+1.0h'
+'2024-03-31 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Antarctica/Troll'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-03-31T12:00:00+02:00'
+●●●●●● 3mm □△○
+'timezone'
+'datetime'
+'is_dst'
+'Antarctica/Troll'
+'2024-03-31T12:00:00+02:00'
+●●●●●● 3mm □△○
+'+0.0h'
+'2024-01-01 00:00:00+00:00'
+'Europe/Warsaw'
+'23:00'
+'Pacific/Kiritimati'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T23:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Pacific/Kiritimati'
+'2024-01-02T12:00:00+14:00'
+●●●●●● 1mm □
+'+13.0h'
+'2024-01-01 00:00:00+00:00'
+'Europe/Warsaw'
+'12:00'
+'Pacific/Chatham'
+'source'
+'target'
+'time_difference'
+'timezone'
+'datetime'
+'is_dst'
+'Europe/Warsaw'
+'2024-01-01T12:00:00+01:00'
+●●●●●● 1mm □
+'timezone'
+'datetime'
+'is_dst'
+'Pacific/Chatham'
+'2024-01-02T00:45:00+13:45'
+●●●●●● 3mm □△○
+'+12.75h'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_local_tz_with_override
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that timezone override works correctly.'
+result
+●●●●●● 1mm □
+get_local_tz
+●●●●●● 1mm □△
+'America/New_York'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'America/New_York'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+ZoneInfo
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_local_tz_with_invalid_override
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that invalid timezone override raises an error.'
+pytest
+●●●●●● 1mm □△
+Exception
+●●●●●● 2mm □△
+get_local_tz
+●●●●●● 1mm □△
+'Invalid/Timezone'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_local_tz_with_valid_iana_name
+●●●●●● 1mm □△
+mock_get_localzone
+●●●●●● 2mm □△
+'Test that valid IANA timezone names from tzlocal work correctly.'
+mock_get_localzone
+●●●●●● 1mm □
+'Europe/London'
+result
+●●●●●● 1mm □
+get_local_tz
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'Europe/London'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+ZoneInfo
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'mcp_server_time.server.get_localzone_name'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_local_tz_when_none_returned
+●●●●●● 1mm □△
+mock_get_localzone
+●●●●●● 2mm □△
+'Test default to UTC when tzlocal returns None.'
+mock_get_localzone
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+get_local_tz
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'UTC'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'mcp_server_time.server.get_localzone_name'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_local_tz_handles_windows_timezones
+●●●●●● 1mm □△
+mock_get_localzone
+●●●●●● 2mm □△
+"Test that tzlocal properly handles Windows timezone names.\n    \n    Note: tzlocal should convert Windows names like 'Pacific Standard Time'\n    to proper IANA names like 'America/Los_Angeles'.\n    "
+mock_get_localzone
+●●●●●● 1mm □
+'America/Los_Angeles'
+result
+●●●●●● 1mm □
+get_local_tz
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'America/Los_Angeles'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+ZoneInfo
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'mcp_server_time.server.get_localzone_name'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_local_tz_various_timezones
+●●●●●● 1mm □△
+mock_get_localzone
+timezone_name
+●●●●●● 2mm □△
+'Test various timezone names that tzlocal might return.'
+mock_get_localzone
+●●●●●● 1mm □
+timezone_name
+result
+●●●●●● 1mm □
+get_local_tz
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+timezone_name
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+ZoneInfo
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+'timezone_name'
+'America/New_York'
+'Europe/Paris'
+'Asia/Tokyo'
+'Australia/Sydney'
+'Africa/Cairo'
+'America/Sao_Paulo'
+'Pacific/Auckland'
+'UTC'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'mcp_server_time.server.get_localzone_name'
+●●●●●● 2mm □△

@@ -1,0 +1,449 @@
+## resilience.py
+'\nEnterprise Resilience Patterns — circuit breakers, error boundaries,\nbackpressure, and graceful degradation.\n\nUsed across all controllers and brains.\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Callable
+Any
+Optional
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+wraps
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CircuitBreaker
+'\n    Per-service circuit breaker.\n    States: CLOSED (normal) → OPEN (failing) → HALF_OPEN (testing)\n\n    Usage:\n        cb = CircuitBreaker("ollama", failure_threshold=3, reset_timeout=120)\n        result = cb.call(lambda: requests.get("http://localhost:11434"))\n    '
+CLOSED
+●●●●●● 1mm □
+'closed'
+OPEN
+●●●●●● 1mm □
+'open'
+HALF_OPEN
+●●●●●● 1mm □
+'half_open'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+failure_threshold
+reset_timeout
+half_open_max
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+3
+120
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+failure_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+reset_timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+half_open_max
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+call
+●●●●●● 1mm □△
+self
+func
+fallback
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+Any
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'Circuit '
+●●●●●● 3mm △
+': OPEN → HALF_OPEN (testing)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Circuit '
+●●●●●● 3mm △
+': OPEN — request rejected'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+fallback
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+fallback
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'Circuit '
+●●●●●● 3mm △
+': HALF_OPEN → CLOSED (recovered)'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Circuit '
+●●●●●● 3mm △
+': HALF_OPEN → OPEN (still failing)'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Circuit '
+●●●●●● 3mm △
+': CLOSED → OPEN ('
+●●●●●● 3mm △
+' failures)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fallback
+●●●●●● 2mm □
+●●●●●● 3mm ○
+fallback
+Any
+●●●●●● 1mm □
+status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'state'
+'failure_count'
+'threshold'
+'reset_timeout'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+_breakers
+●●●●●● 1mm □
+_breakers_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_breaker
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+_breakers_lock
+●●●●●● 2mm □
+name
+_breakers
+_breakers
+name
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_breakers
+name
+CircuitBreaker
+●●●●●● 1mm □
+all_breaker_statuses
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_breakers_lock
+●●●●●● 3mm ○
+b
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+b
+_breakers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm △
+ErrorBoundary
+'\n    Wraps a function call so failures are contained and don\'t cascade.\n\n    Usage:\n        with ErrorBoundary("brain.chat"):\n            result = do_risky_thing()\n\n    Or as decorator:\n        @error_boundary("brain.chat")\n        def handle_chat(payload):\n            ...\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+fallback
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+fallback
+●●●●●● 1mm □
+__enter__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+exc_type
+logger
+●●●●●● 1mm □△
+'ErrorBoundary['
+●●●●●● 3mm △
+']: '
+exc_type
+': '
+exc_val
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+error_boundary
+●●●●●● 1mm □△
+name
+fallback
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Decorator version of ErrorBoundary.'
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'ErrorBoundary['
+name
+']: '
+●●●●●● 3mm □
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+fallback
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+wrapper
+●●●●●● 3mm ○
+decorator
+●●●●●● 2mm △
+GracefulDegradation
+'\n    System-wide degradation level manager.\n\n    Levels:\n      FULL       — all services operational\n      REDUCED    — non-essential services disabled\n      EMERGENCY  — only core chat + health endpoints\n      READ_ONLY  — no writes, no mutations\n    '
+FULL
+●●●●●● 1mm □
+'full'
+REDUCED
+●●●●●● 1mm □
+'reduced'
+EMERGENCY
+●●●●●● 1mm □
+'emergency'
+READ_ONLY
+●●●●●● 1mm □
+'read_only'
+_level
+●●●●●● 1mm □
+FULL
+_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_level
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+set_level
+●●●●●● 1mm □△
+cls
+level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+old
+●●●●●● 1mm □
+cls
+cls
+●●●●●● 1mm □
+level
+●●●●●● 2mm □
+old
+level
+logger
+●●●●●● 1mm □△
+'Degradation level: '
+old
+' → '
+level
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△
+●●●●●● 1mm □
+status
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'level'
+'services'
+cls
+'full'
+'reduced'
+'emergency'
+'read_only'
+'All services operational'
+'Non-essential services disabled'
+'Core chat + health only'
+'No writes, no mutations'
+●●●●●● 2mm □△
+●●●●●● 2mm □△

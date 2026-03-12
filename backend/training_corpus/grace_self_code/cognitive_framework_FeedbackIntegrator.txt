@@ -1,0 +1,57 @@
+## FeedbackIntegrator.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'feedback_integrator'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FeedbackIntegrator
+'\n    Captures outcomes from missions, healing, and testing and feeds them \n    back into knowledge and learning loops.\n    '
+●●●●●● 1mm □
+log_outcome
+●●●●●● 1mm □△
+self
+event_id
+decision_id
+result
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Integrates the execution result into memory for future autonomous learning.\n        '
+success
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+mttr
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'mttr_achieved'
+0
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Feedback Loop Update | Event: '
+event_id
+' | Decision: '
+decision_id
+' | Success: '
+success
+' | MTTR: '
+mttr
+'s'
+●●●●●● 2mm □△

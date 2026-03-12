@@ -1,0 +1,376 @@
+## postgres_adapter.py
+"\nPostgreSQL Adapter — production-grade database layer.\n\nReplaces SQLite for scale. Supports:\n  - Concurrent writes (no writer lock)\n  - Connection pooling (pgbouncer-compatible)\n  - Horizontal read replicas\n  - Full-text search\n  - JSON columns that actually work\n\nFalls back to SQLite if PostgreSQL isn't configured.\n\nUsage in .env:\n  DATABASE_TYPE=postgresql\n  DATABASE_HOST=localhost\n  DATABASE_PORT=5432\n  DATABASE_USER=grace\n  DATABASE_PASSWORD=your_password\n  DATABASE_NAME=grace\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_optimal_engine_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Returns the optimal SQLAlchemy engine configuration\n    based on the database type.\n    '
+db_type
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_TYPE'
+'sqlite'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db_type
+'postgresql'
+●●●●●● 3mm ○
+'pool_class'
+'pool_size'
+'max_overflow'
+'pool_pre_ping'
+'pool_recycle'
+'pool_timeout'
+'echo'
+'isolation_level'
+'connect_args'
+'QueuePool'
+20
+30
+●●●●●● 3mm □△○
+3600
+30
+os
+●●●●●● 1mm □△
+'DATABASE_ECHO'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+'READ COMMITTED'
+'options'
+'-c statement_timeout=30000'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'pool_class'
+'connect_args'
+'echo'
+'pragmas'
+'StaticPool'
+'check_same_thread'
+'timeout'
+●●●●●● 1mm □
+60
+os
+●●●●●● 1mm □△
+'DATABASE_ECHO'
+'false'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'true'
+'journal_mode'
+'busy_timeout'
+'foreign_keys'
+'synchronous'
+'WAL'
+30000
+'ON'
+'NORMAL'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_connection_string
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Build the connection string based on DATABASE_TYPE.'
+db_type
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_TYPE'
+'sqlite'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db_type
+'postgresql'
+host
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_HOST'
+'localhost'
+●●●●●● 2mm □△
+port
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_PORT'
+'5432'
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_USER'
+'grace'
+●●●●●● 2mm □△
+password
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_PASSWORD'
+''
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_NAME'
+'grace'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'postgresql://'
+user
+':'
+password
+'@'
+host
+':'
+port
+'/'
+name
+●●●●●● 1mm △
+db_type
+'mysql'
+host
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_HOST'
+'localhost'
+●●●●●● 2mm □△
+port
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_PORT'
+'3306'
+●●●●●● 2mm □△
+user
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_USER'
+'grace'
+●●●●●● 2mm □△
+password
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_PASSWORD'
+''
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_NAME'
+'grace'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'mysql+pymysql://'
+user
+':'
+password
+'@'
+host
+':'
+port
+'/'
+name
+path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'DATABASE_PATH'
+'data/grace.db'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sqlite:///'
+path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+is_postgres
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_TYPE'
+'sqlite'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'postgresql'
+●●●●●● 3mm △
+●●●●●● 1mm □
+migrate_sqlite_to_postgres
+●●●●●● 1mm □△
+sqlite_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'data/grace.db'
+'\n    Migration helper — export SQLite data to PostgreSQL.\n    Run once when switching databases.\n    '
+●●●●●● 2mm □
+is_postgres
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'DATABASE_TYPE is not postgresql'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+create_engine
+text
+sqlite_conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+sqlite_path
+●●●●●● 2mm □△
+sqlite_conn
+●●●●●● 1mm □
+sqlite3
+pg_url
+●●●●●● 1mm □
+get_connection_string
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pg_engine
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+pg_url
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+r
+0
+r
+sqlite_conn
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table'"
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+migrated
+●●●●●● 1mm □
+table
+tables
+rows
+●●●●●● 1mm □
+sqlite_conn
+●●●●●● 1mm □△
+'SELECT * FROM '
+table
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rows
+cols
+●●●●●● 1mm □
+rows
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pg_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+row
+rows
+vals
+●●●●●● 1mm □
+c
+row
+c
+c
+cols
+placeholders
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+':'
+c
+c
+cols
+●●●●●● 2mm □△
+col_names
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+cols
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'INSERT INTO '
+table
+' ('
+col_names
+') VALUES ('
+placeholders
+') ON CONFLICT DO NOTHING'
+●●●●●● 2mm □△
+vals
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+migrated
+table
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rows
+●●●●●● 2mm □△
+Exception
+migrated
+table
+●●●●●● 1mm □
+'error: '
+e
+sqlite_conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'migrated'
+'tables'
+migrated
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△

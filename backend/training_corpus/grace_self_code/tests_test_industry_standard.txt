@@ -1,0 +1,1432 @@
+## test_industry_standard.py
+'\n10 Industry Standard Tests — Different Perspectives\n\nThese tests validate Grace from the perspective of:\n1. Security Engineer — governance enforcement\n2. DevOps Engineer — self-healing and monitoring\n3. Data Engineer — data integrity and provenance\n4. ML Engineer — trust scoring and learning\n5. QA Engineer — pipeline correctness\n6. Product Manager — feature completeness\n7. Architect — system integration\n8. Compliance Officer — rule enforcement\n9. SRE — reliability and recovery\n10. End User — functional correctness\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSecurityEngineer
+'Every LLM call MUST go through the governance wrapper. No bypass possible.'
+●●●●●● 1mm □
+test_factory_always_wraps
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+provider
+'ollama'
+'openai'
+'kimi'
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+client
+GovernanceAwareLLM
+●●●●●● 2mm □△
+provider
+' client not wrapped'
+●●●●●● 1mm □
+test_kimi_client_wrapped
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+●●●●●● 1mm □
+●●●●●● 1mm □△
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GovernanceAwareLLM
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_raw_client_available_for_internal
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+raw
+●●●●●● 1mm □
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+raw
+GovernanceAwareLLM
+●●●●●● 2mm □△
+'Raw client should NOT be wrapped'
+●●●●●● 1mm □
+test_governance_prefix_is_string
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+build_governance_prefix
+prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+prefix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_persona_has_both_fields
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.governance_rules_api
+●●●●●● 2mm □△○
+get_active_persona
+p
+●●●●●● 1mm □
+get_active_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'personal'
+p
+'professional'
+p
+●●●●●● 2mm △
+TestDevOpsEngineer
+'Immune system must detect failures, attempt recovery, and log everything.'
+●●●●●● 1mm □
+test_scan_detects_down_services
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anomalies
+●●●●●● 1mm □
+result
+'anomalies'
+down
+●●●●●● 1mm □
+a
+a
+anomalies
+a
+'type'
+'service_down'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+down
+●●●●●● 2mm □△
+0
+'Should detect at least one service down'
+●●●●●● 1mm □
+test_scan_identifies_root_cause
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'anomalies'
+●●●●●● 2mm □△
+2
+result
+●●●●●● 1mm □△
+'root_cause'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Should identify root cause with 2+ anomalies'
+●●●●●● 1mm □
+test_scan_adapts_interval
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+'anomalies'
+●●●●●● 2mm □△
+3
+result
+'next_scan_interval'
+30
+'Crisis should reduce interval to <=30s'
+●●●●●● 1mm □
+test_healing_creates_playbook_entry
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+playbook
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+playbook
+●●●●●● 2mm □△
+0
+'Healing should create playbook entries'
+●●●●●● 1mm □
+test_baselines_established
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+status
+'baselines'
+●●●●●● 2mm □△
+0
+'Should establish baselines for healthy components'
+●●●●●● 2mm △
+TestDataEngineer
+'Genesis keys must track every operation with complete metadata.'
+●●●●●● 1mm □
+test_tracker_never_raises
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+result
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_tracker_accepts_all_fields
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_realtime_engine_fires_instantly
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+GenesisRealtimeEngine
+engine
+●●●●●● 1mm □
+GenesisRealtimeEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+received
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'__all__'
+received
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'system'
+'instant test'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+received
+●●●●●● 2mm □△
+1
+'Event should fire immediately, not batched'
+received
+0
+'what'
+'instant test'
+●●●●●● 1mm □
+test_realtime_alert_on_error_spike
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+GenesisRealtimeEngine
+engine
+●●●●●● 1mm □
+GenesisRealtimeEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'error'
+'Error '
+i
+●●●●●● 2mm □△
+alerts
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alerts
+●●●●●● 2mm □△
+0
+'3 errors should trigger an alert'
+alerts
+0
+'type'
+'error_spike'
+●●●●●● 1mm □
+test_streaming_detects_acceleration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+GenesisRealtimeEngine
+engine
+●●●●●● 1mm □
+GenesisRealtimeEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'system'
+'normal 1'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'error'
+'err 1'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'error'
+'err 2'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'error'
+'err 3'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+60
+●●●●●● 2mm □△
+stats
+'trend'
+'accelerating'
+●●●●●● 2mm △
+TestMLEngineer
+'Trust scores must be bounded, monotonic with quality, and composable.'
+●●●●●● 1mm □
+test_trust_bounded_0_100
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+engine
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+'deterministic'
+'internal'
+'llm'
+'unknown'
+comp
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'test_'
+source
+'Test'
+'test content'
+●●●●●● 2mm □△
+0
+comp
+100
+source
+': '
+comp
+' out of bounds'
+●●●●●● 1mm □
+test_deterministic_higher_than_unknown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+engine
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+det
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'d'
+'D'
+'SELECT * FROM users'
+●●●●●● 2mm □△
+unk
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+'u'
+'U'
+'random data'
+●●●●●● 2mm □△
+det
+unk
+●●●●●● 1mm □
+test_verification_levels_correct
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+engine
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'x'
+'y'
+85
+●●●●●● 2mm □△
+'verification_level'
+'internal_only'
+engine
+●●●●●● 1mm □△
+'x'
+'y'
+65
+●●●●●● 2mm □△
+'verification_level'
+'knowledge_base'
+engine
+●●●●●● 1mm □△
+'x'
+'y'
+45
+●●●●●● 2mm □△
+'verification_level'
+'full_verification'
+engine
+●●●●●● 1mm □△
+'x'
+'y'
+35
+●●●●●● 2mm □△
+'verification_level'
+'human_required'
+●●●●●● 1mm □
+test_system_trust_aggregates
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+engine
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'a'
+'A'
+'good code'
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'b'
+'B'
+'bad data'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'component_count'
+2
+0
+sys
+'system_trust'
+100
+●●●●●● 1mm □
+test_intelligence_score_above_8
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.unified_coding_agent_api
+●●●●●● 2mm □△○
+_calculate_intelligence_score
+score
+●●●●●● 1mm □
+_calculate_intelligence_score
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+'score'
+8.0
+'Intelligence score '
+score
+'score'
+' too low'
+score
+'available'
+20
+'Only '
+score
+'available'
+' systems available'
+●●●●●● 2mm △
+TestQAEngineer
+'Pipeline must execute stages sequentially, each feeding the next.'
+●●●●●● 1mm □
+test_all_pre_generation_stages_pass
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'Build a login form'
+●●●●●● 2mm □△
+required
+●●●●●● 1mm □
+'time_sense'
+'ooda'
+'ambiguity'
+'invariants'
+'trust_pre'
+stage
+required
+stage
+ctx
+'Stage '
+stage
+' did not pass'
+●●●●●● 1mm □
+test_stages_execute_in_order
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'test prompt'
+●●●●●● 2mm □△
+order
+●●●●●● 1mm □
+'time_sense'
+'ooda'
+'ambiguity'
+'invariants'
+'trust_pre'
+'trust_post'
+passed
+●●●●●● 1mm □
+s
+s
+ctx
+s
+order
+passed
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+passed
+●●●●●● 2mm □△
+'Stages out of order'
+●●●●●● 1mm □
+test_prompt_classification_complete
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+_classify_prompt
+_classify_prompt
+●●●●●● 1mm □△
+'write a function'
+●●●●●● 2mm □△
+'code_generation'
+_classify_prompt
+●●●●●● 1mm □△
+'fix the bug'
+●●●●●● 2mm □△
+'bug_fix'
+_classify_prompt
+●●●●●● 1mm □△
+'what does this do'
+●●●●●● 2mm □△
+'question'
+_classify_prompt
+●●●●●● 1mm □△
+'optimize the code'
+●●●●●● 2mm □△
+'refactor'
+_classify_prompt
+●●●●●● 1mm □△
+'write tests for API'
+●●●●●● 2mm □△
+'testing'
+_classify_prompt
+●●●●●● 1mm □△
+'delete all files'
+●●●●●● 2mm □△
+'destructive'
+_classify_prompt
+●●●●●● 1mm □△
+'hello'
+●●●●●● 2mm □△
+'general'
+●●●●●● 1mm □
+test_invariants_check_all_12
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+ctx
+'checked'
+12
+●●●●●● 1mm □
+test_ambiguity_detects_implicit_references
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'connect to the database and the server'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+'implicit_refs'
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestProductManager
+'Every feature promised must exist and be reachable.'
+●●●●●● 1mm □
+test_12_frontend_tabs_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+tab_dir
+●●●●●● 1mm □
+'/workspace/frontend/src/components'
+tabs
+●●●●●● 1mm □
+f
+f
+os
+●●●●●● 1mm □△
+tab_dir
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'Tab.jsx'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tabs
+●●●●●● 2mm □△
+12
+'Expected 12 tabs, found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tabs
+●●●●●● 2mm □△
+': '
+tabs
+●●●●●● 1mm □
+test_v1_api_has_10_resources
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+v1_dir
+●●●●●● 1mm □
+'/workspace/backend/api/v1'
+resources
+●●●●●● 1mm □
+f
+f
+os
+●●●●●● 1mm □△
+v1_dir
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+f
+'__init__.py'
+f
+'router.py'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+resources
+●●●●●● 2mm □△
+10
+'Expected 10 resources, found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+resources
+●●●●●● 2mm □△
+': '
+resources
+●●●●●● 1mm □
+test_manifest_reports_correct_counts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.manifest_api
+●●●●●● 2mm □△○
+_get_summary
+s
+●●●●●● 1mm □
+_get_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'frontend_tabs'
+12
+s
+'intelligence_systems'
+28
+s
+'endpoints'
+200
+●●●●●● 1mm □
+test_frontend_builds_clean
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'/workspace/frontend/dist/index.html'
+●●●●●● 2mm □△
+'Frontend not built'
+●●●●●● 1mm □
+test_kimi_has_8_capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+KimiEnhanced
+methods
+●●●●●● 1mm □
+m
+m
+●●●●●● 2mm □
+●●●●●● 1mm □△
+KimiEnhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+methods
+●●●●●● 2mm □△
+8
+'Kimi has '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+methods
+●●●●●● 2mm □△
+' methods, expected 8+'
+●●●●●● 2mm △
+TestArchitect
+'Core systems must be properly integrated, not just coexisting.'
+●●●●●● 1mm □
+test_magma_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+is_available
+is_available
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Magma should be available'
+●●●●●● 1mm □
+test_magma_has_4_graphs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+get_stats
+stats
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'graphs'
+stats
+graph
+'semantic'
+'temporal'
+'causal'
+'entity'
+graph
+stats
+'graphs'
+'Missing graph: '
+graph
+●●●●●● 1mm □
+test_pipeline_queries_magma
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'/workspace/backend/cognitive/pipeline.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'magma_bridge'
+content
+'Pipeline should import magma_bridge'
+'query_context'
+content
+'Pipeline should query Magma context'
+●●●●●● 1mm □
+test_immune_writes_to_magma
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'/workspace/backend/cognitive/immune_system.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'magma_bridge'
+content
+'Immune system should import magma_bridge'
+'store_pattern'
+content
+'Immune should store patterns in Magma'
+●●●●●● 1mm □
+test_healing_coordinator_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.healing_coordinator
+●●●●●● 2mm □△○
+HealingCoordinator
+h
+●●●●●● 1mm □
+HealingCoordinator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+h
+'resolve'
+●●●●●● 2mm □△
+'Coordinator must have resolve method'
+●●●●●● 2mm △
+TestComplianceOfficer
+'Governance rules must be enforced in every LLM call path.'
+●●●●●● 1mm □
+test_agent_rules_api_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.agent_rules_api
+●●●●●● 2mm □△○
+get_agent_rules_context
+ctx
+●●●●●● 1mm □
+get_agent_rules_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_governance_rules_api_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.governance_rules_api
+●●●●●● 2mm □△○
+get_active_persona
+get_active_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_governance_wrapper_reads_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+build_governance_prefix
+prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+prefix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_pipeline_injects_agent_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'/workspace/backend/cognitive/pipeline.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'agent_rules_api'
+content
+'Pipeline should inject agent rules'
+'get_agent_rules_context'
+content
+●●●●●● 1mm □
+test_mcp_orchestrator_injects_governance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'/workspace/backend/grace_mcp/orchestrator.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'governance_wrapper'
+content
+'governance_prefix'
+content
+'build_governance_prefix'
+content
+●●●●●● 2mm △
+TestSRE
+'System must handle failures gracefully and recover autonomously.'
+●●●●●● 1mm □
+test_self_healer_reconnects_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.self_healing
+●●●●●● 2mm □△○
+SelfHealer
+healer
+●●●●●● 1mm □
+SelfHealer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_immune_system_heals_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+immune
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db_heals
+●●●●●● 1mm □
+h
+h
+result
+●●●●●● 1mm □△
+'healing_actions'
+●●●●●● 2mm □△
+h
+●●●●●● 1mm □△
+'component'
+●●●●●● 2mm □△
+'database'
+●●●●●● 2mm □
+db_heals
+db_heals
+0
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+'Database healing should succeed'
+●●●●●● 1mm □
+test_genesis_tracker_never_crashes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_realtime_engine_handles_volume
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+GenesisRealtimeEngine
+engine
+●●●●●● 1mm □
+GenesisRealtimeEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'system'
+'Event '
+i
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_events'
+100
+●●●●●● 1mm □
+test_trust_engine_handles_rapid_scoring
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+engine
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+'comp_'
+i
+'Component '
+i
+'Output '
+i
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'component_count'
+20
+●●●●●● 2mm △
+TestEndUser
+'Core user-facing features must produce correct, useful results.'
+●●●●●● 1mm □
+test_timesense_knows_current_day
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'day_of_week'
+'Monday'
+'Tuesday'
+'Wednesday'
+'Thursday'
+'Friday'
+'Saturday'
+'Sunday'
+ctx
+'period'
+'late_night'
+'morning'
+'afternoon'
+'evening'
+'night'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ctx
+'is_business_hours'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_timesense_urgency_scoring
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+overdue
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+'2020-01-01T00:00:00'
+●●●●●● 2mm □△
+overdue
+'label'
+'overdue'
+overdue
+'urgency'
+1.0
+no_deadline
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+no_deadline
+'label'
+'no_deadline'
+●●●●●● 1mm □
+test_docs_library_helpers_work
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.docs_library_api
+●●●●●● 2mm □△○
+_guess_mime
+_safe_json_parse
+_guess_mime
+●●●●●● 1mm □△
+'report.pdf'
+●●●●●● 2mm □△
+'application/pdf'
+_guess_mime
+●●●●●● 1mm □△
+'script.py'
+●●●●●● 2mm □△
+'text/x-python'
+_safe_json_parse
+●●●●●● 1mm □△
+'{"a":1}'
+●●●●●● 2mm □△
+'a'
+1
+_safe_json_parse
+●●●●●● 1mm □△
+'bad'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_file_suggestion_works
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_suggest_directory
+_suggest_directory
+●●●●●● 1mm □△
+'main.py'
+''
+'.py'
+●●●●●● 2mm □△
+'code/python'
+_suggest_directory
+●●●●●● 1mm □△
+'README.md'
+''
+'.md'
+●●●●●● 2mm □△
+'documentation'
+_suggest_directory
+●●●●●● 1mm □△
+'data.csv'
+''
+'.csv'
+●●●●●● 2mm □△
+'data/csv'
+●●●●●● 1mm □
+test_feedback_loop_doesnt_crash
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+'test-key'
+'test prompt'
+'test output'
+'positive'
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+FeedbackLoop
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

@@ -70,6 +70,7 @@ var/
 state/
 artifacts/
 benchmarks/results/
+backend/layer_1/oracle/action_result/
 
 # Env files
 .env
@@ -110,7 +111,4 @@ backend/.fix_backups/
 
 # Antigravity/AI assistant brain files
 .gemini/
-
-
-backend/venv/
 

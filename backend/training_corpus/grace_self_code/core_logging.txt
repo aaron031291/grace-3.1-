@@ -1,0 +1,216 @@
+## logging.py
+'\nStructured JSON Logging with correlation IDs.\n\nEvery log entry includes:\n  - timestamp (ISO 8601)\n  - level\n  - message\n  - correlation_id (traces a request across brains)\n  - brain_domain (which brain handled the request)\n  - component (which service module)\n  - latency_ms (for request logs)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+_correlation
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_correlation_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Get the current request's correlation ID."
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+_correlation
+'id'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+set_correlation_id
+●●●●●● 1mm □△
+cid
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Set a correlation ID for the current thread/request.'
+_correlation
+●●●●●● 1mm □
+cid
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 2mm △
+StructuredFormatter
+●●●●●● 3mm □△
+logging
+'JSON log formatter with correlation IDs.'
+●●●●●● 1mm □
+format
+●●●●●● 1mm □△
+self
+record
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+'ts'
+'level'
+'msg'
+'logger'
+'cid'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Z'
+record
+record
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+get_correlation_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+'brain'
+●●●●●● 2mm □△
+entry
+'brain'
+●●●●●● 1mm □
+record
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+'action'
+●●●●●● 2mm □△
+entry
+'action'
+●●●●●● 1mm □
+record
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+'latency_ms'
+●●●●●● 2mm □△
+entry
+'latency_ms'
+●●●●●● 1mm □
+record
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+'component'
+●●●●●● 2mm □△
+entry
+'component'
+●●●●●● 1mm □
+record
+●●●●●● 2mm □
+record
+record
+0
+entry
+'error'
+●●●●●● 1mm □
+'type'
+'message'
+record
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+record
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 1mm □
+setup_structured_logging
+●●●●●● 1mm □△
+level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'INFO'
+'Configure structured JSON logging for the entire app.'
+root
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+StructuredFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+logging
+level
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+h
+root
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+h
+StructuredFormatter
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+root
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+logging
+level
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,129 @@
+## kpi_recorder.py
+'\nCentral KPI recording for brains and components.\n\nEvery brain action and key component action should flow through here so that:\n- Governance engine gets record_kpi (for compliance/dashboard)\n- ML KPI tracker gets increment_kpi (for trust scores and health)\n\nAll recording is best-effort: failures are logged and never raise.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_brain_kpi
+●●●●●● 1mm □△
+brain
+action
+ok
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'\n    Record a brain action to both governance KPIs and ML KPI tracker.\n\n    Call after every brain request (HTTP or call_brain) so KPIs stay in sync.\n    '
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+record_kpi
+record_kpi
+●●●●●● 1mm □△
+'brain'
+brain
+'/'
+action
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'KPI recorder: governance record_kpi failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+comp
+●●●●●● 1mm □
+'brain_'
+brain
+tracker
+●●●●●● 1mm □△
+comp
+'requests'
+1.0
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+ok
+'successes'
+'failures'
+1.0
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'KPI recorder: ML tracker increment failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+record_component_kpi
+●●●●●● 1mm □△
+component
+metric
+value
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm △
+1.0
+●●●●●● 2mm □
+'\n    Record a component-level KPI (e.g. retrieval, ingestion, learning).\n\n    Use for components that are not exclusively invoked via brain so they\n    still contribute to system trust and dashboards.\n    '
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+tracker
+●●●●●● 1mm □△
+component
+metric
+value
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 2mm □
+tracker
+●●●●●● 1mm □△
+component
+success
+'successes'
+'failures'
+1.0
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'KPI recorder: component increment failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □

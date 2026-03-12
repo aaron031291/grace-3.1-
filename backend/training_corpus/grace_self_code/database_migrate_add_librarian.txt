@@ -1,0 +1,361 @@
+## migrate_add_librarian.py
+'\nMigration script to add Librarian System tables to Grace.\n\nThis migration adds 6 new tables for the Librarian System:\n- librarian_tags: Tag definitions\n- document_tags: Document-tag relationships\n- document_relationships: Document relationship graph\n- librarian_rules: Pattern matching rules\n- librarian_actions: Approval workflow queue\n- librarian_audit: Complete audit trail\n\nRun this script to enable automatic file organization and categorization.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+inspect
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianTag
+DocumentTag
+DocumentRelationship
+LibrarianRule
+LibrarianAction
+LibrarianAudit
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+migrate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Add Librarian System tables to the database.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Starting Librarian System migration...'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+existing_tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+librarian_tables
+●●●●●● 1mm □
+'librarian_tags'
+LibrarianTag
+'document_tags'
+DocumentTag
+'document_relationships'
+DocumentRelationship
+'librarian_rules'
+LibrarianRule
+'librarian_actions'
+LibrarianAction
+'librarian_audit'
+LibrarianAudit
+tables_created
+●●●●●● 1mm □
+tables_skipped
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+table_name
+model_class
+librarian_tables
+●●●●●● 2mm □
+table_name
+existing_tables
+logger
+●●●●●● 1mm □△
+"✓ Table '"
+table_name
+"' already exists, skipping..."
+●●●●●● 2mm □△
+tables_skipped
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"→ Creating table '"
+table_name
+"'..."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model_class
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+tables_created
+●●●●●● 1mm □△
+table_name
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"  ✓ Table '"
+table_name
+"' created successfully"
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+"  ✗ Failed to create table '"
+table_name
+"': "
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Migration Summary'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables_created
+●●●●●● 2mm □△
+' tables'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tables_created
+table
+tables_created
+logger
+●●●●●● 1mm □△
+'  - '
+table
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tables_skipped
+logger
+●●●●●● 1mm □△
+'Skipped: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables_skipped
+●●●●●● 2mm □△
+' existing tables'
+●●●●●● 2mm □△
+table
+tables_skipped
+logger
+●●●●●● 1mm □△
+'  - '
+table
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Verifying table creation...'
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+final_tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_verified
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+table_name
+_
+librarian_tables
+●●●●●● 2mm □
+table_name
+final_tables
+logger
+●●●●●● 1mm □△
+"  ✓ Verified table '"
+table_name
+"' exists"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"  ✗ Table '"
+table_name
+"' was not created!"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+all_verified
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_verified
+logger
+●●●●●● 1mm □△
+'✓ Librarian System is now active!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'✗ Some tables were not created. Check errors above.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_verified
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'The Librarian System provides:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Automatic file categorization with hybrid rules + AI'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Flat tag system for flexible organization'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Document relationship tracking and knowledge graphs'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Tiered permissions with approval workflows'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Complete audit trail for all operations'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Next steps:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  1. Seed default rules: python backend/librarian/seed_default_rules.py'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  2. Process existing documents: Use /librarian/process/all API endpoint'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  3. Configure settings in backend/settings.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△

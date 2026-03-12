@@ -1,0 +1,454 @@
+## data_integrity_connector.py
+'\nData Integrity Verification Connector - Layer 1 Integration\n\nConnects Data Integrity Verification System to Layer 1 message bus,\nenabling autonomous integrity checking and trust scoring.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+Message
+ComponentType
+MessageType
+get_message_bus
+●●●●●● 3mm □△○
+layer1.autonomous_actions
+●●●●●● 2mm □△○
+AutonomousAction
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DataIntegrityConnector
+'\n    Connector for Data Integrity Verification.\n    \n    Integrates integrity verifier with Layer 1 message bus for:\n    - Autonomous integrity checks\n    - Post-ingestion verification\n    - Trust score calculation\n    - Integrity report generation\n    - Neuro-symbolic trust integration\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+ai_research_path
+database_path
+message_bus
+enable_trust_scoring
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n        Initialize data integrity connector.\n\n        Args:\n            ai_research_path: Path to ai_research directory\n            database_path: Path to database\n            message_bus: Layer 1 message bus instance\n            enable_trust_scoring: Whether to calculate trust scores\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+ai_research_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+database_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_trust_scoring
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Registered with message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_verifier
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Lazy initialization of integrity verifier.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+scripts.verify_data_integrity
+●●●●●● 2mm □△○
+DataIntegrityVerifier
+●●●●●● 3mm △
+●●●●●● 1mm □
+DataIntegrityVerifier
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Verifier initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Failed to initialize: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers with message bus.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+MessageType
+'knowledge_base.verify_integrity'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+MessageType
+'knowledge_base.get_integrity_report'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register autonomous actions.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+AutonomousAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+AutonomousAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Subscribe to relevant events.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'knowledge_base.*'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+Message
+'Handle verify integrity request.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Connector disabled'
+category
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+detailed
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'detailed'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+category
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+category
+●●●●●● 2mm □△
+●●●●●● 3mm □
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'report'
+'all_checks_passed'
+'timestamp'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+report
+'summary'
+●●●●●● 2mm □△
+report
+report
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'report'
+'all_checks_passed'
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+'report'
+●●●●●● 3mm △
+'all_checks_passed'
+Exception
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Verification failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle get integrity report request.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'success'
+'message'
+'report'
+●●●●●● 3mm □△○
+'No report available. Run verify_integrity first.'
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'success'
+'report'
+'all_checks_passed'
+'timestamp'
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+'report'
+●●●●●● 3mm △
+'all_checks_passed'
+●●●●●● 3mm △
+'timestamp'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Autonomous action: Periodic integrity check.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] 🤖 Running periodic integrity check'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+Message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Periodic check failed: '
+e
+●●●●●● 2mm □△
+Message
+'Autonomous action: Update trust scores after verification.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] 🤖 Updating trust scores based on integrity'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'report'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+report
+●●●●●● 1mm □△
+'all_checks_passed'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+0.9
+●●●●●● 3mm □
+trust_score
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Trust score update failed: '
+e
+●●●●●● 2mm □△
+Message
+'Handle knowledge base events.'
+logger
+●●●●●● 1mm □△
+'[DATA-INTEGRITY-CONNECTOR] Event: '
+message
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_all_passed
+●●●●●● 1mm □△
+self
+report
+●●●●●● 2mm □△
+Any
+'Check if all integrity checks passed.'
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+report
+'verification_checks'
+●●●●●● 2mm □△
+checks
+●●●●●● 1mm □
+report
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+checks
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+checks
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'verification_checks'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+checks
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+checks
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+create_data_integrity_connector
+●●●●●● 1mm □△
+ai_research_path
+database_path
+message_bus
+enable_trust_scoring
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n    Factory function to create data integrity connector.\n\n    Args:\n        ai_research_path: Path to ai_research directory\n        database_path: Path to database\n        message_bus: Layer 1 message bus instance\n        enable_trust_scoring: Whether to calculate trust scores\n\n    Returns:\n        DataIntegrityConnector instance\n    '
+●●●●●● 3mm ○
+DataIntegrityConnector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DataIntegrityConnector

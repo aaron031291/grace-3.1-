@@ -1,0 +1,845 @@
+## test_flash_cache.py
+'\nTests for the FlashCache — reference-based intelligent caching layer.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+pytest
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_QDRANT_CHECK'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_OLLAMA_CHECK'
+'true'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'DISABLE_GENESIS_TRACKING'
+'true'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestFlashCacheCore
+'Test the core FlashCache engine.'
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+db_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+'test_flash.db'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_register_and_get
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+entry_id
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry_id
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+16
+entry
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+entry_id
+●●●●●● 2mm □△
+entry
+●●●●●● 2mm □
+entry
+'https://api.example.com/data'
+entry
+'Example API'
+entry
+0.8
+'python'
+entry
+'rest'
+entry
+●●●●●● 1mm □
+test_keyword_lookup
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+results
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+1
+results
+0
+'source_name'
+'ML Guide'
+●●●●●● 1mm □
+test_multi_keyword_lookup
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+2
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+'match_count'
+2
+r
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_search_full_text
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'hooks react'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'react'
+r
+'source_name'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+results
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_source_type_filter
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+api_only
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+api_only
+●●●●●● 2mm □△
+1
+api_only
+0
+'source_type'
+'api'
+●●●●●● 1mm □
+test_trust_filter
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+high
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+high
+●●●●●● 2mm □△
+1
+high
+0
+'trust_score'
+0.9
+●●●●●● 1mm □
+test_update_trust
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+eid
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+eid
+0.2
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+entry
+●●●●●● 1mm □△
+0.7
+●●●●●● 2mm □△
+0.01
+cache
+●●●●●● 1mm □△
+eid
+0.5
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+entry
+●●●●●● 1mm □△
+0.2
+●●●●●● 2mm □△
+0.01
+cache
+●●●●●● 1mm □△
+eid
+1.0
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+entry
+0.0
+●●●●●● 1mm □
+test_remove_entry
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+eid
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cache
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+eid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_duplicate_uri_replaces
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+eid1
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid2
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid1
+eid2
+entry
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+eid1
+●●●●●● 2mm □△
+'v2'
+entry
+●●●●●● 1mm □
+test_stats
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'total_entries'
+3
+s
+'by_type'
+'api'
+1
+s
+'by_type'
+'web'
+2
+s
+'unique_keywords'
+3
+●●●●●● 2mm △
+TestKeywordExtraction
+'Test the keyword extraction engine.'
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+●●●●●● 3mm ○
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_basic_extraction
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'Python machine learning with neural networks and deep learning frameworks'
+keywords
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'python'
+keywords
+'learning'
+keywords
+'neural'
+keywords
+●●●●●● 1mm □
+test_stop_words_removed
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'The quick brown fox jumps over the lazy dog in the park'
+keywords
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'the'
+keywords
+'over'
+keywords
+'quick'
+keywords
+'brown'
+keywords
+●●●●●● 1mm □
+test_frequency_ranking
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'Python Python Python Java Java C++'
+keywords
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+keywords
+0
+'python'
+●●●●●● 1mm □
+test_max_keywords
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+' '
+●●●●●● 1mm □△
+'word'
+i
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+keywords
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keywords
+●●●●●● 2mm □△
+5
+●●●●●● 2mm △
+TestKeywordPrediction
+'Test pre-emptive keyword discovery.'
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+c
+●●●●●● 1mm □
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+pytest
+●●●●●● 1mm □
+test_predicts_related_keywords
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'machine learning'
+●●●●●● 2mm □△
+kw_names
+●●●●●● 1mm □
+p
+'keyword'
+p
+predictions
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+kw_names
+kw
+'tensorflow'
+'pytorch'
+'keras'
+'gpu'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_empty_topic_returns_empty
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+predictions
+●●●●●● 2mm △
+TestCleanup
+'Test stale entry cleanup.'
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+●●●●●● 3mm ○
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_cleanup_unreachable
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+eid
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+eid
+'unreachable'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sqlite3
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+cache
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+"UPDATE flash_entries SET last_accessed = '2020-01-01T00:00:00' WHERE id = ?"
+eid
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+removed
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+removed
+1
+●●●●●● 1mm □
+test_no_cleanup_validated
+●●●●●● 1mm □△
+self
+cache
+●●●●●● 2mm □△
+eid
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+eid
+'validated'
+●●●●●● 2mm □△
+removed
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+removed
+0
+●●●●●● 2mm △
+TestFlashCacheAPI
+'Test the API module imports and configuration.'
+●●●●●● 1mm □
+test_import_router
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.flash_cache_api
+●●●●●● 2mm □△○
+router
+router
+●●●●●● 2mm □
+router
+'/api/flash-cache'
+●●●●●● 1mm □
+test_api_routes_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.flash_cache_api
+●●●●●● 2mm □△○
+router
+paths
+●●●●●● 1mm □
+r
+r
+router
+prefix
+●●●●●● 1mm □
+router
+prefix
+'/register'
+paths
+prefix
+'/lookup'
+paths
+prefix
+'/search'
+paths
+prefix
+'/stats'
+paths
+prefix
+'/cleanup'
+paths
+prefix
+'/predict'
+paths
+prefix
+'/bulk-register'
+paths
+prefix
+'/extract-keywords'
+paths
+●●●●●● 2mm △
+TestIntegrationWithWhitelist
+'Verify FlashCache is importable from whitelist context.'
+●●●●●● 1mm □
+test_get_flash_cache_callable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+get_flash_cache
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_extract_keywords_from_api_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+cache
+●●●●●● 1mm □
+FlashCache
+●●●●●● 1mm □△
+FlashCache
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+●●●●●● 2mm □
+cache
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □
+kw
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+'Git REST API v3 for repository management'
+●●●●●● 2mm □△
+'git'
+kw
+'api'
+kw
+'rest'
+kw
+●●●●●● 2mm △
+TestLRUBehavior
+'Test the LRU cache eviction.'
+●●●●●● 1mm □
+test_lru_eviction
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+cache
+●●●●●● 1mm □
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid
+cache
+●●●●●● 1mm □
+test_lru_access_moves_to_end
+●●●●●● 1mm □△
+self
+tmp_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+FlashCache
+cache
+●●●●●● 1mm □
+FlashCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid1
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid2
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+eid1
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+keys
+1
+eid1

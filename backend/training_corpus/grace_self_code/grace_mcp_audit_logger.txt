@@ -1,0 +1,443 @@
+## audit_logger.py
+'\nGrace OS — MCP Audit Logger.\n\nLogs every MCP tool call with:\n- Timestamp\n- Calling layer/context\n- Tool name\n- Parameters\n- Result summary\n- Duration\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AuditLogger
+'\n    Immutable audit trail for all MCP tool calls.\n    Feeds into the Trust Scorekeeper for confidence tracking.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+log_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+log_dir
+●●●●●● 2mm □
+log_dir
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm □△
+'mcp_audit'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'mcp_audit_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d'
+●●●●●● 2mm □△
+'.jsonl'
+●●●●●● 1mm □
+log_tool_call
+●●●●●● 1mm □△
+self
+tool_name
+arguments
+result
+duration_ms
+calling_layer
+session_id
+success
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Any
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'user'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'Log a single MCP tool call.'
+entry
+●●●●●● 1mm □
+'timestamp'
+'session_id'
+'calling_layer'
+'tool_name'
+'arguments'
+'result_summary'
+'duration_ms'
+'success'
+'error'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_id
+calling_layer
+tool_name
+●●●●●● 3mm △
+●●●●●● 1mm □△
+arguments
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+duration_ms
+2
+●●●●●● 2mm □△
+success
+error
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to write audit log: '
+e
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+success
+'✅'
+'❌'
+logger
+●●●●●● 1mm □△
+'[MCP AUDIT] '
+status
+' '
+tool_name
+' (layer='
+calling_layer
+', '
+duration_ms
+'.0f'
+'ms)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+log_resource_read
+●●●●●● 1mm □△
+self
+uri
+duration_ms
+calling_layer
+session_id
+success
+error
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'user'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'Log an MCP resource read.'
+entry
+●●●●●● 1mm □
+'timestamp'
+'session_id'
+'calling_layer'
+'resource_uri'
+'type'
+'duration_ms'
+'success'
+'error'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_id
+calling_layer
+uri
+'resource_read'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+duration_ms
+2
+●●●●●● 2mm □△
+success
+error
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to write audit log: '
+e
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+success
+'✅'
+'❌'
+logger
+●●●●●● 1mm □△
+'[MCP AUDIT] '
+status
+' READ '
+uri
+' (layer='
+calling_layer
+', '
+duration_ms
+'.0f'
+'ms)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_sanitize_args
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Sanitize arguments to avoid logging sensitive/huge data.'
+sanitized
+●●●●●● 1mm □
+key
+value
+args
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+500
+sanitized
+key
+●●●●●● 1mm □
+value
+500
+●●●●●● 3mm ○
+'... ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+' chars total)'
+●●●●●● 3mm □
+sanitized
+key
+●●●●●● 1mm □
+value
+●●●●●● 3mm ○
+sanitized
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_summarize_result
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+Any
+'Create a brief summary of the tool result.'
+●●●●●● 2mm □
+result
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'null'
+result_str
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result_str
+●●●●●● 2mm □△
+300
+●●●●●● 3mm ○
+result_str
+300
+●●●●●● 3mm ○
+'... ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result_str
+●●●●●● 2mm □△
+' chars)'
+●●●●●● 3mm ○
+result_str
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_recent_entries
+●●●●●● 1mm □△
+self
+count
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Get the most recent audit entries.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+count
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get aggregate stats from audit log.'
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+successes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+e
+●●●●●● 3mm △
+e
+'success'
+●●●●●● 2mm □△
+tool_counts
+●●●●●● 1mm □
+entry
+●●●●●● 3mm △
+tool
+●●●●●● 1mm □
+entry
+'tool_name'
+tool_counts
+tool
+●●●●●● 1mm □
+tool_counts
+●●●●●● 1mm □△
+tool
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+'total_calls'
+'successes'
+'failures'
+'success_rate'
+'tool_counts'
+'log_file'
+total
+successes
+total
+●●●●●● 1mm □△
+successes
+total
+0
+successes
+●●●●●● 3mm □△
+total
+●●●●●● 2mm □△
+100
+0
+tool_counts
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

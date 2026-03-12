@@ -1,0 +1,1411 @@
+## deterministic_healer.py
+"\nself_healing/deterministic_healer.py\n─────────────────────────────────────────────────────────────────────────────\nDeterministic Self-Healer — pattern-based fixes that run BEFORE the LLM.\n\nDesign principle:\n  If the fix can be expressed as a function, don't pay Qwen to guess it.\n  Deterministic healers are: instant, reliable, zero hallucination risk.\n  The LLM is reserved for novel cases that patterns can't handle.\n\nPatterns covered (~60% of runtime errors):\n  1. Timezone fix        — naive/aware datetime arithmetic errors\n  2. NullGuard injector  — NoneType attribute access\n  3. Import probe        — cannot import name X, tries alternatives\n  4. Typo detector       — NameError/AttributeError near-miss (difflib)\n  5. Env var filler      — NameError on missing environment variable\n\nEach healer returns (healed: bool, description: str, patch: Optional[str])\nwhere `patch` is the actual code fix applied to disk (or None if not applied).\n"
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+difflib
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealResult
+__slots__
+●●●●●● 1mm □
+'healed'
+'description'
+'patch_applied'
+'healer'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+healed
+description
+patch_applied
+healer
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+''
+●●●●●● 3mm △
+●●●●●● 1mm □
+healed
+●●●●●● 3mm △
+●●●●●● 1mm □
+description
+●●●●●● 3mm △
+●●●●●● 1mm □
+patch_applied
+●●●●●● 3mm △
+●●●●●● 1mm □
+healer
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 3mm △
+'✅'
+'❌'
+●●●●●● 3mm ○
+'HealResult('
+status
+' ['
+●●●●●● 3mm △
+'] '
+●●●●●● 3mm △
+80
+')'
+●●●●●● 2mm △
+DeterministicHealer
+'\n    Runs all deterministic patterns against an error payload.\n    Returns the first successful heal, or a combined failure result.\n\n    Call before escalating to LLM to avoid unnecessary LLM invocations.\n    '
+_HEALERS
+●●●●●● 1mm □
+'timezone'
+'null_guard'
+'import_probe'
+'typo_detector'
+'env_var_filler'
+●●●●●● 1mm □
+try_heal
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'\n        Try all deterministic healers. Returns first success.\n        Never raises — all exceptions caught and logged.\n        '
+exc_str
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'exc_str'
+''
+●●●●●● 2mm □△
+exc_type
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'exc_type'
+''
+●●●●●● 2mm □△
+location
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'location'
+''
+●●●●●● 2mm □△
+tb
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'tb'
+''
+●●●●●● 2mm □△
+healer_name
+●●●●●● 3mm △
+method
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'_heal_'
+healer_name
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+method
+●●●●●● 1mm □△
+exc_str
+exc_type
+location
+tb
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+logger
+●●●●●● 1mm □△
+'[DET-HEALER] ✅ %s fixed %s: %s'
+healer_name
+location
+result
+80
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[DET-HEALER] %s encountered error: %s'
+healer_name
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'No deterministic pattern matched'
+●●●●●● 2mm □△
+HealResult
+●●●●●● 1mm □
+_heal_timezone
+●●●●●● 1mm □△
+self
+exc_str
+exc_type
+location
+tb
+payload
+●●●●●● 2mm □△
+"\n        Fix: can't subtract offset-naive and offset-aware datetimes.\n        Strategy: find the source file, replace naive datetime.now() /\n        datetime.utcnow() calls with timezone-aware equivalents.\n        "
+TZ_SIGNAL
+●●●●●● 1mm □
+"can't subtract offset-naive and offset-aware datetimes"
+●●●●●● 2mm □
+TZ_SIGNAL
+exc_str
+'offset-naive'
+exc_str
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'Not a timezone error'
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+location
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'timezone: source file not found'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+original
+●●●●●● 1mm □
+source
+●●●●●● 2mm □
+'from datetime import'
+source
+'timezone'
+source
+source
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(from datetime import )([^\\n]+)'
+'timezone'
+m
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+', timezone'
+source
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'import datetime'
+source
+'timezone'
+source
+source
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+'import datetime'
+'import datetime\nfrom datetime import timezone'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'datetime\\.now\\(\\s*\\)'
+'datetime.now(timezone.utc)'
+source
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'datetime\\.utcnow\\(\\s*\\)'
+'datetime.now(timezone.utc)'
+source
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source
+original
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'timezone: no naive datetime calls found to patch'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+source
+'timezone'
+location
+●●●●●● 2mm □△
+HealResult
+●●●●●● 1mm □
+_heal_null_guard
+●●●●●● 1mm □△
+self
+exc_str
+exc_type
+location
+tb
+payload
+●●●●●● 2mm □△
+"\n        Fix: 'NoneType' object has no attribute 'X'.\n        Strategy: find the attribute access in source and wrap with `if x is not None`.\n        "
+●●●●●● 2mm □
+'NoneType'
+exc_str
+'has no attribute'
+exc_str
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'Not a NoneType error'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+"has no attribute '([^']+)'"
+exc_str
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"null_guard: can't extract attribute name"
+●●●●●● 2mm □△
+attr
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+tb_lines
+●●●●●● 1mm □
+tb
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expr_line
+●●●●●● 1mm □
+''
+line
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+tb_lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'.'
+attr
+line
+'File'
+line
+expr_line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+location
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'null_guard: source file not found'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+original
+●●●●●● 1mm □
+source
+lines
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patched
+●●●●●● 1mm □
+●●●●●● 1mm □
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'.'
+attr
+line
+'#'
+line
+●●●●●● 1mm □△
+'.'
+attr
+●●●●●● 2mm □△
+0
+obj_m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(\\b\\w+)\\.'
+●●●●●● 3mm ○
+re
+●●●●●● 1mm □△
+attr
+●●●●●● 2mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 2mm □
+obj_m
+obj
+●●●●●● 1mm □
+obj_m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+indent
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+guard
+●●●●●● 1mm □
+' '
+●●●●●● 2mm □△
+indent
+●●●●●● 3mm ○
+'if '
+obj
+' is None:\n'
+●●●●●● 3mm ○
+' '
+●●●●●● 2mm □△
+indent
+●●●●●● 3mm ○
+"    logger.warning('[NULL-GUARD] "
+obj
+' is None at '
+location
+"')\n"
+lines
+●●●●●● 1mm □△
+i
+guard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+patched
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+patched
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"null_guard: couldn't locate ."
+attr
+' access in source'
+●●●●●● 2mm □△
+new_source
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_source
+original
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'null_guard: no change produced'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+new_source
+'null_guard'
+location
+●●●●●● 2mm □△
+HealResult
+●●●●●● 1mm □
+_heal_import_probe
+●●●●●● 1mm □△
+self
+exc_str
+exc_type
+location
+tb
+payload
+●●●●●● 2mm □△
+"\n        Fix: cannot import name 'X' from 'Y', or ModuleNotFoundError.\n        Strategy:\n          a) Try to import the module directly (maybe it's just not loaded yet).\n          b) If that fails, search sys.path for an alternative location.\n          c) If found elsewhere, patch the import statement in the source file.\n        "
+●●●●●● 2mm □
+exc_type
+'ImportError'
+'ModuleNotFoundError'
+'cannot import name'
+exc_str
+'No module named'
+exc_str
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'Not an import error'
+●●●●●● 2mm □△
+name_m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+"cannot import name '([^']+)' from '([^']+)'"
+exc_str
+●●●●●● 2mm □△
+mod_m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+"No module named '([^']+)'"
+exc_str
+●●●●●● 2mm □△
+●●●●●● 2mm □
+name_m
+import_name
+from_module
+●●●●●● 1mm □
+name_m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+name_m
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm △
+mod_m
+import_name
+from_module
+●●●●●● 1mm □
+mod_m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"import_probe: can't parse error message"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+from_module
+mod
+●●●●●● 1mm □
+importlib
+●●●●●● 1mm □△
+from_module
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mod
+import_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+"import_probe: '"
+import_name
+"' exists in '"
+from_module
+"' — module reload may fix"
+●●●●●● 2mm □△
+Exception
+candidates
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+import_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidates
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"import_probe: '"
+import_name
+"' not found in any backend module"
+●●●●●● 2mm □△
+best
+●●●●●● 1mm □
+candidates
+0
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+location
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+"import_probe: '"
+import_name
+"' found in '"
+best
+"' (patch manually)"
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+from_module
+from_module
+source
+new_source
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+'from '
+from_module
+' import '
+import_name
+'from '
+best
+' import '
+import_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_source
+source
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+new_source
+'import_probe'
+location
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+"import_probe: '"
+import_name
+"' available in '"
+best
+"' — add import"
+●●●●●● 2mm □△
+HealResult
+●●●●●● 1mm □
+_find_symbol_in_backend
+●●●●●● 1mm □△
+self
+symbol
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Search all .py files in backend/ for a definition of `symbol`.'
+found
+●●●●●● 1mm □
+pattern
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'^(class|def|'
+symbol
+'\\s*=)\\s+'
+re
+●●●●●● 1mm □△
+symbol
+●●●●●● 2mm □△
+'(\\s|[:(])'
+re
+●●●●●● 2mm □△
+py_file
+_BACKEND_ROOT
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'venv'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+'.git'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+py_file
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+'^(class |def )'
+re
+●●●●●● 1mm □△
+symbol
+●●●●●● 2mm □△
+'[\\s(:]'
+content
+re
+●●●●●● 2mm □△
+rel
+●●●●●● 1mm □
+py_file
+●●●●●● 1mm □△
+_BACKEND_ROOT
+●●●●●● 2mm □△
+module_path
+●●●●●● 1mm □
+'.'
+●●●●●● 1mm □△
+rel
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+found
+●●●●●● 1mm □△
+module_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+found
+●●●●●● 2mm □△
+5
+Exception
+●●●●●● 3mm ○
+found
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_heal_typo_detector
+●●●●●● 1mm □△
+self
+exc_str
+exc_type
+location
+tb
+payload
+●●●●●● 2mm □△
+"\n        Fix: NameError 'X' not defined, or AttributeError 'has no attribute X'.\n        Strategy: use difflib to find the closest-matching name in scope and\n        suggest (or apply) the correction if confidence > 0.8.\n        "
+●●●●●● 2mm □
+exc_type
+'NameError'
+'AttributeError'
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'Not a Name/Attribute error'
+●●●●●● 2mm □△
+name_m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+"name '([^']+)' is not defined"
+exc_str
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+"has no attribute '([^']+)'"
+exc_str
+●●●●●● 2mm □△
+●●●●●● 2mm □
+name_m
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"typo_detector: can't extract name"
+●●●●●● 2mm □△
+bad_name
+●●●●●● 1mm □
+name_m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+location
+payload
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'typo_detector: source file not found'
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+ast
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+arg
+node
+candidates
+●●●●●● 1mm □△
+arg
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+ast
+●●●●●● 2mm □△
+alias
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+node
+'names'
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+alias
+alias
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+candidates
+●●●●●● 1mm □△
+bad_name
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'typo_detector: source has syntax error'
+●●●●●● 2mm □△
+matches
+●●●●●● 1mm □
+difflib
+●●●●●● 1mm □△
+bad_name
+candidates
+●●●●●● 2mm □△
+●●●●●● 2mm □
+matches
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"typo_detector: no close match for '"
+bad_name
+"'"
+●●●●●● 2mm □△
+correction
+●●●●●● 1mm □
+matches
+0
+new_source
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\b'
+●●●●●● 3mm ○
+re
+●●●●●● 1mm □△
+bad_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\\b'
+correction
+source
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_source
+source
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+"typo_detector: '"
+bad_name
+"' → '"
+correction
+"' (no unique occurrence found)"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target
+new_source
+'typo_detector'
+location
+●●●●●● 2mm □△
+HealResult
+●●●●●● 1mm □
+_heal_env_var_filler
+●●●●●● 1mm □△
+self
+exc_str
+exc_type
+location
+tb
+payload
+●●●●●● 2mm □△
+'\n        Fix: NameError for a name that looks like an env var reference, or\n        a KeyError on os.environ.\n        Strategy: check .env file; if the key is absent, add it with a\n        placeholder and log for the operator.\n        '
+ENV_SIGNALS
+●●●●●● 1mm □
+'os.environ'
+'os.getenv'
+'KeyError'
+'NameError'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+exc_str
+s
+exc_type
+s
+ENV_SIGNALS
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'Not an env var error'
+●●●●●● 2mm □△
+key_m
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+"'([A-Z][A-Z0-9_]{2,})'"
+exc_str
+●●●●●● 2mm □△
+re
+●●●●●● 1mm □△
+"KeyError: '([^']+)'"
+exc_str
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key_m
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"env_var_filler: can't extract var name"
+●●●●●● 2mm □△
+var_name
+●●●●●● 1mm □
+key_m
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+var_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+"env_var_filler: '"
+var_name
+"' already set in environment"
+●●●●●● 2mm □△
+env_file
+●●●●●● 1mm □
+_BACKEND_ROOT
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+env_file
+●●●●●● 1mm □
+_BACKEND_ROOT
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+var_name
+content
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+"env_var_filler: '"
+var_name
+"' is in .env but not loaded — check dotenv call"
+●●●●●● 2mm □△
+env_file
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n# [AUTO-ADDED by deterministic_healer]\n'
+var_name
+'=PLACEHOLDER\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[DET-HEALER] Added '%s=PLACEHOLDER' to .env — OPERATOR: set the real value"
+var_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+"env_var_filler: added '"
+var_name
+"=PLACEHOLDER' to .env — set real value"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+'env_var_filler: .env not found — add '
+var_name
+' manually'
+●●●●●● 2mm □△
+HealResult
+●●●●●● 1mm □
+_resolve_file
+●●●●●● 1mm □△
+self
+location
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'Resolve module.function location to a Path, or use context file.'
+ctx
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+key
+'target_file'
+'file'
+'location'
+f
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+key
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+f
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+p
+parts
+●●●●●● 1mm □
+location
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+length
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+0
+1
+●●●●●● 2mm □△
+module_path
+●●●●●● 1mm □
+'.'
+●●●●●● 1mm □△
+parts
+length
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_path
+sys
+mod
+●●●●●● 1mm □
+sys
+module_path
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+mod
+'__file__'
+●●●●●● 2mm □△
+mod
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+candidate
+●●●●●● 1mm □
+_BACKEND_ROOT
+●●●●●● 3mm □△
+Path
+●●●●●● 1mm □△
+parts
+length
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+candidate
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Path
+●●●●●● 1mm □
+_write_patch
+●●●●●● 1mm □△
+self
+target
+new_source
+healer
+location
+description
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Validate and write patched source, with backup.'
+ast
+●●●●●● 1mm □△
+new_source
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+healer
+': patch produced invalid syntax: '
+se
+●●●●●● 2mm □△
+backup_dir
+●●●●●● 1mm □
+_BACKEND_ROOT
+●●●●●● 3mm □△
+'.fix_backups'
+backup_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+time
+shutil
+safe
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+_BACKEND_ROOT
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'/'
+'_'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'_'
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+target
+backup_dir
+●●●●●● 3mm □△
+safe
+'.'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'.bak'
+●●●●●● 2mm □△
+Exception
+target
+●●●●●● 1mm □△
+new_source
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 1mm □
+healer
+': write failed: '
+e
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 1mm □△
+_BACKEND_ROOT
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+module_name
+●●●●●● 1mm □
+parts
+●●●●●● 1mm □△
+'/'
+'.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+module_name
+sys
+importlib
+●●●●●● 1mm □△
+sys
+module_name
+●●●●●● 2mm □△
+Exception
+desc
+●●●●●● 1mm □
+description
+healer
+' patch applied to '
+target
+●●●●●● 3mm ○
+HealResult
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+desc
+●●●●●● 2mm □△
+HealResult
+_healer
+●●●●●● 2mm □○
+DeterministicHealer
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_deterministic_healer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_healer
+●●●●●● 2mm □
+_healer
+●●●●●● 1mm □
+DeterministicHealer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_healer
+DeterministicHealer

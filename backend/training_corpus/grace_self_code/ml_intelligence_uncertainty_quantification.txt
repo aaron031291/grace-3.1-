@@ -1,0 +1,1290 @@
+## uncertainty_quantification.py
+"\nUncertainty Quantification - Bayesian Confidence Estimation\n\nProvides calibrated confidence estimates for predictions using:\n- Bayesian Neural Networks\n- Monte Carlo Dropout\n- Deep Ensembles\n- Conformal Prediction\n- Epistemic vs Aleatoric Uncertainty\n\nHelps the system know when it doesn't know something.\n"
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+torch.nn
+●●●●●● 1mm □
+nn
+●●●●●● 2mm □△○
+torch.nn.functional
+●●●●●● 1mm □
+F
+●●●●●● 3mm □△○
+torch.distributions
+●●●●●● 2mm □△○
+Normal
+kl_divergence
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Tuple
+Optional
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm △
+UncertaintyEstimate
+'Uncertainty estimate for a prediction'
+prediction
+●●●●●● 3mm ○
+epistemic_uncertainty
+●●●●●● 3mm ○
+aleatoric_uncertainty
+●●●●●● 3mm ○
+total_uncertainty
+●●●●●● 3mm ○
+confidence_interval
+Tuple
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+is_reliable
+●●●●●● 3mm △
+dataclass
+●●●●●● 2mm △
+BayesianLinear
+●●●●●● 3mm □△
+nn
+'\n    Bayesian Linear Layer\n\n    Uses variational inference to learn weight distributions\n    instead of point estimates\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+in_features
+out_features
+prior_std
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+1.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+in_features
+●●●●●● 3mm △
+●●●●●● 1mm □
+out_features
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+out_features
+in_features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+out_features
+in_features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+out_features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+out_features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+prior_std
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+reset_parameters
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize parameters'
+nn
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 3mm △
+3.0
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 3mm △
+3.0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'Forward pass with weight sampling'
+weight_std
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+weight
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+weight_std
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+weight_std
+●●●●●● 2mm □△
+bias_std
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+bias
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+bias_std
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+bias_std
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+F
+●●●●●● 1mm □△
+x
+weight
+bias
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □
+kl_divergence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        KL divergence between variational posterior and prior\n\n        KL(q(w) || p(w)) where p(w) ~ N(0, prior_std^2)\n        '
+weight_var
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+weight_kl
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □○
+2
+●●●●●● 3mm ○
+weight_var
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □○
+2
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+2
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+bias_var
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+bias_kl
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □○
+2
+●●●●●● 3mm ○
+bias_var
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □○
+2
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+2
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+weight_kl
+●●●●●● 3mm ○
+bias_kl
+torch
+●●●●●● 2mm △
+BayesianNeuralNetwork
+●●●●●● 3mm □△
+nn
+'\n    Bayesian Neural Network\n\n    All layers are Bayesian, providing uncertainty estimates\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+input_dim
+hidden_dims
+output_dim
+prior_std
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+128
+64
+1
+1.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layers
+●●●●●● 1mm □
+prev_dim
+●●●●●● 1mm □
+input_dim
+hidden_dim
+hidden_dims
+layers
+●●●●●● 1mm □△
+BayesianLinear
+●●●●●● 1mm □△
+prev_dim
+hidden_dim
+prior_std
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+prev_dim
+●●●●●● 1mm □
+hidden_dim
+layers
+●●●●●● 1mm □△
+BayesianLinear
+●●●●●● 1mm □△
+prev_dim
+output_dim
+prior_std
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+layers
+●●●●●● 2mm □△
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'Forward pass'
+i
+layer
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+layer
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+x
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+x
+torch
+●●●●●● 1mm □
+kl_divergence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Total KL divergence across all layers'
+kl_total
+●●●●●● 1mm □
+0.0
+layer
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+layer
+BayesianLinear
+●●●●●● 2mm □△
+kl_total
+layer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+kl_total
+torch
+●●●●●● 1mm □
+predict_with_uncertainty
+●●●●●● 1mm □△
+self
+x
+num_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+100
+'\n        Predict with uncertainty estimates\n\n        Args:\n            x: Input tensor\n            num_samples: Number of Monte Carlo samples\n\n        Returns:\n            (mean_prediction, epistemic_uncertainty)\n        '
+predictions
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+mean_pred
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+epistemic_unc
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mean_pred
+epistemic_unc
+Tuple
+torch
+torch
+●●●●●● 2mm △
+MCDropoutNetwork
+●●●●●● 3mm □△
+nn
+'\n    Monte Carlo Dropout Network\n\n    Uses dropout at inference time to estimate uncertainty\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+input_dim
+hidden_dims
+output_dim
+dropout_rate
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+128
+64
+1
+0.3
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layers
+●●●●●● 1mm □
+prev_dim
+●●●●●● 1mm □
+input_dim
+hidden_dim
+hidden_dims
+layers
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+prev_dim
+hidden_dim
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layers
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+layers
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+dropout_rate
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+prev_dim
+●●●●●● 1mm □
+hidden_dim
+layers
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+prev_dim
+output_dim
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+layers
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+dropout_rate
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'Forward pass'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □
+predict_with_uncertainty
+●●●●●● 1mm □△
+self
+x
+num_samples
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+50
+'\n        Predict with MC Dropout uncertainty\n\n        Args:\n            x: Input tensor\n            num_samples: Number of MC samples\n\n        Returns:\n            (mean_prediction, uncertainty)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_samples
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+mean_pred
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+uncertainty
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mean_pred
+uncertainty
+Tuple
+torch
+torch
+●●●●●● 2mm △
+DeepEnsemble
+'\n    Deep Ensemble for Uncertainty Estimation\n\n    Trains multiple independent models and combines predictions\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model_fn
+num_models
+device
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+5
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_models
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+num_models
+●●●●●● 3mm △
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+train_ensemble
+●●●●●● 1mm □△
+self
+train_loader
+num_epochs
+loss_fn
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm △○
+10
+F
+'Train all models in ensemble'
+epoch
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_epochs
+●●●●●● 2mm □△
+model_idx
+model
+optimizer
+●●●●●● 2mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+epoch_loss
+●●●●●● 1mm □
+0.0
+batch_x
+batch_y
+train_loader
+batch_x
+●●●●●● 1mm □
+batch_x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+batch_y
+●●●●●● 1mm □
+batch_y
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+batch_x
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+loss_fn
+●●●●●● 1mm □△
+predictions
+batch_y
+●●●●●● 2mm □△
+optimizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+optimizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+epoch_loss
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+predict_with_uncertainty
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'\n        Predict with ensemble uncertainty\n\n        Args:\n            x: Input tensor\n\n        Returns:\n            (mean_prediction, uncertainty)\n        '
+predictions
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+mean_pred
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+uncertainty
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+mean_pred
+uncertainty
+Tuple
+torch
+torch
+●●●●●● 2mm △
+ConformalPredictor
+'\n    Conformal Prediction for Calibrated Confidence Intervals\n\n    Provides statistically valid prediction intervals\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+significance_level
+●●●●●● 2mm □△
+nn
+●●●●●● 3mm ○
+0.1
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+significance_level
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+calibrate
+●●●●●● 1mm □△
+self
+calibration_loader
+loss_fn
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+F
+'\n        Calibrate on held-out calibration set\n\n        Args:\n            calibration_loader: DataLoader with calibration data\n            loss_fn: Loss function for computing conformity scores\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+batch_x
+batch_y
+calibration_loader
+predictions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+batch_x
+●●●●●● 2mm □△
+conformity_scores
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 1mm □△
+batch_y
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □△
+conformity_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 1mm □
+predict_interval
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'\n        Predict with conformal interval\n\n        Args:\n            x: Input tensor\n\n        Returns:\n            (prediction, (lower_bound, upper_bound))\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+margin
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+prediction
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1.0
+●●●●●● 3mm □
+quantile_level
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □
+quantile_level
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+quantile_level
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm □
+margin
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+●●●●●● 3mm △
+quantile_level
+●●●●●● 2mm □△
+●●●●●● 3mm □
+margin
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+margin
+●●●●●● 2mm □△
+lower
+●●●●●● 1mm □
+prediction
+●●●●●● 1mm □△
+margin
+upper
+●●●●●● 1mm □
+prediction
+●●●●●● 3mm ○
+margin
+●●●●●● 3mm ○
+prediction
+lower
+upper
+Tuple
+torch
+Tuple
+torch
+torch
+●●●●●● 2mm △
+UncertaintyQuantifier
+'\n    Main Uncertainty Quantification Interface\n\n    Combines multiple uncertainty estimation methods\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model
+method
+device
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'mc_dropout'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+method
+●●●●●● 2mm □
+method
+'bayesian'
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 1mm △
+method
+'mc_dropout'
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 2mm □
+method
+'ensemble'
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 1mm △
+method
+'conformal'
+●●●●●● 3mm △
+●●●●●● 1mm □
+ConformalPredictor
+●●●●●● 1mm □△
+model
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+predict_with_uncertainty
+●●●●●● 1mm □△
+self
+x
+num_samples
+confidence_level
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+50
+0.95
+'\n        Predict with full uncertainty quantification\n\n        Args:\n            x: Input tensor\n            num_samples: Number of MC samples\n            confidence_level: Confidence level for intervals\n\n        Returns:\n            UncertaintyEstimate object\n        '
+x
+●●●●●● 1mm □
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'bayesian'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+BayesianNeuralNetwork
+●●●●●● 2mm □△
+mean_pred
+epistemic_unc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+num_samples
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'mc_dropout'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+MCDropoutNetwork
+●●●●●● 2mm □△
+mean_pred
+epistemic_unc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+num_samples
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'ensemble'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+DeepEnsemble
+●●●●●● 2mm □△
+mean_pred
+epistemic_unc
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'conformal'
+mean_pred
+lower
+upper
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+epistemic_unc
+●●●●●● 1mm □
+upper
+●●●●●● 1mm □△
+lower
+●●●●●● 3mm □△
+2.0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_samples
+●●●●●● 2mm □△
+pred
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □△
+pred
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+predictions
+●●●●●● 2mm □△
+mean_pred
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+epistemic_unc
+●●●●●● 1mm □
+predictions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+aleatoric_unc
+●●●●●● 1mm □
+epistemic_unc
+●●●●●● 2mm □△
+0.2
+total_unc
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+epistemic_unc
+●●●●●● 3mm □○
+2
+●●●●●● 3mm ○
+aleatoric_unc
+●●●●●● 3mm □○
+2
+●●●●●● 2mm □△
+z_score
+●●●●●● 1mm □
+confidence_level
+0.95
+1.96
+2.576
+lower_bound
+●●●●●● 1mm □
+mean_pred
+●●●●●● 1mm □△
+z_score
+●●●●●● 2mm □△
+total_unc
+upper_bound
+●●●●●● 1mm □
+mean_pred
+●●●●●● 3mm ○
+z_score
+●●●●●● 2mm □△
+total_unc
+is_reliable
+●●●●●● 1mm □
+total_unc
+0.5
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+UncertaintyEstimate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+UncertaintyEstimate
+●●●●●● 1mm □
+calibrate
+●●●●●● 1mm □△
+self
+calibration_loader
+●●●●●● 2mm □△
+'Calibrate uncertainty estimates'
+●●●●●● 2mm □
+●●●●●● 3mm △
+'conformal'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+calibration_loader
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_bayesian_network
+●●●●●● 1mm □△
+input_dim
+hidden_dims
+output_dim
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+128
+64
+1
+'Factory function for Bayesian networks'
+●●●●●● 3mm ○
+BayesianNeuralNetwork
+●●●●●● 1mm □△
+input_dim
+hidden_dims
+output_dim
+●●●●●● 2mm □△
+BayesianNeuralNetwork
+●●●●●● 1mm □
+create_mc_dropout_network
+●●●●●● 1mm □△
+input_dim
+hidden_dims
+output_dim
+dropout_rate
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+128
+64
+1
+0.3
+'Factory function for MC Dropout networks'
+●●●●●● 3mm ○
+MCDropoutNetwork
+●●●●●● 1mm □△
+input_dim
+hidden_dims
+output_dim
+dropout_rate
+●●●●●● 2mm □△
+MCDropoutNetwork
+_uncertainty_quantifier_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_uncertainty_quantifier
+●●●●●● 1mm □△
+model
+method
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'mc_dropout'
+'Get uncertainty quantifier instance'
+●●●●●● 2mm □
+_uncertainty_quantifier_instance
+●●●●●● 2mm □
+model
+●●●●●● 2mm □
+_uncertainty_quantifier_instance
+●●●●●● 1mm □
+UncertaintyQuantifier
+●●●●●● 1mm □△
+model
+method
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_uncertainty_quantifier_instance
+UncertaintyQuantifier

@@ -1,0 +1,1137 @@
+## probe_agent_api.py
+"\nProbe Agent API — automated crawler that sends synthetic pulses to every\nAPI endpoint and cognitive module, classifies them as active/dormant/broken,\nand feeds results into the dormancy protocol + self-healing pipeline.\n\nThe probe agent:\n  1. Discovers all registered routes from FastAPI's app.routes\n  2. Sends a lightweight synthetic request to each endpoint\n  3. Tags every probe with a Genesis key (test=true so metrics aren't polluted)\n  4. Classifies results: ACTIVE (2xx), DORMANT (no recent Genesis keys),\n     BROKEN (4xx/5xx/timeout)\n  5. Broken endpoints trigger self-healing via consensus\n\nThe consensus auto-fix flow:\n  1. Probe finds a broken endpoint\n  2. Sends the error to ALL available models (Kimi, Opus, Qwen, DeepSeek)\n  3. Each model proposes a diagnosis + fix\n  4. If all models agree → execute the fix (with Genesis key provenance)\n  5. If disagreement → queue for human approval\n"
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+urllib.request
+●●●●●● 2mm □△○
+urllib.error
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_probe_results
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_probe_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_MAX_RESULTS
+●●●●●● 1mm □
+500
+SAFE_METHODS_ONLY
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+PROBE_TIMEOUT
+●●●●●● 1mm □
+5
+BASE
+●●●●●● 1mm □
+'http://127.0.0.1:8000'
+SKIP_PREFIXES
+●●●●●● 1mm □
+'/docs'
+'/openapi.json'
+'/redoc'
+'/favicon'
+'/api/probe'
+'/api/runtime'
+'/diagnostic/start'
+'/diagnostic/stop'
+'/diagnostic/pause'
+'/diagnostic/resume'
+●●●●●● 1mm □
+_discover_routes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Discover all routes from the running FastAPI app — both GET and POST.'
+routes
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+starlette.routing
+●●●●●● 2mm □△○
+Route
+Mount
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 1mm □
+_app
+●●●●●● 1mm □
+_extract
+●●●●●● 1mm □△
+routes_list
+prefix
+●●●●●● 2mm □△
+''
+route
+routes_list
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+route
+Mount
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+route
+'routes'
+●●●●●● 2mm □△
+_extract
+●●●●●● 1mm □△
+route
+prefix
+●●●●●● 3mm ○
+route
+''
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+route
+Route
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+prefix
+●●●●●● 3mm ○
+route
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+SKIP_PREFIXES
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'{'
+path
+method
+route
+'GET'
+●●●●●● 2mm □
+method
+'GET'
+'HEAD'
+routes
+●●●●●● 1mm □△
+'path'
+'method'
+path
+'GET'
+●●●●●● 2mm □△
+_extract
+●●●●●● 1mm □△
+_app
+●●●●●● 2mm □△
+●●●●●● 2mm □
+routes
+logger
+●●●●●● 1mm □△
+'Probe discovered %d routes via app introspection'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+routes
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+routes
+Exception
+logger
+●●●●●● 1mm □△
+'App introspection failed, falling back to OpenAPI: %s'
+e
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+BASE
+'/openapi.json'
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+resp
+spec
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+path
+methods
+spec
+●●●●●● 1mm □△
+'paths'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+SKIP_PREFIXES
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'{'
+path
+●●●●●● 2mm □
+'get'
+methods
+routes
+●●●●●● 1mm □△
+'path'
+'method'
+path
+'GET'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Probe discovered %d routes via OpenAPI'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+routes
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Route discovery failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+routes
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_probe_endpoint
+●●●●●● 1mm □△
+path
+method
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'GET'
+'Send a synthetic pulse to a single endpoint.'
+url
+●●●●●● 1mm □
+BASE
+path
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'path'
+'method'
+'status'
+'status_code'
+'latency_ms'
+'error'
+'probed_at'
+path
+method
+'unknown'
+0
+0
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □△
+'X-Probe-Agent'
+'true'
+●●●●●● 2mm □△
+req
+●●●●●● 1mm □△
+'X-Genesis-Test'
+'true'
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+resp
+result
+'status_code'
+●●●●●● 1mm □
+resp
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'active'
+urllib
+result
+'status_code'
+●●●●●● 1mm □
+e
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+e
+405
+result
+'status'
+●●●●●● 1mm □
+'active'
+●●●●●● 1mm △
+e
+500
+result
+'status'
+●●●●●● 1mm □
+'active'
+result
+'error'
+●●●●●● 1mm □
+'HTTP '
+e
+result
+'status'
+●●●●●● 1mm □
+'broken'
+result
+'error'
+●●●●●● 1mm □
+'HTTP '
+e
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+urllib
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'broken'
+result
+'error'
+●●●●●● 1mm □
+'Connection failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+Exception
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'timed out'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'timeout'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'dormant'
+result
+'error'
+●●●●●● 1mm □
+'Timeout'
+●●●●●● 3mm □
+result
+'status'
+●●●●●● 1mm □
+'broken'
+●●●●●● 3mm □
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_probe_llm_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Probe each LLM model individually to check if it's callable."
+results
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+Exception
+●●●●●● 3mm ○
+results
+models
+●●●●●● 1mm □
+'ollama_qwen'
+'qwen'
+settings
+'ollama_deepseek'
+'reasoning'
+settings
+'kimi'
+'kimi'
+settings
+settings
+●●●●●● 2mm □
+'opus'
+'opus'
+settings
+settings
+●●●●●● 2mm □
+label
+model_id
+model_name
+models
+●●●●●● 2mm □
+model_name
+results
+●●●●●● 1mm □△
+'model_id'
+'model_name'
+'status'
+'error'
+'latency_ms'
+label
+model_name
+'(not configured)'
+'not_configured'
+'API key or model not set'
+0
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+_get_client
+MODEL_REGISTRY
+client
+●●●●●● 1mm □
+_get_client
+●●●●●● 1mm □△
+model_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+results
+●●●●●● 1mm □△
+'model_id'
+'model_name'
+'status'
+'error'
+'latency_ms'
+label
+model_name
+'broken'
+'Client creation failed'
+0
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'model_id'
+'model_name'
+'status'
+'response_preview'
+'latency_ms'
+label
+model_name
+'active'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+50
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+50
+latency
+●●●●●● 2mm □△
+Exception
+latency
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'model_id'
+'model_name'
+'status'
+'error'
+'latency_ms'
+label
+model_name
+'broken'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+latency
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_track_probe
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Log probe results via Genesis keys.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+active
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'active'
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'broken'
+●●●●●● 2mm □△
+dormant
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'dormant'
+●●●●●● 2mm □△
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_consensus_diagnose
+●●●●●● 1mm □△
+broken_items
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Ask ALL models to diagnose broken endpoints and propose fixes.'
+●●●●●● 2mm □
+broken_items
+●●●●●● 3mm ○
+diagnoses
+●●●●●● 1mm □
+item
+broken_items
+5
+prompt
+●●●●●● 1mm □
+'A Grace API endpoint is broken.\n\nEndpoint: '
+item
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'model_id'
+●●●●●● 2mm □△
+'\nError: '
+item
+●●●●●● 1mm □△
+'error'
+'unknown'
+●●●●●● 2mm □△
+'\nStatus code: '
+item
+●●●●●● 1mm □△
+'status_code'
+'N/A'
+●●●●●● 2mm □△
+'\n\nDiagnose the root cause and propose a specific fix. Be concise — max 3 sentences for diagnosis, max 3 sentences for fix.'
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diagnoses
+●●●●●● 1mm □△
+'endpoint'
+'error'
+'diagnosis'
+'confidence'
+'models_used'
+'agreements'
+'disagreements'
+'all_agree'
+item
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'model_id'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+result
+result
+result
+result
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+diagnoses
+●●●●●● 1mm □△
+'endpoint'
+'error'
+'diagnosis'
+'confidence'
+'all_agree'
+item
+●●●●●● 1mm □△
+'path'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'model_id'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+'Consensus failed: '
+e
+0
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+diagnoses
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'\n    Full probe sweep — discover all routes, send synthetic pulses,\n    classify as active/dormant/broken, track via Genesis keys.\n    '
+routes
+●●●●●● 1mm □
+_discover_routes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+route
+routes
+result
+●●●●●● 1mm □
+_probe_endpoint
+●●●●●● 1mm □△
+route
+'path'
+route
+'method'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+_track_probe
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+_probe_lock
+_probe_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_probe_results
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+active
+●●●●●● 1mm □
+r
+r
+results
+r
+'status'
+'active'
+broken
+●●●●●● 1mm □
+r
+r
+results
+r
+'status'
+'broken'
+dormant
+●●●●●● 1mm □
+r
+r
+results
+r
+'status'
+'dormant'
+●●●●●● 3mm ○
+'total'
+'active'
+'broken'
+'dormant'
+'broken_endpoints'
+'dormant_endpoints'
+'sweep_at'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+dormant
+●●●●●● 2mm □△
+broken
+dormant
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/sweep'
+●●●●●● 2mm □△
+'Probe each LLM model individually — send a test prompt, check response.'
+results
+●●●●●● 1mm □
+_probe_llm_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+r
+results
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'models'
+'active'
+'broken'
+'not_configured'
+results
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+'active'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+'broken'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'status'
+'not_configured'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/sweep-models'
+●●●●●● 2mm □△
+'\n    Full pipeline: probe → classify → diagnose broken via consensus → heal.\n    '
+api_sweep
+●●●●●● 1mm □
+probe_sweep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_sweep
+●●●●●● 1mm □
+probe_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+api_sweep
+●●●●●● 1mm □△
+'broken_endpoints'
+●●●●●● 2mm □△
+broken_models
+●●●●●● 1mm □
+m
+m
+model_sweep
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+m
+'status'
+'broken'
+diagnoses
+●●●●●● 1mm □
+●●●●●● 2mm □
+broken
+broken_models
+all_broken
+●●●●●● 1mm □
+broken
+●●●●●● 3mm ○
+broken_models
+diagnoses
+●●●●●● 1mm □
+_consensus_diagnose
+●●●●●● 1mm □△
+all_broken
+●●●●●● 2mm □△
+healed
+●●●●●● 1mm □
+diag
+diagnoses
+●●●●●● 2mm □
+diag
+●●●●●● 1mm □△
+'all_agree'
+●●●●●● 2mm □△
+diag
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+0.6
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+get_diagnostic_engine
+TriggerSource
+engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+healed
+●●●●●● 1mm □△
+'endpoint'
+'action'
+'consensus_confidence'
+diag
+'endpoint'
+'diagnostic_cycle_triggered'
+diag
+'confidence'
+●●●●●● 2mm □△
+Exception
+healed
+●●●●●● 1mm □△
+'endpoint'
+'action'
+'error'
+diag
+'endpoint'
+'heal_failed'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'api_sweep'
+'model_sweep'
+'diagnoses'
+'healed'
+'summary'
+api_sweep
+model_sweep
+diagnoses
+healed
+'apis_probed'
+'apis_broken'
+'models_probed'
+'models_broken'
+'diagnoses_made'
+'auto_healed'
+api_sweep
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+api_sweep
+●●●●●● 1mm □△
+'broken'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+model_sweep
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+model_sweep
+●●●●●● 1mm □△
+'broken'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+diagnoses
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+h
+h
+healed
+h
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'heal_failed'
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/sweep-and-heal'
+●●●●●● 2mm □△
+'Get results from the last probe sweep.'
+_probe_lock
+●●●●●● 3mm ○
+'results'
+'total'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_probe_results
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_probe_results
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/results'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Probe a single endpoint.'
+result
+●●●●●● 1mm □
+_probe_endpoint
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/endpoint'
+●●●●●● 2mm □△

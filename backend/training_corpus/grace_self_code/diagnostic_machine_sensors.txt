@@ -1,0 +1,1704 @@
+## sensors.py
+'\nLayer 1 - Sensors: Data Collection Layer\n\nINTEGRATED with LLM Orchestrator for health monitoring.\n\nCollects raw data from:\n- Test results (passed/failed/skipped)\n- System logs (tail logs)\n- Metrics (CPU, memory, disk, latency)\n- Agent outputs (cognitive decisions)\n- Genesis Keys (provenance data)\n- GRACE Mirror (self-reflection state)\n- LLM Orchestrator health status (preferred over direct Ollama)\n\nHealth checks prioritize LLM Orchestrator availability over direct\nOllama client access to ensure consistent system status reporting.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SensorType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of sensors available.'
+TEST_RESULTS
+●●●●●● 1mm □
+'test_results'
+SYSTEM_LOGS
+●●●●●● 1mm □
+'system_logs'
+METRICS
+●●●●●● 1mm □
+'metrics'
+AGENT_OUTPUTS
+●●●●●● 1mm □
+'agent_outputs'
+GENESIS_KEYS
+●●●●●● 1mm □
+'genesis_keys'
+GRACE_MIRROR
+●●●●●● 1mm □
+'grace_mirror'
+COGNITIVE_DECISIONS
+●●●●●● 1mm □
+'cognitive_decisions'
+FILE_HEALTH
+●●●●●● 1mm □
+'file_health'
+●●●●●● 2mm △
+TestResultData
+'Test result sensor data.'
+total_tests
+●●●●●● 2mm ○
+0
+passed
+●●●●●● 2mm ○
+0
+failed
+●●●●●● 2mm ○
+0
+skipped
+●●●●●● 2mm ○
+0
+errors
+●●●●●● 2mm ○
+0
+pass_rate
+●●●●●● 3mm ○
+0.0
+failure_categories
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+infrastructure_failures
+●●●●●● 2mm ○
+0
+code_failures
+●●●●●● 2mm ○
+0
+top_error_types
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learned_patterns
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+LogData
+'System log sensor data.'
+log_level_counts
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error_messages
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+warning_messages
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_exceptions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+log_volume_per_minute
+●●●●●● 3mm ○
+0.0
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+MetricsData
+'System metrics sensor data.'
+cpu_percent
+●●●●●● 3mm ○
+0.0
+memory_percent
+●●●●●● 3mm ○
+0.0
+disk_percent
+●●●●●● 3mm ○
+0.0
+active_connections
+●●●●●● 2mm ○
+0
+request_latency_ms
+●●●●●● 3mm ○
+0.0
+requests_per_second
+●●●●●● 3mm ○
+0.0
+database_health
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+vector_db_health
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+llm_health
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+embedding_health
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+learning_memory_health
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+genesis_qdrant_health
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+AgentOutputData
+'Agent output sensor data.'
+total_decisions
+●●●●●● 2mm ○
+0
+successful_decisions
+●●●●●● 2mm ○
+0
+failed_decisions
+●●●●●● 2mm ○
+0
+pending_decisions
+●●●●●● 2mm ○
+0
+average_confidence
+●●●●●● 3mm ○
+0.0
+invariant_violations
+●●●●●● 2mm ○
+0
+recent_decisions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GenesisKeyData
+'Genesis key sensor data.'
+total_keys
+●●●●●● 2mm ○
+0
+active_keys
+●●●●●● 2mm ○
+0
+error_keys
+●●●●●● 2mm ○
+0
+fix_suggestions
+●●●●●● 2mm ○
+0
+applied_fixes
+●●●●●● 2mm ○
+0
+recent_keys
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_types_distribution
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GraceMirrorData
+'GRACE Mirror self-reflection sensor data.'
+self_healing_progress
+●●●●●● 3mm ○
+0.0
+world_model_progress
+●●●●●● 3mm ○
+0.0
+self_learning_progress
+●●●●●● 3mm ○
+0.0
+self_governance_progress
+●●●●●● 3mm ○
+0.0
+component_status
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_activity
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+SensorData
+'Aggregated sensor data from all sources.'
+test_results
+●●●●●● 2mm □○
+TestResultData
+●●●●●● 2mm □
+logs
+●●●●●● 2mm □○
+LogData
+●●●●●● 2mm □
+metrics
+●●●●●● 2mm □○
+MetricsData
+●●●●●● 2mm □
+agent_outputs
+●●●●●● 2mm □○
+AgentOutputData
+●●●●●● 2mm □
+genesis_keys
+●●●●●● 2mm □○
+GenesisKeyData
+●●●●●● 2mm □
+grace_mirror
+●●●●●● 2mm □○
+GraceMirrorData
+●●●●●● 2mm □
+collection_timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collection_duration_ms
+●●●●●● 3mm ○
+0.0
+sensors_available
+●●●●●● 3mm □△
+SensorType
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensors_failed
+●●●●●● 3mm □△
+SensorType
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+SensorLayer
+'\n    Layer 1 - Sensors: Collects raw data from all GRACE systems.\n\n    This layer acts as the sensory input for the diagnostic machine,\n    gathering data from tests, logs, metrics, agents, and genesis keys.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+diagnostic_report_path
+decision_log_dir
+enable_psutil
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'Initialize the sensor layer.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+diagnostic_report_path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'tests'
+●●●●●● 3mm □△
+'diagnostic_report.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+decision_log_dir
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm □△
+'decisions'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_psutil
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+enable_psutil
+●●●●●● 2mm □△○
+psutil
+●●●●●● 3mm △
+●●●●●● 1mm □
+psutil
+ImportError
+logger
+●●●●●● 1mm □△
+'psutil not available, metrics will be limited'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+collect_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect data from all available sensors.'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+SensorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensors
+●●●●●● 1mm □
+SensorType
+●●●●●● 3mm △
+SensorType
+●●●●●● 3mm △
+SensorType
+●●●●●● 3mm △
+SensorType
+●●●●●● 3mm △
+SensorType
+●●●●●● 3mm △
+SensorType
+●●●●●● 3mm △
+sensor_type
+collector
+sensors
+result
+●●●●●● 1mm □
+collector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 2mm □
+sensor_type
+SensorType
+sensor_data
+●●●●●● 1mm □
+result
+●●●●●● 1mm △
+sensor_type
+SensorType
+sensor_data
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+sensor_type
+SensorType
+sensor_data
+●●●●●● 1mm □
+result
+●●●●●● 1mm △
+sensor_type
+SensorType
+sensor_data
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+sensor_type
+SensorType
+sensor_data
+●●●●●● 1mm □
+result
+●●●●●● 1mm △
+sensor_type
+SensorType
+sensor_data
+●●●●●● 1mm □
+result
+sensor_data
+●●●●●● 1mm □△
+sensor_type
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Sensor '
+sensor_type
+' failed: '
+e
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □△
+sensor_type
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+●●●●●● 1mm □
+end_time
+sensor_data
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+sensor_data
+SensorData
+●●●●●● 1mm □
+_collect_test_results
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect test results from diagnostic report.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+report
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+test_results
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'test_results'
+●●●●●● 2mm □△
+failures
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'failures'
+●●●●●● 2mm □△
+passes
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'passes'
+●●●●●● 2mm □△
+infrastructure_failures
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+f
+failures
+f
+●●●●●● 1mm □△
+'is_infrastructure_issue'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+code_failures
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failures
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+infrastructure_failures
+error_types
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+failure
+failures
+error_type
+●●●●●● 1mm □
+failure
+●●●●●● 1mm □△
+'error_type'
+'unknown'
+●●●●●● 2mm □△
+error_types
+error_type
+●●●●●● 1mm □
+error_types
+●●●●●● 1mm □△
+error_type
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+learned_patterns
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+'learned_patterns'
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+test_results
+●●●●●● 1mm □△
+'passed'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+test_results
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+test_results
+●●●●●● 1mm □△
+'skipped'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+test_results
+●●●●●● 1mm □△
+'errors'
+0
+●●●●●● 2mm □△
+pass_rate
+●●●●●● 1mm □
+total
+0
+test_results
+●●●●●● 1mm □△
+'passed'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+0.0
+●●●●●● 3mm ○
+TestResultData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to collect test results: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+TestResultData
+●●●●●● 1mm □
+_collect_logs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect log data from recent log files.'
+log_data
+●●●●●● 1mm □
+LogData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+log_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 2mm □
+log_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+log_data
+log_files
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+log_dir
+●●●●●● 1mm □△
+'*.log'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+log_dir
+●●●●●● 1mm □△
+'*.jsonl'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+log_file
+log_files
+5
+●●●●●● 2mm □
+log_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_cutoff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+100
+line
+lines
+line_lower
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'"level": "error"'
+line_lower
+'error'
+line_lower
+50
+log_data
+'ERROR'
+●●●●●● 1mm □
+log_data
+●●●●●● 1mm □△
+'ERROR'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+log_data
+●●●●●● 1mm □△
+'file'
+'message'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+log_file
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'"level": "warning"'
+line_lower
+'warning'
+line_lower
+50
+log_data
+'WARNING'
+●●●●●● 1mm □
+log_data
+●●●●●● 1mm □△
+'WARNING'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+log_data
+●●●●●● 1mm □△
+'file'
+'message'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+log_file
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'exception'
+line_lower
+'traceback'
+line_lower
+log_data
+●●●●●● 1mm □△
+'file'
+'message'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+log_file
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+●●●●●● 3mm □
+log_data
+'INFO'
+●●●●●● 1mm □
+log_data
+●●●●●● 1mm □△
+'INFO'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Could not read log file '
+log_file
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+log_data
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to collect logs: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+LogData
+●●●●●● 1mm □
+_collect_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect system metrics.'
+metrics
+●●●●●● 1mm □
+MetricsData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+metrics
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+client
+●●●●●● 2mm □
+Exception
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+llm_healthy
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+llm_healthy
+●●●●●● 1mm □
+orchestrator
+●●●●●● 2mm □
+●●●●●● 2mm □
+llm_healthy
+logger
+●●●●●● 1mm □△
+'[SENSORS] LLM health via orchestrator: OK'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+llm_healthy
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+llm_healthy
+●●●●●● 1mm □
+client
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □
+llm_healthy
+logger
+●●●●●● 1mm □△
+'[SENSORS] LLM health via direct client: OK'
+●●●●●● 2mm □△
+Exception
+metrics
+●●●●●● 1mm □
+llm_healthy
+Exception
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+model
+●●●●●● 2mm □
+Exception
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+kb_path
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'knowledge_base'
+kb_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+mgr
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kb_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mgr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+Exception
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+metrics
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+names
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+'genesis_keys'
+names
+●●●●●● 3mm □
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+Exception
+metrics
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+metrics
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to collect metrics: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+MetricsData
+●●●●●● 1mm □
+_collect_agent_outputs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect cognitive agent outputs.'
+agent_data
+●●●●●● 1mm □
+AgentOutputData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+agent_data
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+decision_file
+●●●●●● 1mm □
+decision_dir
+●●●●●● 3mm □△
+'decisions_'
+today
+'.jsonl'
+●●●●●● 2mm □
+decision_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision_file
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line
+lines
+50
+decision
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+agent_data
+1
+event_type
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □△
+'event_type'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event_type
+'decision_complete'
+agent_data
+1
+●●●●●● 1mm △
+event_type
+'decision_aborted'
+agent_data
+1
+●●●●●● 2mm □
+event_type
+'invariant_violation'
+agent_data
+1
+confidence
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+confidence
+0
+agent_data
+●●●●●● 1mm □
+agent_data
+●●●●●● 3mm ○
+confidence
+●●●●●● 3mm □△
+2
+agent_data
+●●●●●● 1mm □△
+'decision_id'
+'event_type'
+'timestamp'
+decision
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+event_type
+decision
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+json
+●●●●●● 3mm ○
+agent_data
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to collect agent outputs: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+AgentOutputData
+●●●●●● 1mm □
+_collect_genesis_keys
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect Genesis Key data.'
+genesis_data
+●●●●●● 1mm □
+GenesisKeyData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+GenesisKeyService
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+session_gen
+●●●●●● 1mm □
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+session_gen
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □
+GenesisKeyService
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+genesis_data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+'ACTIVE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+genesis_data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+FixSuggestion
+genesis_data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+FixSuggestion
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+genesis_data
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+func
+●●●●●● 1mm □△
+FixSuggestion
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+FixSuggestion
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+key_types
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+func
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_data
+●●●●●● 1mm □
+kt
+count
+kt
+count
+key_types
+recent
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+cutoff
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_data
+●●●●●● 1mm □
+'key_id'
+'key_type'
+'status'
+'is_error'
+'created_at'
+k
+k
+k
+k
+k
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+k
+recent
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not query genesis keys: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_data
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to collect genesis keys: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+GenesisKeyData
+●●●●●● 1mm □
+_collect_grace_mirror
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Collect GRACE Mirror self-reflection data.'
+mirror_data
+●●●●●● 1mm □
+GraceMirrorData
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+world_model_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.genesis_world_model.json'
+●●●●●● 2mm □
+world_model_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+world_model_path
+'r'
+●●●●●● 2mm □△
+f
+world_model
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+organs
+●●●●●● 1mm □
+world_model
+●●●●●● 1mm □△
+'organs'
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+organs
+●●●●●● 1mm □△
+'self_healing'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'progress'
+0.25
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+organs
+●●●●●● 1mm □△
+'world_model'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'progress'
+0.45
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+organs
+●●●●●● 1mm □△
+'self_learning'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'progress'
+0.35
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+organs
+●●●●●● 1mm □△
+'self_governance'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'progress'
+0.3
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+world_model
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+world_model
+●●●●●● 1mm □△
+'recent_activity'
+●●●●●● 2mm □△
+10
+Exception
+logger
+●●●●●● 1mm □△
+'Could not read world model: '
+e
+●●●●●● 2mm □△
+mirror_data
+●●●●●● 1mm □
+0.25
+mirror_data
+●●●●●● 1mm □
+0.45
+mirror_data
+●●●●●● 1mm □
+0.35
+mirror_data
+●●●●●● 1mm □
+0.3
+●●●●●● 3mm ○
+mirror_data
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to collect grace mirror: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+GraceMirrorData
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+sensor_data
+●●●●●● 2mm □△
+SensorData
+'Convert sensor data to dictionary for serialization.'
+result
+●●●●●● 1mm □
+'collection_timestamp'
+'collection_duration_ms'
+'sensors_available'
+'sensors_failed'
+sensor_data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sensor_data
+s
+s
+sensor_data
+s
+s
+sensor_data
+●●●●●● 2mm □
+sensor_data
+result
+'test_results'
+●●●●●● 1mm □
+'total_tests'
+'passed'
+'failed'
+'skipped'
+'errors'
+'pass_rate'
+'infrastructure_failures'
+'code_failures'
+'top_error_types'
+'learned_patterns_count'
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+result
+'logs'
+●●●●●● 1mm □
+'log_level_counts'
+'error_count'
+'warning_count'
+'exception_count'
+sensor_data
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sensor_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sensor_data
+result
+'metrics'
+●●●●●● 1mm □
+'cpu_percent'
+'memory_percent'
+'disk_percent'
+'database_health'
+'vector_db_health'
+'llm_health'
+'embedding_health'
+'learning_memory_health'
+'genesis_qdrant_health'
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+●●●●●● 2mm □
+sensor_data
+result
+'agent_outputs'
+●●●●●● 1mm □
+'total_decisions'
+'successful_decisions'
+'failed_decisions'
+'average_confidence'
+'invariant_violations'
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+●●●●●● 2mm □
+sensor_data
+result
+'genesis_keys'
+●●●●●● 1mm □
+'total_keys'
+'active_keys'
+'error_keys'
+'fix_suggestions'
+'applied_fixes'
+'key_types_distribution'
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+●●●●●● 2mm □
+sensor_data
+result
+'grace_mirror'
+●●●●●● 1mm □
+'self_healing_progress'
+'world_model_progress'
+'self_learning_progress'
+'self_governance_progress'
+'component_status'
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+sensor_data
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

@@ -1,0 +1,719 @@
+## cli.py
+'\nCommand-line utility for managing file-based document ingestion.\nProvides commands to scan, watch, and manage knowledge base files.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+argparse
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileIngestionCLI
+'Command-line interface for file ingestion management.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'backend/knowledge_base'
+'Initialize CLI.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 2mm □○
+IngestionFileManager
+●●●●●● 2mm □
+●●●●●● 1mm □
+init_manager
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize file manager.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Initializing file ingestion manager...'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ File manager initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to initialize file manager: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+scan
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+argparse
+'Scan knowledge base for changes.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+logger
+●●●●●● 1mm □△
+'Scanning knowledge base: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+logger
+●●●●●● 1mm □△
+'No changes detected'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SCAN RESULTS: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' changes processed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Successful: '
+successful
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✗ Failed: '
+failed
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+result
+results
+status
+●●●●●● 1mm □
+result
+'✓'
+'✗'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' ['
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'] '
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Document ID: '
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Message: '
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Error: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+0
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Error scanning knowledge base: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □
+watch
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+argparse
+'Watch knowledge base for changes (continuous mode).'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+interval
+●●●●●● 1mm □
+args
+5
+logger
+●●●●●● 1mm □△
+'Watching knowledge base (scan interval: '
+interval
+'s)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Press Ctrl+C to stop\n'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+KeyboardInterrupt
+logger
+●●●●●● 1mm □△
+'\nWatcher stopped'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Error in watch mode: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □
+init_git
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+argparse
+'Initialize git repository.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+logger
+●●●●●● 1mm □△
+'Initializing git repository...'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+logger
+●●●●●● 1mm □△
+'✓ Git repository initialized'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'Failed to initialize git repository'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Error initializing git: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □
+list_tracked
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+argparse
+'List tracked files.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+tracked
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nTracked Files: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tracked
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracked
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'No tracked files'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+filepath
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+tracked
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+hash_val
+●●●●●● 1mm □
+tracked
+filepath
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+filepath
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Hash: '
+hash_val
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Error listing tracked files: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □
+clear_state
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+argparse
+'Clear tracking state.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+0
+logger
+●●●●●● 1mm □△
+'No tracked files to clear'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm □
+args
+response
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'Clear '
+count
+' tracked files? [y/N] '
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'y'
+logger
+●●●●●● 1mm □△
+'Cancelled'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+logger
+●●●●●● 1mm □△
+'Clearing '
+count
+' tracked files...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Tracking state cleared'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Error clearing state: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □
+status
+●●●●●● 1mm □△
+self
+args
+●●●●●● 2mm □△
+argparse
+'Show file manager status.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+git_dir
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'.git'
+tracked_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFile Manager Status'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Knowledge Base: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tracked Files: '
+tracked_count
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Git Initialized: '
+git_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Yes'
+'No'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'State File: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting status: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point.'
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--kb-path'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'-v'
+'--verbose'
+●●●●●● 2mm □△
+subparsers
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+subparsers
+●●●●●● 1mm □△
+'scan'
+●●●●●● 2mm □△
+watch_parser
+●●●●●● 1mm □
+subparsers
+●●●●●● 1mm □△
+'watch'
+●●●●●● 2mm □△
+watch_parser
+●●●●●● 1mm □△
+'--interval'
+●●●●●● 2mm □△
+subparsers
+●●●●●● 1mm □△
+'init-git'
+●●●●●● 2mm □△
+subparsers
+●●●●●● 1mm □△
+'list-tracked'
+●●●●●● 2mm □△
+clear_parser
+●●●●●● 1mm □
+subparsers
+●●●●●● 1mm □△
+'clear-state'
+●●●●●● 2mm □△
+clear_parser
+●●●●●● 1mm □△
+'--force'
+●●●●●● 2mm □△
+subparsers
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+cli
+●●●●●● 1mm □
+FileIngestionCLI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+'scan'
+●●●●●● 3mm ○
+cli
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+'watch'
+●●●●●● 3mm ○
+cli
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+'init-git'
+●●●●●● 3mm ○
+cli
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+'list-tracked'
+●●●●●● 3mm ○
+cli
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+'clear-state'
+●●●●●● 3mm ○
+cli
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+'status'
+●●●●●● 3mm ○
+cli
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Unknown command: '
+args
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

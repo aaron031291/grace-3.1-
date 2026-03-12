@@ -1,0 +1,947 @@
+## retrieve.py
+'\nRetrieval API endpoints for RAG system.\nProvides REST endpoints to retrieve and build context from stored documents.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Query
+Path
+Depends
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+get_retriever
+●●●●●● 3mm □△○
+retrieval.cognitive_retriever
+●●●●●● 2mm □△○
+CognitiveRetriever
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_retriever
+●●●●●● 2mm □○
+DocumentRetriever
+●●●●●● 2mm □
+_cognitive_retriever
+●●●●●● 2mm □○
+CognitiveRetriever
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_document_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create document retriever instance.'
+●●●●●● 2mm □
+_retriever
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[RETRIEVE] Initializing document retriever...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+ingest_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+ingest_service
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[RETRIEVE] [OK] Reusing embedding model from ingestion service'
+●●●●●● 2mm □△
+_retriever
+●●●●●● 1mm □
+get_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[RETRIEVE] [OK] Document retriever created successfully'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to initialize retriever: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_retriever
+DocumentRetriever
+●●●●●● 1mm □
+get_cognitive_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create cognitive retriever instance.'
+●●●●●● 2mm □
+_cognitive_retriever
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[COGNITIVE] Initializing cognitive retriever...'
+●●●●●● 2mm □△
+base_retriever
+●●●●●● 1mm □
+get_document_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cognitive_retriever
+●●●●●● 1mm □
+CognitiveRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[COGNITIVE] [OK] Cognitive retriever created successfully'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[COGNITIVE] [OK] OODA loop enforcement enabled'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[COGNITIVE] [OK] Learning memory integration enabled'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to initialize cognitive retriever: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cognitive_retriever
+CognitiveRetriever
+●●●●●● 2mm △
+RetrievalChunk
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Retrieved document chunk.'
+chunk_id
+●●●●●● 2mm ○
+document_id
+●●●●●● 2mm ○
+chunk_index
+●●●●●● 2mm ○
+text
+●●●●●● 1mm ○
+score
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+confidence_score
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △
+RetrievalResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response from retrieval endpoints.'
+query
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm □△
+RetrievalChunk
+total
+●●●●●● 2mm ○
+context
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+auto_search_triggered
+●●●●●● 3mm △
+●●●●●● 1mm □
+auto_search_job_ids
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □
+auto_search_urls
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+auto_search_message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+ContextRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request to build context from chunks.'
+chunks
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+max_length
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+include_sources
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+CognitiveRetriever
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_cognitive_retriever
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Retrieve document chunks using Cognitive Engine with OODA loop.\n\n    This endpoint integrates:\n    1. **Cognitive Engine** - OODA loop for decision-making\n    2. **Ambiguity Tracking** - Identifies and tracks unknowns\n    3. **Learning Memory** - Records outcomes for future improvement\n    4. **Trust Scoring** - Builds trust in retrieval strategies\n\n    The system:\n    - **Observes**: Analyzes query characteristics and ambiguity\n    - **Orients**: Determines constraints and available strategies\n    - **Decides**: Chooses best retrieval strategy (semantic/hybrid/reranked)\n    - **Acts**: Executes retrieval and tracks quality\n\n    Returns enriched results with cognitive metadata including:\n    - Decision ID (for tracking)\n    - Strategy selected (semantic/hybrid/reranked)\n    - Ambiguity level (low/medium/high)\n    - Quality score (0-1)\n    - OODA phases completed\n\n    Args:\n        query: Query text to search for\n        limit: Maximum number of chunks to return\n        threshold: Minimum similarity score (0-1)\n        keyword_weight: Weight for keyword matching (0-1)\n        user_id: Genesis user ID (for learning memory)\n        genesis_key_id: Genesis Key ID (for tracking)\n        cognitive_retriever: CognitiveRetriever instance\n\n    Returns:\n        Dict with chunks, context, and cognitive metadata\n    '
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+created_genesis_key
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✅ Genesis Key created for RAG query: '
+created_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key_id
+genesis_key_id
+●●●●●● 1mm □
+created_genesis_key
+result
+●●●●●● 1mm □
+cognitive_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+'chunk_id'
+'document_id'
+'chunk_index'
+'text'
+'score'
+'confidence_score'
+'metadata'
+chunk
+'chunk_id'
+chunk
+'document_id'
+chunk
+'chunk_index'
+chunk
+'text'
+chunk
+●●●●●● 1mm □△
+'score'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'confidence_score'
+●●●●●● 2mm □△
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+chunk
+result
+'chunks'
+●●●●●● 3mm ○
+'query'
+'chunks'
+'total'
+'context'
+'cognitive_metadata'
+'strategy_used'
+result
+'query'
+retrieval_chunks
+result
+'total'
+result
+'context'
+result
+●●●●●● 1mm □△
+'cognitive_metadata'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'strategy_used'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Cognitive retrieval error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/search-cognitive'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+CognitiveRetriever
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_cognitive_retriever
+●●●●●● 2mm □△
+'\n    Provide feedback on retrieval results to improve learning.\n\n    This creates high-trust learning examples from direct user feedback,\n    which helps the system learn which retrieval strategies work best.\n\n    Args:\n        query: Original query that was used\n        chunks_used: List of chunk IDs that were used in the response\n        was_helpful: True if results were helpful, False otherwise\n        user_id: Genesis user ID\n        genesis_key_id: Genesis Key ID\n        cognitive_retriever: CognitiveRetriever instance\n\n    Returns:\n        Success confirmation\n    '
+cognitive_retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+'feedback_type'
+●●●●●● 3mm □△○
+'Feedback recorded successfully'
+was_helpful
+'positive'
+'negative'
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to record feedback: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/feedback'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+DocumentRetriever
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_document_retriever
+●●●●●● 2mm □△
+'\n    Retrieve document chunks relevant to a query using hybrid search (semantic + keyword).\n    \n    Uses keyword boosting to ensure short queries return documents with matching keywords.\n    For longer queries, semantic relevance naturally dominates.\n    \n    Args:\n        query: Query text to search for\n        limit: Maximum number of chunks to return\n        threshold: Minimum similarity score (0-1)\n        keyword_weight: Weight for keyword matching (0-1, default 0.3 = 30% keyword, 70% semantic)\n        retriever: DocumentRetriever instance\n        \n    Returns:\n        RetrievalResponse with relevant chunks, ranked by combined score\n    '
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+RetrievalChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+chunks
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Retrieval error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/search'
+●●●●●● 2mm □△
+RetrievalResponse
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+DocumentRetriever
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_document_retriever
+●●●●●● 2mm □△
+'\n    Retrieve document chunks using pure semantic search (no keyword boosting).\n    \n    Best for longer, contextual queries. Use /retrieve/search for hybrid approach.\n    \n    Args:\n        query: Query text to search for\n        limit: Maximum number of chunks to return\n        threshold: Minimum similarity score (0-1)\n        retriever: DocumentRetriever instance\n        \n    Returns:\n        RetrievalResponse with relevant chunks ranked by semantic similarity\n    '
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+RetrievalChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+chunks
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Semantic retrieval error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/search-semantic'
+●●●●●● 2mm □△
+RetrievalResponse
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+DocumentRetriever
+Path
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_document_retriever
+●●●●●● 2mm □△
+'\n    Retrieve all chunks from a specific document.\n    \n    Args:\n        document_id: ID of the document\n        limit: Maximum chunks to retrieve (None for all)\n        retriever: DocumentRetriever instance\n        \n    Returns:\n        RetrievalResponse with all document chunks\n    '
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+RetrievalChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+chunks
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error retrieving document '
+document_id
+': '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/document/{document_id}'
+●●●●●● 2mm □△
+RetrievalResponse
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+DocumentRetriever
+Path
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_document_retriever
+●●●●●● 2mm □△
+'\n    Retrieve chunks from documents with a specific source.\n    \n    Args:\n        source: Source identifier\n        limit: Maximum chunks to retrieve\n        retriever: DocumentRetriever instance\n        \n    Returns:\n        RetrievalResponse with matching chunks\n    '
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+RetrievalChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+chunks
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+"Error retrieving chunks by source '"
+source
+"': "
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/source/{source}'
+●●●●●● 2mm □△
+RetrievalResponse
+ContextRequest
+'\n    Build a formatted context string from retrieved chunks.\n    \n    Args:\n        request: ContextRequest with chunk list and options\n        \n    Returns:\n        Dictionary with formatted context string\n    '
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'context'
+'chunk_count'
+'context_length'
+●●●●●● 3mm □△○
+context
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error building context: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/context'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+DocumentRetriever
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.2
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_document_retriever
+●●●●●● 2mm □△
+'\n    Retrieve chunks and apply reranking for better relevance.\n    \n    Args:\n        query: Query text\n        limit: Maximum chunks\n        threshold: Minimum similarity score\n        retriever: DocumentRetriever instance\n        \n    Returns:\n        RetrievalResponse with reranked chunks\n    '
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+RetrievalChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+chunks
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Reranking error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/rerank'
+●●●●●● 2mm □△
+RetrievalResponse
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+DocumentRetriever
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_document_retriever
+●●●●●● 2mm □△
+'\n    Retrieve document chunks from files in a specific directory.\n    \n    Only documents whose file_path starts with the specified directory_path\n    will be included in the search results.\n    \n    Args:\n        query: Query text to search for\n        directory_path: Directory path (relative to knowledge_base root)\n        limit: Maximum number of chunks to return\n        threshold: Minimum similarity score (0-1)\n        retriever: DocumentRetriever instance\n        \n    Returns:\n        RetrievalResponse with chunks from specified directory\n        \n    Raises:\n        HTTPException: 404 if no documents found in directory\n    '
+all_chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_chunks
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filtered_chunks
+●●●●●● 1mm □
+chunk
+all_chunks
+file_path
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'file_path'
+''
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+file_path
+file_path
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+''
+target_dir
+●●●●●● 1mm □
+directory_path
+directory_path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\\'
+'/'
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □
+target_dir
+''
+●●●●●● 2mm □
+'/'
+file_path
+filtered_chunks
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 1mm △
+file_path
+●●●●●● 1mm □△
+target_dir
+●●●●●● 3mm ○
+'/'
+●●●●●● 2mm □△
+file_path
+target_dir
+filtered_chunks
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+filtered_chunks
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+filtered_chunks
+●●●●●● 2mm □△
+limit
+●●●●●● 2mm □
+filtered_chunks
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieval_chunks
+●●●●●● 1mm □
+RetrievalChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+filtered_chunks
+context
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+filtered_chunks
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RetrievalResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HTTPException
+Exception
+logger
+●●●●●● 1mm □△
+'Directory retrieval error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/directory-search'
+●●●●●● 2mm □△
+RetrievalResponse

@@ -1,0 +1,1171 @@
+## continuous_learning_orchestrator.py
+'\nContinuous Learning Orchestrator\n\nConnects the Autonomous Sandbox Lab to continuous training data ingestion.\n\nGrace continuously:\n1. Ingests new documents and data\n2. Learns from them using autonomous learning\n3. Identifies improvement opportunities via Mirror\n4. Proposes experiments to Sandbox Lab\n5. Tests improvements with new data\n6. Promotes validated improvements\n7. Repeats - continuous evolution\n\nThis creates a never-ending self-improvement loop.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Set
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ContinuousLearningOrchestrator
+'\n    Orchestrates continuous autonomous learning and self-improvement\n\n    Coordinates:\n    - Data ingestion (files, documents, knowledge)\n    - Autonomous learning (study, practice, consolidate)\n    - Mirror observations (pattern detection)\n    - Sandbox experiments (self-improvement)\n    - Performance tracking\n    - Continuous evolution\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'ingestion_interval_seconds'
+'learning_cycle_interval_seconds'
+'mirror_observation_interval_seconds'
+'experiment_check_interval_seconds'
+'auto_propose_experiments'
+'auto_start_trials'
+'min_trust_for_auto_trial'
+60
+300
+600
+120
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+0.65
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_ingestions'
+'total_learning_cycles'
+'total_mirror_observations'
+'total_experiments_proposed'
+'total_trials_started'
+'total_improvements_deployed'
+'uptime_seconds'
+'data_points_processed'
+'knowledge_items_learned'
+0
+0
+0
+0
+0
+0
+0
+0
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'ingestion_success_rate'
+'learning_retention_rate'
+'retrieval_quality'
+'average_confidence'
+'error_rate'
+0.0
+0.0
+0.0
+0.0
+0.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+initialize_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize all required components'
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Initializing components...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+get_sandbox_lab
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] [OK] Sandbox Lab initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Sandbox Lab unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session_factory
+session_factory
+●●●●●● 1mm □
+get_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] [OK] Mirror System initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Mirror System unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.autonomous_learning
+●●●●●● 2mm □△○
+get_learning_orchestrator
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_learning_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] [OK] Learning Orchestrator initialized'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Learning Orchestrator unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] [OK] Ingestion Service initialized'
+●●●●●● 2mm □△
+FileNotFoundError
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Ingestion Service unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Ingestion Service unavailable: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Component initialization complete'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start continuous learning orchestration'
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Already running'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Re-initializing missing components...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Starting continuous learning orchestration...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Orchestration started - Grace will now continuously learn and improve'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop continuous learning orchestration'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Stopping orchestration...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Orchestration stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_orchestration_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Main orchestration loop - runs continuously'
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_count
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Orchestration loop started'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+cycle_start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_count
+1
+●●●●●● 3mm △
+'uptime_seconds'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle_count
+●●●●●● 2mm □○
+10
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cycle_start
+sleep_time
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+1
+10
+●●●●●● 1mm □△
+cycle_duration
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+sleep_time
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Error in orchestration loop: '
+e
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+30
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_should_run_ingestion
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Check if it's time to check for new data"
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed
+●●●●●● 3mm △
+'ingestion_interval_seconds'
+●●●●●● 3mm △
+●●●●●● 1mm □
+_should_run_learning
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Check if it's time to run learning cycle"
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed
+●●●●●● 3mm △
+'learning_cycle_interval_seconds'
+●●●●●● 3mm △
+●●●●●● 1mm □
+_should_run_mirror
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Check if it's time for mirror observation"
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed
+●●●●●● 3mm △
+'mirror_observation_interval_seconds'
+●●●●●● 3mm △
+●●●●●● 1mm □
+_should_check_experiments
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Check if it's time to check experiments"
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed
+●●●●●● 3mm △
+'experiment_check_interval_seconds'
+●●●●●● 3mm △
+●●●●●● 1mm □
+_run_ingestion_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check for and ingest new data'
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+possible_paths
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+'../knowledge_base'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+knowledge_base
+●●●●●● 1mm □
+●●●●●● 2mm □
+path
+possible_paths
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knowledge_base
+●●●●●● 1mm □
+path
+●●●●●● 2mm □
+knowledge_base
+●●●●●● 3mm ○
+new_files
+●●●●●● 1mm □
+file_path
+knowledge_base
+●●●●●● 1mm □△
+'**/*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+'.txt'
+'.md'
+'.pdf'
+'.docx'
+new_files
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_files
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+new_files
+●●●●●● 2mm □△
+' files to potentially ingest'
+●●●●●● 2mm □△
+file_path
+new_files
+5
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'file_path'
+'timestamp'
+file_path
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+0
+item
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+item
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc_id
+error
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_id
+●●●●●● 3mm △
+'total_ingestions'
+1
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Ingested: '
+file_path
+' (doc_id='
+doc_id
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'document_id'
+'filename'
+'timestamp'
+doc_id
+file_path
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Ingestion error: '
+e
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Ingestion check error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_learning_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Run autonomous learning cycle'
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Running learning cycle with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' items'
+●●●●●● 2mm □△
+items
+●●●●●● 1mm □
+●●●●●● 3mm △
+10
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+10
+item
+items
+●●●●●● 3mm △
+'knowledge_items_learned'
+1
+●●●●●● 3mm △
+'total_learning_cycles'
+1
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Learning cycle complete'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Learning cycle error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_mirror_observation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Mirror observes patterns and proposes improvements'
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Mirror observing recent operations...'
+●●●●●● 2mm □△
+analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+analysis
+'improvement_opportunities'
+analysis
+opportunities
+●●●●●● 1mm □
+analysis
+'improvement_opportunities'
+opportunity
+opportunities
+3
+●●●●●● 2mm □
+●●●●●● 3mm △
+'auto_propose_experiments'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+opportunity
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_mirror_observations'
+1
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Mirror observation error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_propose_experiment_from_opportunity
+●●●●●● 1mm □△
+self
+opportunity
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Propose experiment based on improvement opportunity'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+exp_type_map
+●●●●●● 1mm □
+'chunking'
+'retrieval'
+'learning'
+'performance'
+'error'
+ExperimentType
+ExperimentType
+ExperimentType
+ExperimentType
+ExperimentType
+exp_type
+●●●●●● 1mm □
+exp_type_map
+●●●●●● 1mm □△
+opportunity
+●●●●●● 1mm □△
+'category'
+'improvement'
+●●●●●● 2mm □△
+ExperimentType
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_experiments_proposed'
+1
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Proposed experiment: '
+exp
+' - '
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'experiment_id'
+'proposed_at'
+exp
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Experiment proposal error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_experiments
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check and manage sandbox experiments'
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+active_trials
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trial_exp
+active_trials
+●●●●●● 2mm □
+●●●●●● 3mm △
+'total_ingestions'
+0
+success
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trial_exp
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'data_points_processed'
+1
+awaiting_approval
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+awaiting_approval
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Experiment '
+exp
+' awaiting user approval'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Trust: '
+exp
+'.2f'
+', Improvement: '
+exp
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Experiment '
+exp
+' qualifies for auto-approval!'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'auto_start_trials'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentStatus
+sandbox_exps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+sandbox_exps
+●●●●●● 2mm □
+exp
+●●●●●● 3mm △
+'min_trust_for_auto_trial'
+●●●●●● 2mm □
+exp
+●●●●●● 3mm △
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_trials_started'
+1
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Auto-started trial for '
+exp
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Experiment check error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Update current performance metrics'
+●●●●●● 1mm □
+_log_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Log periodic status'
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] === STATUS ==='
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Uptime: '
+●●●●●● 3mm △
+'uptime_seconds'
+'s'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Ingestions: '
+●●●●●● 3mm △
+'total_ingestions'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Learning cycles: '
+●●●●●● 3mm △
+'total_learning_cycles'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Mirror observations: '
+●●●●●● 3mm △
+'total_mirror_observations'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Experiments proposed: '
+●●●●●● 3mm △
+'total_experiments_proposed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Trials started: '
+●●●●●● 3mm △
+'total_trials_started'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Queues - Ingestion: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+', Learning: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get orchestrator status'
+●●●●●● 3mm ○
+'running'
+'uptime_seconds'
+'stats'
+'config'
+'queues'
+'last_operations'
+'current_metrics'
+●●●●●● 3mm △
+●●●●●● 3mm △
+'uptime_seconds'
+●●●●●● 3mm △
+●●●●●● 3mm △
+'ingestion'
+'learning'
+'experiment_ideas'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+'ingestion_check'
+'learning_cycle'
+'mirror_observation'
+'experiment_check'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_continuous_orchestrator
+●●●●●● 2mm □○
+ContinuousLearningOrchestrator
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_continuous_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create continuous learning orchestrator'
+●●●●●● 2mm □
+_continuous_orchestrator
+●●●●●● 2mm □
+_continuous_orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_continuous_orchestrator
+ContinuousLearningOrchestrator
+●●●●●● 1mm □
+start_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Start continuous learning orchestration'
+●●●●●● 2mm □
+_continuous_orchestrator
+_continuous_orchestrator
+logger
+●●●●●● 1mm □△
+'[CONTINUOUS_LEARNING] Forcing re-initialization (components missing)'
+●●●●●● 2mm □△
+_continuous_orchestrator
+●●●●●● 1mm □
+●●●●●● 1mm □
+_continuous_orchestrator
+●●●●●● 1mm □
+●●●●●● 2mm □
+orchestrator
+●●●●●● 1mm □
+get_continuous_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+orchestrator
+●●●●●● 1mm □
+stop_continuous_learning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Stop continuous learning orchestration'
+orchestrator
+●●●●●● 1mm □
+get_continuous_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△

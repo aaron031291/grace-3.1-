@@ -1,0 +1,40 @@
+## __init__.py
+"\nGrace Execution Layer\n\nBridges Grace's cognitive systems with code execution capabilities.\nUses OpenHands-style runtime for sandboxed execution.\n\nComponents:\n- ExecutionBridge: Core execution without governance\n- GovernedExecutionBridge: Execution with constitutional governance\n- FeedbackProcessor: Learning signal generation\n"
+●●●●●● 3mm □△○
+actions
+●●●●●● 2mm □△○
+GraceAction
+ActionRequest
+ActionResult
+ActionStatus
+create_action
+●●●●●● 3mm □△○
+bridge
+●●●●●● 2mm □△○
+ExecutionBridge
+ExecutionConfig
+get_execution_bridge
+●●●●●● 3mm □△○
+governed_bridge
+●●●●●● 2mm □△○
+GovernedExecutionBridge
+get_governed_execution_bridge
+ACTION_GOVERNANCE_MAP
+●●●●●● 3mm □△○
+feedback
+●●●●●● 2mm □△○
+FeedbackProcessor
+__all__
+●●●●●● 1mm □
+'GraceAction'
+'ActionRequest'
+'ActionResult'
+'ActionStatus'
+'create_action'
+'ExecutionBridge'
+'ExecutionConfig'
+'get_execution_bridge'
+'GovernedExecutionBridge'
+'get_governed_execution_bridge'
+'ACTION_GOVERNANCE_MAP'
+'FeedbackProcessor'

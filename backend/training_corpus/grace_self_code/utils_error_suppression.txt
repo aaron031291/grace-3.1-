@@ -1,0 +1,46 @@
+## error_suppression.py
+'\nUtility to check if error logging should be suppressed based on settings.\n'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+ImportError
+settings
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+should_suppress_genesis_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if Genesis errors should be suppressed.'
+●●●●●● 3mm ○
+settings
+settings
+●●●●●● 3mm △
+●●●●●● 1mm □
+should_suppress_qdrant_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if Qdrant errors should be suppressed.'
+●●●●●● 3mm ○
+settings
+settings
+●●●●●● 3mm △
+●●●●●● 1mm □
+should_suppress_ingestion_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if ingestion errors should be suppressed.'
+●●●●●● 3mm ○
+settings
+settings
+●●●●●● 3mm △
+●●●●●● 1mm □
+should_suppress_embedding_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check if embedding errors should be suppressed.'
+●●●●●● 3mm ○
+settings
+settings
+●●●●●● 3mm △

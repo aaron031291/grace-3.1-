@@ -1,0 +1,51 @@
+## genesis_key.py
+'\nGenesis Key Generator\nMints immutable cryptographic-style keys to trace component origin\nand action provenance across the Grace system.\n'
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm △
+GenesisKeyGenerator
+●●●●●● 1mm □
+mint
+●●●●●● 1mm □△
+self
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Produce a traceable Genesis Key mapping to a specific component initialization.\n        '
+raw_seed
+●●●●●● 1mm □
+component
+'_'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+raw_seed
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'genesis_'
+component
+'_'
+key_hash
+●●●●●● 1mm ○
+genesis_key
+●●●●●● 1mm □
+GenesisKeyGenerator
+●●●●●● 1mm □△
+●●●●●● 2mm □△

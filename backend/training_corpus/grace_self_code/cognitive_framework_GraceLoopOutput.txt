@@ -1,0 +1,65 @@
+## GraceLoopOutput.py
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm △
+GraceLoopOutput
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Captures the results from missions/healing/testing and feeds them \n    back into knowledge + learning loops.\n    '
+loop_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+decision_id
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+timestamp
+datetime
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+mttr_seconds
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+artifacts_produced
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+knowledge_updates
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△

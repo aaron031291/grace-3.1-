@@ -1,0 +1,524 @@
+## test_drive_support.py
+'\nTest Google Drive URL detection and conversion.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+●●●●●● 1mm □
+test_drive_url_detection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Google Drive URL detection.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Google Drive URL Detection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_cases
+●●●●●● 1mm □
+'https://drive.google.com/file/d/1ABC123xyz/view?usp=sharing'
+●●●●●● 3mm □△○
+'https://drive.google.com/uc?id=1ABC123xyz&export=download'
+●●●●●● 3mm □△○
+'https://docs.google.com/document/d/1ABC123xyz/edit'
+●●●●●● 3mm □△○
+'https://docs.google.com/spreadsheets/d/1ABC123xyz/edit'
+●●●●●● 3mm □△○
+'https://docs.google.com/presentation/d/1ABC123xyz/edit'
+●●●●●● 3mm □△○
+'https://example.com/document.pdf'
+●●●●●● 1mm □
+'https://dropbox.com/s/abc123/file.pdf'
+●●●●●● 1mm □
+passed
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+url
+expected
+test_cases
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+result
+expected
+'✓'
+'✗'
+●●●●●● 2mm □
+result
+expected
+passed
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' '
+url
+60
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Expected: '
+expected
+', Got: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nResults: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+●●●●●● 1mm □
+test_file_id_extraction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test Google Drive file ID extraction.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing File ID Extraction'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_cases
+●●●●●● 1mm □
+'https://drive.google.com/file/d/1ABC123xyz/view'
+'1ABC123xyz'
+'https://drive.google.com/uc?id=1ABC123xyz'
+'1ABC123xyz'
+'https://docs.google.com/document/d/1ABC123xyz/edit'
+'1ABC123xyz'
+'https://docs.google.com/spreadsheets/d/1DEF456abc/edit'
+'1DEF456abc'
+'https://docs.google.com/presentation/d/1GHI789def/edit'
+'1GHI789def'
+'https://example.com/file.pdf'
+●●●●●● 2mm □
+passed
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+url
+expected_id
+test_cases
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+result
+expected_id
+'✓'
+'✗'
+●●●●●● 2mm □
+result
+expected_id
+passed
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' '
+url
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Expected ID: '
+expected_id
+', Got: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nResults: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+●●●●●● 1mm □
+test_download_url_generation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test download URL generation.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Download URL Generation'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_cases
+●●●●●● 1mm □
+'https://drive.google.com/file/d/1ABC123xyz/view'
+'https://drive.google.com/uc?id=1ABC123xyz&export=download'
+'https://docs.google.com/document/d/1ABC123xyz/edit'
+'https://docs.google.com/document/d/1ABC123xyz/export?format=docx'
+'https://docs.google.com/spreadsheets/d/1ABC123xyz/edit'
+'https://docs.google.com/spreadsheets/d/1ABC123xyz/export?format=xlsx'
+'https://docs.google.com/presentation/d/1ABC123xyz/edit'
+'https://docs.google.com/presentation/d/1ABC123xyz/export?format=pptx'
+passed
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+original_url
+expected_download_url
+test_cases
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+original_url
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+result
+expected_download_url
+'✓'
+'✗'
+●●●●●● 2mm □
+result
+expected_download_url
+passed
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' '
+original_url
+40
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Expected: '
+expected_download_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Got:      '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Results: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+●●●●●● 1mm □
+test_url_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that Drive URLs are now allowed.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing URL Validation (Drive URLs Should Be Allowed)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_cases
+●●●●●● 1mm □
+'https://drive.google.com/file/d/1ABC123xyz/view'
+●●●●●● 3mm □△○
+'https://docs.google.com/document/d/1ABC123xyz/edit'
+●●●●●● 3mm □△○
+'https://dropbox.com/s/abc123/file.pdf'
+●●●●●● 1mm □
+'https://example.com/document.pdf'
+●●●●●● 3mm □△○
+passed
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+url
+should_pass
+test_cases
+is_valid
+error
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+is_valid
+should_pass
+'✓'
+'✗'
+●●●●●● 2mm □
+is_valid
+should_pass
+passed
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' '
+url
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Should pass: '
+should_pass
+', Valid: '
+is_valid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+error
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Error: '
+error
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Results: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'GOOGLE DRIVE SUPPORT - TEST SUITE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'Drive URL Detection'
+test_drive_url_detection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'File ID Extraction'
+test_file_id_extraction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Download URL Generation'
+test_download_url_generation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'URL Validation'
+test_url_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_name
+passed
+results
+status
+●●●●●● 1mm □
+passed
+'✓ PASSED'
+'✗ FAILED'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+': '
+test_name
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+result
+1
+result
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ All tests passed!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✗ Some tests failed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+exit
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

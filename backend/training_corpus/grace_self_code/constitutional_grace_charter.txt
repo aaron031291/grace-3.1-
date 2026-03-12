@@ -1,0 +1,210 @@
+## grace_charter.py
+●●●●●● 2mm □△○
+yaml
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+ConfigDict
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'grace_charter'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PillarConfig
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+obligations
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+ClauseConfig
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+●●●●●● 1mm △
+●●●●●● 1mm ○
+text
+●●●●●● 1mm ○
+●●●●●● 2mm △
+OKRConfig
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+●●●●●● 1mm △
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+●●●●●● 2mm △
+Constitution
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+model_config
+●●●●●● 1mm □
+ConfigDict
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+version
+●●●●●● 1mm ○
+pillars
+●●●●●● 3mm □△
+PillarConfig
+clauses
+●●●●●● 3mm □△
+ClauseConfig
+okrs
+●●●●●● 3mm □△
+OKRConfig
+●●●●●● 2mm △
+GraceCharter
+'\n    Loads and enforces the rules from the grace_constitution.yaml.\n    Used by the Governance Gate and Unified Logic Hub.\n    '
+_constitution
+●●●●●● 2mm □○
+Constitution
+●●●●●● 2mm □
+●●●●●● 1mm □
+load_constitution
+●●●●●● 1mm □△
+cls
+override_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+override_path
+●●●●●● 2mm □
+●●●●●● 3mm ○
+cls
+default_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'config'
+●●●●●● 3mm □△
+'grace_constitution.yaml'
+path
+●●●●●● 1mm □
+override_path
+Path
+●●●●●● 1mm □△
+override_path
+●●●●●● 2mm □△
+default_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+yaml
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+cls
+●●●●●● 1mm □
+Constitution
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Loaded Grace Constitution v'
+cls
+' with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+' pillars.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to load Grace Constitution from '
+path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Constitution
+●●●●●● 1mm □
+get_constitution
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+●●●●●● 3mm ○
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+Constitution
+●●●●●● 1mm □
+get_pillar
+●●●●●● 1mm □△
+cls
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+constitution
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pillar
+constitution
+●●●●●● 2mm □
+pillar
+name
+●●●●●● 3mm ○
+pillar
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+PillarConfig
+●●●●●● 1mm □
+is_risk_acceptable
+●●●●●● 1mm □△
+cls
+risk_score
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n        Helper method checking Clause 4: \n        Actions with risk score > 0.7 must escalate and require explicit approval.\n        '
+●●●●●● 3mm ○
+risk_score
+0.7
+●●●●●● 2mm □△
+●●●●●● 3mm △

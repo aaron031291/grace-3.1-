@@ -1,0 +1,966 @@
+## deep_learning.py
+'\nGrace Deep Learning Model — predicts action success, component risk,\nand trust scores from Genesis key patterns.\n\nArchitecture: 3-head MLP on 32-dim feature vector\n  Head 1: Will next action succeed? (binary)\n  Head 2: Which component breaks next? (10-class)\n  Head 3: What trust score? (regression 0-1)\n\nTrains continuously from Genesis keys. CPU-only, <50MB.\n'
+●●●●●● 2mm □△○
+math
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Tuple
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+Counter
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+torch.nn
+●●●●●● 1mm □
+nn
+●●●●●● 2mm □△○
+torch.optim
+●●●●●● 1mm □
+optim
+TORCH_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+TORCH_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'PyTorch not available — deep learning disabled'
+●●●●●● 2mm □△
+COMPONENT_CLASSES
+●●●●●● 1mm □
+'chat_engine'
+'llm_orchestrator'
+'consensus_engine'
+'retrieval'
+'ingestion'
+'database'
+'genesis_tracker'
+'diagnostic_engine'
+'self_healing'
+'unknown'
+KEY_TYPES
+●●●●●● 1mm □
+'ai_response'
+'api_request'
+'system_event'
+'error'
+'code_change'
+'file_op'
+'learning_complete'
+'gap_identified'
+'user_input'
+'unknown'
+●●●●●● 1mm □
+_key_to_features
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Convert a Genesis key to a 32-dim feature vector.'
+features
+●●●●●● 1mm □
+0.0
+●●●●●● 2mm □△
+32
+kt
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'key_type'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kt
+KEY_TYPES
+features
+KEY_TYPES
+●●●●●● 1mm □△
+kt
+●●●●●● 2mm □△
+●●●●●● 1mm □
+1.0
+features
+10
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+1.0
+0.0
+when
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'when'
+''
+●●●●●● 2mm □△
+dt
+●●●●●● 1mm □
+when
+datetime
+●●●●●● 1mm □△
+when
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+11
+●●●●●● 1mm □
+dt
+●●●●●● 3mm □△
+24.0
+features
+12
+●●●●●● 1mm □
+dt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+7.0
+Exception
+what
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'what'
+''
+●●●●●● 2mm □△
+features
+13
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+what
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+200.0
+1.0
+●●●●●● 2mm □△
+features
+14
+●●●●●● 1mm □
+'error'
+what
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1.0
+0.0
+features
+15
+●●●●●● 1mm □
+'fail'
+what
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1.0
+0.0
+tags
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+features
+16
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+tags
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tags
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+10.0
+1.0
+●●●●●● 2mm □△
+0.0
+who
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'who'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+who
+h
+●●●●●● 1mm □
+●●●●●● 2mm △
+●●●●●● 1mm □△
+who
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+10000
+features
+17
+●●●●●● 1mm □
+h
+●●●●●● 2mm □○
+100
+●●●●●● 3mm □△
+100.0
+features
+18
+●●●●●● 1mm □
+h
+●●●●●● 1mm □○
+100
+●●●●●● 2mm □○
+100
+●●●●●● 3mm □△
+100.0
+text
+●●●●●● 1mm □
+what
+●●●●●● 3mm ○
+' '
+●●●●●● 3mm ○
+who
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+comp
+●●●●●● 2mm □
+●●●●●● 1mm □△
+COMPONENT_CLASSES
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+text
+comp
+●●●●●● 1mm □△
+'_'
+''
+●●●●●● 2mm □△
+text
+features
+19
+●●●●●● 3mm ○
+i
+●●●●●● 1mm □
+1.0
+features
+29
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+1.0
+0.0
+features
+30
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'error_type'
+●●●●●● 2mm □△
+1.0
+0.0
+features
+31
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+key
+●●●●●● 1mm □△
+'trust_score'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+features
+●●●●●● 1mm □△
+●●●●●● 2mm □
+TORCH_AVAILABLE
+●●●●●● 2mm △
+GracePredictor
+●●●●●● 3mm □△
+nn
+'3-head predictor: success, component risk, trust score.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+input_dim
+hidden_dim
+n_components
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+32
+64
+10
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+input_dim
+hidden_dim
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+0.2
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+hidden_dim
+hidden_dim
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+hidden_dim
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+hidden_dim
+n_components
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+hidden_dim
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+h
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+h
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+h
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+h
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+success
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+component
+trust
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraceModelManager
+'Manages training and inference for the Grace DL model.'
+MODEL_PATH
+●●●●●● 1mm □
+'data/grace_model.pt'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+TORCH_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 1mm □
+GracePredictor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+optim
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_weights
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+p
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace model loaded from disk'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'No saved model: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_weights
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+train_batch
+●●●●●● 1mm □△
+self
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+'Train on a batch of Genesis keys.'
+●●●●●● 2mm □
+TORCH_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+'status'
+'reason'
+'skipped'
+'not enough data or no torch'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+labels_success
+●●●●●● 1mm □
+labels_component
+●●●●●● 1mm □
+labels_trust
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+_key_to_features
+●●●●●● 1mm □△
+keys
+i
+●●●●●● 2mm □△
+next_key
+●●●●●● 1mm □
+keys
+i
+●●●●●● 3mm ○
+1
+features
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+labels_success
+●●●●●● 1mm □△
+next_key
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+0.0
+1.0
+●●●●●● 2mm □△
+comp_text
+●●●●●● 1mm □
+next_key
+●●●●●● 1mm □△
+'what'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+' '
+●●●●●● 3mm ○
+next_key
+●●●●●● 1mm □△
+'who'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_idx
+●●●●●● 1mm □
+9
+j
+c
+●●●●●● 2mm □
+●●●●●● 1mm □△
+COMPONENT_CLASSES
+●●●●●● 2mm □△
+●●●●●● 2mm □
+c
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+comp_text
+comp_idx
+●●●●●● 1mm □
+j
+labels_component
+●●●●●● 1mm □△
+comp_idx
+●●●●●● 2mm □△
+labels_trust
+●●●●●● 1mm □△
+next_key
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+0.3
+0.7
+●●●●●● 2mm □△
+X
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+y_s
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+labels_success
+●●●●●● 2mm □△
+y_c
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+labels_component
+●●●●●● 2mm □△
+y_t
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+labels_trust
+●●●●●● 2mm □△
+pred_s
+pred_c
+pred_t
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+X
+●●●●●● 2mm □△
+loss_s
+●●●●●● 1mm □
+●●●●●● 1mm □△
+pred_s
+y_s
+●●●●●● 2mm □△
+loss_c
+●●●●●● 1mm □
+●●●●●● 1mm □△
+pred_c
+y_c
+●●●●●● 2mm □△
+loss_t
+●●●●●● 1mm □
+●●●●●● 1mm □△
+pred_t
+y_t
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+loss_s
+●●●●●● 3mm ○
+loss_c
+●●●●●● 3mm ○
+0.5
+●●●●●● 2mm □△
+loss_t
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'samples'
+'loss'
+'loss_success'
+'loss_component'
+'loss_trust'
+'trained'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+4
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loss_s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+4
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loss_c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+4
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+loss_t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+4
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+predict
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Predict success, risky component, and trust for next action.'
+●●●●●● 2mm □
+TORCH_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'available'
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+_key_to_features
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pred_s
+pred_c
+pred_t
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+success_prob
+●●●●●● 1mm □
+pred_s
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_probs
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+pred_c
+0
+●●●●●● 2mm □△
+risky_idx
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+component_probs
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_pred
+●●●●●● 1mm □
+pred_t
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+'success_probability'
+'risky_component'
+'component_risk'
+'predicted_trust'
+'all_risks'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+success_prob
+3
+●●●●●● 2mm □△
+COMPONENT_CLASSES
+risky_idx
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+component_probs
+risky_idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+trust_pred
+3
+●●●●●● 2mm □△
+COMPONENT_CLASSES
+i
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+component_probs
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPONENT_CLASSES
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+component_probs
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.05
+●●●●●● 2mm □△
+●●●●●● 1mm □
+train_from_db
+●●●●●● 1mm □△
+self
+hours
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+24
+1000
+'Load Genesis keys from DB and train.'
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+miner
+●●●●●● 1mm □
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+miner
+●●●●●● 1mm □△
+hours
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+●●●●●● 3mm ○
+'status'
+'no_data'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm ○
+'status'
+'error: '
+e
+●●●●●● 2mm □△
+_model_manager
+●●●●●● 2mm □○
+GraceModelManager
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_model_manager
+●●●●●● 2mm □
+_model_manager
+●●●●●● 1mm □
+GraceModelManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_model_manager
+GraceModelManager

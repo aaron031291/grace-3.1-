@@ -1,0 +1,145 @@
+## error_middleware.py
+'\nSpindle Error Middleware\nBridges the gap between Z3 Formal Verification (Spindle) and the World Model.\nWhen Spindle rejects an action due to Causal Graph physical catastrophe predictions,\nthis middleware intercepts the `Z3_UNSAT` failure and queries the World Model (via Magma)\nto suggest safe, formally valid alternatives.\n'
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+List
+Dict
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+get_magma_graphs
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SpindleRejection
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+original_action
+●●●●●● 1mm ○
+rejection_reason
+●●●●●● 1mm ○
+violating_causal_nodes
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+SafeAlternative
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+suggested_action
+●●●●●● 1mm ○
+rationale
+●●●●●● 1mm ○
+●●●●●● 2mm △
+SpindleErrorMiddleware
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[SPINDLE-MIDDLEWARE] Magma Graphs offline. Alternative generation disabled.'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+handle_causal_rejection
+●●●●●● 1mm □△
+self
+rejection
+●●●●●● 2mm □△
+SpindleRejection
+'\n        When the World Model Causal Graph forces Spindle to block an action,\n        find a detour node that achieves a similar intent without hitting\n        the catastrophic node.\n        '
+logger
+●●●●●● 1mm □△
+'[SPINDLE-MIDDLEWARE] Processing Causal Rejection for: '
+rejection
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+semantic_alternatives
+●●●●●● 1mm □
+action_keywords
+●●●●●● 1mm □
+rejection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'restart'
+action_keywords
+●●●●●● 3mm ○
+SafeAlternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'increase'
+action_keywords
+'temperature'
+action_keywords
+●●●●●● 3mm ○
+SafeAlternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'start'
+action_keywords
+'archiving'
+action_keywords
+●●●●●● 3mm ○
+SafeAlternative
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[SPINDLE-MIDDLEWARE] Failed to generate safe alternative: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+SafeAlternative
+_middleware
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_error_middleware
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_middleware
+●●●●●● 2mm □
+_middleware
+●●●●●● 1mm □
+SpindleErrorMiddleware
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_middleware
+SpindleErrorMiddleware
