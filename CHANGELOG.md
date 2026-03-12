@@ -27,17 +27,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.1] - 2026-03-12
 
 ### Added
-- Created `USAGE.md` for client onboarding.
+- Created comprehensive `USAGE.md` client usage guide covering all 40+ UI tabs, MCP agentic tools, governance workflows, troubleshooting steps, and admin operations.
+- Documented 16 previously undocumented frontend components (`DevTab`, `FoldersTab`, `TasksTab`, `PlannerPanel`, `LabTab`, `OracleTab`, `LearningHealingTab`, `TerminalLogViewer`, `ActivityFeed`, `TabGuide`, `CrossTabNotifier`, `GenesisTimeline`, `GovernanceDiscussion`, `UndoManager`, `UploadProgress`, `BackendPanel`) in `README.md`.
 
 ### Changed
-- Migrated deprecated `datetime.utcnow()` to timezone-aware UTC timestamps system-wide.
-- Hardened React 19 frontend by resolving all remaining linting warnings, dead code, and fast-refresh issues.
+- Updated `README.md` Current State section to reflect v3.1.1 enterprise handoff detail with specific bug references (SQLite savepoint, Qwen pool, timezone fixes, lint cleanup).
+- Corrected frontend component count to 92 (from estimate of ~90) in `README.md`.
+- Migrated deprecated `datetime.utcnow()` to timezone-aware UTC timestamps (`datetime.now(timezone.utc)`) system-wide for Python 3.11+ compliance.
+- Hardened React 19 frontend by resolving all remaining linting warnings, dead code, and fast-refresh issues — frontend now builds with zero warnings.
 
 ### Fixed
-- Resolved SQLite `sa_savepoint_4` database errors within the Genesis tracking system.
+- Resolved critical SQLite `sa_savepoint_4` database errors within the Genesis tracking system causing transaction loss under concurrent load.
 - Fixed 500 Internal Server Errors in multi-tier RAG retrieval and chat endpoints.
-- Patched Qwen Model Pool initialization parameters and permissions.
-- Fixed test docstring syntax causing skips in pytest.
+- Patched Qwen Model Pool initialization parameters and write-permission enforcement logic.
+- Fixed test file docstring syntax errors causing pytest skips to silently bypass test execution.
 
 ## [3.1.0] - 2026-01-14
 
