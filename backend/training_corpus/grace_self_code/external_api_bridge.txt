@@ -1,0 +1,55 @@
+## external_api_bridge.py
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ExternalAPIBridge
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.genesis_key
+●●●●●● 2mm □△○
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[EXTERNAL-BRIDGE] OAuth2 services bound to Genesis Key: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+call_external_service
+●●●●●● 1mm □△
+self
+service_url
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'\n        Makes a call to a third party API (like GitHub or external LLM providers).\n        '
+logger
+●●●●●● 1mm □△
+'[EXTERNAL-BRIDGE] Calling '
+service_url
+' via key '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'data'
+'genesis_key'
+200
+'mock response'
+●●●●●● 3mm △
+●●●●●● 2mm □△

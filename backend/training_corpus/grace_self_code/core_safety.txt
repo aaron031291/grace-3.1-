@@ -1,0 +1,867 @@
+## safety.py
+'\nProduction Safety — the 4 critical gaps identified by Kimi+Opus.\n\n1. Multi-step rollback (undo chains when hot-reload breaks things)\n2. Security scanning (detect code injection in generated code)\n3. Budget circuit breaker (hard token/cost limits)\n4. Provenance ledger (cryptographic hash chain for audit)\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+MAX_SNAPSHOT_SIZE_MB
+●●●●●● 1mm □
+50
+_rollback_stack
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_rollback_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+snapshot_state
+●●●●●● 1mm □△
+label
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+''
+'Take a snapshot of critical files for rollback.'
+snapshot_id
+●●●●●● 1mm □
+'SNAP-'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+snapshot
+●●●●●● 1mm □
+'id'
+'label'
+'ts'
+'files'
+snapshot_id
+label
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+critical
+●●●●●● 1mm □
+'app.py'
+'api/brain_api_v2.py'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+f
+root
+●●●●●● 3mm □△
+'core'
+●●●●●● 3mm □△
+'services'
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+root
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+f
+root
+●●●●●● 3mm □△
+'core'
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+critical
+30
+fp
+●●●●●● 1mm □
+root
+●●●●●● 3mm □△
+f
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+snapshot
+'files'
+f
+●●●●●● 1mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_rollback_lock
+total_size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+s
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+s
+_rollback_stack
+●●●●●● 2mm □△
+snapshot_size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+snapshot
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_size
+●●●●●● 3mm ○
+snapshot_size
+MAX_SNAPSHOT_SIZE_MB
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+_rollback_stack
+evicted
+●●●●●● 1mm □
+_rollback_stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_size
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+evicted
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_rollback_stack
+●●●●●● 1mm □△
+snapshot
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+snapshot_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+rollback_to
+●●●●●● 1mm □△
+snapshot_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Rollback to a snapshot. If no ID, rollback to last.'
+_rollback_lock
+●●●●●● 2mm □
+_rollback_stack
+●●●●●● 3mm ○
+'error'
+'No snapshots available'
+●●●●●● 2mm □
+snapshot_id
+snapshot
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+s
+s
+_rollback_stack
+s
+'id'
+snapshot_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □
+snapshot
+●●●●●● 1mm □
+_rollback_stack
+1
+●●●●●● 2mm □
+snapshot
+●●●●●● 3mm ○
+'error'
+'Snapshot '
+snapshot_id
+' not found'
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+restored
+●●●●●● 1mm □
+0
+filepath
+content
+snapshot
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 3mm □△
+filepath
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+restored
+1
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'rolled_back'
+'snapshot_id'
+'files_restored'
+●●●●●● 3mm □△○
+snapshot
+'id'
+restored
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_snapshots
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_rollback_lock
+●●●●●● 3mm ○
+'id'
+'label'
+'ts'
+'files'
+s
+'id'
+s
+'label'
+s
+'ts'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+s
+'files'
+●●●●●● 2mm □△
+s
+_rollback_stack
+●●●●●● 1mm □△
+DANGEROUS_PATTERNS
+●●●●●● 1mm □
+'exec('
+'code_execution'
+'critical'
+'eval('
+'code_execution'
+'critical'
+"__import__('os')"
+'os_import'
+'critical'
+'subprocess.call'
+'subprocess'
+'high'
+'subprocess.Popen'
+'subprocess'
+'high'
+'os.system('
+'os_system'
+'critical'
+'os.popen('
+'os_popen'
+'critical'
+'shutil.rmtree'
+'recursive_delete'
+'high'
+"open('/etc"
+'filesystem_access'
+'high'
+'rm -rf'
+'destructive_command'
+'critical'
+'DROP TABLE'
+'sql_drop'
+'critical'
+'DELETE FROM'
+'sql_delete'
+'high'
+'pickle.loads'
+'deserialization'
+'high'
+'yaml.load('
+'unsafe_yaml'
+'medium'
+'__builtins__'
+'builtin_access'
+'high'
+'ctypes'
+'native_code'
+'high'
+'socket.socket'
+'raw_socket'
+'medium'
+"requests.get(f'http://{"
+'ssrf_risk'
+'medium'
+●●●●●● 1mm □
+scan_code_security
+●●●●●● 1mm □△
+code
+filepath
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'Scan generated code for security vulnerabilities.'
+findings
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+stripped
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stripped
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+pattern
+vuln_type
+severity
+DANGEROUS_PATTERNS
+●●●●●● 2mm □
+pattern
+line
+findings
+●●●●●● 1mm □△
+'line'
+'pattern'
+'type'
+'severity'
+'code'
+'file'
+i
+●●●●●● 3mm ○
+1
+pattern
+vuln_type
+severity
+stripped
+80
+filepath
+●●●●●● 2mm □△
+blocked
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+f
+'severity'
+'critical'
+f
+findings
+●●●●●● 2mm □△
+●●●●●● 2mm □
+findings
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'safe'
+'blocked'
+'findings'
+'total'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+findings
+●●●●●● 2mm □△
+0
+blocked
+findings
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+findings
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_budget
+●●●●●● 1mm □
+'total_calls'
+'total_tokens_est'
+'limit_calls_per_hour'
+'limit_tokens_per_hour'
+'window_start'
+'blocked'
+0
+0
+500
+500000
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+_budget_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_budget
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Check if we're within budget. Returns True if allowed."
+_budget_lock
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+now
+●●●●●● 1mm □△
+_budget
+'window_start'
+3600
+_budget
+'total_calls'
+●●●●●● 1mm □
+0
+_budget
+'total_tokens_est'
+●●●●●● 1mm □
+0
+_budget
+'window_start'
+●●●●●● 1mm □
+now
+●●●●●● 2mm □
+_budget
+'total_calls'
+_budget
+'limit_calls_per_hour'
+_budget
+'blocked'
+1
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+_budget
+'total_tokens_est'
+_budget
+'limit_tokens_per_hour'
+_budget
+'blocked'
+1
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+record_usage
+●●●●●● 1mm □△
+tokens
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+0
+'Record an API call for budget tracking.'
+_budget_lock
+_budget
+'total_calls'
+1
+_budget
+'total_tokens_est'
+tokens
+●●●●●● 1mm □
+get_budget_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_budget_lock
+remaining_calls
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+_budget
+'limit_calls_per_hour'
+●●●●●● 1mm □△
+_budget
+'total_calls'
+●●●●●● 2mm □△
+remaining_tokens
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+_budget
+'limit_tokens_per_hour'
+●●●●●● 1mm □△
+_budget
+'total_tokens_est'
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_budget
+'window_start'
+●●●●●● 3mm ○
+'remaining_calls'
+'remaining_tokens'
+'window_elapsed_minutes'
+_budget
+remaining_calls
+remaining_tokens
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+elapsed
+●●●●●● 3mm □△
+60
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_budget_limits
+●●●●●● 1mm □△
+calls_per_hour
+tokens_per_hour
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+_budget_lock
+●●●●●● 2mm □
+calls_per_hour
+_budget
+'limit_calls_per_hour'
+●●●●●● 1mm □
+calls_per_hour
+●●●●●● 2mm □
+tokens_per_hour
+_budget
+'limit_tokens_per_hour'
+●●●●●● 1mm □
+tokens_per_hour
+●●●●●● 3mm ○
+get_budget_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LEDGER_PATH
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'provenance_ledger.jsonl'
+_prev_hash
+●●●●●● 1mm □
+'0'
+●●●●●● 2mm □△
+64
+●●●●●● 1mm □
+record_provenance
+●●●●●● 1mm □△
+action
+content_hash
+model
+prompt_hash
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+''
+''
+●●●●●● 2mm □
+'Record a provenance entry with cryptographic hash chain.'
+entry
+●●●●●● 1mm □
+'seq'
+'ts'
+'action'
+'content_hash'
+'model'
+'prompt_hash'
+'prev_hash'
+'metadata'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+content_hash
+model
+prompt_hash
+_prev_hash
+metadata
+entry_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+entry
+'hash'
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+entry_str
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_prev_hash
+●●●●●● 1mm □
+entry
+'hash'
+LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+LEDGER_PATH
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'hash'
+'seq'
+entry
+'hash'
+entry
+'seq'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+verify_ledger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify the hash chain integrity.'
+●●●●●● 2mm □
+LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'valid'
+'entries'
+●●●●●● 3mm □△○
+0
+entries
+●●●●●● 1mm □
+prev
+●●●●●● 1mm □
+'0'
+●●●●●● 2mm □△
+64
+broken_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+line
+LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+entry
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □△
+'prev_hash'
+●●●●●● 2mm □△
+prev
+broken_at
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'seq'
+●●●●●● 2mm □△
+prev
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □△
+'hash'
+''
+●●●●●● 2mm □△
+entries
+●●●●●● 1mm □△
+entry
+'seq'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'valid'
+'entries'
+'broken_at'
+broken_at
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+entries
+●●●●●● 2mm □△
+broken_at
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_ledger_entries
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+●●●●●● 2mm □
+LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+lines
+●●●●●● 1mm □
+LEDGER_PATH
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+entries
+●●●●●● 1mm □
+line
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+lines
+limit
+●●●●●● 2mm □△
+entries
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+entries
+●●●●●● 1mm □△

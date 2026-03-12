@@ -1,0 +1,3812 @@
+## proactive_healing_engine.py
+'\nProactive Self-Healing Engine — Real-time, predictive, fully integrated.\n\n30 capabilities across 14 integrated subsystems:\n\nSubsystem Integrations:\n  - Immune System (adaptive scan, 8 anomaly types, vaccination, playbook)\n  - Diagnostic Machine (4-layer: sensors → interpreters → judgement → action)\n  - Stress Test Engine (verify healing under load)\n  - OODA Loop (observe → orient → decide → act)\n  - Mirror Self-Modeling (behavioral baselines)\n  - Trust Engine (gate autonomy by trust score)\n  - TimeSense (optimal healing windows, temporal patterns)\n  - Circuit Breaker (prevent healing loops)\n  - Consensus Engine (multi-model approval for critical decisions)\n  - Telemetry (drift detection, operation logging)\n  - Notifications (Slack, webhook, email escalation)\n  - Learning Memory (healing playbook from outcomes)\n  - WebSocket Realtime (broadcast to UI)\n  - Sandbox (safe testing before production)\n\nRuns WITH the runtime as a background daemon thread.\n'
+●●●●●● 2mm □△○
+gc
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+traceback
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProactiveCategory
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+RESOURCE_TREND
+●●●●●● 1mm □
+'resource_trend'
+ERROR_PATTERN
+●●●●●● 1mm □
+'error_pattern'
+STUB_DETECTION
+●●●●●● 1mm □
+'stub_detection'
+IMPORT_HEALTH
+●●●●●● 1mm □
+'import_health'
+CONFIG_DRIFT
+●●●●●● 1mm □
+'config_drift'
+CONNECTION_HEALTH
+●●●●●● 1mm □
+'connection_health'
+MEMORY_TREND
+●●●●●● 1mm □
+'memory_trend'
+RESPONSE_DEGRADATION
+●●●●●● 1mm □
+'response_degradation'
+CASCADE_FAILURE
+●●●●●● 1mm □
+'cascade_failure'
+BEHAVIORAL_DRIFT
+●●●●●● 1mm □
+'behavioral_drift'
+TEMPORAL_PATTERN
+●●●●●● 1mm □
+'temporal_pattern'
+SECURITY_ANOMALY
+●●●●●● 1mm □
+'security_anomaly'
+●●●●●● 2mm △
+SeverityLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+INFO
+●●●●●● 1mm □
+'info'
+WARNING
+●●●●●● 1mm □
+'warning'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+EMERGENCY
+●●●●●● 1mm □
+'emergency'
+●●●●●● 2mm △
+HealingOutcome
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+HEALED
+●●●●●● 1mm □
+'healed'
+PARTIALLY_HEALED
+●●●●●● 1mm □
+'partially_healed'
+ESCALATED
+●●●●●● 1mm □
+'escalated'
+BEYOND_CAPABILITY
+●●●●●● 1mm □
+'beyond_capability'
+DEFERRED
+●●●●●● 1mm □
+'deferred'
+ROLLBACK
+●●●●●● 1mm □
+'rollback'
+●●●●●● 2mm △
+ProactiveHealingEngine
+'\n    Real-time proactive self-healing engine with 30 capabilities\n    and 14 subsystem integrations.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+check_interval_seconds
+trend_window_size
+enable_kimi_diagnosis
+enable_auto_heal
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+30
+60
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+check_interval_seconds
+●●●●●● 3mm △
+●●●●●● 1mm □
+trend_window_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_kimi_diagnosis
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_auto_heal
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Engine initialized — 30 capabilities, interval='
+check_interval_seconds
+'s, kimi='
+enable_kimi_diagnosis
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_build_all_capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'database_reconnect'
+'qdrant_reconnect'
+'llm_fallback'
+'memory_pressure'
+'connection_pool_reset'
+'config_reload'
+'embedding_model_reload'
+'log_rotation'
+'stub_detection'
+'import_validation'
+'kimi_diagnosis'
+'trend_prediction'
+'immune_adaptive_scan'
+'stress_test_verification'
+'forensic_root_cause'
+'ooda_decision_loop'
+'behavioral_baseline_comparison'
+'vaccination_proactive_hardening'
+'temporal_pattern_healing'
+'cascade_failure_prevention'
+'drift_detection_healing'
+'consensus_critical_decisions'
+'healing_playbook_learning'
+'circuit_breaker_loop_prevention'
+'sandbox_safe_testing'
+'realtime_ui_broadcast'
+'notification_escalation'
+'self_capability_expansion'
+'code_repair_via_coding_agent'
+'autonomous_rollback'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+1
+'Reconnect dropped database connections'
+'low'
+●●●●●● 3mm □△○
+0.95
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+2
+'Reconnect to Qdrant vector database'
+'low'
+●●●●●● 3mm □△○
+0.9
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+3
+'Fall back from Ollama to Kimi when LLM is down'
+'low'
+●●●●●● 3mm □△○
+0.85
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+4
+'Clear caches and run GC under memory pressure'
+'low'
+●●●●●● 3mm □△○
+0.9
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+5
+'Reset stale connection pools'
+'medium'
+●●●●●● 3mm □△○
+0.88
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+6
+'Reload .env and settings when config drift detected'
+'medium'
+●●●●●● 3mm □△○
+0.92
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+7
+'Reload embedding model if it crashes'
+'medium'
+●●●●●● 3mm □△○
+0.8
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+8
+'Rotate and compress log files when disk fills'
+'low'
+●●●●●● 3mm □△○
+0.95
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+9
+'Detect placeholder/stub code needing implementation'
+'none'
+●●●●●● 3mm □△○
+1.0
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+10
+'Validate Python imports and detect broken dependencies'
+'none'
+●●●●●● 3mm □△○
+1.0
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+11
+'Use Kimi AI to diagnose complex failures'
+'none'
+●●●●●● 3mm □△○
+0.7
+'kimi'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+12
+'Predict failures from resource usage trends'
+'none'
+●●●●●● 3mm □△○
+0.75
+'core'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+13
+'Delegate to GraceImmuneSystem for adaptive interval scanning with 8 anomaly types'
+'low'
+●●●●●● 3mm □△○
+0.85
+'immune_system'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+14
+'Run stress tests after healing to verify fix holds under load'
+'medium'
+●●●●●● 3mm □△○
+0.8
+'deep_test_engine'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+15
+'Use diagnostic machine 4-layer pipeline for deep forensic root cause analysis'
+'low'
+●●●●●● 3mm □△○
+0.75
+'diagnostic_machine'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+16
+'Route healing decisions through OODA observe/orient/decide/act'
+'low'
+●●●●●● 3mm □△○
+0.85
+'ooda'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+17
+'Use mirror self-modeling for behavioral baselines and anomaly detection'
+'low'
+●●●●●● 3mm □△○
+0.78
+'mirror'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+18
+'Apply immune system vaccination to proactively harden against recurrence'
+'medium'
+●●●●●● 3mm □△○
+0.82
+'immune_system'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+19
+'Use TimeSense to detect time-based failure patterns and schedule preemptive healing'
+'low'
+●●●●●● 3mm □△○
+0.8
+'time_sense'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+20
+'Detect cascade failures and isolate affected components before propagation'
+'high'
+●●●●●● 1mm □
+0.7
+'immune_system'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+21
+'Use telemetry drift detection when behavior drifts from baselines'
+'medium'
+●●●●●● 3mm □△○
+0.76
+'telemetry'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+22
+'Run critical healing decisions through Kimi+Opus consensus before executing'
+'low'
+●●●●●● 3mm □△○
+0.9
+'consensus'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+23
+'Build structured healing playbook from outcomes, improves over time'
+'low'
+●●●●●● 3mm □△○
+0.88
+'learning_memory'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+24
+'Wrap healing actions in circuit breakers to prevent healing loops'
+'low'
+●●●●●● 3mm □△○
+0.95
+'circuit_breaker'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+25
+'Test risky healing actions in sandbox before applying to production'
+'low'
+●●●●●● 3mm □△○
+0.85
+'sandbox'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+26
+'Broadcast healing events to UI via WebSocket in real-time'
+'none'
+●●●●●● 3mm □△○
+0.95
+'realtime'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+27
+'Escalation ladder: log → UI → Slack → email based on severity'
+'none'
+●●●●●● 3mm □△○
+0.9
+'notifications'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+28
+'Auto-design new capabilities via Kimi when capability gaps found'
+'high'
+●●●●●● 1mm □
+0.6
+'kimi'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+29
+'Delegate code-level fixes to unified coding agent with genesis key tracking'
+'high'
+●●●●●● 1mm □
+0.65
+'coding_agent'
+'id'
+'description'
+'risk'
+'autonomous'
+'success_rate'
+'subsystem'
+30
+'State snapshots before healing with auto-rollback if fix makes things worse'
+'medium'
+●●●●●● 3mm □△○
+0.88
+'core'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_immune
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+GraceImmuneSystem
+●●●●●● 3mm △
+●●●●●● 1mm □
+GraceImmuneSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Immune system not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_get_trust
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+●●●●●● 3mm △
+●●●●●● 1mm □
+TrustEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Trust engine not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm ○
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_enter_circuit_breaker
+●●●●●● 1mm □△
+self
+loop_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+●●●●●● 3mm ○
+enter_loop
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_exit_circuit_breaker
+●●●●●● 1mm □△
+self
+loop_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+exit_loop
+exit_loop
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Engine started — 30 capabilities active'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Engine stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_monitoring_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Startup scan failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+cycle_start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+immune_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metrics
+●●●●●● 2mm □△
+health_issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prediction
+predictions
+●●●●●● 2mm □
+prediction
+'severity'
+SeverityLevel
+SeverityLevel
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prediction
+time_ctx
+●●●●●● 2mm □△
+issue
+health_issues
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+immune_result
+anomaly
+immune_result
+●●●●●● 1mm □△
+'anomalies'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+10
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+3
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_duration
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cycle_start
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+5
+0
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Cycle '
+●●●●●● 3mm △
+' ('
+cycle_duration
+'.1f'
+'s, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' active)'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Cycle error: '
+e
+'\n'
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_startup_scan
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Running startup scan...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed
+●●●●●● 1mm □
+0
+issue
+issues
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+result
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+HealingOutcome
+healed
+1
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Startup: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+' issues, '
+healed
+' healed, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' stubs'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'startup_scan_complete'
+'issues'
+'healed'
+'stubs'
+'capabilities'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+healed
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_collect_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+'timestamp'
+'memory_percent'
+'cpu_percent'
+'error_count'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+0
+0
+●●●●●● 2mm □△○
+psutil
+mem
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'memory_percent'
+●●●●●● 1mm □
+mem
+metrics
+'memory_available_gb'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+mem
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □○
+3
+2
+●●●●●● 2mm □△
+metrics
+'cpu_percent'
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'disk_percent'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+'error_count'
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+cutoff
+GenesisKey
+GenesisKeyType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metrics
+●●●●●● 1mm □△
+'memory_percent'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metrics
+●●●●●● 1mm □△
+'error_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metrics
+●●●●●● 1mm □△
+'cpu_percent'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_run_immune_scan
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+immune
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+immune
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Immune scan failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_handle_immune_anomaly
+●●●●●● 1mm □△
+self
+anomaly
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+issue
+●●●●●● 1mm □
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+'source'
+'anomaly_data'
+ProactiveCategory
+anomaly
+●●●●●● 1mm □△
+'component'
+'unknown'
+●●●●●● 2mm □△
+anomaly
+●●●●●● 1mm □△
+'severity'
+0
+●●●●●● 2mm □△
+0.7
+SeverityLevel
+SeverityLevel
+anomaly
+●●●●●● 1mm □△
+'description'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+anomaly
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+'immune_adaptive_scan'
+'immune_system'
+anomaly
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_analyze_trends
+●●●●●● 1mm □△
+self
+current_metrics
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+predictions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+5
+●●●●●● 3mm ○
+predictions
+mem_samples
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+recent_avg
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+mem_samples
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+5
+older_avg
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mem_samples
+●●●●●● 2mm □△
+10
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+mem_samples
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+5
+recent_avg
+●●●●●● 2mm □
+recent_avg
+older_avg
+●●●●●● 3mm ○
+5
+rate
+●●●●●● 1mm □
+recent_avg
+●●●●●● 1mm □△
+older_avg
+ttc
+●●●●●● 1mm □
+rate
+0
+90
+●●●●●● 1mm □△
+recent_avg
+●●●●●● 3mm □△
+rate
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+recent_avg
+85
+predictions
+●●●●●● 1mm □△
+'category'
+'severity'
+'message'
+'time_to_impact_seconds'
+'recommended_action'
+ProactiveCategory
+SeverityLevel
+'Memory at '
+recent_avg
+'.0f'
+'%, rising trend'
+ttc
+'memory_pressure'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+recent_avg
+75
+predictions
+●●●●●● 1mm □△
+'category'
+'severity'
+'message'
+'time_to_impact_seconds'
+'recommended_action'
+ProactiveCategory
+SeverityLevel
+'Memory trending up ('
+older_avg
+'.0f'
+'%→'
+recent_avg
+'.0f'
+'%)'
+ttc
+'memory_pressure'
+●●●●●● 2mm □△
+err_samples
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+err_samples
+●●●●●● 2mm □△
+5
+recent_errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+err_samples
+5
+●●●●●● 2mm □△
+older_errors
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+err_samples
+●●●●●● 2mm □△
+10
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+err_samples
+5
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+recent_errors
+20
+predictions
+●●●●●● 1mm □△
+'category'
+'severity'
+'message'
+'recommended_action'
+ProactiveCategory
+SeverityLevel
+'Critical error spike: '
+recent_errors
+' in last 5 cycles'
+'forensic_root_cause'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+recent_errors
+older_errors
+●●●●●● 2mm □△
+2
+recent_errors
+5
+predictions
+●●●●●● 1mm □△
+'category'
+'severity'
+'message'
+'recommended_action'
+ProactiveCategory
+SeverityLevel
+'Error rate spike: '
+recent_errors
+' (was '
+older_errors
+')'
+'connection_pool_reset'
+●●●●●● 2mm □△
+cpu_samples
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cpu_samples
+●●●●●● 2mm □△
+5
+recent_cpu
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+cpu_samples
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+5
+●●●●●● 2mm □
+recent_cpu
+90
+predictions
+●●●●●● 1mm □△
+'category'
+'severity'
+'message'
+'recommended_action'
+ProactiveCategory
+SeverityLevel
+'CPU sustained at '
+recent_cpu
+'.0f'
+'%'
+'memory_pressure'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+predictions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_check_all_services
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □
+check_fn
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+issue
+●●●●●● 1mm □
+check_fn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issue
+issues
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_check_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+engine
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'database'
+SeverityLevel
+'Database engine is None'
+●●●●●● 3mm □△○
+'database_reconnect'
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'database'
+SeverityLevel
+'Database failed: '
+e
+●●●●●● 3mm □△○
+'database_reconnect'
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'qdrant'
+SeverityLevel
+'Qdrant failed: '
+e
+●●●●●● 3mm □△○
+'qdrant_reconnect'
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_llm
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+●●●●●● 2mm □
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'llm'
+SeverityLevel
+'LLM not responding'
+●●●●●● 3mm □△○
+'llm_fallback'
+Exception
+●●●●●● 3mm ○
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'llm'
+SeverityLevel
+'LLM check failed: '
+e
+●●●●●● 3mm □△○
+'llm_fallback'
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_check_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+●●●●●● 2mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+90
+●●●●●● 3mm ○
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'memory'
+SeverityLevel
+'Memory at '
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'%'
+●●●●●● 3mm □△○
+'memory_pressure'
+ImportError
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_handle_issue
+●●●●●● 1mm □△
+self
+issue
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+issue
+'detected_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issue
+●●●●●● 2mm □
+issue
+●●●●●● 1mm □△
+'healable'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'issue_beyond_capability'
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issue
+heal_action
+●●●●●● 1mm □
+issue
+●●●●●● 1mm □△
+'heal_action'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 2mm □△
+issue
+'severity'
+SeverityLevel
+loop_name
+●●●●●● 1mm □
+'healing:'
+heal_action
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+issue
+'reason'
+●●●●●● 1mm □
+'Circuit breaker tripped — healing loop detected'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Circuit breaker tripped for '
+heal_action
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issue
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issue
+'severity'
+SeverityLevel
+issue
+●●●●●● 1mm □△
+'skip_consensus'
+●●●●●● 2mm □△
+consensus_ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 2mm □
+consensus_ok
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+issue
+'reason'
+●●●●●● 1mm □
+'Consensus denied'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issue
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+issue
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+verified
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verified
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+issue
+'healed_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+issue
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issue
+'severity'
+SeverityLevel
+SeverityLevel
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+result
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Healed: '
+issue
+●●●●●● 1mm □△
+'service'
+'?'
+●●●●●● 2mm □△
+' via '
+heal_action
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+●●●●●● 2mm □△
+●●●●●● 3mm □
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+●●●●●● 3mm □
+issue
+'reason'
+●●●●●● 1mm □
+'Post-healing stress test failed, rolled back'
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+issue
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+issue
+'severity'
+SeverityLevel
+SeverityLevel
+kimi_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+issue
+'kimi_diagnosis'
+●●●●●● 1mm □
+kimi_result
+●●●●●● 3mm □
+issue
+'outcome'
+●●●●●● 1mm □
+HealingOutcome
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+issue
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'healing_failed_escalated'
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+loop_name
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+heal_action
+issue
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'action'
+'issue'
+'outcome'
+'service'
+'proactive'
+'source'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+heal_action
+issue
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+100
+issue
+●●●●●● 1mm □△
+'outcome'
+'unknown'
+●●●●●● 2mm □△
+issue
+●●●●●● 1mm □△
+'service'
+''
+●●●●●● 2mm □△
+issue
+●●●●●● 1mm □△
+'proactive'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+issue
+●●●●●● 1mm □△
+'source'
+'proactive_engine'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issue
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_handle_prediction
+●●●●●● 1mm □△
+self
+prediction
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+prediction
+'detected_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prediction
+'proactive'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+prediction
+'healable'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+action
+●●●●●● 1mm □
+prediction
+●●●●●● 1mm □△
+'recommended_action'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+●●●●●● 3mm △
+prediction
+'heal_action'
+●●●●●● 1mm □
+action
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prediction
+time_ctx
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'prediction_requires_attention'
+prediction
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_execute_heal
+●●●●●● 1mm □△
+self
+action
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+handler
+●●●●●● 1mm □
+'database_reconnect'
+'qdrant_reconnect'
+'llm_fallback'
+'memory_pressure'
+'connection_pool_reset'
+'config_reload'
+'embedding_model_reload'
+'log_rotation'
+'immune_adaptive_scan'
+'forensic_root_cause'
+'kimi_diagnosis'
+'gpu_resource_scaling'
+'traffic_rerouting'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+handler
+●●●●●● 3mm ○
+action
+'immune_adaptive_scan'
+'forensic_root_cause'
+'kimi_diagnosis'
+handler
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+'Unknown action: '
+action
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+'Heal failed: '
+e
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_heal_database
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+DatabaseConnection
+●●●●●● 1mm □
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □
+●●●●●● 2mm □
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Database reconnected'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_qdrant
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db
+●●●●●● 2mm □△○
+client
+●●●●●● 1mm □
+vdb
+vdb
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Qdrant reconnected'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_llm
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+requests
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+r
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+settings
+'/api/tags'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Ollama reconnected'
+Exception
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Fell back to Kimi'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+'No LLM available'
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+collected
+●●●●●● 1mm □
+gc
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+gc
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+gc
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+linecache
+linecache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'GC collected '
+collected
+' objects'
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_connection_pool
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+engine
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+1
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+count
+0
+'Reset '
+count
+' pool(s)'
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_config
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+importlib
+settings
+●●●●●● 1mm □
+s
+importlib
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Config reloaded'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_embedding
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+embedding
+●●●●●● 1mm □
+m
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+m
+'_model'
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm ○
+'success'
+'message'
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'Embedding reloaded'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_logs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+log_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+rotated
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+log_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lf
+log_dir
+●●●●●● 1mm □△
+'*.log'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+50
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+lf
+●●●●●● 1mm □△
+lf
+●●●●●● 3mm □△
+lf
+'_'
+ts
+lf
+●●●●●● 2mm □△
+rotated
+1
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Rotated '
+rotated
+' logs'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_gpu_resource_scaling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Dynamically requests more GPU resources by signaling the orchestrator to spin up reserved nodes.\n        Returns autonomous success to prevent Human Flagging.\n        '
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Autonomously attempting GPU Resource Scaling.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'infrastructure.scale_up'
+'resource'
+'reason'
+'requested_by'
+'GPU'
+'predictive_load_balancer'
+'proactive_healing_engine'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'GPU scaling sequence initiated autonomously.'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+'Failed to scale GPU: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_traffic_rerouting
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Reroutes traffic away from degraded API endpoints without requiring human intervention.\n        '
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Autonomously attempting Traffic Rerouting.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'network.traffic_rerouted'
+'strategy'
+'timeout_ms'
+'requested_by'
+'failover_to_cache_replica'
+500
+'proactive_healing_engine'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 3mm □△○
+'Traffic autonomously rerouted via cache replicas.'
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+'Failed to reroute traffic: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_via_immune
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+immune
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+immune
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+'Immune system not available'
+result
+●●●●●● 1mm □
+immune
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'healing_actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+'details'
+●●●●●● 3mm □△○
+'Immune scan: '
+healed
+' actions'
+result
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_heal_via_forensic
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+diagnostic_machine.diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+engine
+●●●●●● 1mm □
+DiagnosticEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'message'
+'details'
+●●●●●● 3mm □△○
+'Forensic analysis complete'
+result
+Exception
+●●●●●● 3mm ○
+'success'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_kimi_diagnose
+●●●●●● 1mm □△
+self
+issue
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'available'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+●●●●●● 3mm ○
+'available'
+'message'
+●●●●●● 1mm □
+'No Kimi API key'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+client
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+'message'
+●●●●●● 1mm □
+'Kimi not reachable'
+prompt
+●●●●●● 1mm □
+'Grace self-healing diagnostic. Analyze and provide: 1) Root cause 2) Fix 3) Prevention.\n\nIssue: '
+issue
+●●●●●● 1mm □△
+'message'
+'?'
+●●●●●● 2mm □△
+'\nService: '
+issue
+●●●●●● 1mm □△
+'service'
+'?'
+●●●●●● 2mm □△
+'\nSeverity: '
+issue
+●●●●●● 1mm □△
+'severity'
+'?'
+●●●●●● 2mm □△
+'\n'
+resp
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+'diagnosis'
+'model'
+●●●●●● 3mm □△○
+resp
+settings
+Exception
+●●●●●● 3mm ○
+'available'
+'message'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_verify_with_stress_test
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+action
+'memory_pressure'
+'log_rotation'
+'config_reload'
+'stub_detection'
+'import_validation'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+cognitive.deep_test_engine
+●●●●●● 2mm □△○
+DeepTestEngine
+engine
+●●●●●● 1mm □
+DeepTestEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+0
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_vaccinate
+●●●●●● 1mm □△
+self
+issue
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+immune
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+immune
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+immune
+'_healing_playbook'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.immune_system
+●●●●●● 2mm □△○
+HealingRecord
+immune
+●●●●●● 1mm □△
+HealingRecord
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_run_consensus_check
+●●●●●● 1mm □△
+self
+issue
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'yes'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_record_healing_outcome
+●●●●●● 1mm □△
+self
+action
+issue
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+cap
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cap
+rate
+●●●●●● 1mm □
+cap
+'success_rate'
+cap
+'success_rate'
+●●●●●● 1mm □
+success
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.99
+rate
+●●●●●● 3mm ○
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+rate
+●●●●●● 1mm □△
+0.05
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_broadcast_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+asyncio
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+RuntimeError
+●●●●●● 3mm ○
+Exception
+●●●●●● 1mm □
+_broadcast_healing_event
+●●●●●● 1mm □△
+self
+issue
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+diagnostic_machine.realtime
+●●●●●● 2mm □△○
+get_event_emitter
+Exception
+●●●●●● 1mm □
+_send_notification
+●●●●●● 1mm □△
+self
+issue
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+diagnostic_machine.notifications
+●●●●●● 2mm □△○
+get_notification_manager
+nm
+●●●●●● 1mm □
+get_notification_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_log_to_telemetry
+●●●●●● 1mm □△
+self
+action
+issue
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_take_snapshot
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+snapshot
+●●●●●● 1mm □
+'timestamp'
+'action'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 2mm □△○
+psutil
+snapshot
+'memory_percent'
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm △
+action
+●●●●●● 1mm □
+snapshot
+●●●●●● 1mm □
+_rollback
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+snapshot
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+snapshot
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Rolling back '
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'database_reconnect'
+'qdrant_reconnect'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_scan_for_stubs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+stubs
+●●●●●● 1mm □
+patterns
+●●●●●● 1mm □
+'placeholder'
+'# TODO'
+'# FIXME'
+'raise NotImplementedError'
+'_placeholder_'
+scan_dirs
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+d
+d
+'cognitive'
+'diagnostic_machine'
+'genesis'
+'file_manager'
+d
+scan_dirs
+●●●●●● 2mm □
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+d
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+lines
+1
+●●●●●● 2mm □△
+ll
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+patterns
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ll
+stubs
+●●●●●● 1mm □△
+'file'
+'line'
+'content'
+'pattern'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+i
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+120
+p
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+stubs
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stubs
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'count'
+'message'
+'action_required'
+'stub_code'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stubs
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stubs
+●●●●●● 2mm □△
+' placeholder/stub implementations detected'
+'Implement real functionality'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_validate_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+critical
+●●●●●● 1mm □
+'database.connection'
+'DatabaseConnection'
+'database.session'
+'SessionLocal'
+'settings'
+'settings'
+●●●●●● 2mm △○
+●●●●●● 1mm □
+'vector_db.client'
+'get_qdrant_client'
+'llm_orchestrator.factory'
+'get_llm_client'
+'embedding'
+'get_embedding_model'
+broken
+●●●●●● 1mm □
+mod
+attr
+critical
+m
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+m
+attr
+●●●●●● 2mm □△
+Exception
+broken
+●●●●●● 1mm □△
+'module'
+'attribute'
+'error'
+'critical'
+mod
+attr
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+mod
+attr
+●●●●●● 2mm △○
+m
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+m
+attr
+●●●●●● 2mm □△
+Exception
+broken
+●●●●●● 1mm □△
+'module'
+'attribute'
+'error'
+'critical'
+mod
+attr
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+crit
+●●●●●● 1mm □
+b
+b
+broken
+b
+'critical'
+●●●●●● 2mm □
+crit
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'type'
+'count'
+'message'
+'details'
+'broken_imports'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+crit
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+crit
+●●●●●● 2mm □△
+' critical imports broken'
+crit
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_periodic_deep_scan
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+●●●●●● 2mm □
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+90
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'category'
+'service'
+'severity'
+'message'
+'healable'
+'heal_action'
+ProactiveCategory
+'disk'
+SeverityLevel
+'Disk at '
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+'%'
+●●●●●● 3mm □△○
+'log_rotation'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 1mm □
+_add_limitation
+●●●●●● 1mm □△
+self
+limitation
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+limitation
+'registered_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing
+●●●●●● 3mm △
+●●●●●● 2mm □
+existing
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+limitation
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □△
+limitation
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+limitation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_notify_governance
+●●●●●● 1mm □△
+self
+event_type
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'event_type'
+'timestamp'
+'data'
+event_type
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'running'
+'cycle_count'
+'check_interval_seconds'
+'kimi_enabled'
+'auto_heal_enabled'
+'active_issues'
+'resolved_issues'
+'total_healed'
+'stubs_detected'
+'limitations_count'
+'capabilities_count'
+'last_stub_scan'
+'subsystems_integrated'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+●●●●●● 3mm △
+r
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+HealingOutcome
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_integrated_subsystems
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+subsystems
+●●●●●● 1mm □
+'name'
+'status'
+'immune_system'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'connected'
+'unavailable'
+'name'
+'status'
+'trust_engine'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'connected'
+'unavailable'
+checks
+●●●●●● 1mm □
+'diagnostic_machine'
+'diagnostic_machine.diagnostic_engine'
+'DiagnosticEngine'
+'ooda'
+'cognitive.ooda'
+'OODALoop'
+'mirror'
+'cognitive.mirror_self_modeling'
+'MirrorSelfModelingSystem'
+'time_sense'
+'cognitive.time_sense'
+'TimeSense'
+'circuit_breaker'
+'cognitive.circuit_breaker'
+'enter_loop'
+'deep_test_engine'
+'cognitive.deep_test_engine'
+'DeepTestEngine'
+'consensus'
+'cognitive.consensus_engine'
+'run_consensus'
+'telemetry'
+'telemetry.telemetry_service'
+'TelemetryService'
+'notifications'
+'diagnostic_machine.notifications'
+'NotificationManager'
+'realtime'
+'diagnostic_machine.realtime'
+'ConnectionManager'
+'learning_memory'
+'cognitive.learning_memory'
+'LearningExample'
+'sandbox'
+'cognitive.autonomous_sandbox_lab'
+'AutonomousSandboxLab'
+name
+mod
+attr
+checks
+m
+●●●●●● 1mm □
+__import__
+●●●●●● 1mm □△
+mod
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+m
+attr
+●●●●●● 2mm □△
+subsystems
+●●●●●● 1mm □△
+'name'
+'status'
+name
+'connected'
+●●●●●● 2mm □△
+Exception
+subsystems
+●●●●●● 1mm □△
+'name'
+'status'
+name
+'unavailable'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+subsystems
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_limitations
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_active_issues
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+50
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_resolved_issues
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+50
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_healing_log
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+50
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_stubs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_governance_notifications
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_trend_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'memory_samples'
+'error_counts'
+'cpu_samples'
+'response_times'
+'sample_count'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+trigger_manual_heal
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+logger
+●●●●●● 1mm □△
+'[PROACTIVE-HEALING] Manual heal: '
+action
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+'source'
+'manual'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'action'
+'issue'
+'outcome'
+'manual'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+'Manual trigger'
+result
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+HealingOutcome
+HealingOutcome
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_full_diagnostic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+metrics
+●●●●●● 2mm □△
+immune_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'timestamp'
+'metrics'
+'issues'
+'predictions'
+'immune_scan'
+'stubs'
+'limitations'
+'capabilities'
+'subsystems'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+issues
+predictions
+immune_result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_proactive_engine
+●●●●●● 2mm □○
+ProactiveHealingEngine
+●●●●●● 2mm □
+_engine_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_proactive_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_engine_lock
+●●●●●● 2mm □
+_proactive_engine
+●●●●●● 2mm □
+_proactive_engine
+●●●●●● 1mm □
+ProactiveHealingEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_proactive_engine
+ProactiveHealingEngine
+●●●●●● 1mm □
+start_proactive_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+get_proactive_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+engine
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+engine
+ProactiveHealingEngine
+●●●●●● 1mm □
+stop_proactive_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_proactive_engine
+_proactive_engine
+_proactive_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_proactive_engine
+●●●●●● 1mm □
+●●●●●● 2mm □

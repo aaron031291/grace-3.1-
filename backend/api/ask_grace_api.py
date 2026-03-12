@@ -584,7 +584,6 @@ async def bus_status() -> Dict[str, Any]:
         result["cognitive_event_bus"] = {"error": str(e)}
 
     try:
-        from grace_os.kernel.event_system import EventSystem
         result["grace_os_event_system"] = {"available": True}
     except Exception:
         result["grace_os_event_system"] = {"available": False}

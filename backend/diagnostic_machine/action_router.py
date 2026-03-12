@@ -121,6 +121,13 @@ except ImportError:
     MirrorPatternType = None
     MIRROR_AVAILABLE = False
 
+try:
+    from cognitive.braille_compiler import NLPCompilerEdge
+    BRAILLE_COMPILER_AVAILABLE = True
+except ImportError:
+    NLPCompilerEdge = None
+    BRAILLE_COMPILER_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -562,10 +569,6 @@ class ActionRouter:
         # ========== STEP 1: OODA Loop (Observe → Orient → Decide) ==========
         if self.cognitive_engine:
             try:
-                # Force a reset of the main cognitive engine OODA loop directly as well
-                if hasattr(self.cognitive_engine, 'reset'):
-                    self.cognitive_engine.reset()
-
                 decision_context = DecisionContext(
                     problem_statement=f"System health: {judgement.health.status.value}",
                     goal="Restore system health",
@@ -628,8 +631,15 @@ class ActionRouter:
                     "components": judgement.health.critical_components,
                     "patterns": [p.pattern_type for p in interpreted_data.patterns]
                 }
-                # Note: This would use memory_mesh.retrieve_episodic_memories() if available
-                logger.debug("[LAYER4] Episodic Memory: Checking for similar past actions")
+                problem_str = f"Health: {judgement.health.status.value}, Components: {','.join(judgement.health.critical_components)}"
+                retrieved_episodes = self.memory_mesh.episodic_buffer.recall_similar(
+                    problem=problem_str,
+                    k=3,
+                    min_trust=0.6
+                )
+                if retrieved_episodes:
+                    past_actions.extend(retrieved_episodes)
+                logger.debug(f"[LAYER4] Episodic Memory: Retrieved {len(retrieved_episodes)} past actions")
             except Exception as e:
                 logger.warning(f"[LAYER4] Episodic Memory retrieval failed: {e}")
 
@@ -638,24 +648,78 @@ class ActionRouter:
         if self.memory_mesh:
             try:
                 # Retrieve relevant procedures
-                # Note: This would use memory_mesh.retrieve_procedures() if available
-                logger.debug("[LAYER4] Procedural Memory: Checking for learned procedures")
+                goal_str = f"Fix health {judgement.health.status.value} for {','.join(judgement.health.critical_components)}"
+                query_context = {
+                    "health_status": judgement.health.status.value,
+                    "components": judgement.health.critical_components
+                }
+                proc = self.memory_mesh.procedural_repo.find_procedure(
+                    goal=goal_str,
+                    context=query_context
+                )
+                if proc:
+                    procedures.append(proc)
+                logger.debug(f"[LAYER4] Procedural Memory: Found {len(procedures)} procedures")
             except Exception as e:
                 logger.warning(f"[LAYER4] Procedural Memory retrieval failed: {e}")
 
         # ========== STEP 6: Multi-LLM - Get Consensus (if complex) ==========
         llm_suggestion = None
+        braille_bitmask = None
         if self.llm_orchestrator and judgement.confidence.overall_confidence < 0.7:
             try:
                 # Use LLM for complex decisions
+                from llm_orchestrator.multi_llm_client import TaskType
                 context = {
                     "health_status": judgement.health.status.value,
                     "critical_components": judgement.health.critical_components,
                     "patterns": [p.description for p in interpreted_data.patterns],
                     "knowledge": knowledge_context.get("retrieved_knowledge", [])
                 }
-                # Note: Would use llm_orchestrator.generate_with_consensus() if available
-                logger.debug("[LAYER4] Multi-LLM: Getting consensus for complex decision")
+                prompt = (
+                    f"System health is {context['health_status']}. "
+                    f"Critical components: {', '.join(context['critical_components'])}. "
+                    f"Observed patterns: {', '.join(context['patterns'])}. "
+                    "Analyze root cause and recommend the safest automated action."
+                )
+                llm_result = self.llm_orchestrator.execute_task(
+                    prompt=prompt,
+                    task_type=TaskType.GENERAL,
+                    require_consensus=True,
+                    context_documents=[str(k) for k in context["knowledge"]] if context["knowledge"] else None
+                )
+                if llm_result and llm_result.success:
+                    llm_suggestion = llm_result.content
+                    
+                    # --- BRAILLE DETERMINISTIC TOPOLOGICAL GUARD ---
+                    if BRAILLE_COMPILER_AVAILABLE and NLPCompilerEdge is not None:
+                        compiler = NLPCompilerEdge()
+                        session_context = {
+                            "is_maintenance_window": False,
+                            "is_emergency": getattr(judgement.health.status, 'value', '') == 'critical',
+                            "has_elevation_token": False
+                        }
+                        
+                        # Translate the fuzzy LLM suggestion into a strictly validated Spatial Bitmask
+                        logger.debug(f"[LAYER4] Passing LLM output through Braille Compiler Edge...")
+                        b_mask, b_msg = compiler.process_command(
+                            natural_language=llm_suggestion, 
+                            privilege="system", 
+                            session_context=session_context
+                        )
+                        
+                        if b_mask is not None:
+                            logger.info(f"[LAYER4] BRAILLE GUARD PASSED: {bin(b_mask)} ({b_msg})")
+                            braille_bitmask = b_mask
+                        else:
+                            logger.error(f"[LAYER4] BRAILLE GUARD REJECTED LLM INTENT: {b_msg}. Halting automated action.")
+                            # Prevent hallucinated or topologically invalid actions from executing
+                            judgement.recommended_action = "alert"
+                            judgement.confidence.overall_confidence = 0.1
+                            llm_suggestion = f"[BRAILLE HALT] Hallucination/Topology violation blocked: {b_msg}"
+                    # -----------------------------------------------
+                    
+                logger.debug(f"[LAYER4] Multi-LLM Consensus resulted in success: {llm_result.success if llm_result else False}")
             except Exception as e:
                 logger.warning(f"[LAYER4] Multi-LLM orchestration failed: {e}")
 
@@ -715,12 +779,28 @@ class ActionRouter:
         if self.memory_mesh and decision.results:
             try:
                 # Store action outcome in memory
+                stored_count = 0
                 for result in decision.results:
                     if result.status == ActionStatus.COMPLETED:
                         # Store successful action as learning example
-                        # Note: Would use memory_mesh.ingest_learning_experience() if available
-                        pass
-                logger.debug("[LAYER4] Learning: Stored action outcome in memory")
+                        self.memory_mesh.ingest_learning_experience(
+                            experience_type="action_result",
+                            context={
+                                "health_status": judgement.health.status.value,
+                                "critical_components": judgement.health.critical_components
+                            },
+                            action_taken={
+                                "action_type": result.action_type.value,
+                                "details": result.details
+                            },
+                            outcome={
+                                "status": "success",
+                                "message": result.message
+                            },
+                            source="layer4_action_router"
+                        )
+                        stored_count += 1
+                logger.debug(f"[LAYER4] Learning: Stored {stored_count} successful action outcome(s) in memory")
             except Exception as e:
                 logger.warning(f"[LAYER4] Learning storage failed: {e}")
 

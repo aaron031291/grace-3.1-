@@ -1,0 +1,539 @@
+## test_document_download.py
+'\nTest script for document download feature.\n\nThis script tests the new document download functionality by:\n1. Testing URL detection for downloadable documents\n2. Verifying database schema updates\n3. Testing the document downloader service\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+scraping.url_validator
+●●●●●● 2mm □△○
+URLValidator
+●●●●●● 3mm □△○
+scraping.document_downloader
+●●●●●● 2mm □△○
+DocumentDownloader
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 1mm □
+test_url_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test URL validator for document detection.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing URL Validator - Document Detection'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_cases
+●●●●●● 1mm □
+'https://example.com/document.pdf'
+●●●●●● 3mm □△○
+'https://example.com/presentation.pptx'
+●●●●●● 3mm □△○
+'https://example.com/spreadsheet.xlsx'
+●●●●●● 3mm □△○
+'https://example.com/file.docx'
+●●●●●● 3mm □△○
+'https://example.com/data.csv'
+●●●●●● 3mm □△○
+'https://example.com/document.pdf?download=true'
+●●●●●● 3mm □△○
+'https://example.com/image.jpg'
+●●●●●● 1mm □
+'https://example.com/video.mp4'
+●●●●●● 1mm □
+'https://example.com/page.html'
+●●●●●● 1mm □
+'https://example.com/'
+●●●●●● 1mm □
+passed
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+url
+expected
+test_cases
+result
+●●●●●● 1mm □
+URLValidator
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+result
+expected
+'✓'
+'✗'
+●●●●●● 2mm □
+result
+expected
+passed
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' '
+url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Expected: '
+expected
+', Got: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nResults: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+●●●●●● 1mm □
+test_database_schema
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test that database schema has been updated.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Database Schema Updates'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+db_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Database not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'PRAGMA table_info(scraping_jobs)'
+●●●●●● 2mm □△
+columns
+●●●●●● 1mm □
+row
+1
+row
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'pages_downloaded'
+columns
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ scraping_jobs.pages_downloaded exists'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ scraping_jobs.pages_downloaded missing'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+'PRAGMA table_info(scraped_pages)'
+●●●●●● 2mm □△
+columns
+●●●●●● 1mm □
+row
+1
+row
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+required_fields
+●●●●●● 1mm □
+'file_path'
+'file_size'
+'file_type'
+field
+required_fields
+●●●●●● 2mm □
+field
+columns
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ scraped_pages.'
+field
+' exists'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ scraped_pages.'
+field
+' missing'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ All database schema updates verified'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Error checking database: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Test document downloader with a small test file.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing Document Downloader'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+downloader
+●●●●●● 1mm □
+DocumentDownloader
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_url
+●●●●●● 1mm □
+'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+test_folder
+●●●●●● 1mm □
+'test_downloads'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing download from: '
+test_url
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'(This may take a few seconds...)'
+●●●●●● 2mm □△
+success
+metadata
+●●●●●● 1mm □
+downloader
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+metadata
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Download successful!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   File path: '
+metadata
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   File size: '
+metadata
+'file_size'
+' bytes'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   File type: '
+metadata
+'file_type'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+metadata
+'file_path'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+metadata
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Cleaned up test file'
+●●●●●● 2mm □△
+meta_file
+●●●●●● 1mm □
+metadata
+'file_path'
+'.meta.json'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+meta_file
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+meta_file
+●●●●●● 2mm □△
+folder_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+metadata
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+folder_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Cleaned up test folder'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Download failed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Error during download test: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'DOCUMENT DOWNLOAD FEATURE - TEST SUITE'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'URL Validator'
+test_url_validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Database Schema'
+test_database_schema
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRunning async test...'
+●●●●●● 2mm □△
+downloader_result
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+test_document_downloader
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'Document Downloader'
+downloader_result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_name
+passed
+results
+status
+●●●●●● 1mm □
+passed
+'✓ PASSED'
+'✗ FAILED'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+': '
+test_name
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+result
+1
+result
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ All tests passed!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✗ Some tests failed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+exit
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

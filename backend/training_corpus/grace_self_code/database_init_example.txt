@@ -1,0 +1,174 @@
+## init_example.py
+'\nDatabase initialization example.\nThis demonstrates how to initialize the database in your FastAPI application.\n\nCopy and adapt this to your app.py or create a separate initialization module.\n'
+●●●●●● 3mm □△○
+contextlib
+●●●●●● 2mm □△○
+asynccontextmanager
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+FastAPI
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+Depends
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+initialize_session_factory
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+create_tables
+DatabaseConnection
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+FastAPI
+'\n    FastAPI lifespan context manager for database initialization.\n    \n    This handles:\n    - Database connection setup on app startup\n    - Session factory initialization\n    - Table creation\n    - Graceful shutdown on app termination\n    '
+logger
+●●●●●● 1mm □△
+'Initializing database...'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database Configuration: '
+config
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database connection established'
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Session factory initialized'
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database tables created/verified'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Database health check passed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'⚠ Database health check failed'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to initialize database: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Closing database connection...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database connection closed'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error closing database: '
+e
+●●●●●● 2mm □△
+asynccontextmanager
+'\nfrom fastapi import FastAPI\n\n# Create FastAPI app with database lifespan\napp = FastAPI(\n    title="Grace API",\n    lifespan=db_lifespan,\n)\n\n# Now you can use dependency injection for database sessions\n@app.get("/api/users/")\ndef list_users(session: Session = Depends(get_session)):\n    from models.repositories import UserRepository\n    repo = UserRepository(session)\n    return [user.to_dict() for user in repo.get_all()]\n\n@app.post("/api/users/")\ndef create_user(\n    username: str,\n    email: str,\n    session: Session = Depends(get_session)\n):\n    from models.repositories import UserRepository\n    repo = UserRepository(session)\n    user = repo.create(username=username, email=email)\n    return user.to_dict()\n'
+●●●●●● 1mm □
+init_database_manually
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"\n    Manual database initialization.\n    Use this if you can't use the lifespan context manager.\n    "
+logger
+●●●●●● 1mm □△
+'Initializing database (manual)...'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+create_tables
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Database initialized successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'⚠ Database connection may have issues'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+close_database_manually
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Manual database cleanup.\n    Call this when shutting down the application.\n    '
+logger
+●●●●●● 1mm □△
+'Closing database (manual)...'
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\nif __name__ == "__main__":\n    init_database_manually()\n    \n    try:\n        # Your application code here\n        from models.repositories import UserRepository\n        from database.session import SessionLocal\n        \n        session = SessionLocal()\n        repo = UserRepository(session)\n        user = repo.create(username="test", email="test@example.com")\n        print(f"Created user: {user}")\n        session.close()\n    \n    finally:\n        close_database_manually()\n'

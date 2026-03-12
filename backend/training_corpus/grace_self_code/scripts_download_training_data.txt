@@ -1,0 +1,608 @@
+## download_training_data.py
+"\nTraining Data Downloader — Pull 2TB of open-source data into Grace's Oracle.\n\nRun: python scripts/download_training_data.py\n\nDownloads in order of value:\n  1. Stack Overflow Python Q&A (~10GB)\n  2. The Stack v2 Python subset (~100GB)\n  3. OWASP Security data (~1GB)\n  4. RefinedWeb (~100GB subset)\n  5. ArXiv CS/AI papers (~30GB)\n\nEach batch streams to disk, then ingests into Oracle.\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+DOWNLOAD_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'training_downloads'
+DOWNLOAD_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+download_huggingface
+●●●●●● 1mm □△
+dataset_id
+output_dir
+languages
+max_samples
+batch_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Path
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+100000
+5000
+'Stream download from HuggingFace datasets.'
+●●●●●● 3mm □△○
+datasets
+●●●●●● 2mm □△○
+load_dataset
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Installing datasets library...'
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+sys
+' -m pip install datasets huggingface_hub'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+datasets
+●●●●●● 2mm □△○
+load_dataset
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDownloading: '
+dataset_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Output: '
+output_dir
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Max samples: '
+max_samples
+●●●●●● 2mm □△
+output_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ds
+●●●●●● 1mm □
+load_dataset
+●●●●●● 1mm □△
+dataset_id
+●●●●●● 2mm □△
+batch_num
+●●●●●● 1mm □
+0
+total_samples
+●●●●●● 1mm □
+0
+total_bytes
+●●●●●● 1mm □
+0
+batch
+ds
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+total_samples
+max_samples
+content_field
+●●●●●● 1mm □
+●●●●●● 2mm □
+field
+'content'
+'text'
+'code'
+'body'
+'answer_body'
+'question_body'
+'answer'
+'question'
+●●●●●● 2mm □
+field
+batch
+content_field
+●●●●●● 1mm □
+field
+●●●●●● 2mm □
+content_field
+●●●●●● 2mm □
+'question_body'
+batch
+'answer_body'
+batch
+content_field
+●●●●●● 1mm □
+'__combined_qa__'
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  No content field found. Fields: '
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+batch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □
+samples
+●●●●●● 1mm □
+●●●●●● 2mm □
+content_field
+'__combined_qa__'
+questions
+●●●●●● 1mm □
+batch
+'question_body'
+answers
+●●●●●● 1mm □
+batch
+'answer_body'
+titles
+●●●●●● 1mm □
+batch
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+questions
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+contents
+●●●●●● 1mm □
+'Q: '
+titles
+i
+'\n'
+questions
+i
+'\n\nA: '
+answers
+i
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+questions
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+contents
+●●●●●● 1mm □
+batch
+content_field
+i
+content
+●●●●●● 2mm □
+●●●●●● 1mm □△
+contents
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+50
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100000
+●●●●●● 2mm □
+languages
+lang
+●●●●●● 1mm □
+batch
+●●●●●● 1mm □△
+'lang'
+batch
+●●●●●● 1mm □△
+'language'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contents
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 2mm □
+lang
+lang
+languages
+samples
+●●●●●● 1mm □△
+'content'
+'index'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+50000
+total_samples
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+samples
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+samples
+output_file
+●●●●●● 1mm □
+output_dir
+●●●●●● 3mm □△
+'batch_'
+batch_num
+'06d'
+'.jsonl'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_file
+'w'
+●●●●●● 2mm □△
+f
+sample
+samples
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+sample
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+total_samples
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+samples
+●●●●●● 2mm □△
+total_bytes
+output_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Batch '
+batch_num
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+samples
+●●●●●● 2mm □△
+' samples ('
+total_bytes
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □△
+1024
+'.1f'
+' MB total, '
+total_samples
+' samples)'
+●●●●●● 2mm □△
+batch_num
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Done: '
+total_samples
+' samples, '
+total_bytes
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □△
+1024
+'.1f'
+' MB'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'samples'
+'bytes'
+total_samples
+total_bytes
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_to_oracle
+●●●●●● 1mm □△
+data_dir
+source_name
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+'Ingest downloaded data into Oracle (learning_examples).'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nIngesting '
+source_name
+' to Oracle...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+0
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+data_dir
+●●●●●● 1mm □△
+'*.jsonl'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+fh
+line
+fh
+sample
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+sample
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+50
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+count
+1
+●●●●●● 2mm □
+count
+●●●●●● 2mm □○
+100
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Ingested: '
+count
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Total ingested: '
+count
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Ingest error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Grace Training Data Downloader'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Target: 2TB across multiple sources'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+sources
+●●●●●● 1mm □
+'name'
+'dataset'
+'dir'
+'max'
+'desc'
+'stack_overflow_python'
+'koutch/stackoverflow_python'
+DOWNLOAD_DIR
+●●●●●● 3mm □△
+'stackoverflow_python'
+200000
+'Stack Overflow Python Q&A'
+'name'
+'dataset'
+'dir'
+'languages'
+'max'
+'desc'
+'the_stack_python'
+'bigcode/the-stack-v2-train-smol-ids'
+DOWNLOAD_DIR
+●●●●●● 3mm □△
+'the_stack_python'
+'Python'
+500000
+'The Stack v2 — Python source code'
+'name'
+'dataset'
+'dir'
+'max'
+'desc'
+'refinedweb'
+'tiiuae/falcon-refinedweb'
+DOWNLOAD_DIR
+●●●●●● 3mm □△
+'refinedweb'
+200000
+'RefinedWeb — high-quality web text'
+src
+sources
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Source: '
+src
+'desc'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+40
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+download_huggingface
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+ingest_to_oracle
+●●●●●● 1mm □△
+src
+'dir'
+src
+'name'
+●●●●●● 2mm □△
+total_size
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+d
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+d
+DOWNLOAD_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Download complete: '
+total_size
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □△
+1024
+●●●●●● 3mm □△
+1024
+'.2f'
+' GB total'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

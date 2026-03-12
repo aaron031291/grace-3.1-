@@ -1,0 +1,547 @@
+## code_service.py
+'Code domain service — codebase, projects, code generation.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+PROJECTS_META
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'code_projects.json'
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+rel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Path traversal blocked'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+target
+●●●●●● 1mm □
+_load_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PROJECTS_META
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+PROJECTS_META
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+PROJECTS_META
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_save_projects
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+PROJECTS_META
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+PROJECTS_META
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+list_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'projects'
+_load_projects
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+project_tree
+●●●●●● 1mm □△
+folder
+max_depth
+●●●●●● 2mm □△
+3
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+folder
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb
+●●●●●● 1mm □
+_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_t
+●●●●●● 1mm □△
+p
+depth
+●●●●●● 2mm □△
+0
+r
+●●●●●● 1mm □
+'path'
+'name'
+'type'
+'children'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+'directory'
+●●●●●● 2mm □
+depth
+max_depth
+●●●●●● 3mm ○
+r
+item
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+'children'
+●●●●●● 1mm □△
+_t
+●●●●●● 1mm □△
+item
+depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+r
+'children'
+●●●●●● 1mm □△
+'path'
+'name'
+'type'
+'size'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+item
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+item
+'file'
+item
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+PermissionError
+●●●●●● 3mm ○
+r
+●●●●●● 3mm ○
+_t
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm □
+read_file
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+●●●●●● 3mm ○
+'path'
+'content'
+'language'
+'size'
+path
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+50000
+target
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+write_file
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'path'
+'saved'
+path
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+create_file
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+''
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'created'
+path
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+delete_file
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Not found'
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'path'
+'deleted'
+path
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+generate_code
+●●●●●● 1mm □△
+prompt
+project_folder
+use_pipeline
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □
+'\n    Generate code via Qwen (latest coder model). Follows pipeline when use_pipeline=True:\n    consensus design → Qwen build → compile/test → self-heal. Otherwise uses Qwen coder only.\n    '
+●●●●●● 2mm □
+use_pipeline
+●●●●●● 3mm □△○
+cognitive.qwen_coding_net
+●●●●●● 2mm □△○
+generate_code
+●●●●●● 1mm □
+pipeline_generate
+●●●●●● 3mm ○
+pipeline_generate
+●●●●●● 1mm □△
+prompt
+project_folder
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+project_folder
+target
+●●●●●● 1mm □
+_safe
+●●●●●● 1mm □△
+project_folder
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+f
+target
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+'.py'
+'.js'
+'.ts'
+'.jsx'
+'.tsx'
+files
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+'Project files: '
+', '
+●●●●●● 1mm □△
+files
+20
+●●●●●● 2mm □△
+Exception
+full_prompt
+●●●●●● 1mm □
+context
+context
+'\n\n'
+prompt
+prompt
+●●●●●● 2mm □△○
+ast
+max_retries
+●●●●●● 1mm □
+3
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+max_retries
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+clean_code
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clean_code
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+clean_code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+lines
+0
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+lines
+1
+●●●●●● 2mm □
+lines
+1
+●●●●●● 1mm □△
+'```'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+lines
+1
+clean_code
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+clean_code
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+SyntaxError
+logger
+●●●●●● 1mm □△
+'Standard LLM generated invalid syntax (Attempt '
+attempt
+●●●●●● 3mm ○
+1
+'/'
+max_retries
+'): '
+syntax_err
+●●●●●● 2mm □△
+full_prompt
+'\n\nERROR IN PREVIOUS OUTPUT:\n'
+syntax_err
+'\nFix the syntax error and return the full corrected code.'
+is_valid
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'ok'
+'code'
+'prompt'
+is_valid
+code
+prompt
+Exception
+●●●●●● 3mm ○
+'ok'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+apply_code
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+write_file
+●●●●●● 1mm □△
+path
+content
+●●●●●● 2mm □△

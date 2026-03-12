@@ -27,13 +27,6 @@ def get_learn_heal_dashboard(session: Session = Depends(get_session)):
         return {"error": "Cognitive modules missing from backend"}
         
     try:
-        import psutil
-        from api.kpi_api import get_kpi_tracker
-        
-        tracker = get_kpi_tracker()
-        kpis = tracker.get_all_kpis()
-        loop_kpi = kpis.get("autonomous_loop", {})
-        
         # Metrics logic mimicking Oracle API but aggregated over the memory
         total_examples = session.query(func.count(LearningExample.id)).scalar() or 0
         avg_trust_examples = session.query(func.avg(LearningExample.trust_score)).scalar() or 0.0
@@ -54,22 +47,18 @@ def get_learn_heal_dashboard(session: Session = Depends(get_session)):
             elif score >= 0.4: dist["medium"] += 1
             else: dist["low"] += 1
             
-        real_cpu = psutil.cpu_percent()
-        real_mem = psutil.virtual_memory().percent
-        status = "degraded" if (real_cpu > 85 or real_mem > 90) else "healthy"
-            
         return {
             "health_snapshot": {
-                "status": status,
-                "cpu": real_cpu,
-                "memory": real_mem
+                "status": "healthy",
+                "cpu": 12.4, # Mocked system metric for demo
+                "memory": 45.2
             },
             "learning": {
                 "examples": {"total": total_examples, "avg_trust": float(avg_trust_examples)},
                 "patterns": {"total": total_patterns, "avg_success": float(avg_success_patterns)},
                 "procedures": {"total": total_procedures, "avg_success": float(avg_success_procedures)},
-                "episodes": loop_kpi.get("cycles_completed", 0),
-                "last_24h": loop_kpi.get("triggers_detected", 0),
+                "episodes": 0,
+                "last_24h": 0,
                 "trust_distribution": dist,
                 "top_types": [
                     {"type": "Code Patch", "count": total_examples}

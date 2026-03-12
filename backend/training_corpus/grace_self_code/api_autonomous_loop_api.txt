@@ -1,0 +1,2257 @@
+## autonomous_loop_api.py
+'\nAutonomous Loop — "Ouroboros"\n\nUnifies self-healing, self-learning, and coding agent into ONE\ncontinuous control loop. Runs every 30s inside the diagnostic engine.\n\nFlow:\n  TRIGGER → DIAGNOSE → DECIDE → ACT → LEARN → VERIFY → LOOP\n\n  1. TRIGGER: Any anomaly detected (probe, trigger scan, component health)\n  2. DIAGNOSE: 4-layer diagnostic engine classifies severity\n  3. DECIDE: Decision matrix routes to correct action type:\n     - HEAL: DB reconnect, cache clear, GC, service restart\n     - LEARN: Memory mesh ingestion, knowledge gap fill, pattern extraction\n     - CODE: Qwen generates fix, consensus verifies, apply if agreed\n     - ESCALATE: Queue for human approval\n  4. ACT: Execute the chosen action via Brain API\n  5. LEARN: Record outcome in memory mesh (success/failure/partial)\n  6. VERIFY: Re-probe to confirm fix worked\n  7. LOOP: Feed verification result back as new trigger data\n\nAll actions tracked via Genesis keys with full provenance chain.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+Body
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+json
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_state
+●●●●●● 1mm □
+'running'
+'cycle_count'
+'last_cycle'
+'last_result'
+'actions_taken'
+'healed'
+'learned'
+'coded'
+'escalated'
+'errors'
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+●●●●●● 2mm □
+0
+0
+0
+0
+0
+0
+_loop_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_log
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+●●●●●● 3mm ○
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_trust_score
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+component
+component
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+score
+●●●●●● 2mm □△
+0.7
+Exception
+●●●●●● 3mm ○
+0.7
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_get_mirror_observation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+urllib.request
+json
+●●●●●● 1mm □
+_j
+req
+●●●●●● 1mm □
+urllib
+●●●●●● 1mm □△
+'http://127.0.0.1:8000/api/component-health/mirror-feed'
+●●●●●● 2mm □△
+urllib
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+resp
+●●●●●● 3mm ○
+_j
+●●●●●● 1mm □△
+resp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_recall_similar_episode
+●●●●●● 1mm □△
+problem_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check episodic memory for similar past problems and what worked.'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sess
+buffer
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+sess
+●●●●●● 2mm □△
+episodes
+●●●●●● 1mm □
+buffer
+●●●●●● 1mm □△
+problem_text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+episodes
+ep
+●●●●●● 1mm □
+episodes
+0
+●●●●●● 3mm ○
+'found'
+'past_problem'
+'past_action'
+'past_outcome'
+'trust'
+●●●●●● 3mm □△○
+ep
+ep
+200
+''
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ep
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ep
+200
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+200
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ep
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ep
+200
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ep
+●●●●●● 2mm □△
+200
+ep
+Exception
+●●●●●● 3mm ○
+'found'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_kpis
+●●●●●● 1mm □△
+cycle_result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Update KPI tracker with loop metrics.'
+●●●●●● 3mm □△○
+api.kpi_api
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'autonomous_loop'
+'cycles_completed'
+1
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'autonomous_loop'
+'triggers_detected'
+cycle_result
+●●●●●● 1mm □△
+'triggers_found'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+a
+cycle_result
+●●●●●● 1mm □△
+'actions'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'autonomous_loop'
+'actions_'
+a
+'type'
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle_result
+●●●●●● 1mm □△
+'trust_blocked'
+0
+●●●●●● 2mm □△
+0
+tracker
+●●●●●● 1mm □△
+'autonomous_loop'
+'trust_blocked'
+cycle_result
+'trust_blocked'
+●●●●●● 2mm □△
+Exception
+TRUST_THRESHOLDS
+●●●●●● 1mm □
+'heal'
+'learn'
+'code'
+'escalate'
+0.5
+0.4
+0.8
+0.0
+●●●●●● 1mm □
+_run_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Execute one full autonomous cycle with trust, time, mirror, memory.'
+cycle_start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'cycle_id'
+'timestamp'
+'triggers_found'
+'actions'
+'outcome'
+'trust_blocked'
+'deferred'
+'AUTO-'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+'clean'
+0
+0
+time_ctx
+●●●●●● 1mm □
+_get_time_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_quiet
+●●●●●● 1mm □
+time_ctx
+●●●●●● 1mm □△
+'period'
+●●●●●● 2mm □△
+'late_night'
+'night'
+result
+'time_context'
+●●●●●● 1mm □
+'period'
+'is_business_hours'
+'is_quiet'
+time_ctx
+●●●●●● 1mm □△
+'period'
+'unknown'
+●●●●●● 2mm □△
+time_ctx
+●●●●●● 1mm □△
+'is_business_hours'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+is_quiet
+mirror
+●●●●●● 1mm □
+_get_mirror_observation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'mirror'
+●●●●●● 1mm □
+'problems_observed'
+'total_events_1h'
+'error_count_1h'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mirror
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □△
+'total_events_1h'
+0
+●●●●●● 2mm □△
+mirror
+●●●●●● 1mm □△
+'error_count_1h'
+0
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+DeterministicAutoFixer
+det_report
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+det_report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+problems
+●●●●●● 1mm □△
+'source'
+'target'
+'status'
+'reason'
+'severity'
+'flag_for_human'
+'deterministic'
+p
+●●●●●● 1mm □△
+'file'
+p
+●●●●●● 1mm □△
+'module'
+p
+●●●●●● 1mm □△
+'service'
+p
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+'red'
+'orange'
+'['
+p
+'type'
+'] '
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'severity'
+'warning'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'flag_for_human'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+det_report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+fixer
+●●●●●● 1mm □
+DeterministicAutoFixer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+auto_fixes
+●●●●●● 1mm □
+fixer
+●●●●●● 1mm □△
+det_report
+'problems'
+●●●●●● 2mm □△
+result
+'auto_fixes'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+auto_fixes
+●●●●●● 2mm □△
+for_human
+●●●●●● 1mm □
+p
+p
+det_report
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'flag_for_human'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+for_human
+result
+'for_human'
+●●●●●● 1mm □
+'type'
+'message'
+p
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+200
+p
+for_human
+p
+for_human
+logger
+●●●●●● 1mm □△
+'FLAG_FOR_HUMAN: [%s] %s'
+p
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+300
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+call_brain
+●●●●●● 1mm □△
+'system'
+'notify'
+'title'
+'message'
+'type'
+'Ouroboros: Issues need human attention'
+'; '
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'message'
+p
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+''
+80
+p
+for_human
+3
+●●●●●● 2mm □△
+'escalate'
+●●●●●● 2mm □△
+Exception
+Exception
+●●●●●● 3mm □△○
+api.component_health_api
+●●●●●● 2mm □△○
+COMPONENT_REGISTRY
+_get_genesis_keys
+_classify_component
+_check_service_health
+keys
+●●●●●● 1mm □
+_get_genesis_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+svc_health
+●●●●●● 1mm □
+_check_service_health
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+comp_id
+comp
+COMPONENT_REGISTRY
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+classified
+●●●●●● 1mm □
+_classify_component
+●●●●●● 1mm □△
+comp_id
+comp
+keys
+svc_health
+●●●●●● 2mm □△
+●●●●●● 2mm □
+classified
+'status'
+'red'
+'orange'
+problems
+●●●●●● 1mm □△
+'source'
+'target'
+'component_id'
+'status'
+'reason'
+'severity'
+'component_health'
+classified
+'label'
+comp_id
+classified
+'status'
+classified
+'reason'
+classified
+'status'
+'red'
+'critical'
+'warning'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Health scan skipped: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.runtime_triggers_api
+●●●●●● 2mm □△○
+_scan_resources
+_scan_code
+_scan_build
+scanner
+_scan_resources
+_scan_code
+_scan_build
+found
+●●●●●● 1mm □
+scanner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+found
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+t
+'to_dict'
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 2mm □
+entry
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+'warning'
+problems
+●●●●●● 1mm □△
+'source'
+'target'
+'status'
+'reason'
+'severity'
+'trigger_scan'
+entry
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'detail'
+''
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+result
+'triggers_found'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+unified
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'run_unified_triggers'
+'category'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+result
+'unified_triggers'
+●●●●●● 1mm □
+unified
+●●●●●● 1mm □△
+'summary'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Unified triggers skipped: %s'
+e
+●●●●●● 2mm □△
+result
+'unified_triggers'
+●●●●●● 1mm □
+'run'
+'ok'
+'failed'
+0
+0
+0
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+●●●●●● 3mm □△○
+core.async_parallel
+●●●●●● 2mm □△○
+run_parallel
+run_background
+p
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+●●●●●● 2mm □
+p
+●●●●●● 1mm □△
+'component_id'
+●●●●●● 2mm □△
+corr
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'correlate'
+'component'
+p
+'component_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+corr
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+corr
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'suppress_alert'
+●●●●●● 2mm □△
+p
+'suppressed'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+problems
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_orphans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'orphans'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_baselines
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'baselines'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_mine_keys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'mine_keys'
+'hours'
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_episodes
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'mine_episodes'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_intel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'intelligence'
+'hours'
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_synapses
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'synapses'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_trust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_brain
+●●●●●● 1mm □△
+'system'
+'trust'
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+run_parallel
+●●●●●● 1mm □△
+_orphans
+_baselines
+_mine_keys
+_episodes
+_intel
+_synapses
+_trust
+●●●●●● 2mm □△
+orphans
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+0
+Exception
+●●●●●● 2mm □△
+out
+0
+baselines
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+1
+Exception
+●●●●●● 2mm □△
+out
+1
+key_patterns
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+2
+Exception
+●●●●●● 2mm □△
+out
+2
+episodes
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+3
+Exception
+●●●●●● 2mm □△
+out
+3
+intel
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+4
+Exception
+●●●●●● 2mm □△
+out
+4
+synapses
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+5
+Exception
+●●●●●● 2mm □△
+out
+5
+trust_state
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+out
+6
+Exception
+●●●●●● 2mm □△
+out
+6
+●●●●●● 2mm □
+orphans
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+orphans
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'orphans'
+●●●●●● 2mm □△
+o
+orphans
+'data'
+'orphans'
+problems
+●●●●●● 1mm □△
+'source'
+'target'
+'reason'
+'severity'
+'orphan_detection'
+o
+●●●●●● 1mm □△
+'label'
+''
+●●●●●● 2mm □△
+o
+●●●●●● 1mm □△
+'diagnosis'
+''
+●●●●●● 2mm □△
+'warning'
+●●●●●● 2mm □△
+result
+'baselines_checked'
+●●●●●● 1mm □
+baselines
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key_patterns
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+repeated
+●●●●●● 1mm □
+key_patterns
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'repeated_failures'
+●●●●●● 2mm □△
+rf
+repeated
+3
+problems
+●●●●●● 1mm □△
+'source'
+'target'
+'reason'
+'severity'
+'genesis_pattern'
+rf
+●●●●●● 1mm □△
+'pattern'
+''
+●●●●●● 2mm □△
+'Repeated '
+rf
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+'x'
+'warning'
+●●●●●● 2mm □△
+result
+'episodes_mined'
+●●●●●● 1mm □
+episodes
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+'intelligence_consulted'
+●●●●●● 1mm □
+intel
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+'synapses_checked'
+●●●●●● 1mm □
+synapses
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+'trust_state'
+●●●●●● 1mm □
+trust_state
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+trust_state
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_deep_background
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'genesis_cleanup'
+●●●●●● 2mm □△
+critical
+●●●●●● 1mm □
+p
+p
+problems
+p
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+●●●●●● 2mm □
+critical
+call_brain
+●●●●●● 1mm □△
+'system'
+'consensus_fix'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'triggers'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'security_scan'
+'code'
+'file'
+''
+''
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'govern'
+'heal'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'govern'
+'learn'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'diagnose'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'integration_matrix'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'knowledge_gaps'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'fill_knowledge_gaps'
+'max_gaps'
+'auto_ingest'
+3
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'oracle_export'
+'limit'
+300
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'governance_training_cycle'
+'export_to_oracle'
+'run_sandbox_review'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+problems
+call_brain
+●●●●●● 1mm □△
+'system'
+'notify'
+'title'
+'message'
+'type'
+'Ouroboros: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+●●●●●● 2mm □△
+' issues'
+', '
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'target'
+'?'
+●●●●●● 2mm □△
+20
+p
+problems
+3
+●●●●●● 2mm □△
+'warning'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Deep intelligence background: %s'
+e
+●●●●●● 2mm □△
+run_background
+●●●●●● 1mm □△
+_deep_background
+'deep_intelligence'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.commit_batch_trigger
+●●●●●● 2mm □△○
+check_and_upload_if_batch
+result
+'commit_batch'
+●●●●●● 1mm □
+check_and_upload_if_batch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'commit_batch'
+●●●●●● 1mm □
+'triggered'
+'error'
+●●●●●● 1mm □
+'import or run failed'
+Exception
+logger
+●●●●●● 1mm □△
+'Deep intelligence scan: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+problems
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+call_brain
+●●●●●● 1mm □△
+'ai'
+'dl_train'
+'hours'
+'limit'
+24
+500
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'ai'
+'pipeline_progress'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'generate_report'
+'hours'
+6
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'hot_reload_all'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'security_scan'
+'code'
+'file'
+''
+''
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'snapshots'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'verify_ledger'
+●●●●●● 2mm □△
+Exception
+result
+'outcome'
+●●●●●● 1mm □
+'clean'
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cycle_start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+_update_kpis
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△○
+core.async_parallel
+●●●●●● 2mm □△○
+run_parallel
+run_background
+problems_batch
+●●●●●● 1mm □
+problems
+5
+●●●●●● 2mm □
+problems_batch
+thunks
+●●●●●● 1mm □
+p
+_decide_and_act
+●●●●●● 1mm □△
+_p
+●●●●●● 2mm □△
+p
+problems_batch
+actions_raw
+●●●●●● 1mm □
+run_parallel
+●●●●●● 1mm □△
+thunks
+●●●●●● 2mm □△
+●●●●●● 3mm □
+actions_raw
+●●●●●● 1mm □
+problem
+action
+●●●●●● 3mm □
+●●●●●● 1mm □△
+problems_batch
+actions_raw
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+action
+Exception
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+'target'
+'reason'
+'type'
+'result'
+problem
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+problem
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+'escalate'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+200
+trust
+●●●●●● 1mm □
+_get_trust_score
+●●●●●● 1mm □△
+problem
+●●●●●● 1mm □△
+'target'
+'system'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+threshold
+●●●●●● 1mm □
+TRUST_THRESHOLDS
+●●●●●● 1mm □△
+action
+'type'
+0.5
+●●●●●● 2mm □△
+action
+'trust_score'
+●●●●●● 1mm □
+trust
+action
+'trust_threshold'
+●●●●●● 1mm □
+threshold
+●●●●●● 2mm □
+trust
+threshold
+action
+'type'
+'escalate'
+action
+'trust_blocked'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+action
+'type'
+●●●●●● 1mm □
+'escalate'
+action
+'result'
+●●●●●● 1mm □
+'reason'
+'Trust '
+trust
+'.2f'
+' < threshold '
+threshold
+result
+'trust_blocked'
+1
+●●●●●● 3mm □
+action
+'trust_blocked'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+is_quiet
+problem
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+action
+'type'
+'escalate'
+action
+'deferred'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+action
+'result'
+●●●●●● 1mm □
+'reason'
+'Deferred to business hours (non-critical, quiet period)'
+result
+'deferred'
+1
+●●●●●● 3mm □
+action
+'deferred'
+●●●●●● 1mm □
+●●●●●● 1mm □
+episode
+●●●●●● 1mm □
+_recall_similar_episode
+●●●●●● 1mm □△
+problem
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action
+'episodic_recall'
+●●●●●● 1mm □
+episode
+result
+'actions'
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+_loop_lock
+_loop_state
+'actions_taken'
+1
+cat
+●●●●●● 1mm □
+action
+'type'
+●●●●●● 2mm □
+cat
+_loop_state
+_loop_state
+cat
+1
+action_types_done
+●●●●●● 1mm □
+a
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+a
+result
+●●●●●● 1mm □△
+'actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action_types_done
+●●●●●● 3mm △
+'heal'
+'learn'
+●●●●●● 1mm □
+_trigger_learn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+call_brain
+●●●●●● 1mm □△
+'govern'
+'learn'
+●●●●●● 2mm □△
+Exception
+run_background
+●●●●●● 1mm □△
+_trigger_learn
+'govern/learn'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_update_kpis
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+action
+result
+●●●●●● 1mm □△
+'actions'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+EpisodicBuffer
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_to_json_str
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+buf
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+buf
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+max_verify_rounds
+●●●●●● 1mm □
+2
+verify_round
+●●●●●● 1mm □
+●●●●●● 1mm □△
+max_verify_rounds
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deterministic_bridge
+●●●●●● 2mm □△○
+build_deterministic_report
+det_report2
+●●●●●● 1mm □
+build_deterministic_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+still_problems
+●●●●●● 1mm □
+p
+p
+det_report2
+●●●●●● 1mm □△
+'problems'
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'flag_for_human'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+still_problems
+problem
+still_problems
+3
+action
+●●●●●● 1mm □
+_decide_and_act
+●●●●●● 1mm □△
+'source'
+'target'
+'reason'
+'severity'
+'flag_for_human'
+problem
+●●●●●● 1mm □△
+'type'
+'deterministic'
+●●●●●● 2mm □△
+problem
+●●●●●● 1mm □△
+'file'
+problem
+●●●●●● 1mm □△
+'module'
+problem
+●●●●●● 1mm □△
+'service'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'['
+problem
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'] '
+problem
+●●●●●● 1mm □△
+'message'
+problem
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+problem
+●●●●●● 1mm □△
+'severity'
+'warning'
+●●●●●● 2mm □△
+problem
+●●●●●● 1mm □△
+'flag_for_human'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+_get_trust_score
+●●●●●● 1mm □△
+problem
+●●●●●● 1mm □△
+'file'
+'system'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+threshold
+●●●●●● 1mm □
+TRUST_THRESHOLDS
+●●●●●● 1mm □△
+action
+'type'
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust
+threshold
+is_quiet
+action
+'type'
+'escalate'
+result
+'actions'
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+_loop_lock
+_loop_state
+'actions_taken'
+1
+●●●●●● 2mm □
+action
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+_loop_state
+_loop_state
+action
+'type'
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Verify round %s: %s'
+verify_round
+●●●●●● 3mm ○
+1
+e
+●●●●●● 2mm □△
+action_types
+●●●●●● 1mm □
+a
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+a
+result
+●●●●●● 1mm □△
+'actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action_types
+●●●●●● 3mm △
+'heal'
+'learn'
+●●●●●● 3mm □△○
+cognitive.loop_orchestrator
+●●●●●● 2mm □△○
+LoopOrchestrator
+orch
+●●●●●● 1mm □
+LoopOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+composite_result
+●●●●●● 1mm □
+orch
+●●●●●● 1mm □△
+'heal_and_learn'
+●●●●●● 2mm □△
+result
+'composite_loop'
+●●●●●● 1mm □
+'id'
+'verdict'
+'passed'
+'failed'
+'heal_and_learn'
+composite_result
+composite_result
+composite_result
+Exception
+logger
+●●●●●● 1mm □△
+'Composite loop heal_and_learn: %s'
+e
+●●●●●● 2mm □△
+result
+'composite_loop'
+●●●●●● 1mm □
+'id'
+'error'
+'heal_and_learn'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+result
+'outcome'
+●●●●●● 1mm □
+'acted'
+result
+'latency_ms'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+cycle_start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_decide_and_act
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n    Agentic decide-and-act: ask the brain what to do, then execute it.\n    All decisions flow through system/decide_autonomous_action; the loop only executes.\n    '
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+target
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'target'
+''
+●●●●●● 2mm □△
+reason
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'reason'
+''
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+'target'
+'reason'
+'type'
+'result'
+target
+reason
+'none'
+●●●●●● 2mm □
+decision_resp
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'decide_autonomous_action'
+problem
+●●●●●● 2mm □△
+Exception
+action
+'type'
+●●●●●● 1mm □
+'escalate'
+action
+'result'
+●●●●●● 1mm □
+'error'
+'queued'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+'human_review'
+●●●●●● 3mm ○
+action
+●●●●●● 2mm □
+decision_resp
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+action
+'type'
+●●●●●● 1mm □
+'escalate'
+action
+'result'
+●●●●●● 1mm □
+'error'
+'queued'
+decision_resp
+●●●●●● 1mm □△
+'error'
+'decision failed'
+●●●●●● 2mm □△
+100
+'human_review'
+●●●●●● 3mm ○
+action
+data
+●●●●●● 1mm □
+decision_resp
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+●●●●●● 1mm □△
+'escalate'
+●●●●●● 2mm □△
+action
+'type'
+●●●●●● 1mm □
+'escalate'
+action
+'result'
+●●●●●● 1mm □
+'queued'
+'reason'
+'human_review'
+data
+●●●●●● 1mm □△
+'reason'
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+action
+brain
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'brain'
+●●●●●● 2mm □△
+act
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'payload'
+●●●●●● 2mm □△
+action
+'type'
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'type'
+'heal'
+●●●●●● 2mm □△
+action
+'result'
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+brain
+act
+payload
+●●●●●● 2mm □△
+Exception
+action
+'result'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+●●●●●● 3mm ○
+action
+●●●●●● 2mm □△
+●●●●●● 1mm □
+submit_coding_task
+●●●●●● 1mm □△
+instructions
+context
+priority
+error_class
+origin
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+5
+''
+'error_pipeline'
+'\n    Submit a coding task to the coding agent queue.\n\n    Called by error_pipeline when a runtime error needs a code fix,\n    and by the autonomous loop when it detects a code-related problem.\n\n    Returns a task_id string.\n    '
+●●●●●● 3mm □△○
+coding_agent.task_queue
+●●●●●● 2mm □△○
+submit
+task_id
+●●●●●● 1mm □
+submit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS] Coding task submitted: %s (class=%s)'
+task_id
+error_class
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS] submit_coding_task failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error_'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+_stop_event
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_background_loop
+●●●●●● 1mm □△
+interval_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+30
+'Background autonomous loop.'
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+_run_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_lock
+_loop_state
+'cycle_count'
+1
+_loop_state
+'last_cycle'
+●●●●●● 1mm □
+result
+'timestamp'
+_loop_state
+'last_result'
+●●●●●● 1mm □
+result
+'outcome'
+_loop_log
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_loop_log
+●●●●●● 2mm □△
+100
+_loop_log
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+Exception
+_loop_lock
+_loop_state
+'errors'
+1
+logger
+●●●●●● 1mm □△
+'Autonomous loop error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_stop_event
+●●●●●● 1mm □△
+interval_seconds
+●●●●●● 2mm □△
+'Get autonomous loop status.'
+_loop_lock
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_loop_state
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+30
+'Start the autonomous loop.'
+_loop_lock
+●●●●●● 2mm □
+_loop_state
+'running'
+●●●●●● 3mm ○
+'status'
+'already_running'
+_loop_state
+'running'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'interval_seconds'
+'started'
+interval
+router
+●●●●●● 1mm □△
+'/start'
+●●●●●● 2mm □△
+'Stop the autonomous loop.'
+_stop_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_lock
+_loop_state
+'running'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'status'
+'stopped'
+router
+●●●●●● 1mm □△
+'/stop'
+●●●●●● 2mm □△
+'Run a single autonomous cycle manually.'
+result
+●●●●●● 1mm □
+_run_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_loop_lock
+_loop_state
+'cycle_count'
+1
+_loop_state
+'last_cycle'
+●●●●●● 1mm □
+result
+'timestamp'
+_loop_state
+'last_result'
+●●●●●● 1mm □
+result
+'outcome'
+_loop_log
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/cycle'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Get recent autonomous loop activity.'
+_loop_lock
+●●●●●● 3mm ○
+'log'
+'total'
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+_loop_log
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_loop_log
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/log'
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'List all defined triggers; optional filter by category or comma-separated trigger_ids.'
+●●●●●● 3mm □△○
+core.unified_trigger_brain
+●●●●●● 2mm □△○
+get_trigger_definitions
+get_categories
+ids
+●●●●●● 1mm □
+x
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+x
+trigger_ids
+''
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'triggers'
+'categories'
+get_trigger_definitions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_categories
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/triggers/definitions'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Body
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run unified triggers (async multi-trigger). Body: { "trigger_ids": [...], "category": "..." }.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+payload
+●●●●●● 1mm □
+payload
+result
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'run_unified_triggers'
+'trigger_ids'
+'category'
+payload
+●●●●●● 1mm □△
+'trigger_ids'
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/triggers/run'
+●●●●●● 2mm □△

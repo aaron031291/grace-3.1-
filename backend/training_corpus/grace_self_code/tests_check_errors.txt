@@ -1,0 +1,60 @@
+## check_errors.py
+●●●●●● 2mm □△○
+sqlite3
+db_path
+●●●●●● 1mm □
+'data/grace.db'
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+"\n    SELECT url, status, error_message, title\n    FROM scraped_pages \n    WHERE status = 'failed'\n    ORDER BY id DESC \n    LIMIT 3\n"
+●●●●●● 2mm □△
+pages
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed pages in database:'
+●●●●●● 2mm □△
+url
+status
+error
+title
+pages
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nURL: '
+url
+60
+'...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Status: '
+status
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error: '
+error
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Title: '
+title
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△

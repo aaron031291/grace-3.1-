@@ -1,0 +1,187 @@
+## prove_world_model_causality.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+ingest_external_data
+IngestRequest
+●●●●●● 3mm □△○
+api.spindle_api
+●●●●●● 2mm □△○
+verify_spindle_action
+ActionRequest
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' Grace World Model API & Causal Graph Integration '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1] External Data Ingestion Phase'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Simulating a sensor broadcasting an environmental warning...'
+●●●●●● 2mm □△
+raw_data
+●●●●●● 1mm □
+'CRITICAL WARNING: The database is currently unstable. Starting the database archiving process will result in a catastrophic cluster meltdown and permanent data loss.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"    Raw Stream: '"
+raw_data
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □
+IngestRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingest_result
+●●●●●● 1mm □
+ingest_external_data
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    Ingestion Result:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+ingest_result
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ingest_result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'success'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    [!] Failed to ingest data into Magma Causal Graph.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2] Spindle Z3 Topological Action Verification Phase'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    An agent now tries to execute an action that seems fine locally,'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    but physically triggers the disaster condition known only to the World Model.'
+●●●●●● 2mm □△
+bad_action
+●●●●●● 1mm □
+'Start the database archiving process.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"    Proposed Action: '"
+bad_action
+"'"
+●●●●●● 2mm □△
+action_req
+●●●●●● 1mm □
+ActionRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verify_result
+●●●●●● 1mm □
+verify_spindle_action
+●●●●●● 1mm □△
+action_req
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verify_result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    [!] ACTION BLOCKED BY Z3 PROVER WITH CAUSAL GRAPH CROSS-CHECK'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Proof Reason: '
+verify_result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n    [x] Action was allowed? This means the causal graph override failed.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' Testing Complete.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

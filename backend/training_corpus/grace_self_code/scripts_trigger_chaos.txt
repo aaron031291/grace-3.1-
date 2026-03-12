@@ -1,0 +1,129 @@
+## trigger_chaos.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'ChaosTrigger'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+trigger_network_chaos
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Inject an error spike into the database to trigger autonomous healing.'
+logger
+●●●●●● 1mm □△
+'Initializing database connection...'
+●●●●●● 2mm □△
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"Injecting simulated 'ConnectionError' anomalies..."
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+12
+●●●●●● 2mm □△
+key_id
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+error_key
+●●●●●● 1mm □
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+error_key
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Successfully injected 12 simulated TimeoutErrors into the Genesis Log.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"Grace's 'Health Monitor' thread should detect these on its next 300s sweep."
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'To see it immediately, you can manually trigger health monitor in the codebase.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+trigger_network_chaos
+●●●●●● 1mm □△
+●●●●●● 2mm □△

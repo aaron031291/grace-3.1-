@@ -1,0 +1,207 @@
+## fix_corrupt_json.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 1mm □
+fix_truncated_json
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+'\n    Repair a truncated JSON file by adding missing closing characters.\n    '
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Checking '
+file_path
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error: '
+file_path
+' does not exist.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+json
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'File is already valid JSON.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+json
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'File is invalid. Attempting repair...'
+●●●●●● 2mm □△
+backup_path
+●●●●●● 1mm □
+file_path
+'.bak.'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+file_path
+backup_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Backup created: '
+backup_path
+●●●●●● 2mm □△
+fixed_content
+●●●●●● 1mm □
+content
+●●●●●● 2mm □
+fixed_content
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'"keys": ['
+fixed_content
+last_brace
+●●●●●● 1mm □
+fixed_content
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+last_brace
+1
+fixed_content
+●●●●●● 1mm □
+fixed_content
+last_brace
+●●●●●● 3mm ○
+1
+fixed_content
+'\n  ],\n  "last_updated": "'
+●●●●●● 3mm ○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'",\n  "total_keys": 0,\n  "repaired": true\n}'
+●●●●●● 3mm □
+fixed_content
+'}'
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+fixed_content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'keys'
+data
+data
+'total_keys'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+'keys'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Successfully repaired '
+file_path
+'. Total keys: '
+data
+●●●●●● 1mm □△
+'total_keys'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+json
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Heuristic repair failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error during repair: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+1
+path
+sys
+1
+fix_truncated_json
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+corrupt_file
+●●●●●● 1mm □
+'D:\\grace-3.1-\\backend\\knowledge_base\\layer_1\\genesis_key\\file_watcher\\keys_2026-02-24.json'
+●●●●●● 3mm □
+fix_truncated_json
+●●●●●● 1mm □△
+corrupt_file
+●●●●●● 2mm □△

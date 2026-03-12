@@ -1,0 +1,2201 @@
+## ask_grace_api.py
+'\nAsk Grace API — Unified system introspection endpoint.\n\nReplaces the broken /api/world-model/chat with a fully wired endpoint\nthat aggregates data from:\n  - SystemRegistry (auto-discovered components)\n  - ComponentRegistry (runtime components)\n  - Layer 1 Message Bus (communication stats)\n  - Cognitive Event Bus (recent events)\n  - Probe Agent (endpoint health)\n  - Genesis Keys (provenance)\n  - Live Console (model status)\n\nWired into both the Layer 1 message bus (via AskGraceConnector) and the\ncognitive event bus (publishes ask_grace.* events).\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+List
+Dict
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+traceback
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AskGraceQuery
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+query
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+include_system_state
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+scope
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+'all'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AskGraceResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+response
+●●●●●● 1mm ○
+intent
+●●●●●● 1mm ○
+sources_used
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+components_referenced
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+system_health
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+timestamp
+●●●●●● 1mm ○
+''
+●●●●●● 1mm □
+_classify_intent
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Deterministic intent classification using pattern matching.\n\n    Falls back to \'general\' for anything that doesn\'t match a known pattern.\n    This runs BEFORE the LLM so we can route the query efficiently.\n\n    Order matters: more specific patterns are checked first to avoid\n    generic keywords (like "show me") stealing matches from specific intents.\n    '
+q
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+owner_keywords
+●●●●●● 1mm □
+'who owns'
+'who maintains'
+'who built'
+'owned by'
+'maintainer'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+owner_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ownership_query'
+genesis_keywords
+●●●●●● 1mm □
+'genesis'
+'provenance'
+'audit trail'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+genesis_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_query'
+bus_keywords
+●●●●●● 1mm □
+'message bus'
+'event bus'
+'subscriber'
+'publish'
+'layer 1'
+'communication bus'
+'on the bus'
+'the bus'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+bus_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'bus_query'
+probe_keywords
+●●●●●● 1mm □
+'probe'
+'endpoint'
+'dormant'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+probe_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'probe_query'
+health_keywords
+●●●●●● 1mm □
+'health'
+'status'
+'alive'
+'running'
+'broken'
+'down'
+'error'
+'degraded'
+'working'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+health_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'health_check'
+capability_keywords
+●●●●●● 1mm □
+'can you'
+'capable'
+'ability'
+'feature'
+'what can'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+capability_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'capability_query'
+component_keywords
+●●●●●● 1mm □
+'component'
+'module'
+'service'
+'registry'
+'list'
+'show me'
+'what is'
+'find'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+q
+kw
+component_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'component_query'
+●●●●●● 3mm ○
+'general'
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Build targeted context based on classified intent.'
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'sources'
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+get_ask_grace_connector
+connector
+●●●●●● 1mm □
+get_ask_grace_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+include_system_state
+intent
+'health_check'
+'general'
+full_ctx
+●●●●●● 1mm □
+connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+full_ctx
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+context
+Exception
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE] Connector unavailable, building context manually: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'health_check'
+'general'
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+sr
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'system_health'
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'components'
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources'
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.registry
+●●●●●● 2mm □△○
+get_component_registry
+cr
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'component_health'
+●●●●●● 1mm □
+cr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources'
+●●●●●● 1mm □△
+'component_registry'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm △
+intent
+'component_query'
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+sr
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'components'
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'by_category'
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources'
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+intent
+'bus_query'
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'bus_stats'
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'autonomous_actions'
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources'
+●●●●●● 1mm □△
+'message_bus'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+get_recent_events
+get_subscriber_count
+context
+'recent_events'
+●●●●●● 1mm □
+get_recent_events
+●●●●●● 1mm □△
+30
+●●●●●● 2mm □△
+context
+'event_subscribers'
+●●●●●● 1mm □
+get_subscriber_count
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources'
+●●●●●● 1mm □△
+'cognitive_event_bus'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm △
+intent
+'genesis_query'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent_keys
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'recent_genesis_keys'
+●●●●●● 1mm □
+'key_id'
+'type'
+'what'
+'where'
+'created'
+k
+k
+k
+'unknown'
+k
+k
+150
+''
+k
+''
+k
+k
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+''
+k
+recent_keys
+context
+'sources'
+●●●●●● 1mm □△
+'genesis_keys_db'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+intent
+'probe_query'
+●●●●●● 3mm □△○
+api.probe_agent_api
+●●●●●● 2mm □△○
+_probe_results
+context
+'probe_results'
+●●●●●● 1mm □
+_probe_results
+_probe_results
+50
+context
+'sources'
+●●●●●● 1mm □△
+'probe_agent'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api.live_console_api
+●●●●●● 2mm □△○
+live_status
+context
+'live_status'
+●●●●●● 1mm □
+live_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'sources'
+●●●●●● 1mm □△
+'live_console'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_build_deterministic_response
+●●●●●● 1mm □△
+intent
+query
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Try to answer deterministically without an LLM call.\n\n    Returns None if the question needs LLM reasoning.\n    '
+●●●●●● 2mm □
+intent
+'health_check'
+health
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'system_health'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+health
+total
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+green
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'green'
+0
+●●●●●● 2mm □△
+amber
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'amber'
+0
+●●●●●● 2mm □△
+red
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'red'
+0
+●●●●●● 2mm □△
+pct
+●●●●●● 1mm □
+health
+●●●●●● 1mm □△
+'health_pct'
+0
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'broken'
+●●●●●● 2mm □△
+degraded
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'degraded'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+'System Health: '
+pct
+'% ('
+green
+' healthy, '
+amber
+' degraded, '
+red
+' broken out of '
+total
+' components)'
+●●●●●● 2mm □
+broken
+lines
+●●●●●● 1mm □△
+'\nBroken components ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+c
+broken
+10
+lines
+●●●●●● 1mm □△
+'  - '
+c
+●●●●●● 1mm □△
+'name'
+c
+●●●●●● 1mm □△
+'id'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+': '
+c
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+degraded
+lines
+●●●●●● 1mm □△
+'\nDegraded components ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+degraded
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+c
+degraded
+10
+lines
+●●●●●● 1mm □△
+'  - '
+c
+●●●●●● 1mm □△
+'name'
+c
+●●●●●● 1mm □△
+'id'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+': '
+c
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+live
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'live_status'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+live
+lines
+●●●●●● 1mm □△
+'\nLive status: '
+live
+●●●●●● 1mm □△
+'summary'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+live
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+models
+lines
+●●●●●● 1mm □△
+'Models:'
+●●●●●● 2mm □△
+name
+info
+models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  - '
+name
+': '
+info
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'bus_query'
+stats
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'bus_stats'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'message_bus'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'stats'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stats
+lines
+●●●●●● 1mm □
+'Layer 1 Message Bus:'
+'  Total messages: '
+stats
+●●●●●● 1mm □△
+'total_messages'
+0
+●●●●●● 2mm □△
+'  Requests: '
+stats
+●●●●●● 1mm □△
+'requests'
+0
+●●●●●● 2mm □△
+'  Events: '
+stats
+●●●●●● 1mm □△
+'events'
+0
+●●●●●● 2mm □△
+'  Commands: '
+stats
+●●●●●● 1mm □△
+'commands'
+0
+●●●●●● 2mm □△
+'  Autonomous actions triggered: '
+stats
+●●●●●● 1mm □△
+'autonomous_actions_triggered'
+0
+●●●●●● 2mm □△
+'  Registered components: '
+stats
+●●●●●● 1mm □△
+'registered_components'
+0
+●●●●●● 2mm □△
+'  Components: '
+', '
+●●●●●● 1mm □△
+stats
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'autonomous_actions'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'message_bus'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'autonomous_actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+actions
+lines
+●●●●●● 1mm □△
+'\nAutonomous Actions ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+actions
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+a
+actions
+15
+status
+●●●●●● 1mm □
+a
+●●●●●● 1mm □△
+'enabled'
+●●●●●● 2mm □△
+'enabled'
+'disabled'
+lines
+●●●●●● 1mm □△
+'  - ['
+status
+'] '
+a
+●●●●●● 1mm □△
+'description'
+'?'
+●●●●●● 2mm □△
+' (trigger: '
+a
+●●●●●● 1mm □△
+'trigger_event'
+'?'
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+event_subs
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'event_subscribers'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+event_subs
+lines
+●●●●●● 1mm □△
+'\nCognitive Event Bus Subscribers ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+event_subs
+●●●●●● 2mm □△
+' topics):'
+●●●●●● 2mm □△
+topic
+count
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+event_subs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  - '
+topic
+': '
+count
+' handler(s)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'component_query'
+components
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+by_cat
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'by_category'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+by_cat
+lines
+●●●●●● 1mm □
+'Grace Components ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+' total):'
+cat
+comps
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+by_cat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'\n  '
+cat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comps
+●●●●●● 2mm □△
+'):'
+●●●●●● 2mm □△
+c
+comps
+8
+status_icon
+●●●●●● 1mm □
+'green'
+'amber'
+'red'
+'unknown'
+'[OK]'
+'[WARN]'
+'[FAIL]'
+'[?]'
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+'[?]'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'    '
+status_icon
+' '
+c
+●●●●●● 1mm □△
+'name'
+'?'
+●●●●●● 2mm □△
+': '
+c
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comps
+●●●●●● 2mm □△
+8
+lines
+●●●●●● 1mm □△
+'    ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+comps
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+8
+' more'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+components
+lines
+●●●●●● 1mm □
+'Grace Components ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+' total):'
+c
+components
+20
+status_icon
+●●●●●● 1mm □
+'green'
+'amber'
+'red'
+'unknown'
+'[OK]'
+'[WARN]'
+'[FAIL]'
+'[?]'
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'status'
+''
+●●●●●● 2mm □△
+'[?]'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'  '
+status_icon
+' '
+c
+●●●●●● 1mm □△
+'name'
+'?'
+●●●●●● 2mm □△
+' ('
+c
+●●●●●● 1mm □△
+'category'
+'?'
+●●●●●● 2mm □△
+'): '
+c
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+20
+lines
+●●●●●● 1mm □△
+'  ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+20
+' more'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'genesis_query'
+keys
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'recent_genesis_keys'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+lines
+●●●●●● 1mm □
+'Recent Genesis Keys ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+'):'
+k
+keys
+lines
+●●●●●● 1mm □△
+'  ['
+k
+●●●●●● 1mm □△
+'type'
+'?'
+●●●●●● 2mm □△
+'] '
+k
+●●●●●● 1mm □△
+'key_id'
+'?'
+●●●●●● 2mm □△
+': '
+k
+●●●●●● 1mm □△
+'what'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+k
+●●●●●● 1mm □△
+'where'
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □△
+'    Location: '
+k
+'where'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'probe_query'
+results
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'probe_results'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+active
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'ACTIVE'
+dormant
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'DORMANT'
+broken
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'BROKEN'
+lines
+●●●●●● 1mm □
+'Probe Results ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' endpoints):'
+'  Active: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active
+●●●●●● 2mm □△
+'  Dormant: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+dormant
+●●●●●● 2mm □△
+'  Broken: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+broken
+●●●●●● 2mm □△
+●●●●●● 2mm □
+broken
+lines
+●●●●●● 1mm □△
+'\nBroken endpoints:'
+●●●●●● 2mm □△
+r
+broken
+10
+lines
+●●●●●● 1mm □△
+'  - '
+r
+●●●●●● 1mm □△
+'method'
+'?'
+●●●●●● 2mm □△
+' '
+r
+●●●●●● 1mm □△
+'path'
+'?'
+●●●●●● 2mm □△
+': '
+r
+●●●●●● 1mm □△
+'error'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Use the LLM orchestrator to generate a response when deterministic fails.'
+context_summary
+●●●●●● 1mm □
+_summarize_context
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+"You are Grace's self-introspection engine. You answer questions about Grace's own components, health, architecture, and state. You have access to live system data provided as context. Be concise, accurate, and reference specific component names and statuses. If something is broken, say so directly. If you don't have enough data, say what's missing."
+user_prompt
+●●●●●● 1mm □
+'System context:\n'
+context_summary
+'\n\nUser question: '
+query
+'\n\nAnswer based on the system context above. Be specific and actionable.'
+providers_to_try
+●●●●●● 1mm □
+'qwen'
+●●●●●● 2mm □
+'kimi'
+'opus'
+provider
+providers_to_try
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+response
+Exception
+logger
+●●●●●● 1mm □△
+'[ASK-GRACE] Provider '
+provider
+' failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+result
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+●●●●●● 3mm ○
+"I gathered system data but couldn't generate a natural language response (LLM unavailable). Raw context sources: "
+', '
+●●●●●● 1mm □△
+context
+●●●●●● 1mm □△
+'sources'
+context
+●●●●●● 1mm □△
+'sources_queried'
+'none'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_summarize_context
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Compress context into a text summary for the LLM prompt.'
+parts
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sr
+sr
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'System Registry: '
+health
+●●●●●● 1mm □△
+'total'
+'?'
+●●●●●● 2mm □△
+' components, '
+health
+●●●●●● 1mm □△
+'green'
+'?'
+●●●●●● 2mm □△
+' healthy, '
+health
+●●●●●● 1mm □△
+'amber'
+'?'
+●●●●●● 2mm □△
+' degraded, '
+health
+●●●●●● 1mm □△
+'red'
+'?'
+●●●●●● 2mm □△
+' broken ('
+health
+●●●●●● 1mm □△
+'health_pct'
+'?'
+●●●●●● 2mm □△
+'%)'
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+'broken'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+broken
+names
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'name'
+'?'
+●●●●●● 2mm □△
+c
+broken
+5
+parts
+●●●●●● 1mm □△
+'Broken: '
+', '
+●●●●●● 1mm □△
+names
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cr
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'component_registry'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cr
+cr
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+ch
+●●●●●● 1mm □
+cr
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Component Registry: '
+ch
+●●●●●● 1mm □△
+'total_components'
+'?'
+●●●●●● 2mm □△
+' components, health score '
+ch
+●●●●●● 1mm □△
+'health_score'
+'?'
+●●●●●● 2mm □△
+', status: '
+ch
+●●●●●● 1mm □△
+'status'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mb
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'message_bus'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mb
+stats
+●●●●●● 1mm □
+mb
+●●●●●● 1mm □△
+'stats'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Message Bus: '
+stats
+●●●●●● 1mm □△
+'total_messages'
+0
+●●●●●● 2mm □△
+' messages, '
+stats
+●●●●●● 1mm □△
+'registered_components'
+0
+●●●●●● 2mm □△
+' components, '
+stats
+●●●●●● 1mm □△
+'autonomous_actions'
+0
+●●●●●● 2mm □△
+' auto-actions'
+●●●●●● 2mm □△
+live
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'live_status'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+live
+live
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'Live Status: '
+live
+●●●●●● 1mm □△
+'summary'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+models
+●●●●●● 1mm □
+live
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+name
+info
+models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □△
+'  Model '
+name
+': '
+info
+●●●●●● 1mm □△
+'status'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+eb
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'event_bus'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+eb
+eb
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □
+eb
+●●●●●● 1mm □△
+'recent_events'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+events
+parts
+●●●●●● 1mm □△
+'Recent events ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+events
+●●●●●● 2mm □△
+'): '
+', '
+●●●●●● 1mm □△
+e
+●●●●●● 1mm □△
+'topic'
+'?'
+●●●●●● 2mm □△
+e
+events
+5
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+components
+cats
+●●●●●● 1mm □
+c
+components
+cat
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+'category'
+'other'
+●●●●●● 2mm □△
+cats
+cat
+●●●●●● 1mm □
+cats
+●●●●●● 1mm □△
+cat
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+parts
+●●●●●● 1mm □△
+'Components by category: '
+', '
+●●●●●● 1mm □△
+k
+'='
+v
+k
+v
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+cats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+parts
+'\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+'No system context available.'
+●●●●●● 1mm ○
+AskGraceQuery
+'Main Ask Grace endpoint. Classifies intent, gathers context, responds.'
+start
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+intent
+●●●●●● 1mm □
+_classify_intent
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+_build_context_for_intent
+●●●●●● 1mm □△
+intent
+query
+●●●●●● 2mm □△
+deterministic
+●●●●●● 1mm □
+_build_deterministic_response
+●●●●●● 1mm □△
+intent
+query
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+deterministic
+response_text
+●●●●●● 1mm □
+deterministic
+method
+●●●●●● 1mm □
+'deterministic'
+●●●●●● 3mm □
+response_text
+●●●●●● 1mm □
+_generate_llm_response
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+●●●●●● 3mm □
+method
+●●●●●● 1mm □
+'llm'
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+get_ask_grace_connector
+connector
+●●●●●● 1mm □
+get_ask_grace_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □△
+query
+response_text
+intent
+●●●●●● 2mm □△
+connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish_async
+publish_async
+●●●●●● 1mm □△
+'ask_grace.query_completed'
+'query'
+'intent'
+'method'
+'duration_ms'
+query
+intent
+method
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+Exception
+sources_used
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'sources'
+context
+●●●●●● 1mm □△
+'sources_queried'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+components_referenced
+●●●●●● 1mm □
+●●●●●● 2mm □
+intent
+'component_query'
+components_referenced
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'components'
+●●●●●● 2mm □△
+10
+health_info
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+intent
+'health_check'
+health_info
+●●●●●● 1mm □
+context
+●●●●●● 1mm □△
+'system_health'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+'system_registry'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'health'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'intent'
+'method'
+'sources_used'
+'components_referenced'
+'system_health'
+'timestamp'
+'duration_ms'
+response_text
+intent
+method
+sources_used
+components_referenced
+health_info
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/query'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+AskGraceQuery
+"Alias for /query — matches the frontend's expected /chat endpoint."
+●●●●●● 3mm ○
+ask_grace
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/chat'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Quick aggregated health from all registries.'
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'status'
+'registries'
+'operational'
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+sr
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'registries'
+'system'
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'registries'
+'system'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.registry
+●●●●●● 2mm □△○
+get_component_registry
+cr
+●●●●●● 1mm □
+get_component_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'registries'
+'component'
+●●●●●● 1mm □
+cr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'registries'
+'component'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'message_bus'
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'message_bus'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+get_subscriber_count
+result
+'event_bus'
+●●●●●● 1mm □
+'subscriber_topics'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+get_subscriber_count
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+has_errors
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+v
+result
+'registries'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+has_errors
+'degraded'
+'operational'
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'List all components from all registries, with optional filters.'
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+get_ask_grace_connector
+connector
+●●●●●● 1mm □
+get_ask_grace_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+components
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.system_registry
+●●●●●● 2mm □△○
+get_system_registry
+sr
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+sr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+category
+components
+●●●●●● 1mm □
+c
+c
+components
+c
+●●●●●● 1mm □△
+'category'
+●●●●●● 2mm □△
+category
+●●●●●● 2mm □
+status
+components
+●●●●●● 1mm □
+c
+c
+components
+c
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+status
+●●●●●● 3mm ○
+'components'
+'total'
+'filters'
+components
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+'category'
+'status'
+category
+status
+router
+●●●●●● 1mm □△
+'/components'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Detailed status of all communication buses.'
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+bus
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'layer1_message_bus'
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'layer1_message_bus'
+'autonomous_actions'
+●●●●●● 1mm □
+bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+result
+'layer1_message_bus'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+get_recent_events
+get_subscriber_count
+result
+'cognitive_event_bus'
+●●●●●● 1mm □
+'subscriber_topics'
+'recent_events'
+get_subscriber_count
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+get_recent_events
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+Exception
+result
+'cognitive_event_bus'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+result
+'grace_os_event_system'
+●●●●●● 1mm □
+'available'
+●●●●●● 3mm □△○
+Exception
+result
+'grace_os_event_system'
+●●●●●● 1mm □
+'available'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+result
+router
+●●●●●● 1mm □△
+'/bus-status'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm ○
+20
+'Return recent Ask Grace queries for analytics.'
+●●●●●● 3mm □△○
+layer1.components.ask_grace_connector
+●●●●●● 2mm □△○
+get_ask_grace_connector
+connector
+●●●●●● 1mm □
+get_ask_grace_connector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'queries'
+connector
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'queries'
+router
+●●●●●● 1mm □△
+'/recent-queries'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Qwen model pool status — models, health, task routing, governance mode.'
+●●●●●● 3mm □△○
+llm_orchestrator.qwen_pool
+●●●●●● 2mm □△○
+get_qwen_pool
+pool
+●●●●●● 1mm □
+get_qwen_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'initialized'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+router
+●●●●●● 1mm □△
+'/qwen-pool'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Hot-swap a Qwen model at runtime.'
+●●●●●● 3mm □△○
+llm_orchestrator.qwen_pool
+●●●●●● 2mm □△○
+get_qwen_pool
+pool
+●●●●●● 1mm □
+get_qwen_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pool
+●●●●●● 1mm □△
+slot
+model
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'slot'
+'new_model'
+'swapped'
+slot
+model
+Exception
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/qwen-pool/swap'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

@@ -1,0 +1,1924 @@
+## grace_team_management.py
+'\nGrace Team Management Service\n\nSkill-based auto-assignment system for tasks and jobs.\nManages team members, skills, workload, and intelligent assignment.\n\nFeatures:\n- Team member profiles with skills and Genesis IDs\n- Skill-based task matching\n- Workload balancing\n- Availability tracking\n- Performance history integration\n- Auto-assignment with ML predictions\n\nAuthor: Grace Autonomous System\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Set
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm △
+SkillLevel
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Skill proficiency levels'
+NOVICE
+●●●●●● 1mm □
+'novice'
+INTERMEDIATE
+●●●●●● 1mm □
+'intermediate'
+ADVANCED
+●●●●●● 1mm □
+'advanced'
+EXPERT
+●●●●●● 1mm □
+'expert'
+MASTER
+●●●●●● 1mm □
+'master'
+●●●●●● 2mm △
+TeamRole
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Team member roles'
+DEVELOPER
+●●●●●● 1mm □
+'developer'
+DESIGNER
+●●●●●● 1mm □
+'designer'
+ARCHITECT
+●●●●●● 1mm □
+'architect'
+QA_ENGINEER
+●●●●●● 1mm □
+'qa_engineer'
+DEVOPS
+●●●●●● 1mm □
+'devops'
+DATA_SCIENTIST
+●●●●●● 1mm □
+'data_scientist'
+PRODUCT_MANAGER
+●●●●●● 1mm □
+'product_manager'
+TECH_LEAD
+●●●●●● 1mm □
+'tech_lead'
+GRACE_AGENT
+●●●●●● 1mm □
+'grace_agent'
+●●●●●● 2mm △
+AssignmentStrategy
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Task assignment strategies'
+SKILL_MATCH
+●●●●●● 1mm □
+'skill_match'
+WORKLOAD_BALANCE
+●●●●●● 1mm □
+'workload_balance'
+HYBRID
+●●●●●● 1mm □
+'hybrid'
+ROUND_ROBIN
+●●●●●● 1mm □
+'round_robin'
+PRIORITY_FIRST
+●●●●●● 1mm □
+'priority_first'
+LEARNING
+●●●●●● 1mm □
+'learning'
+●●●●●● 2mm △
+Skill
+'Skill definition'
+name
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+level
+SkillLevel
+SkillLevel
+years_experience
+●●●●●● 3mm ○
+0
+certifications
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_used
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+TeamMember
+'Team member profile'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+genesis_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+email
+●●●●●● 1mm ○
+role
+TeamRole
+skills
+●●●●●● 3mm □△
+Skill
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_available
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+availability_hours
+●●●●●● 2mm ○
+40
+current_capacity
+●●●●●● 3mm ○
+100
+current_tasks
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_concurrent_tasks
+●●●●●● 2mm ○
+5
+current_workload
+●●●●●● 3mm ○
+0
+tasks_completed
+●●●●●● 2mm ○
+0
+success_rate
+●●●●●● 3mm ○
+0.8
+avg_completion_time_hours
+●●●●●● 3mm ○
+8
+preferred_task_types
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+timezone
+●●●●●● 1mm ○
+'UTC'
+joined_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_active
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GraceAgent
+'Grace AI agent that can be assigned tasks'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+agent_type
+●●●●●● 1mm ○
+capabilities
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_concurrent
+●●●●●● 2mm ○
+10
+current_tasks
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success_rate
+●●●●●● 3mm ○
+0.95
+avg_completion_time_ms
+●●●●●● 2mm ○
+5000
+is_active
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+AssignmentResult
+'Result of task assignment'
+task_id
+●●●●●● 1mm ○
+assignee_id
+●●●●●● 1mm ○
+assignee_type
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+reasoning
+●●●●●● 1mm ○
+skill_match_score
+●●●●●● 3mm ○
+workload_score
+●●●●●● 3mm ○
+alternatives
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assigned_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+GraceTeamManagement
+'\n    Team management system with skill-based auto-assignment.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TeamMember
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+GraceAgent
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+AssignmentResult
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_default_agents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize default Grace AI agents'
+default_agents
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+default_agents
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □
+agent
+●●●●●● 1mm □
+add_team_member
+●●●●●● 1mm □△
+self
+name
+email
+role
+genesis_id
+skills
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TeamRole
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Add a new team member'
+member_id
+●●●●●● 1mm □
+'TM-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+genesis_id
+●●●●●● 1mm □
+genesis_id
+'G-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+skill_objects
+●●●●●● 1mm □
+●●●●●● 2mm □
+skills
+s
+skills
+skill
+●●●●●● 1mm □
+Skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skill_objects
+●●●●●● 1mm □△
+skill
+●●●●●● 2mm □△
+●●●●●● 3mm △
+skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+member_id
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □
+TeamMember
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+member_id
+●●●●●● 1mm □
+member
+●●●●●● 3mm ○
+member
+TeamMember
+●●●●●● 1mm □
+update_team_member
+●●●●●● 1mm □△
+self
+member_id
+updates
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Update team member details'
+●●●●●● 2mm □
+member_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+member_id
+key
+value
+updates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+member
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+member
+key
+value
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+member
+●●●●●● 2mm □○
+TeamMember
+●●●●●● 1mm □
+add_skill_to_member
+●●●●●● 1mm □△
+self
+member_id
+skill_name
+category
+level
+years_experience
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+SkillLevel
+●●●●●● 3mm ○
+SkillLevel
+0
+'Add a skill to a team member'
+●●●●●● 2mm □
+member_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+member_id
+skill
+●●●●●● 1mm □
+Skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □△
+skill
+●●●●●● 2mm □△
+●●●●●● 3mm △
+skill_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+member_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_team_member
+●●●●●● 1mm □△
+self
+member_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a team member by ID'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+TeamMember
+●●●●●● 1mm □
+get_team_by_genesis_id
+●●●●●● 1mm □△
+self
+genesis_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get team member by Genesis ID'
+member
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+member
+genesis_id
+●●●●●● 3mm ○
+member
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+TeamMember
+●●●●●● 1mm □
+get_all_team_members
+●●●●●● 1mm □△
+self
+role
+available_only
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+TeamRole
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'Get all team members with optional filters'
+members
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+role
+members
+●●●●●● 1mm □
+m
+m
+members
+m
+role
+●●●●●● 2mm □
+available_only
+members
+●●●●●● 1mm □
+m
+m
+members
+m
+m
+100
+●●●●●● 3mm ○
+members
+●●●●●● 3mm □△
+TeamMember
+●●●●●● 1mm □
+get_members_with_skill
+●●●●●● 1mm □△
+self
+skill_name
+min_level
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+SkillLevel
+SkillLevel
+'Get team members with a specific skill'
+level_order
+●●●●●● 1mm □
+SkillLevel
+SkillLevel
+SkillLevel
+SkillLevel
+SkillLevel
+min_level_idx
+●●●●●● 1mm □
+level_order
+●●●●●● 1mm □△
+min_level
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+member_ids
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mid
+member_ids
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+mid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+member
+skill
+member
+●●●●●● 2mm □
+skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skill_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skill_level_idx
+●●●●●● 1mm □
+level_order
+●●●●●● 1mm □△
+skill
+●●●●●● 2mm □△
+●●●●●● 2mm □
+skill_level_idx
+min_level_idx
+result
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△
+TeamMember
+●●●●●● 1mm □
+add_grace_agent
+●●●●●● 1mm □△
+self
+name
+agent_type
+capabilities
+max_concurrent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+'Add a new Grace AI agent'
+agent_id
+●●●●●● 1mm □
+'GA-'
+agent_type
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+6
+agent
+●●●●●● 1mm □
+GraceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+agent_id
+●●●●●● 1mm □
+agent
+●●●●●● 3mm ○
+agent
+GraceAgent
+●●●●●● 1mm □
+get_grace_agent
+●●●●●● 1mm □△
+self
+agent_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get a Grace agent by ID'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agent_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+GraceAgent
+●●●●●● 1mm □
+get_agents_by_capability
+●●●●●● 1mm □△
+self
+capability
+active_only
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'Get Grace agents with a specific capability'
+result
+●●●●●● 1mm □
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+capability
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+agent
+●●●●●● 2mm □
+active_only
+agent
+result
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△
+GraceAgent
+●●●●●● 1mm □
+get_available_agents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all available Grace agents'
+●●●●●● 3mm ○
+agent
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm □△
+GraceAgent
+●●●●●● 1mm □
+auto_assign_task
+●●●●●● 1mm □△
+self
+task_id
+task_type
+required_skills
+priority
+estimated_hours
+strategy
+prefer_human
+prefer_agent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+AssignmentStrategy
+●●●●●● 3mm △
+●●●●●● 3mm △
+5
+4
+AssignmentStrategy
+●●●●●● 1mm □
+●●●●●● 1mm □
+'\n        Automatically assign a task to the best available resource.\n\n        Args:\n            task_id: Task identifier\n            task_type: Type of task\n            required_skills: Required skills/capabilities\n            priority: Task priority (1-10)\n            estimated_hours: Estimated time to complete\n            strategy: Assignment strategy to use\n            prefer_human: Prefer human team member\n            prefer_agent: Prefer Grace AI agent\n        '
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+'type'
+'required_skills'
+'priority'
+'estimated_hours'
+task_type
+required_skills
+priority
+estimated_hours
+candidates
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidates
+●●●●●● 3mm ○
+AssignmentResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scored_candidates
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scored_candidates
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+best
+●●●●●● 1mm □
+scored_candidates
+0
+alternatives
+●●●●●● 1mm □
+scored_candidates
+1
+4
+result
+●●●●●● 1mm □
+AssignmentResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+estimated_hours
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+AssignmentResult
+●●●●●● 1mm □
+_get_assignment_candidates
+●●●●●● 1mm □△
+self
+required_skills
+prefer_human
+prefer_agent
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+'Get all potential candidates for assignment'
+candidates
+●●●●●● 1mm □
+●●●●●● 2mm □
+prefer_agent
+member
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+member
+member
+100
+candidates
+●●●●●● 1mm □△
+'id'
+'name'
+'type'
+'skills'
+'skill_levels'
+'workload'
+'max_workload'
+'success_rate'
+'role'
+member
+member
+'team_member'
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+member
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+s
+member
+member
+100
+member
+member
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prefer_human
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+agent
+candidates
+●●●●●● 1mm □△
+'id'
+'name'
+'type'
+'skills'
+'skill_levels'
+'workload'
+'max_workload'
+'success_rate'
+'role'
+agent
+agent
+'grace_agent'
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+agent
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SkillLevel
+c
+agent
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+agent
+●●●●●● 2mm □△
+100
+100
+agent
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+candidates
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_score_candidates
+●●●●●● 1mm □△
+self
+candidates
+required_skills
+priority
+estimated_hours
+strategy
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+AssignmentStrategy
+'Score candidates based on assignment strategy'
+level_weights
+●●●●●● 1mm □
+SkillLevel
+SkillLevel
+SkillLevel
+SkillLevel
+SkillLevel
+20
+40
+60
+80
+100
+scored
+●●●●●● 1mm □
+candidate
+candidates
+skill_score
+●●●●●● 1mm □
+0
+matched_skills
+●●●●●● 1mm □
+0
+required_skills_lower
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+required_skills
+req_skill
+required_skills_lower
+●●●●●● 2mm □
+req_skill
+candidate
+'skills'
+matched_skills
+1
+level
+●●●●●● 1mm □
+candidate
+'skill_levels'
+●●●●●● 1mm □△
+req_skill
+SkillLevel
+●●●●●● 2mm □△
+skill_score
+level_weights
+●●●●●● 1mm □△
+level
+40
+●●●●●● 2mm □△
+●●●●●● 2mm □
+required_skills
+skill_score
+●●●●●● 1mm □
+skill_score
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+required_skills
+●●●●●● 2mm □△
+●●●●●● 3mm □
+skill_score
+●●●●●● 1mm □
+50
+workload_score
+●●●●●● 1mm □
+100
+●●●●●● 1mm □△
+candidate
+'workload'
+availability_score
+●●●●●● 1mm □
+candidate
+'workload'
+80
+100
+50
+success_score
+●●●●●● 1mm □
+candidate
+'success_rate'
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+strategy
+AssignmentStrategy
+total_score
+●●●●●● 1mm □
+skill_score
+●●●●●● 2mm □△
+0.7
+●●●●●● 3mm ○
+success_score
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+workload_score
+●●●●●● 2mm □△
+0.1
+●●●●●● 1mm △
+strategy
+AssignmentStrategy
+total_score
+●●●●●● 1mm □
+workload_score
+●●●●●● 2mm □△
+0.6
+●●●●●● 3mm ○
+skill_score
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+availability_score
+●●●●●● 2mm □△
+0.1
+●●●●●● 2mm □
+strategy
+AssignmentStrategy
+skill_weight
+●●●●●● 1mm □
+0.4
+●●●●●● 3mm ○
+priority
+●●●●●● 3mm □△
+10
+●●●●●● 2mm □△
+0.4
+total_score
+●●●●●● 1mm □
+skill_score
+●●●●●● 2mm □△
+skill_weight
+●●●●●● 3mm ○
+success_score
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+workload_score
+●●●●●● 2mm □△
+0.7
+●●●●●● 1mm □△
+skill_weight
+●●●●●● 1mm △
+strategy
+AssignmentStrategy
+learning_score
+●●●●●● 1mm □
+100
+●●●●●● 1mm □△
+skill_score
+total_score
+●●●●●● 1mm □
+learning_score
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+workload_score
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+availability_score
+●●●●●● 2mm □△
+0.2
+total_score
+●●●●●● 1mm □
+skill_score
+●●●●●● 2mm □△
+0.4
+●●●●●● 3mm ○
+workload_score
+●●●●●● 2mm □△
+0.3
+●●●●●● 3mm ○
+success_score
+●●●●●● 2mm □△
+0.2
+●●●●●● 3mm ○
+availability_score
+●●●●●● 2mm □△
+0.1
+reasoning_parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+matched_skills
+0
+reasoning_parts
+●●●●●● 1mm □△
+'Matched '
+matched_skills
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+required_skills
+●●●●●● 2mm □△
+' required skills'
+●●●●●● 2mm □△
+reasoning_parts
+●●●●●● 1mm □△
+'Current workload: '
+candidate
+'workload'
+'.0f'
+'%'
+●●●●●● 2mm □△
+reasoning_parts
+●●●●●● 1mm □△
+'Success rate: '
+candidate
+'success_rate'
+●●●●●● 2mm □△
+100
+'.0f'
+'%'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+candidate
+'type'
+'grace_agent'
+reasoning_parts
+●●●●●● 1mm □△
+'Grace AI agent - fast execution'
+●●●●●● 2mm □△
+scored
+●●●●●● 1mm □△
+'skill_score'
+'workload_score'
+'success_score'
+'total_score'
+'reasoning'
+candidate
+skill_score
+workload_score
+success_score
+total_score
+'; '
+●●●●●● 1mm □△
+reasoning_parts
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+scored
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_execute_assignment
+●●●●●● 1mm □△
+self
+result
+estimated_hours
+●●●●●● 2mm □△
+AssignmentResult
+●●●●●● 3mm ○
+'Execute the assignment by updating assignee workload'
+●●●●●● 2mm □
+result
+'team_member'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+member
+member
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+workload_increase
+●●●●●● 1mm □
+estimated_hours
+●●●●●● 3mm □△
+40
+●●●●●● 2mm □△
+100
+member
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100
+member
+●●●●●● 3mm ○
+workload_increase
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+result
+'grace_agent'
+agent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent
+agent
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+complete_assignment
+●●●●●● 1mm □△
+self
+task_id
+success
+actual_hours
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Mark an assignment as complete and update metrics'
+assignment
+●●●●●● 1mm □
+●●●●●● 2mm □
+a
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+a
+task_id
+assignment
+●●●●●● 1mm □
+a
+●●●●●● 2mm □
+assignment
+●●●●●● 3mm ○
+●●●●●● 2mm □
+assignment
+'team_member'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+assignment
+●●●●●● 2mm □△
+●●●●●● 2mm □
+member
+●●●●●● 2mm □
+task_id
+member
+member
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+member
+1
+member
+●●●●●● 1mm □
+member
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □△
+1
+●●●●●● 3mm ○
+success
+1
+0
+●●●●●● 3mm □△
+member
+●●●●●● 2mm □
+actual_hours
+member
+●●●●●● 1mm □
+member
+●●●●●● 2mm □△
+member
+●●●●●● 1mm □△
+1
+●●●●●● 3mm ○
+actual_hours
+●●●●●● 3mm □△
+member
+task_req
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+estimated
+●●●●●● 1mm □
+task_req
+●●●●●● 1mm □△
+'estimated_hours'
+4
+●●●●●● 2mm □△
+workload_decrease
+●●●●●● 1mm □
+estimated
+●●●●●● 3mm □△
+40
+●●●●●● 2mm □△
+100
+member
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+member
+●●●●●● 1mm □△
+workload_decrease
+●●●●●● 2mm □△
+●●●●●● 1mm △
+assignment
+'grace_agent'
+agent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+assignment
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent
+●●●●●● 2mm □
+task_id
+agent
+agent
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+agent
+●●●●●● 3mm ○
+success
+1
+0
+●●●●●● 3mm □△
+2
+●●●●●● 1mm □
+get_team_overview
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get overview of team status'
+members
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+agents
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'team_members'
+'grace_agents'
+'skills_coverage'
+'assignment_stats'
+'total'
+'available'
+'by_role'
+'avg_workload'
+'total_active_tasks'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+members
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+m
+m
+members
+m
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+members
+'role'
+●●●●●● 2mm □△
+members
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+m
+m
+members
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+members
+●●●●●● 2mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+m
+members
+●●●●●● 2mm □△
+'total'
+'active'
+'by_type'
+'total_active_tasks'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agents
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a
+a
+agents
+a
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agents
+'agent_type'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+a
+agents
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_count_by_attr
+●●●●●● 1mm □△
+self
+items
+attr
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Count items by attribute'
+counts
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+item
+items
+val
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+item
+attr
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+val
+'value'
+●●●●●● 2mm □△
+val
+●●●●●● 1mm □
+val
+counts
+val
+1
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+counts
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_get_skills_coverage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get coverage count for each skill'
+●●●●●● 3mm ○
+skill
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+members
+●●●●●● 2mm □△
+skill
+members
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_get_assignment_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get assignment statistics'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'total'
+0
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+by_type
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+avg_confidence
+●●●●●● 1mm □
+0
+a
+●●●●●● 3mm △
+by_type
+a
+1
+avg_confidence
+a
+●●●●●● 3mm ○
+'total'
+'by_assignee_type'
+'avg_confidence'
+total
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+by_type
+●●●●●● 2mm □△
+total
+avg_confidence
+●●●●●● 3mm □△
+total
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_workload_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get workload report for all team members and agents'
+report
+●●●●●● 1mm □
+member
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □△
+'id'
+'name'
+'type'
+'role'
+'current_workload'
+'active_tasks'
+'max_tasks'
+'is_available'
+'success_rate'
+member
+member
+'team_member'
+member
+member
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+member
+●●●●●● 2mm □△
+member
+member
+member
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workload
+●●●●●● 1mm □
+agent
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+agent
+●●●●●● 2mm □△
+100
+0
+report
+●●●●●● 1mm □△
+'id'
+'name'
+'type'
+'role'
+'current_workload'
+'active_tasks'
+'max_tasks'
+'is_available'
+'success_rate'
+agent
+agent
+'grace_agent'
+agent
+workload
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+agent
+agent
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+suggest_skill_development
+●●●●●● 1mm □△
+self
+member_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Suggest skills for a team member to develop'
+member
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+member_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+member
+●●●●●● 3mm ○
+current_skills
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+member
+●●●●●● 2mm □△
+suggestions
+●●●●●● 1mm □
+skill_demand
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+task_req
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skill
+task_req
+●●●●●● 1mm □△
+'required_skills'
+●●●●●● 2mm □△
+skill_lower
+●●●●●● 1mm □
+skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+skill_lower
+current_skills
+skill_demand
+skill_lower
+1
+skill
+demand
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+skill_demand
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+5
+suggestions
+●●●●●● 1mm □△
+'skill'
+'demand'
+'reason'
+'category'
+skill
+demand
+'Required in '
+demand
+' recent tasks'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+suggestions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_infer_skill_category
+●●●●●● 1mm □△
+self
+skill
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Infer skill category from skill name'
+skill_lower
+●●●●●● 1mm □
+skill
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+skill_lower
+kw
+'python'
+'javascript'
+'java'
+'api'
+'backend'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'backend'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+skill_lower
+kw
+'react'
+'vue'
+'css'
+'html'
+'frontend'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'frontend'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+skill_lower
+kw
+'docker'
+'kubernetes'
+'ci'
+'deploy'
+'aws'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'devops'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+skill_lower
+kw
+'test'
+'qa'
+'selenium'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'testing'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+skill_lower
+kw
+'design'
+'ux'
+'figma'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'design'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'general'
+●●●●●● 1mm ○
+_team_management_instance
+●●●●●● 2mm □○
+GraceTeamManagement
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_team_management
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the Team Management singleton'
+●●●●●● 2mm □
+_team_management_instance
+●●●●●● 2mm □
+_team_management_instance
+●●●●●● 1mm □
+GraceTeamManagement
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_team_management_instance
+GraceTeamManagement

@@ -1,0 +1,308 @@
+## commit_batch_trigger.py
+'\nCommit batch trigger: when N new commits (default 5) accumulate, run the upload action\n(model version check + persist). State stored in data/commit_batch_state.json.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+STATE_FILE
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'commit_batch_state.json'
+BATCH_SIZE
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'COMMIT_BATCH_SIZE'
+'5'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+STATE_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+STATE_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Commit batch state load failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'last_commit_sha'
+'last_upload_at'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_save_state
+●●●●●● 1mm □△
+last_commit_sha
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+STATE_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+datetime
+STATE_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'last_commit_sha'
+'last_upload_at'
+last_commit_sha
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_and_upload_if_batch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Count new commits since last upload. If >= BATCH_SIZE (default 5), run model\n    version check (upload) and persist new HEAD. Returns result dict with\n    triggered, new_commits, last_sha.\n    '
+out
+●●●●●● 1mm □
+'triggered'
+'new_commits'
+'last_sha'
+'error'
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+version_control.git_service
+●●●●●● 2mm □△○
+GitService
+backend
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+backend
+repo_path
+●●●●●● 1mm □
+workspace
+●●●●●● 3mm □△
+'.git'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+workspace
+backend
+git
+●●●●●● 1mm □
+GitService
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+commits
+●●●●●● 1mm □
+git
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+commits
+●●●●●● 3mm ○
+out
+head_sha
+●●●●●● 1mm □
+commits
+commits
+0
+●●●●●● 1mm □△
+'sha'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+head_sha
+●●●●●● 3mm ○
+out
+state
+●●●●●● 1mm □
+_load_state
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_sha
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+'last_commit_sha'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+last_sha
+●●●●●● 2mm □
+_save_state
+●●●●●● 1mm □△
+head_sha
+●●●●●● 2mm □△
+out
+'last_sha'
+●●●●●● 1mm □
+head_sha
+●●●●●● 3mm ○
+out
+new_count
+●●●●●● 1mm □
+0
+c
+commits
+●●●●●● 2mm □
+c
+●●●●●● 1mm □△
+'sha'
+●●●●●● 2mm □△
+last_sha
+new_count
+1
+●●●●●● 2mm □
+new_count
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+commits
+●●●●●● 2mm □△
+last_sha
+c
+●●●●●● 1mm □△
+'sha'
+●●●●●● 2mm □△
+c
+commits
+new_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+commits
+●●●●●● 2mm □△
+out
+'new_commits'
+●●●●●● 1mm □
+new_count
+●●●●●● 2mm □
+new_count
+BATCH_SIZE
+●●●●●● 3mm □△○
+cognitive.model_updater
+●●●●●● 2mm □△○
+check_all_models
+check_all_models
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.hot_reload
+●●●●●● 2mm □△○
+hot_reload_all_services
+hr
+●●●●●● 1mm □
+hot_reload_all_services
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'hot_reload'
+●●●●●● 1mm □
+'reloaded'
+'failed'
+hr
+●●●●●● 1mm □△
+'reloaded'
+0
+●●●●●● 2mm □△
+hr
+●●●●●● 1mm □△
+'failed'
+0
+●●●●●● 2mm □△
+Exception
+out
+'hot_reload'
+●●●●●● 1mm □
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+100
+_save_state
+●●●●●● 1mm □△
+head_sha
+●●●●●● 2mm □△
+out
+'triggered'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+out
+'last_sha'
+●●●●●● 1mm □
+head_sha
+logger
+●●●●●● 1mm □△
+'Commit batch trigger: %s new commits, model check + hot reload'
+new_count
+●●●●●● 2mm □△
+Exception
+out
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Commit batch trigger failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

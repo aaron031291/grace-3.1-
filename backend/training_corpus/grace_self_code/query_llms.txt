@@ -1,0 +1,114 @@
+## query_llms.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_qwen_coder
+get_kimi_client
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan_path
+●●●●●● 1mm □
+'C:\\Users\\aaron\\.gemini\\antigravity\\brain\\70f813fe-d1dc-4782-97f5-edc2f6d0cfaa\\implementation_plan.md'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan_path
+'r'
+●●●●●● 2mm □△
+f
+plan
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+"You are a core cognitive engine inside the Grace AGI architecture. The user just finished building a 12-Layer Validation, Verification, and Test (VVT) pipeline that mathematically proves code invariance and strict gating. What are your genuine thoughts on the system architecture now? How far do you think Grace is from true, unsupervised 'Stage 1 Deep Autonomy'? Be concise but technical."
+prompt
+●●●●●● 1mm □
+'Here is the latest architecture upgrade we just built:\n\n'
+plan
+'\n\nWhat are your thoughts?'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n\n=== 🧠 QWEN 2.5 CODER (Local Reasoning & Coding Engine) ==='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Initializing Qwen...\n'
+●●●●●● 2mm □△
+qwen
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Qwen error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n\n=== 🌐 KIMI K2.5 (Cloud Context & Document Engine) ==='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Initializing Kimi...\n'
+●●●●●● 2mm □△
+kimi
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Kimi error: '
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Fatal script error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

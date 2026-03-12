@@ -1,0 +1,85 @@
+## run_layer4_tests.py
+'\nTest runner for Layer 4 Action Router tests.\nBypasses conftest Unicode issues by running tests directly.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+warnings
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sys
+'win32'
+●●●●●● 2mm □△○
+io
+sys
+●●●●●● 1mm □
+io
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □
+io
+●●●●●● 1mm □△
+sys
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'ignore'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □
+__name__
+'__main__'
+exit_code
+●●●●●● 1mm □
+pytest
+●●●●●● 1mm □△
+__file__
+●●●●●● 1mm □△
+'run_layer4_tests.py'
+'test_layer4_action_router.py'
+●●●●●● 2mm □△
+'-v'
+'--tb=short'
+'-p'
+'no:cacheprovider'
+'--override-ini=python_files=test_layer4_action_router.py'
+'--override-ini=python_classes=Test*'
+'--override-ini=python_functions=test_*'
+'-W'
+'ignore::DeprecationWarning'
+'-W'
+'ignore::pytest.PytestCollectionWarning'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+exit_code
+●●●●●● 2mm □△

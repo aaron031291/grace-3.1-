@@ -1,0 +1,497 @@
+## file_ingestion.py
+'\nAPI endpoints for file-based ingestion management.\nProvides REST endpoints to trigger and monitor file-based ingestion.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Query
+Depends
+BackgroundTasks
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+IngestionResult
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_file_manager
+●●●●●● 2mm □○
+IngestionFileManager
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create file ingestion manager.'
+●●●●●● 2mm □
+_file_manager
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+os
+logger
+●●●●●● 1mm □△
+'[FILE_INGEST] Initializing file ingestion manager...'
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'knowledge_base'
+_file_manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE_INGEST] [OK] File manager initialized with path: '
+kb_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to initialize file manager: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_file_manager
+IngestionFileManager
+●●●●●● 2mm △
+FileIngestionResultItem
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Result of a file ingestion operation.'
+success
+●●●●●● 3mm △
+filepath
+●●●●●● 1mm ○
+change_type
+●●●●●● 1mm ○
+document_id
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+message
+●●●●●● 1mm ○
+''
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ScanResults
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Results from scanning knowledge base.'
+total_processed
+●●●●●● 2mm ○
+successful
+●●●●●● 2mm ○
+failed
+●●●●●● 2mm ○
+results
+●●●●●● 3mm □△
+FileIngestionResultItem
+timestamp
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileManagerStatus
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Status of file manager.'
+initialized
+●●●●●● 3mm △
+knowledge_base_path
+●●●●●● 1mm ○
+tracked_files
+●●●●●● 2mm ○
+git_initialized
+●●●●●● 3mm △
+timestamp
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Get file manager status.'
+git_dir
+●●●●●● 1mm □
+file_manager
+●●●●●● 3mm □△
+'.git'
+●●●●●● 3mm ○
+FileManagerStatus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting status: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+IngestionFileManager
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+Depends
+●●●●●● 1mm □△
+get_session
+●●●●●● 2mm □△
+'\n    Scan knowledge base for file changes and process them.\n\n    - New files: Trigger ingestion\n    - Modified files: Delete old embeddings and re-ingest\n    - Deleted files: Remove embeddings and metadata\n    '
+logger
+●●●●●● 1mm □△
+'[API] Starting knowledge base scan'
+●●●●●● 2mm □△
+genesis_service
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✅ Genesis Key created for file scan: '
+genesis_key
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ScanResults
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error scanning knowledge base: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/scan'
+●●●●●● 2mm □△
+BackgroundTasks
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'\n    Scan knowledge base for file changes in background.\n    \n    Returns immediately with a task ID. Results are logged asynchronously.\n    '
+logger
+●●●●●● 1mm □△
+'[API] Starting background knowledge base scan'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+scan_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[OK] Background scan completed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' changes processed'
+●●●●●● 2mm □△
+result
+results
+status
+●●●●●● 1mm □
+result
+'[OK]'
+'[FAIL]'
+logger
+●●●●●● 1mm □△
+'  '
+status
+' '
+result
+': '
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FAIL] Error in background scan: '
+e
+●●●●●● 2mm □△
+background_tasks
+●●●●●● 1mm □△
+scan_task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'knowledge_base_path'
+'Background scan started'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_manager
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error starting background scan: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/scan-background'
+●●●●●● 2mm □△
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Initialize git repository for knowledge base tracking.'
+logger
+●●●●●● 1mm □△
+'[API] Initializing git repository'
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm ○
+'status'
+'message'
+'path'
+'success'
+'Git repository initialized'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_manager
+●●●●●● 2mm □△
+●●●●●● 3mm □
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error initializing git: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/initialize-git'
+●●●●●● 2mm □△
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Get list of tracked files and their hashes.'
+●●●●●● 3mm ○
+'count'
+'files'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_manager
+●●●●●● 2mm □△
+'filepath'
+'hash'
+filepath
+hash_val
+filepath
+hash_val
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting tracked files: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/tracked-files'
+●●●●●● 2mm □△
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Clear file tracking state (reset all tracked hashes).'
+logger
+●●●●●● 1mm □△
+'[API] Clearing file tracking state'
+●●●●●● 2mm □△
+old_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_manager
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'cleared_count'
+'success'
+'Tracking state cleared'
+old_count
+Exception
+logger
+●●●●●● 1mm □△
+'Error clearing tracking state: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/clear-tracking'
+●●●●●● 2mm □△

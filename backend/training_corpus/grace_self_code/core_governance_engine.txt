@@ -1,0 +1,990 @@
+## governance_engine.py
+'\nGovernance Engine — per-project rules, approval workflow, KPI scoring.\n\nEach project gets its own governance rules.\nApproval table with approve/deny/discuss workflow.\nKPI scoring per feature feeds into trust scores.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+DATA_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 1mm □
+get_project_rules
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get governance rules for a specific project.'
+rules_dir
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'projects'
+●●●●●● 3mm □△
+project_id
+●●●●●● 3mm □△
+'governance'
+rules_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □
+f
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+rules_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rules
+●●●●●● 1mm □△
+'id'
+'name'
+'size'
+'content_preview'
+f
+f
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+config_path
+●●●●●● 1mm □
+rules_dir
+●●●●●● 3mm □△
+'_config.json'
+config
+●●●●●● 1mm □
+●●●●●● 2mm □
+config_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+config_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'project_id'
+'rules'
+'config'
+'total'
+project_id
+rules
+config
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rules
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_governance_coding_contract
+●●●●●● 1mm □△
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+''
+'\n    Governance coding contract — single source for what the pipeline must satisfy.\n    Combines: global rules (immutable), project rules, and governance rule documents.\n    Used by the coding pipeline and deterministic-first loop to enforce the contract.\n    '
+pid
+●●●●●● 1mm □
+project_id
+'default'
+out
+●●●●●● 1mm □
+'global_rules'
+'project_rules'
+'documents'
+'contract_text'
+'project_id'
+''
+pid
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+get_container
+container
+●●●●●● 1mm □
+get_container
+●●●●●● 1mm □△
+pid
+●●●●●● 2mm □△
+combined
+●●●●●● 1mm □
+container
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'global_rules'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+combined
+●●●●●● 1mm □△
+'global_rules'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+out
+'project_rules'
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'content'
+r
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+500
+r
+combined
+●●●●●● 1mm □△
+'project_rules'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.project_container
+●●●●●● 2mm □△○
+GLOBAL_RULES
+out
+'global_rules'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+GLOBAL_RULES
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+list_rules
+get_rule_content
+listed
+●●●●●● 1mm □
+list_rules
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+listed
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+20
+doc_id
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+get_rule_content
+●●●●●● 1mm □△
+doc_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+out
+'documents'
+●●●●●● 1mm □△
+'id'
+'content'
+doc_id
+content
+'content'
+1000
+●●●●●● 2mm □△
+Exception
+parts
+●●●●●● 1mm □
+●●●●●● 2mm □
+out
+'global_rules'
+parts
+●●●●●● 1mm □△
+'## Global rules (immutable)\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'- '
+r
+r
+out
+'global_rules'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+out
+'project_rules'
+parts
+●●●●●● 1mm □△
+'## Project rules\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+300
+r
+out
+'project_rules'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+d
+out
+'documents'
+parts
+●●●●●● 1mm □△
+'## '
+d
+●●●●●● 1mm □△
+'id'
+'rule'
+●●●●●● 2mm □△
+'\n'
+d
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+out
+'contract_text'
+●●●●●● 1mm □
+parts
+'\n\n'
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+'(no rules loaded)'
+out
+'total'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out
+'global_rules'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out
+'project_rules'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out
+'documents'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_project_rules
+●●●●●● 1mm □△
+project_id
+config
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'Set governance config for a project.'
+rules_dir
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'projects'
+●●●●●● 3mm □△
+project_id
+●●●●●● 3mm □△
+'governance'
+rules_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config_path
+●●●●●● 1mm □
+rules_dir
+●●●●●● 3mm □△
+'_config.json'
+config
+'updated_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config_path
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'saved'
+'project_id'
+●●●●●● 3mm □△○
+project_id
+●●●●●● 2mm □△
+_approvals
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+_approval_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_approval_counter
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+create_approval
+●●●●●● 1mm □△
+title
+description
+category
+project_id
+severity
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'general'
+''
+'medium'
+●●●●●● 2mm □
+'Create a new approval request.'
+_approval_lock
+_approval_counter
+1
+approval
+●●●●●● 1mm □
+'id'
+'title'
+'description'
+'category'
+'project_id'
+'severity'
+'status'
+'data'
+'created_at'
+'responses'
+_approval_counter
+title
+description
+category
+project_id
+severity
+'pending'
+data
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_approvals
+●●●●●● 1mm □△
+approval
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+approval
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_approvals
+●●●●●● 1mm □△
+status
+project_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get approvals filtered by status and/or project.'
+_approval_lock
+result
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+_approvals
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+result
+●●●●●● 1mm □
+a
+a
+result
+a
+'status'
+status
+●●●●●● 2mm □
+project_id
+result
+●●●●●● 1mm □
+a
+a
+result
+a
+'project_id'
+project_id
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 1mm □
+respond_to_approval
+●●●●●● 1mm □△
+approval_id
+action
+reason
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+''
+'default'
+'Approve, deny, or discuss an approval.'
+_approval_lock
+approval
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+a
+a
+_approvals
+a
+'id'
+approval_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+approval
+●●●●●● 3mm ○
+'error'
+'Approval not found'
+response
+●●●●●● 1mm □
+'action'
+'reason'
+'user_id'
+'timestamp'
+action
+reason
+user_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+approval
+'responses'
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'approve'
+'deny'
+approval
+'status'
+●●●●●● 1mm □
+action
+'approve'
+'approved'
+'denied'
+approval
+'resolved_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+action
+'discuss'
+approval
+'status'
+●●●●●● 1mm □
+'discussing'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+approval
+●●●●●● 2mm □△
+_kpi_scores
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+_kpi_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_kpi
+●●●●●● 1mm □△
+component
+feature
+passed
+layer
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+0
+'Record a KPI event — feature passed or failed at a layer.'
+key
+●●●●●● 1mm □
+component
+'/'
+feature
+_kpi_lock
+●●●●●● 2mm □
+key
+_kpi_scores
+_kpi_scores
+key
+●●●●●● 1mm □
+'component'
+'feature'
+'total_checks'
+'passed'
+'failed'
+'score'
+'layers_passed'
+component
+feature
+0
+0
+0
+0.0
+entry
+●●●●●● 1mm □
+_kpi_scores
+key
+entry
+'total_checks'
+1
+●●●●●● 2mm □
+passed
+entry
+'passed'
+1
+entry
+'layers_passed'
+●●●●●● 1mm □△
+layer
+●●●●●● 2mm □△
+●●●●●● 3mm □
+entry
+'failed'
+1
+entry
+'score'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+entry
+'passed'
+●●●●●● 3mm □△
+entry
+'total_checks'
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_kpi_scores
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get KPI scores, optionally filtered by component.'
+_kpi_lock
+●●●●●● 2mm □
+component
+scores
+●●●●●● 1mm □
+k
+v
+k
+v
+_kpi_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+'component'
+component
+●●●●●● 3mm □
+scores
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_kpi_scores
+●●●●●● 2mm □△
+●●●●●● 2mm □
+scores
+avg_score
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+'score'
+s
+scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+avg_score
+●●●●●● 3mm □△
+100
+●●●●●● 3mm □
+avg_score
+●●●●●● 1mm □
+0
+●●●●●● 3mm □
+trust
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm ○
+'scores'
+'total_features'
+'average_score'
+'trust_score'
+scores
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+scores
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg_score
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+trust
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_kpi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Full KPI dashboard grouped by component.'
+_kpi_lock
+by_component
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+data
+_kpi_scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+by_component
+data
+'component'
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+comp
+features
+by_component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avg
+●●●●●● 1mm □
+features
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+'score'
+f
+features
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+0
+components
+comp
+●●●●●● 1mm □
+'features'
+'average_score'
+'trust'
+'details'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+avg
+●●●●●● 3mm □△
+100
+3
+●●●●●● 2mm □△
+features
+●●●●●● 3mm ○
+'components'
+'total_components'
+components
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+COMPLIANCE_PRESETS
+●●●●●● 1mm □
+'iso_27001'
+'gdpr'
+'soc2'
+'owasp'
+'nist_csf'
+'pci_dss'
+'hipaa'
+'iso_22301'
+'name'
+'rules'
+'ISO 27001 Information Security'
+'All data must be encrypted at rest and in transit'
+'Access control must follow least privilege principle'
+'All security events must be logged and auditable'
+'Regular security assessments must be conducted'
+'Incident response procedures must be documented'
+'name'
+'rules'
+'GDPR Data Protection'
+'Personal data processing requires explicit consent'
+'Data subjects have the right to access and delete their data'
+'Data breaches must be reported within 72 hours'
+'Privacy by design must be implemented'
+'Data processing records must be maintained'
+'name'
+'rules'
+'SOC 2 Trust Services'
+'Security controls must prevent unauthorized access'
+'Availability SLAs must be defined and monitored'
+'Processing integrity must be verified'
+'Confidentiality of data must be maintained'
+'Privacy commitments must be documented'
+'name'
+'rules'
+'OWASP Top 10 Security'
+'Prevent injection attacks (SQL, NoSQL, LDAP)'
+'Implement proper authentication and session management'
+'Protect against cross-site scripting (XSS)'
+'Enforce access control on every request'
+'Security configuration must be hardened'
+'name'
+'rules'
+'NIST Cybersecurity Framework'
+'Identify: Maintain asset inventory and risk assessment'
+'Protect: Implement access control and data security'
+'Detect: Continuous monitoring and anomaly detection'
+'Respond: Incident response plan and communication'
+'Recover: Recovery planning and improvement process'
+'name'
+'rules'
+'PCI DSS Payment Security'
+'Install and maintain network security controls'
+'Apply secure configurations to all system components'
+'Protect stored account data with encryption'
+'Encrypt cardholder data during transmission'
+'Maintain vulnerability management program'
+'name'
+'rules'
+'HIPAA Healthcare Data'
+'Ensure confidentiality of protected health information (PHI)'
+'Implement access controls for electronic PHI'
+'Maintain audit trails of PHI access and modifications'
+'Implement data backup and disaster recovery for PHI'
+'Conduct regular risk assessments'
+'name'
+'rules'
+'ISO 22301 Business Continuity'
+'Business impact analysis must be maintained'
+'Business continuity plans must be documented and tested'
+'Recovery time objectives (RTO) must be defined per service'
+'Recovery point objectives (RPO) must be defined per data type'
+'Regular exercises and testing must be conducted'
+●●●●●● 1mm □
+get_compliance_presets
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'presets'
+'total'
+COMPLIANCE_PRESETS
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+COMPLIANCE_PRESETS
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+apply_compliance_preset
+●●●●●● 1mm □△
+project_id
+preset_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Apply a compliance preset to a project.'
+preset
+●●●●●● 1mm □
+COMPLIANCE_PRESETS
+●●●●●● 1mm □△
+preset_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+preset
+●●●●●● 3mm ○
+'error'
+'Unknown preset: '
+preset_name
+rules_dir
+●●●●●● 1mm □
+DATA_DIR
+●●●●●● 3mm □△
+'projects'
+●●●●●● 3mm □△
+project_id
+●●●●●● 3mm □△
+'governance'
+rules_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+filename
+●●●●●● 1mm □
+'compliance_'
+preset_name
+'.md'
+content
+●●●●●● 1mm □
+'# '
+preset
+'name'
+'\n\n'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+'- '
+r
+r
+preset
+'rules'
+●●●●●● 2mm □△
+rules_dir
+●●●●●● 3mm □△
+filename
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'applied'
+'project_id'
+'preset'
+'rules_count'
+●●●●●● 3mm □△○
+project_id
+preset_name
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+preset
+'rules'
+●●●●●● 2mm □△
+●●●●●● 2mm □△

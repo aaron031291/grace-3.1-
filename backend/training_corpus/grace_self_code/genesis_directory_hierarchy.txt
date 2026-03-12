@@ -1,0 +1,877 @@
+## directory_hierarchy.py
+'\nGenesis Key Directory Hierarchy System.\n\nCreates a hierarchical structure where:\n- Every directory gets a unique Genesis Key (DIR-prefix)\n- Every subdirectory gets its own Genesis Key\n- Files within directories are version-controlled\n- Complete hierarchy tracking\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+List
+Any
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+GenesisKeyStatus
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DirectoryGenesisKey
+'\n    Manages Genesis Keys for directory hierarchies.\n\n    Structure:\n    - Root directory: DIR-xxxxxx (Genesis Key)\n      - Subdirectory 1: DIR-yyyyyy (Genesis Key)\n        - file1.txt (version controlled)\n        - file2.txt (version controlled)\n      - Subdirectory 2: DIR-zzzzzz (Genesis Key)\n        - Subdirectory 2.1: DIR-aaaaaa (Genesis Key)\n          - file3.txt (version controlled)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+base_path
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'.genesis_directory_keys.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_default_base_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get default base path (knowledge_base).'
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+backend_dir
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_ensure_base_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure base path exists.'
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_or_create_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load or create directory Genesis Keys metadata.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm △
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'version'
+'created_at'
+'root_genesis_key'
+'directories'
+'1.0'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_save_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Save directory Genesis Keys metadata.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+●●●●●● 3mm △
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_directory_key
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate a unique directory Genesis Key.'
+●●●●●● 3mm ○
+'DIR-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+create_directory_genesis_key
+●●●●●● 1mm □△
+self
+directory_path
+parent_genesis_key
+user_id
+description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Create a Genesis Key for a directory.\n\n        Args:\n            directory_path: Path to the directory (relative to base_path)\n            parent_genesis_key: Genesis Key of parent directory\n            user_id: User who created the directory\n            description: Optional description\n\n        Returns:\n            Dictionary with directory Genesis Key information\n        '
+abs_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+directory_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+directory_path
+●●●●●● 3mm △
+'directories'
+logger
+●●●●●● 1mm □△
+'Directory '
+directory_path
+' already has Genesis Key'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'directories'
+directory_path
+dir_genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dir_name
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+directory_path
+●●●●●● 2mm □△
+'root'
+is_root
+●●●●●● 1mm □
+directory_path
+''
+directory_path
+'.'
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to create Genesis Key in database: '
+e
+●●●●●● 2mm □△
+dir_info
+●●●●●● 1mm □
+'genesis_key'
+'path'
+'absolute_path'
+'name'
+'parent_genesis_key'
+'created_at'
+'is_root'
+'subdirectories'
+'files'
+'version_count'
+dir_genesis_key
+directory_path
+abs_path
+dir_name
+parent_genesis_key
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_root
+0
+●●●●●● 3mm △
+'directories'
+directory_path
+●●●●●● 1mm □
+dir_info
+●●●●●● 2mm □
+is_root
+●●●●●● 3mm △
+'root_genesis_key'
+●●●●●● 1mm □
+dir_genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+abs_path
+dir_info
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created Genesis Key '
+dir_genesis_key
+' for directory '
+directory_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+dir_info
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_create_directory_readme
+●●●●●● 1mm □△
+self
+abs_path
+dir_info
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'Create README in directory with Genesis Key info.'
+readme_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+'.genesis_key_info.md'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'# Directory Genesis Key\n\n**Genesis Key:** `'
+dir_info
+'genesis_key'
+'`\n**Directory:** `'
+dir_info
+'name'
+'`\n**Created:** '
+dir_info
+'created_at'
+'\n\n## Hierarchy\n\n- **Parent Genesis Key:** '
+dir_info
+'parent_genesis_key'
+'None (Root)'
+'\n- **Is Root:** '
+dir_info
+'is_root'
+'\n\n## Purpose\n\nThis directory is uniquely identified by its Genesis Key. All files within this directory\nare version-controlled under this Genesis Key hierarchy.\n\n## Structure\n\n- Each subdirectory has its own Genesis Key\n- Files are version-controlled within their directory\n- Complete hierarchy tracking from root to leaf\n\n## Version Control\n\nAll changes to files in this directory are tracked with:\n- What: File operation (create, update, delete)\n- Where: File path within this directory\n- When: Timestamp\n- Why: Reason for change\n- Who: User making change\n- How: Method used\n\nGenesis Key: '
+dir_info
+'genesis_key'
+'\n'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+readme_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_hierarchy
+●●●●●● 1mm □△
+self
+root_path
+user_id
+scan_existing
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+''
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Create Genesis Key hierarchy for a directory tree.\n\n        Args:\n            root_path: Root directory path (relative to base_path)\n            user_id: User creating the hierarchy\n            scan_existing: Whether to scan existing directories\n\n        Returns:\n            Hierarchy structure with Genesis Keys\n        '
+root_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+scan_existing
+abs_root
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+root_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+abs_root
+root_path
+root_info
+'genesis_key'
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+root_path
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_scan_and_create_keys
+●●●●●● 1mm □△
+self
+abs_path
+rel_path
+parent_key
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Recursively scan and create Genesis Keys for directories.'
+item
+os
+●●●●●● 1mm □△
+abs_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+item
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'__'
+●●●●●● 2mm □△
+item_abs
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_path
+item
+●●●●●● 2mm □△
+item_rel
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+rel_path
+item
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+item_abs
+●●●●●● 2mm □△
+sub_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel_path
+●●●●●● 3mm △
+'directories'
+●●●●●● 2mm □
+sub_info
+'genesis_key'
+●●●●●● 3mm △
+'directories'
+rel_path
+'subdirectories'
+●●●●●● 3mm △
+'directories'
+rel_path
+'subdirectories'
+●●●●●● 1mm □△
+sub_info
+'genesis_key'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+item_abs
+item_rel
+sub_info
+'genesis_key'
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm △
+os
+●●●●●● 1mm □△
+item_abs
+●●●●●● 2mm □△
+●●●●●● 2mm □
+rel_path
+●●●●●● 3mm △
+'directories'
+file_info
+●●●●●● 1mm □
+'name'
+'path'
+'added_at'
+item
+item_rel
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_info
+●●●●●● 3mm △
+'directories'
+rel_path
+'files'
+●●●●●● 3mm △
+'directories'
+rel_path
+'files'
+●●●●●● 1mm □△
+file_info
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error scanning '
+abs_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_directory_genesis_key
+●●●●●● 1mm □△
+self
+directory_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get Genesis Key for a directory.'
+●●●●●● 2mm □
+directory_path
+●●●●●● 3mm △
+'directories'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'directories'
+directory_path
+'genesis_key'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_directory_info
+●●●●●● 1mm □△
+self
+directory_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get full information for a directory.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □△
+directory_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_directory_tree
+●●●●●● 1mm □△
+self
+root_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+''
+'\n        Get directory tree with Genesis Keys.\n\n        Returns hierarchical structure with all Genesis Keys.\n        '
+●●●●●● 2mm □
+root_path
+●●●●●● 3mm △
+'directories'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+root_info
+●●●●●● 1mm □
+●●●●●● 3mm △
+'directories'
+root_path
+tree
+●●●●●● 1mm □
+'genesis_key'
+'name'
+'path'
+'is_root'
+'created_at'
+'parent_genesis_key'
+'subdirectories'
+'files'
+'file_count'
+'subdirectory_count'
+root_info
+'genesis_key'
+root_info
+'name'
+root_info
+'path'
+root_info
+'is_root'
+root_info
+'created_at'
+root_info
+'parent_genesis_key'
+root_info
+'files'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+root_info
+'files'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+root_info
+'subdirectories'
+●●●●●● 2mm □△
+subdir_key
+root_info
+'subdirectories'
+path
+info
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+'genesis_key'
+subdir_key
+subtree
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+subtree
+tree
+'subdirectories'
+●●●●●● 1mm □△
+subtree
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tree
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+add_file_version
+●●●●●● 1mm □△
+self
+directory_path
+file_name
+user_id
+version_note
+file_content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+"\n        Add a file version under a directory's Genesis Key.\n\n        Args:\n            directory_path: Directory containing the file\n            file_name: Name of the file\n            user_id: User making the change\n            version_note: Note about this version\n            file_content: Optional file content snapshot\n\n        Returns:\n            Version information\n        "
+dir_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+directory_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dir_key
+ValueError
+●●●●●● 1mm □△
+'No Genesis Key found for directory: '
+directory_path
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+directory_path
+file_name
+●●●●●● 2mm □△
+abs_file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+directory_path
+●●●●●● 3mm △
+'directories'
+●●●●●● 3mm △
+'directories'
+directory_path
+'version_count'
+1
+version_number
+●●●●●● 1mm □
+●●●●●● 3mm △
+'directories'
+directory_path
+'version_count'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+version_number
+●●●●●● 1mm □
+1
+version_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'version_key'
+'version_number'
+'directory_genesis_key'
+'file_path'
+'timestamp'
+version_key
+version_number
+dir_key
+file_path
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to create file version: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all_directory_keys
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all directory Genesis Keys.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_hierarchy_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get statistics about the directory hierarchy.'
+total_dirs
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'directories'
+●●●●●● 2mm □△
+total_files
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+info
+'files'
+●●●●●● 2mm □△
+info
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total_versions
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+info
+'version_count'
+info
+●●●●●● 3mm △
+'directories'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_directories'
+'total_files'
+'total_versions'
+'root_genesis_key'
+'created_at'
+total_dirs
+total_files
+total_versions
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'root_genesis_key'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'created_at'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_directory_hierarchy
+●●●●●● 2mm □○
+DirectoryGenesisKey
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_directory_hierarchy
+●●●●●● 1mm □△
+base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get or create the global directory hierarchy instance.'
+●●●●●● 2mm □
+_directory_hierarchy
+●●●●●● 2mm □
+base_path
+●●●●●● 2mm □
+_directory_hierarchy
+●●●●●● 1mm □
+DirectoryGenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_directory_hierarchy
+DirectoryGenesisKey

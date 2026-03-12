@@ -18,7 +18,7 @@ export default function LearningHealingTab() {
   const [fullData, setFullData] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/learn-heal/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => { });
+    fetch(`${API_BASE_URL}/api/tabs/learn-heal/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
   }, []);
 
   const refresh = useCallback(async () => {
@@ -220,11 +220,7 @@ export default function LearningHealingTab() {
 
             {activeTab === 'heal' && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                {(d.healing?.available_actions || []).length === 0 ? (
-                  <div style={{ padding: 40, textAlign: 'center', color: C.dim, gridColumn: 'span 2' }}>
-                    No healing actions available currently.
-                  </div>
-                ) : (d.healing?.available_actions || []).map(a => (
+                {(d.healing?.available_actions || []).map(a => (
                   <button key={a.id} onClick={() => triggerHeal(a.id)} disabled={healingAction === a.id}
                     style={{ ...btn(C.bgDark), padding: '16px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 6, opacity: healingAction === a.id ? 0.5 : 1, borderRadius: 8, border: `1px solid ${C.border}` }}>
                     <span style={{ fontSize: 14, fontWeight: 700 }}>{a.name}</span>
@@ -237,17 +233,17 @@ export default function LearningHealingTab() {
             {activeTab === 'skills' && (
               <div>
                 {skills.length === 0 ? <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>No skills learned yet</div>
-                  : skills.map((s, i) => (
-                    <div key={i} style={{ padding: '10px 14px', marginBottom: 6, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 16 }}>🎯</span>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600 }}>{s.name}</div>
-                        <div style={{ fontSize: 10, color: C.dim }}>{s.goal} · {s.type} · used {s.usage}x</div>
-                      </div>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: (s.trust || 0) >= 0.7 ? C.success : C.warn }}>{((s.trust || 0) * 100).toFixed(0)}%</span>
-                      <span style={{ fontSize: 10, color: C.dim }}>{((s.success || 0) * 100).toFixed(0)}% success</span>
+                 : skills.map((s, i) => (
+                  <div key={i} style={{ padding: '10px 14px', marginBottom: 6, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 16 }}>🎯</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600 }}>{s.name}</div>
+                      <div style={{ fontSize: 10, color: C.dim }}>{s.goal} · {s.type} · used {s.usage}x</div>
                     </div>
-                  ))}
+                    <span style={{ fontSize: 12, fontWeight: 700, color: (s.trust || 0) >= 0.7 ? C.success : C.warn }}>{((s.trust || 0) * 100).toFixed(0)}%</span>
+                    <span style={{ fontSize: 10, color: C.dim }}>{((s.success || 0) * 100).toFixed(0)}% success</span>
+                  </div>
+                ))}
 
                 <BackendPanel prefixes={['/training', '/autonomous-learning', '/learning-memory', '/learning-efficiency', '/proactive-learning', '/ml-intelligence', '/sandbox-lab', '/api/learn-heal']} label="Learning & ML" />
               </div>

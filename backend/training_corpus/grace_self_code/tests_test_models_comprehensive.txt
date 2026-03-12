@@ -1,0 +1,3002 @@
+## test_models_comprehensive.py
+'\nComprehensive Test Suite for Models Module\n==========================================\nTests for database models and repositories.\n\nCoverage:\n- Database model definitions and fields\n- Model relationships\n- Model serialization (to_dict methods)\n- Repository CRUD operations\n- Repository custom queries\n- Repository pagination and filtering\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+PropertyMock
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 2mm □△○
+sys
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_pool
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_pool
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_pool
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+mock_pool
+mock_orm
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_orm
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_orm
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_orm
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_orm
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+mock_orm
+mock_ext
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_ext
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_ext
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+mock_ext
+sys
+'sqlalchemy'
+●●●●●● 1mm □
+mock_sqlalchemy
+sys
+'sqlalchemy.pool'
+●●●●●● 1mm □
+mock_pool
+sys
+'sqlalchemy.orm'
+●●●●●● 1mm □
+mock_orm
+sys
+'sqlalchemy.ext'
+●●●●●● 1mm □
+mock_ext
+sys
+'sqlalchemy.ext.declarative'
+●●●●●● 1mm □
+mock_ext
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestDatabaseModelDefinitions
+'Test database model definitions and structure.'
+●●●●●● 1mm □
+test_user_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test User model definition.'
+●●●●●● 2mm △
+MockUser
+__tablename__
+●●●●●● 1mm □
+'users'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+username
+●●●●●● 1mm □
+●●●●●● 2mm □
+email
+●●●●●● 1mm □
+●●●●●● 2mm □
+full_name
+●●●●●● 1mm □
+●●●●●● 2mm □
+is_active
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+user
+●●●●●● 1mm □
+MockUser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockUser
+'users'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockUser
+'id'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockUser
+'username'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockUser
+'email'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockUser
+'full_name'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockUser
+'is_active'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_conversation_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Conversation model definition.'
+●●●●●● 2mm △
+MockConversation
+__tablename__
+●●●●●● 1mm □
+'conversations'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+title
+●●●●●● 1mm □
+●●●●●● 2mm □
+model
+●●●●●● 1mm □
+'gpt-4'
+system_prompt
+●●●●●● 1mm □
+●●●●●● 2mm □
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+conv
+●●●●●● 1mm □
+MockConversation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockConversation
+'conversations'
+conv
+'gpt-4'
+●●●●●● 1mm □
+test_message_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Message model definition.'
+●●●●●● 2mm △
+MockMessage
+__tablename__
+●●●●●● 1mm □
+'messages'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+conversation_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+role
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+tokens
+●●●●●● 1mm □
+●●●●●● 2mm □
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+MockMessage
+'messages'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockMessage
+'conversation_id'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockMessage
+'role'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockMessage
+'content'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_embedding_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Embedding model definition.'
+●●●●●● 2mm △
+MockEmbedding
+__tablename__
+●●●●●● 1mm □
+'embeddings'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+embedding
+●●●●●● 1mm □
+●●●●●● 2mm □
+source
+●●●●●● 1mm □
+●●●●●● 2mm □
+model
+●●●●●● 1mm □
+●●●●●● 2mm □
+dimension
+●●●●●● 1mm □
+1536
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+embed
+●●●●●● 1mm □
+MockEmbedding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockEmbedding
+'embeddings'
+embed
+1536
+●●●●●● 1mm □
+test_chat_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Chat model definition.'
+●●●●●● 2mm △
+MockChat
+__tablename__
+●●●●●● 1mm □
+'chats'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+title
+●●●●●● 1mm □
+●●●●●● 2mm □
+is_active
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+chat
+●●●●●● 1mm □
+MockChat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockChat
+'chats'
+chat
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_chat_history_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ChatHistory model definition.'
+●●●●●● 2mm △
+MockChatHistory
+__tablename__
+●●●●●● 1mm □
+'chat_history'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+chat_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+role
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+tokens
+●●●●●● 1mm □
+●●●●●● 2mm □
+token_ids
+●●●●●● 1mm □
+●●●●●● 2mm □
+completion_time
+●●●●●● 1mm □
+●●●●●● 2mm □
+is_edited
+●●●●●● 1mm □
+●●●●●● 1mm □
+edited_content
+●●●●●● 1mm □
+●●●●●● 2mm □
+edited_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+history
+●●●●●● 1mm □
+MockChatHistory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockChatHistory
+'chat_history'
+history
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_document_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Document model definition.'
+●●●●●● 2mm △
+MockDocument
+__tablename__
+●●●●●● 1mm □
+'documents'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+filename
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+file_type
+●●●●●● 1mm □
+●●●●●● 2mm □
+file_size
+●●●●●● 1mm □
+●●●●●● 2mm □
+is_processed
+●●●●●● 1mm □
+●●●●●● 1mm □
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+doc
+●●●●●● 1mm □
+MockDocument
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockDocument
+'documents'
+doc
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_document_chunk_model_has_expected_attributes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test DocumentChunk model definition.'
+●●●●●● 2mm △
+MockDocumentChunk
+__tablename__
+●●●●●● 1mm □
+'document_chunks'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+document_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+chunk_index
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+embedding
+●●●●●● 1mm □
+●●●●●● 2mm □
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □
+MockDocumentChunk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MockDocumentChunk
+'document_chunks'
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+MockDocumentChunk
+'document_id'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestGovernanceModels
+'Test governance-related models.'
+●●●●●● 1mm □
+test_governance_rule_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GovernanceRule model structure.'
+●●●●●● 2mm △
+MockGovernanceRule
+__tablename__
+●●●●●● 1mm □
+'governance_rules'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+name
+●●●●●● 1mm □
+●●●●●● 2mm □
+description
+●●●●●● 1mm □
+●●●●●● 2mm □
+rule_type
+●●●●●● 1mm □
+●●●●●● 2mm □
+conditions
+●●●●●● 1mm □
+●●●●●● 2mm □
+actions
+●●●●●● 1mm □
+●●●●●● 2mm □
+priority
+●●●●●● 1mm □
+0
+is_active
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'name'
+'description'
+'rule_type'
+'conditions'
+'actions'
+'priority'
+'is_active'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+rule
+●●●●●● 1mm □
+MockGovernanceRule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rule
+●●●●●● 1mm □
+1
+rule
+●●●●●● 1mm □
+'Test Rule'
+rule
+●●●●●● 1mm □
+'validation'
+rule
+●●●●●● 1mm □
+5
+result
+●●●●●● 1mm □
+rule
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'id'
+1
+result
+'name'
+'Test Rule'
+result
+'rule_type'
+'validation'
+result
+'priority'
+5
+●●●●●● 1mm □
+test_governance_document_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GovernanceDocument model structure.'
+●●●●●● 2mm △
+MockGovernanceDocument
+__tablename__
+●●●●●● 1mm □
+'governance_documents'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+title
+●●●●●● 1mm □
+●●●●●● 2mm □
+content
+●●●●●● 1mm □
+●●●●●● 2mm □
+document_type
+●●●●●● 1mm □
+●●●●●● 2mm □
+version
+●●●●●● 1mm □
+'1.0'
+status
+●●●●●● 1mm □
+'draft'
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+updated_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'title'
+'content'
+'document_type'
+'version'
+'status'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+doc
+●●●●●● 1mm □
+MockGovernanceDocument
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+1
+doc
+●●●●●● 1mm □
+'Policy Doc'
+doc
+●●●●●● 1mm □
+'approved'
+result
+●●●●●● 1mm □
+doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'title'
+'Policy Doc'
+result
+'status'
+'approved'
+●●●●●● 1mm □
+test_governance_decision_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test GovernanceDecision model structure.'
+●●●●●● 2mm △
+MockGovernanceDecision
+__tablename__
+●●●●●● 1mm □
+'governance_decisions'
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+decision_type
+●●●●●● 1mm □
+●●●●●● 2mm □
+context
+●●●●●● 1mm □
+●●●●●● 2mm □
+rules_applied
+●●●●●● 1mm □
+●●●●●● 2mm □
+outcome
+●●●●●● 1mm □
+●●●●●● 2mm □
+confidence_score
+●●●●●● 1mm □
+●●●●●● 2mm □
+explanation
+●●●●●● 1mm □
+●●●●●● 2mm □
+created_at
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'decision_type'
+'context'
+'rules_applied'
+'outcome'
+'confidence_score'
+'explanation'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+decision
+●●●●●● 1mm □
+MockGovernanceDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+1
+decision
+●●●●●● 1mm □
+'approval'
+decision
+●●●●●● 1mm □
+'approved'
+decision
+●●●●●● 1mm □
+0.95
+result
+●●●●●● 1mm □
+decision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'decision_type'
+'approval'
+result
+'outcome'
+'approved'
+result
+'confidence_score'
+0.95
+●●●●●● 2mm △
+TestBaseRepositoryPattern
+'Test the base repository pattern implementation.'
+●●●●●● 1mm □
+test_repository_create_operation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test repository create operation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_model
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_model
+●●●●●● 1mm □
+new_instance
+mock_session
+●●●●●● 1mm □△
+new_instance
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+new_instance
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+new_instance
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+new_instance
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_repository_get_operation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test repository get by id operation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_model
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+expected_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+expected_instance
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+mock_model
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+result
+expected_instance
+mock_session
+●●●●●● 1mm □△
+mock_model
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_repository_update_operation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test repository update operation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_instance
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_instance
+●●●●●● 1mm □
+1
+existing_instance
+●●●●●● 1mm □
+'original'
+existing_instance
+●●●●●● 1mm □
+'updated'
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_instance
+'updated'
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_repository_delete_operation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test repository delete operation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+instance_to_delete
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+instance_to_delete
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+instance_to_delete
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_repository_filter_operation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test repository filter operation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_model
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+mock_model
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+2
+●●●●●● 2mm △
+TestUserRepository
+'Test UserRepository operations.'
+●●●●●● 1mm □
+test_user_repository_get_by_username
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting user by username.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_user
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_user
+●●●●●● 1mm □
+'testuser'
+mock_user
+●●●●●● 1mm □
+'test@example.com'
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_user
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'testuser'
+●●●●●● 1mm □
+test_user_repository_get_by_email
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting user by email.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_user
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_user
+●●●●●● 1mm □
+'test@example.com'
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_user
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'test@example.com'
+●●●●●● 1mm □
+test_user_repository_get_active_users
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting active users.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_users
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+active_users
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+u
+u
+result
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestConversationRepository
+'Test ConversationRepository operations.'
+●●●●●● 1mm □
+test_get_all_conversations_with_pagination
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting all conversations with pagination.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conversations
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+conversations
+5
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □
+test_search_by_title
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching conversations by title.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matching_convs
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+matching_convs
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+result
+0
+'Test Conversation'
+●●●●●● 2mm △
+TestMessageRepository
+'Test MessageRepository operations.'
+●●●●●● 1mm □
+test_get_messages_by_conversation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting messages for a conversation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+messages
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+m
+1
+m
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_count_messages_by_conversation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test counting messages in a conversation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+25
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+25
+●●●●●● 2mm △
+TestChatRepository
+'Test ChatRepository operations.'
+●●●●●● 1mm □
+test_get_all_chats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting all chats.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chats
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+chats
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □
+test_get_active_chats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting active chats only.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_chats
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+active_chats
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+c
+c
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_count_active_chats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test counting active chats.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+42
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+42
+●●●●●● 1mm □
+test_get_recent_chats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting recent chats within N days.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_chats
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+recent_chats
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_search_chats_by_title
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test searching chats by title.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+matching_chats
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+matching_chats
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+result
+0
+'Test Chat'
+●●●●●● 1mm □
+test_deactivate_chat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deactivating a chat.'
+mock_chat
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_chat
+●●●●●● 1mm □
+1
+mock_chat
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+mock_chat
+●●●●●● 1mm □
+●●●●●● 1mm □
+mock_chat
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_activate_chat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test activating a chat.'
+mock_chat
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_chat
+●●●●●● 1mm □
+1
+mock_chat
+●●●●●● 1mm □
+●●●●●● 1mm □
+mock_chat
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+mock_chat
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestChatHistoryRepository
+'Test ChatHistoryRepository operations.'
+●●●●●● 1mm □
+test_get_by_chat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting chat history for a chat.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+history
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □
+test_get_by_chat_reverse
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting chat history in reverse order.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+history
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □
+test_count_by_chat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test counting messages in a chat.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+50
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+50
+●●●●●● 1mm □
+test_get_by_role
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting messages by role.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_messages
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+user_messages
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+m
+'user'
+m
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_count_tokens_in_chat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test counting total tokens in a chat.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token_results
+●●●●●● 1mm □
+100
+200
+150
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_entities
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_entities
+mock_entities
+●●●●●● 1mm □
+token_results
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+row
+0
+row
+result
+row
+0
+●●●●●● 2mm □
+●●●●●● 2mm □△
+total
+450
+●●●●●● 1mm □
+test_get_edited_messages
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting edited messages.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edited
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+edited
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+2
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+m
+m
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_add_message
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding a message to chat history.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_message
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_message
+●●●●●● 1mm □
+1
+new_message
+●●●●●● 1mm □
+'user'
+new_message
+●●●●●● 1mm □
+'Hello, world!'
+new_message
+●●●●●● 1mm □
+5
+new_message
+●●●●●● 1mm □
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+new_message
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+new_message
+●●●●●● 2mm □△
+new_message
+1
+new_message
+'user'
+new_message
+'Hello, world!'
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_edit_message
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test editing a message in chat history.'
+existing_message
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_message
+●●●●●● 1mm □
+1
+existing_message
+●●●●●● 1mm □
+'Original content'
+existing_message
+●●●●●● 1mm □
+●●●●●● 1mm □
+existing_message
+●●●●●● 1mm □
+●●●●●● 2mm □
+existing_message
+●●●●●● 1mm □
+●●●●●● 2mm □
+original_content
+●●●●●● 1mm □
+existing_message
+existing_message
+●●●●●● 1mm □
+original_content
+existing_message
+●●●●●● 1mm □
+'Updated content'
+existing_message
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+existing_message
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_message
+'Updated content'
+existing_message
+'Original content'
+existing_message
+●●●●●● 3mm □△○
+existing_message
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestEmbeddingRepository
+'Test EmbeddingRepository operations.'
+●●●●●● 1mm □
+test_get_by_source
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting embeddings by source.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+embeddings
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+e
+'document.pdf'
+e
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_by_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting embeddings by model.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+embeddings
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+e
+'text-embedding-ada-002'
+e
+result
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestModelRelationships
+'Test model relationship definitions.'
+●●●●●● 1mm □
+test_conversation_to_messages_relationship
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test conversation has many messages relationship.'
+mock_conversation
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_messages
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+mock_conversation
+●●●●●● 1mm □
+mock_messages
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mock_conversation
+●●●●●● 2mm □△
+5
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+m
+1
+m
+mock_conversation
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_chat_to_history_relationship
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test chat has many history entries relationship.'
+mock_chat
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_chat
+●●●●●● 1mm □
+1
+mock_history
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+mock_chat
+●●●●●● 1mm □
+mock_history
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mock_chat
+●●●●●● 2mm □△
+10
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+h
+1
+h
+mock_chat
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_document_to_chunks_relationship
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test document has many chunks relationship.'
+mock_document
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_document
+●●●●●● 1mm □
+1
+mock_chunks
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+mock_document
+●●●●●● 1mm □
+mock_chunks
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mock_document
+●●●●●● 2mm □△
+3
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+c
+1
+c
+mock_document
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_message_belongs_to_conversation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test message belongs to conversation relationship.'
+mock_message
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_message
+●●●●●● 1mm □
+1
+mock_conversation
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_conversation
+●●●●●● 1mm □
+1
+mock_message
+●●●●●● 1mm □
+mock_conversation
+mock_message
+mock_message
+●●●●●● 2mm △
+TestModelIndexes
+'Test model index definitions.'
+●●●●●● 1mm □
+test_index_definition_format
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test index definitions follow expected format.'
+mock_index
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_index
+●●●●●● 1mm □
+'ix_users_username'
+mock_index
+●●●●●● 1mm □
+'username'
+mock_index
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+mock_index
+'ix_users_username'
+'username'
+mock_index
+mock_index
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_composite_index_definition
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test composite index definitions.'
+mock_index
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_index
+●●●●●● 1mm □
+'ix_messages_conversation_created'
+mock_index
+●●●●●● 1mm □
+'conversation_id'
+'created_at'
+mock_index
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mock_index
+●●●●●● 2mm □△
+2
+'conversation_id'
+mock_index
+'created_at'
+mock_index
+●●●●●● 2mm △
+TestTransactionHandling
+'Test transaction handling in repositories.'
+●●●●●● 1mm □
+test_commit_on_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test transaction commits on successful operation.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rollback_on_error
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test transaction rollback on error.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Database error'
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_session_close_cleanup
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test session is closed after operations.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestEdgeCases
+'Test edge cases and error handling.'
+●●●●●● 1mm □
+test_empty_query_result
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling empty query results.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_pagination_with_zero_results
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test pagination returns empty list when no results.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_offset
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_limit
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+mock_offset
+mock_offset
+●●●●●● 1mm □
+mock_limit
+mock_limit
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_update_nonexistent_record
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test updating a nonexistent record returns None.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+99999
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_delete_nonexistent_record
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test deleting nonexistent record is handled gracefully.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+99999
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_ilike_search_case_insensitive
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ilike search is case insensitive.'
+mock_session
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_query
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_filter
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_order
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_session
+●●●●●● 1mm □
+mock_query
+mock_query
+●●●●●● 1mm □
+mock_filter
+mock_filter
+●●●●●● 1mm □
+mock_order
+mock_order
+●●●●●● 1mm □
+results
+result
+●●●●●● 1mm □
+mock_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+2

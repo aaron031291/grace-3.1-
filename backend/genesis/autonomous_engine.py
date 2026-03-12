@@ -327,9 +327,9 @@ class AutonomousEngine:
         self.rules["scheduled_health"] = ActionRule(
             id="scheduled_health",
             name="Periodic Health Check",
-            description="Run health checks every 1 minute",
+            description="Run health checks every 5 minutes",
             trigger_type=TriggerType.SCHEDULE,
-            condition={"interval_seconds": 60},
+            condition={"interval_seconds": 300},
             action_type=ActionType.HEALTH_CHECK,
             action_config={"full_check": True},
             priority=ActionPriority.LOW

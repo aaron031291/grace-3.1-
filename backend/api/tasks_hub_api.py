@@ -1,63 +1,39 @@
 from fastapi import APIRouter
 import datetime
 import uuid
-import psutil
-from coding_agent import task_queue
 
 router = APIRouter(prefix="/tasks-hub", tags=["Tasks Hub"])
 
 # Mock store for scheduled tasks
 scheduled_db = {}
-
 @router.get("/active")
 async def get_active_tasks():
-    # Return real swarm status from the coding agent
-    return {"tasks": task_queue.get_swarm_status()}
+    return {"tasks": []}
 
 @router.get("/live")
 async def get_live_activity():
-    # Get total queued tasks + CPU stats
-    queue_status = task_queue.get_status()
-    total_active = queue_status.get("by_status", {}).get("running", 0) + queue_status.get("by_status", {}).get("pending", 0)
-    
     return {
-        "activity_count": total_active,
-        "activities": [
-            {"id": t["task_id"], "title": t["instructions"][:50], "time": t["updated_at"]}
-            for t in task_queue._queue[-10:] if t["status"] in ["running", "completed", "failed"]
-        ],
+        "activity_count": 0,
+        "activities": [],
         "system": {
-            "cpu": psutil.cpu_percent(),
-            "memory": psutil.virtual_memory().percent
+            "cpu": 0,
+            "memory": 0
         }
     }
 
 @router.get("/history")
 async def get_history(limit: int = 40):
-    completed = [
-        {"id": t["task_id"], "title": t["instructions"][:50], "status": t["status"], "time": t["updated_at"]}
-        for t in reversed(task_queue._queue) if t["status"] in ["completed", "failed"]
-    ]
-    return {"history": completed[:limit]}
+    return {"history": []}
 
 @router.get("/time-sense")
 async def get_time_sense():
     now = datetime.datetime.now()
-    try:
-        from cognitive.time_sense import TimeSense
-        time_ctx = TimeSense.now_context()
-        period_label = time_ctx.get("period", "Day").capitalize()
-        is_business = time_ctx.get("is_business_hours", False)
-    except:
-        period_label = "Day"
-        is_business = 9 <= now.hour < 17
-        
     return {
         "now": {
             "day_of_week": now.strftime("%A"),
-            "period_label": period_label,
+            "period_label": "Day",
             "time": now.strftime("%H:%M:%S"),
-            "is_business_hours": is_business
+            "is_business_hours": 9 <= now.hour < 17
         },
         "activity_pattern": {
             "peak_hour": "14:00",

@@ -1,0 +1,148 @@
+## codegen_layer.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CodegenLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 6: Code Generation.\n    Translates task descriptions into actual code using MCP tools.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L6_Codegen'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code_generation'
+'file_editing'
+'style_enforcement'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'EXECUTE_TASK'
+'FIX_CODE'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+'\n        Main entry point for L6.\n        '
+●●●●●● 2mm □
+message
+'EXECUTE_TASK'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'FIX_CODE'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Translates a task into code changes.\n        '
+task_desc
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L6] Executing task: '
+task_desc
+50
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L6 Codegen Layer of Grace OS. Generate the code or diff required to fulfill the task. Always include the file path and the EXACT content to be written.'
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'message'
+'Code generated (mock tool call).'
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Fixes code based on test failures from L7.\n        '
+error_trace
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'error_trace'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L6] Fixing code based on error: '
+error_trace
+50
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'message'
+'Code fix attempted.'
+●●●●●● 2mm □△
+LayerResponse

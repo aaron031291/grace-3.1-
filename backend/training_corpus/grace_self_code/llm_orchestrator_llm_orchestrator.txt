@@ -1,0 +1,1019 @@
+## llm_orchestrator.py
+'\nComplete LLM Orchestration System\n\nIntegrates all components:\n- Multiple LLMs (DeepSeek, Qwen, Llama, etc.)\n- Read-only repository access\n- Hallucination mitigation (5-layer pipeline)\n- Cognitive framework enforcement (12 OODA invariants)\n- Genesis Key tracking\n- Layer 1 integration\n- Learning Memory integration\n- Version control\n- Trust system verification\n\nAll LLM operations are:\n- Tracked with Genesis Keys\n- Logged for audit\n- Trust-scored\n- Cognitively enforced\n- Integrated with learning memory\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+multi_llm_client
+●●●●●● 2mm □△○
+MultiLLMClient
+TaskType
+●●●●●● 3mm □△○
+repo_access
+●●●●●● 2mm □△○
+RepositoryAccessLayer
+●●●●●● 3mm □△○
+hallucination_guard
+●●●●●● 2mm □△○
+HallucinationGuard
+VerificationResult
+●●●●●● 3mm □△○
+cognitive_enforcer
+●●●●●● 2mm □△○
+CognitiveEnforcer
+CognitiveConstraints
+●●●●●● 3mm □△○
+genesis.cognitive_layer1_integration
+●●●●●● 2mm □△○
+get_cognitive_layer1_integration
+CognitiveLayer1Integration
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+EmbeddingModel
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LLMTaskRequest
+'LLM task request.'
+task_id
+●●●●●● 1mm ○
+prompt
+●●●●●● 1mm ○
+task_type
+TaskType
+user_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+require_verification
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_consensus
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+require_grounding
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+enable_learning
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+system_prompt
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+context_documents
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+cognitive_constraints
+●●●●●● 2mm □○
+CognitiveConstraints
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+LLMTaskResult
+'LLM task result.'
+task_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+content
+●●●●●● 1mm ○
+verification_result
+●●●●●● 2mm □○
+VerificationResult
+cognitive_decision_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+trust_score
+●●●●●● 3mm ○
+confidence_score
+●●●●●● 3mm ○
+model_used
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+learning_example_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+timestamp
+datetime
+dataclass
+●●●●●● 2mm △
+LLMOrchestrator
+'\n    Complete LLM orchestration system.\n\n    Manages the full lifecycle of LLM tasks:\n    1. Cognitive enforcement (OODA + 12 invariants)\n    2. Multi-model selection\n    3. Hallucination mitigation (5-layer pipeline)\n    4. Genesis Key assignment\n    5. Layer 1 integration\n    6. Learning Memory integration\n    7. Trust scoring\n    8. Audit logging\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+embedding_model
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize LLM orchestrator.\n\n        Args:\n            session: Database session\n            embedding_model: Embedding model\n            knowledge_base_path: Path to knowledge base\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+MultiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+RepositoryAccessLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+ConfidenceScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+HallucinationGuard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+CognitiveEnforcer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+get_cognitive_layer1_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+knowledge_base_path
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+LLMTaskRequest
+●●●●●● 3mm △
+●●●●●● 3mm □△
+LLMTaskResult
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+task_type
+user_id
+require_verification
+require_consensus
+require_grounding
+enable_learning
+system_prompt
+context_documents
+cognitive_constraints
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+CognitiveConstraints
+TaskType
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Execute complete LLM task with full pipeline.\n\n        Args:\n            prompt: User prompt\n            task_type: Type of task\n            user_id: User ID (Genesis ID)\n            require_verification: Enable hallucination mitigation\n            require_consensus: Enable cross-model consensus\n            require_grounding: Require repository grounding\n            enable_learning: Enable learning memory integration\n            system_prompt: System prompt\n            context_documents: Context documents\n            cognitive_constraints: Cognitive constraints\n\n        Returns:\n            LLMTaskResult with complete information\n        '
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_id
+●●●●●● 1mm □
+'llm_task_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+audit_trail
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'[LLM ORCHESTRATOR] Starting task '
+task_id
+': '
+task_type
+●●●●●● 2mm □△
+task_request
+●●●●●● 1mm □
+LLMTaskRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+task_request
+decision_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_request
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'decision_id'
+'timestamp'
+'cognitive_enforcement'
+decision_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_request
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'model'
+'duration_ms'
+'timestamp'
+'llm_generation'
+llm_response
+●●●●●● 1mm □△
+'model_name'
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm □△
+'duration_ms'
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+llm_response
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△
+'LLM generation failed: '
+llm_response
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+llm_response
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+verification_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+require_verification
+verification_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_request
+content
+llm_response
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'is_verified'
+'confidence'
+'trust_score'
+'timestamp'
+'hallucination_verification'
+verification_result
+verification_result
+verification_result
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+verification_result
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_request
+content
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'genesis_key_id'
+'timestamp'
+'genesis_key_assignment'
+genesis_key_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_request
+content
+genesis_key_id
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'genesis_key_id'
+'timestamp'
+'layer1_integration'
+genesis_key_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+learning_example_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+enable_learning
+learning_example_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_request
+content
+verification_result
+genesis_key_id
+●●●●●● 2mm □△
+audit_trail
+●●●●●● 1mm □△
+'step'
+'learning_example_id'
+'timestamp'
+'learning_memory_integration'
+learning_example_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+verification_result
+verification_result
+0.8
+confidence_score
+●●●●●● 1mm □
+verification_result
+verification_result
+0.8
+duration_ms
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+result
+●●●●●● 1mm □
+LLMTaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+task_id
+logger
+●●●●●● 1mm □△
+'[LLM ORCHESTRATOR] Task '
+task_id
+' completed successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[LLM ORCHESTRATOR] Task '
+task_id
+' failed: '
+e
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+result
+●●●●●● 1mm □
+LLMTaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 3mm ○
+result
+LLMTaskResult
+●●●●●● 1mm □
+_enforce_cognitive_framework
+●●●●●● 1mm □△
+self
+task_request
+●●●●●● 2mm □△
+LLMTaskRequest
+'Enforce cognitive framework (OODA + 12 invariants).'
+logger
+●●●●●● 1mm □△
+'[COGNITIVE] Enforcing framework for task '
+task_request
+●●●●●● 2mm □△
+decision_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+alternatives
+●●●●●● 1mm □
+'name'
+'description'
+'simplicity'
+'optionality'
+'immediate_value'
+'reversible'
+'complexity'
+'execute_llm_task'
+'Execute LLM task with full pipeline'
+0.8
+1.0
+1.0
+●●●●●● 3mm □△○
+0.3
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_llm_response
+●●●●●● 1mm □△
+self
+task_request
+●●●●●● 2mm □△
+LLMTaskRequest
+'Generate LLM response.'
+logger
+●●●●●● 1mm □△
+'[LLM GENERATION] Generating response for task '
+task_request
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+task_request
+''
+●●●●●● 2mm □
+task_request
+●●●●●● 3mm △
+system_prompt
+'\n\nYou have read-only access to the repository. Always reference actual files when making claims about code.'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_verify_content
+●●●●●● 1mm □△
+self
+task_request
+content
+llm_response
+●●●●●● 2mm □△
+LLMTaskRequest
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Verify content through hallucination mitigation pipeline.'
+logger
+●●●●●● 1mm □△
+'[VERIFICATION] Verifying content for task '
+task_request
+●●●●●● 2mm □△
+verification_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+verification_result
+VerificationResult
+●●●●●● 1mm □
+_assign_genesis_key
+●●●●●● 1mm □△
+self
+task_request
+content
+●●●●●● 2mm □△
+LLMTaskRequest
+●●●●●● 1mm ○
+'Assign Genesis Key to LLM interaction.'
+logger
+●●●●●● 1mm □△
+'[GENESIS KEY] Assigning Genesis Key for task '
+task_request
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □
+'task_id'
+'task_type'
+'user_id'
+'prompt'
+'content_length'
+'timestamp'
+task_request
+task_request
+task_request
+task_request
+500
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+'GK-LLM-'
+task_request
+●●●●●● 3mm ○
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_integrate_layer1
+●●●●●● 1mm □△
+self
+task_request
+content
+genesis_key_id
+●●●●●● 2mm □△
+LLMTaskRequest
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'\n        Integrate with Cognitive Layer 1.\n\n        ALL LLM interactions flow through Layer 1 with:\n        - OODA Loop enforcement\n        - 12 Invariant validation\n        - Genesis Key tracking\n        - Trust scoring\n        - Complete audit trail\n        '
+logger
+●●●●●● 1mm □△
+'[COGNITIVE LAYER 1] Integrating task '
+task_request
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Cognitive Layer 1 integration not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+llm_interaction_data
+●●●●●● 1mm □
+'task_id'
+'task_type'
+'user_id'
+'prompt'
+'content'
+'content_length'
+'genesis_key_id'
+'require_verification'
+'require_consensus'
+'require_grounding'
+'timestamp'
+task_request
+task_request
+task_request
+task_request
+500
+content
+1000
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+genesis_key_id
+task_request
+task_request
+task_request
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[COGNITIVE LAYER 1] ✓ Task '
+task_request
+' processed through Layer 1'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[COGNITIVE LAYER 1] - Genesis Key: '
+result
+●●●●●● 1mm □△
+'genesis_key_id'
+'N/A'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[COGNITIVE LAYER 1] - OODA Loop: '
+result
+●●●●●● 1mm □△
+'cognitive'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'ooda_loop_completed'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[COGNITIVE LAYER 1] - Invariants: '
+result
+●●●●●● 1mm □△
+'cognitive'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'invariants_validated'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Cognitive Layer 1 integration error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_integrate_learning_memory
+●●●●●● 1mm □△
+self
+task_request
+content
+verification_result
+genesis_key_id
+●●●●●● 2mm □△
+LLMTaskRequest
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+VerificationResult
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'Integrate with learning memory.'
+logger
+●●●●●● 1mm □△
+'[LEARNING MEMORY] Integrating task '
+task_request
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'Learning memory not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+learning_data
+●●●●●● 1mm □
+'context'
+'expected'
+'actual'
+'task_type'
+'prompt'
+task_request
+task_request
+'content'
+'verified'
+content
+verification_result
+verification_result
+●●●●●● 1mm □
+'confidence_score'
+'trust_score'
+verification_result
+verification_result
+0.8
+verification_result
+verification_result
+0.8
+example
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+example
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Learning memory integration error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_task_result
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get task result by ID.'
+result
+●●●●●● 3mm △
+●●●●●● 2mm □
+result
+task_id
+●●●●●● 3mm ○
+result
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+LLMTaskResult
+●●●●●● 1mm □
+get_recent_tasks
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent task results.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+LLMTaskResult
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get orchestrator statistics.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'total_tasks'
+'success_rate'
+'avg_duration_ms'
+'avg_trust_score'
+'avg_confidence_score'
+0
+0.0
+0.0
+0.0
+0.0
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+t
+●●●●●● 3mm △
+t
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_tasks'
+'success_rate'
+'avg_duration_ms'
+'avg_trust_score'
+'avg_confidence_score'
+'multi_llm_stats'
+'verification_stats'
+total
+successful
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+t
+t
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+total
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_llm_orchestrator
+●●●●●● 2mm □○
+LLMOrchestrator
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+session
+embedding_model
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+EmbeddingModel
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create global LLM orchestrator instance.'
+●●●●●● 2mm □
+_llm_orchestrator
+●●●●●● 2mm □
+_llm_orchestrator
+●●●●●● 1mm □
+LLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_llm_orchestrator
+LLMOrchestrator

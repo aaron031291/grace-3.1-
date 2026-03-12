@@ -1,0 +1,1249 @@
+## contrastive_learning.py
+'\nContrastive Learning - Better Representation Learning\n\nLearns better embeddings by contrasting similar vs dissimilar examples.\n\nImplementations:\n- SimCLR: Contrastive learning with data augmentation\n- Supervised Contrastive Learning\n- Triplet Loss\n- N-Pair Loss\n- Hard Negative Mining\n'
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □△○
+torch.nn
+●●●●●● 1mm □
+nn
+●●●●●● 2mm □△○
+torch.nn.functional
+●●●●●● 1mm □
+F
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Tuple
+Optional
+Dict
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 2mm △
+ContrastiveBatch
+'Batch for contrastive learning'
+anchors
+torch
+positives
+torch
+negatives
+●●●●●● 2mm □○
+torch
+●●●●●● 2mm □
+labels
+●●●●●● 2mm □○
+torch
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+NTXentLoss
+●●●●●● 3mm □△
+nn
+'\n    Normalized Temperature-scaled Cross-Entropy Loss (NT-Xent)\n\n    Used in SimCLR and other contrastive methods\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+temperature
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.5
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+temperature
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+z_i
+z_j
+●●●●●● 2mm □△
+torch
+torch
+'\n        Compute NT-Xent loss\n\n        Args:\n            z_i: Embeddings from view 1 [N, D]\n            z_j: Embeddings from view 2 [N, D]\n\n        Returns:\n            Loss scalar\n        '
+batch_size
+●●●●●● 1mm □
+z_i
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+z_i
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+z_i
+●●●●●● 2mm □△
+z_j
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+z_j
+●●●●●● 2mm □△
+representations
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+z_i
+z_j
+●●●●●● 2mm □△
+similarity_matrix
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+representations
+representations
+●●●●●● 2mm □△
+mask
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+batch_size
+●●●●●● 2mm □△
+similarity_matrix
+●●●●●● 1mm □
+similarity_matrix
+●●●●●● 1mm □△
+mask
+9000000000000000.0
+●●●●●● 2mm □△
+positives
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+batch_size
+2
+●●●●●● 2mm □△
+batch_size
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+0
+batch_size
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+z_i
+●●●●●● 2mm □△
+similarity_matrix
+●●●●●● 1mm □
+similarity_matrix
+●●●●●● 3mm □△
+●●●●●● 3mm △
+loss
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+similarity_matrix
+positives
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loss
+torch
+●●●●●● 2mm △
+TripletLoss
+●●●●●● 3mm □△
+nn
+'\n    Triplet Loss\n\n    Minimizes distance to positive, maximizes distance to negative\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+margin
+distance_metric
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+1.0
+'euclidean'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+margin
+●●●●●● 3mm △
+●●●●●● 1mm □
+distance_metric
+●●●●●● 1mm □
+compute_distance
+●●●●●● 1mm □△
+self
+x1
+x2
+●●●●●● 2mm □△
+torch
+torch
+'Compute pairwise distance'
+●●●●●● 2mm □
+●●●●●● 3mm △
+'euclidean'
+●●●●●● 3mm ○
+torch
+●●●●●● 1mm □△
+x1
+●●●●●● 1mm □△
+x2
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'cosine'
+●●●●●● 3mm ○
+1.0
+●●●●●● 1mm □△
+F
+●●●●●● 1mm □△
+x1
+x2
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Unknown distance metric: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+anchor
+positive
+negative
+●●●●●● 2mm □△
+torch
+torch
+torch
+'\n        Compute triplet loss\n\n        Args:\n            anchor: Anchor embeddings [N, D]\n            positive: Positive embeddings [N, D]\n            negative: Negative embeddings [N, D]\n\n        Returns:\n            Loss scalar\n        '
+pos_dist
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor
+positive
+●●●●●● 2mm □△
+neg_dist
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchor
+negative
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+pos_dist
+●●●●●● 1mm □△
+neg_dist
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 2mm △
+SupervisedContrastiveLoss
+●●●●●● 3mm □△
+nn
+'\n    Supervised Contrastive Loss\n\n    Uses label information to form positives and negatives\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+temperature
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.07
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+temperature
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+features
+labels
+●●●●●● 2mm □△
+torch
+torch
+'\n        Compute supervised contrastive loss\n\n        Args:\n            features: Embeddings [N, D]\n            labels: Labels [N]\n\n        Returns:\n            Loss scalar\n        '
+batch_size
+●●●●●● 1mm □
+features
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+similarity_matrix
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+features
+features
+●●●●●● 2mm □△
+labels
+●●●●●● 1mm □
+labels
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+mask_positives
+●●●●●● 1mm □
+labels
+labels
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+mask_self
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+batch_size
+●●●●●● 2mm □△
+similarity_matrix
+●●●●●● 1mm □
+similarity_matrix
+●●●●●● 3mm □△
+●●●●●● 3mm △
+max_sim
+●●●●●● 1mm □
+similarity_matrix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+similarity_matrix
+●●●●●● 1mm □
+similarity_matrix
+●●●●●● 1mm □△
+max_sim
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp_sim
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+similarity_matrix
+●●●●●● 2mm □△
+sum_negatives
+●●●●●● 1mm □
+exp_sim
+●●●●●● 1mm □△
+mask_self
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+log_prob
+●●●●●● 1mm □
+similarity_matrix
+●●●●●● 1mm □△
+torch
+●●●●●● 1mm □△
+sum_negatives
+●●●●●● 3mm ○
+1e-08
+●●●●●● 2mm □△
+num_positives
+●●●●●● 1mm □
+mask_positives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loss_per_anchor
+●●●●●● 1mm □
+log_prob
+●●●●●● 2mm □△
+mask_positives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+num_positives
+●●●●●● 3mm ○
+1e-08
+loss
+●●●●●● 1mm □
+loss_per_anchor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loss
+torch
+●●●●●● 2mm △
+HardNegativeMiner
+'\n    Hard Negative Mining\n\n    Selects the hardest negatives for more effective training\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+distance_metric
+mining_strategy
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'euclidean'
+'hard'
+●●●●●● 3mm △
+●●●●●● 1mm □
+distance_metric
+●●●●●● 3mm △
+●●●●●● 1mm □
+mining_strategy
+●●●●●● 1mm □
+compute_pairwise_distances
+●●●●●● 1mm □△
+self
+embeddings
+●●●●●● 2mm □△
+torch
+'\n        Compute pairwise distance matrix\n\n        Args:\n            embeddings: [N, D]\n\n        Returns:\n            Distance matrix [N, N]\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+'euclidean'
+dot_product
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+embeddings
+embeddings
+●●●●●● 2mm □△
+squared_norm
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+dot_product
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □
+squared_norm
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+2.0
+●●●●●● 2mm □△
+dot_product
+●●●●●● 3mm ○
+squared_norm
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+distances
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+torch
+●●●●●● 1mm □△
+distances
+●●●●●● 3mm ○
+1e-08
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'cosine'
+normalized
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+normalized
+normalized
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1.0
+●●●●●● 1mm □△
+similarity
+ValueError
+●●●●●● 1mm □△
+'Unknown distance metric: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □
+mine_hard_negatives
+●●●●●● 1mm □△
+self
+embeddings
+labels
+margin
+●●●●●● 2mm □△
+torch
+torch
+●●●●●● 3mm ○
+1.0
+'\n        Mine hard triplets\n\n        Args:\n            embeddings: [N, D]\n            labels: [N]\n            margin: Triplet margin\n\n        Returns:\n            (anchor_indices, positive_indices, negative_indices)\n        '
+distance_matrix
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+labels
+●●●●●● 1mm □
+labels
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+mask_positives
+●●●●●● 1mm □
+labels
+labels
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+mask_negatives
+●●●●●● 1mm □
+labels
+labels
+anchor_indices
+●●●●●● 1mm □
+positive_indices
+●●●●●● 1mm □
+negative_indices
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+embeddings
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pos_dists
+●●●●●● 1mm □
+distance_matrix
+i
+●●●●●● 1mm □△
+mask_positives
+i
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+neg_dists
+●●●●●● 1mm □
+distance_matrix
+i
+●●●●●● 1mm □△
+mask_negatives
+i
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'hard'
+●●●●●● 2mm □
+pos_dists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+hard_pos_idx
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+pos_dists
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neg_dists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+hard_neg_idx
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+neg_dists
+●●●●●● 2mm □△
+anchor_indices
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+positive_indices
+●●●●●● 1mm □△
+hard_pos_idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+negative_indices
+●●●●●● 1mm □△
+hard_neg_idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'semi_hard'
+●●●●●● 2mm □
+pos_dists
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+hard_pos_idx
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+pos_dists
+●●●●●● 2mm □△
+hard_pos_dist
+●●●●●● 1mm □
+pos_dists
+hard_pos_idx
+semi_hard_mask
+●●●●●● 1mm □
+neg_dists
+hard_pos_dist
+●●●●●● 3mm ○
+margin
+●●●●●● 3mm △
+neg_dists
+hard_pos_dist
+●●●●●● 2mm □
+semi_hard_mask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semi_hard_negs
+●●●●●● 1mm □
+neg_dists
+●●●●●● 1mm □△
+semi_hard_mask
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+'inf'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+hard_neg_idx
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+semi_hard_negs
+●●●●●● 2mm □△
+anchor_indices
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+positive_indices
+●●●●●● 1mm □△
+hard_pos_idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+negative_indices
+●●●●●● 1mm □△
+hard_neg_idx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anchor_indices
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+torch
+●●●●●● 1mm □△
+anchor_indices
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+positive_indices
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+negative_indices
+●●●●●● 2mm □△
+Tuple
+torch
+torch
+torch
+●●●●●● 2mm △
+ContrastiveLearner
+'\n    Main Contrastive Learning Interface\n\n    Coordinates different contrastive learning approaches\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+encoder
+projection_dim
+loss_type
+temperature
+margin
+device
+●●●●●● 2mm □△
+nn
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+128
+'ntxent'
+0.5
+1.0
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cuda'
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+encoder
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+nn
+●●●●●● 1mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+encoder
+'output_dim'
+●●●●●● 2mm □△
+encoder
+512
+512
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm □△
+512
+projection_dim
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+loss_type
+●●●●●● 2mm □
+loss_type
+'ntxent'
+●●●●●● 3mm △
+●●●●●● 1mm □
+NTXentLoss
+●●●●●● 1mm □△
+temperature
+●●●●●● 2mm □△
+●●●●●● 1mm △
+loss_type
+'triplet'
+●●●●●● 3mm △
+●●●●●● 1mm □
+TripletLoss
+●●●●●● 1mm □△
+margin
+●●●●●● 2mm □△
+●●●●●● 2mm □
+loss_type
+'supervised'
+●●●●●● 3mm △
+●●●●●● 1mm □
+SupervisedContrastiveLoss
+●●●●●● 1mm □△
+temperature
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown loss type: '
+loss_type
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+HardNegativeMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+forward
+●●●●●● 1mm □△
+self
+x
+●●●●●● 2mm □△
+torch
+'Forward pass through encoder and projection'
+encoding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+projection
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+encoding
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+projection
+torch
+●●●●●● 1mm □
+train_step
+●●●●●● 1mm □△
+self
+batch
+●●●●●● 2mm □△
+ContrastiveBatch
+'\n        Single training step\n\n        Args:\n            batch: ContrastiveBatch\n\n        Returns:\n            Dict with loss and metrics\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anchors
+●●●●●● 1mm □
+batch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+positives
+●●●●●● 1mm □
+batch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+z_anchors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anchors
+●●●●●● 2mm □△
+z_positives
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+positives
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'ntxent'
+loss
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+z_anchors
+z_positives
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+'triplet'
+negatives
+●●●●●● 1mm □
+batch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+z_negatives
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+negatives
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+z_anchors
+z_positives
+z_negatives
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'supervised'
+labels
+●●●●●● 1mm □
+batch
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+all_embeddings
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+z_anchors
+z_positives
+●●●●●● 2mm □△
+all_labels
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+labels
+labels
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+all_embeddings
+all_labels
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown loss type: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+'loss'
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'loss'
+●●●●●● 1mm □△
+loss
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+encode
+●●●●●● 1mm □△
+self
+x
+use_projection
+●●●●●● 2mm □△
+torch
+●●●●●● 3mm △
+●●●●●● 1mm □
+'\n        Encode inputs to embeddings\n\n        Args:\n            x: Input tensor\n            use_projection: Whether to use projection head\n\n        Returns:\n            Embeddings\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+x
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+encoding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+●●●●●● 2mm □
+use_projection
+encoding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+encoding
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+encoding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □
+compute_similarity
+●●●●●● 1mm □△
+self
+x1
+x2
+metric
+●●●●●● 2mm □△
+torch
+torch
+●●●●●● 1mm ○
+'cosine'
+"\n        Compute similarity between embeddings\n\n        Args:\n            x1: First input\n            x2: Second input\n            metric: 'cosine' or 'euclidean'\n\n        Returns:\n            Similarity scores\n        "
+emb1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x1
+●●●●●● 2mm □△
+emb2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metric
+'cosine'
+emb1
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+emb1
+●●●●●● 2mm □△
+emb2
+●●●●●● 1mm □
+F
+●●●●●● 1mm □△
+emb2
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+emb1
+●●●●●● 2mm □△
+emb2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+metric
+'euclidean'
+similarity
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+emb1
+●●●●●● 1mm □△
+emb2
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Unknown metric: '
+metric
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similarity
+torch
+●●●●●● 1mm □
+get_training_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get training statistics'
+●●●●●● 2mm □
+●●●●●● 3mm △
+'loss'
+●●●●●● 3mm ○
+recent_losses
+●●●●●● 1mm □
+●●●●●● 3mm △
+'loss'
+100
+●●●●●● 3mm ○
+'total_steps'
+'recent_avg_loss'
+'recent_std_loss'
+'min_loss'
+'max_loss'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'loss'
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+recent_losses
+●●●●●● 2mm □△
+np
+●●●●●● 1mm □△
+recent_losses
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'loss'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'loss'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+save_model
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Save model'
+torch
+●●●●●● 1mm □△
+'encoder_state'
+'projection_state'
+'optimizer_state'
+'training_stats'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+load_model
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Load model'
+checkpoint
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+checkpoint
+'encoder_state'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+checkpoint
+'projection_state'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+checkpoint
+'optimizer_state'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+checkpoint
+●●●●●● 1mm □△
+'training_stats'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_contrastive_learner_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_contrastive_learner
+●●●●●● 1mm □△
+encoder
+loss_type
+●●●●●● 2mm □△
+nn
+●●●●●● 1mm ○
+'ntxent'
+'Get contrastive learner instance'
+●●●●●● 2mm □
+_contrastive_learner_instance
+●●●●●● 2mm □
+encoder
+●●●●●● 2mm □
+_contrastive_learner_instance
+●●●●●● 1mm □
+ContrastiveLearner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_contrastive_learner_instance
+ContrastiveLearner

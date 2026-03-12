@@ -1,0 +1,669 @@
+## user_pattern_learner.py
+"\nUser Thinking Pattern Learner\n==============================\nObserves how each user communicates, thinks, and works —\nthen adapts Grace's responses to match their style.\n\nTracks:\n  - Communication style (verbose/concise, technical/casual, tone)\n  - Topic preferences (what they ask about most)\n  - Problem-solving approach (step-by-step vs big-picture)\n  - Response preferences (code-first vs explanation-first)\n  - Session patterns (active hours, session lengths)\n  - Error patterns (recurring issues, common mistakes)\n  - Vocabulary level (beginner/intermediate/expert per domain)\n\nThe learner runs after every user interaction, updating the profile\nincrementally. Grace uses the profile to customize her responses.\n"
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+Counter
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+models.memory_graph_models
+●●●●●● 2mm □△○
+UserThinkingPattern
+UserInteractionLog
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+UserPatternLearner
+'\n    Learns user thinking patterns from interaction history.\n    Each user gets a profile that evolves over time.\n    '
+STYLE_PATTERNS
+●●●●●● 1mm □
+'communication_verbosity'
+'communication_technicality'
+'response_preference'
+'problem_solving_style'
+'question_depth'
+'feedback_style'
+'How verbose vs concise the user communicates'
+'How technical vs casual the language is'
+'Prefers code-first, explanation-first, or balanced'
+'Step-by-step methodical vs exploratory jump-around'
+'Surface-level questions vs deep investigation'
+'How the user gives feedback (explicit, implicit, none)'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+user_id
+●●●●●● 1mm □
+observe_interaction
+●●●●●● 1mm □△
+self
+message
+interaction_type
+session_id
+response
+response_time_ms
+satisfaction_signal
+topic_tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'chat'
+●●●●●● 2mm □
+●●●●●● 2mm □
+0
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Observe a user interaction and update patterns.\n        Called after every user message.\n        '
+content_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+log
+●●●●●● 1mm □
+UserInteractionLog
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+log
+●●●●●● 2mm □△
+patterns_updated
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+response
+topic_tags
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'user_id'
+'patterns_updated'
+'interaction_logged'
+●●●●●● 3mm △
+patterns_updated
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_patterns
+●●●●●● 1mm □△
+self
+message
+response
+topic_tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Extract and update patterns from a single interaction.'
+updated
+●●●●●● 1mm □
+0
+verbosity
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+200
+'verbose'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+50
+'concise'
+'moderate'
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'communication_verbosity'
+verbosity
+1.0
+●●●●●● 2mm □△
+tech_indicators
+●●●●●● 1mm □
+'function'
+'class'
+'api'
+'endpoint'
+'database'
+'async'
+'import'
+'module'
+'deploy'
+'docker'
+'kubernetes'
+'sql'
+tech_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+w
+tech_indicators
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+technicality
+●●●●●● 1mm □
+tech_count
+2
+'technical'
+tech_count
+0
+'casual'
+'mixed'
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'communication_technicality'
+technicality
+1.0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'code'
+'implement'
+'write'
+'build'
+'create'
+'function'
+●●●●●● 2mm □△
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'response_preference'
+'code_first'
+0.8
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'explain'
+'why'
+'how does'
+'what is'
+'understand'
+●●●●●● 2mm □△
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'response_preference'
+'explanation_first'
+0.8
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'step by step'
+'first'
+'then'
+'next'
+'plan'
+●●●●●● 2mm □△
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'problem_solving_style'
+'methodical'
+0.7
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+'just'
+'quick'
+'fast'
+'directly'
+'skip'
+●●●●●● 2mm □△
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'problem_solving_style'
+'exploratory'
+0.7
+●●●●●● 2mm □△
+has_question
+●●●●●● 1mm □
+'?'
+message
+question_words
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+w
+'why'
+'how'
+'what'
+'when'
+'where'
+'which'
+w
+message
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+has_question
+question_words
+2
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'question_depth'
+'deep'
+0.6
+●●●●●● 2mm □△
+●●●●●● 1mm △
+has_question
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'question_depth'
+'moderate'
+0.6
+●●●●●● 2mm □△
+●●●●●● 2mm □
+topic_tags
+tag
+topic_tags
+updated
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'topic_preference'
+tag
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+updated
+●●●●●● 2mm ○
+●●●●●● 1mm □
+_update_pattern
+●●●●●● 1mm □△
+self
+pattern_type
+pattern_value
+weight
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Update or create a pattern record. Returns 1 if updated, 0 if failed.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+UserThinkingPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+existing
+1
+old_conf
+●●●●●● 1mm □
+existing
+existing
+●●●●●● 1mm □
+old_conf
+●●●●●● 3mm ○
+weight
+●●●●●● 1mm □△
+old_conf
+●●●●●● 2mm □△
+0.1
+existing
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 3mm □
+record
+●●●●●● 1mm □
+UserThinkingPattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+Exception
+logger
+●●●●●● 1mm □△
+'[UserPattern] Update failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_profile
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get the full user thinking profile.'
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+UserThinkingPattern
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+UserThinkingPattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+profile
+●●●●●● 1mm □
+p
+patterns
+●●●●●● 2mm □
+p
+profile
+profile
+p
+●●●●●● 1mm □
+profile
+p
+●●●●●● 1mm □△
+'value'
+'confidence'
+'observations'
+'last_seen'
+p
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+p
+3
+●●●●●● 2mm □△
+p
+p
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+dominant
+●●●●●● 1mm □
+ptype
+values
+profile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+values
+dominant
+ptype
+●●●●●● 1mm □
+values
+0
+'value'
+interaction_count
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+UserInteractionLog
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'user_id'
+'interaction_count'
+'dominant_patterns'
+'all_patterns'
+●●●●●● 3mm △
+interaction_count
+dominant
+profile
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_adaptation_hints
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get hints for how Grace should adapt responses for this user.\n        Used by the LLM orchestrator to customize system prompts.\n        '
+profile
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dominant
+●●●●●● 1mm □
+profile
+●●●●●● 1mm □△
+'dominant_patterns'
+●●●●●● 2mm □△
+hints
+●●●●●● 1mm □
+verbosity
+●●●●●● 1mm □
+dominant
+●●●●●● 1mm □△
+'communication_verbosity'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+verbosity
+'concise'
+hints
+'length'
+●●●●●● 1mm □
+'Keep responses short and direct. This user prefers brevity.'
+●●●●●● 1mm △
+verbosity
+'verbose'
+hints
+'length'
+●●●●●● 1mm □
+'Provide detailed, thorough responses. This user appreciates depth.'
+tech
+●●●●●● 1mm □
+dominant
+●●●●●● 1mm □△
+'communication_technicality'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tech
+'technical'
+hints
+'style'
+●●●●●● 1mm □
+'Use technical language. This user is comfortable with jargon.'
+●●●●●● 1mm △
+tech
+'casual'
+hints
+'style'
+●●●●●● 1mm □
+'Use plain, accessible language. Avoid unnecessary jargon.'
+pref
+●●●●●● 1mm □
+dominant
+●●●●●● 1mm □△
+'response_preference'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pref
+'code_first'
+hints
+'format'
+●●●●●● 1mm □
+'Lead with code examples, then explain. This user prefers seeing code first.'
+●●●●●● 1mm △
+pref
+'explanation_first'
+hints
+'format'
+●●●●●● 1mm □
+'Explain the concept first, then show code. This user prefers understanding before implementation.'
+solving
+●●●●●● 1mm □
+dominant
+●●●●●● 1mm □△
+'problem_solving_style'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+solving
+'methodical'
+hints
+'structure'
+●●●●●● 1mm □
+'Use numbered steps and clear progression. This user thinks methodically.'
+●●●●●● 1mm △
+solving
+'exploratory'
+hints
+'structure'
+●●●●●● 1mm □
+'Get to the point quickly. This user prefers directness over structure.'
+●●●●●● 3mm ○
+hints
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_classify_response_type
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'```'
+response
+●●●●●● 3mm ○
+'code_heavy'
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+500
+●●●●●● 3mm ○
+'detailed'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+100
+●●●●●● 3mm ○
+'brief'
+●●●●●● 3mm ○
+'moderate'
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_user_learner
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+UserPatternLearner
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+UserPatternLearner

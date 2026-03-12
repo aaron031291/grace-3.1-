@@ -39,7 +39,7 @@ async def get_modules_stats():
     }
 
 @router.get("/commits/{sha}/diff")
-async def get_commit_diff(sha: str):
+async def get_diff(sha: str):
     """Mock a git diff."""
     return {"diff": [f"--- a/file.py\n+++ b/file.py\n@@ -1,1 +1,2 @@\n- old\n+ new"]}
 

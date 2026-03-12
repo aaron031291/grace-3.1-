@@ -1,0 +1,396 @@
+## worker_pool.py
+"\nWorker Pool — multi-process execution for concurrent users.\n\nPrevents one user's infinite loop from crashing everyone.\nUses ThreadPoolExecutor for brain calls, ProcessPoolExecutor for heavy compute.\n"
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+ProcessPoolExecutor
+TimeoutError
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Callable
+Any
+Optional
+Dict
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+lru_cache
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_thread_pool
+●●●●●● 2mm □○
+ThreadPoolExecutor
+●●●●●● 2mm □
+_thread_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_user_requests
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+_user_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MAX_WORKERS
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GRACE_MAX_WORKERS'
+'10'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+MAX_REQUESTS_PER_USER
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GRACE_MAX_USER_REQUESTS'
+'50'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+REQUEST_TIMEOUT
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+'GRACE_REQUEST_TIMEOUT'
+'120'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_thread_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the shared thread pool.'
+●●●●●● 2mm □
+_thread_pool
+●●●●●● 2mm □
+_thread_lock
+●●●●●● 2mm □
+_thread_pool
+●●●●●● 2mm □
+_thread_pool
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_thread_pool
+ThreadPoolExecutor
+●●●●●● 1mm □
+submit_task
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'default'
+●●●●●● 2mm □
+'\n    Submit a task to the worker pool with per-user rate limiting.\n    Returns the result or raises TimeoutError.\n    '
+●●●●●● 2mm □
+_check_user_quota
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'Rate limit exceeded for user '
+user_id
+●●●●●● 2mm □△
+pool
+●●●●●● 1mm □
+get_thread_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □
+pool
+●●●●●● 1mm □△
+func
+args
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_record_request
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+TimeoutError
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_record_request
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+Exception
+_record_request
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm □
+_check_user_quota
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if user is within their request quota.'
+_user_lock
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+requests
+●●●●●● 1mm □
+_user_requests
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+requests
+●●●●●● 1mm □
+r
+r
+requests
+now
+●●●●●● 1mm □△
+r
+'ts'
+3600
+_user_requests
+user_id
+●●●●●● 1mm □
+requests
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+requests
+●●●●●● 2mm □△
+MAX_REQUESTS_PER_USER
+●●●●●● 3mm △
+●●●●●● 1mm □
+_record_request
+●●●●●● 1mm □△
+user_id
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'Record a request for rate limiting.'
+_user_lock
+●●●●●● 2mm □
+user_id
+_user_requests
+_user_requests
+user_id
+●●●●●● 1mm □
+_user_requests
+user_id
+●●●●●● 1mm □△
+'ts'
+'success'
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_pool_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get worker pool statistics.'
+pool
+●●●●●● 1mm □
+get_thread_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_user_lock
+active_users
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_user_requests
+●●●●●● 2mm □△
+total_requests
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+●●●●●● 2mm □△
+r
+_user_requests
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'max_workers'
+'active_users'
+'total_requests_1h'
+'max_per_user'
+'timeout_seconds'
+MAX_WORKERS
+active_users
+total_requests
+MAX_REQUESTS_PER_USER
+REQUEST_TIMEOUT
+●●●●●● 2mm □△
+_response_cache
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+_cache_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CACHE_TTL
+●●●●●● 1mm □
+300
+MAX_CACHE_SIZE
+●●●●●● 1mm □
+500
+●●●●●● 1mm □
+cached_brain_call
+●●●●●● 1mm □△
+domain
+action
+payload_hash
+func
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'\n    Cache brain call results. Same domain+action+payload within 5min\n    returns cached result instead of calling LLM again.\n    '
+cache_key
+●●●●●● 1mm □
+domain
+':'
+action
+':'
+payload_hash
+_cache_lock
+●●●●●● 2mm □
+cache_key
+_response_cache
+entry
+●●●●●● 1mm □
+_response_cache
+cache_key
+●●●●●● 2mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+entry
+'ts'
+CACHE_TTL
+entry
+'hits'
+1
+●●●●●● 3mm ○
+entry
+'result'
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cache_lock
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_response_cache
+●●●●●● 2mm □△
+MAX_CACHE_SIZE
+oldest_key
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+_response_cache
+●●●●●● 2mm □△
+_response_cache
+oldest_key
+_response_cache
+cache_key
+●●●●●● 1mm □
+'result'
+'ts'
+'hits'
+result
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+result
+Any
+●●●●●● 1mm □
+get_cache_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cache_lock
+total_hits
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+'hits'
+e
+_response_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'entries'
+'max_size'
+'ttl_seconds'
+'total_cache_hits'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+_response_cache
+●●●●●● 2mm □△
+MAX_CACHE_SIZE
+CACHE_TTL
+total_hits
+●●●●●● 2mm □△
+●●●●●● 1mm □
+clear_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cache_lock
+_response_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,16 @@
+## __init__.py
+'\nFile manager module for knowledge base management.\n'
+●●●●●● 3mm □△○
+file_handler
+●●●●●● 2mm □△○
+FileHandler
+extract_file_text
+●●●●●● 3mm □△○
+knowledge_base_manager
+●●●●●● 2mm □△○
+KnowledgeBaseManager
+__all__
+●●●●●● 1mm □
+'FileHandler'
+'extract_file_text'
+'KnowledgeBaseManager'

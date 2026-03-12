@@ -1,0 +1,262 @@
+## download_lightweight_model.py
+'\nDownload lightweight embedding model for laptop testing.\n\nThis script downloads the all-MiniLM-L6-v2 model which is much smaller\nthan Qwen-4B and can run on laptops with limited resources.\n\nModel Details:\n- Name: all-MiniLM-L6-v2\n- Size: ~90 MB\n- RAM Usage: ~500 MB\n- Embedding Dimension: 384\n- Quality: Good for general purpose semantic search\n\nUsage:\n    python download_lightweight_model.py\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+download_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Download and save the lightweight embedding model.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Downloading Lightweight Embedding Model'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Model: all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Size: ~90 MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'RAM Usage: ~500 MB'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'This may take a few minutes depending on your internet speed...'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sentence_transformers
+●●●●●● 2mm □△○
+SentenceTransformer
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error: sentence-transformers not installed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Please install it with:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  pip install sentence-transformers'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+models_dir
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+models_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_path
+●●●●●● 1mm □
+models_dir
+●●●●●● 3mm □△
+'all-MiniLM-L6-v2'
+●●●●●● 2mm □
+model_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠️  Model already exists at: '
+model_path
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+'Do you want to re-download? (y/N): '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+'y'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Using existing model'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'📥 Downloading model from HuggingFace...'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+SentenceTransformer
+●●●●●● 1mm □△
+'sentence-transformers/all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'💾 Saving model to: '
+model_path
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Model downloaded successfully!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Next steps:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'1. Update your .env file with:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   EMBEDDING_DEFAULT=all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   EMBEDDING_MODEL_PATH=./models/embedding/all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'2. Set SKIP_EMBEDDING_LOAD=false to enable the model'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'3. Restart your backend server'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'To switch back to Qwen-4B for deployment:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   EMBEDDING_DEFAULT=qwen_4b'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   EMBEDDING_MODEL_PATH=./models/embedding/qwen_4b'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Error downloading model: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+download_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

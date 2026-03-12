@@ -1,0 +1,1344 @@
+## internal_vcs.py
+"\nGrace Internal Version Control System\n======================================\nReplaces Git/GitHub — no third-party dependency.\n\nFully async using run_in_executor for DB operations (matching\nGrace's established pattern: async handlers, sync SQLAlchemy).\n\nEvery file change is tracked as a FileVersion record in the database.\nSupports: snapshots, diffs, branches, rollback, history, merge.\nGrace uses this to manage code for all tenant AI workspaces.\n"
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+difflib
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+List
+Any
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+desc
+●●●●●● 3mm □△○
+models.workspace_models
+●●●●●● 2mm □△○
+Workspace
+Branch
+FileVersion
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+InternalVCS
+"\n    Grace's self-contained version control system.\n    No Git, no GitHub — pure database-backed VCS.\n    All public methods are async.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+workspace_id
+●●●●●● 1mm □
+_get_workspace
+●●●●●● 1mm □△
+self
+session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Workspace
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ws
+ValueError
+●●●●●● 1mm □△
+"Workspace '"
+●●●●●● 3mm △
+"' not found"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ws
+Workspace
+●●●●●● 1mm □
+_get_or_create_default_branch
+●●●●●● 1mm □△
+self
+session
+workspace
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Workspace
+branch
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch
+branch
+●●●●●● 1mm □
+Branch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+branch
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+branch
+Branch
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+''
+'grace'
+●●●●●● 2mm □
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+file_path
+content
+message
+author
+branch_name
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+50
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+file_path
+branch_name
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+file_path
+version_a
+version_b
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'grace'
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+file_path
+target_version
+author
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+file_path
+version
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'main'
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+name
+from_branch
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+branch_name
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+''
+''
+'grace'
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+directory_path
+message
+author
+extensions
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_snapshot_sync
+●●●●●● 1mm □△
+self
+file_path
+content
+message
+author
+branch_name
+genesis_key_id
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+'utf-8'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch_name
+branch
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch
+ValueError
+●●●●●● 1mm □△
+"Branch '"
+branch_name
+"' not found"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+branch
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 2mm □△
+prev
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+desc
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prev
+prev
+content_hash
+●●●●●● 3mm ○
+'status'
+'file_path'
+'version'
+'content_hash'
+'unchanged'
+file_path
+prev
+content_hash
+version_number
+●●●●●● 1mm □
+prev
+prev
+●●●●●● 3mm ○
+1
+1
+old_content
+●●●●●● 1mm □
+prev
+prev
+''
+diff_text
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+old_content
+content
+file_path
+●●●●●● 2mm □△
+fv
+●●●●●● 1mm □
+FileVersion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+fv
+●●●●●● 2mm □△
+branch
+●●●●●● 1mm □
+fv
+ws
+●●●●●● 1mm □
+ws
+0
+●●●●●● 3mm ○
+1
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[VCS] '
+●●●●●● 3mm △
+'/'
+file_path
+' → v'
+version_number
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'file_path'
+'version'
+'content_hash'
+'diff_lines'
+'branch'
+'version_id'
+'created'
+file_path
+version_number
+content_hash
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+diff_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+branch
+fv
+●●●●●● 1mm □
+_history_sync
+●●●●●● 1mm □△
+self
+file_path
+branch_name
+limit
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch_name
+branch
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+versions
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+desc
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'version'
+'content_hash'
+'content_size'
+'operation'
+'message'
+'author'
+'created_at'
+'version_id'
+v
+v
+v
+v
+v
+v
+v
+v
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+v
+v
+versions
+●●●●●● 1mm □
+_diff_sync
+●●●●●● 1mm □△
+self
+file_path
+version_a
+version_b
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+va
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vb
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+va
+vb
+●●●●●● 3mm ○
+'error'
+'Version not found'
+diff_text
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+va
+''
+vb
+''
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_path'
+'from_version'
+'to_version'
+'diff'
+'lines_changed'
+file_path
+version_a
+version_b
+diff_text
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+l
+l
+diff_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+l
+●●●●●● 1mm □△
+'+'
+'-'
+●●●●●● 2mm □△
+l
+●●●●●● 1mm □△
+'+++'
+'---'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_rollback_sync
+●●●●●● 1mm □△
+self
+file_path
+target_version
+author
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+target
+●●●●●● 3mm ○
+'error'
+'Version '
+target_version
+' not found for '
+file_path
+content
+●●●●●● 1mm □
+target
+''
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+content
+'Rollback to v'
+target_version
+author
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+result
+'rollback_from'
+●●●●●● 1mm □
+target_version
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+_get_content_sync
+●●●●●● 1mm □△
+self
+file_path
+version
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fv
+●●●●●● 1mm □
+version
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+q
+●●●●●● 1mm □△
+desc
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fv
+●●●●●● 3mm ○
+'error'
+'File not found in VCS'
+●●●●●● 3mm ○
+'file_path'
+'version'
+'content'
+'content_hash'
+'author'
+'message'
+'created_at'
+file_path
+fv
+fv
+fv
+fv
+fv
+fv
+fv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+_create_branch_sync
+●●●●●● 1mm □△
+self
+name
+from_branch
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+"Branch '"
+name
+"' already exists"
+parent
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parent
+●●●●●● 3mm ○
+'error'
+"Source branch '"
+from_branch
+"' not found"
+branch
+●●●●●● 1mm □
+Branch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+branch
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'branch'
+'from_branch'
+'branch_id'
+'status'
+name
+from_branch
+branch
+'created'
+●●●●●● 1mm □
+_list_branches_sync
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+branches
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'is_default'
+'is_active'
+'branch_id'
+b
+b
+b
+b
+b
+branches
+●●●●●● 1mm □
+_list_tracked_files_sync
+●●●●●● 1mm □△
+self
+branch_name
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+q
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+FileVersion
+func
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'latest_version'
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'last_modified'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch_name
+branch
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Branch
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch
+q
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+q
+●●●●●● 1mm □△
+FileVersion
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_path'
+'latest_version'
+'last_modified'
+f
+f
+f
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+files
+●●●●●● 1mm □
+_snapshot_directory_sync
+●●●●●● 1mm □△
+self
+directory_path
+message
+author
+extensions
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+ws
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+root_path
+●●●●●● 1mm □
+ws
+root
+●●●●●● 1mm □
+directory_path
+Path
+●●●●●● 1mm □△
+root_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+directory_path
+Path
+●●●●●● 1mm □△
+root_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+root
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Directory not found: '
+directory_path
+results
+●●●●●● 1mm □
+fp
+root
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fp
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+extensions
+fp
+extensions
+rel
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+fp
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+root_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+rel
+content
+message
+'Directory snapshot: '
+directory_path
+author
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+results
+●●●●●● 1mm □△
+'file_path'
+'status'
+'error'
+rel
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'directory'
+'total_files'
+'created'
+'unchanged'
+'errors'
+directory_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'created'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'unchanged'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'error'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compute_diff
+●●●●●● 1mm □△
+old
+new
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+''
+●●●●●● 1mm □△
+difflib
+●●●●●● 1mm □△
+old
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+''
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+_create_workspace_sync
+workspace_id
+name
+root_path
+owner_id
+description
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □△
+_executor
+_list_workspaces_sync
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_create_workspace_sync
+●●●●●● 1mm □△
+workspace_id
+name
+root_path
+owner_id
+description
+config
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Workspace
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+"Workspace '"
+workspace_id
+"' already exists"
+root
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+root_path
+●●●●●● 2mm □△
+root
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 3mm □△
+'knowledge_base'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+root
+●●●●●● 3mm □△
+'data'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ws
+●●●●●● 1mm □
+Workspace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ws
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+branch
+●●●●●● 1mm □
+Branch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+branch
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"[Workspace] Created '"
+workspace_id
+"' at "
+root_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'workspace_id'
+'name'
+'root_path'
+'default_branch'
+'status'
+workspace_id
+name
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+root
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'main'
+'created'
+●●●●●● 1mm □
+_list_workspaces_sync
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+workspaces
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+Workspace
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'workspace_id'
+'name'
+'description'
+'root_path'
+'total_files'
+'total_versions'
+'total_pipeline_runs'
+'created_at'
+ws
+ws
+ws
+ws
+ws
+0
+ws
+0
+ws
+0
+ws
+ws
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ws
+workspaces
+●●●●●● 1mm □
+get_vcs
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+InternalVCS
+●●●●●● 1mm □△
+workspace_id
+●●●●●● 2mm □△
+InternalVCS

@@ -40,43 +40,14 @@ logger = logging.getLogger(__name__)
 _started = False
 _started_lock = threading.Lock()
 
-def _get_service_map():
-    try:
-        from settings import settings
-        from urllib.parse import urlparse
-        
-        # Qdrant
-        q_host, q_port = settings.QDRANT_HOST or "localhost", settings.QDRANT_PORT or 6333
-        if getattr(settings, "QDRANT_URL", None):
-            p = urlparse(settings.QDRANT_URL)
-            q_host = p.hostname or q_host
-            q_port = p.port or (443 if p.scheme == "https" else 6333)
-            
-        # Postgres
-        db_host = settings.DATABASE_HOST or "localhost"
-        db_port = settings.DATABASE_PORT or 5432
-        
-        # Ollama
-        o_host, o_port = "localhost", 11434
-        if getattr(settings, "OLLAMA_URL", None):
-            p = urlparse(settings.OLLAMA_URL)
-            o_host = p.hostname or "localhost"
-            o_port = p.port or 11434
-            
-        return [
-            (db_host, db_port, "PostgreSQL"),
-            (q_host, q_port, "Qdrant"),
-            (o_host, o_port, "Ollama"),
-            ("localhost", 8000, "GraceAPI"),
-        ]
-    except Exception as e:
-        logger.debug(f"[NETWORK-PROBE] Failed to parse dynamic service map: {e}")
-        return [
-            ("localhost", 5432,  "PostgreSQL"),
-            ("localhost", 6333,  "Qdrant"),
-            ("localhost", 11434, "Ollama"),
-            ("localhost", 8000,  "GraceAPI"),
-        ]
+# Grace's critical service map: (host, port, service_name)
+_SERVICE_MAP = [
+    ("localhost", 5432,  "PostgreSQL"),
+    ("localhost", 6333,  "Qdrant"),
+    ("localhost", 11434, "Ollama"),
+    ("localhost", 6379,  "Redis"),
+    ("localhost", 8000,  "GraceAPI"),
+]
 _PROBE_INTERVAL_S = 60   # probe every 60 seconds
 _PROBE_TIMEOUT_S  = 3    # 3s per service probe
 
@@ -189,7 +160,7 @@ def _network_probe_loop() -> None:
         except Exception:
             interval = _PROBE_INTERVAL_S
 
-        for host, port, service in _get_service_map():
+        for host, port, service in _SERVICE_MAP:
             reachable = _probe_tcp(host, port)
             key = f"{service}:{port}"
 
@@ -377,9 +348,8 @@ def _route_mirror_pattern(pattern: dict) -> None:
         logger.debug("[MIRROR-OBSERVER] Pattern routing error (%s): %s", pattern_type, e)
 
 
-def _on_rate_limited(event: Any) -> None:
+def _on_rate_limited(data: Dict) -> None:
     """Rate limit hit — log for ops visibility, future circuit breaker."""
-    data = getattr(event, 'data', event)
     service = data.get("service", "unknown")
     logger.warning(
         "[TRIGGER-FABRIC] ⏸ Rate limited on %s — backing off 60s", service
@@ -398,19 +368,17 @@ def _on_rate_limited(event: Any) -> None:
         pass
 
 
-def _on_network_healed(event: Any) -> None:
+def _on_network_healed(data: Dict) -> None:
     """Network heal completed — log for ops."""
-    data = getattr(event, 'data', event)
     fixes = data.get("fixes", [])
     logger.info("[TRIGGER-FABRIC] 🌐 Network healed: %s", " | ".join(str(f) for f in fixes))
 
 
-def _on_probe_result(event: Any) -> None:
+def _on_probe_result(data: Dict) -> None:
     """
     Probe sweep result arrived (probe.light.result / probe.deep.result).
     Route any FAIL checks into the error pipeline for self-healing.
     """
-    data = getattr(event, 'data', event)
     failed = data.get("failed", 0)
     results = data.get("results", [])
 
@@ -446,17 +414,13 @@ def _wire_fastapi_middleware(app) -> None:
                 try:
                     return await call_next(request)
                 except Exception as exc:
-                    endpoint = request.scope.get("endpoint")
-                    module = getattr(endpoint, "__module__", "api") if endpoint else "api"
-                    function = getattr(endpoint, "__name__", str(request.url.path)) if endpoint else str(request.url.path)
-
                     # Non-blocking: route to error pipeline in background
                     threading.Thread(
                         target=_route_exception,
                         args=(exc, {
                             "url": str(request.url),
                             "method": request.method,
-                        }, module, function),
+                        }, "api", str(request.url.path)),
                         daemon=True,
                     ).start()
                     raise  # re-raise so FastAPI/Starlette handles the response
@@ -521,9 +485,8 @@ def _submit_code_action(problem: dict, action: dict) -> None:
 
 # ── Event handlers ────────────────────────────────────────────────────────
 
-def _on_llm_error(event: Any) -> None:
+def _on_llm_error(data: Dict) -> None:
     """LLM call failed → report to error pipeline for healing."""
-    data = getattr(event, 'data', event)
     try:
         _route_exception(
             Exception(f"LLM error from {data.get('provider', 'unknown')}: {data.get('error', '')}"),
@@ -535,9 +498,8 @@ def _on_llm_error(event: Any) -> None:
         pass
 
 
-def _on_hallucination(event: Any) -> None:
+def _on_hallucination(data: Dict) -> None:
     """Hallucination detected → learning trigger: record as negative example."""
-    data = getattr(event, 'data', event)
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
@@ -563,9 +525,8 @@ def _on_hallucination(event: Any) -> None:
         logger.debug("[TRIGGER-FABRIC] Hallucination error: %s", e)
 
 
-def _on_knowledge_gap(event: Any) -> None:
+def _on_knowledge_gap(data: Dict) -> None:
     """Knowledge gap detected → submit coding task to generate missing knowledge."""
-    data = getattr(event, 'data', event)
     try:
         from api.autonomous_loop_api import submit_coding_task
         gap = data.get("gap", data.get("topic", "unknown knowledge gap"))
@@ -585,9 +546,8 @@ def _on_knowledge_gap(event: Any) -> None:
         pass
 
 
-def _on_repeated_error(event: Any) -> None:
+def _on_repeated_error(data: Dict) -> None:
     """Same error pattern repeated — escalate priority."""
-    data = getattr(event, 'data', event)
     try:
         from api.autonomous_loop_api import submit_coding_task
         pattern = data.get("pattern", "unknown")
@@ -607,9 +567,8 @@ def _on_repeated_error(event: Any) -> None:
         pass
 
 
-def _on_fix_applied(event: Any) -> None:
+def _on_fix_applied(data: Dict) -> None:
     """Fix successfully applied → immediately reward in learning system."""
-    data = getattr(event, 'data', event)
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
@@ -625,9 +584,8 @@ def _on_fix_applied(event: Any) -> None:
         logger.debug("[TRIGGER-FABRIC] Fix applied error: %s", e)
 
 
-def _on_verification_rejected(event: Any) -> None:
+def _on_verification_rejected(data: Dict) -> None:
     """Verification pass rejected code → record as training signal."""
-    data = getattr(event, 'data', event)
     try:
         import json
         from cognitive.unified_memory import get_unified_memory

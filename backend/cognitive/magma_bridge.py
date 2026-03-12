@@ -43,6 +43,14 @@ def _get_magma():
 def is_available() -> bool:
     return _get_magma() is not None
 
+def get_magma_graphs():
+    """Get the Magma Relation Graphs (Causal, Semantic, Temporal, Entity)."""
+    m = _get_magma()
+    if m and hasattr(m, 'graphs'):
+        return m.graphs
+    if m and hasattr(m, 'memory') and hasattr(m.memory, 'graphs'):
+        return m.memory.graphs
+    raise RuntimeError("Magma graphs not available")
 
 # ── Query ──────────────────────────────────────────────────────────────
 

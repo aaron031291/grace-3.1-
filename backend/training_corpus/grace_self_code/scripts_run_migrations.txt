@@ -1,0 +1,452 @@
+## run_migrations.py
+'\nRun all database migrations for Grace.\nThis script initializes the database connection and creates all necessary tables.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+inspect
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+User
+Conversation
+Embedding
+Chat
+Message
+ChatHistory
+Document
+DocumentChunk
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+FixSuggestion
+GenesisKeyArchive
+UserProfile
+genesis_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Genesis models not available: '
+e
+●●●●●● 2mm □△
+genesis_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianTag
+DocumentTag
+DocumentRelationship
+LibrarianRule
+LibrarianAction
+LibrarianAudit
+librarian_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Librarian models not available: '
+e
+●●●●●● 2mm □△
+librarian_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+PerformanceBaseline
+DriftAlert
+OperationReplay
+SystemState
+telemetry_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Telemetry models not available: '
+e
+●●●●●● 2mm □△
+telemetry_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+models.query_intelligence_models
+●●●●●● 2mm □△○
+QueryHandlingLog
+KnowledgeGap
+ContextSubmission
+query_intelligence_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Query intelligence models not available: '
+e
+●●●●●● 2mm □△
+query_intelligence_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+scraping.models
+●●●●●● 2mm □△○
+ScrapingJob
+ScrapedPage
+scraping_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Scraping models not available: '
+e
+●●●●●● 2mm □△
+scraping_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+models.workspace_models
+●●●●●● 2mm □△○
+Workspace
+Branch
+FileVersion
+PipelineRun
+workspace_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Workspace models not available: '
+e
+●●●●●● 2mm □△
+workspace_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+models.memory_graph_models
+●●●●●● 2mm □△○
+GraphNodeRecord
+GraphEdgeRecord
+UserThinkingPattern
+UserInteractionLog
+memory_graph_models_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Warning: Memory graph models not available: '
+e
+●●●●●● 2mm □△
+memory_graph_models_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+run_all_migrations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all database migrations.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Grace Database Migration Script'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n1. Initializing database connection...'
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Database: '
+config
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Path: '
+config
+'sqlite'
+config
+config
+':'
+config
+'/'
+config
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n2. Checking existing tables...'
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+existing_tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Found '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+existing_tables
+●●●●●● 2mm □△
+' existing tables:'
+●●●●●● 2mm □△
+table
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+existing_tables
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      - '
+table
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n3. Creating/updating all tables...'
+●●●●●● 2mm □△
+BaseModel
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n4. Verifying tables...'
+●●●●●● 2mm □△
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+all_tables
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_tables
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+all_tables
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+existing_tables
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_tables
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Created '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+new_tables
+●●●●●● 2mm □△
+' new tables:'
+●●●●●● 2mm □△
+table
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+new_tables
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'      + '
+table
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   No new tables created (all tables already exist)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n   Total tables in database: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_tables
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n5. Model Availability:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   [OK] Core models: Available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+genesis_models_available
+'OK'
+'SKIP'
+'] Genesis Key models: '
+genesis_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+librarian_models_available
+'OK'
+'SKIP'
+'] Librarian models: '
+librarian_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+telemetry_models_available
+'OK'
+'SKIP'
+'] Telemetry models: '
+telemetry_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+query_intelligence_models_available
+'OK'
+'SKIP'
+'] Query Intelligence models: '
+query_intelligence_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+scraping_models_available
+'OK'
+'SKIP'
+'] Scraping models: '
+scraping_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+workspace_models_available
+'OK'
+'SKIP'
+'] Workspace models: '
+workspace_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   ['
+memory_graph_models_available
+'OK'
+'SKIP'
+'] Memory Graph models: '
+memory_graph_models_available
+'Available'
+'Not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Migration Complete!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+run_all_migrations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[ERROR] Migration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△

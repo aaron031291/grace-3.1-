@@ -1,0 +1,624 @@
+## middleware.py
+'\nSecurity Middleware for GRACE\n\nProvides:\n- Security headers middleware\n- Rate limiting middleware\n'
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Callable
+Optional
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+starlette.middleware.base
+●●●●●● 2mm □△○
+BaseHTTPMiddleware
+●●●●●● 3mm □△○
+starlette.requests
+●●●●●● 2mm □△○
+Request
+●●●●●● 3mm □△○
+starlette.responses
+●●●●●● 2mm □△○
+Response
+JSONResponse
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+HTTPException
+●●●●●● 3mm □△○
+config
+●●●●●● 2mm □△○
+get_security_config
+●●●●●● 3mm □△○
+logging
+●●●●●● 2mm □△○
+log_security_event
+●●●●●● 2mm △
+SecurityHeadersMiddleware
+●●●●●● 3mm □△
+BaseHTTPMiddleware
+BaseHTTPMiddleware
+'\n    Adds security headers to all responses.\n\n    Headers added:\n    - Content-Security-Policy\n    - X-Content-Type-Options\n    - X-Frame-Options\n    - X-XSS-Protection\n    - Referrer-Policy\n    - Permissions-Policy\n    - Strict-Transport-Security (if enabled)\n    '
+Request
+●●●●●● 1mm △○
+config
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+response
+'X-Content-Type-Options'
+●●●●●● 1mm □
+config
+response
+'X-Frame-Options'
+●●●●●● 1mm □
+config
+response
+'X-XSS-Protection'
+●●●●●● 1mm □
+config
+response
+'Referrer-Policy'
+●●●●●● 1mm □
+config
+response
+'Permissions-Policy'
+●●●●●● 1mm □
+config
+csp
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+csp
+response
+'Content-Security-Policy'
+●●●●●● 1mm □
+csp
+hsts
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+hsts
+config
+config
+response
+'Strict-Transport-Security'
+●●●●●● 1mm □
+hsts
+●●●●●● 2mm □
+'server'
+response
+response
+'server'
+●●●●●● 3mm ○
+response
+Response
+●●●●●● 2mm △
+RateLimitMiddleware
+●●●●●● 3mm □△
+BaseHTTPMiddleware
+BaseHTTPMiddleware
+'\n    Rate limiting middleware using a sliding window algorithm.\n\n    Features:\n    - Per-IP rate limiting\n    - Different limits for different endpoints\n    - Burst allowance\n    - Rate limit headers in response\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+app
+default_limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'100/minute'
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+default_limit
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'/auth/'
+'/login'
+'/upload'
+'/ingest'
+'/chat'
+'/grace/'
+'/prompt'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_parse_limit
+●●●●●● 1mm □△
+self
+limit_str
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"Parse rate limit string like '100/minute' into (count, seconds)."
+count
+period
+●●●●●● 1mm □
+limit_str
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+count
+●●●●●● 2mm □△
+period_seconds
+●●●●●● 1mm □
+'second'
+'minute'
+'hour'
+'day'
+1
+60
+3600
+86400
+seconds
+●●●●●● 1mm □
+period_seconds
+●●●●●● 1mm □△
+period
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+seconds
+Exception
+●●●●●● 3mm ○
+100
+60
+●●●●●● 3mm □△
+●●●●●● 1mm □
+_get_client_identifier
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+Request
+'Get unique identifier for the client (IP + optional user ID).'
+forwarded_for
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'X-Forwarded-For'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+forwarded_for
+ip
+●●●●●● 1mm □
+forwarded_for
+●●●●●● 1mm □△
+','
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ip
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+'unknown'
+user_id
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'genesis_id'
+''
+●●●●●● 2mm □△
+identifier
+●●●●●● 1mm □
+ip
+':'
+user_id
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+identifier
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_limit_for_path
+●●●●●● 1mm □△
+self
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the rate limit for a specific path.'
+pattern
+limit
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern
+path
+●●●●●● 3mm ○
+limit
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □
+_is_rate_limited
+●●●●●● 1mm □△
+self
+identifier
+path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Check if the client is rate limited.\n\n        Returns:\n            (is_limited, remaining, reset_time)\n        '
+now
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+limit_count
+window_seconds
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+identifier
+':'
+path
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+ts
+ts
+●●●●●● 3mm △
+key
+now
+●●●●●● 1mm □△
+ts
+window_seconds
+current_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+remaining
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+limit_count
+●●●●●● 1mm □△
+current_count
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+key
+oldest
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 2mm □△
+reset_time
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+oldest
+●●●●●● 3mm ○
+window_seconds
+●●●●●● 1mm □△
+now
+●●●●●● 2mm □△
+●●●●●● 3mm □
+reset_time
+●●●●●● 1mm □
+window_seconds
+●●●●●● 2mm □
+current_count
+limit_count
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+remaining
+reset_time
+●●●●●● 3mm △
+key
+●●●●●● 1mm □△
+now
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+remaining
+●●●●●● 1mm □△
+1
+reset_time
+●●●●●● 3mm □△
+Request
+●●●●●● 1mm △○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+●●●●●● 3mm □△
+skip_paths
+●●●●●● 1mm □
+'/health'
+'/docs'
+'/openapi.json'
+'/favicon.ico'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □△
+skip
+●●●●●● 2mm □△
+skip
+skip_paths
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+identifier
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+is_limited
+remaining
+reset_time
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+identifier
+path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_limited
+●●●●●● 2mm □
+●●●●●● 3mm △
+log_security_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+JSONResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+limit_count
+_
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+response
+'X-RateLimit-Limit'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+limit_count
+●●●●●● 2mm □△
+response
+'X-RateLimit-Remaining'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+remaining
+●●●●●● 2mm □△
+response
+'X-RateLimit-Reset'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+reset_time
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+Response
+●●●●●● 2mm △
+RequestValidationMiddleware
+●●●●●● 3mm □△
+BaseHTTPMiddleware
+BaseHTTPMiddleware
+'\n    Validates incoming requests for security issues.\n\n    Checks:\n    - Request size limits\n    - Suspicious patterns in URLs\n    - Content-Type validation\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+app
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_security_config
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'../'
+'..\\'
+'<script'
+'javascript:'
+'data:text/html'
+'SELECT%20'
+'UNION%20'
+'INSERT%20'
+'DELETE%20'
+'DROP%20'
+'%00'
+Request
+●●●●●● 1mm △○
+url
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+log_security_event
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+JSONResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△
+'POST'
+'PUT'
+'PATCH'
+content_length
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'content-length'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content_length
+path
+●●●●●● 1mm □
+●●●●●● 3mm □△
+●●●●●● 2mm □
+path
+●●●●●● 1mm □△
+'/api/upload/chunk'
+●●●●●● 2mm □△
+max_size
+●●●●●● 1mm □
+60
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 3mm □
+max_size
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+content_length
+●●●●●● 2mm □△
+max_size
+●●●●●● 3mm ○
+JSONResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+call_next
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+Response

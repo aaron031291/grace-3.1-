@@ -1,0 +1,240 @@
+## query_llms_full_system.py
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+glob
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_qwen_coder
+get_kimi_client
+get_qwen_reasoner
+●●●●●● 1mm □
+get_system_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Gather core architectural files to provide full system context.'
+context_files
+●●●●●● 1mm □
+'backend/self_healing/error_pipeline.py'
+'backend/cognitive/unified_memory.py'
+'backend/cognitive/continuous_learning_orchestrator.py'
+'backend/verification/deterministic_vvt_pipeline.py'
+'backend/api/autonomous_loop_api.py'
+context
+●●●●●● 1mm □
+'=== GRACE CORE ARCHITECTURE ===\n\n'
+base_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rel_path
+context_files
+full_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+base_dir
+rel_path
+●●●●●● 1mm □△
+'/'
+os
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+full_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+full_path
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+'--- File: '
+rel_path
+' ---\n'
+content
+3000
+'...\n\n'
+●●●●●● 3mm □
+context
+'--- File: '
+rel_path
+' (Not Found) ---\n\n'
+●●●●●● 3mm ○
+context
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'query_output.txt'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+'w'
+●●●●●● 2mm □△
+out_f
+system_context
+●●●●●● 1mm □
+get_system_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+"You are a core cognitive engine inside the Grace AGI architecture. You have been granted access to Grace's core system source code, memory systems, self-healing pipelines, and self-learning orchestrator. Analyze the architecture provided. Be concise, technical, and highly analytical."
+prompt
+●●●●●● 1mm □
+system_context
+"\n\nQUESTION FROM THE CREATOR:\nBased on your understanding of the whole system (Memory, Self-Healing, Self-Learning, and the VVT pipeline), what are your thoughts on the system as a whole? Specifically, how do we safely give Grace 'continual context evolution' without destabilizing her?"
+out_f
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+'QWEN 2.5 CODER (Reasoning Engine)...\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+qwen
+●●●●●● 1mm □
+get_qwen_coder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+response
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+out_f
+●●●●●● 1mm □△
+'Qwen error: '
+e
+'\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+'KIMI K2.5 (Cloud Context Engine)...\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kimi
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out_f
+●●●●●● 1mm □△
+response
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+out_f
+●●●●●● 1mm □△
+'Kimi error: '
+e
+'\n'
+●●●●●● 2mm □△
+Exception
+out_f
+●●●●●● 1mm □△
+'Fatal script error: '
+e
+'\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

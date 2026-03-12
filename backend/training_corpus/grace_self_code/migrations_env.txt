@@ -1,0 +1,183 @@
+## env.py
+●●●●●● 3mm □△○
+logging.config
+●●●●●● 2mm □△○
+fileConfig
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+engine_from_config
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+pool
+●●●●●● 3mm □△○
+alembic
+●●●●●● 2mm □△○
+context
+config
+●●●●●● 1mm □
+context
+●●●●●● 2mm □
+config
+●●●●●● 2mm □
+fileConfig
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+Base
+●●●●●● 2mm □△○
+models.database_models
+●●●●●● 2mm □△○
+models.notion_models
+●●●●●● 3mm □△○
+models.telemetry_models
+●●●●●● 2mm □△○
+OperationLog
+PerformanceBaseline
+DriftAlert
+OperationReplay
+SystemState
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+FixSuggestion
+GenesisKeyArchive
+UserProfile
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianTag
+DocumentTag
+DocumentRelationship
+LibrarianRule
+LibrarianAction
+LibrarianAudit
+target_metadata
+●●●●●● 1mm □
+Base
+●●●●●● 1mm □
+run_migrations_offline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Run migrations in 'offline' mode.\n\n    This configures the context with just a URL\n    and not an Engine, though an Engine is acceptable\n    here as well.  By skipping the Engine creation\n    we don't even need a DBAPI to be available.\n\n    Calls to context.execute() here emit the given string to the\n    script output.\n\n    "
+url
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+'sqlalchemy.url'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+run_migrations_online
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"Run migrations in 'online' mode.\n\n    In this scenario we need to create an Engine\n    and associate a connection with the context.\n\n    "
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+●●●●●● 2mm □△○
+os
+env_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'.env'
+●●●●●● 2mm □△
+load_dotenv
+●●●●●● 1mm □△
+env_path
+●●●●●● 2mm □△
+config_obj
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn_url
+●●●●●● 1mm □
+config_obj
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □△
+'sqlalchemy.url'
+conn_url
+●●●●●● 2mm □△
+connectable
+●●●●●● 1mm □
+engine_from_config
+●●●●●● 1mm □△
+config
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connectable
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connection
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+run_migrations_offline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+run_migrations_online
+●●●●●● 1mm □△
+●●●●●● 2mm □△

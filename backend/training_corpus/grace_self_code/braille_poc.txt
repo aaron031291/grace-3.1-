@@ -1,0 +1,395 @@
+## braille_poc.py
+●●●●●● 2mm □△○
+logging
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'BrailleCompiler'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BrailleDictionary
+DOMAIN_DATABASE
+●●●●●● 1mm □
+1
+DOMAIN_API
+●●●●●● 1mm □
+2
+DOMAIN_MEMORY
+●●●●●● 1mm □
+4
+INTENT_START
+●●●●●● 1mm □
+16
+INTENT_DELETE
+●●●●●● 1mm □
+32
+INTENT_QUERY
+●●●●●● 1mm □
+64
+STATE_FAILED
+●●●●●● 1mm □
+256
+STATE_IMMUTABLE
+●●●●●● 1mm □
+512
+STATE_ACTIVE
+●●●●●● 1mm □
+1024
+PRIV_ADMIN
+●●●●●● 1mm □
+4096
+PRIV_USER
+●●●●●● 1mm □
+8192
+●●●●●● 1mm □
+compile_schema
+●●●●●● 1mm □△
+cls
+json_intent
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n        Takes structured JSON from the NLP wrapper and strictly compiles it \n        into a deterministic bitmask.\n        '
+bitmask
+●●●●●● 1mm □
+0
+domain
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'domain'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+domain
+'database'
+bitmask
+cls
+●●●●●● 1mm △
+domain
+'api'
+bitmask
+cls
+●●●●●● 2mm □
+domain
+'memory'
+bitmask
+cls
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown domain hallucinated: '
+domain
+●●●●●● 2mm □△
+intent
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'intent'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+intent
+'start'
+bitmask
+cls
+●●●●●● 1mm △
+intent
+'delete'
+bitmask
+cls
+●●●●●● 2mm □
+intent
+'query'
+bitmask
+cls
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown intent hallucinated: '
+intent
+●●●●●● 2mm □△
+state
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'target_state'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+state
+'failed'
+bitmask
+cls
+●●●●●● 1mm △
+state
+'immutable'
+bitmask
+cls
+●●●●●● 2mm □
+state
+'active'
+bitmask
+cls
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown state hallucinated: '
+state
+●●●●●● 2mm □△
+priv
+●●●●●● 1mm □
+json_intent
+●●●●●● 1mm □△
+'privilege'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+priv
+'admin'
+bitmask
+cls
+●●●●●● 1mm △
+priv
+'user'
+bitmask
+cls
+ValueError
+●●●●●● 1mm □△
+'Unknown privilege hallucinated: '
+priv
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+bitmask
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm △
+DeterministicTopologyGuard
+'\n    Replaces neural-network based contradiction detectors.\n    Runs classical bitwise math to prove if an action is topologically permitted.\n    '
+●●●●●● 1mm □
+validate_action
+●●●●●● 1mm □△
+compiled_bitmask
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n        Runs topological rules against the bitmask using geometric operations (AND/XOR).\n        If ANY rule yields a collision/violation, the system halts.\n        '
+forbidden_delete_immutable
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm ○
+BrailleDictionary
+●●●●●● 2mm □
+compiled_bitmask
+●●●●●● 3mm △
+forbidden_delete_immutable
+forbidden_delete_immutable
+logger
+●●●●●● 1mm □△
+'TOPOLOGY VIOLATED [Rule 1]: Cannot mathematical compose DELETE and IMMUTABLE. Token rejected.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+forbidden_user_db_modify
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm ○
+BrailleDictionary
+action_bits
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm ○
+BrailleDictionary
+has_user_db
+●●●●●● 1mm □
+compiled_bitmask
+●●●●●● 3mm △
+forbidden_user_db_modify
+forbidden_user_db_modify
+has_modify_action
+●●●●●● 1mm □
+compiled_bitmask
+●●●●●● 3mm △
+action_bits
+0
+●●●●●● 2mm □
+has_user_db
+has_modify_action
+logger
+●●●●●● 1mm □△
+'TOPOLOGY VIOLATED [Rule 2]: Mathematical collision between USER permission, DATABASE domain, and State Mutation.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'Topology Validated via Bitwise Geometry. Bitmask is executable: '
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+compiled_bitmask
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=================================================='
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+' BRAILLE DETERMINISTIC ENGINE - POC'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'==================================================\n'
+●●●●●● 2mm □△
+llm_json_output_A
+●●●●●● 1mm □
+'domain'
+'intent'
+'target_state'
+'privilege'
+'database'
+'start'
+'failed'
+'admin'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- SCENARIO A: Valid Action ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'LLM JSON Edge Input: '
+llm_json_output_A
+●●●●●● 2mm □△
+mask_A
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm □△
+llm_json_output_A
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Compiled Spatial Bitmask: '
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+mask_A
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_valid_A
+●●●●●● 1mm □
+DeterministicTopologyGuard
+●●●●●● 1mm □△
+mask_A
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid_A
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> ENGINE INSTRUCTION: [EXECUTE PROCEDURE]\n'
+●●●●●● 2mm □△
+llm_json_output_B
+●●●●●● 1mm □
+'domain'
+'intent'
+'target_state'
+'privilege'
+'memory'
+'delete'
+'immutable'
+'admin'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- SCENARIO B: LLM Hallucination/Invalid Physics ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'LLM JSON Edge Input: '
+llm_json_output_B
+●●●●●● 2mm □△
+mask_B
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm □△
+llm_json_output_B
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Compiled Spatial Bitmask: '
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+mask_B
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_valid_B
+●●●●●● 1mm □
+DeterministicTopologyGuard
+●●●●●● 1mm □△
+mask_B
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid_B
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> ENGINE INSTRUCTION: [HARD HALT - REJECT HALLUCINATION]\n'
+●●●●●● 2mm □△
+llm_json_output_C
+●●●●●● 1mm □
+'domain'
+'intent'
+'target_state'
+'privilege'
+'database'
+'delete'
+'failed'
+'user'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'--- SCENARIO C: Privilege Mathematics ---'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'LLM JSON Edge Input: '
+llm_json_output_C
+●●●●●● 2mm □△
+mask_C
+●●●●●● 1mm □
+BrailleDictionary
+●●●●●● 1mm □△
+llm_json_output_C
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Compiled Spatial Bitmask: '
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+mask_C
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_valid_C
+●●●●●● 1mm □
+DeterministicTopologyGuard
+●●●●●● 1mm □△
+mask_C
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_valid_C
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-> ENGINE INSTRUCTION: [HARD HALT - NEURO-SYMBOLIC REJECT]\n'
+●●●●●● 2mm □△

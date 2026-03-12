@@ -1,0 +1,13 @@
+## __init__.py
+"\nGrace Agent Framework\n\nThe complete software engineering agent that combines:\n- Grace's cognitive systems (RAG, memory, OODA)\n- Execution capabilities (code, tests, git)\n- Learning from outcomes\n"
+●●●●●● 3mm □△○
+grace_agent
+●●●●●● 2mm □△○
+GraceAgent
+AgentConfig
+TaskResult
+__all__
+●●●●●● 1mm □
+'GraceAgent'
+'AgentConfig'
+'TaskResult'

@@ -1,0 +1,365 @@
+## audit_deployment.py
+'\nDeployment Audit Script\nVerifies system readiness for high-performance client deployment.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+load_dotenv
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+ImportError
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'❌ Critical Import Error: '
+e
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'AUDIT'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1] Environment Configuration'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Embedding Model: '
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Model Path: '
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • LLM Model: '
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  • Database: '
+settings
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Embedding model directory exists.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Embedding model directory MISSING at '
+settings
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Action: You need to download the model or update the path.'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_qola_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2] Ollama Integration (Mistral)'
+●●●●●● 2mm □△
+url
+●●●●●● 1mm □
+settings
+'/api/tags'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+models
+●●●●●● 1mm □
+m
+'name'
+m
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'models'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Ollama Connected. Available: '
+', '
+●●●●●● 1mm □△
+models
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+settings
+models
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ✅ Target model '"
+settings
+"' is pulled."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ❌ Target model '"
+settings
+"' NOT found in Ollama."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Ollama API returned '
+response
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Ollama Connection Failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_qdrant_compatibility
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3] Qdrant Compatibility'
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Qdrant Connected at '
+client
+':'
+client
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+vec_size
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'config'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'params'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'vectors'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'size'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vec_size
+vec_size
+●●●●●● 1mm □
+info
+●●●●●● 1mm □△
+'config'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'params'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'vectors'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'size'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ℹ️  Existing Collection '"
+settings
+"' has vector size: "
+vec_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❓ Verifying against expected model dimensions...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sentence_transformers
+●●●●●● 2mm □△○
+SentenceTransformer
+model
+●●●●●● 1mm □
+SentenceTransformer
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+expected_dim
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ℹ️  Model '"
+settings
+"' expects dimension: "
+expected_dim
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vec_size
+expected_dim
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ CRITICAL MISMATCH: Collection ('
+vec_size
+') != Model ('
+expected_dim
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Action: Delete Qdrant collection to allow re-initialization.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Dimensions match.'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ⚠️ Could not load model for verification: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ⚠️ Cannot verify dimensions (Model missing).'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ℹ️  Collection '"
+settings
+"' does not exist (Will be created)."
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Qdrant Connection Failed'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Qdrant Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=== Grace System Deployment Audit ==='
+●●●●●● 2mm □△
+check_environment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_qola_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_qdrant_compatibility
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n=== Audit Complete ==='
+●●●●●● 2mm □△

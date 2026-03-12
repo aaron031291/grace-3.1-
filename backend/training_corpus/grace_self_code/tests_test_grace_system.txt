@@ -1,0 +1,1175 @@
+## test_grace_system.py
+"\nGrace AI Comprehensive Test Suite — 4 levels with Genesis key tracking.\n\nEvery test creates a Genesis key tagged 'genesis_test' for provenance.\n\nLevel 1: SMOKE — is it alive?\nLevel 2: COMPONENT — does it work correctly?\nLevel 3: INTEGRATION — do components work together?\nLevel 4: END-TO-END — full system validation\n"
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+'SKIP_EMBEDDING_LOAD'
+'SKIP_QDRANT_CHECK'
+'SKIP_OLLAMA_CHECK'
+'SKIP_AUTO_INGESTION'
+'DISABLE_CONTINUOUS_LEARNING'
+'SKIP_LLM_CHECK'
+'true'
+'true'
+'true'
+'true'
+'true'
+'true'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+genesis_test
+●●●●●● 1mm □△
+name
+result
+detail
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+''
+'Track every test via Genesis key.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm △
+TestLevel1Smoke
+'Can we import and instantiate every critical module?'
+●●●●●● 1mm □
+test_app_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+app
+●●●●●● 2mm □△○
+app
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+30
+genesis_test
+●●●●●● 1mm □△
+'smoke_app_import'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+app
+●●●●●● 2mm □△
+' routes'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_brain_api_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+_build_directory
+d
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+8
+genesis_test
+●●●●●● 1mm □△
+'smoke_brain_import'
+●●●●●● 3mm □△○
+'8 domains'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_all_services_import
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.chat_service
+●●●●●● 2mm □△○
+list_chats
+●●●●●● 3mm □△○
+core.services.files_service
+●●●●●● 2mm □△○
+stats
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+get_persona
+●●●●●● 3mm □△○
+core.services.data_service
+●●●●●● 2mm □△○
+api_sources
+●●●●●● 3mm □△○
+core.services.tasks_service
+●●●●●● 2mm □△○
+time_sense
+●●●●●● 3mm □△○
+core.services.code_service
+●●●●●● 2mm □△○
+list_projects
+●●●●●● 3mm □△○
+core.services.system_service
+●●●●●● 2mm □△○
+get_runtime_status
+genesis_test
+●●●●●● 1mm □△
+'smoke_services_import'
+●●●●●● 3mm □△○
+'7 services'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_consensus_engine_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.engines.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+get_available_models
+genesis_test
+●●●●●● 1mm □△
+'smoke_consensus_import'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_memory_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.memory.unified_memory
+●●●●●● 2mm □△○
+UnifiedMemory
+LearningExample
+Episode
+genesis_test
+●●●●●● 1mm □△
+'smoke_memory_import'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_awareness_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.awareness.self_model
+●●●●●● 2mm □△○
+SelfModel
+TimeSense
+genesis_test
+●●●●●● 1mm □△
+'smoke_awareness_import'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_resilience_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+ErrorBoundary
+GracefulDegradation
+genesis_test
+●●●●●● 1mm □△
+'smoke_resilience_import'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_intelligence_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+AdaptiveTrust
+EpisodicMiner
+genesis_test
+●●●●●● 1mm □△
+'smoke_intelligence_import'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_security_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+check_rate_limit
+check_sql_injection
+backup_database
+genesis_test
+●●●●●● 1mm □△
+'smoke_security_import'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_genesis_tracker_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+genesis_test
+●●●●●● 1mm □△
+'smoke_genesis_tracker'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_deep_learning_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deep_learning
+●●●●●● 2mm □△○
+get_model
+TORCH_AVAILABLE
+genesis_test
+●●●●●● 1mm □△
+'smoke_deep_learning'
+●●●●●● 3mm □△○
+'torch='
+TORCH_AVAILABLE
+'yes'
+'no'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestLevel2Components
+'Does each component produce correct output?'
+●●●●●● 1mm □
+test_brain_returns_valid_response
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'tasks'
+'time_sense'
+●●●●●● 2mm □△
+r
+'ok'
+●●●●●● 3mm □△○
+'period'
+r
+'data'
+genesis_test
+●●●●●● 1mm □△
+'comp_brain_valid_response'
+●●●●●● 3mm □△○
+r
+'data'
+●●●●●● 1mm □△
+'period'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_brain_handles_invalid_action
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'chat'
+'nonexistent_action_xyz'
+●●●●●● 2mm □△
+r
+'ok'
+●●●●●● 1mm □
+'Unknown action'
+r
+'error'
+genesis_test
+●●●●●● 1mm □△
+'comp_brain_invalid_action'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_brain_all_domains_respond
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+_build_directory
+d
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+domain
+info
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+info
+'actions'
+0
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+domain
+action
+●●●●●● 2mm □△
+'ok'
+r
+'Domain '
+domain
+'/'
+action
+" missing 'ok'"
+genesis_test
+●●●●●● 1mm □△
+'comp_brain_'
+domain
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_files_service_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.files_service
+●●●●●● 2mm □△○
+stats
+s
+●●●●●● 1mm □
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_files'
+s
+●●●●●● 1mm □
+●●●●●● 1mm □△
+s
+'total_files'
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+genesis_test
+●●●●●● 1mm □△
+'comp_files_stats'
+●●●●●● 3mm □△○
+s
+'total_files'
+' files'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_govern_persona
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.services.govern_service
+●●●●●● 2mm □△○
+get_persona
+p
+●●●●●● 1mm □
+get_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_test
+●●●●●● 1mm □△
+'comp_govern_persona'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_time_sense_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'period'
+ctx
+'is_business_hours'
+ctx
+'hour'
+ctx
+genesis_test
+●●●●●● 1mm □△
+'comp_time_sense'
+●●●●●● 3mm □△○
+ctx
+'period'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_circuit_breaker_transitions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'test_comp'
+●●●●●● 2mm □△
+cb
+'closed'
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+_
+_
+●●●●●● 1mm □△
+Exception
+●●●●●● 1mm □△
+'x'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+cb
+'open'
+time
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □△
+'recovered'
+●●●●●● 2mm □△
+cb
+'closed'
+genesis_test
+●●●●●● 1mm □△
+'comp_circuit_breaker'
+●●●●●● 3mm □△○
+'closed→open→closed'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_error_boundary_contains
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+ErrorBoundary
+caught
+●●●●●● 1mm □
+●●●●●● 1mm □
+ErrorBoundary
+●●●●●● 1mm □△
+'test_comp'
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'should be caught'
+●●●●●● 2mm □△
+caught
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+caught
+genesis_test
+●●●●●● 1mm □△
+'comp_error_boundary'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rate_limiter
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+RateLimiter
+rl
+●●●●●● 1mm □
+RateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rl
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+rl
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+rl
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+rl
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+genesis_test
+●●●●●● 1mm □△
+'comp_rate_limiter'
+●●●●●● 3mm □△○
+'blocked on 4th'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_sql_injection_detection
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+check_sql_injection
+check_sql_injection
+●●●●●● 1mm □△
+"'; DROP TABLE users--"
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+check_sql_injection
+●●●●●● 1mm □△
+'normal text'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_sql_injection
+●●●●●● 1mm □△
+"' OR '1'='1"
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis_test
+●●●●●● 1mm □△
+'comp_sql_injection'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_adaptive_trust_update
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+old
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+AdaptiveTrust
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+'kimi'
+●●●●●● 2mm □△
+new
+old
+genesis_test
+●●●●●● 1mm □△
+'comp_adaptive_trust'
+●●●●●● 3mm □△○
+old
+'.3f'
+'→'
+new
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_json_serialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+_to_json_str
+_from_json_str
+original
+●●●●●● 1mm □
+'key'
+'nested'
+'value'
+'a'
+1
+serialized
+●●●●●● 1mm □
+_to_json_str
+●●●●●● 1mm □△
+original
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+serialized
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+restored
+●●●●●● 1mm □
+_from_json_str
+●●●●●● 1mm □△
+serialized
+●●●●●● 2mm □△
+restored
+'key'
+'value'
+restored
+'nested'
+'a'
+1
+genesis_test
+●●●●●● 1mm □△
+'comp_json_serialize'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_deep_learning_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.deep_learning
+●●●●●● 2mm □△○
+get_model
+TORCH_AVAILABLE
+●●●●●● 2mm □
+TORCH_AVAILABLE
+pytest
+●●●●●● 1mm □△
+'PyTorch not available'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+get_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+'key_type'
+'what'
+'who'
+'is_error'
+'tags'
+'ai_response'
+'test prediction'
+'test'
+●●●●●● 1mm □
+'test'
+●●●●●● 2mm □△
+'success_probability'
+prediction
+0
+prediction
+'success_probability'
+1
+genesis_test
+●●●●●● 1mm □△
+'comp_deep_learning'
+●●●●●● 3mm □△○
+'p='
+prediction
+'success_probability'
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestLevel3Integration
+'Do components actually work together end-to-end?'
+●●●●●● 1mm □
+test_brain_to_service_to_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Brain call → service function → returns real data.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'files'
+'stats'
+●●●●●● 2mm □△
+r
+'ok'
+●●●●●● 3mm □△○
+'total_files'
+r
+'data'
+genesis_test
+●●●●●● 1mm □△
+'integ_brain_service_data'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_cross_brain_orchestration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Multiple brains called in sequence.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+r1
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'tasks'
+'time_sense'
+●●●●●● 2mm □△
+r2
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'runtime'
+●●●●●● 2mm □△
+r1
+'ok'
+r2
+'ok'
+genesis_test
+●●●●●● 1mm □△
+'integ_cross_brain'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_consensus_updates_trust
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Consensus result feeds back into adaptive trust.'
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+AdaptiveTrust
+ConsensusTrustBridge
+old_trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+'opus'
+●●●●●● 2mm □△
+ConsensusTrustBridge
+●●●●●● 1mm □△
+'models_used'
+'agreements'
+'disagreements'
+'confidence'
+'individual_responses'
+'opus'
+'kimi'
+'point1'
+'point2'
+0.9
+●●●●●● 2mm □△
+new_trust
+●●●●●● 1mm □
+AdaptiveTrust
+●●●●●● 1mm □△
+'opus'
+●●●●●● 2mm □△
+new_trust
+old_trust
+genesis_test
+●●●●●● 1mm □△
+'integ_consensus_trust'
+●●●●●● 3mm □△○
+old_trust
+'.3f'
+'→'
+new_trust
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_genesis_key_mining
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Genesis key miner can analyze keys.'
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+GenesisKeyMiner
+miner
+●●●●●● 1mm □
+GenesisKeyMiner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+miner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'keys_analyzed'
+result
+genesis_test
+●●●●●● 1mm □△
+'integ_key_mining'
+●●●●●● 3mm □△○
+result
+'keys_analyzed'
+' keys'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_security_pipeline
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Rate limit → SQL check → sanitize → brain call.'
+●●●●●● 3mm □△○
+core.security
+●●●●●● 2mm □△○
+check_rate_limit
+check_sql_injection
+sanitize_string
+check_rate_limit
+●●●●●● 1mm □△
+'test_integ'
+'1.2.3.4'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+check_sql_injection
+●●●●●● 1mm □△
+"'; DROP TABLE--"
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+clean
+●●●●●● 1mm □
+sanitize_string
+●●●●●● 1mm □△
+'hello\x00world'
+●●●●●● 2mm □△
+'\x00'
+clean
+genesis_test
+●●●●●● 1mm □△
+'integ_security_pipeline'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_resilience_with_brain
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Circuit breaker wrapping a brain call.'
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+CircuitBreaker
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+cb
+●●●●●● 1mm □
+CircuitBreaker
+●●●●●● 1mm □△
+'integ_test'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cb
+●●●●●● 1mm □△
+call_brain
+●●●●●● 1mm □△
+'system'
+'runtime'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'ok'
+●●●●●● 3mm □△○
+genesis_test
+●●●●●● 1mm □△
+'integ_resilience_brain'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_dl_model_train_and_predict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Train model on fake data, then predict.'
+●●●●●● 3mm □△○
+core.deep_learning
+●●●●●● 2mm □△○
+get_model
+TORCH_AVAILABLE
+●●●●●● 2mm □
+TORCH_AVAILABLE
+pytest
+●●●●●● 1mm □△
+'PyTorch not available'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+get_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fake_keys
+●●●●●● 1mm □
+'key_type'
+'what'
+'who'
+'when'
+'is_error'
+'tags'
+'ai_response'
+'action '
+i
+'test'
+'2026-03-01T12:00:00'
+i
+●●●●●● 2mm □○
+5
+0
+'test'
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+train_result
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+fake_keys
+●●●●●● 2mm □△
+train_result
+'status'
+'trained'
+pred
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+fake_keys
+1
+●●●●●● 2mm □△
+'success_probability'
+pred
+genesis_test
+●●●●●● 1mm □△
+'integ_dl_train_predict'
+●●●●●● 3mm □△○
+'loss='
+train_result
+●●●●●● 1mm □△
+'loss'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestLevel4EndToEnd
+'Complete system validation — everything works together.'
+●●●●●● 1mm □
+test_full_brain_directory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'All 8 domains with 87+ actions accessible.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+_build_directory
+d
+●●●●●● 1mm □
+_build_directory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+8
+total
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+b
+'actions'
+●●●●●● 2mm □△
+b
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+total
+87
+genesis_test
+●●●●●● 1mm □△
+'e2e_brain_directory'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+' domains, '
+total
+' actions'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_full_system_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'System runtime, health, trust all accessible via brain.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+runtime
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'runtime'
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'trust'
+●●●●●● 2mm □△
+runtime
+'ok'
+trust
+'ok'
+genesis_test
+●●●●●● 1mm □△
+'e2e_system_status'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_full_intelligence_report
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Intelligence report mines keys, trust, episodes.'
+●●●●●● 3mm □△○
+core.intelligence
+●●●●●● 2mm □△○
+get_intelligence_report
+report
+●●●●●● 1mm □
+get_intelligence_report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'genesis_patterns'
+report
+'trust_state'
+report
+'episodic_analysis'
+report
+genesis_test
+●●●●●● 1mm □△
+'e2e_intelligence_report'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_full_verification_script
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'The verify_system.py script passes.'
+●●●●●● 2mm □△○
+subprocess
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+sys
+'scripts/verify_system.py'
+●●●●●● 2mm □△
+'ALL CHECKS PASSED'
+result
+genesis_test
+●●●●●● 1mm □△
+'e2e_verification_script'
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
