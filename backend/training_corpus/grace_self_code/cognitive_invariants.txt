@@ -1,0 +1,370 @@
+## invariants.py
+"\nInvariant Validator for Grace's Cognitive Engine.\n\nValidates that all 12 core invariants are satisfied before execution.\n"
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Optional
+TYPE_CHECKING
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □
+TYPE_CHECKING
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+DecisionContext
+●●●●●● 2mm △
+ValidationResult
+'Result of invariant validation.'
+is_valid
+●●●●●● 3mm △
+violations
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+dataclass
+●●●●●● 2mm △
+InvariantValidator
+'\n    Validates the 12 core cognitive invariants.\n\n    Ensures Grace operates within the defined cognitive constraints.\n    '
+●●●●●● 1mm □
+validate_all
+●●●●●● 1mm □△
+self
+context
+●●●●●● 2mm □△
+'DecisionContext'
+'\n        Validate all invariants for a decision context.\n\n        Args:\n            context: Decision context to validate\n\n        Returns:\n            ValidationResult with any violations\n        '
+violations
+●●●●●● 1mm □
+warnings
+●●●●●● 1mm □
+●●●●●● 2mm □
+context
+violations
+●●●●●● 1mm □△
+'Invariant 1: No problem statement (OODA Observe missing)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+violations
+●●●●●● 1mm □△
+'Invariant 1: No goal defined (OODA Orient missing)'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+violations
+●●●●●● 1mm □△
+'Invariant 2: Blocking unknowns prevent irreversible action. Unknowns: '
+e
+e
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+warnings
+●●●●●● 1mm □△
+'Invariant 2: Blocking unknowns exist but action is reversible. Unknowns: '
+e
+e
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Invariant 3: Irreversible action requires explicit justification'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Invariant 4: Safety-critical operations must be deterministic'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+'systemic'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+0
+violations
+●●●●●● 1mm □△
+'Invariant 5: Systemic changes require detailed success criteria'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'impact_analysis'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'Invariant 5: Systemic change without impact analysis'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+0
+●●●●●● 2mm □
+context
+0
+warnings
+●●●●●● 1mm □△
+'Invariant 7: Complexity without measured benefit'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+context
+context
+warnings
+●●●●●● 1mm □△
+'Invariant 7: Complexity ('
+context
+') exceeds benefit ('
+context
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Invariant 9: Recursion depth limit exceeded ('
+context
+' >= '
+context
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Invariant 9: Iteration limit exceeded ('
+context
+' >= '
+context
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+context
+0.5
+warnings
+●●●●●● 1mm □△
+'Invariant 10: Low future flexibility ('
+context
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+violations
+●●●●●● 1mm □△
+'Invariant 11: Decision freeze point exceeded - must decide now'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+0
+warnings
+●●●●●● 1mm □△
+'Invariant 12: No alternative paths considered (chess mode not used)'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+context
+●●●●●● 2mm □
+violations
+●●●●●● 1mm □△
+'Invariant 12: Alternative paths generated but none selected'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+ValidationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValidationResult
+●●●●●● 1mm □
+validate_invariant
+●●●●●● 1mm □△
+self
+invariant_number
+context
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'DecisionContext'
+'\n        Validate a specific invariant.\n\n        Args:\n            invariant_number: Number of invariant to validate (1-12)\n            context: Decision context\n\n        Returns:\n            ValidationResult for that invariant\n        '
+violations
+●●●●●● 1mm □
+warnings
+●●●●●● 1mm □
+●●●●●● 2mm □
+invariant_number
+1
+●●●●●● 2mm □
+context
+violations
+●●●●●● 1mm □△
+'No problem statement'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+violations
+●●●●●● 1mm □△
+'No goal defined'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+invariant_number
+2
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+violations
+●●●●●● 1mm □△
+'Blocking unknowns prevent irreversible action'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+invariant_number
+3
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Irreversible action requires justification'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+invariant_number
+4
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Safety-critical operations must be deterministic'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+invariant_number
+5
+●●●●●● 2mm □
+context
+'systemic'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+0
+violations
+●●●●●● 1mm □△
+'Systemic changes require success criteria'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+invariant_number
+7
+●●●●●● 2mm □
+context
+context
+warnings
+●●●●●● 1mm □△
+'Complexity exceeds benefit'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+invariant_number
+9
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Recursion depth limit exceeded'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+context
+context
+violations
+●●●●●● 1mm □△
+'Iteration limit exceeded'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+invariant_number
+10
+●●●●●● 2mm □
+context
+0.5
+warnings
+●●●●●● 1mm □△
+'Low future flexibility'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+invariant_number
+11
+●●●●●● 2mm □
+context
+●●●●●● 2mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+violations
+●●●●●● 1mm □△
+'Decision freeze point exceeded'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+invariant_number
+12
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+0
+warnings
+●●●●●● 1mm □△
+'No alternative paths considered'
+●●●●●● 2mm □△
+is_valid
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+0
+●●●●●● 3mm ○
+ValidationResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValidationResult

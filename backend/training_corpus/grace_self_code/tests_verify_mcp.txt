@@ -1,0 +1,296 @@
+## verify_mcp.py
+'\nQuick verification script for MCP integration.\nTests: imports, MCP client connection, tool listing, and a basic tool call.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Grace OS — MCP Integration Verification'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1/4] Testing imports...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+grace_mcp.client
+●●●●●● 2mm □△○
+MCPClient
+●●●●●● 3mm □△○
+grace_mcp.orchestrator
+●●●●●● 2mm □△○
+MCPOrchestrator
+●●●●●● 3mm □△○
+grace_mcp.audit_logger
+●●●●●● 2mm □△○
+AuditLogger
+●●●●●● 3mm □△○
+api.mcp_api
+●●●●●● 2mm □△○
+router
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ All MCP modules imported successfully'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Import failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2/4] Creating MCP client...'
+●●●●●● 2mm □△
+audit
+●●●●●● 1mm □
+AuditLogger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+MCPClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ MCPClient created'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Server command: '
+client
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Server args: '
+client
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Client creation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3/4] Connecting to DesktopCommanderMCP...'
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+connected
+tools
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Connected! '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tools
+●●●●●● 2mm □△
+' tools available:'
+●●●●●● 2mm □△
+tool
+tools
+10
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     - '
+tool
+'name'
+': '
+tool
+'description'
+60
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tools
+●●●●●● 2mm □△
+10
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tools
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+' more'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Connection failed (server may not be running)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     Make sure DesktopCommanderMCP is built: npm run build'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Connection error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4/4] Testing tool call: list_directory...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'list_directory'
+'path'
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+'success'
+lines
+●●●●●● 1mm □
+result
+'content'
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ list_directory succeeded ('
+result
+●●●●●● 1mm □△
+'duration_ms'
+0
+●●●●●● 2mm □△
+'.0f'
+'ms):'
+●●●●●● 2mm □△
+line
+lines
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'     '
+line
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Tool call failed: '
+result
+●●●●●● 1mm □△
+'error'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Tool call error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[BONUS] OpenAI function format tools:'
+●●●●●● 2mm □△
+openai_tools
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+openai_tools
+●●●●●● 2mm □△
+' tools converted to OpenAI format'
+●●●●●● 2mm □△
+t
+openai_tools
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+t
+'function'
+'name'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[AUDIT] Stats: '
+audit
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✅ All verification passed!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

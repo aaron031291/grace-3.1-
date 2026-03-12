@@ -1,0 +1,423 @@
+## migrate_add_confidence_scoring.py
+'\nMigration script to add confidence scoring columns to documents and document_chunks tables.\n\nThis migration adds the following columns:\n\nFor documents table:\n- confidence_score: Main confidence score (0.0-1.0)\n- source_reliability: Source reliability component\n- content_quality: Content quality component\n- consensus_score: Consensus with existing knowledge\n- recency_score: Recency component\n- confidence_metadata: JSON field with detailed calculation data\n\nFor document_chunks table:\n- confidence_score: Chunk-level confidence score\n- consensus_similarity_scores: JSON array of similarity scores\n\nThe migration also drops the old trust_score column from documents table\nand updates indexes for the new confidence_score column.\n'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+Float
+Text
+inspect
+text
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+DatabaseType
+●●●●●● 3mm □△○
+database.migration
+●●●●●● 2mm □△○
+table_exists
+get_table_columns
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+migrate_add_confidence_scoring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Add confidence scoring columns to documents and document_chunks tables.\n    '
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+config
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+connection
+●●●●●● 2mm □
+table_exists
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'documents table does not exist, skipping migration'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+docs_columns
+●●●●●● 1mm □
+get_table_columns
+●●●●●● 1mm □△
+'documents'
+●●●●●● 2mm □△
+chunks_columns
+●●●●●● 1mm □
+get_table_columns
+●●●●●● 1mm □△
+'document_chunks'
+●●●●●● 2mm □△
+added_columns
+●●●●●● 1mm □
+'documents'
+'document_chunks'
+logger
+●●●●●● 1mm □△
+'Migrating documents table...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'confidence_score'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Adding confidence_score column to documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents ADD COLUMN confidence_score FLOAT DEFAULT 0.5 NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'documents'
+●●●●●● 1mm □△
+'confidence_score'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added confidence_score'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding confidence_score: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'source_reliability'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Adding source_reliability column to documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents ADD COLUMN source_reliability FLOAT DEFAULT 0.5 NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'documents'
+●●●●●● 1mm □△
+'source_reliability'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added source_reliability'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding source_reliability: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'content_quality'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Adding content_quality column to documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents ADD COLUMN content_quality FLOAT DEFAULT 0.5 NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'documents'
+●●●●●● 1mm □△
+'content_quality'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added content_quality'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding content_quality: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'consensus_score'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Adding consensus_score column to documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents ADD COLUMN consensus_score FLOAT DEFAULT 0.5 NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'documents'
+●●●●●● 1mm □△
+'consensus_score'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added consensus_score'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding consensus_score: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'recency_score'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Adding recency_score column to documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents ADD COLUMN recency_score FLOAT DEFAULT 0.5 NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'documents'
+●●●●●● 1mm □△
+'recency_score'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added recency_score'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding recency_score: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'confidence_metadata'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Adding confidence_metadata column to documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents ADD COLUMN confidence_metadata TEXT'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'documents'
+●●●●●● 1mm □△
+'confidence_metadata'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added confidence_metadata'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding confidence_metadata: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'trust_score'
+docs_columns
+logger
+●●●●●● 1mm □△
+'Removing old trust_score column from documents table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE documents DROP COLUMN trust_score'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Dropped trust_score'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not drop trust_score (may not exist): '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Migrating document_chunks table...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'confidence_score'
+chunks_columns
+logger
+●●●●●● 1mm □△
+'Adding confidence_score column to document_chunks table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE document_chunks ADD COLUMN confidence_score FLOAT DEFAULT 0.5 NOT NULL'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'document_chunks'
+●●●●●● 1mm □△
+'confidence_score'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added confidence_score'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding confidence_score: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'consensus_similarity_scores'
+chunks_columns
+logger
+●●●●●● 1mm □△
+'Adding consensus_similarity_scores column to document_chunks table...'
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'ALTER TABLE document_chunks ADD COLUMN consensus_similarity_scores TEXT'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+added_columns
+'document_chunks'
+●●●●●● 1mm □△
+'consensus_similarity_scores'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Added consensus_similarity_scores'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error adding consensus_similarity_scores: '
+e
+●●●●●● 2mm □△
+connection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+timezone
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Migration completed at '
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Documents table columns added: '
+added_columns
+'documents'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Document_chunks table columns added: '
+added_columns
+'document_chunks'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+added_columns
+●●●●●● 2mm □
+__name__
+'__main__'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Starting confidence scoring migration...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+migrate_add_confidence_scoring
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Migration completed successfully!'
+●●●●●● 2mm □△

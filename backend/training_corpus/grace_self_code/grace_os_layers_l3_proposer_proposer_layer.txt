@@ -1,0 +1,303 @@
+## proposer_layer.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ProposerLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 3: Solution Proposer.\n    Generates 3+ diverse solution approaches for each sub-task.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L3_Proposer'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'propose_solutions'
+'strategy_generation'
+'diversity_enforcement'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'PROPOSE_SOLUTIONS'
+'REQUEST_MORE_PROPOSALS'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 2mm □
+message
+'PROPOSE_SOLUTIONS'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'REQUEST_MORE_PROPOSALS'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Generate 3+ diverse solution proposals for a task.'
+task
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+task_desc
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'context'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L3] Generating proposals for: '
+task_desc
+60
+'...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L3 Solution Proposer of Grace OS. Generate EXACTLY 3 distinct solution approaches for the given task. Proposals MUST differ in fundamental strategy, not cosmetic variations. Respond ONLY with a JSON array where each element has: "id" (string), "approach" (string summary), "tradeoffs" (string), "risk_score" (int 0-100). Example: [{"id":"p1","approach":"Refactor existing module","tradeoffs":"Lower risk but more work","risk_score":25}]'
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proposals
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+proposals
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+proposals
+●●●●●● 2mm □△
+1
+proposals
+●●●●●● 1mm □
+'id'
+'approach'
+'tradeoffs'
+'risk_score'
+'p1'
+'Direct implementation'
+'Fast but less flexible'
+30
+'id'
+'approach'
+'tradeoffs'
+'risk_score'
+'p2'
+'Modular refactor'
+'More work but extensible'
+20
+'id'
+'approach'
+'tradeoffs'
+'risk_score'
+'p3'
+'Minimal patch'
+'Quick fix, may need revisit'
+50
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'proposals'
+'task'
+proposals
+task
+●●●●●● 2mm □△
+json
+Exception
+logger
+●●●●●● 1mm □△
+'[L3] Failed to parse proposals: '
+e
+●●●●●● 2mm □△
+fallback
+●●●●●● 1mm □
+'id'
+'approach'
+'tradeoffs'
+'risk_score'
+'p1'
+'Direct implementation'
+'Default fallback'
+40
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'partial'
+'proposals'
+'task'
+'parse_error'
+fallback
+task
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Generate additional proposals when L4 rejects all existing ones.'
+rejected_reasons
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'rejection_reasons'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L3] Generating more proposals (previous rejected)...'
+●●●●●● 2mm □△
+system_prompt
+●●●●●● 1mm □
+'You are the L3 Solution Proposer. Previous proposals were rejected. Rejection reasons: '
+rejected_reasons
+'. Generate 3 NEW approaches that address these concerns. Respond ONLY with a JSON array of proposals.'
+task_desc
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proposals
+●●●●●● 1mm □
+llm_response
+json
+●●●●●● 1mm □△
+llm_response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'proposals'
+'task'
+proposals
+task
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[L3] Failed on retry proposals: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+LayerResponse

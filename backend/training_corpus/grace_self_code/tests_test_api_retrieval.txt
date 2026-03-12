@@ -1,0 +1,304 @@
+## test_api_retrieval.py
+'\nTests for Retrieval and RAG API endpoints.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestRetrievalStatus
+'Test retrieval system status endpoints.'
+●●●●●● 1mm □
+test_get_retrieval_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting retrieval system status via ingest status.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/status'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestSemanticSearch
+'Test semantic search endpoints.'
+●●●●●● 1mm □
+test_semantic_search
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test semantic search.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_semantic_search_with_filters
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test semantic search with filters.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_semantic_search_with_folder
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test semantic search scoped to folder.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_semantic_search_empty_query
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test semantic search with empty query.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search'
+●●●●●● 2mm □△
+response
+200
+400
+422
+500
+pytest
+●●●●●● 2mm △
+TestReranking
+'Test reranking endpoints.'
+●●●●●● 1mm □
+test_search_with_reranking
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test search with reranking via semantic search.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search-semantic'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_rerank_results
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test explicit reranking of results.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/rerank'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest
+●●●●●● 2mm △
+TestCognitiveRetrieval
+'Test cognitive retrieval endpoints.'
+●●●●●● 1mm □
+test_cognitive_search
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test cognitive retrieval.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search-cognitive'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_cognitive_search_with_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test cognitive search with conversation history.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/search-cognitive'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest
+●●●●●● 2mm △
+TestDocumentRetrieval
+'Test document retrieval endpoints.'
+●●●●●● 1mm □
+test_get_document_chunks
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting document by ID.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/document/1'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_get_similar_documents
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting similar documents via search.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/documents'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestRAGContext
+'Test RAG context building endpoints.'
+●●●●●● 1mm □
+test_build_context
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test building RAG context.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/context'
+●●●●●● 2mm □△
+response
+200
+422
+500
+●●●●●● 1mm □
+test_build_context_with_threshold
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test building RAG context with similarity threshold.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/retrieve/context'
+●●●●●● 2mm □△
+response
+200
+422
+500
+pytest
+●●●●●● 2mm △
+TestVectorDBOperations
+'Test vector database operation endpoints.'
+●●●●●● 1mm □
+test_get_collection_stats
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting vector collection statistics via ingestion stats.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/api/ingestion/statistics'
+●●●●●● 2mm □△
+response
+200
+404
+500
+●●●●●● 1mm □
+test_get_collections
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test listing documents via ingest.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/ingest/documents'
+●●●●●● 2mm □△
+response
+200
+500
+pytest

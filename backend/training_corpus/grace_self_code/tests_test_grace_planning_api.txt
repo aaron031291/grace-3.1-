@@ -1,0 +1,902 @@
+## test_grace_planning_api.py
+'\nTests for Grace Planning API\n\nComprehensive tests for planning workflow system.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+AsyncMock
+●●●●●● 3mm □△○
+api.grace_planning_api
+●●●●●● 2mm □△○
+router
+PlanningPhase
+ConceptStatus
+QuestionType
+TechnicalDecisionStatus
+ExecutionStatus
+PlanningConcept
+ConceptQuestion
+TechnicalStackItem
+TechnicalDecision
+ExecutionPlan
+IDEHandoff
+PlanningSession
+planning_sessions
+concepts
+questions
+tech_stack
+tech_decisions
+execution_plans
+ide_handoffs
+●●●●●● 2mm △
+TestPlanningPhaseEnum
+'Test PlanningPhase enum'
+●●●●●● 1mm □
+test_all_phases_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected phases exist'
+expected
+●●●●●● 1mm □
+'concept'
+'questions'
+'technical_stack'
+'technical_acceptance'
+'execute'
+'ide_handoff'
+'completed'
+phase
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+PlanningPhase
+phase
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_phase_order
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test phase progression order'
+phase_order
+●●●●●● 1mm □
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+phase_order
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+phase_order
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestConceptStatusEnum
+'Test ConceptStatus enum'
+●●●●●● 1mm □
+test_all_statuses_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected statuses exist'
+expected
+●●●●●● 1mm □
+'draft'
+'in_discussion'
+'approved'
+'rejected'
+'archived'
+status
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ConceptStatus
+status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestQuestionTypeEnum
+'Test QuestionType enum'
+●●●●●● 1mm □
+test_all_types_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected question types exist'
+expected
+●●●●●● 1mm □
+'clarification'
+'scope'
+'functionality'
+'user_experience'
+'integration'
+'constraints'
+qtype
+expected
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+QuestionType
+qtype
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPlanningConcept
+'Test PlanningConcept model'
+●●●●●● 1mm □
+test_concept_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a PlanningConcept'
+concept
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concept
+'New Feature'
+concept
+●●●●●● 1mm □△
+'GPC-'
+●●●●●● 2mm □△
+concept
+ConceptStatus
+concept
+PlanningPhase
+●●●●●● 1mm □
+test_concept_with_full_details
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test concept with all fields'
+concept
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concept
+'Long-term vision statement'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+concept
+●●●●●● 2mm □△
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+concept
+●●●●●● 2mm □△
+2
+concept
+8
+concept
+'high'
+●●●●●● 1mm □
+test_concept_relationships
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test concept parent-child relationships'
+parent
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+child
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parent
+●●●●●● 1mm □△
+child
+●●●●●● 2mm □△
+child
+parent
+child
+parent
+●●●●●● 1mm □
+test_concept_grace_analysis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Grace analysis on concept'
+concept
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concept
+●●●●●● 1mm □
+'feasibility_score'
+'complexity_assessment'
+'recommended_approach'
+0.85
+'medium'
+'phased_implementation'
+concept
+●●●●●● 1mm □
+'Break into smaller tasks'
+'Define clear acceptance criteria'
+concept
+'feasibility_score'
+0.85
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+concept
+●●●●●● 2mm □△
+2
+●●●●●● 2mm △
+TestConceptQuestion
+'Test ConceptQuestion model'
+●●●●●● 1mm □
+test_question_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a ConceptQuestion'
+question
+●●●●●● 1mm □
+ConceptQuestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+question
+'GPC-001'
+question
+●●●●●● 1mm □△
+'GPQ-'
+●●●●●● 2mm □△
+question
+QuestionType
+question
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_question_with_answers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test question with answers'
+question
+●●●●●● 1mm □
+ConceptQuestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+question
+●●●●●● 1mm □
+'id'
+'author'
+'content'
+'timestamp'
+'ANS-001'
+'Developer'
+'Via REST API'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'id'
+'author'
+'content'
+'timestamp'
+'ANS-002'
+'Architect'
+'Use event-driven approach'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+question
+●●●●●● 1mm □
+'ANS-001'
+question
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△
+2
+question
+'ANS-001'
+question
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_grace_suggested_answer
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Grace suggested answer'
+question
+●●●●●● 1mm □
+ConceptQuestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+question
+●●●●●● 1mm □
+'Based on the requirements, I suggest using React for frontend'
+question
+●●●●●● 1mm □
+0.85
+question
+●●●●●● 2mm □
+question
+0.85
+●●●●●● 2mm △
+TestTechnicalStackItem
+'Test TechnicalStackItem model'
+●●●●●● 1mm □
+test_stack_item_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a TechnicalStackItem'
+item
+●●●●●● 1mm □
+TechnicalStackItem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+●●●●●● 1mm □△
+'GTS-'
+●●●●●● 2mm □△
+item
+'backend'
+item
+'FastAPI'
+item
+TechnicalDecisionStatus
+●●●●●● 1mm □
+test_stack_item_with_pros_cons
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stack item with pros and cons'
+item
+●●●●●● 1mm □
+TechnicalStackItem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+2
+item
+'15'
+●●●●●● 1mm □
+test_stack_item_dependencies
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stack item dependencies'
+item
+●●●●●● 1mm □
+TechnicalStackItem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+item
+●●●●●● 2mm □△
+2
+●●●●●● 2mm △
+TestTechnicalDecision
+'Test TechnicalDecision model'
+●●●●●● 1mm □
+test_decision_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a TechnicalDecision'
+decision
+●●●●●● 1mm □
+TechnicalDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □△
+'GTD-'
+●●●●●● 2mm □△
+decision
+TechnicalDecisionStatus
+decision
+'technology'
+●●●●●● 1mm □
+test_decision_with_options
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test decision with multiple options'
+decision
+●●●●●● 1mm □
+TechnicalDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_decision_acceptance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test accepting a decision'
+decision
+●●●●●● 1mm □
+TechnicalDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+'REST'
+decision
+●●●●●● 1mm □
+"Better fit for our team's expertise"
+decision
+●●●●●● 1mm □
+TechnicalDecisionStatus
+decision
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+'REST'
+decision
+TechnicalDecisionStatus
+decision
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestExecutionPlan
+'Test ExecutionPlan model'
+●●●●●● 1mm □
+test_plan_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating an ExecutionPlan'
+plan
+●●●●●● 1mm □
+ExecutionPlan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan
+●●●●●● 1mm □△
+'GPE-'
+●●●●●● 2mm □△
+plan
+ExecutionStatus
+plan
+0
+●●●●●● 1mm □
+test_plan_with_phases
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test plan with phases and milestones'
+plan
+●●●●●● 1mm □
+ExecutionPlan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+●●●●●● 2mm □△
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+plan
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_plan_progress_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test plan progress tracking'
+plan
+●●●●●● 1mm □
+ExecutionPlan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan
+●●●●●● 1mm □
+ExecutionStatus
+plan
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan
+●●●●●● 1mm □
+45
+plan
+●●●●●● 1mm □
+'Development'
+plan
+ExecutionStatus
+plan
+45
+plan
+'Development'
+●●●●●● 1mm □
+test_plan_completion
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test completing a plan'
+plan
+●●●●●● 1mm □
+ExecutionPlan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan
+●●●●●● 1mm □
+100
+plan
+●●●●●● 1mm □
+ExecutionStatus
+plan
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+plan
+100
+plan
+ExecutionStatus
+plan
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestIDEHandoff
+'Test IDEHandoff model'
+●●●●●● 1mm □
+test_handoff_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating an IDEHandoff'
+handoff
+●●●●●● 1mm □
+IDEHandoff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handoff
+●●●●●● 1mm □△
+'GPH-'
+●●●●●● 2mm □△
+handoff
+'vscode'
+handoff
+'pending'
+●●●●●● 1mm □
+test_handoff_with_files
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handoff with file specifications'
+handoff
+●●●●●● 1mm □
+IDEHandoff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+handoff
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+handoff
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_handoff_send
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test sending handoff to IDE'
+handoff
+●●●●●● 1mm □
+IDEHandoff
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handoff
+●●●●●● 1mm □
+'sent'
+handoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handoff
+●●●●●● 1mm □
+'IDE-abc123'
+handoff
+'sent'
+handoff
+'IDE-abc123'
+●●●●●● 2mm △
+TestPlanningSession
+'Test PlanningSession model'
+●●●●●● 1mm □
+test_session_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating a PlanningSession'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+PlanningSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'GPS-'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+PlanningPhase
+'G-USER-001'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+test_session_phase_completion
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test session phase completion tracking'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+PlanningSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+PlanningPhase
+●●●●●● 1mm □
+100
+●●●●●● 3mm △○
+PlanningPhase
+●●●●●● 1mm □
+50
+●●●●●● 3mm △○
+PlanningPhase
+100
+●●●●●● 3mm △○
+PlanningPhase
+50
+●●●●●● 1mm □
+test_session_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test session component tracking'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+PlanningSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'GPC-001'
+'GPC-002'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'GPQ-001'
+'GPQ-002'
+'GPQ-003'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'GTS-001'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'GTD-001'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestSessionStorage
+'Test in-memory session storage'
+●●●●●● 1mm □
+setup_method
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Clear storage before each test'
+planning_sessions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concepts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+questions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tech_stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tech_decisions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+execution_plans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ide_handoffs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_add_session_to_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding session to storage'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+PlanningSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+planning_sessions
+●●●●●● 3mm △○
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △○
+planning_sessions
+●●●●●● 1mm □
+test_add_concept_to_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test adding concept to storage'
+concept
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concepts
+concept
+●●●●●● 1mm □
+concept
+concept
+concepts
+●●●●●● 2mm △
+TestPhaseTransitions
+'Test phase transition logic'
+●●●●●● 1mm □
+test_valid_phase_progression
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test valid forward phase progression'
+●●●●●● 3mm △○
+●●●●●● 1mm □
+PlanningSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+PlanningPhase
+phases
+●●●●●● 1mm □
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+PlanningPhase
+phase
+phases
+●●●●●● 3mm △○
+●●●●●● 1mm □
+phase
+●●●●●● 3mm △○
+phase
+●●●●●● 2mm △
+TestGraceIntegration
+'Test Grace AI integration features'
+●●●●●● 1mm □
+test_concept_grace_analysis_structure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Grace analysis structure'
+analysis
+●●●●●● 1mm □
+'feasibility_score'
+'complexity_assessment'
+'recommended_approach'
+'potential_risks'
+'success_factors'
+0.85
+'medium'
+'phased_implementation'
+'Integration complexity'
+'Clear requirements'
+concept
+●●●●●● 1mm □
+PlanningConcept
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+concept
+●●●●●● 1mm □
+analysis
+concept
+'feasibility_score'
+0
+concept
+'feasibility_score'
+1
+●●●●●● 1mm □
+test_decision_grace_recommendation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test Grace recommendation on decisions'
+decision
+●●●●●● 1mm □
+TechnicalDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+'grace_recommendation'
+'recommendation_reason'
+'Option A'
+'Best fit for requirements'
+decision
+'grace_recommendation'
+'Option A'
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

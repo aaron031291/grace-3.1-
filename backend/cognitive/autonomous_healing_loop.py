@@ -295,8 +295,8 @@ def heal_content(
 def _surgical_heal(content: str, errors: List[str]) -> str:
     """Fix specific errors without rewriting the whole file."""
     try:
-        from llm_orchestrator.factory import get_llm_for_task
-        client = get_llm_for_task("self_healing")
+        from llm_orchestrator.factory import get_llm_client
+        client = get_llm_client()
 
         # Process each error individually
         healed = content

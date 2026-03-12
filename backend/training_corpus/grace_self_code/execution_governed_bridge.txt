@@ -1,0 +1,775 @@
+## governed_bridge.py
+'\nGoverned Execution Bridge\n\nWraps the ExecutionBridge with constitutional governance checks.\nAll actions must pass governance evaluation before execution.\n\nIntegration points:\n- GovernanceEngine: Constitutional and policy checks\n- Layer1MessageBus: Event publishing for audit\n- GovernanceMetrics: KPI tracking\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+bridge
+●●●●●● 2mm □△○
+ExecutionBridge
+ExecutionConfig
+●●●●●● 3mm □△○
+actions
+●●●●●● 2mm □△○
+GraceAction
+ActionRequest
+ActionResult
+ActionStatus
+●●●●●● 3mm □△○
+security.governance
+●●●●●● 2mm □△○
+GovernanceEngine
+GovernanceContext
+GovernanceDecision
+AutonomyTier
+get_governance_engine
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+ComponentType
+get_message_bus
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+ACTION_GOVERNANCE_MAP
+●●●●●● 1mm □○
+GraceAction
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+GraceAction
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'read'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'read'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'read'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'read'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'read'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'read'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_local'
+'component'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_local'
+'component'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_local'
+'component'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_local'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_local'
+'component'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'execute_safe'
+'component'
+●●●●●● 1mm □
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'execute_safe'
+'component'
+●●●●●● 1mm □
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'execute_safe'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'execute_safe'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_remote'
+'systemic'
+●●●●●● 1mm □
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'write_remote'
+'component'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'external_api'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'analyze'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'analyze'
+'local'
+●●●●●● 3mm □△○
+0.0
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'analyze'
+'local'
+●●●●●● 3mm □△○
+0.0
+●●●●●● 2mm △
+GovernedExecutionBridge
+'\n    Execution bridge with constitutional governance integration.\n\n    Every action passes through governance evaluation before execution.\n    Provides:\n    - Constitutional rule enforcement\n    - Autonomy tier checking\n    - Policy evaluation\n    - Audit trail via message bus\n    - Metrics recording\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+config
+genesis_tracker
+governance_engine
+message_bus
+●●●●●● 2mm □△
+ExecutionConfig
+GovernanceEngine
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+ExecutionBridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+governance_engine
+get_governance_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_actions'
+'allowed'
+'blocked'
+'pending_approval'
+'avg_governance_time_ms'
+0
+0
+0
+0
+0.0
+logger
+●●●●●● 1mm □△
+'[GOVERNED-BRIDGE] Initialized with governance integration'
+●●●●●● 2mm □△
+ActionRequest
+'\n        Execute an action with governance checks.\n\n        Flow:\n        1. Build governance context from action\n        2. Evaluate against constitutional rules\n        3. Check autonomy tier constraints\n        4. Apply policy rules\n        5. If allowed, execute via underlying bridge\n        6. Record metrics and publish events\n        '
+●●●●●● 3mm △
+'total_actions'
+1
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+governance_time_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+governance_time_ms
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+decision
+governance_time_ms
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+decision
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+●●●●●● 2mm □
+decision
+●●●●●● 3mm △
+'pending_approval'
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+'Action requires approval: '
+', '
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+'blocked'
+1
+●●●●●● 3mm □
+violation_summary
+●●●●●● 1mm □
+'; '
+●●●●●● 1mm □△
+v
+v
+decision
+3
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+'Action blocked by governance: '
+violation_summary
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'allowed'
+1
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.001
+●●●●●● 2mm □△
+●●●●●● 1mm △
+result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.005
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[GOVERNED-BRIDGE] Execution failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_build_governance_context
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+ActionRequest
+'Build governance context from action request.'
+mapping
+●●●●●● 1mm □
+ACTION_GOVERNANCE_MAP
+●●●●●● 1mm □△
+action
+'action_type'
+'impact_scope'
+'is_reversible'
+'financial_impact'
+'unknown'
+'local'
+●●●●●● 3mm □△○
+0.0
+●●●●●● 2mm □△
+target_resource
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+'action_id'
+'confidence'
+'reasoning'
+'parameters'
+action
+action
+action
+action
+●●●●●● 2mm □
+action
+GraceAction
+command
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+'command'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+dangerous
+command
+dangerous
+'rm -rf'
+'sudo'
+'chmod 777'
+●●●●●● 2mm □△
+metadata
+'potential_harm_to_humans'
+●●●●●● 1mm □
+●●●●●● 1mm □
+metadata
+'bypasses_safety_check'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+GovernanceContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GovernanceContext
+●●●●●● 1mm □
+_extract_target_resource
+●●●●●● 1mm □△
+self
+action
+●●●●●● 2mm □△
+ActionRequest
+'Extract target resource from action parameters.'
+params
+●●●●●● 1mm □
+action
+●●●●●● 2mm □
+'path'
+params
+●●●●●● 3mm ○
+params
+'path'
+●●●●●● 2mm □
+'file'
+params
+●●●●●● 3mm ○
+params
+'file'
+●●●●●● 2mm □
+'command'
+params
+●●●●●● 3mm ○
+'bash:'
+params
+'command'
+50
+●●●●●● 2mm □
+'code'
+params
+●●●●●● 3mm ○
+'python:'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+params
+'code'
+●●●●●● 2mm □△
+'chars'
+●●●●●● 2mm □
+'test_path'
+params
+●●●●●● 3mm ○
+params
+'test_path'
+●●●●●● 2mm □
+'pattern'
+params
+●●●●●● 3mm ○
+'search:'
+params
+'pattern'
+●●●●●● 3mm ○
+action
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_create_blocked_result
+●●●●●● 1mm □△
+self
+action
+message
+decision
+●●●●●● 2mm □△
+ActionRequest
+●●●●●● 1mm ○
+GovernanceDecision
+'Create a blocked action result.'
+●●●●●● 3mm ○
+ActionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ActionResult
+●●●●●● 1mm □
+_log_governance_decision
+●●●●●● 1mm □△
+self
+action
+decision
+governance_time_ms
+●●●●●● 2mm □△
+ActionRequest
+GovernanceDecision
+●●●●●● 3mm ○
+'Log governance decision for audit.'
+entry
+●●●●●● 1mm □
+'timestamp'
+'action_id'
+'action_type'
+'decision_id'
+'allowed'
+'autonomy_tier'
+'violations_count'
+'governance_time_ms'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+action
+decision
+decision
+decision
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+governance_time_ms
+●●●●●● 3mm △
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+_update_avg_governance_time
+●●●●●● 1mm □△
+self
+governance_time_ms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Update rolling average governance evaluation time.'
+current_avg
+●●●●●● 1mm □
+●●●●●● 3mm △
+'avg_governance_time_ms'
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+'total_actions'
+●●●●●● 3mm △
+'avg_governance_time_ms'
+●●●●●● 1mm □
+current_avg
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □△
+1
+●●●●●● 3mm ○
+governance_time_ms
+●●●●●● 3mm □△
+total
+ActionRequest
+GovernanceDecision
+'Publish governance event to message bus.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GOVERNED-BRIDGE] Failed to publish event: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+config
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get execution config.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+ExecutionConfig
+●●●●●● 1mm □
+action_history
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get action history from underlying bridge.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get combined stats.'
+●●●●●● 3mm ○
+'governance'
+'current_tier'
+'trust_score'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_governance_log
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+100
+'Get recent governance decisions.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_governed_bridge
+●●●●●● 2mm □○
+GovernedExecutionBridge
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_governed_execution_bridge
+●●●●●● 1mm □△
+config
+genesis_tracker
+●●●●●● 2mm □△
+ExecutionConfig
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Get or create the governed execution bridge singleton.'
+●●●●●● 2mm □
+_governed_bridge
+●●●●●● 2mm □
+_governed_bridge
+●●●●●● 1mm □
+GovernedExecutionBridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GOVERNED-BRIDGE] Created global governed bridge'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_governed_bridge
+GovernedExecutionBridge
+●●●●●● 1mm □
+reset_governed_bridge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset governed bridge (for testing).'
+_governed_bridge
+●●●●●● 1mm □
+●●●●●● 2mm □

@@ -1,0 +1,289 @@
+## runtime_layer.py
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RuntimeLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 1: Runtime Environment.\n    Manages isolated execution environments, dependency resolution,\n    state snapshots, and resource limits.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L1_Runtime'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'environment_management'
+'dependency_resolution'
+'state_snapshot'
+'resource_limiting'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'SETUP_ENVIRONMENT'
+'SNAPSHOT_STATE'
+'TEARDOWN_ENVIRONMENT'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+●●●●●● 2mm □
+message
+'SETUP_ENVIRONMENT'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+'SNAPSHOT_STATE'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 2mm □
+message
+'TEARDOWN_ENVIRONMENT'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Set up an isolated environment for task execution.'
+project_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'project_path'
+'.'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'task'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L1] Setting up environment for project: '
+project_path
+●●●●●● 2mm □△
+env_id
+●●●●●● 1mm □
+'env_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm △
+env_id
+●●●●●● 1mm □
+'id'
+'project_path'
+'status'
+'dependencies_resolved'
+'task'
+env_id
+project_path
+'active'
+●●●●●● 3mm □△○
+task
+snapshot_id
+●●●●●● 1mm □
+'snap_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm △
+snapshot_id
+●●●●●● 1mm □
+'id'
+'env_id'
+'type'
+'status'
+snapshot_id
+env_id
+'pre_execution'
+'captured'
+logger
+●●●●●● 1mm □△
+'[L1] Environment '
+env_id
+' ready. Snapshot: '
+snapshot_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'environment_id'
+'snapshot_id'
+'dependencies_resolved'
+'task'
+env_id
+snapshot_id
+●●●●●● 3mm □△○
+task
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Capture environment state for rollback capability.'
+env_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'environment_id'
+''
+●●●●●● 2mm □△
+snapshot_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'snapshot_type'
+'checkpoint'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L1] Taking snapshot of environment '
+env_id
+'...'
+●●●●●● 2mm □△
+snapshot_id
+●●●●●● 1mm □
+'snap_'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm △
+snapshot_id
+●●●●●● 1mm □
+'id'
+'env_id'
+'type'
+'status'
+snapshot_id
+env_id
+snapshot_type
+'captured'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'snapshot_id'
+'env_id'
+'type'
+snapshot_id
+env_id
+snapshot_type
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'Clean up an environment after task completion.'
+env_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'environment_id'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[L1] Tearing down environment '
+env_id
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+env_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+env_id
+'status'
+●●●●●● 1mm □
+'terminated'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'environment_id'
+'status'
+env_id
+'terminated'
+●●●●●● 2mm □△
+LayerResponse

@@ -1,0 +1,44 @@
+## clean_output.py
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'consensus_output.txt'
+'r'
+●●●●●● 2mm □△
+f
+text
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ansi_escape
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\x1B(?:[@-Z\\\\-_]|\\[[0-?]*[ -/]*[@-~])'
+●●●●●● 2mm □△
+clean_text
+●●●●●● 1mm □
+ansi_escape
+●●●●●● 1mm □△
+''
+text
+●●●●●● 2mm □△
+clean_text
+●●●●●● 1mm □
+clean_text
+●●●●●● 1mm □△
+'\r'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'consensus_clean.txt'
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+clean_text
+●●●●●● 2mm □△

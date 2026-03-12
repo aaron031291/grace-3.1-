@@ -1,0 +1,1724 @@
+## api.py
+'\nDiagnostic Machine API Endpoints\n\nProvides REST API for:\n- Running diagnostic cycles\n- Getting health status\n- Viewing diagnostic history\n- Managing the diagnostic engine\n- CI/CD integration webhooks\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+BackgroundTasks
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+diagnostic_engine
+●●●●●● 2mm □△○
+DiagnosticEngine
+get_diagnostic_engine
+start_diagnostic_engine
+stop_diagnostic_engine
+TriggerSource
+EngineState
+●●●●●● 3mm □△○
+sensors
+●●●●●● 2mm □△○
+SensorLayer
+●●●●●● 3mm □△○
+interpreters
+●●●●●● 2mm □△○
+InterpreterLayer
+●●●●●● 3mm □△○
+judgement
+●●●●●● 2mm □△○
+JudgementLayer
+●●●●●● 3mm □△○
+action_router
+●●●●●● 2mm □△○
+ActionRouter
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DiagnosticTriggerRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request to trigger a diagnostic cycle.'
+source
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reason
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+DiagnosticTriggerResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Response from diagnostic trigger.'
+cycle_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+health_status
+●●●●●● 1mm ○
+health_score
+●●●●●● 3mm ○
+recommended_action
+●●●●●● 1mm ○
+action_taken
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+message
+●●●●●● 1mm ○
+●●●●●● 2mm △
+HealthSummaryResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Health summary response.'
+status
+●●●●●● 1mm ○
+health_score
+●●●●●● 3mm ○
+confidence
+●●●●●● 3mm ○
+last_check
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+degraded_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+critical_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+avm_level
+●●●●●● 1mm ○
+recommended_action
+●●●●●● 1mm ○
+●●●●●● 2mm △
+EngineStatusResponse
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Engine status response.'
+state
+●●●●●● 1mm ○
+heartbeat_interval
+●●●●●● 2mm ○
+total_cycles
+●●●●●● 2mm ○
+successful_cycles
+●●●●●● 2mm ○
+failed_cycles
+●●●●●● 2mm ○
+total_alerts
+●●●●●● 2mm ○
+total_healing_actions
+●●●●●● 2mm ○
+total_freeze_events
+●●●●●● 2mm ○
+uptime_seconds
+●●●●●● 3mm ○
+●●●●●● 2mm △
+CICDWebhookRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'CI/CD webhook request.'
+pipeline_id
+●●●●●● 1mm ○
+event
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+SensorFlagRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request to flag an issue from a sensor.'
+sensor_type
+●●●●●● 1mm ○
+severity
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm ○
+details
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_engine
+●●●●●● 2mm □○
+DiagnosticEngine
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the diagnostic engine.'
+●●●●●● 2mm □
+_engine
+●●●●●● 2mm □
+_engine
+●●●●●● 1mm □
+get_diagnostic_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_engine
+DiagnosticEngine
+'Get current system health summary from diagnostic machine.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealthSummaryResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting health summary: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/health'
+●●●●●● 2mm □△
+'Get diagnostic engine status and statistics.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+engine
+●●●●●● 3mm ○
+EngineStatusResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting engine status: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+DiagnosticTriggerRequest
+'Manually trigger a diagnostic cycle.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_map
+●●●●●● 1mm □
+'api'
+'manual'
+'webhook'
+'cicd'
+TriggerSource
+TriggerSource
+TriggerSource
+TriggerSource
+trigger_source
+●●●●●● 1mm □
+source_map
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+TriggerSource
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+trigger_source
+●●●●●● 2mm □△
+health_status
+●●●●●● 1mm □
+'unknown'
+health_score
+●●●●●● 1mm □
+0.0
+recommended_action
+●●●●●● 1mm □
+'none'
+action_taken
+●●●●●● 1mm □
+'none'
+●●●●●● 2mm □
+cycle
+health_status
+●●●●●● 1mm □
+cycle
+health_score
+●●●●●● 1mm □
+cycle
+recommended_action
+●●●●●● 1mm □
+cycle
+●●●●●● 2mm □
+cycle
+action_taken
+●●●●●● 1mm □
+cycle
+●●●●●● 3mm ○
+DiagnosticTriggerResponse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error triggering diagnostic: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trigger'
+●●●●●● 2mm □△
+CICDWebhookRequest
+BackgroundTasks
+'Webhook endpoint for CI/CD pipeline integration.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+background_tasks
+●●●●●● 1mm □△
+engine
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'pipeline_event'
+'accepted'
+'Diagnostic triggered for pipeline '
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'CI/CD webhook error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/webhook/cicd'
+●●●●●● 2mm □△
+SensorFlagRequest
+BackgroundTasks
+'Flag an issue from a sensor to trigger diagnostic.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+background_tasks
+●●●●●● 1mm □△
+engine
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'severity'
+'accepted'
+'Sensor flag received: '
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Sensor flag error: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/sensor/flag'
+●●●●●● 2mm □△
+'Start the diagnostic engine with heartbeat.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'state'
+'heartbeat_interval'
+success
+'started'
+'failed'
+engine
+engine
+Exception
+logger
+●●●●●● 1mm □△
+'Error starting engine: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/start'
+●●●●●● 2mm □△
+'Stop the diagnostic engine.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'state'
+success
+'stopped'
+'failed'
+engine
+Exception
+logger
+●●●●●● 1mm □△
+'Error stopping engine: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/stop'
+●●●●●● 2mm □△
+'Pause the diagnostic engine heartbeat.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'state'
+'paused'
+engine
+Exception
+logger
+●●●●●● 1mm □△
+'Error pausing engine: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/pause'
+●●●●●● 2mm □△
+'Resume the diagnostic engine heartbeat.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'state'
+'resumed'
+engine
+Exception
+logger
+●●●●●● 1mm □△
+'Error resuming engine: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/resume'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'Get recent diagnostic cycle history.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycles
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'cycles'
+'total'
+'cycle_id'
+'trigger_source'
+'success'
+'health_status'
+'health_score'
+'action_taken'
+'duration_ms'
+'timestamp'
+c
+c
+c
+c
+c
+'unknown'
+c
+c
+0.0
+c
+c
+'none'
+c
+c
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+c
+cycles
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cycles
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting history: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/history'
+●●●●●● 2mm □△
+'Get a comprehensive diagnostic report.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+TriggerSource
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+'report_id'
+'generated_at'
+'cycle_id'
+'success'
+'REPORT-'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d%H%M%S'
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle
+cycle
+●●●●●● 2mm □
+cycle
+sensor_layer
+●●●●●● 1mm □
+SensorLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'sensors'
+●●●●●● 1mm □
+sensor_layer
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+interpreter_layer
+●●●●●● 1mm □
+InterpreterLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'interpretation'
+●●●●●● 1mm □
+interpreter_layer
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+judgement_layer
+●●●●●● 1mm □
+JudgementLayer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'judgement'
+●●●●●● 1mm □
+judgement_layer
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle
+action_router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+'action'
+●●●●●● 1mm □
+action_router
+●●●●●● 1mm □△
+cycle
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+engine
+report
+'engine_stats'
+●●●●●● 1mm □
+'state'
+'total_cycles'
+'uptime_seconds'
+'average_cycle_duration_ms'
+engine
+stats
+stats
+stats
+●●●●●● 3mm ○
+report
+Exception
+logger
+●●●●●● 1mm □△
+'Error generating report: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/full-report'
+●●●●●● 2mm □△
+'Get Anomaly Violation Notification alerts.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycles
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+alerts
+●●●●●● 1mm □
+cycle
+cycles
+●●●●●● 2mm □
+cycle
+cycle
+alert
+cycle
+alerts
+●●●●●● 1mm □△
+'alert_id'
+'cycle_id'
+'severity'
+'anomaly_type'
+'violation_type'
+'message'
+'timestamp'
+alert
+cycle
+alert
+alert
+alert
+alert
+alert
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'alerts'
+'total'
+alerts
+20
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+alerts
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting AVN alerts: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/avn/alerts'
+●●●●●● 2mm □△
+'Get Anomaly Violation Monitor status.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycles
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycles
+cycles
+0
+●●●●●● 3mm ○
+'status'
+'message'
+'unknown'
+'No diagnostic data available'
+avm
+●●●●●● 1mm □
+cycles
+0
+●●●●●● 3mm ○
+'monitor_id'
+'is_active'
+'anomalies_detected'
+'violations_detected'
+'last_check'
+'alert_level'
+avm
+avm
+avm
+avm
+avm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avm
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting AVM status: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/avm/status'
+●●●●●● 2mm □△
+'Get forensic analysis findings.'
+engine
+●●●●●● 1mm □
+get_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycles
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+findings
+●●●●●● 1mm □
+cycle
+cycles
+●●●●●● 2mm □
+cycle
+cycle
+finding
+cycle
+findings
+●●●●●● 1mm □△
+'finding_id'
+'cycle_id'
+'category'
+'description'
+'confidence'
+'related_components'
+finding
+cycle
+finding
+finding
+finding
+finding
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'findings'
+'total'
+findings
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+findings
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting forensic findings: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/forensics'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+24
+'Get trend analysis for all tracked metrics.'
+●●●●●● 3mm □△○
+trend_analysis
+●●●●●● 2mm □△○
+get_metrics_collector
+TrendAnalyzer
+get_time_series_store
+collector
+●●●●●● 1mm □
+get_metrics_collector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trends
+●●●●●● 1mm □
+collector
+●●●●●● 1mm □△
+window_hours
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'trends'
+'window_hours'
+name
+'direction'
+'significance'
+'change_percent'
+'current_value'
+'baseline_value'
+'prediction'
+'alert_breached'
+'recommendation'
+t
+t
+t
+t
+t
+t
+t
+t
+name
+t
+trends
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+window_hours
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting trends: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trends'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+24
+'Get trend analysis for a specific metric.'
+●●●●●● 3mm □△○
+trend_analysis
+●●●●●● 2mm □△○
+get_trend_analyzer
+analyzer
+●●●●●● 1mm □
+get_trend_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trend
+●●●●●● 1mm □
+analyzer
+●●●●●● 1mm □△
+metric_name
+window_hours
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'metric_name'
+'direction'
+'significance'
+'change_percent'
+'current_value'
+'baseline_value'
+'trend_slope'
+'data_points'
+'prediction'
+'alert_breached'
+'recommendation'
+trend
+trend
+trend
+trend
+trend
+trend
+trend
+trend
+trend
+trend
+trend
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting trend for '
+metric_name
+': '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trends/{metric_name}'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+168
+'Get historical summary for a metric.'
+●●●●●● 3mm □△○
+trend_analysis
+●●●●●● 2mm □△○
+get_trend_analyzer
+analyzer
+●●●●●● 1mm □
+get_trend_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+analyzer
+●●●●●● 1mm □△
+metric_name
+hours
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'metric_name'
+'min_value'
+'max_value'
+'avg_value'
+'std_dev'
+'percentile_25'
+'percentile_50'
+'percentile_75'
+'percentile_95'
+'data_points'
+'time_range_hours'
+summary
+summary
+summary
+summary
+summary
+summary
+summary
+summary
+summary
+summary
+summary
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting history for '
+metric_name
+': '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trends/{metric_name}/history'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+24
+2.0
+'Detect anomalies in a metric using statistical analysis.'
+●●●●●● 3mm □△○
+trend_analysis
+●●●●●● 2mm □△○
+get_trend_analyzer
+analyzer
+●●●●●● 1mm □
+get_trend_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anomalies
+●●●●●● 1mm □
+analyzer
+●●●●●● 1mm □△
+metric_name
+hours
+threshold
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'metric_name'
+'anomalies'
+'total'
+'std_threshold'
+metric_name
+anomalies
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+threshold
+Exception
+logger
+●●●●●● 1mm □△
+'Error detecting anomalies for '
+metric_name
+': '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trends/{metric_name}/anomalies'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Auto-calibrate baseline for a metric from historical data.'
+●●●●●● 3mm □△○
+trend_analysis
+●●●●●● 2mm □△○
+get_trend_analyzer
+analyzer
+●●●●●● 1mm □
+get_trend_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+calibration
+●●●●●● 1mm □
+analyzer
+●●●●●● 1mm □△
+metric_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'metric_name'
+'calibration'
+metric_name
+calibration
+Exception
+logger
+●●●●●● 1mm □△
+'Error calibrating '
+metric_name
+': '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trends/{metric_name}/calibrate'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealingRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request to execute a healing action.'
+action_type
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+parameters
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dry_run
+●●●●●● 3mm △
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all available healing actions.'
+●●●●●● 3mm □△○
+healing
+●●●●●● 2mm □△○
+get_healing_executor
+executor
+●●●●●● 1mm □
+get_healing_executor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+actions
+●●●●●● 1mm □
+executor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'actions'
+'action_type'
+'enabled'
+'risk_level'
+'timeout_seconds'
+'requires_confirmation'
+a
+a
+a
+a
+a
+a
+actions
+Exception
+logger
+●●●●●● 1mm □△
+'Error listing healing actions: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/healing/actions'
+●●●●●● 2mm □△
+HealingRequest
+'Execute a healing action.'
+●●●●●● 3mm □△○
+healing
+●●●●●● 2mm □△○
+execute_healing
+HealingActionType
+action_type
+●●●●●● 1mm □
+HealingActionType
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+ValueError
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+execute_healing
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action_type'
+'success'
+'message'
+'duration_ms'
+'pre_state'
+'post_state'
+'rollback_available'
+result
+result
+result
+result
+result
+result
+result
+HTTPException
+Exception
+logger
+●●●●●● 1mm □△
+'Error executing healing: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/healing/execute'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+NotificationTestRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Request to send a test notification.'
+title
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+priority
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+channels
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List configured notification channels.'
+●●●●●● 3mm □△○
+notifications
+●●●●●● 2mm □△○
+get_notification_manager
+manager
+●●●●●● 1mm □
+get_notification_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+configured
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'configured_channels'
+'available_channels'
+configured
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error listing channels: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/notifications/channels'
+●●●●●● 2mm □△
+NotificationTestRequest
+'Send a test notification.'
+●●●●●● 3mm □△○
+notifications
+●●●●●● 2mm □△○
+get_notification_manager
+NotificationPriority
+manager
+●●●●●● 1mm □
+get_notification_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+priority_map
+●●●●●● 1mm □
+'low'
+'medium'
+'high'
+'critical'
+NotificationPriority
+NotificationPriority
+NotificationPriority
+NotificationPriority
+priority
+●●●●●● 1mm □
+priority_map
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+NotificationPriority
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'results'
+'channel'
+'status'
+'message'
+r
+r
+r
+r
+results
+Exception
+logger
+●●●●●● 1mm □△
+'Error sending notification: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/notifications/test'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Get recent notification history.'
+●●●●●● 3mm □△○
+notifications
+●●●●●● 2mm □△○
+get_notification_manager
+manager
+●●●●●● 1mm □
+get_notification_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'notifications'
+'total'
+'notification_id'
+'channel'
+'status'
+'message'
+'timestamp'
+r
+r
+r
+r
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting notification history: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/notifications/history'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Get recent learning insights from diagnostics.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+json
+insights_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'learning_memory'
+●●●●●● 3mm □△
+'diagnostic_insights'
+●●●●●● 2mm □
+insights_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'insights'
+'total'
+0
+insights
+●●●●●● 1mm □
+file_path
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+insights_dir
+●●●●●● 1mm □△
+'*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+limit
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+insights
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'insights'
+'total'
+insights
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+insights
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting learning insights: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/learning/insights'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+20
+'Get learned diagnostic patterns.'
+●●●●●● 3mm □△○
+cognitive_integration
+●●●●●● 2mm □△○
+get_cognitive_manager
+manager
+●●●●●● 1mm □
+get_cognitive_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+patterns
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'patterns'
+'total'
+patterns
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting patterns: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/learning/patterns'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+WebSocket
+WebSocketDisconnect
+WebSocket
+'WebSocket endpoint for real-time diagnostic updates.'
+●●●●●● 3mm □△○
+realtime
+●●●●●● 2mm □△○
+get_connection_manager
+manager
+●●●●●● 1mm □
+get_connection_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+client_id
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+websocket
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+data
+●●●●●● 1mm □
+websocket
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+json
+message
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+message
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'subscribe'
+topics
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+client_id
+topics
+●●●●●● 2mm □△
+●●●●●● 1mm △
+message
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'unsubscribe'
+topics
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'topics'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+client_id
+topics
+●●●●●● 2mm □△
+json
+WebSocketDisconnect
+●●●●●● 2mm □
+client_id
+manager
+●●●●●● 1mm □△
+client_id
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'WebSocket error: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client_id
+manager
+●●●●●● 1mm □△
+client_id
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ws'
+●●●●●● 2mm □△
+'Get info about connected WebSocket clients.'
+●●●●●● 3mm □△○
+realtime
+●●●●●● 2mm □△○
+get_connection_manager
+manager
+●●●●●● 1mm □
+get_connection_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'client_count'
+'clients'
+manager
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting WS clients: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ws/clients'
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+50
+'Get recent WebSocket events.'
+●●●●●● 3mm □△○
+realtime
+●●●●●● 2mm □△○
+get_connection_manager
+manager
+●●●●●● 1mm □
+get_connection_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'events'
+'total'
+manager
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manager
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting events: '
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ws/events'
+●●●●●● 2mm □△

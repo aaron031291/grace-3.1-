@@ -1,0 +1,1254 @@
+## architecture_compass.py
+'\nArchitecture Compass — Grace\'s Internal Self-Awareness Map\n\nGrace needs to understand her own architecture to function as an IDE.\nThis module gives her an internal compass — she knows:\n  - What each component does and why it exists\n  - How components connect to each other\n  - What data flows between them\n  - What capabilities are available for any given task\n  - Where bottlenecks and weak points are\n\nThe compass auto-registers all 184 modules on startup by scanning\nthe source code and building a live component graph.\n\nUsage by Grace:\n  compass.explain("pipeline")        → "The cognitive pipeline is a 9-stage..."\n  compass.find_for("code review")    → ["consensus_engine", "hunter", "pipeline"]\n  compass.how_connected("trust_engine", "pipeline") → data flow path\n  compass.diagnose()                 → bottlenecks, broken links\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+threading
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Set
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+COMPONENT_KNOWLEDGE
+●●●●●● 1mm □
+'cognitive/pipeline.py'
+'cognitive/consensus_engine.py'
+'cognitive/trust_engine.py'
+'cognitive/immune_system.py'
+'cognitive/flash_cache.py'
+'cognitive/unified_memory.py'
+'cognitive/central_orchestrator.py'
+'cognitive/event_bus.py'
+'cognitive/librarian_autonomous.py'
+'cognitive/hunter_assimilator.py'
+'cognitive/knowledge_cycle.py'
+'cognitive/mirror_self_modeling.py'
+'cognitive/idle_learner.py'
+'cognitive/model_updater.py'
+'cognitive/file_generator.py'
+'cognitive/healing_coordinator.py'
+'llm_orchestrator/factory.py'
+'llm_orchestrator/governance_wrapper.py'
+'api/_genesis_tracker.py'
+'security/api_vault.py'
+'api/chunked_upload_api.py'
+'api/brain_api_v2.py'
+'api/stream_api.py'
+'api/completion_api.py'
+'api/autonomous_loop_api.py'
+'api/retrieve.py'
+'retrieval/retriever.py'
+'embedding/embedder.py'
+'purpose'
+'capabilities'
+'key_apis'
+'9-stage cognitive processing chain: TimeSense→OODA→Ambiguity→Invariants→Generate→Contradiction→Hallucination→Trust→Genesis. Every code generation and reasoning task flows through this pipeline.'
+'code_generation'
+'reasoning'
+'verification'
+'trust_scoring'
+'CognitivePipeline.run()'
+'purpose'
+'capabilities'
+'key_apis'
+'Multi-model roundtable (Knights of the Roundtable). 4 layers: independent deliberation → consensus formation → alignment → verification. Runs Opus, Kimi, Qwen, and reasoning models in parallel on the same problem.'
+'multi_model_consensus'
+'autonomous_batch'
+'conflict_resolution'
+'run_consensus()'
+'queue_autonomous_query()'
+'get_available_models()'
+'purpose'
+'capabilities'
+'key_apis'
+'Component-level trust scoring (0-100). Breaks output into chunks, scores each chunk on source reliability, content quality, consensus, and recency. Components below threshold get flagged for verification.'
+'trust_scoring'
+'verification_trigger'
+'component_tracking'
+'get_trust_engine().score_output()'
+'get_dashboard()'
+'purpose'
+'capabilities'
+'key_apis'
+'AVN (Autonomous Vigilance Network). Monitors all system health: DB, Qdrant, LLM, memory, disk, API, ingestion. Adaptive scan intervals (10s-5min). Self-heals with rollback. Connects to genesis realtime for instant error notification.'
+'health_monitoring'
+'self_healing'
+'anomaly_detection'
+'healing_playbook'
+'GraceImmuneSystem.scan()'
+'_diagnose_and_heal()'
+'purpose'
+'capabilities'
+'key_apis'
+'Reference-based intelligent caching. Stores source URIs + keywords + summaries, NOT full content. Content streamed on demand from original source. Sub-millisecond keyword lookups via inverted index.'
+'keyword_lookup'
+'source_caching'
+'on_demand_streaming'
+'keyword_prediction'
+'get_flash_cache().register()'
+'.lookup()'
+'.search()'
+'.stream_content()'
+'purpose'
+'capabilities'
+'key_apis'
+'Single interface for all 5 memory systems: episodic (experiences), procedural (skills), learning (training data), magma (graph memory), flash cache (external refs). Search all at once.'
+'memory_store'
+'memory_recall'
+'cross_memory_search'
+'get_unified_memory().store_episode()'
+'.search_all()'
+'.get_stats()'
+'purpose'
+'capabilities'
+'key_apis'
+"Grace's Cognitive Operating System. Coordinates all autonomous systems. Global state container, task routing, integration health monitoring. Event bus subscriptions for system-wide awareness."
+'task_routing'
+'state_sync'
+'integration_health'
+'global_awareness'
+'get_orchestrator().route_task()'
+'.sync_state()'
+'.check_integration_health()'
+'purpose'
+'capabilities'
+'key_apis'
+'In-process pub/sub event system. Components publish events (llm.called, healing.started, trust.updated), subscribers react. Wildcard support. Non-blocking async publish.'
+'event_publishing'
+'event_subscription'
+'wildcard_matching'
+'publish()'
+'subscribe()'
+'publish_async()'
+'purpose'
+'capabilities'
+'key_apis'
+'Autonomous file organization. Watches for new files from ANY source, analyses content, creates directory structures, moves files to correct locations. Uses Kimi for unknown file types. FlashCache for reference lookups.'
+'file_organization'
+'directory_management'
+'content_analysis'
+'taxonomy_maintenance'
+'AutonomousLibrarian.organise_file()'
+'.suggest_location()'
+'.on_new_folder()'
+'purpose'
+'capabilities'
+'key_apis'
+'Autonomous code integration triggered by HUNTER keyword. 15-step pipeline: parse→Kimi analyse→pipeline verify→code review→fix→trust→healing pre-check→write→schema→librarian→handshake→contradiction→learn→immune→KPI.'
+'code_integration'
+'automated_review'
+'schema_migration'
+'HunterAssimilator.assimilate()'
+'purpose'
+'capabilities'
+'key_apis'
+'Iterative knowledge expansion: Seed→Discover→Score→Enrich→Validate→Reingest. Sources: Oracle DB, RAG, Magma, FlashCache. Trust-aware with depth limits and cost controls.'
+'knowledge_expansion'
+'multi_source_discovery'
+'trust_scoring'
+'KnowledgeCycle.run_cycle()'
+'purpose'
+'capabilities'
+'key_apis'
+"Grace's self-awareness. Analyses Genesis Keys to detect behavioral patterns: what keeps failing, what's improving, efficiency drops, learning plateaus. Lazy-loadable (no DB session required)."
+'self_observation'
+'pattern_detection'
+'improvement_suggestions'
+'MirrorSelfModelingSystem().observe_recent_operations()'
+'.detect_behavioral_patterns()'
+'purpose'
+'capabilities'
+'key_apis'
+'Background learning during idle time. Kimi teaches the coding agent from a 26-topic curriculum. Identifies knowledge gaps from failed generations.'
+'background_learning'
+'gap_identification'
+'curriculum_teaching'
+'IdleLearner.learn_topic()'
+'purpose'
+'capabilities'
+'key_apis'
+'Checks Kimi/Opus/Ollama APIs for new model versions. Auto-updates runtime config and persists to .env. Version history tracked.'
+'model_discovery'
+'version_update'
+'provider_health_check'
+'check_all_models()'
+'update_model()'
+'purpose'
+'capabilities'
+'key_apis'
+'Autonomous file creation from natural language prompts. Supports PDF, code, docs, data files. Auto-detects type, generates via appropriate LLM, saves to KB, registers in docs, organises via librarian.'
+'file_generation'
+'multi_format_output'
+'FileGenerator.generate()'
+'purpose'
+'capabilities'
+'key_apis'
+'Orchestrates the full healing chain: detect→diagnose→fix→verify→learn. Grace and Kimi independently diagnose, coding agent fixes, web search for context.'
+'healing_orchestration'
+'multi_model_diagnosis'
+'HealingCoordinator.heal()'
+'purpose'
+'capabilities'
+'key_apis'
+'Factory for creating LLM clients. Every client wrapped with GovernanceAwareLLM. Supports: Ollama (local), Kimi (cloud), Opus (cloud). Per-task model selection (code, reason, fast).'
+'llm_client_creation'
+'governance_wrapping'
+'task_routing'
+'get_llm_client()'
+'get_kimi_client()'
+'get_opus_client()'
+'get_llm_for_task()'
+'purpose'
+'capabilities'
+'key_apis'
+'Wraps ALL LLM clients. Injects governance rules and persona into every call. Tracks usage stats (latency, errors, tokens) for BI dashboard. Genesis Key on every call.'
+'governance_injection'
+'usage_tracking'
+'persona_management'
+'GovernanceAwareLLM.generate()'
+'get_llm_usage_stats()'
+'purpose'
+'capabilities'
+'key_apis'
+'Genesis Key creation helper. Every system output gets a Genesis Key (who/what/when/where/why/how). Fires realtime engine and event bus for instant notification.'
+'provenance_tracking'
+'event_firing'
+'track()'
+'purpose'
+'capabilities'
+'key_apis'
+'Central secure access point for all API keys. Masked display, per-provider verification, key rotation with audit trail.'
+'key_management'
+'provider_verification'
+'key_rotation'
+'get_vault().get_status()'
+'.verify_all()'
+'.rotate_key()'
+'purpose'
+'capabilities'
+'key_apis'
+'Chunked file upload supporting 5GB files. 5MB chunks, SHA256 per-chunk verification, resumable, streaming reassembly. Auto-registers in docs library.'
+'large_file_upload'
+'integrity_verification'
+'resumable_upload'
+'/api/upload/initiate'
+'/api/upload/chunk'
+'/api/upload/complete'
+'purpose'
+'capabilities'
+'key_apis'
+'Unified brain router: chat response (Cursor-style), consensus, code generation, RAG, file ops, governance, health. Single entry point for all 93+ actions across 8 domains.'
+'chat_response'
+'full_nlp'
+'multi_model_consensus'
+'code_generation'
+'semantic_search'
+'file_operations'
+'governance'
+'call_brain()'
+'brain_directory()'
+'health_map()'
+'semantic_query()'
+'purpose'
+'capabilities'
+'key_apis'
+'SSE streaming chat response. Cursor-style streaming: token-by-token delivery, model selection (Kimi/Opus), mention parsing, RAG context injection.'
+'chat_response'
+'streaming'
+'full_nlp'
+'multi_model'
+'/api/stream/chat'
+'streamChat()'
+'purpose'
+'capabilities'
+'key_apis'
+'Inline code completion (Cursor-style). Context-aware completion from code before/after cursor, optional streaming. Used by IDE and chat.'
+'chat_response'
+'code_completion'
+'inline_completion'
+'/api/complete'
+'getCompletion()'
+'streamCompletion()'
+'purpose'
+'capabilities'
+'key_apis'
+'Autonomous task loop API. Background and one-shot autonomous runs, progress polling, task lifecycle.'
+'autonomous_loop'
+'background_tasks'
+'task_progress'
+'/autonomous-learning/*'
+'run_background()'
+'progress'
+'purpose'
+'capabilities'
+'key_apis'
+'RAG retrieval and semantic search. Multi-tier retrieval (vector → model → context), reranking, trust-aware scoring. Full NLP pipeline for query understanding and document search.'
+'full_nlp'
+'semantic_search'
+'rag_retrieval'
+'reranking'
+'multi_tier'
+'/api/retrieve/*'
+'retrieve()'
+'search()'
+'purpose'
+'capabilities'
+'key_apis'
+'Core vector retrieval against Qdrant. Embedding-based similarity, filters, scoring. Part of full NLP stack for semantic search.'
+'full_nlp'
+'vector_search'
+'embedding_similarity'
+'retrieve()'
+'search()'
+'purpose'
+'capabilities'
+'key_apis'
+'Text embedding model (e.g. Qwen). Encodes text to vectors for RAG and semantic search. Foundation for full NLP retrieval.'
+'full_nlp'
+'embeddings'
+'vector_encoding'
+'embed()'
+'embed_batch()'
+●●●●●● 2mm △
+ComponentInfo
+name
+●●●●●● 1mm ○
+file_path
+●●●●●● 1mm ○
+purpose
+●●●●●● 1mm ○
+capabilities
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+key_apis
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+classes
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+public_functions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+imports_from
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+imported_by
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+connection_count
+●●●●●● 2mm ○
+is_isolated
+●●●●●● 3mm △
+last_health
+●●●●●● 1mm ○
+'unknown'
+dataclass
+●●●●●● 2mm △
+ArchitectureCompass
+"Grace's internal understanding of her own architecture."
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ComponentInfo
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Set
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'ArchitectureCompass'
+●●●●●● 1mm □
+build
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Scan the entire codebase and build the component map.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+subdir
+'api'
+'cognitive'
+'llm_orchestrator'
+'genesis'
+'security'
+'search'
+'retrieval'
+'embedding'
+d
+●●●●●● 1mm □
+BACKEND_DIR
+●●●●●● 3mm □△
+subdir
+●●●●●● 2mm □
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+d
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+'__init__.py'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+f
+subdir
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[COMPASS] Built architecture map: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' components'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_scan_module
+●●●●●● 1mm □△
+self
+file_path
+subdir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+rel
+●●●●●● 1mm □
+subdir
+'/'
+file_path
+source
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+classes
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+functions
+●●●●●● 1mm □
+n
+n
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+n
+●●●●●● 1mm □△
+'_'
+●●●●●● 2mm □△
+imports_from
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+node
+●●●●●● 1mm □△
+p
+●●●●●● 2mm □△
+p
+'cognitive.'
+'api.'
+'llm_orchestrator.'
+'genesis.'
+'security.'
+●●●●●● 2mm □△
+imports_from
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+knowledge
+●●●●●● 1mm □
+COMPONENT_KNOWLEDGE
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □
+ComponentInfo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+rel
+●●●●●● 1mm □
+info
+●●●●●● 3mm △
+rel
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+imp
+imports_from
+target
+●●●●●● 1mm □
+imp
+●●●●●● 1mm □△
+'.'
+'/'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'.py'
+●●●●●● 3mm △
+rel
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_build_reverse_graph
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+src
+targets
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+targets
+●●●●●● 2mm □
+target
+●●●●●● 3mm △
+●●●●●● 3mm △
+target
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+target
+●●●●●● 1mm □△
+src
+●●●●●● 2mm □△
+comp_path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+comp_path
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_build_capability_index
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+comp_path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cap
+info
+●●●●●● 2mm □
+cap
+●●●●●● 3mm △
+●●●●●● 3mm △
+cap
+●●●●●● 1mm □
+●●●●●● 3mm △
+cap
+●●●●●● 1mm □△
+comp_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+explain
+●●●●●● 1mm □△
+self
+component_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Grace asks: What does this component do?'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+component_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lines
+●●●●●● 1mm □
+'**'
+info
+'** (`'
+info
+'`)'
+'Purpose: '
+info
+'Capabilities: '
+info
+', '
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+'general'
+'Key APIs: '
+', '
+●●●●●● 1mm □△
+info
+5
+●●●●●● 2mm □△
+'Classes: '
+', '
+●●●●●● 1mm □△
+info
+5
+●●●●●● 2mm □△
+'Connects to: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+' modules'
+'Used by: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+' modules'
+'Isolated: '
+info
+'Yes'
+'No'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Unknown component: '
+component_name
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_for
+●●●●●● 1mm □△
+self
+capability
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Grace asks: What can handle this task?'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+cap_lower
+●●●●●● 1mm □
+capability
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cap
+components
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cap_lower
+cap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cap
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cap_lower
+results
+●●●●●● 1mm □△
+components
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cap_lower
+info
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+how_connected
+●●●●●● 1mm □△
+self
+comp_a
+comp_b
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Grace asks: How does data flow from A to B?'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path_a
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+comp_a
+●●●●●● 2mm □△
+path_b
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+comp_b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path_a
+path_b
+●●●●●● 3mm ○
+'Could not resolve: '
+path_a
+comp_a
+comp_b
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+visited
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+queue
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path_a
+path_a
+●●●●●● 2mm □△
+queue
+current
+path
+●●●●●● 1mm □
+queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current
+path_b
+●●●●●● 3mm ○
+path
+●●●●●● 2mm □
+current
+visited
+visited
+●●●●●● 1mm □△
+current
+●●●●●● 2mm □△
+neighbor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neighbor
+visited
+queue
+●●●●●● 1mm □△
+neighbor
+path
+●●●●●● 3mm ○
+neighbor
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'No direct path from '
+comp_a
+' to '
+comp_b
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+diagnose
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Grace self-diagnoses her architecture.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+isolated
+●●●●●● 1mm □
+p
+p
+i
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+most_depended
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+p
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 3mm △
+●●●●●● 2mm □△
+10
+most_connections
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+p
+i
+p
+i
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+'total_components'
+'total_connections'
+'isolated_count'
+'isolated_modules'
+'most_depended_on'
+'most_connections'
+'capabilities_available'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+isolated
+●●●●●● 2mm □△
+isolated
+20
+'module'
+'dependents'
+p
+c
+p
+c
+most_depended
+'module'
+'connections'
+p
+c
+p
+c
+most_connections
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+predict_dependency_issues
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Predict dependency issues before they happen.\n        Uses the connection graph to find:\n        - Single points of failure (modules everything depends on)\n        - Circular dependency risks\n        - Modules with too many dependents (fragile)\n        - Orphaned modules that might break silently\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □
+path
+●●●●●● 3mm △
+dependents
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dependents
+10
+issues
+●●●●●● 1mm □△
+'type'
+'severity'
+'module'
+'dependents'
+'risk'
+'mitigation'
+'single_point_of_failure'
+dependents
+20
+'high'
+'medium'
+path
+dependents
+path
+' has '
+dependents
+' dependents — if it breaks, '
+dependents
+' modules fail'
+'Add fallback/retry logic in dependent modules'
+●●●●●● 2mm □△
+path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dependents
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+path
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+outgoing
+●●●●●● 1mm □
+info
+●●●●●● 2mm □
+dependents
+0
+outgoing
+5
+issues
+●●●●●● 1mm □△
+'type'
+'severity'
+'module'
+'outgoing'
+'risk'
+'potential_dead_code'
+'low'
+path
+outgoing
+path
+' imports '
+outgoing
+' modules but nothing imports it — possibly unused'
+●●●●●● 2mm □△
+path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+8
+issues
+●●●●●● 1mm □△
+'type'
+'severity'
+'module'
+'connections'
+'risk'
+'mitigation'
+'tight_coupling'
+'medium'
+path
+info
+path
+' has '
+info
+' dependencies — tightly coupled, hard to modify'
+'Consider using event bus for some connections'
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_full_map
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Complete architecture map for display.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'components'
+'total'
+'connected'
+'isolated'
+path
+'name'
+'purpose'
+'capabilities'
+'connections_out'
+'connections_in'
+'isolated'
+info
+info
+200
+info
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+info
+●●●●●● 2mm □△
+info
+path
+info
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+i
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+i
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_resolve_path
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+path
+●●●●●● 3mm △
+●●●●●● 2mm □
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+path
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ArchitectureCompass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ArchitectureCompass

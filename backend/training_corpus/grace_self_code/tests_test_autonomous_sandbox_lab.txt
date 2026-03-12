@@ -1,0 +1,2417 @@
+## test_autonomous_sandbox_lab.py
+"\nComprehensive Component Tests for Autonomous Sandbox Lab\n\nTests the complete lifecycle of Grace's self-improvement experiments:\n- Experiment creation and management\n- Trust score calculation\n- Trial execution and metrics tracking\n- Promotion workflow (sandbox -> trial -> production)\n- Continuous learning orchestration\n"
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+patch
+MagicMock
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+tempfile
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestExperimentStatus
+'Test ExperimentStatus enum'
+●●●●●● 1mm □
+test_all_statuses_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected statuses are defined'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentStatus
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'PROPOSED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'SANDBOX'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'TRIAL'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'VALIDATED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'APPROVED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'PRODUCTION'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'REJECTED'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentStatus
+'ARCHIVED'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_status_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test status string values'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentStatus
+ExperimentStatus
+'proposed'
+ExperimentStatus
+'sandbox'
+ExperimentStatus
+'trial'
+ExperimentStatus
+'validated'
+ExperimentStatus
+'approved'
+ExperimentStatus
+'production'
+ExperimentStatus
+'rejected'
+ExperimentStatus
+'archived'
+●●●●●● 2mm △
+TestExperimentType
+'Test ExperimentType enum'
+●●●●●● 1mm □
+test_all_types_exist
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test all expected types are defined'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentType
+'ALGORITHM_IMPROVEMENT'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentType
+'NEW_CAPABILITY'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentType
+'PERFORMANCE_OPTIMIZATION'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentType
+'ERROR_REDUCTION'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentType
+'LEARNING_ENHANCEMENT'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ExperimentType
+'SELF_MODELING'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_type_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test type string values'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentType
+'algorithm_improvement'
+ExperimentType
+'new_capability'
+ExperimentType
+'performance_optimization'
+●●●●●● 2mm △
+TestTrustThreshold
+'Test TrustThreshold values'
+●●●●●● 1mm □
+test_threshold_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trust thresholds are properly defined'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+TrustThreshold
+TrustThreshold
+0.3
+TrustThreshold
+0.6
+TrustThreshold
+0.85
+TrustThreshold
+0.95
+●●●●●● 1mm □
+test_threshold_ordering
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test thresholds increase at each stage'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+TrustThreshold
+TrustThreshold
+TrustThreshold
+TrustThreshold
+TrustThreshold
+TrustThreshold
+TrustThreshold
+●●●●●● 2mm △
+TestExperiment
+'Test Experiment class'
+●●●●●● 1mm □
+test_experiment_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating an experiment'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+'Test Experiment'
+exp
+'A test experiment'
+exp
+ExperimentType
+exp
+'test_user'
+exp
+'Testing purposes'
+exp
+ExperimentStatus
+exp
+●●●●●● 1mm □△
+'EXP-'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_experiment_with_custom_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test creating experiment with custom ID'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+'EXP-CUSTOM-001'
+●●●●●● 1mm □
+test_experiment_initial_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test experiment initial values'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+0.0
+exp
+0.0
+exp
+exp
+exp
+exp
+●●●●●● 2mm □
+exp
+90
+exp
+0
+exp
+0
+exp
+0
+exp
+●●●●●● 2mm □
+exp
+exp
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_get_success_rate_no_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test success rate with no trial data'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+●●●●●● 1mm □
+test_get_success_rate_with_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test success rate calculation'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+100
+exp
+●●●●●● 1mm □
+90
+exp
+●●●●●● 1mm □
+10
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.9
+●●●●●● 1mm □
+test_get_trial_days_elapsed_no_trial
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trial days with no trial started'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_get_trial_days_elapsed_active_trial
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trial days with active trial'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+30
+●●●●●● 1mm □
+test_get_trial_days_remaining
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trial days remaining calculation'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+60
+●●●●●● 1mm □
+test_is_trial_complete
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trial completion check'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_is_trial_not_complete
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trial not complete'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestExperimentGates
+'Test experiment gate checks'
+●●●●●● 1mm □
+test_can_enter_sandbox_true
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test can enter sandbox with sufficient trust'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+TrustThreshold
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.35
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_can_enter_sandbox_low_trust
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cannot enter sandbox with low trust'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.2
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_can_enter_sandbox_wrong_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cannot enter sandbox from wrong status'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.5
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_can_enter_trial_true
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test can enter trial with all requirements'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.65
+exp
+●●●●●● 1mm □
+'def improve(): pass'
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_can_enter_trial_no_implementation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cannot enter trial without implementation'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.65
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_can_promote_to_production
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test can promote with all requirements met'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.9
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+1000
+exp
+●●●●●● 1mm □
+950
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_can_auto_approve
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test auto-approve eligibility'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.96
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+1000
+exp
+●●●●●● 1mm □
+950
+exp
+●●●●●● 1mm □
+25.0
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_cannot_auto_approve_low_improvement
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cannot auto-approve with low improvement'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentStatus
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+0.96
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+1000
+exp
+●●●●●● 1mm □
+950
+exp
+●●●●●● 1mm □
+15.0
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestExperimentTrustScore
+'Test trust score calculation'
+●●●●●● 1mm □
+test_calculate_trust_score_rule_based
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test rule-based trust score calculation'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+1000
+exp
+●●●●●● 1mm □
+900
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+30.0
+score
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+score
+1.0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+1
+'factors'
+exp
+0
+●●●●●● 1mm □
+test_calculate_trust_score_with_ml_scorer
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trust score with ML scorer'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+1000
+exp
+●●●●●● 1mm □
+900
+mock_scorer
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_scorer
+●●●●●● 1mm □
+0.85
+0.05
+score
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+0.85
+exp
+0.85
+mock_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_calculate_trust_score_ml_fallback
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test trust score falls back to rules when ML fails'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+100
+exp
+●●●●●● 1mm □
+90
+mock_scorer
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_scorer
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'ML unavailable'
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+score
+1.0
+●●●●●● 2mm △
+TestExperimentTypeRisk
+'Test experiment type risk factors'
+●●●●●● 1mm □
+test_risk_factor_low_risk
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test low risk type'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentType
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+risk
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+risk
+0.9
+●●●●●● 1mm □
+test_risk_factor_high_risk
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test high risk type'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentType
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+risk
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+risk
+0.4
+●●●●●● 2mm △
+TestExperimentSerialization
+'Test experiment serialization'
+●●●●●● 1mm □
+test_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test experiment to_dict serialization'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+Experiment
+ExperimentType
+exp
+●●●●●● 1mm □
+Experiment
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+0.5
+data
+●●●●●● 1mm □
+exp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'name'
+'Test Experiment'
+data
+'description'
+'Test description'
+data
+'experiment_type'
+'algorithm_improvement'
+data
+'motivation'
+'Test motivation'
+data
+'status'
+'proposed'
+'trust_scores'
+data
+data
+'trust_scores'
+'current'
+0.5
+'metrics'
+data
+'trial'
+data
+'approval'
+data
+'gates'
+data
+●●●●●● 2mm △
+TestAutonomousSandboxLab
+'Test AutonomousSandboxLab class'
+●●●●●● 1mm □
+temp_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary storage for testing'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+self
+temp_storage
+●●●●●● 2mm □△
+'Create sandbox lab with temp storage'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+●●●●●● 3mm ○
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_lab_initialization
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test lab initializes correctly'
+sandbox_lab
+sandbox_lab
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_propose_experiment
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test proposing an experiment'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+'Test Improvement'
+exp
+sandbox_lab
+exp
+ExperimentStatus
+sandbox_lab
+'total_experiments'
+1
+●●●●●● 1mm □
+test_propose_experiment_auto_sandbox
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test experiment auto-enters sandbox with high trust'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+ExperimentStatus
+●●●●●● 1mm □
+test_enter_sandbox
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test entering sandbox'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+ExperimentStatus
+●●●●●● 1mm □
+test_enter_sandbox_low_trust
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test cannot enter sandbox with low trust'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_record_sandbox_implementation
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test recording sandbox implementation'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+code
+●●●●●● 1mm □
+'def improved_algorithm(): return True'
+files
+●●●●●● 1mm □
+'test.py'
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+code
+files
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+code
+exp
+●●●●●● 2mm □
+exp
+files
+●●●●●● 1mm □
+test_start_trial
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test starting a trial'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+'def test(): pass'
+baseline
+●●●●●● 1mm □
+'accuracy'
+'speed'
+0.8
+100
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+baseline
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+ExperimentStatus
+exp
+●●●●●● 2mm □
+exp
+baseline
+exp
+sandbox_lab
+●●●●●● 1mm □
+test_record_trial_result_success
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test recording successful trial result'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+'accuracy'
+0.8
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+1
+exp
+1
+exp
+0
+●●●●●● 1mm □
+test_record_trial_result_failure
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test recording failed trial result'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+1
+exp
+0
+exp
+1
+●●●●●● 1mm □
+test_trial_validates_on_completion
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test trial validates when complete with high success rate'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+999
+exp
+●●●●●● 1mm □
+920
+exp
+●●●●●● 1mm □
+0.9
+exp
+●●●●●● 1mm □
+'accuracy'
+0.8
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+exp
+ExperimentStatus
+●●●●●● 1mm □
+test_approve_for_production
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test approving for production'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+1000
+exp
+●●●●●● 1mm □
+950
+exp
+●●●●●● 1mm □
+0.9
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+ExperimentStatus
+exp
+'test_user'
+exp
+'Approved for testing'
+●●●●●● 1mm □
+test_promote_to_production
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test promoting to production'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+ExperimentStatus
+exp
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_experiment
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test getting experiment by ID'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+retrieved
+●●●●●● 2mm □
+retrieved
+exp
+●●●●●● 1mm □
+test_get_experiment_not_found
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test getting non-existent experiment'
+result
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+'EXP-NONEXISTENT'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_list_experiments
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test listing experiments'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+experiments
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+experiments
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_list_experiments_filter_by_status
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test filtering experiments by status'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp1
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp2
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proposed
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sandbox
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+proposed
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sandbox
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_list_experiments_filter_by_type
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test filtering experiments by type'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+algo
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+perf
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+algo
+●●●●●● 2mm □△
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+perf
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_active_trials
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test getting active trials'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+'def test(): pass'
+sandbox_lab
+●●●●●● 1mm □△
+exp
+'accuracy'
+0.8
+●●●●●● 2mm □△
+active
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active
+●●●●●● 2mm □△
+1
+active
+0
+exp
+●●●●●● 1mm □
+test_get_awaiting_approval
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test getting experiments awaiting approval'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+ExperimentStatus
+exp
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+awaiting
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+awaiting
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_statistics
+●●●●●● 1mm □△
+self
+sandbox_lab
+●●●●●● 2mm □△
+'Test getting lab statistics'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+ExperimentType
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+sandbox_lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_experiments'
+stats
+'sandbox_experiments'
+stats
+'trial_experiments'
+stats
+'production_experiments'
+stats
+'rejected_experiments'
+stats
+'active_trials_count'
+stats
+'awaiting_approval_count'
+stats
+'average_trust_score'
+stats
+●●●●●● 2mm △
+TestSandboxLabPersistence
+'Test sandbox lab persistence'
+●●●●●● 1mm □
+temp_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary storage for testing'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_save_experiment
+●●●●●● 1mm □△
+self
+temp_storage
+●●●●●● 2mm □△
+'Test experiment is saved to disk'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+ExperimentType
+lab
+●●●●●● 1mm □
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp_file
+●●●●●● 1mm □
+temp_storage
+●●●●●● 3mm □△
+exp
+'.json'
+exp_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+exp_file
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+data
+'name'
+'Save Test'
+data
+'experiment_id'
+exp
+●●●●●● 2mm △
+TestSandboxLabSeeding
+'Test sandbox lab seeding'
+●●●●●● 1mm □
+temp_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary storage for testing'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_seed_initial_experiments
+●●●●●● 1mm □△
+self
+temp_storage
+●●●●●● 2mm □△
+'Test seeding initial experiments'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+lab
+●●●●●● 1mm □
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lab
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □
+test_seed_does_not_duplicate
+●●●●●● 1mm □△
+self
+temp_storage
+●●●●●● 2mm □△
+"Test seeding doesn't duplicate if experiments exist"
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+ExperimentType
+lab
+●●●●●● 1mm □
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lab
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestContinuousLearningOrchestrator
+'Test ContinuousLearningOrchestrator class'
+●●●●●● 1mm □
+test_orchestrator_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test orchestrator initializes correctly'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+orchestrator
+●●●●●● 2mm □
+orchestrator
+●●●●●● 2mm □
+orchestrator
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_orchestrator_default_config
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test orchestrator default configuration'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+'ingestion_interval_seconds'
+60
+orchestrator
+'learning_cycle_interval_seconds'
+300
+orchestrator
+'mirror_observation_interval_seconds'
+600
+orchestrator
+'experiment_check_interval_seconds'
+120
+orchestrator
+'auto_propose_experiments'
+●●●●●● 3mm □△○
+orchestrator
+'auto_start_trials'
+●●●●●● 3mm □△○
+orchestrator
+'min_trust_for_auto_trial'
+0.65
+●●●●●● 1mm □
+test_orchestrator_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test orchestrator statistics initialization'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+'total_ingestions'
+0
+orchestrator
+'total_learning_cycles'
+0
+orchestrator
+'total_mirror_observations'
+0
+orchestrator
+'total_experiments_proposed'
+0
+orchestrator
+'total_trials_started'
+0
+orchestrator
+'total_improvements_deployed'
+0
+●●●●●● 1mm □
+test_orchestrator_get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test getting orchestrator status'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'running'
+status
+'uptime_seconds'
+status
+'stats'
+status
+'config'
+status
+'queues'
+status
+'last_operations'
+status
+'current_metrics'
+status
+●●●●●● 1mm □
+test_should_run_ingestion_first_time
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion should run first time'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_should_run_ingestion_after_interval
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion runs after interval'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_should_not_run_ingestion_too_soon
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Test ingestion doesn't run too soon"
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_should_run_learning_first_time
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test learning should run first time'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_should_run_mirror_first_time
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test mirror should run first time'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_should_check_experiments_first_time
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test experiment check should run first time'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestContinuousLearningOrchestratorLifecycle
+'Test orchestrator lifecycle (start/stop)'
+●●●●●● 1mm □
+test_start_sets_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test start sets running flag'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+orchestrator
+'initialize_components'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 3mm □△○
+orchestrator
+●●●●●● 2mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_stop_clears_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test stop clears running flag'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+orchestrator
+'initialize_components'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_start_idempotent
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Test calling start twice doesn't create duplicate threads"
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+ContinuousLearningOrchestrator
+orchestrator
+●●●●●● 1mm □
+ContinuousLearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+orchestrator
+'initialize_components'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+first_thread
+●●●●●● 1mm □
+orchestrator
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+second_thread
+●●●●●● 1mm □
+orchestrator
+first_thread
+second_thread
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestContinuousLearningOrchestratorSingleton
+'Test singleton pattern'
+●●●●●● 1mm □
+test_get_continuous_orchestrator_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_continuous_orchestrator returns singleton'
+●●●●●● 3mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 2mm □△○
+get_continuous_orchestrator
+_continuous_orchestrator
+●●●●●● 2mm □△○
+cognitive.continuous_learning_orchestrator
+●●●●●● 1mm □
+module
+module
+●●●●●● 1mm □
+●●●●●● 2mm □
+orch1
+●●●●●● 1mm □
+get_continuous_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orch2
+●●●●●● 1mm □
+get_continuous_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orch1
+orch2
+●●●●●● 2mm △
+TestSandboxLabIntegration
+'Integration tests for sandbox lab with other components'
+●●●●●● 1mm □
+temp_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary storage for testing'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_full_experiment_lifecycle
+●●●●●● 1mm □△
+self
+temp_storage
+●●●●●● 2mm □△
+'Test complete experiment lifecycle from proposal to production'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+ExperimentType
+ExperimentStatus
+lab
+●●●●●● 1mm □
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+ExperimentStatus
+result
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+exp
+'def optimized(): return True'
+'optimization.py'
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+exp
+'latency_ms'
+'throughput'
+100
+500
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+ExperimentStatus
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+0.9
+lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+exp
+ExperimentStatus
+result
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+result
+●●●●●● 3mm □△○
+exp
+ExperimentStatus
+●●●●●● 2mm △
+TestApprovalRequestGeneration
+'Test approval request message generation'
+●●●●●● 1mm □
+temp_storage
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create temporary storage for testing'
+tempfile
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tmpdir
+Path
+●●●●●● 1mm □△
+tmpdir
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_generate_approval_request
+●●●●●● 1mm □△
+self
+temp_storage
+●●●●●● 2mm □△
+'Test approval request message is properly formatted'
+●●●●●● 3mm □△○
+cognitive.autonomous_sandbox_lab
+●●●●●● 2mm □△○
+AutonomousSandboxLab
+ExperimentType
+ExperimentStatus
+lab
+●●●●●● 1mm □
+AutonomousSandboxLab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exp
+●●●●●● 1mm □
+ExperimentStatus
+exp
+●●●●●● 1mm □
+10000
+exp
+●●●●●● 1mm □
+9500
+exp
+●●●●●● 1mm □
+0.92
+exp
+●●●●●● 1mm □
+25.5
+exp
+●●●●●● 1mm □
+'accuracy'
+0.8
+exp
+●●●●●● 1mm □
+'accuracy'
+0.95
+message
+●●●●●● 1mm □
+lab
+●●●●●● 1mm □△
+exp
+●●●●●● 2mm □△
+'EXPERIMENT READY FOR APPROVAL'
+message
+exp
+message
+'Approval Request Test'
+message
+'10,000'
+message
+'95.0%'
+message
+'25.5%'
+message
+'TO APPROVE:'
+message
+'TO REJECT:'
+message
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

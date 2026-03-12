@@ -1,0 +1,149 @@
+## data_warehouse.py
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+time
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LegacyDataWarehouse
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.genesis_key
+●●●●●● 2mm □△○
+genesis_key
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LEGACY-WAREHOUSE] Initialized with Genesis Key: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+perform_migration
+●●●●●● 1mm □△
+self
+migration_sql
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Legacy operation that used to bypass Spindle formal proofs.\n        Now retrofitted to check physics and use the Genesis Key.\n        '
+logger
+●●●●●● 1mm □△
+'[LEGACY-WAREHOUSE] Attempting migration: '
+migration_sql
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.spindle_api
+●●●●●● 2mm □△○
+verify_spindle_action
+ActionRequest
+●●●●●● 2mm □△○
+asyncio
+action
+●●●●●● 1mm □
+'Execute database migration: '
+migration_sql
+50
+req
+●●●●●● 1mm □
+ActionRequest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+verify_result
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+verify_spindle_action
+●●●●●● 1mm □△
+req
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+verify_result
+logger
+●●●●●● 1mm □△
+'[LEGACY-WAREHOUSE] Spindle Blocked Migration! Reason: '
+verify_result
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'Spindle rejected legacy operation.'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LEGACY-WAREHOUSE] Migration permitted. Executing.'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'rows_affected'
+'success'
+1400
+ImportError
+logger
+●●●●●● 1mm □△
+'[LEGACY-WAREHOUSE] Spindle not found, executing raw (UNSAFE).'
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'rows_affected'
+'success'
+1400
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_warehouse
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_legacy_warehouse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_warehouse
+●●●●●● 2mm □
+_warehouse
+●●●●●● 1mm □
+LegacyDataWarehouse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_warehouse
+LegacyDataWarehouse

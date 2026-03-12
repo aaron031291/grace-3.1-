@@ -1,0 +1,236 @@
+## base_layer.py
+'\nGrace OS — Base Layer\n\nThe abstract base class that all 9 processing layers implement. \nIt encapsulates the mesh architecture connection details, leaving the \nconcrete classes to focus on their specific logic.\n'
+●●●●●● 3mm □△○
+abc
+●●●●●● 2mm □△○
+ABC
+abstractmethod
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+kernel.message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+kernel.layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BaseLayer
+●●●●●● 3mm □△
+ABC
+ABC
+'\n    Abstract Base Class for all Grace OS Layers.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+bus
+registry
+●●●●●● 2mm □△
+MessageBus
+LayerRegistry
+●●●●●● 3mm △
+●●●●●● 1mm □
+bus
+●●●●●● 3mm △
+●●●●●● 1mm □
+registry
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"e.g., 'L3_Proposer'"
+●●●●●● 3mm ○
+abstractmethod
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"e.g., ['propose_solutions', 'brainstorming']"
+●●●●●● 3mm ○
+abstractmethod
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"e.g., ['request_proposals']"
+●●●●●● 3mm ○
+abstractmethod
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Register with the registry and subscribe to the message bus.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Starting layer...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+msg_type
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+msg_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Started and listening on '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Deregister and unsubscribe.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Stopping layer...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+msg_type
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+msg_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+0
+10
+'\n        Helper method for layers to send messages.\n        '
+msg
+●●●●●● 1mm □
+LayerMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+"] Sending '"
+message_type
+"' to '"
+to_layer
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Internal wrapper around the abstract `handle_message`.\n        Performs target validation.\n        '
+●●●●●● 2mm □
+message
+'*'
+message
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'ignored'
+'Not intended for this layer'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Received message: '
+message
+' from '
+message
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Process the incoming layer message.\n        Concrete layers must implement this method to perform their specific work.\n        '
+abstractmethod
+LayerResponse

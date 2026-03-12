@@ -1,0 +1,1873 @@
+## autonomous_healing_system.py
+'\nAutonomous Self-Healing System with AVM/AVN Integration\n\nCombines knowledge from:\n- AVN (Auto Verifier Node): Health monitoring, anomaly detection\n- AVM (Autonomous Virtual Machine): Real AI decision-making, trust-based execution\n- Forensic Tools: Investigation and evidence preservation\n- Genesis Keys: Problem identification and tracking\n\nCreates a fully autonomous system that:\n1. Continuously monitors system health\n2. Detects anomalies and issues automatically\n3. Makes autonomous healing decisions based on trust scores\n4. Executes healing actions with progressive autonomy\n5. Learns from healing outcomes\n6. Integrates with mirror agent for self-modeling\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+genesis.healing_system
+●●●●●● 2mm □△○
+get_healing_system
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+GenesisKeyType
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealthStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'System health status levels from AVN.'
+HEALTHY
+●●●●●● 1mm □
+'healthy'
+DEGRADED
+●●●●●● 1mm □
+'degraded'
+WARNING
+●●●●●● 1mm □
+'warning'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+FAILING
+●●●●●● 1mm □
+'failing'
+●●●●●● 2mm △
+AnomalyType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of anomalies the system can detect.'
+PERFORMANCE_DEGRADATION
+●●●●●● 1mm □
+'performance_degradation'
+MEMORY_LEAK
+●●●●●● 1mm □
+'memory_leak'
+ERROR_SPIKE
+●●●●●● 1mm □
+'error_spike'
+RESPONSE_TIMEOUT
+●●●●●● 1mm □
+'response_timeout'
+DATA_INCONSISTENCY
+●●●●●● 1mm □
+'data_inconsistency'
+SECURITY_BREACH
+●●●●●● 1mm □
+'security_breach'
+RESOURCE_EXHAUSTION
+●●●●●● 1mm □
+'resource_exhaustion'
+●●●●●● 2mm △
+HealingAction
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Healing actions ordered by severity (8 levels from AVN).'
+BUFFER_CLEAR
+●●●●●● 1mm □
+'buffer_clear'
+CACHE_FLUSH
+●●●●●● 1mm □
+'cache_flush'
+CONNECTION_RESET
+●●●●●● 1mm □
+'connection_reset'
+PROCESS_RESTART
+●●●●●● 1mm □
+'process_restart'
+SERVICE_RESTART
+●●●●●● 1mm □
+'service_restart'
+STATE_ROLLBACK
+●●●●●● 1mm □
+'state_rollback'
+ISOLATION
+●●●●●● 1mm □
+'isolation'
+EMERGENCY_SHUTDOWN
+●●●●●● 1mm □
+'emergency_shutdown'
+●●●●●● 2mm △
+TrustLevel
+●●●●●● 3mm □△
+int
+Enum
+●●●●●● 2mm ○
+Enum
+'Trust levels for autonomous action execution (0-9 from AVM).'
+MANUAL_ONLY
+●●●●●● 1mm □
+0
+SUGGEST_ONLY
+●●●●●● 1mm □
+1
+LOW_RISK_AUTO
+●●●●●● 1mm □
+2
+MEDIUM_RISK_AUTO
+●●●●●● 1mm □
+3
+HIGH_RISK_AUTO
+●●●●●● 1mm □
+4
+CRITICAL_AUTO
+●●●●●● 1mm □
+5
+SYSTEM_WIDE_AUTO
+●●●●●● 1mm □
+6
+LEARNING_AUTO
+●●●●●● 1mm □
+7
+SELF_MODIFICATION
+●●●●●● 1mm □
+8
+FULL_AUTONOMY
+●●●●●● 1mm □
+9
+●●●●●● 2mm △
+AutonomousHealingSystem
+'\n    Autonomous self-healing system with AVM/AVN integration.\n\n    Continuously monitors health, detects anomalies, and executes healing\n    actions based on trust scores and progressive autonomy levels.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+repo_path
+trust_level
+enable_learning
+simulation_mode
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+TrustLevel
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □
+TrustLevel
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+Path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_level
+●●●●●● 3mm △
+●●●●●● 1mm □
+enable_learning
+●●●●●● 3mm △
+●●●●●● 1mm □
+simulation_mode
+●●●●●● 2mm □
+settings
+simulation_mode
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_healing_system
+●●●●●● 1mm □△
+repo_path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+HealthStatus
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'error_rate'
+'response_time'
+'memory_usage'
+'cpu_usage'
+0.05
+5.0
+0.85
+0.9
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Initialized with trust_level='
+trust_level
+', learning='
+enable_learning
+'ENABLED'
+'DISABLED'
+', mode='
+●●●●●● 3mm △
+'SIMULATE'
+'EXECUTE'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_initialize_trust_scores
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Initialize trust scores for healing actions (0.0 = no trust, 1.0 = full trust).'
+●●●●●● 3mm △
+●●●●●● 1mm □
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+0.9
+0.85
+0.75
+0.6
+0.5
+0.4
+0.35
+0.2
+●●●●●● 1mm □
+assess_system_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Assess overall system health.\n\n        Returns health status and detected anomalies.\n        '
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Assessing system health...'
+●●●●●● 2mm □△
+code_issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recent_errors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+anomalies
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code_issues
+recent_errors
+●●●●●● 2mm □△
+health_status
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+assessment
+●●●●●● 1mm □
+'timestamp'
+'health_status'
+'code_issues'
+'recent_errors'
+'anomalies_detected'
+'anomalies'
+'trust_level'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health_status
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+code_issues
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+anomalies
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+health_status
+●●●●●● 3mm △
+●●●●●● 1mm □
+anomalies
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Health: '
+health_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+', Anomalies: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+anomalies
+●●●●●● 2mm □△
+', Issues: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+code_issues
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+assessment
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_query_recent_errors
+●●●●●● 1mm □△
+self
+hours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+1
+'Query recent error Genesis Keys.'
+cutoff_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+cutoff_time
+GenesisKey
+GenesisKeyType
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+errors
+●●●●●● 3mm □△
+GenesisKey
+●●●●●● 1mm □
+_detect_anomalies
+●●●●●● 1mm □△
+self
+code_issues
+recent_errors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△
+GenesisKey
+'\n        Detect anomalies from code issues and error patterns.\n\n        Returns list of detected anomalies with type and severity.\n        '
+anomalies
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+10
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'details'
+'evidence'
+AnomalyType
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+50
+'critical'
+'warning'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_errors
+●●●●●● 2mm □△
+' errors in last hour'
+e
+e
+recent_errors
+5
+●●●●●● 2mm □△
+critical_issues
+●●●●●● 1mm □
+i
+i
+code_issues
+i
+●●●●●● 1mm □△
+'severity'
+●●●●●● 2mm □△
+'critical'
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critical_issues
+●●●●●● 2mm □△
+5
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'details'
+'evidence'
+AnomalyType
+'critical'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critical_issues
+●●●●●● 2mm □△
+' critical code issues detected'
+i
+●●●●●● 1mm □△
+'file_genesis_key'
+●●●●●● 2mm □△
+i
+critical_issues
+5
+●●●●●● 2mm □△
+file_error_counts
+●●●●●● 1mm □
+error
+recent_errors
+file_path
+●●●●●● 1mm □
+error
+●●●●●● 2mm □
+file_path
+error
+file_path
+●●●●●● 1mm □
+error
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_path
+file_error_counts
+file_path
+●●●●●● 1mm □
+file_error_counts
+●●●●●● 1mm □△
+file_path
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+file_path
+count
+file_error_counts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+3
+anomalies
+●●●●●● 1mm □△
+'type'
+'severity'
+'details'
+'evidence'
+AnomalyType
+'warning'
+"File '"
+file_path
+"' failing repeatedly ("
+count
+' times)'
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+anomalies
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_calculate_health_status
+●●●●●● 1mm □△
+self
+anomalies
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+'Calculate overall health status from detected anomalies.'
+●●●●●● 2mm □
+anomalies
+●●●●●● 3mm ○
+HealthStatus
+critical_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+anomalies
+a
+'severity'
+'critical'
+●●●●●● 2mm □△
+warning_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+a
+anomalies
+a
+'severity'
+'warning'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+critical_count
+2
+●●●●●● 3mm ○
+HealthStatus
+●●●●●● 1mm △
+critical_count
+1
+●●●●●● 3mm ○
+HealthStatus
+●●●●●● 2mm □
+warning_count
+3
+●●●●●● 3mm ○
+HealthStatus
+●●●●●● 1mm △
+warning_count
+1
+●●●●●● 3mm ○
+HealthStatus
+●●●●●● 3mm ○
+HealthStatus
+HealthStatus
+●●●●●● 1mm □
+decide_healing_actions
+●●●●●● 1mm □△
+self
+anomalies
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Decide what healing actions to take based on anomalies.\n\n        Uses trust scores and progressive autonomy to determine actions.\n        '
+decisions
+●●●●●● 1mm □
+anomaly
+anomalies
+action
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+0.5
+●●●●●● 2mm □△
+can_auto_execute
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+trust_score
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+'anomaly'
+'healing_action'
+'trust_score'
+'execution_mode'
+'reason'
+anomaly
+action
+trust_score
+can_auto_execute
+'autonomous'
+'manual_approval'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+anomaly
+action
+trust_score
+●●●●●● 2mm □△
+decisions
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Decided '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decisions
+●●●●●● 2mm □△
+' healing actions, '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+d
+decisions
+d
+'execution_mode'
+'autonomous'
+●●●●●● 2mm □△
+' autonomous'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decisions
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_select_healing_action
+●●●●●● 1mm □△
+self
+anomaly
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Select appropriate healing action for anomaly type.'
+anomaly_type
+●●●●●● 1mm □
+anomaly
+'type'
+severity
+●●●●●● 1mm □
+anomaly
+'severity'
+●●●●●● 2mm □
+anomaly_type
+AnomalyType
+●●●●●● 2mm □
+severity
+'critical'
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 3mm □
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 1mm △
+anomaly_type
+AnomalyType
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 2mm □
+anomaly_type
+AnomalyType
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 1mm △
+anomaly_type
+AnomalyType
+●●●●●● 2mm □
+severity
+'critical'
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 3mm □
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 2mm □
+anomaly_type
+AnomalyType
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 1mm △
+anomaly_type
+AnomalyType
+●●●●●● 3mm ○
+HealingAction
+●●●●●● 3mm ○
+HealingAction
+HealingAction
+●●●●●● 1mm □
+_can_auto_execute
+●●●●●● 1mm □△
+self
+action
+trust_score
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 3mm ○
+'\n        Determine if action can be executed autonomously.\n\n        Based on:\n        - Current trust level (system-wide setting)\n        - Trust score for specific action\n        - Action risk level\n        '
+action_trust_requirements
+●●●●●● 1mm □
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+HealingAction
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+TrustLevel
+required_level
+●●●●●● 1mm □
+action_trust_requirements
+●●●●●● 1mm □△
+action
+TrustLevel
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+required_level
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+trust_score
+0.7
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_explain_decision
+●●●●●● 1mm □△
+self
+anomaly
+action
+trust_score
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+HealingAction
+●●●●●● 3mm ○
+'Explain why this healing action was chosen.'
+●●●●●● 3mm ○
+'Detected '
+anomaly
+'type'
+' with '
+anomaly
+'severity'
+' severity. Selected '
+action
+' (trust: '
+trust_score
+'.2f'
+'). Evidence: '
+', '
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+e
+anomaly
+●●●●●● 1mm □△
+'evidence'
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+execute_healing
+●●●●●● 1mm □△
+self
+decisions
+user_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+'autonomous_healing'
+'\n        Execute healing actions based on decisions.\n\n        Only executes autonomous actions. Manual approval actions are logged.\n        '
+results
+●●●●●● 1mm □
+'executed'
+'awaiting_approval'
+'failed'
+decision
+decisions
+●●●●●● 2mm □
+decision
+'execution_mode'
+'autonomous'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+'healing_action'
+decision
+'anomaly'
+user_id
+●●●●●● 2mm □△
+results
+'executed'
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Failed to execute '
+decision
+'healing_action'
+': '
+e
+●●●●●● 2mm □△
+results
+'failed'
+●●●●●● 1mm □△
+'decision'
+'error'
+decision
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm □
+results
+'awaiting_approval'
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Executed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+'executed'
+●●●●●● 2mm □△
+', Awaiting approval: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+'awaiting_approval'
+●●●●●● 2mm □△
+', Failed: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+'failed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_execute_action
+●●●●●● 1mm □△
+self
+action_name
+anomaly
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'Execute a specific healing action.'
+action
+●●●●●● 1mm □
+HealingAction
+●●●●●● 1mm □△
+action_name
+●●●●●● 2mm □△
+mode_label
+●●●●●● 1mm □
+●●●●●● 3mm △
+'SIMULATE'
+'EXECUTE'
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] ('
+mode_label
+') Executing '
+action
+'...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+anomaly
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.braille_compiler
+●●●●●● 2mm □△○
+NLPCompilerEdge
+action_desc
+●●●●●● 1mm □
+action
+' anomaly '
+anomaly
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+compiler
+●●●●●● 1mm □
+NLPCompilerEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+masks
+msg
+●●●●●● 1mm □
+compiler
+●●●●●● 1mm □△
+action_desc
+●●●●●● 2mm □△
+●●●●●● 2mm □
+masks
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Z3 Blocked Destructive Action: '
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'error'
+action
+'blocked'
+mode_label
+'Z3 Spindle Safety Violation: '
+msg
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Z3 Physics verification failed to run: '
+e
+●●●●●● 2mm □△
+file_keys
+●●●●●● 1mm □
+anomaly
+●●●●●● 1mm □△
+'evidence'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+HealingAction
+healed_files
+●●●●●● 1mm □
+file_key
+file_keys
+●●●●●● 2mm □
+file_key
+●●●●●● 1mm □△
+'FILE-'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healed_files
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'files_healed'
+'details'
+action
+'success'
+'execute'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+healed_files
+●●●●●● 2mm □△
+healed_files
+●●●●●● 1mm △
+action
+HealingAction
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache_cleared
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+lru_cache
+cache_cleared
+1
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'message'
+action
+'success'
+'execute'
+'Cache flushed successfully (gc collected, '
+cache_cleared
+' cache types cleared)'
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Cache flush failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'error'
+action
+'failed'
+'execute'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+HealingAction
+reset_count
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+engine
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reset_count
+1
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Database connection pool reset'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] DB connection reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.qdrant_client
+●●●●●● 2mm □△○
+get_qdrant_client
+qdrant
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+qdrant
+reset_count
+1
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Qdrant connection marked for reset'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Qdrant connection reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'connections_reset'
+'message'
+action
+'success'
+'execute'
+reset_count
+'Reset '
+reset_count
+' connection(s) successfully'
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Connection reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'error'
+action
+'failed'
+'execute'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm △
+action
+HealingAction
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+signal
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Process restart requested for anomaly: '
+anomaly
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reset_items
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+embedding.embedding_model
+●●●●●● 2mm □△○
+_embedding_model
+●●●●●● 2mm □
+_embedding_model
+reset_items
+●●●●●● 1mm □△
+'embedding_model'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'message'
+'reset_items'
+'note'
+action
+'success'
+'execute'
+'Process state reset (gc collected, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+reset_items
+●●●●●● 2mm □△
+' singletons cleared)'
+reset_items
+'Full process restart requires external orchestration (e.g., systemd, supervisor)'
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Process restart failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'error'
+action
+'failed'
+'execute'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+HealingAction
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Service restart requested for anomaly: '
+anomaly
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+services_reset
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+engine
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+services_reset
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'DB reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.qdrant_client
+●●●●●● 2mm □△○
+_qdrant_client
+●●●●●● 2mm □
+_qdrant_client
+services_reset
+●●●●●● 1mm □△
+'qdrant'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+gc
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+services_reset
+●●●●●● 1mm □△
+'cache'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+_orchestrator
+●●●●●● 2mm □
+_orchestrator
+services_reset
+●●●●●● 1mm □△
+'llm_orchestrator'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'services_reset'
+'message'
+'note'
+action
+'success'
+'execute'
+services_reset
+'Reset '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+services_reset
+●●●●●● 2mm □△
+' service(s): '
+', '
+●●●●●● 1mm □△
+services_reset
+●●●●●● 2mm □△
+'Full service restart requires external orchestration'
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Service restart failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'error'
+action
+'failed'
+'execute'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm △
+action
+HealingAction
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+anomaly
+file_keys
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+HealingAction
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+anomaly
+file_keys
+●●●●●● 2mm □△
+●●●●●● 1mm △
+action
+HealingAction
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] EMERGENCY SHUTDOWN requested for anomaly: '
+anomaly
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'message'
+'note'
+action
+'logged'
+'execute'
+'Emergency shutdown logged - requires manual intervention'
+'Actual shutdown requires external orchestration for safety'
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] No implementation for action: '
+action
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'message'
+action
+'not_implemented'
+'execute'
+'Action '
+action
+' not yet implemented'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_simulate_action
+●●●●●● 1mm □△
+self
+action
+anomaly
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Return a deterministic simulation payload for any healing action.'
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'anomaly'
+'message'
+action
+'simulated'
+'simulate'
+anomaly
+'Simulated execution of '
+action
+' (no side effects)'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_execute_with_llm_guidance
+●●●●●● 1mm □△
+self
+action
+anomaly
+file_keys
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Execute complex healing action with multi-LLM guidance.\n\n        For complex/risky actions, use multiple LLMs to:\n        - Analyze the anomaly\n        - Recommend healing strategy\n        - Validate proposed solution\n        - Build consensus before execution\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+anomaly
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+LLMOrchestrator
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Requesting LLM guidance for '
+action
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+LLMOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+anomaly
+file_keys
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healing_strategy
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'consensus_answer'
+''
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] LLM consensus received (confidence='
+result
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+'.2f'
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'llm_strategy'
+'llm_confidence'
+'models_consulted'
+'message'
+action
+'llm_guided'
+'execute'
+healing_strategy
+result
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'models_used'
+●●●●●● 2mm □△
+'Healing strategy generated with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'models_used'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+' LLM consensus'
+Exception
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] LLM guidance failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'status'
+'mode'
+'error'
+action
+'failed'
+'execute'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_build_healing_query
+●●●●●● 1mm □△
+self
+action
+anomaly
+file_keys
+●●●●●● 2mm □△
+HealingAction
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Build query for LLMs to provide healing guidance.'
+query
+●●●●●● 1mm □
+'System Healing Analysis Required\n\nAnomaly Detected:\n- Type: '
+anomaly
+'type'
+'\n- Severity: '
+anomaly
+'severity'
+'\n- Details: '
+anomaly
+'details'
+'\n\nProposed Healing Action: '
+action
+'\n\nEvidence (Genesis Keys): '
+', '
+●●●●●● 1mm □△
+file_keys
+3
+●●●●●● 2mm □△
+'\n\nPlease provide:\n1. Root cause analysis of the anomaly\n2. Recommended healing strategy for '
+action
+'\n3. Potential risks of this action\n4. Alternative approaches if applicable\n5. Step-by-step execution plan\n\nFocus on practical, safe, and effective healing.'
+●●●●●● 3mm ○
+query
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_learn_from_healing
+●●●●●● 1mm □△
+self
+decision
+result
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+'\n        Learn from healing outcome to improve future decisions.\n\n        Updates trust scores based on success/failure.\n        Creates learning examples for training.\n        '
+action
+●●●●●● 1mm □
+HealingAction
+●●●●●● 1mm □△
+decision
+'healing_action'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+action
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.95
+●●●●●● 3mm △
+action
+●●●●●● 3mm ○
+0.05
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Trust increased for '
+action
+': '
+●●●●●● 3mm △
+action
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+action
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+●●●●●● 3mm △
+action
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Trust decreased for '
+action
+': '
+●●●●●● 3mm △
+action
+'.2f'
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'decision'
+'result'
+'success'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+result
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □
+run_monitoring_cycle
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Run one complete monitoring and healing cycle.\n\n        This is the main autonomous loop:\n        1. Assess health\n        2. Decide actions\n        3. Execute autonomously (if trust allows)\n        4. Learn from outcomes\n        '
+logger
+●●●●●● 1mm □△
+'[AUTONOMOUS-HEALING] Starting monitoring cycle...'
+●●●●●● 2mm □△
+assessment
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+assessment
+'anomalies_detected'
+0
+decisions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+assessment
+'anomalies'
+●●●●●● 2mm □△
+execution_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decisions
+●●●●●● 2mm □△
+●●●●●● 3mm □
+decisions
+●●●●●● 1mm □
+●●●●●● 3mm □
+execution_results
+●●●●●● 1mm □
+'executed'
+'awaiting_approval'
+'failed'
+●●●●●● 3mm ○
+'timestamp'
+'health_status'
+'anomalies_detected'
+'decisions_made'
+'actions_executed'
+'awaiting_approval'
+'failures'
+'assessment'
+'decisions'
+'results'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+assessment
+'health_status'
+assessment
+'anomalies_detected'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decisions
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+execution_results
+'executed'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+execution_results
+'awaiting_approval'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+execution_results
+'failed'
+●●●●●● 2mm □△
+assessment
+decisions
+execution_results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_system_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get current system status.'
+●●●●●● 3mm ○
+'current_health'
+'trust_level'
+'anomalies_active'
+'healing_history_count'
+'trust_scores'
+'learning_enabled'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+action
+score
+action
+score
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_autonomous_healing
+●●●●●● 2mm □○
+AutonomousHealingSystem
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_autonomous_healing
+●●●●●● 1mm □△
+session
+repo_path
+trust_level
+enable_learning
+simulation_mode
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+Path
+TrustLevel
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □
+TrustLevel
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'Get or create global autonomous healing system.'
+●●●●●● 2mm □
+_autonomous_healing
+●●●●●● 2mm □
+_autonomous_healing
+●●●●●● 1mm □
+AutonomousHealingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_autonomous_healing
+AutonomousHealingSystem

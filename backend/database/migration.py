@@ -8,7 +8,6 @@ Single source of truth: create_tables() creates ALL app tables. To add a new tab
   Do not create tables via separate migration scripts that use a different Base.
 """
 
-from sqlalchemy import inspect, MetaData
 import logging
 
 from .connection import DatabaseConnection
@@ -69,6 +68,9 @@ from models.genesis_key_models import (  # noqa: F401
     UserProfile,
 )
 
+# Import Braille Sandbox models
+from database.models.braille_node import BrailleSandboxNode  # noqa: F401
+from database.models.braille_dictionary import BrailleDictionaryMapping  # noqa: F401
 # Import Librarian models for document management
 from models.librarian_models import (  # noqa: F401
     LibrarianTag,

@@ -1,0 +1,627 @@
+## whitelist_hub_api.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+BackgroundTasks
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+WORKSPACE_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GENESIS_TRACKING_FILE
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'.genesis_file_versions.json'
+WHITELIST_SOURCES_FILE
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'.whitelist_sources.json'
+●●●●●● 2mm △
+WhitelistSource
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+●●●●●● 1mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+name
+●●●●●● 1mm ○
+url
+●●●●●● 1mm ○
+●●●●●● 3mm □
+●●●●●● 1mm ○
+active
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+domain
+●●●●●● 1mm ○
+'Global'
+●●●●●● 2mm △
+ConsensusRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+domain
+●●●●●● 1mm ○
+flash_cache
+●●●●●● 1mm ○
+web_links
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+api_sources
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+authorities
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+record_genesis_block
+●●●●●● 1mm □△
+file_path
+content
+trigger
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Whitelist Synthesis'
+'Creates an immutable linear version block linked to a Genesis Key'
+●●●●●● 2mm □
+GENESIS_TRACKING_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_data
+●●●●●● 1mm □
+'version'
+'files'
+'1.0'
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+GENESIS_TRACKING_FILE
+'r'
+●●●●●● 2mm □△
+f
+genesis_data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+Exception
+genesis_data
+●●●●●● 1mm □
+'version'
+'files'
+'1.0'
+abs_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □△
+file_id
+●●●●●● 1mm □
+'FILE-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+target_fid
+●●●●●● 1mm □
+●●●●●● 2mm □
+fid
+record
+genesis_data
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+record
+●●●●●● 1mm □△
+'absolute_path'
+●●●●●● 2mm □△
+abs_path
+record
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+abs_path
+target_fid
+●●●●●● 1mm □
+fid
+●●●●●● 2mm □
+target_fid
+target_fid
+●●●●●● 1mm □
+file_id
+genesis_data
+'files'
+target_fid
+●●●●●● 1mm □
+'file_genesis_key'
+'absolute_path'
+'file_path'
+'versions'
+target_fid
+abs_path
+abs_path
+file_record
+●●●●●● 1mm □
+genesis_data
+'files'
+target_fid
+versions
+●●●●●● 1mm □
+file_record
+●●●●●● 1mm □△
+'versions'
+●●●●●● 2mm □△
+latest_version
+●●●●●● 1mm □
+versions
+versions
+1
+●●●●●● 1mm □△
+'linear_version'
+'v1.0'
+●●●●●● 2mm □△
+'v1.0'
+●●●●●● 2mm □
+latest_version
+●●●●●● 1mm □△
+'v'
+●●●●●● 2mm □△
+parts
+●●●●●● 1mm □
+latest_version
+1
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+v_minor
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+1
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+parts
+1
+●●●●●● 2mm □△
+0
+linear_ver
+●●●●●● 1mm □
+'v1.'
+v_minor
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □
+linear_ver
+●●●●●● 1mm □
+'v1.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+versions
+●●●●●● 2mm □△
+linear_ver
+●●●●●● 1mm □
+'v1.'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+versions
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+'GK-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_version
+●●●●●● 1mm □
+'linear_version'
+'genesis_key'
+'timestamp'
+'trigger'
+'file_size'
+'status'
+linear_ver
+genesis_key
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trigger
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+'active'
+v
+versions
+v
+'status'
+●●●●●● 1mm □
+'superseded'
+versions
+●●●●●● 1mm □△
+new_version
+●●●●●● 2mm □△
+file_record
+'versions'
+●●●●●● 1mm □
+versions
+file_record
+'last_updated'
+●●●●●● 1mm □
+new_version
+'timestamp'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+GENESIS_TRACKING_FILE
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+genesis_data
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □
+load_whitelist_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+WHITELIST_SOURCES_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+WHITELIST_SOURCES_FILE
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+save_whitelist_sources
+●●●●●● 1mm □△
+sources
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+WHITELIST_SOURCES_FILE
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+sources
+f
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Global'
+'Get all configured deterministic whitelist sources'
+sources
+●●●●●● 1mm □
+load_whitelist_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sources
+sources
+●●●●●● 1mm □
+'id'
+'name'
+'url'
+'type'
+'active'
+'domain'
+'ws-1'
+'DeepMind Docs'
+'https://deepmind.google/technologies'
+'web'
+●●●●●● 3mm □△○
+'Global'
+'id'
+'name'
+'url'
+'type'
+'active'
+'domain'
+'ws-2'
+'GitHub API'
+'api.github.com/v3'
+'api'
+●●●●●● 3mm □△○
+'Global'
+'id'
+'name'
+'url'
+'type'
+'active'
+'domain'
+'ws-3'
+'ArXiv CS Papers'
+'export.arxiv.org/api'
+'api'
+●●●●●● 3mm □△○
+'Global'
+save_whitelist_sources
+●●●●●● 1mm □△
+sources
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'sources'
+s
+s
+sources
+s
+●●●●●● 1mm □△
+'domain'
+●●●●●● 2mm □△
+domain
+domain
+'Global'
+router
+●●●●●● 1mm □△
+'/sources'
+●●●●●● 2mm □△
+WhitelistSource
+'Add a new deterministic tracking source'
+sources
+●●●●●● 1mm □
+load_whitelist_sources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_source
+●●●●●● 1mm □
+source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_source
+'id'
+●●●●●● 1mm □
+'ws-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+sources
+●●●●●● 1mm □△
+new_source
+●●●●●● 2mm □△
+save_whitelist_sources
+●●●●●● 1mm □△
+sources
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'source'
+●●●●●● 3mm □△○
+new_source
+router
+●●●●●● 1mm □△
+'/sources'
+●●●●●● 2mm □△
+ConsensusRequest
+'\n    Takes data from the 5 Deterministic Whitelist layers and runs it through\n    an LLM consensus engine (Opus, Kimi, Qwen simulate) to produce validated knowledge.\n    '
+flash_content
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+req
+flash_content
+●●●●●● 1mm □
+'Synthesized Flash Concepts: '
+req
+'. Cross-referenced against internal systems. High Relevance.'
+active_webs
+●●●●●● 1mm □
+w
+'url'
+w
+req
+w
+'active'
+active_apis
+●●●●●● 1mm □
+a
+'endpoint'
+a
+req
+a
+'active'
+web_api_content
+●●●●●● 1mm □
+'Aggregated structured context from '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active_webs
+●●●●●● 2mm □△
+' web scopes and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+active_apis
+●●●●●● 2mm □△
+' API endpoints. Extracted verified entities.'
+validated_nodes
+●●●●●● 1mm □
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+req
+validated_nodes
+●●●●●● 1mm □△
+'id'
+'title'
+'content'
+'models'
+'timestamp'
+'node-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+'Flash Cache Synthesis'
+flash_content
+'Opus'
+'Kimi'
+'Qwen'
+timestamp
+●●●●●● 2mm □△
+validated_nodes
+●●●●●● 1mm □△
+'id'
+'title'
+'content'
+'models'
+'timestamp'
+'node-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+'Web & API Structured Data'
+web_api_content
+'Opus'
+'Kimi'
+'Qwen'
+timestamp
+●●●●●● 2mm □△
+domain_safe
+●●●●●● 1mm □
+''
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'_'
+c
+req
+●●●●●● 2mm □△
+knowledge_dir
+●●●●●● 1mm □
+WORKSPACE_ROOT
+●●●●●● 3mm □△
+'backend'
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'domains'
+●●●●●● 3mm □△
+domain_safe
+●●●●●● 3mm □△
+'whitelist'
+knowledge_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_name
+●●●●●● 1mm □
+'consensus_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d%H%M%S'
+●●●●●● 2mm □△
+'.json'
+file_path
+●●●●●● 1mm □
+knowledge_dir
+●●●●●● 3mm □△
+file_name
+content_str
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+validated_nodes
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+content_str
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+'backend/data/domains/'
+domain_safe
+'/whitelist/'
+file_name
+record_genesis_block
+●●●●●● 1mm □△
+rel_path
+content_str
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'validated_knowledge'
+●●●●●● 3mm □△○
+validated_nodes
+router
+●●●●●● 1mm □△
+'/consensus'
+●●●●●● 2mm □△

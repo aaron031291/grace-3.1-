@@ -1,0 +1,62 @@
+## events.py
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 2mm △
+CognitiveEvent
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Normalizes incoming signals from Guardian, agents, and HTM anomalies.\n    '
+●●●●●● 1mm △
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+source_component
+●●●●●● 1mm ○
+Field
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+timestamp
+datetime
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+severity
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+recurrence_count
+●●●●●● 2mm ○
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Field
+●●●●●● 1mm □△
+●●●●●● 2mm □△

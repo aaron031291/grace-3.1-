@@ -1,0 +1,475 @@
+## decorators.py
+"\nDecorators for integrating cognitive enforcement into Grace's operations.\n\nThese decorators wrap existing functions to automatically apply\nthe 12-invariant cognitive blueprint.\n"
+●●●●●● 2mm □△○
+functools
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Callable
+Any
+Optional
+Dict
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+ooda
+●●●●●● 2mm □△○
+OODAPhase
+●●●●●● 1mm □
+cognitive_operation
+●●●●●● 1mm □△
+operation_name
+requires_determinism
+is_safety_critical
+impact_scope
+is_reversible
+max_recursion_depth
+max_iterations
+planning_timeout_seconds
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+'local'
+●●●●●● 3mm □△○
+3
+5
+●●●●●● 2mm □
+'\n    Decorator that wraps an operation with cognitive enforcement.\n\n    Automatically applies the 12 invariants to any function.\n\n    Args:\n        operation_name: Name of the operation\n        requires_determinism: If True, enforces deterministic execution\n        is_safety_critical: If True, marks as safety-critical\n        impact_scope: Blast radius scope (local, component, systemic)\n        is_reversible: Whether operation can be reversed\n        max_recursion_depth: Maximum recursion depth allowed\n        max_iterations: Maximum iteration count allowed\n        planning_timeout_seconds: Timeout for planning phase\n\n    Example:\n        @cognitive_operation(\n            "ingest_document",\n            is_reversible=True,\n            impact_scope="component"\n        )\n        def ingest_document(filepath: str) -> dict:\n            # Your implementation\n            return {"status": "success"}\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problem_statement
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'problem_statement'
+'Execute '
+operation_name
+●●●●●● 2mm □△
+goal
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'goal'
+'Complete '
+operation_name
+' successfully'
+●●●●●● 2mm □△
+success_criteria
+●●●●●● 1mm □
+kwargs
+●●●●●● 1mm □△
+'success_criteria'
+operation_name
+' completes without errors'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+planning_timeout_seconds
+context
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observations
+●●●●●● 1mm □
+'args'
+'kwargs'
+'function_name'
+'operation_name'
+args
+kwargs
+func
+operation_name
+engine
+●●●●●● 1mm □△
+context
+observations
+●●●●●● 2mm □△
+constraints
+●●●●●● 1mm □
+'safety_critical'
+'impact_scope'
+is_safety_critical
+impact_scope
+context_info
+●●●●●● 1mm □
+'determinism_required'
+'reversible'
+requires_determinism
+is_reversible
+engine
+●●●●●● 1mm □△
+context
+constraints
+context_info
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate_alternatives
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'name'
+'immediate_value'
+'future_options'
+'simplicity'
+'reversibility'
+'complexity'
+'direct_execution'
+1.0
+1.0
+1.0
+is_reversible
+1.0
+0.5
+0.1
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+selected_path
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+generate_alternatives
+●●●●●● 2mm □△
+●●●●●● 1mm □
+action
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+context
+action
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+functools
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+Any
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+decorator
+●●●●●● 1mm □
+with_ambiguity_tracking
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+'\n    Decorator that adds ambiguity tracking to a function.\n\n    Automatically tracks unknowns and inferred values.\n\n    Example:\n        @with_ambiguity_tracking\n        def process_data(data: Optional[dict]) -> dict:\n            if data is None:\n                # This will be tracked as an unknown\n                return {"error": "no data"}\n            return {"processed": True}\n    '
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+engine
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+active_contexts
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+active_contexts
+context
+●●●●●● 1mm □
+active_contexts
+0
+key
+value
+kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+functools
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+Any
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 1mm □
+enforce_reversibility
+●●●●●● 1mm □△
+reversible
+justification
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'\n    Decorator that enforces reversibility constraints.\n\n    Implements Invariant 3: Reversibility Before Commitment.\n\n    Args:\n        reversible: Whether the operation is reversible\n        justification: Required justification if irreversible\n\n    Example:\n        @enforce_reversibility(\n            reversible=False,\n            justification="Database schema migration cannot be auto-reversed"\n        )\n        def migrate_database():\n            pass\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reversible
+justification
+ValueError
+●●●●●● 1mm □△
+"Irreversible operation '"
+func
+"' requires justification"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+reversible
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ IRREVERSIBLE OPERATION: '
+func
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Justification: '
+justification
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+functools
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+Any
+wrapper
+●●●●●● 1mm □
+reversible
+wrapper
+●●●●●● 1mm □
+justification
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+decorator
+●●●●●● 1mm □
+blast_radius
+●●●●●● 1mm □△
+scope
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Decorator that declares the blast radius of an operation.\n\n    Implements Invariant 5: Blast Radius Minimization.\n\n    Args:\n        scope: Impact scope (local, component, systemic)\n\n    Example:\n        @blast_radius("systemic")\n        def update_schema():\n            pass\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+scope
+'systemic'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'⚠ SYSTEMIC CHANGE: '
+func
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  High scrutiny required'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+functools
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+Any
+wrapper
+●●●●●● 1mm □
+scope
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+decorator
+●●●●●● 1mm □
+time_bounded
+●●●●●● 1mm □△
+timeout_seconds
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n    Decorator that enforces time bounds on operations.\n\n    Implements Invariant 11: Time-Bounded Reasoning.\n\n    Args:\n        timeout_seconds: Maximum execution time\n\n    Example:\n        @time_bounded(timeout_seconds=30)\n        def analyze_document():\n            pass\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+signal
+●●●●●● 1mm □
+timeout_handler
+●●●●●● 1mm □△
+signum
+frame
+●●●●●● 2mm □△
+TimeoutError
+●●●●●● 1mm □△
+"Operation '"
+func
+"' exceeded "
+timeout_seconds
+'s time bound'
+●●●●●● 2mm □△
+old_handler
+●●●●●● 1mm □
+signal
+●●●●●● 1mm □△
+signal
+timeout_handler
+●●●●●● 2mm □△
+signal
+●●●●●● 1mm □△
+timeout_seconds
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+signal
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+signal
+●●●●●● 1mm □△
+signal
+old_handler
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+functools
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+Any
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+decorator
+●●●●●● 1mm □
+requires_determinism
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+'\n    Decorator that marks a function as requiring deterministic execution.\n\n    Implements Invariant 4: Determinism Where Safety Depends on It.\n\n    Example:\n        @requires_determinism\n        def validate_critical_data():\n            pass\n    '
+●●●●●● 1mm □
+wrapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+functools
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+Any
+wrapper
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○

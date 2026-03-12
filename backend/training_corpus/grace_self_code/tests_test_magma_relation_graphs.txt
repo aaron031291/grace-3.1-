@@ -1,0 +1,2640 @@
+## test_magma_relation_graphs.py
+'\nFull Test Suite for Magma Relation Graphs\n\nTests all four graph types comprehensively:\n- SemanticGraph\n- TemporalGraph\n- CausalGraph\n- EntityGraph\n- MagmaRelationGraphs (unified interface)\n\nNOT a smoke test - comprehensive coverage of all functionality.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+cognitive.magma.relation_graphs
+●●●●●● 2mm □△○
+MagmaRelationGraphs
+SemanticGraph
+TemporalGraph
+CausalGraph
+EntityGraph
+GraphNode
+GraphEdge
+RelationType
+BaseRelationGraph
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Fresh semantic graph for each test.'
+●●●●●● 3mm ○
+SemanticGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Fresh temporal graph for each test.'
+●●●●●● 3mm ○
+TemporalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Fresh causal graph for each test.'
+●●●●●● 3mm ○
+CausalGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Fresh entity graph for each test.'
+●●●●●● 3mm ○
+EntityGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Fresh unified magma graphs for each test.'
+●●●●●● 3mm ○
+MagmaRelationGraphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+sample_embedding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Sample embedding vector.'
+●●●●●● 3mm ○
+0.1
+●●●●●● 2mm □△
+384
+pytest
+●●●●●● 1mm □
+similar_embedding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Embedding similar to sample_embedding.'
+●●●●●● 3mm ○
+0.11
+●●●●●● 2mm □△
+384
+pytest
+●●●●●● 1mm □
+different_embedding
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Embedding different from sample_embedding.'
+●●●●●● 3mm ○
+0.9
+0.5
+●●●●●● 2mm □△
+192
+pytest
+●●●●●● 2mm △
+TestGraphNode
+'Tests for GraphNode dataclass.'
+●●●●●● 1mm □
+test_create_node
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test basic node creation.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+'test-node-1'
+node
+'concept'
+node
+'test content'
+node
+0.5
+node
+●●●●●● 2mm □
+node
+●●●●●● 1mm □
+test_node_with_embedding
+●●●●●● 1mm □△
+self
+sample_embedding
+●●●●●● 2mm □△
+'Test node with embedding.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+sample_embedding
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+384
+●●●●●● 1mm □
+test_node_with_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test node with metadata.'
+metadata
+●●●●●● 1mm □
+'key'
+'count'
+'value'
+42
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+'key'
+'value'
+node
+'count'
+42
+●●●●●● 1mm □
+test_node_with_genesis_key
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test node with Genesis Key ID.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node
+'GK-TEST12345678'
+●●●●●● 1mm □
+test_node_hash_and_equality
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test node hashing and equality.'
+node1
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node2
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node3
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node1
+node2
+node1
+node3
+●●●●●● 2mm △
+●●●●●● 1mm □△
+node1
+●●●●●● 2mm □△
+●●●●●● 2mm △
+●●●●●● 1mm □△
+node2
+●●●●●● 2mm □△
+●●●●●● 2mm △
+●●●●●● 1mm □△
+node1
+●●●●●● 2mm □△
+●●●●●● 2mm △
+●●●●●● 1mm □△
+node3
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_node_in_set
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test nodes in a set (uses hash).'
+node1
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node2
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node3
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_set
+●●●●●● 1mm □
+node1
+node2
+node3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+node_set
+●●●●●● 2mm □△
+2
+●●●●●● 2mm △
+TestGraphEdge
+'Tests for GraphEdge dataclass.'
+●●●●●● 1mm □
+test_create_edge
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test basic edge creation.'
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge
+'edge-1'
+edge
+'node-a'
+edge
+'node-b'
+edge
+RelationType
+edge
+1.0
+edge
+0.5
+●●●●●● 1mm □
+test_edge_with_weight
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test edge with custom weight.'
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge
+0.8
+edge
+0.9
+●●●●●● 1mm □
+test_edge_hash
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test edge hashing.'
+edge1
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge2
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+●●●●●● 1mm □△
+edge1
+●●●●●● 2mm □△
+●●●●●● 2mm △
+●●●●●● 1mm □△
+edge2
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestBaseRelationGraph
+'Tests for BaseRelationGraph functionality.'
+●●●●●● 1mm □
+test_add_node
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test adding nodes.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+node_id
+'n1'
+'n1'
+semantic_graph
+semantic_graph
+'n1'
+'test'
+●●●●●● 1mm □
+test_add_edge
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test adding edges.'
+node1
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node2
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node1
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node2
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+edge_id
+'e1'
+'e1'
+semantic_graph
+'e1'
+semantic_graph
+'n1'
+'e1'
+semantic_graph
+'n2'
+●●●●●● 1mm □
+test_add_edge_missing_source
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test adding edge with missing source node.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_add_edge_missing_target
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test adding edge with missing target node.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_node
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test getting a node.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+retrieved
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+●●●●●● 2mm □△
+retrieved
+●●●●●● 2mm □
+retrieved
+'test'
+missing
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 2mm □△
+missing
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_neighbors_outgoing
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test getting outgoing neighbors.'
+nodes
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+nodes
+semantic_graph
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+edges
+semantic_graph
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+2
+neighbor_ids
+●●●●●● 1mm □
+n
+n
+e
+neighbors
+'n2'
+neighbor_ids
+'n3'
+neighbor_ids
+●●●●●● 1mm □
+test_get_neighbors_incoming
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test getting incoming neighbors.'
+nodes
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+nodes
+semantic_graph
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+edges
+semantic_graph
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n3'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_get_neighbors_with_relation_filter
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test filtering neighbors by relation type.'
+nodes
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+nodes
+semantic_graph
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+edges
+semantic_graph
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+similar_neighbors
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similar_neighbors
+●●●●●● 2mm □△
+1
+similar_neighbors
+0
+0
+'n2'
+●●●●●● 1mm □
+test_find_path_direct
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test finding direct path between nodes.'
+nodes
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+nodes
+semantic_graph
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+'n2'
+●●●●●● 2mm □△
+path
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+2
+path
+0
+0
+'n1'
+path
+1
+0
+'n2'
+●●●●●● 1mm □
+test_find_path_multi_hop
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test finding multi-hop path.'
+nodes
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+nodes
+semantic_graph
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+e
+edges
+semantic_graph
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+'n3'
+●●●●●● 2mm □△
+path
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_find_path_no_path
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test when no path exists.'
+nodes
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+n
+nodes
+semantic_graph
+●●●●●● 1mm □△
+n
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+'n2'
+●●●●●● 2mm □△
+path
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_find_path_same_node
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test path to same node.'
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'n1'
+'n1'
+●●●●●● 2mm □△
+path
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_subgraph
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test extracting subgraph.'
+center
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+center
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+subgraph_nodes
+subgraph_edges
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'center'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+subgraph_nodes
+●●●●●● 2mm □△
+6
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+subgraph_edges
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □
+test_calculate_node_importance
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test node importance calculation.'
+hub
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+hub
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+hub_importance
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'hub'
+●●●●●● 2mm □△
+spoke_importance
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'spoke0'
+●●●●●● 2mm □△
+hub_importance
+spoke_importance
+●●●●●● 1mm □
+test_get_stats
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test getting graph statistics.'
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'graph_type'
+'semantic'
+stats
+'total_nodes'
+5
+stats
+'total_edges'
+3
+'avg_degree'
+stats
+'relation_type_counts'
+stats
+●●●●●● 2mm △
+TestSemanticGraph
+'Tests for SemanticGraph functionality.'
+●●●●●● 1mm □
+test_add_concept
+●●●●●● 1mm □△
+self
+semantic_graph
+sample_embedding
+●●●●●● 2mm □△
+'Test adding a concept.'
+node_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □△
+'sem-'
+●●●●●● 2mm □△
+node_id
+semantic_graph
+semantic_graph
+node_id
+'machine learning'
+●●●●●● 1mm □
+test_auto_similarity_linking
+●●●●●● 1mm □△
+self
+semantic_graph
+sample_embedding
+similar_embedding
+●●●●●● 2mm □△
+'Test automatic similarity linking.'
+node1_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node2_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+semantic_graph
+●●●●●● 2mm □△
+1
+neighbors
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+node2_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_no_link_for_different_embeddings
+●●●●●● 1mm □△
+self
+semantic_graph
+sample_embedding
+different_embedding
+●●●●●● 2mm □△
+'Test no linking for dissimilar concepts.'
+semantic_graph
+●●●●●● 1mm □
+0.9
+node1_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node2_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+node2_id
+●●●●●● 2mm □△
+node1_in_neighbors
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+n
+node1_id
+n
+e
+neighbors
+●●●●●● 2mm □△
+node1_in_neighbors
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_find_related_concepts
+●●●●●● 1mm □△
+self
+semantic_graph
+sample_embedding
+●●●●●● 2mm □△
+'Test finding related concepts.'
+base_id
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'base concept'
+sample_embedding
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+slightly_diff
+●●●●●● 1mm □
+x
+●●●●●● 3mm ○
+i
+●●●●●● 2mm □△
+0.01
+x
+sample_embedding
+semantic_graph
+●●●●●● 1mm □△
+'related concept '
+i
+slightly_diff
+●●●●●● 2mm □△
+related
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+base_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+related
+●●●●●● 2mm □△
+3
+●●●●●● 1mm □
+test_cosine_similarity
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test cosine similarity calculation.'
+vec1
+●●●●●● 1mm □
+1.0
+0.0
+0.0
+vec2
+●●●●●● 1mm □
+1.0
+0.0
+0.0
+vec3
+●●●●●● 1mm □
+0.0
+1.0
+0.0
+vec4
+●●●●●● 1mm □
+1.0
+0.0
+0.0
+semantic_graph
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+vec1
+vec3
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+vec1
+vec4
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_cosine_similarity_edge_cases
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test cosine similarity edge cases.'
+semantic_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+semantic_graph
+●●●●●● 1mm □△
+0
+0
+0
+0
+●●●●●● 2mm □△
+0.0
+semantic_graph
+●●●●●● 1mm □△
+1
+2
+1
+2
+3
+●●●●●● 2mm □△
+0.0
+●●●●●● 2mm △
+TestTemporalGraph
+'Tests for TemporalGraph functionality.'
+●●●●●● 1mm □
+test_add_event
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test adding a temporal event.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+node_id
+●●●●●● 1mm □△
+'temp-'
+●●●●●● 2mm □△
+node_id
+temporal_graph
+temporal_graph
+node_id
+'timestamp'
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_auto_temporal_linking
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test automatic temporal relationship creation.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event1_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Event 1'
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+event2_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Event 2'
+now
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+temporal_graph
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_concurrent_events
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test concurrent event detection.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event1_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Event A'
+now
+●●●●●● 2mm □△
+event2_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Event B'
+now
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+temporal_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+concurrent_edges
+●●●●●● 1mm □
+e
+e
+edges
+e
+RelationType
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+concurrent_edges
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_temporal_before_after
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test before/after relationships.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+early_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Early event'
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+late_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Late event'
+now
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+late_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_get_events_in_range
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test getting events in a time range.'
+base_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+temporal_graph
+●●●●●● 1mm □△
+'Event '
+i
+base_time
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+base_time
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+base_time
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+events
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+start
+end
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+events
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □
+test_get_event_sequence
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test getting event sequence.'
+base_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event_ids
+●●●●●● 1mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+event_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Sequence event '
+i
+base_time
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+event_ids
+●●●●●● 1mm □△
+event_id
+●●●●●● 2mm □△
+sequence
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+event_ids
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sequence
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_time_weight_decay
+●●●●●● 1mm □△
+self
+temporal_graph
+●●●●●● 2mm □△
+'Test that edge weight decays with time difference.'
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+event1_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Event 1'
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+event2_id
+●●●●●● 1mm □
+temporal_graph
+●●●●●● 1mm □△
+'Event 2'
+now
+●●●●●● 2mm □△
+edges
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+temporal_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+edges
+●●●●●● 2mm □△
+1
+edge
+edges
+edge
+1.0
+●●●●●● 2mm △
+TestCausalGraph
+'Tests for CausalGraph functionality.'
+●●●●●● 1mm □
+test_add_causal_link
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test adding causal relationship.'
+cause
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+effect
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+cause
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+effect
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □△
+'causal-edge-'
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+causal_graph
+edge_id
+edge
+0.9
+'observed 100 times'
+edge
+'evidence'
+●●●●●● 1mm □
+test_invalid_causal_relation
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test rejection of invalid relation type.'
+cause
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+effect
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+cause
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+effect
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'cause'
+'effect'
+RelationType
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_causes
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test getting causes of an effect.'
+node_id
+'A'
+'B'
+'C'
+causal_graph
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'A'
+'C'
+RelationType
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'B'
+'C'
+RelationType
+●●●●●● 2mm □△
+causes
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+'C'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+causes
+●●●●●● 2mm □△
+2
+cause_ids
+●●●●●● 1mm □
+node
+node
+conf
+causes
+'A'
+cause_ids
+'B'
+cause_ids
+●●●●●● 1mm □
+test_get_effects
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test getting effects of a cause.'
+node_id
+'A'
+'B'
+'C'
+causal_graph
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'A'
+'B'
+RelationType
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'A'
+'C'
+RelationType
+●●●●●● 2mm □△
+effects
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+'A'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+effects
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_trace_causal_chain
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test tracing causal chains.'
+node_id
+'A'
+'B'
+'C'
+'D'
+causal_graph
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'A'
+'B'
+RelationType
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'B'
+'C'
+RelationType
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'C'
+'D'
+RelationType
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+'A'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+1
+longest_chain
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+longest_chain
+●●●●●● 2mm □△
+4
+●●●●●● 1mm □
+test_trace_causal_chain_branching
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test tracing with branching causation.'
+node_id
+'A'
+'B'
+'C'
+causal_graph
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'A'
+'B'
+RelationType
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'A'
+'C'
+RelationType
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+'A'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □
+test_enables_prevents_relations
+●●●●●● 1mm □△
+self
+causal_graph
+●●●●●● 2mm □△
+'Test enables and prevents relations.'
+node_id
+'condition'
+'enabled'
+'prevented'
+causal_graph
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'condition'
+'enabled'
+RelationType
+●●●●●● 2mm □△
+causal_graph
+●●●●●● 1mm □△
+'condition'
+'prevented'
+RelationType
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+causal_graph
+●●●●●● 1mm □△
+'condition'
+●●●●●● 2mm □△
+relation_types
+●●●●●● 1mm □
+e
+n
+e
+neighbors
+RelationType
+relation_types
+RelationType
+relation_types
+●●●●●● 2mm △
+TestEntityGraph
+'Tests for EntityGraph functionality.'
+●●●●●● 1mm □
+test_add_entity
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test adding an entity.'
+entity_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entity_id
+●●●●●● 1mm □△
+'ent-'
+●●●●●● 2mm □△
+entity
+●●●●●● 1mm □
+entity_graph
+entity_id
+entity
+'John Doe'
+entity
+'entity_type'
+'person'
+entity
+'attributes'
+'age'
+30
+●●●●●● 1mm □
+test_link_entities
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test linking entities.'
+person_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Alice'
+'person'
+●●●●●● 2mm □△
+company_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Acme Corp'
+'organization'
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+person_id
+company_id
+RelationType
+●●●●●● 2mm □△
+edge_id
+●●●●●● 1mm □△
+'ent-edge-'
+●●●●●● 2mm □△
+edge
+●●●●●● 1mm □
+entity_graph
+edge_id
+edge
+RelationType
+edge
+'context'
+'employment'
+●●●●●● 1mm □
+test_invalid_entity_relation
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test rejection of invalid entity relation.'
+e1
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'A'
+'thing'
+●●●●●● 2mm □△
+e2
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'B'
+'thing'
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+e1
+e2
+RelationType
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_record_co_occurrence
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test recording co-occurrences.'
+e1
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Python'
+'technology'
+●●●●●● 2mm □△
+e2
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Machine Learning'
+'concept'
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+e1
+e2
+'article about ML with Python'
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+e1
+e2
+'Python ML tutorial'
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+e1
+e2
+'Data science course'
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+e1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+1
+node
+edge
+●●●●●● 1mm □
+neighbors
+0
+edge
+0.5
+●●●●●● 1mm □
+test_get_entity_cluster
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test getting entity cluster.'
+center_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Python'
+'language'
+●●●●●● 2mm □△
+related_ids
+●●●●●● 1mm □
+tech
+'Django'
+'Flask'
+'FastAPI'
+'NumPy'
+tech_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+tech
+'framework'
+●●●●●● 2mm □△
+related_ids
+●●●●●● 1mm □△
+tech_id
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+center_id
+tech_id
+RelationType
+●●●●●● 2mm □△
+cluster
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+center_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+cluster
+●●●●●● 2mm □△
+4
+●●●●●● 1mm □
+test_instance_of_relation
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test instance-of relationships.'
+class_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Vehicle'
+'class'
+●●●●●● 2mm □△
+instance_id
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'My Car'
+'instance'
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+instance_id
+class_id
+RelationType
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+instance_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+1
+neighbors
+0
+0
+'Vehicle'
+●●●●●● 2mm △
+TestMagmaRelationGraphs
+'Tests for unified MagmaRelationGraphs interface.'
+●●●●●● 1mm □
+test_initialization
+●●●●●● 1mm □△
+self
+magma_graphs
+●●●●●● 2mm □△
+'Test unified graphs initialization.'
+magma_graphs
+●●●●●● 2mm □
+magma_graphs
+●●●●●● 2mm □
+magma_graphs
+●●●●●● 2mm □
+magma_graphs
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_get_all_graphs
+●●●●●● 1mm □△
+self
+magma_graphs
+●●●●●● 2mm □△
+'Test getting all graphs.'
+graphs
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'semantic'
+graphs
+'temporal'
+graphs
+'causal'
+graphs
+'entity'
+graphs
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graphs
+●●●●●● 2mm □△
+4
+●●●●●● 1mm □
+test_cross_graph_search
+●●●●●● 1mm □△
+self
+magma_graphs
+sample_embedding
+●●●●●● 2mm □△
+'Test cross-graph search via genesis key.'
+genesis_key
+●●●●●● 1mm □
+'GK-SHARED-001'
+sem_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'machine learning concept'
+sample_embedding
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+temp_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'ML event'
+now
+●●●●●● 2mm □△
+ent_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'ML Entity'
+'concept'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+sem_id
+●●●●●● 2mm □△
+'temporal'
+results
+'entity'
+results
+●●●●●● 1mm □
+test_get_unified_stats
+●●●●●● 1mm □△
+self
+magma_graphs
+sample_embedding
+●●●●●● 2mm □△
+'Test getting unified statistics.'
+magma_graphs
+●●●●●● 1mm □△
+'concept 1'
+sample_embedding
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+'concept 2'
+sample_embedding
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+'event 1'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+'entity 1'
+'thing'
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'semantic'
+stats
+'temporal'
+stats
+'causal'
+stats
+'entity'
+stats
+stats
+'total_nodes'
+4
+'total_edges'
+stats
+●●●●●● 1mm □
+test_empty_graphs
+●●●●●● 1mm □△
+self
+magma_graphs
+●●●●●● 2mm □△
+'Test operations on empty graphs.'
+stats
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'total_nodes'
+0
+stats
+'total_edges'
+0
+●●●●●● 1mm □
+test_cross_graph_no_genesis_key
+●●●●●● 1mm □△
+self
+magma_graphs
+sample_embedding
+●●●●●● 2mm □△
+'Test cross-graph search when node has no genesis key.'
+sem_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'concept without genesis'
+sample_embedding
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+sem_id
+'semantic'
+●●●●●● 2mm □△
+results
+●●●●●● 2mm △
+TestIntegrationScenarios
+'Integration tests for complex scenarios.'
+●●●●●● 1mm □
+test_knowledge_graph_construction
+●●●●●● 1mm □△
+self
+magma_graphs
+sample_embedding
+●●●●●● 2mm □△
+'Test building a knowledge graph across all dimensions.'
+ml_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Machine Learning'
+sample_embedding
+●●●●●● 2mm □△
+dl_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Deep Learning'
+x
+●●●●●● 3mm ○
+0.05
+x
+sample_embedding
+●●●●●● 2mm □△
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learn_event
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Learned ML basics'
+now
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+apply_event
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Applied ML model'
+now
+●●●●●● 2mm □△
+person_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Data Scientist'
+'role'
+●●●●●● 2mm □△
+tool_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'TensorFlow'
+'tool'
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+person_id
+tool_id
+RelationType
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+'study'
+'skill'
+RelationType
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'total_nodes'
+8
+stats
+'total_edges'
+2
+●●●●●● 1mm □
+test_event_driven_memory_update
+●●●●●● 1mm □△
+self
+magma_graphs
+sample_embedding
+●●●●●● 2mm □△
+'Test event-driven memory updates across graphs.'
+genesis_key
+●●●●●● 1mm □
+'GK-SESSION-001'
+start_event
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Started coding task'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+concept_id
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Python asyncio'
+sample_embedding
+●●●●●● 2mm □△
+end_event
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Completed coding task'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+concept_id
+●●●●●● 2mm □△
+'temporal'
+results
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+'temporal'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_causal_chain_with_entities
+●●●●●● 1mm □△
+self
+magma_graphs
+●●●●●● 2mm □△
+'Test causal chains involving entities.'
+bug_node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fix_node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+deploy_node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+bug_node
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+fix_node
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+deploy_node
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+'bug'
+'fix'
+RelationType
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+'fix'
+'deploy'
+RelationType
+●●●●●● 2mm □△
+chains
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'bug'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chains
+●●●●●● 2mm □△
+1
+bug_ent
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Software Bug'
+'issue'
+●●●●●● 2mm □△
+fix_ent
+●●●●●● 1mm □
+magma_graphs
+●●●●●● 1mm □△
+'Bug Fix'
+'solution'
+●●●●●● 2mm □△
+magma_graphs
+●●●●●● 1mm □△
+bug_ent
+fix_ent
+RelationType
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPerformance
+'Performance tests for graph operations.'
+●●●●●● 1mm □
+test_large_graph_construction
+●●●●●● 1mm □△
+self
+semantic_graph
+sample_embedding
+●●●●●● 2mm □△
+'Test performance with larger graph.'
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+embedding
+●●●●●● 1mm □
+x
+●●●●●● 3mm ○
+i
+●●●●●● 2mm □△
+0.001
+x
+sample_embedding
+semantic_graph
+●●●●●● 1mm □△
+'concept_'
+i
+embedding
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+semantic_graph
+●●●●●● 2mm □△
+100
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+semantic_graph
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_path_finding_performance
+●●●●●● 1mm □△
+self
+semantic_graph
+●●●●●● 2mm □△
+'Test path finding in larger graph.'
+prev_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+GraphNode
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+prev_id
+edge
+●●●●●● 1mm □
+GraphEdge
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+semantic_graph
+●●●●●● 1mm □△
+edge
+●●●●●● 2mm □△
+prev_id
+●●●●●● 1mm □
+'chain_'
+i
+path
+●●●●●● 1mm □
+semantic_graph
+●●●●●● 1mm □△
+'chain_0'
+'chain_49'
+●●●●●● 2mm □△
+path
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+path
+●●●●●● 2mm □△
+50
+●●●●●● 1mm □
+test_neighbor_retrieval_performance
+●●●●●● 1mm □△
+self
+entity_graph
+●●●●●● 2mm □△
+'Test neighbor retrieval with many connections.'
+hub
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Hub'
+'central'
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+spoke
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+'Spoke_'
+i
+'peripheral'
+●●●●●● 2mm □△
+entity_graph
+●●●●●● 1mm □△
+hub
+spoke
+RelationType
+●●●●●● 2mm □△
+neighbors
+●●●●●● 1mm □
+entity_graph
+●●●●●● 1mm □△
+hub
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+neighbors
+●●●●●● 2mm □△
+100
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

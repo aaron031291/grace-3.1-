@@ -1,0 +1,426 @@
+## connection_api.py
+'\nConnection Validation API\n==========================\nExposes comprehensive connection validation via REST endpoints.\n\nEndpoints:\n- GET  /api/connections/status       - Quick status of all connections\n- GET  /api/connections/validate     - Full validation with action checks\n- GET  /api/connections/validate/{name} - Validate a single connection\n- GET  /api/connections/summary      - Category-level summary\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+HTTPException
+Query
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Quick status check of all connections.\n    Returns connection name, category, status, and connected boolean.\n    Lightweight — no deep action validation.\n    '
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+validate_database
+validate_qdrant
+validate_llm_provider
+validate_embedding_model
+validate_serpapi
+validate_kimi
+validate_opus
+validate_diagnostic_engine
+validate_autonomous_loop
+validate_websocket_manager
+validate_genesis_tracking
+validators
+●●●●●● 1mm □
+validate_database
+validate_qdrant
+validate_llm_provider
+validate_embedding_model
+validate_serpapi
+validate_kimi
+validate_opus
+validate_diagnostic_engine
+validate_autonomous_loop
+validate_websocket_manager
+validate_genesis_tracking
+results
+●●●●●● 1mm □
+validator
+validators
+report
+●●●●●● 1mm □
+validator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'name'
+'category'
+'status'
+'connected'
+'latency_ms'
+'message'
+report
+report
+report
+report
+report
+report
+●●●●●● 2mm □△
+Exception
+results
+●●●●●● 1mm □△
+'name'
+'category'
+'status'
+'connected'
+'message'
+validator
+●●●●●● 1mm □△
+'validate_'
+''
+●●●●●● 2mm □△
+'unknown'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+connected
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+'connected'
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'connected'
+'total'
+'connections'
+connected
+total
+'all_connected'
+'partial'
+connected
+total
+results
+router
+●●●●●● 1mm □△
+'/status'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+Query
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+"\n    Full validation of ALL system connections.\n\n    Checks every connection, validates each action it should perform,\n    and returns a comprehensive report showing what's connected,\n    what's not, and whether each action is doing its job.\n    "
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+validate_all_connections
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n    Validate a single connection by name.\n\n    Supported names: database, qdrant, llm_provider, embedding_model,\n    serpapi, kimi, opus, diagnostic_engine, autonomous_loop,\n    continuous_learning, file_watcher, ml_intelligence,\n    genesis_tracking, websocket_manager\n    '
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+validate_database
+validate_qdrant
+validate_llm_provider
+validate_embedding_model
+validate_serpapi
+validate_kimi
+validate_opus
+validate_diagnostic_engine
+validate_autonomous_loop
+validate_continuous_learning
+validate_file_watcher
+validate_ml_intelligence
+validate_genesis_tracking
+validate_websocket_manager
+validator_map
+●●●●●● 1mm □
+'database'
+'qdrant'
+'llm_provider'
+'embedding_model'
+'serpapi'
+'kimi'
+'opus'
+'diagnostic_engine'
+'autonomous_loop'
+'continuous_learning'
+'file_watcher'
+'ml_intelligence'
+'genesis_tracking'
+'websocket_manager'
+validate_database
+validate_qdrant
+validate_llm_provider
+validate_embedding_model
+validate_serpapi
+validate_kimi
+validate_opus
+validate_diagnostic_engine
+validate_autonomous_loop
+validate_continuous_learning
+validate_file_watcher
+validate_ml_intelligence
+validate_genesis_tracking
+validate_websocket_manager
+●●●●●● 2mm □
+connection_name
+validator_map
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/{connection_name}'
+●●●●●● 2mm □△
+'\n    High-level summary of connection status by category.\n\n    Returns counts of connected/disconnected/degraded per category,\n    plus total action validation pass/fail counts.\n    '
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+validate_all_connections
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'timestamp'
+'totals'
+'actions'
+'categories'
+full
+'status'
+full
+'timestamp'
+'connections'
+'connected'
+'disconnected'
+'degraded'
+full
+'total_connections'
+full
+'connected_count'
+full
+'disconnected_count'
+full
+'degraded_count'
+'validated'
+'passing'
+'failing'
+full
+'total_actions_validated'
+full
+'total_actions_passing'
+full
+'total_actions_failing'
+full
+'categories'
+router
+●●●●●● 1mm □△
+'/summary'
+●●●●●● 2mm □△
+'\n    Visual connection map showing all system connections,\n    their relationships, and data flow paths.\n    '
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+validate_all_connections
+report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data_flows
+●●●●●● 1mm □
+'from'
+'to'
+'label'
+'user_input'
+'llm_provider'
+'Chat queries'
+'from'
+'to'
+'label'
+'user_input'
+'rag'
+'Knowledge retrieval'
+'from'
+'to'
+'label'
+'ingestion'
+'qdrant'
+'Vector embeddings'
+'from'
+'to'
+'label'
+'ingestion'
+'genesis_keys'
+'Auto-create tracking keys'
+'from'
+'to'
+'label'
+'rag'
+'qdrant'
+'Vector search'
+'from'
+'to'
+'label'
+'rag'
+'memory_mesh'
+'Procedural context'
+'from'
+'to'
+'label'
+'rag'
+'llm_orchestration'
+'Answer generation'
+'from'
+'to'
+'label'
+'genesis_keys'
+'memory_mesh'
+'Learning linkage'
+'from'
+'to'
+'label'
+'memory_mesh'
+'llm_orchestration'
+'Skill registration'
+'from'
+'to'
+'label'
+'memory_mesh'
+'autonomous_learning'
+'Pattern detection'
+'from'
+'to'
+'label'
+'file_watcher'
+'version_control'
+'File change tracking'
+'from'
+'to'
+'label'
+'version_control'
+'genesis_keys'
+'Commit linkage'
+'from'
+'to'
+'label'
+'diagnostic_engine'
+'websocket_manager'
+'Health events'
+'from'
+'to'
+'label'
+'diagnostic_engine'
+'autonomous_loop'
+'Self-healing'
+'from'
+'to'
+'label'
+'continuous_learning'
+'memory_mesh'
+'Learning ingestion'
+'from'
+'to'
+'label'
+'llm_provider'
+'database'
+'Chat persistence'
+'from'
+'to'
+'label'
+'embedding_model'
+'qdrant'
+'Vector generation'
+connection_statuses
+●●●●●● 1mm □
+conn
+report
+connection_statuses
+conn
+●●●●●● 1mm □
+'status'
+'connected'
+'actions_passing'
+'actions_total'
+conn
+conn
+conn
+conn
+●●●●●● 3mm ○
+'status'
+'connection_statuses'
+'data_flows'
+'total_connections'
+'connected'
+report
+connection_statuses
+data_flows
+report
+report
+router
+●●●●●● 1mm □△
+'/map'
+●●●●●● 2mm □△

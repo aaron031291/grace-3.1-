@@ -1,0 +1,903 @@
+## healing_system.py
+'\nScaffolded Healing System using Genesis Keys.\n\nUses Genesis Keys to:\n- Detect issues in code/files\n- Provide contextual healing/fixes\n- Debug using Genesis Key navigation\n- Auto-repair broken code\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+genesis.code_analyzer
+●●●●●● 2mm □△○
+get_code_analyzer
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm □△○
+genesis.repo_scanner
+●●●●●● 2mm □△○
+get_repo_scanner
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKeyType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealingSystem
+'\n    Scaffolded healing system using Genesis Keys for debugging.\n\n    Features:\n    - Detects issues using Genesis Keys\n    - Provides contextual fixes\n    - Navigates codebase via Genesis Keys\n    - Auto-heals broken code\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+repo_path
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_repo_scanner
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_code_analyzer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'.genesis_immutable_memory.json'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+_get_default_repo_path
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get default repo path.'
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_load_immutable_memory
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load immutable memory if exists.'
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+scan_for_issues
+●●●●●● 1mm □△
+self
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Scan for issues using Genesis Keys.\n\n        Args:\n            file_genesis_key: Optional specific file Genesis Key to scan\n\n        Returns:\n            List of detected issues with Genesis Key context\n        '
+issues
+●●●●●● 1mm □
+●●●●●● 2mm □
+file_genesis_key
+file_issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+file_issues
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'No immutable memory found. Run scan first.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □
+file_path
+file_info
+●●●●●● 3mm △
+'files'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+file_info
+●●●●●● 1mm □△
+'extension'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.py'
+'.js'
+'.jsx'
+'.ts'
+'.tsx'
+file_issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_info
+'genesis_key'
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+file_issues
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_scan_file_by_genesis_key
+●●●●●● 1mm □△
+self
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Scan a specific file by its Genesis Key.'
+file_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_result
+file_result
+'type'
+'file'
+●●●●●● 3mm ○
+file_info
+●●●●●● 1mm □
+file_result
+'info'
+abs_path
+●●●●●● 1mm □
+file_info
+'absolute_path'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+abs_path
+'r'
+●●●●●● 2mm □△
+f
+code
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to read file '
+abs_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ext
+●●●●●● 1mm □
+file_info
+●●●●●● 1mm □△
+'extension'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.py'
+code_issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+abs_path
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.js'
+'.jsx'
+'.ts'
+'.tsx'
+code_issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+code
+abs_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 1mm □
+issue
+code_issues
+issues
+●●●●●● 1mm □△
+'file_genesis_key'
+'file_path'
+'file_name'
+'directory_genesis_key'
+'issue_type'
+'severity'
+'line_number'
+'column'
+'message'
+'suggested_fix'
+'fix_confidence'
+'context'
+'detected_at'
+file_genesis_key
+file_info
+'path'
+file_info
+'name'
+file_info
+'directory_genesis_key'
+issue
+issue
+issue
+issue
+issue
+issue
+issue
+issue
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+issues
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+heal_file
+●●●●●● 1mm □△
+self
+file_genesis_key
+user_id
+auto_apply
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n        Heal a file using its Genesis Key.\n\n        Args:\n            file_genesis_key: Genesis Key of file to heal\n            user_id: User performing healing\n            auto_apply: Whether to automatically apply fixes\n\n        Returns:\n            Healing results\n        '
+issues
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issues
+●●●●●● 3mm ○
+'file_genesis_key'
+'status'
+'issues_found'
+'fixes_applied'
+file_genesis_key
+'healthy'
+0
+0
+file_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_result
+●●●●●● 3mm ○
+'error'
+'File not found'
+file_info
+●●●●●● 1mm □
+file_result
+'info'
+abs_path
+●●●●●● 1mm □
+file_info
+'absolute_path'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+abs_path
+'r'
+●●●●●● 2mm □△
+f
+original_code
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fixes_applied
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+auto_apply
+fixed_code
+●●●●●● 1mm □
+original_code
+issue
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+●●●●●● 2mm □
+issue
+'suggested_fix'
+issue
+'fix_confidence'
+0.8
+fixed_code
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+fixed_code
+issue
+●●●●●● 2mm □△
+fixes_applied
+1
+●●●●●● 2mm □
+fixes_applied
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+abs_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+fixed_code
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+healing_record
+●●●●●● 1mm □
+'file_genesis_key'
+'file_path'
+'issues_found'
+'fixes_applied'
+'healed_at'
+'issues'
+file_genesis_key
+file_info
+'path'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+fixes_applied
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+issues
+●●●●●● 3mm △
+●●●●●● 1mm □△
+healing_record
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_genesis_key'
+'file_path'
+'status'
+'issues_found'
+'fixes_applied'
+'issues'
+file_genesis_key
+file_info
+'path'
+fixes_applied
+0
+'healed'
+'analyzed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+fixes_applied
+issues
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_apply_fix
+●●●●●● 1mm □△
+self
+code
+issue
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'Apply a fix to code.'
+●●●●●● 2mm □
+issue
+'suggested_fix'
+●●●●●● 3mm ○
+code
+lines
+●●●●●● 1mm □
+code
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line_idx
+●●●●●● 1mm □
+issue
+'line_number'
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □
+0
+line_idx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+lines
+line_idx
+●●●●●● 1mm □
+issue
+'suggested_fix'
+●●●●●● 3mm ○
+'\n'
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+heal_directory
+●●●●●● 1mm □△
+self
+dir_genesis_key
+user_id
+auto_apply
+recursive
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+'\n        Heal all files in a directory using Genesis Key.\n\n        Args:\n            dir_genesis_key: Genesis Key of directory\n            user_id: User performing healing\n            auto_apply: Whether to automatically apply fixes\n            recursive: Whether to heal subdirectories\n\n        Returns:\n            Healing results for directory\n        '
+dir_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dir_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dir_result
+dir_result
+'type'
+'directory'
+●●●●●● 3mm ○
+'error'
+'Directory not found'
+dir_info
+●●●●●● 1mm □
+dir_result
+'info'
+results
+●●●●●● 1mm □
+'directory_genesis_key'
+'directory_path'
+'files_healed'
+'total_issues'
+'total_fixes'
+dir_genesis_key
+dir_info
+'path'
+0
+0
+file_key
+dir_info
+'files'
+file_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_key
+user_id
+auto_apply
+●●●●●● 2mm □△
+results
+'files_healed'
+●●●●●● 1mm □△
+file_result
+●●●●●● 2mm □△
+results
+'total_issues'
+file_result
+●●●●●● 1mm □△
+'issues_found'
+0
+●●●●●● 2mm □△
+results
+'total_fixes'
+file_result
+●●●●●● 1mm □△
+'fixes_applied'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+recursive
+subdir_key
+dir_info
+'subdirectories'
+subdir_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+subdir_key
+user_id
+auto_apply
+recursive
+●●●●●● 2mm □△
+results
+'files_healed'
+●●●●●● 1mm □△
+subdir_result
+●●●●●● 1mm □△
+'files_healed'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+'total_issues'
+subdir_result
+●●●●●● 1mm □△
+'total_issues'
+0
+●●●●●● 2mm □△
+results
+'total_fixes'
+subdir_result
+●●●●●● 1mm □△
+'total_fixes'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+navigate_to_issue
+●●●●●● 1mm □△
+self
+file_genesis_key
+issue_line
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'\n        Navigate to an issue using Genesis Key.\n\n        Returns file path and context for debugging.\n        '
+file_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_genesis_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file_result
+●●●●●● 3mm ○
+'error'
+'File not found'
+file_info
+●●●●●● 1mm □
+file_result
+'info'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_info
+'absolute_path'
+'r'
+●●●●●● 2mm □△
+f
+lines
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+issue_line
+●●●●●● 1mm □△
+6
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+issue_line
+●●●●●● 3mm ○
+5
+●●●●●● 2mm □△
+context_lines
+●●●●●● 1mm □
+lines
+start
+end
+●●●●●● 3mm ○
+'file_genesis_key'
+'file_path'
+'absolute_path'
+'directory_genesis_key'
+'issue_line'
+'context'
+file_genesis_key
+file_info
+'path'
+file_info
+'absolute_path'
+file_info
+'directory_genesis_key'
+issue_line
+'start_line'
+'end_line'
+'lines'
+start
+●●●●●● 3mm ○
+1
+end
+'line_number'
+'content'
+'is_issue_line'
+start
+●●●●●● 3mm ○
+i
+●●●●●● 3mm ○
+1
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start
+●●●●●● 3mm ○
+i
+●●●●●● 3mm ○
+1
+issue_line
+i
+line
+●●●●●● 2mm □
+●●●●●● 1mm □△
+context_lines
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_healing_summary
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get summary of healing operations.'
+total_files
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+total_issues
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+h
+'issues_found'
+h
+●●●●●● 3mm △
+●●●●●● 2mm □△
+total_fixes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+h
+'fixes_applied'
+h
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_files_healed'
+'total_issues_found'
+'total_fixes_applied'
+'healing_rate'
+'healing_log'
+total_files
+total_issues
+total_fixes
+total_issues
+0
+total_fixes
+●●●●●● 3mm □△
+total_issues
+●●●●●● 2mm □△
+100
+0
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+export_healing_report
+●●●●●● 1mm □△
+self
+output_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Export healing report to JSON.'
+●●●●●● 2mm □
+output_path
+output_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'.genesis_healing_report_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+'.json'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+'generated_at'
+'summary'
+'detailed_log'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+output_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+report
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Healing report exported to: '
+output_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+output_path
+●●●●●● 1mm ○
+_healing_system
+●●●●●● 2mm □○
+HealingSystem
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_healing_system
+●●●●●● 1mm □△
+repo_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get or create global healing system instance.'
+●●●●●● 2mm □
+_healing_system
+●●●●●● 2mm □
+repo_path
+●●●●●● 2mm □
+_healing_system
+●●●●●● 1mm □
+HealingSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_healing_system
+HealingSystem

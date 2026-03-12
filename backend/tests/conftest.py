@@ -29,8 +29,7 @@ def app():
 @pytest.fixture(scope="session")
 def client(app):
     from fastapi.testclient import TestClient
-    with TestClient(app) as c:
-        yield c
+    return TestClient(app)
 
 
 @pytest.fixture

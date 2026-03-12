@@ -1,0 +1,689 @@
+## approval_workflow.py
+'\nApprovalWorkflow - Permission Management and Approval Queue\n\nManages tiered permission system for librarian actions:\n- Auto-commit: Safe actions (tagging, metadata, indexing)\n- Approval required: Sensitive actions (folder creation, deletion, moves)\n\nProvides approval queue for human review of pending actions.\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+and_
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+models.librarian_models
+●●●●●● 2mm □△○
+LibrarianAction
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ApprovalWorkflow
+'\n    Manages approval workflow for librarian actions.\n\n    Permission Tiers:\n    - **auto**: Executed immediately (tag assignment, metadata updates, indexing, relationship detection)\n    - **approval_required**: Wait for human approval (folder creation, file deletion, cross-category moves)\n\n    Example:\n        >>> workflow = ApprovalWorkflow(db_session)\n        >>>\n        >>> # Create action\n        >>> action = workflow.create_action(\n        ...     document_id=123,\n        ...     action_type="assign_tag",\n        ...     action_params={"tag_names": ["ai"]},\n        ...     triggered_by="rule",\n        ...     reason="Matched PDF Documents rule"\n        ... )\n        >>>\n        >>> # Check permission tier\n        >>> if action.permission_tier == "auto":\n        ...     # Execute immediately\n        ...     pass\n        >>> else:\n        ...     # Wait for approval\n        ...     pass\n    '
+AUTO_APPROVED_ACTIONS
+●●●●●● 1mm □
+'assign_tag'
+'update_metadata'
+'reindex'
+'detect_relationship'
+'calculate_confidence'
+'extract_content'
+APPROVAL_REQUIRED_ACTIONS
+●●●●●● 1mm □
+'create_folder'
+'delete_file'
+'move_file'
+'rename_file'
+'delete_folder'
+'modify_system_file'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+db_session
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n        Initialize ApprovalWorkflow.\n\n        Args:\n            db_session: SQLAlchemy database session\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+db_session
+●●●●●● 1mm □
+create_action
+●●●●●● 1mm □△
+self
+document_id
+action_type
+action_params
+triggered_by
+reason
+confidence
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'system'
+●●●●●● 2mm □
+1.0
+'\n        Create a new action for the approval workflow.\n\n        Args:\n            document_id: Document ID (None for system-wide actions)\n            action_type: Type of action (assign_tag, create_folder, etc.)\n            action_params: Parameters for the action\n            triggered_by: Who/what triggered it (system, user, rule, ai, grace)\n            reason: Human-readable explanation\n            confidence: Confidence in the action (0.0-1.0)\n\n        Returns:\n            LibrarianAction: Created action\n\n        Example:\n            >>> action = workflow.create_action(\n            ...     document_id=123,\n            ...     action_type="assign_tag",\n            ...     action_params={"tag_names": ["research", "ai"]},\n            ...     triggered_by="rule",\n            ...     reason="Matched AI Research folder pattern",\n            ...     confidence=0.95\n            ... )\n        '
+permission_tier
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+action_params
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+LibrarianAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Created action '
+action
+': '
+action_type
+' (tier: '
+permission_tier
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+action
+LibrarianAction
+●●●●●● 1mm □
+get_permission_tier
+●●●●●● 1mm □△
+self
+action_type
+action_params
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Determine permission tier for an action.\n\n        Args:\n            action_type: Type of action\n            action_params: Action parameters\n\n        Returns:\n            str: "auto" or "approval_required"\n\n        Example:\n            >>> tier = workflow.get_permission_tier("assign_tag", {"tag_names": ["ai"]})\n            >>> print(tier)  # "auto"\n            >>>\n            >>> tier = workflow.get_permission_tier("delete_file", {"file_id": 123})\n            >>> print(tier)  # "approval_required"\n        '
+●●●●●● 2mm □
+action_type
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'auto'
+●●●●●● 2mm □
+action_type
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'approval_required'
+●●●●●● 2mm □
+action_type
+'move_file'
+source_path
+●●●●●● 1mm □
+action_params
+●●●●●● 1mm □△
+'source_path'
+''
+●●●●●● 2mm □△
+target_path
+●●●●●● 1mm □
+action_params
+●●●●●● 1mm □△
+'target_path'
+''
+●●●●●● 2mm □△
+source_folder
+●●●●●● 1mm □
+'/'
+●●●●●● 1mm □△
+source_path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+target_folder
+●●●●●● 1mm □
+'/'
+●●●●●● 1mm □△
+target_path
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source_folder
+target_folder
+●●●●●● 3mm ○
+'auto'
+●●●●●● 3mm □
+●●●●●● 3mm ○
+'approval_required'
+logger
+●●●●●● 1mm □△
+"Unknown action type '"
+action_type
+"', defaulting to approval_required"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'approval_required'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_pending_actions
+●●●●●● 1mm □△
+self
+document_id
+permission_tier
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+50
+'\n        Get pending actions from the approval queue.\n\n        Args:\n            document_id: Filter by document ID\n            permission_tier: Filter by permission tier\n            limit: Maximum number of actions to return\n\n        Returns:\n            List[LibrarianAction]: Pending actions\n\n        Example:\n            >>> # Get all pending actions requiring approval\n            >>> pending = workflow.get_pending_actions(permission_tier="approval_required")\n            >>> print(f"{len(pending)} actions awaiting approval")\n        '
+query
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianAction
+'pending'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+document_id
+●●●●●● 2mm □
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LibrarianAction
+document_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+permission_tier
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LibrarianAction
+permission_tier
+●●●●●● 2mm □△
+query
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+query
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+LibrarianAction
+●●●●●● 1mm □
+approve_action
+●●●●●● 1mm □△
+self
+action_id
+reviewed_by
+notes
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Approve a pending action.\n\n        Args:\n            action_id: Action ID to approve\n            reviewed_by: Who approved it (user ID, username, etc.)\n            notes: Optional review notes\n\n        Returns:\n            bool: True if approved, False if not found or already processed\n\n        Example:\n            >>> success = workflow.approve_action(\n            ...     action_id=5,\n            ...     reviewed_by="user@example.com",\n            ...     notes="Looks good, proceed"\n            ... )\n        '
+action
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianAction
+action_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+logger
+●●●●●● 1mm □△
+'Action '
+action_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+action
+'pending'
+logger
+●●●●●● 1mm □△
+'Action '
+action_id
+' is not pending (status: '
+action
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+action
+●●●●●● 1mm □
+'approved'
+action
+●●●●●● 1mm □
+reviewed_by
+action
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+notes
+action
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Action '
+action_id
+' approved by '
+reviewed_by
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+reject_action
+●●●●●● 1mm □△
+self
+action_id
+reviewed_by
+reason
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Reject a pending action.\n\n        Args:\n            action_id: Action ID to reject\n            reviewed_by: Who rejected it\n            reason: Reason for rejection\n\n        Returns:\n            bool: True if rejected, False if not found or already processed\n\n        Example:\n            >>> success = workflow.reject_action(\n            ...     action_id=5,\n            ...     reviewed_by="user@example.com",\n            ...     reason="Incorrect categorization"\n            ... )\n        '
+action
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianAction
+action_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+logger
+●●●●●● 1mm □△
+'Action '
+action_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm □
+action
+'pending'
+logger
+●●●●●● 1mm □△
+'Action '
+action_id
+' is not pending (status: '
+action
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+action
+●●●●●● 1mm □
+'rejected'
+action
+●●●●●● 1mm □
+reviewed_by
+action
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+reason
+action
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Action '
+action_id
+' rejected by '
+reviewed_by
+': '
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+auto_approve_safe_actions
+●●●●●● 1mm □△
+self
+min_confidence
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.8
+'\n        Automatically approve safe actions with high confidence.\n\n        Args:\n            min_confidence: Minimum confidence to auto-approve (default: 0.8)\n\n        Returns:\n            int: Number of actions auto-approved\n\n        Example:\n            >>> count = workflow.auto_approve_safe_actions(min_confidence=0.9)\n            >>> print(f"Auto-approved {count} high-confidence actions")\n        '
+pending_actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+and_
+●●●●●● 1mm □△
+LibrarianAction
+'pending'
+LibrarianAction
+'auto'
+LibrarianAction
+min_confidence
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+approved_count
+●●●●●● 1mm □
+0
+action
+pending_actions
+action
+●●●●●● 1mm □
+'approved'
+action
+●●●●●● 1mm □
+'system'
+action
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+'Auto-approved (confidence: '
+action
+')'
+action
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+approved_count
+1
+●●●●●● 2mm □
+approved_count
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Auto-approved '
+approved_count
+' actions'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+approved_count
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_action_statistics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Get statistics about actions in the workflow.\n\n        Returns:\n            Dict: Statistics including counts by status, tier, etc.\n\n        Example:\n            >>> stats = workflow.get_action_statistics()\n            >>> print(f"Pending: {stats[\'by_status\'][\'pending\']}")\n            >>> print(f"Auto-tier: {stats[\'by_tier\'][\'auto\']}")\n        '
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+func
+by_status
+●●●●●● 1mm □
+status_counts
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+func
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+count
+status_counts
+by_status
+status
+●●●●●● 1mm □
+count
+by_tier
+●●●●●● 1mm □
+tier_counts
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+func
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tier
+count
+tier_counts
+by_tier
+tier
+●●●●●● 1mm □
+count
+by_type
+●●●●●● 1mm □
+type_counts
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LibrarianAction
+func
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LibrarianAction
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action_type
+count
+type_counts
+by_type
+action_type
+●●●●●● 1mm □
+count
+●●●●●● 3mm ○
+'by_status'
+'by_tier'
+'by_type'
+'total_actions'
+'pending_approvals'
+by_status
+by_tier
+by_type
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+by_status
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+by_status
+●●●●●● 1mm □△
+'pending'
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+batch_approve
+●●●●●● 1mm □△
+self
+action_ids
+reviewed_by
+notes
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Approve multiple actions at once.\n\n        Args:\n            action_ids: List of action IDs to approve\n            reviewed_by: Who approved them\n            notes: Optional notes for all actions\n\n        Returns:\n            Dict: {"approved": count, "failed": count}\n\n        Example:\n            >>> result = workflow.batch_approve([1, 2, 3, 4], "admin@example.com")\n            >>> print(f"Approved {result[\'approved\']}/{len([1,2,3,4])}")\n        '
+approved
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+action_id
+action_ids
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_id
+reviewed_by
+notes
+●●●●●● 2mm □△
+approved
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 3mm ○
+'approved'
+'failed'
+approved
+failed
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □
+batch_reject
+●●●●●● 1mm □△
+self
+action_ids
+reviewed_by
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Reject multiple actions at once.\n\n        Args:\n            action_ids: List of action IDs to reject\n            reviewed_by: Who rejected them\n            reason: Rejection reason\n\n        Returns:\n            Dict: {"rejected": count, "failed": count}\n        '
+rejected
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+action_id
+action_ids
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_id
+reviewed_by
+reason
+●●●●●● 2mm □△
+rejected
+1
+●●●●●● 3mm □
+failed
+1
+●●●●●● 3mm ○
+'rejected'
+'failed'
+rejected
+failed
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○

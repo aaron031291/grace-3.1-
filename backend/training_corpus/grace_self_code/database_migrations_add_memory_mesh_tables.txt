@@ -1,0 +1,264 @@
+## add_memory_mesh_tables.py
+'\nDatabase Migration: Add Memory Mesh Tables (Simplified)\n\nCreates the missing tables for Episodic and Procedural Memory using direct SQL.\n'
+●●●●●● 2mm □△○
+sqlite3
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Create episodes and procedures tables using direct SQL.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Memory Mesh Tables Migration'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+db_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'grace.db'
+●●●●●● 2mm □
+db_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ Database not found: '
+db_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Found database: '
+db_path
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □
+sqlite3
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+db_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\nCreating 'episodes' table..."
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n        CREATE TABLE IF NOT EXISTS episodes (\n            id TEXT PRIMARY KEY,\n            problem TEXT NOT NULL,\n            action TEXT NOT NULL,\n            outcome TEXT NOT NULL,\n            predicted_outcome TEXT,\n            prediction_error REAL DEFAULT 0.0,\n            trust_score REAL DEFAULT 0.5 NOT NULL,\n            source TEXT NOT NULL,\n            genesis_key_id TEXT,\n            decision_id TEXT,\n            timestamp DATETIME NOT NULL,\n            embedding TEXT,\n            episode_metadata TEXT,\n            created_at DATETIME,\n            updated_at DATETIME\n        )\n    '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ✓ Created 'episodes' table"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"\nCreating 'procedures' table..."
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+'\n        CREATE TABLE IF NOT EXISTS procedures (\n            id TEXT PRIMARY KEY,\n            name TEXT NOT NULL UNIQUE,\n            goal TEXT NOT NULL,\n            procedure_type TEXT NOT NULL,\n            steps TEXT NOT NULL,\n            preconditions TEXT NOT NULL,\n            trust_score REAL DEFAULT 0.5 NOT NULL,\n            success_rate REAL DEFAULT 0.0 NOT NULL,\n            usage_count INTEGER DEFAULT 0,\n            success_count INTEGER DEFAULT 0,\n            supporting_examples TEXT,\n            learned_from_episode_id TEXT,\n            embedding TEXT,\n            procedure_metadata TEXT,\n            created_at DATETIME,\n            updated_at DATETIME\n        )\n    '
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"  ✓ Created 'procedures' table"
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nVerifying tables...'
+●●●●●● 2mm □△
+cursor
+●●●●●● 1mm □△
+"SELECT name FROM sqlite_master WHERE type='table' AND name IN ('episodes', 'procedures')"
+●●●●●● 2mm □△
+tables
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tables
+●●●●●● 2mm □△
+2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✅ Both tables verified!'
+●●●●●● 2mm □△
+table_name
+'episodes'
+'procedures'
+cursor
+●●●●●● 1mm □△
+'PRAGMA table_info('
+table_name
+')'
+●●●●●● 2mm □△
+columns
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n  '
+table_name
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+columns
+●●●●●● 2mm □△
+' columns):'
+●●●●●● 2mm □△
+col
+columns
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    - '
+col
+1
+' ('
+col
+2
+')'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+columns
+●●●●●● 2mm □△
+5
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    ... and '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+columns
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+5
+' more'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ❌ Table verification failed!'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nChecking row counts...'
+●●●●●● 2mm □△
+table_name
+'episodes'
+'procedures'
+cursor
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM '
+table_name
+●●●●●● 2mm □△
+count
+●●●●●● 1mm □
+cursor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+table_name
+': '
+count
+' rows'
+●●●●●● 2mm □△
+conn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✅ Migration completed successfully!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+run_migration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exit
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n❌ Migration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+exit
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△

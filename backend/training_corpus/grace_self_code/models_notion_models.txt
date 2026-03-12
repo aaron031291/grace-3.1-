@@ -1,0 +1,745 @@
+## notion_models.py
+'\nNotion Task Management Models for Grace.\n\nProvides comprehensive task tracking with Genesis Key integration,\nprofile management, skill tracking, and full provenance.\n'
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+Dict
+Any
+List
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Integer
+Float
+DateTime
+JSON
+Text
+Boolean
+Index
+Enum
+●●●●●● 1mm □
+SQLEnum
+ForeignKey
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 2mm □△○
+enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm △
+TaskStatus
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Status of a task in the Kanban board.'
+TODO
+●●●●●● 1mm □
+'todo'
+IN_PROGRESS
+●●●●●● 1mm □
+'in_progress'
+IN_REVIEW
+●●●●●● 1mm □
+'in_review'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+ARCHIVED
+●●●●●● 1mm □
+'archived'
+●●●●●● 2mm △
+TaskPriority
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Priority levels for tasks.'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+TaskType
+●●●●●● 3mm □△
+str
+●●●●●● 1mm ○
+enum
+'Types of tasks Grace can work on.'
+LEARNING
+●●●●●● 1mm □
+'learning'
+BUILDING
+●●●●●● 1mm □
+'building'
+RESEARCH
+●●●●●● 1mm □
+'research'
+MAINTENANCE
+●●●●●● 1mm □
+'maintenance'
+EXPERIMENT
+●●●●●● 1mm □
+'experiment'
+DOCUMENTATION
+●●●●●● 1mm □
+'documentation'
+ANALYSIS
+●●●●●● 1mm □
+'analysis'
+OTHER
+●●●●●● 1mm □
+'other'
+●●●●●● 1mm □
+generate_genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Generate a unique Genesis Key ID in format GK-[hex].'
+●●●●●● 3mm ○
+'GK-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+generate_profile_genesis_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Generate a unique Profile Genesis ID in format GP-[hex].'
+●●●●●● 3mm ○
+'GP-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+16
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+NotionProfile
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Profile for task assignment and tracking.\n\n    Each profile has a unique Genesis Key ID for tracking all\n    work, tasks, and contributions.\n    '
+__tablename__
+●●●●●● 1mm □
+'notion_profile'
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+display_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+avatar_url
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+skill_set
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+specializations
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+is_active
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+last_logged_on
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+last_logged_off
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+total_time_logged
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+tasks_completed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+tasks_in_progress
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+tasks_total
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+profile_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+assigned_tasks
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'NotionTask'
+●●●●●● 2mm □△
+created_tasks
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'NotionTask'
+●●●●●● 2mm □△
+task_history
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'TaskHistory'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_profile_genesis_key'
+'genesis_key_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_profile_active'
+'is_active'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<NotionProfile(genesis_key_id='
+●●●●●● 3mm △
+', name='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+NotionTask
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Task in the Notion-style Kanban board.\n\n    Tracks work that Grace is doing, with full provenance,\n    file associations, and version history.\n    '
+__tablename__
+●●●●●● 1mm □
+'notion_task'
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+title
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+TaskStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+priority
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+TaskPriority
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+TaskType
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+assignee_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'notion_profile.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+creator_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'notion_profile.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+due_date
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+started_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+completed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+estimated_hours
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+actual_hours
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+folder_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+file_paths
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+progress_percent
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+subtasks
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+labels
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+category
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+version
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+notes
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+task_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+assignee
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'NotionProfile'
+●●●●●● 2mm □△
+creator
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'NotionProfile'
+●●●●●● 2mm □△
+history
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'TaskHistory'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_task_status'
+'status'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_task_assignee'
+'assignee_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_task_genesis_key'
+'genesis_key_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_task_priority_status'
+'priority'
+'status'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<NotionTask(genesis_key_id='
+●●●●●● 3mm △
+', title='
+●●●●●● 3mm △
+30
+', status='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+TaskHistory
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Complete history of task changes for versioning and provenance.\n\n    Every change to a task is recorded here for full audit trail.\n    '
+__tablename__
+●●●●●● 1mm □
+'task_history'
+task_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'notion_task.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+task_genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+field_changed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+old_value
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+new_value
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+actor_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'notion_profile.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+actor_genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+36
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+version_number
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+change_reason
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+history_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'NotionTask'
+●●●●●● 2mm □△
+actor
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'NotionProfile'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_history_task'
+'task_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_history_timestamp'
+'created_at'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_history_action'
+'action'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<TaskHistory(task_id='
+●●●●●● 3mm △
+', action='
+●●●●●● 3mm △
+', at='
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+TaskTemplate
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Reusable task templates for common work patterns.\n    '
+__tablename__
+●●●●●● 1mm □
+'task_template'
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+default_title
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+500
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+default_description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+default_priority
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+TaskPriority
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+default_task_type
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+SQLEnum
+●●●●●● 1mm □△
+TaskType
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+default_labels
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+default_subtasks
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+estimated_hours
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+template_metadata
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+is_active
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<TaskTemplate(name='
+●●●●●● 3mm △
+')>'

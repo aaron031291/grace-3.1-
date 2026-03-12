@@ -1,0 +1,1242 @@
+## test_ml_intelligence_components.py
+'\nComprehensive Component Tests for ML Intelligence Module\n\nTests the ML Intelligence module including:\n- KPITracker functionality\n- NeuralTrustScorer (when torch available)\n- Module imports and fallbacks\n- Component availability flags\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+patch
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestMLIntelligenceImports
+'Test ML Intelligence module imports and availability.'
+●●●●●● 1mm □
+test_ml_intelligence_module_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ML Intelligence module can be imported.'
+●●●●●● 2mm □△○
+ml_intelligence
+ml_intelligence
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_ml_intelligence_available_flag_exists
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ML_INTELLIGENCE_AVAILABLE flag is defined.'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+ML_INTELLIGENCE_AVAILABLE
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ML_INTELLIGENCE_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_kpi_tracker_import
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker can be imported from ml_intelligence.'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+KPITracker
+KPI
+ComponentKPIs
+get_kpi_tracker
+KPITracker
+●●●●●● 2mm □
+KPITracker
+●●●●●● 2mm □
+KPI
+●●●●●● 2mm □
+KPI
+●●●●●● 2mm □
+ComponentKPIs
+●●●●●● 2mm □
+ComponentKPIs
+●●●●●● 2mm □
+get_kpi_tracker
+●●●●●● 2mm □
+get_kpi_tracker
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_all_exports_defined
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test __all__ exports are defined in module.'
+●●●●●● 2mm □△○
+ml_intelligence
+expected_exports
+●●●●●● 1mm □
+'NeuralTrustScorer'
+'get_neural_trust_scorer'
+'KPITracker'
+'KPI'
+'ComponentKPIs'
+'get_kpi_tracker'
+export
+expected_exports
+export
+ml_intelligence
+export
+' missing from __all__'
+●●●●●● 2mm △
+TestKPIClass
+'Test KPI dataclass functionality.'
+●●●●●● 1mm □
+test_kpi_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPI can be created with required fields.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPI
+kpi
+●●●●●● 1mm □
+KPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpi
+'retrieval'
+kpi
+'queries_processed'
+kpi
+100.0
+kpi
+1
+●●●●●● 1mm □
+test_kpi_increment
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPI increment functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPI
+kpi
+●●●●●● 1mm □
+KPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □△
+10.0
+●●●●●● 2mm □△
+kpi
+10.0
+kpi
+1
+kpi
+●●●●●● 1mm □△
+5.0
+●●●●●● 2mm □△
+kpi
+15.0
+kpi
+2
+kpi
+●●●●●● 1mm □△
+'source'
+●●●●●● 2mm □△
+'api'
+●●●●●● 1mm □
+test_kpi_timestamp_updates
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPI timestamp updates on increment.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPI
+●●●●●● 2mm □△○
+time
+kpi
+●●●●●● 1mm □
+KPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+original_timestamp
+●●●●●● 1mm □
+kpi
+time
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+kpi
+original_timestamp
+●●●●●● 2mm △
+TestComponentKPIs
+'Test ComponentKPIs class functionality.'
+●●●●●● 1mm □
+test_component_kpis_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ComponentKPIs can be created.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+ComponentKPIs
+component
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+'cognitive_engine'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_component_kpis_get_or_create
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ComponentKPIs get_kpi creates KPI if not exists.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+ComponentKPIs
+component
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kpi
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+'decisions_made'
+●●●●●● 2mm □△
+kpi
+'cognitive'
+kpi
+'decisions_made'
+kpi
+0.0
+kpi2
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+'decisions_made'
+●●●●●● 2mm □△
+kpi
+kpi2
+●●●●●● 1mm □
+test_component_kpis_increment
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ComponentKPIs increment_kpi functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+ComponentKPIs
+component
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'queries'
+10.0
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'queries'
+5.0
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'cache_hits'
+3.0
+●●●●●● 2mm □△
+component
+'queries'
+15.0
+component
+'queries'
+2
+component
+'cache_hits'
+3.0
+●●●●●● 1mm □
+test_component_kpis_trust_score
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ComponentKPIs trust score calculation.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+ComponentKPIs
+component
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.5
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'activity'
+1.0
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+trust
+1.0
+trust
+0.5
+●●●●●● 1mm □
+test_component_kpis_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ComponentKPIs serialization to dict.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+ComponentKPIs
+component
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'metric1'
+10.0
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+'component_name'
+'test'
+'kpis'
+data
+'metric1'
+data
+'kpis'
+'trust_score'
+data
+'created_at'
+data
+'updated_at'
+data
+●●●●●● 1mm □
+test_component_kpis_recent_kpi
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ComponentKPIs get_recent_kpi functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+ComponentKPIs
+component
+●●●●●● 1mm □
+ComponentKPIs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+component
+●●●●●● 1mm □△
+'fresh_metric'
+1.0
+●●●●●● 2mm □△
+recent
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+'fresh_metric'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+recent
+●●●●●● 2mm □
+missing
+●●●●●● 1mm □
+component
+●●●●●● 1mm □△
+'nonexistent'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+missing
+●●●●●● 2mm □
+●●●●●● 2mm △
+TestKPITracker
+'Test KPITracker class functionality.'
+●●●●●● 1mm □
+test_kpi_tracker_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker can be created.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tracker
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_kpi_tracker_register_component
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker register_component functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'cognitive_engine'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'retrieval'
+●●●●●● 2mm □△
+'cognitive_engine'
+tracker
+'retrieval'
+tracker
+tracker
+●●●●●● 1mm □△
+'retrieval'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'queries'
+●●●●●● 2mm □△
+2.0
+●●●●●● 1mm □
+test_kpi_tracker_increment_auto_register
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker auto-registers component on increment.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'new_component'
+'actions'
+5.0
+●●●●●● 2mm □△
+'new_component'
+tracker
+tracker
+'new_component'
+'actions'
+5.0
+●●●●●● 1mm □
+test_kpi_tracker_component_trust_score
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker get_component_trust_score functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'unknown'
+●●●●●● 2mm □△
+0.5
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+15
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'active_component'
+'actions'
+1.0
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+'active_component'
+●●●●●● 2mm □△
+trust
+0.5
+●●●●●● 1mm □
+test_kpi_tracker_system_trust_score
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker get_system_trust_score functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.5
+comp
+'comp1'
+'comp2'
+'comp3'
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+'actions'
+1.0
+●●●●●● 2mm □△
+system_trust
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.0
+system_trust
+1.0
+●●●●●● 1mm □
+test_kpi_tracker_health_signal
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker get_health_signal functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+'unknown'
+●●●●●● 2mm □△
+health
+'status'
+'unknown'
+health
+'trust_score'
+0.5
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'healthy_component'
+'successes'
+1.0
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+'healthy_component'
+●●●●●● 2mm □△
+health
+'component_name'
+'healthy_component'
+health
+'status'
+'excellent'
+'good'
+'fair'
+'poor'
+'trust_score'
+health
+'kpi_count'
+health
+'total_actions'
+health
+●●●●●● 1mm □
+test_kpi_tracker_system_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker get_system_health functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'comp1'
+'actions'
+10.0
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'comp2'
+'actions'
+20.0
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'system_trust_score'
+health
+'status'
+health
+'component_count'
+health
+health
+'component_count'
+2
+'components'
+health
+'comp1'
+health
+'components'
+'comp2'
+health
+'components'
+●●●●●● 1mm □
+test_kpi_tracker_to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test KPITracker serialization to dict.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'test_comp'
+'metric1'
+5.0
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'components'
+data
+'test_comp'
+data
+'components'
+'system_trust_score'
+data
+'system_health'
+data
+●●●●●● 2mm △
+TestKPITrackerSingleton
+'Test KPITracker singleton functionality.'
+●●●●●● 1mm □
+test_get_kpi_tracker_singleton
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_kpi_tracker returns singleton instance.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+reset_kpi_tracker
+reset_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker1
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker2
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker1
+tracker2
+●●●●●● 1mm □
+test_reset_kpi_tracker
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test reset_kpi_tracker creates new instance.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+reset_kpi_tracker
+tracker1
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker1
+●●●●●● 1mm □△
+'test'
+'value'
+100.0
+●●●●●● 2mm □△
+reset_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker2
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tracker2
+●●●●●● 2mm □△
+0
+●●●●●● 2mm △
+TestNeuralTrustScorer
+'Test NeuralTrustScorer functionality (when available).'
+●●●●●● 1mm □
+test_neural_trust_scorer_import
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test NeuralTrustScorer can be imported.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+NeuralTrustScorer
+NeuralTrustScorer
+●●●●●● 2mm □
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_trust_features_dataclass
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TrustFeatures dataclass.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+TrustFeatures
+features
+●●●●●● 1mm □
+TrustFeatures
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+features
+0.8
+features
+●●●●●● 3mm □△○
+features
+0.85
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_neural_trust_scorer_extract_features
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test NeuralTrustScorer feature extraction.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+NeuralTrustScorer
+scorer
+●●●●●● 1mm □
+NeuralTrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_example
+●●●●●● 1mm □
+'source_reliability'
+'outcome_quality'
+'consistency_score'
+'times_validated'
+'times_invalidated'
+'created_at'
+'input_context'
+'expected_output'
+'times_referenced'
+0.8
+0.7
+0.6
+10
+2
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'def test_function(): pass'
+'Expected result'
+5
+features
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+features
+0.8
+features
+0.7
+features
+●●●●●● 3mm □△○
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_neural_trust_scorer_predict_trust
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test NeuralTrustScorer trust prediction.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+NeuralTrustScorer
+scorer
+●●●●●● 1mm □
+NeuralTrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_example
+●●●●●● 1mm □
+'source_reliability'
+'outcome_quality'
+'consistency_score'
+'times_validated'
+'times_invalidated'
+'created_at'
+'input_context'
+'expected_output'
+'times_referenced'
+0.9
+0.8
+0.85
+20
+1
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'High quality content'
+'Expected result'
+15
+score
+uncertainty
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+learning_example
+●●●●●● 2mm □△
+0.0
+score
+1.0
+●●●●●● 2mm □
+uncertainty
+●●●●●● 2mm □
+0.0
+uncertainty
+1.0
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_neural_trust_scorer_get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test NeuralTrustScorer stats retrieval.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+NeuralTrustScorer
+scorer
+●●●●●● 1mm □
+NeuralTrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_updates'
+stats
+'replay_buffer_size'
+stats
+'device'
+stats
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestExperienceReplay
+'Test ExperienceReplay buffer functionality.'
+●●●●●● 1mm □
+test_experience_replay_creation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ExperienceReplay buffer can be created.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+ExperienceReplay
+buffer
+●●●●●● 1mm □
+ExperienceReplay
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+buffer
+●●●●●● 2mm □△
+0
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_experience_replay_add_and_sample
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ExperienceReplay add and sample functionality.'
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+ExperienceReplay
+TrainingExample
+TrustFeatures
+buffer
+●●●●●● 1mm □
+ExperienceReplay
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+features
+●●●●●● 1mm □
+TrustFeatures
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+TrainingExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+buffer
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+buffer
+●●●●●● 2mm □△
+10
+batch
+●●●●●● 1mm □
+buffer
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+batch
+●●●●●● 2mm □△
+5
+ImportError
+pytest
+●●●●●● 1mm □△
+'Neural trust scorer dependencies not available: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestMLIntelligenceFallbacks
+'Test ML Intelligence module fallback behavior.'
+●●●●●● 1mm □
+test_fallbacks_defined_when_unavailable
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that fallback values are defined when components unavailable.'
+●●●●●● 2mm □△○
+ml_intelligence
+attrs_to_check
+●●●●●● 1mm □
+'NeuralTrustScorer'
+'get_neural_trust_scorer'
+'KPITracker'
+'KPI'
+'ComponentKPIs'
+'get_kpi_tracker'
+attr
+attrs_to_check
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+ml_intelligence
+attr
+●●●●●● 2mm □△
+'Missing attribute: '
+attr
+●●●●●● 1mm □
+test_ml_intelligence_available_reflects_imports
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ML_INTELLIGENCE_AVAILABLE reflects import success.'
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+ML_INTELLIGENCE_AVAILABLE
+●●●●●● 3mm □△○
+ml_intelligence
+●●●●●● 2mm □△○
+KPITracker
+●●●●●● 2mm □
+KPITracker
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ML_INTELLIGENCE_AVAILABLE
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestKPITrackerIntegration
+'Integration tests for KPITracker with multiple components.'
+●●●●●● 1mm □
+test_multi_component_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test tracking KPIs across multiple components.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+components
+●●●●●● 1mm □
+'cognitive'
+'retrieval'
+'ingestion'
+'learning'
+comp
+components
+tracker
+●●●●●● 1mm □△
+comp
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+'requests'
+1.0
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+comp
+'successes'
+0.9
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+tracker
+●●●●●● 2mm □△
+4
+health
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'component_count'
+4
+comp
+components
+comp
+health
+'components'
+●●●●●● 1mm □
+test_weighted_trust_calculation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test weighted trust score calculation.'
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+KPITracker
+tracker
+●●●●●● 1mm □
+KPITracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'critical_component'
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+20
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'critical_component'
+'successes'
+1.0
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+'critical_component'
+●●●●●● 2mm □△
+trust
+0.5
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

@@ -1,0 +1,1450 @@
+## autonomous_test_runner.py
+'\nAutonomous Test Runner for Grace Self-Testing\n\nThis module enables Grace to autonomously run tests to verify her own\nimplementation and logic. Integrates with the sandbox lab and can be\ntriggered via API, scheduled tasks, or autonomous actions.\n\nFeatures:\n- Run all tests or specific test suites\n- Generate detailed reports\n- Track test history and trends\n- Integrate with Genesis Keys for change tracking\n- Sandbox isolation for safe execution\n'
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 2mm □△○
+asyncio
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND_DIR
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestResult
+'Individual test result.'
+test_name
+●●●●●● 1mm ○
+test_file
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+duration
+●●●●●● 3mm ○
+message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+traceback
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+TestSuiteResult
+'Result of a test suite run.'
+suite_name
+●●●●●● 1mm ○
+total_tests
+●●●●●● 2mm ○
+passed
+●●●●●● 2mm ○
+failed
+●●●●●● 2mm ○
+skipped
+●●●●●● 2mm ○
+errors
+●●●●●● 2mm ○
+duration
+●●●●●● 3mm ○
+timestamp
+●●●●●● 1mm ○
+results
+●●●●●● 3mm □△
+TestResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+coverage_percent
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+TestRunReport
+'Complete test run report.'
+run_id
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+total_suites
+●●●●●● 2mm ○
+total_tests
+●●●●●● 2mm ○
+passed
+●●●●●● 2mm ○
+failed
+●●●●●● 2mm ○
+skipped
+●●●●●● 2mm ○
+errors
+●●●●●● 2mm ○
+duration
+●●●●●● 3mm ○
+success_rate
+●●●●●● 3mm ○
+suites
+●●●●●● 3mm □△
+TestSuiteResult
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+AutonomousTestRunner
+'\n    Autonomous test runner for Grace self-testing.\n\n    Enables Grace to verify her own implementations by running\n    tests autonomously and reporting results.\n    '
+TEST_SUITES
+●●●●●● 1mm □
+'core'
+'layer1'
+'cognitive'
+'ml_intelligence'
+'genesis'
+'governance'
+'librarian'
+'retrieval'
+'codebase'
+'monitoring'
+'security'
+'database'
+'name'
+'files'
+'description'
+'Core API Tests'
+'tests/test_app.py'
+'Core application and health endpoints'
+'name'
+'files'
+'description'
+'Layer 1 Tests'
+'tests/test_api_layer1.py'
+'Layer 1 and whitelist functionality'
+'name'
+'files'
+'description'
+'Cognitive System Tests'
+'tests/test_api_cognitive.py'
+'tests/test_cognitive_engine.py'
+'Cognitive engine and memory mesh'
+'name'
+'files'
+'description'
+'ML Intelligence Tests'
+'tests/test_api_ml_intelligence.py'
+'Machine learning and trust scoring'
+'name'
+'files'
+'description'
+'Genesis Keys Tests'
+'tests/test_api_genesis.py'
+'Genesis key tracking and verification'
+'name'
+'files'
+'description'
+'Governance Tests'
+'tests/test_api_governance.py'
+'Governance rules and approvals'
+'name'
+'files'
+'description'
+'Librarian Tests'
+'tests/test_api_librarian.py'
+'Document organization and tagging'
+'name'
+'files'
+'description'
+'Retrieval Tests'
+'tests/test_api_retrieval.py'
+'tests/test_reranker.py'
+'RAG retrieval and reranking'
+'name'
+'files'
+'description'
+'Codebase Tests'
+'tests/test_api_codebase.py'
+'Codebase browsing and analysis'
+'name'
+'files'
+'description'
+'Monitoring Tests'
+'tests/test_api_monitoring.py'
+'System monitoring and metrics'
+'name'
+'files'
+'description'
+'Security Tests'
+'tests/test_security.py'
+'tests/test_rate_limiting.py'
+'Security and rate limiting'
+'name'
+'files'
+'description'
+'Database Tests'
+'tests/test_database.py'
+'Database models and operations'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Initialize the test runner.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+backend_dir
+Path
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+BACKEND_DIR
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'test_reports'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+TestRunReport
+●●●●●● 1mm □
+_generate_run_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate unique run ID.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'test_run_'
+timestamp
+●●●●●● 1mm ○
+●●●●●● 1mm □
+run_suite
+●●●●●● 1mm □△
+self
+suite_name
+verbose
+coverage
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+'\n        Run a specific test suite.\n\n        Args:\n            suite_name: Name of the test suite to run\n            verbose: Enable verbose output\n            coverage: Enable coverage reporting\n\n        Returns:\n            TestSuiteResult with test outcomes\n        '
+●●●●●● 2mm □
+suite_name
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Unknown test suite: '
+suite_name
+●●●●●● 2mm □△
+suite_config
+●●●●●● 1mm □
+●●●●●● 3mm △
+suite_name
+test_files
+●●●●●● 1mm □
+suite_config
+'files'
+logger
+●●●●●● 1mm □△
+'Running test suite: '
+suite_config
+'name'
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □
+'python'
+'-m'
+'pytest'
+●●●●●● 2mm □
+verbose
+cmd
+●●●●●● 1mm □△
+'-v'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+coverage
+cmd
+●●●●●● 1mm □△
+'--cov=.'
+'--cov-report=json'
+●●●●●● 2mm □△
+json_output
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+suite_name
+'_result.json'
+cmd
+●●●●●● 1mm □△
+'--json-report'
+'--json-report-file='
+json_output
+●●●●●● 2mm □△
+test_file
+test_files
+test_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+test_file
+●●●●●● 2mm □
+test_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cmd
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+test_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+json_output
+●●●●●● 2mm □△
+f
+json_data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+test_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+json_data
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+test_results
+r
+'passed'
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+test_results
+r
+'failed'
+●●●●●● 2mm □△
+skipped
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+test_results
+r
+'skipped'
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+test_results
+r
+'error'
+●●●●●● 2mm □△
+suite_result
+●●●●●● 1mm □
+TestSuiteResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Suite '
+suite_name
+': '
+passed
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_results
+●●●●●● 2mm □△
+' passed ('
+failed
+' failed, '
+skipped
+' skipped) in '
+duration
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+suite_result
+subprocess
+logger
+●●●●●● 1mm □△
+'Test suite '
+suite_name
+' timed out'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TestSuiteResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error running test suite '
+suite_name
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TestSuiteResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+TestSuiteResult
+●●●●●● 1mm □
+run_all_tests
+●●●●●● 1mm □△
+self
+suites
+verbose
+coverage
+parallel
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+●●●●●● 1mm □
+'\n        Run all test suites or specified suites.\n\n        Args:\n            suites: List of suite names to run (None for all)\n            verbose: Enable verbose output\n            coverage: Enable coverage reporting\n            parallel: Run suites in parallel (experimental)\n\n        Returns:\n            TestRunReport with complete results\n        '
+run_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suites_to_run
+●●●●●● 1mm □
+suites
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+suite_results
+●●●●●● 1mm □
+logger
+●●●●●● 1mm □△
+'Starting test run '
+run_id
+' with '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+suites_to_run
+●●●●●● 2mm □△
+' suites'
+●●●●●● 2mm □△
+suite_name
+suites_to_run
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+suite_name
+verbose
+coverage
+●●●●●● 2mm □△
+suite_results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error running suite '
+suite_name
+': '
+e
+●●●●●● 2mm □△
+total_tests
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+suite_results
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+suite_results
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+suite_results
+●●●●●● 2mm □△
+skipped
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+suite_results
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+s
+s
+suite_results
+●●●●●● 2mm □△
+duration
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+success_rate
+●●●●●● 1mm □
+total_tests
+0
+passed
+●●●●●● 3mm □△
+total_tests
+●●●●●● 2mm □△
+100
+0.0
+report
+●●●●●● 1mm □
+TestRunReport
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not create Genesis Key for test run: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Test run '
+run_id
+' complete: '
+passed
+'/'
+total_tests
+' passed ('
+success_rate
+'.1f'
+'% success rate) in '
+duration
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+TestRunReport
+●●●●●● 1mm □
+_parse_pytest_output
+●●●●●● 1mm □△
+self
+stdout
+stderr
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Parse pytest console output to extract results.'
+results
+●●●●●● 1mm □
+lines
+●●●●●● 1mm □
+stdout
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line
+lines
+●●●●●● 2mm □
+'::'
+line
+' PASSED'
+line
+' FAILED'
+line
+' SKIPPED'
+line
+parts
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+'::'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+parts
+●●●●●● 2mm □△
+2
+test_file
+●●●●●● 1mm □
+parts
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rest
+●●●●●● 1mm □
+'::'
+●●●●●● 1mm □△
+parts
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+' PASSED'
+rest
+test_name
+●●●●●● 1mm □
+rest
+●●●●●● 1mm □△
+' PASSED'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'passed'
+●●●●●● 1mm △
+' FAILED'
+rest
+test_name
+●●●●●● 1mm □
+rest
+●●●●●● 1mm □△
+' FAILED'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'failed'
+●●●●●● 2mm □
+' SKIPPED'
+rest
+test_name
+●●●●●● 1mm □
+rest
+●●●●●● 1mm □△
+' SKIPPED'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'skipped'
+●●●●●● 3mm □
+results
+●●●●●● 1mm □△
+TestResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+TestResult
+●●●●●● 1mm □
+_parse_json_report
+●●●●●● 1mm □△
+self
+json_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Parse pytest-json-report output.'
+results
+●●●●●● 1mm □
+tests
+●●●●●● 1mm □
+json_data
+●●●●●● 1mm □△
+'tests'
+●●●●●● 2mm □△
+test
+tests
+results
+●●●●●● 1mm □△
+TestResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+TestResult
+●●●●●● 1mm □
+_save_report
+●●●●●● 1mm □△
+self
+report
+●●●●●● 2mm □△
+TestRunReport
+'Save test report to file.'
+report_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+report
+'.json'
+report_dict
+●●●●●● 1mm □
+'run_id'
+'timestamp'
+'total_suites'
+'total_tests'
+'passed'
+'failed'
+'skipped'
+'errors'
+'duration'
+'success_rate'
+'suites'
+report
+report
+report
+report
+report
+report
+report
+report
+report
+report
+'suite_name'
+'total_tests'
+'passed'
+'failed'
+'skipped'
+'errors'
+'duration'
+'timestamp'
+'results'
+s
+s
+s
+s
+s
+s
+s
+s
+'test_name'
+'test_file'
+'status'
+'duration'
+'message'
+r
+r
+r
+r
+r
+r
+s
+s
+report
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+report_dict
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Report saved to '
+report_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_create_genesis_key
+●●●●●● 1mm □△
+self
+report
+●●●●●● 2mm □△
+TestRunReport
+'Create Genesis Key for test run.'
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+GenesisKeyService
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+service
+●●●●●● 1mm □
+GenesisKeyService
+●●●●●● 1mm □△
+db
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+key
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Could not create Genesis Key: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_test_history
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'Get recent test run history.'
+reports
+●●●●●● 1mm □
+report_files
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test_run_*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+limit
+report_file
+report_files
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report_file
+●●●●●● 2mm □△
+f
+reports
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not load report '
+report_file
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+reports
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_failed_tests
+●●●●●● 1mm □△
+self
+run_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get failed tests from a specific run or most recent.'
+●●●●●● 2mm □
+run_id
+report_path
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+run_id
+'.json'
+●●●●●● 3mm □
+report_files
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'test_run_*.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+report_files
+●●●●●● 3mm ○
+●●●●●● 3mm □
+report_path
+●●●●●● 1mm □
+report_files
+0
+●●●●●● 2mm □
+report_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report_path
+●●●●●● 2mm □△
+f
+report
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+failed
+●●●●●● 1mm □
+suite
+report
+●●●●●● 1mm □△
+'suites'
+●●●●●● 2mm □△
+result
+suite
+●●●●●● 1mm □△
+'results'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'failed'
+failed
+●●●●●● 1mm □△
+'suite'
+'test'
+'file'
+'message'
+suite
+'suite_name'
+result
+'test_name'
+result
+'test_file'
+result
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+quick_health_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Run a quick health check with minimal tests.\n\n        Returns:\n            Dict with health check results\n        '
+logger
+●●●●●● 1mm □△
+'Running quick health check...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'core'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'tests_run'
+'passed'
+'failed'
+'duration'
+'timestamp'
+result
+0
+'healthy'
+'unhealthy'
+result
+result
+result
+result
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_test_runner
+●●●●●● 2mm □○
+AutonomousTestRunner
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_test_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the autonomous test runner instance.'
+●●●●●● 2mm □
+_test_runner
+●●●●●● 2mm □
+_test_runner
+●●●●●● 1mm □
+AutonomousTestRunner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_test_runner
+AutonomousTestRunner
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 2mm □△○
+argparse
+parser
+●●●●●● 1mm □
+argparse
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--suite'
+'-s'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--all'
+'-a'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--quick'
+'-q'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--verbose'
+'-v'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--coverage'
+'-c'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--history'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--failed'
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+'--list'
+'-l'
+●●●●●● 2mm □△
+args
+●●●●●● 1mm □
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+runner
+●●●●●● 1mm □
+get_test_runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nAvailable Test Suites:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+50
+●●●●●● 2mm □△
+name
+config
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+name
+'15'
+' - '
+config
+'description'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+result
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nHealth Check: '
+result
+'status'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tests: '
+result
+'passed'
+'/'
+result
+'tests_run'
+' passed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Duration: '
+result
+'duration'
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+history
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nRecent Test Runs:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+run
+history
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  '
+run
+'run_id'
+': '
+run
+'passed'
+'/'
+run
+'total_tests'
+' passed ('
+run
+'success_rate'
+'%) - '
+run
+'duration'
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+failed
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+failed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nFailed Tests:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test
+failed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ['
+test
+'suite'
+'] '
+test
+'file'
+'::'
+test
+'test'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+test
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    -> '
+test
+'message'
+100
+'...'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nNo failed tests!'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+args
+result
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSuite: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tests: '
+result
+'/'
+result
+' passed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed: '
+result
+', Skipped: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Duration: '
+result
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+args
+report
+●●●●●● 1mm □
+runner
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST RUN COMPLETE: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Total Tests: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Passed: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Skipped: '
+report
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Success Rate: '
+report
+'%'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Duration: '
+report
+'.2f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+parser
+●●●●●● 1mm □△
+●●●●●● 2mm □△

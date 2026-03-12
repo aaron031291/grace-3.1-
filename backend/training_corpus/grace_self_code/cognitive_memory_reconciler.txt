@@ -1,0 +1,456 @@
+## memory_reconciler.py
+'\nMemory Reconciler — Single source of truth for ALL memory systems.\n\nTicket #2: FlashCache, Ghost Memory, and Unified Memory need reconciliation.\nThey currently contradict each other (hot keys age out of one but not another).\n\nThis reconciler provides:\n  - atomic_get(key): checks all 3 systems, returns freshest\n  - atomic_set(key, value): writes to all 3 simultaneously\n  - atomic_evict(key): removes from all 3\n  - reconcile(): sync all systems on demand\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MemoryReconciler
+'Single source of truth across FlashCache, Ghost Memory, and Unified Memory.'
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_instance
+●●●●●● 1mm □△
+cls
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cls
+●●●●●● 2mm □
+cls
+●●●●●● 1mm □
+cls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+cls
+●●●●●● 2mm □△
+'MemoryReconciler'
+●●●●●● 1mm □
+atomic_get
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get from the freshest source.'
+results
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+refs
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+refs
+results
+●●●●●● 1mm □△
+'source'
+'data'
+'ts'
+'flash_cache'
+refs
+0
+refs
+0
+●●●●●● 1mm □△
+'last_accessed'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 3mm □○
+●●●●●● 1mm □△
+ghost
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'source'
+'data'
+'ts'
+'ghost'
+entry
+entry
+●●●●●● 1mm □△
+'ts'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+search
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+search
+●●●●●● 1mm □△
+'total'
+0
+●●●●●● 2mm □△
+0
+sys_name
+items
+search
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+items
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+items
+results
+●●●●●● 1mm □△
+'source'
+'data'
+'ts'
+'unified_'
+sys_name
+items
+0
+●●●●●● 1mm □
+●●●●●● 1mm □△
+items
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+items
+0
+●●●●●● 1mm □△
+'created_at'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+results
+●●●●●● 3mm ○
+●●●●●● 2mm □
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+0
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+atomic_set
+●●●●●● 1mm □△
+self
+key
+value
+source
+keywords
+trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'reconciler'
+●●●●●● 2mm □
+0.7
+'Write to ALL memory systems simultaneously.'
+stored
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+keywords
+fc
+●●●●●● 1mm □△
+key
+' '
+value
+200
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stored
+●●●●●● 1mm □△
+'flash_cache'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stored
+●●●●●● 1mm □△
+'unified_memory'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+ghost
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ghost
+ghost
+●●●●●● 1mm □△
+'memory_write'
+key
+': '
+value
+200
+●●●●●● 2mm □△
+stored
+●●●●●● 1mm □△
+'ghost_memory'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'stored_in'
+'key'
+stored
+key
+●●●●●● 1mm □
+atomic_evict
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Remove from ALL memory systems.'
+evicted
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+refs
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ref
+refs
+●●●●●● 2mm □
+ref
+●●●●●● 1mm □△
+'source_name'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+ref
+'id'
+●●●●●● 2mm □△
+evicted
+●●●●●● 1mm □△
+'flash_cache'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'evicted_from'
+'key'
+evicted
+key
+●●●●●● 1mm □○
+●●●●●● 1mm □
+reconcile
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Force sync all memory systems. Returns reconciliation report.'
+stats
+●●●●●● 1mm □
+'flash_cache'
+'unified_memory'
+'ghost_memory'
+'conflicts'
+0
+0
+0
+0
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+stats
+'flash_cache'
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'total_entries'
+0
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem_stats
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+'unified_memory'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+v
+mem_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+stats
+'ghost_memory'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+stats
+'total'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+v
+v
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+v
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_reconciler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MemoryReconciler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+MemoryReconciler

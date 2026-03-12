@@ -1,0 +1,144 @@
+## cognitive_framework.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+ConfigDict
+●●●●●● 3mm □△○
+events
+●●●●●● 2mm □△○
+CognitiveEvent
+●●●●●● 3mm □△○
+dependency_graph
+●●●●●● 2mm □△○
+DependencyGraph
+●●●●●● 3mm □△○
+escalation_manager
+●●●●●● 2mm □△○
+EscalationManager
+●●●●●● 3mm □△○
+consequence_engine
+●●●●●● 2mm □△○
+ConsequenceEngine
+●●●●●● 3mm □△○
+cognitive_playbook_executor
+●●●●●● 2mm □△○
+PlaybookExecutor
+●●●●●● 3mm □△○
+backend.core.clarity_framework
+●●●●●● 2mm □△○
+ClarityFramework
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'cognitive_framework'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CognitiveFramework
+"\n    Orchestrator for Grace's perception, reasoning, and response logic.\n    Coordinates between triggers, decision graphs, policies, and playbooks.\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+DependencyGraph
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ConsequenceEngine
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EscalationManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+PlaybookExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cognitive Framework Initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+CognitiveEvent
+'\n        Main entry point for processing incoming signals (warnings, errors, etc.)\n        '
+logger
+●●●●●● 1mm □△
+'Processing cognitive event: '
+event
+' ('
+event
+')'
+●●●●●● 2mm □△
+impacted
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+blast_radius
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+impacted
+●●●●●● 2mm □△
+response_plan
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+blast_radius
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+ClarityFramework
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+execution_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+response_plan
+●●●●●● 1mm □△
+'playbook'
+●●●●●● 2mm □△
+execution_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+response_plan
+'playbook'
+event
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'decision_id'
+'execution_result'
+decision
+execution_result
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

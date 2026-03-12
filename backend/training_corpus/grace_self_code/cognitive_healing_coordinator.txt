@@ -1,0 +1,1226 @@
+## healing_coordinator.py
+"\nHealing Coordinator — Intelligent problem resolution chain.\n\nWhen a problem is detected:\n1. Self-healing tries basic recovery\n2. If that fails → diagnostics run (Grace + Kimi independently)\n3. They compare findings and agree on best fix\n4. If code is broken → coding agent fixes it\n5. If they can't resolve → web search / API search for context\n6. Re-diagnose with new info → apply fix\n7. Track outcome via KPI → update trust scores\n8. Store as learning experience in Oracle / memory mesh\n\nConnected to: self-healing, coding agent, Kimi, diagnostics,\ntrust engine, KPI tracker, learning memory, web search.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealingCoordinator
+'\n    Orchestrates the full healing chain:\n    detect → diagnose → fix → verify → learn\n    '
+●●●●●● 1mm □
+resolve
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Full resolution chain for a detected problem.\n        \n        problem: {\n            "component": str,\n            "description": str,\n            "error": str (optional),\n            "file_path": str (optional),\n            "severity": str (low/medium/high/critical)\n        }\n        '
+result
+●●●●●● 1mm □
+'problem'
+'started_at'
+'steps'
+'resolved'
+'resolution'
+problem
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □
+step1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step1
+●●●●●● 1mm □△
+'resolved'
+●●●●●● 2mm □△
+result
+'resolved'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'resolution'
+●●●●●● 1mm □
+'self_healing'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+'self_healing'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+step2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step2
+●●●●●● 2mm □△
+step3
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+step2
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step3
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step3
+●●●●●● 1mm □△
+'fix_type'
+●●●●●● 2mm □△
+'code_fix'
+step4
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+step3
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step4
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step4
+●●●●●● 1mm □△
+'resolved'
+●●●●●● 2mm □△
+result
+'resolved'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+'resolution'
+●●●●●● 1mm □
+'coding_agent'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+step4
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+step5
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+step3
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step5
+●●●●●● 2mm □△
+step6
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+step5
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step6
+●●●●●● 2mm □△
+●●●●●● 2mm □
+step6
+●●●●●● 1mm □△
+'fix'
+●●●●●● 2mm □△
+step7
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+step6
+●●●●●● 2mm □△
+result
+'steps'
+●●●●●● 1mm □△
+step7
+●●●●●● 2mm □△
+result
+'resolved'
+●●●●●● 1mm □
+step7
+●●●●●● 1mm □△
+'resolved'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+result
+'resolution'
+●●●●●● 1mm □
+result
+'resolved'
+'coordinated_fix'
+'unresolved'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+result
+●●●●●● 2mm □△
+result
+'completed_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_step_self_heal
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Self-heal via brain: system/reset_db, reset_vector_db, scan_heal; govern/heal for rest.'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+component
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'component'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+action_key
+●●●●●● 1mm □
+'unknown'
+●●●●●● 2mm □
+'database'
+component
+'db'
+component
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'reset_db'
+●●●●●● 2mm □△
+action_key
+●●●●●● 1mm □
+'database_reconnect'
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'qdrant'
+component
+'vector'
+component
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'reset_vector_db'
+●●●●●● 2mm □△
+action_key
+●●●●●● 1mm □
+'qdrant_reconnect'
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'llm'
+component
+'ollama'
+component
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'system'
+'scan_heal'
+●●●●●● 2mm □△
+action_key
+●●●●●● 1mm □
+'llm_reconnect'
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'govern'
+'heal'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+action_key
+●●●●●● 1mm □
+'gc_collect'
+●●●●●● 3mm □
+ok
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'action'
+'resolved'
+'self_heal'
+action_key
+ok
+Exception
+●●●●●● 3mm ○
+'step'
+'action'
+'resolved'
+'error'
+'self_heal'
+'failed'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_diagnose
+●●●●●● 1mm □△
+self
+problem
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+core.async_parallel
+●●●●●● 2mm □△○
+run_parallel
+diagnostics
+●●●●●● 1mm □
+'step'
+'grace'
+'kimi'
+'diagnose'
+●●●●●● 2mm □
+●●●●●● 2mm □
+desc
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+''
+err
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+''
+comp
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+''
+payload
+●●●●●● 1mm □
+'Problem: '
+desc
+'\nError: '
+err
+'\nComponent: '
+comp
+●●●●●● 1mm □
+_grace
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+●●●●●● 3mm ○
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'Grace diagnosis unavailable: '
+e
+●●●●●● 1mm □
+_kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+●●●●●● 3mm ○
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'Kimi diagnosis unavailable: '
+e
+grace_diag
+kimi_diag
+●●●●●● 1mm □
+run_parallel
+●●●●●● 1mm □△
+_grace
+_kimi
+●●●●●● 2mm □△
+diagnostics
+'grace'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+grace_diag
+Exception
+●●●●●● 2mm □△
+grace_diag
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+grace_diag
+●●●●●● 2mm □△
+diagnostics
+'kimi'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kimi_diag
+Exception
+●●●●●● 2mm □△
+kimi_diag
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kimi_diag
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+diagnostics
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_agree_fix
+●●●●●● 1mm □△
+self
+problem
+diagnostics
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+grace_diag
+●●●●●● 1mm □
+diagnostics
+●●●●●● 1mm □△
+'grace'
+''
+●●●●●● 2mm □△
+kimi_diag
+●●●●●● 1mm □
+diagnostics
+●●●●●● 1mm □△
+'kimi'
+''
+●●●●●● 2mm □△
+fix_type
+●●●●●● 1mm □
+'unknown'
+description
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+error
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+description
+●●●●●● 3mm ○
+error
+w
+'syntax'
+'import'
+'indent'
+'undefined'
+'typeerror'
+'attributeerror'
+●●●●●● 2mm □△
+fix_type
+●●●●●● 1mm □
+'code_fix'
+●●●●●● 1mm △
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+description
+●●●●●● 3mm ○
+error
+w
+'connection'
+'timeout'
+'refused'
+'unavailable'
+●●●●●● 2mm □△
+fix_type
+●●●●●● 1mm □
+'service_restart'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+description
+●●●●●● 3mm ○
+error
+w
+'memory'
+'disk'
+'resource'
+●●●●●● 2mm □△
+fix_type
+●●●●●● 1mm □
+'resource_cleanup'
+●●●●●● 3mm □
+fix_type
+●●●●●● 1mm □
+'code_fix'
+●●●●●● 3mm ○
+'step'
+'fix_type'
+'grace_recommendation'
+'kimi_recommendation'
+'agree_fix'
+fix_type
+grace_diag
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+grace_diag
+●●●●●● 2mm □△
+300
+''
+kimi_diag
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+kimi_diag
+●●●●●● 2mm □△
+300
+''
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_code_fix
+●●●●●● 1mm □△
+self
+problem
+agreement
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+'Coding agent fix via brain (code/generate returns {code, prompt}).'
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+prompt
+●●●●●● 1mm □
+'Fix this problem:\n'
+problem
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+'\nError: '
+problem
+●●●●●● 1mm □△
+'error'
+''
+●●●●●● 2mm □△
+'\nGrace diagnosis: '
+agreement
+●●●●●● 1mm □△
+'grace_recommendation'
+''
+●●●●●● 2mm □△
+'\nKimi diagnosis: '
+agreement
+●●●●●● 1mm □△
+'kimi_recommendation'
+''
+●●●●●● 2mm □△
+project_folder
+●●●●●● 1mm □
+problem
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+''
+●●●●●● 1mm □△
+'/'
+1
+●●●●●● 2mm □△
+0
+r
+●●●●●● 1mm □
+call_brain
+●●●●●● 1mm □△
+'code'
+'generate'
+'prompt'
+'project_folder'
+prompt
+project_folder
+●●●●●● 2mm □△
+●●●●●● 2mm □
+r
+●●●●●● 1mm □△
+'ok'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'resolved'
+'error'
+'code_fix'
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'error'
+'brain error'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+r
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+fix
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'response'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'resolved'
+'fix'
+'trust'
+'pipeline_stages'
+'code_fix'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+fix
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+fix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+fix
+1000
+fix
+data
+●●●●●● 1mm □△
+'trust_score'
+0.5
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'stages_passed'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'step'
+'resolved'
+'error'
+'code_fix'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_search_context
+●●●●●● 1mm □△
+self
+problem
+agreement
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+context
+●●●●●● 1mm □
+'step'
+'sources'
+'search_context'
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunks
+context
+'sources'
+●●●●●● 1mm □△
+'type'
+'count'
+'content'
+'knowledge_base'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+'; '
+●●●●●● 1mm □△
+c
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+200
+c
+chunks
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+patterns
+●●●●●● 1mm □
+FeedbackLoop
+●●●●●● 1mm □△
+problem
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+patterns
+context
+'sources'
+●●●●●● 1mm □△
+'type'
+'count'
+'content'
+'learning_memory'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+patterns
+●●●●●● 2mm □△
+'; '
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+'input'
+''
+●●●●●● 2mm □△
+100
+p
+patterns
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+context
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_rediagnose
+●●●●●● 1mm □△
+self
+problem
+search_result
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+extra_context
+●●●●●● 1mm □
+''
+src
+search_result
+●●●●●● 1mm □△
+'sources'
+●●●●●● 2mm □△
+extra_context
+'\n['
+src
+'type'
+']: '
+src
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+300
+●●●●●● 2mm □
+extra_context
+●●●●●● 3mm ○
+'step'
+'fix'
+'note'
+'rediagnose'
+●●●●●● 2mm □
+'No additional context found'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fix
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'fix'
+'rediagnose'
+fix
+Exception
+●●●●●● 3mm ○
+'step'
+'fix'
+'error'
+'rediagnose'
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_step_apply_fix
+●●●●●● 1mm □△
+self
+problem
+rediagnosis
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+fix
+●●●●●● 1mm □
+rediagnosis
+●●●●●● 1mm □△
+'fix'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fix
+●●●●●● 3mm ○
+'step'
+'resolved'
+'apply_fix'
+●●●●●● 1mm □
+●●●●●● 2mm □
+problem
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+fp
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+problem
+'file_path'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fp
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'step'
+'resolved'
+'note'
+'apply_fix'
+●●●●●● 3mm □△○
+'Fix generated — ready to apply via coding agent'
+Exception
+●●●●●● 3mm ○
+'step'
+'resolved'
+'fix_preview'
+'apply_fix'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+fix
+●●●●●● 2mm □△
+fix
+500
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_trigger_learn_after_heal
+●●●●●● 1mm □△
+self
+problem
+resolution
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+'After a successful heal, trigger learning in background.'
+●●●●●● 3mm □△○
+core.async_parallel
+●●●●●● 2mm □△○
+run_background
+●●●●●● 1mm □
+_do
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+call_brain
+●●●●●● 1mm □△
+'govern'
+'learn'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'govern'
+'record_gap'
+'what'
+'target'
+'tags'
+'Heal succeeded: '
+resolution
+' — '
+problem
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+problem
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+'heal_triggered_learn'
+resolution
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Trigger learn after heal: %s'
+e
+●●●●●● 2mm □△
+run_background
+●●●●●● 1mm □△
+_do
+'learn_after_heal'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_trigger_heal_and_learn_after_code_fix
+●●●●●● 1mm □△
+self
+problem
+step4
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+'After coding agent fix, trigger heal + learn in background.'
+●●●●●● 3mm □△○
+core.async_parallel
+●●●●●● 2mm □△○
+run_background
+●●●●●● 1mm □
+_do
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+call_brain
+call_brain
+●●●●●● 1mm □△
+'system'
+'scan_heal'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'govern'
+'heal'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'govern'
+'learn'
+●●●●●● 2mm □△
+call_brain
+●●●●●● 1mm □△
+'govern'
+'record_gap'
+'what'
+'target'
+'tags'
+'Code fix applied: '
+problem
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+200
+problem
+●●●●●● 1mm □△
+'file_path'
+problem
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'code_fix_triggered_heal_learn'
+'coding_agent'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Trigger heal+learn after code fix: %s'
+e
+●●●●●● 2mm □△
+run_background
+●●●●●● 1mm □△
+_do
+'heal_learn_after_code_fix'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_record_outcome
+●●●●●● 1mm □△
+self
+problem
+result
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 3mm △
+'Track via KPI + store as learning experience + Magma memory.'
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+store_decision
+store_pattern
+ingest
+ingest
+●●●●●● 1mm □△
+'Healing coordination: '
+problem
+●●●●●● 1mm □△
+'component'
+●●●●●● 2mm □△
+' — '
+success
+'RESOLVED'
+'UNRESOLVED'
+●●●●●● 2mm □△
+store_decision
+●●●●●● 1mm □△
+'coordinate_healing'
+problem
+●●●●●● 1mm □△
+'component'
+''
+●●●●●● 2mm □△
+success
+'Resolved'
+'Failed'
+' via '
+result
+●●●●●● 1mm □△
+'resolution'
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+store_pattern
+●●●●●● 1mm □△
+'successful_coordination'
+problem
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+100
+' → '
+result
+●●●●●● 1mm □△
+'resolution'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+engine
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_coordinator
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_coordinator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_coordinator
+●●●●●● 2mm □
+_coordinator
+●●●●●● 1mm □
+HealingCoordinator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_coordinator
+HealingCoordinator

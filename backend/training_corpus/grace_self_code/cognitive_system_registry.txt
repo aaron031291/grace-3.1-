@@ -1,0 +1,953 @@
+## system_registry.py
+'\nGrace System Registry — Living map of every component in the system.\n\nConnected to Genesis Keys, Auto-Updater, and Handshake Protocol.\nShows every component (old code and new code) with live status:\n  🟢 Green = working\n  🟡 Amber = degraded or partially working\n  🔴 Red = broken or not responding\n\nThe registry:\n1. Auto-discovers components on startup by scanning the codebase\n2. Listens to HUNTER handshakes to register new components\n3. Reads genesis keys to track last activity per component\n4. Pings components to check health status\n5. Persists to disk so nothing is ever lost\n6. Human-readable display — you see the full system, not a black box\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+REGISTRY_FILE
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'system_registry.json'
+●●●●●● 2mm △
+Component
+'A registered component in Grace.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+category
+●●●●●● 1mm ○
+module_path
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+''
+status
+●●●●●● 1mm ○
+'unknown'
+last_seen
+●●●●●● 1mm ○
+''
+last_genesis_key
+●●●●●● 1mm ○
+''
+health_score
+●●●●●● 3mm ○
+0
+dependencies
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registered_at
+●●●●●● 1mm ○
+''
+source
+●●●●●● 1mm ○
+'auto_discovery'
+file_count
+●●●●●● 2mm ○
+0
+is_new
+●●●●●● 3mm △
+●●●●●● 1mm □
+dataclass
+●●●●●● 2mm △
+SystemRegistry
+'\n    Living registry of every component in Grace.\n    Auto-discovers, tracks health, persists, and displays.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Component
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_auto_discover
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Scan the codebase and register every module.'
+backend
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+skip
+●●●●●● 1mm □
+'venv'
+'node_modules'
+'__pycache__'
+'mcp_repos'
+'.git'
+'tests'
+'data'
+'logs'
+'knowledge_base'
+categories
+●●●●●● 1mm □
+'cognitive'
+'api'
+'llm_orchestrator'
+'ml_intelligence'
+'genesis'
+'retrieval'
+'ingestion'
+'vector_db'
+'database'
+'security'
+'diagnostic_machine'
+'grace_os'
+'agent'
+'execution'
+'confidence_scorer'
+'scraping'
+'search'
+'librarian'
+'file_manager'
+'telemetry'
+'models'
+'services'
+'layer1'
+'cache'
+'core'
+'embedding'
+'version_control'
+'cognitive'
+'api'
+'intelligence'
+'intelligence'
+'tracking'
+'data'
+'data'
+'data'
+'infrastructure'
+'infrastructure'
+'infrastructure'
+'core'
+'intelligence'
+'intelligence'
+'intelligence'
+'data'
+'data'
+'data'
+'data'
+'infrastructure'
+'infrastructure'
+'core'
+'core'
+'infrastructure'
+'core'
+'intelligence'
+'infrastructure'
+d
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+backend
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+d
+skip
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+py_files
+●●●●●● 1mm □
+f
+f
+d
+●●●●●● 1mm □△
+'*.py'
+●●●●●● 2mm □△
+'__pycache__'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+py_files
+comp_id
+●●●●●● 1mm □
+'module_'
+d
+●●●●●● 2mm □
+comp_id
+●●●●●● 3mm △
+category
+●●●●●● 1mm □
+categories
+●●●●●● 1mm □△
+d
+'other'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'unknown'
+__import__
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'green'
+Exception
+status
+●●●●●● 1mm □
+'amber'
+●●●●●● 3mm △
+comp_id
+●●●●●● 1mm □
+Component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+frontend_tabs
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'frontend'
+●●●●●● 3mm □△
+'src'
+●●●●●● 3mm □△
+'components'
+●●●●●● 2mm □
+frontend_tabs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+frontend_tabs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+'Tab.jsx'
+●●●●●● 2mm □△
+comp_id
+●●●●●● 1mm □
+'frontend_'
+f
+●●●●●● 2mm □
+comp_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+comp_id
+●●●●●● 1mm □
+Component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_components
+●●●●●● 1mm □
+'cognitive_pipeline'
+'Cognitive Pipeline'
+'cognitive'
+'cognitive/pipeline.py'
+'9-stage cognitive processing chain'
+'trust_engine'
+'Trust Engine'
+'intelligence'
+'cognitive/trust_engine.py'
+'Component-level trust scoring 0-100'
+'immune_system'
+'Immune System'
+'cognitive'
+'cognitive/immune_system.py'
+'Autonomous health monitoring and healing'
+'healing_coordinator'
+'Healing Coordinator'
+'cognitive'
+'cognitive/healing_coordinator.py'
+'Intelligent problem resolution chain'
+'magma_memory'
+'Magma Memory'
+'cognitive'
+'cognitive/magma/'
+'4-graph relation memory system'
+'genesis_realtime'
+'Genesis Realtime'
+'tracking'
+'genesis/realtime.py'
+'Instant event firing and alerting'
+'governance_wrapper'
+'Governance Wrapper'
+'intelligence'
+'llm_orchestrator/governance_wrapper.py'
+'Law docs enforced on every LLM call'
+'kimi_enhanced'
+'Kimi Enhanced'
+'intelligence'
+'llm_orchestrator/kimi_enhanced.py'
+'8 tool-like Kimi capabilities'
+'hunter_assimilator'
+'HUNTER Assimilator'
+'intelligence'
+'cognitive/hunter_assimilator.py'
+'Autonomous code integration'
+'idle_learner'
+'Idle Learner'
+'intelligence'
+'cognitive/idle_learner.py'
+'Kimi teaches during idle time'
+'knowledge_cycle'
+'Knowledge Cycle'
+'intelligence'
+'cognitive/knowledge_cycle.py'
+'Seed→discover→score→enrich→reingest'
+'autonomous_librarian'
+'Autonomous Librarian'
+'data'
+'cognitive/librarian_autonomous.py'
+'Auto-organise files system-wide'
+'time_sense'
+'TimeSense'
+'cognitive'
+'cognitive/time_sense.py'
+'Temporal awareness and urgency'
+'self_healing'
+'Self-Healing'
+'infrastructure'
+'cognitive/self_healing.py'
+'Service recovery and fallback'
+'feedback_loop'
+'Feedback Loop'
+'intelligence'
+'cognitive/pipeline.py'
+'Learn from outcomes'
+'magma_bridge'
+'Magma Bridge'
+'cognitive'
+'cognitive/magma_bridge.py'
+'Connects Magma to all systems'
+comp_id
+name
+category
+path
+desc
+key_components
+●●●●●● 2mm □
+comp_id
+●●●●●● 3mm △
+status
+●●●●●● 1mm □
+'green'
+full_path
+●●●●●● 1mm □
+backend
+●●●●●● 3mm □△
+path
+●●●●●● 2mm □
+full_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'red'
+Exception
+status
+●●●●●● 1mm □
+'red'
+●●●●●● 3mm △
+comp_id
+●●●●●● 1mm □
+Component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_module_description
+●●●●●● 1mm □△
+self
+module_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+module_dir
+●●●●●● 3mm □△
+'__init__.py'
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+line
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □
+line
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'"'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+"'"
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+line
+●●●●●● 1mm □△
+'#'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+'from'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+'import'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+line
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+line
+200
+Exception
+●●●●●● 3mm ○
+'Backend module: '
+module_dir
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_connect_to_realtime
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+rt
+●●●●●● 1mm □
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rt
+●●●●●● 1mm □△
+'__all__'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[REGISTRY] Connected to genesis realtime'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_on_genesis_event
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+'Update last_seen for components based on genesis key activity. Accepts Event or dict.'
+data
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+event
+'data'
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+where
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'where'
+''
+●●●●●● 2mm □△
+key_type
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'key_type'
+''
+●●●●●● 2mm □△
+comp
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+comp
+where
+comp
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'timestamp'
+''
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+data
+●●●●●● 1mm □△
+'what'
+''
+●●●●●● 2mm □△
+''
+100
+●●●●●● 1mm □
+register_from_handshake
+●●●●●● 1mm □△
+self
+announcement
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Register a new component from HUNTER handshake.'
+files
+●●●●●● 1mm □
+announcement
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+request_id
+●●●●●● 1mm □
+announcement
+●●●●●● 1mm □△
+'request_id'
+''
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+announcement
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+comp_id
+●●●●●● 1mm □
+'hunter_'
+request_id
+●●●●●● 3mm △
+comp_id
+●●●●●● 1mm □
+Component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Check health of all registered components.'
+comp
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+comp
+'auto_discovery'
+comp
+'frontend'
+module_name
+●●●●●● 1mm □
+comp
+●●●●●● 1mm □△
+'/'
+'.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'.'
+module_name
+module_name
+●●●●●● 1mm □
+module_name
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+__import__
+●●●●●● 1mm □△
+module_name
+●●●●●● 2mm □△
+comp
+●●●●●● 1mm □
+'green'
+comp
+●●●●●● 1mm □
+90
+Exception
+●●●●●● 2mm □
+comp
+'green'
+comp
+●●●●●● 1mm □
+'amber'
+comp
+●●●●●● 1mm □
+50
+●●●●●● 3mm □
+comp
+●●●●●● 1mm □
+'red'
+●●●●●● 3mm □
+comp
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+green
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'green'
+●●●●●● 2mm □△
+amber
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'amber'
+●●●●●● 2mm □△
+red
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'red'
+●●●●●● 2mm □△
+unknown
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'green'
+'amber'
+'red'
+'unknown'
+'health_pct'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+green
+amber
+red
+unknown
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+green
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+100
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all components as human-readable list.'
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+'id'
+'name'
+'category'
+'module'
+'description'
+'status'
+'health'
+'last_seen'
+'last_key'
+'registered'
+'source'
+'files'
+'is_new'
+'dependencies'
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_by_category
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get components grouped by category.'
+all_comps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+categories
+●●●●●● 1mm □
+c
+all_comps
+cat
+●●●●●● 1mm □
+c
+'category'
+●●●●●● 2mm □
+cat
+categories
+categories
+cat
+●●●●●● 1mm □
+categories
+cat
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+categories
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+get_by_status
+●●●●●● 1mm □△
+self
+status
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+c
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+'status'
+status
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_save
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+REGISTRY_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+comp_id
+comp
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+comp_id
+●●●●●● 1mm □
+'id'
+'name'
+'category'
+'module_path'
+'description'
+'status'
+'health_score'
+'last_seen'
+'last_genesis_key'
+'registered_at'
+'source'
+'file_count'
+'is_new'
+'dependencies'
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+comp
+REGISTRY_FILE
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+REGISTRY_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+REGISTRY_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+comp_id
+comp_data
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+comp_id
+●●●●●● 1mm □
+Component
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+_registry
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_system_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_registry
+●●●●●● 2mm □
+_registry
+●●●●●● 1mm □
+SystemRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_registry
+SystemRegistry

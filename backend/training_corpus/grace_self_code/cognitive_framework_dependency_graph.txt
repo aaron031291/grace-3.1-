@@ -1,0 +1,80 @@
+## dependency_graph.py
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+●●●●●● 2mm △
+DependencyGraph
+'\n    Tracks component/topic dependencies and supports impact analysis when an alert fires.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+add_dependency
+●●●●●● 1mm □△
+self
+source
+target
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+source
+●●●●●● 3mm △
+●●●●●● 3mm △
+source
+●●●●●● 1mm □
+●●●●●● 3mm △
+source
+●●●●●● 1mm □△
+target
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_impacted_components
+●●●●●● 1mm □△
+self
+component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Returns downstream components affected by this failure.'
+impacted
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stack
+●●●●●● 1mm □
+component
+stack
+current
+●●●●●● 1mm □
+stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+impacted
+●●●●●● 1mm □△
+current
+●●●●●● 2mm □△
+neighbor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current
+●●●●●● 2mm □△
+●●●●●● 2mm □
+neighbor
+impacted
+stack
+●●●●●● 1mm □△
+neighbor
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+impacted
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○

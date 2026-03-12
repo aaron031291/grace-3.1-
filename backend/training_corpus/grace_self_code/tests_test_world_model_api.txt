@@ -1,0 +1,544 @@
+## test_world_model_api.py
+'Tests for World Model API and Librarian Autonomous FS API.'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestWorldModelHelpers
+'Test world model internal helpers.'
+●●●●●● 1mm □
+test_get_source_code_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_get_source_code_stats
+stats
+●●●●●● 1mm □
+_get_source_code_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'total_python_files'
+stats
+stats
+'total_python_files'
+0
+'total_lines'
+stats
+stats
+'total_lines'
+0
+'modules'
+stats
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+stats
+'modules'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □
+test_get_knowledge_base_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_get_knowledge_base_stats
+stats
+●●●●●● 1mm □
+_get_knowledge_base_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'path'
+stats
+'exists'
+stats
+●●●●●● 1mm □
+test_get_system_resources
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_get_system_resources
+resources
+●●●●●● 1mm □
+_get_system_resources
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cpu_percent'
+resources
+'memory_percent'
+resources
+●●●●●● 1mm □
+test_read_source_file
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_read_source_file
+content
+●●●●●● 1mm □
+_read_source_file
+●●●●●● 1mm □△
+'settings.py'
+●●●●●● 2mm □△
+'Settings'
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+100
+●●●●●● 1mm □
+test_read_source_file_not_found
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_read_source_file
+content
+●●●●●● 1mm □
+_read_source_file
+●●●●●● 1mm □△
+'nonexistent_file.py'
+●●●●●● 2mm □△
+'[Error'
+content
+●●●●●● 1mm □
+test_read_source_file_path_escape
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_read_source_file
+content
+●●●●●● 1mm □
+_read_source_file
+●●●●●● 1mm □△
+'../../etc/passwd'
+●●●●●● 2mm □△
+'[Error'
+content
+●●●●●● 1mm □
+test_build_state_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.world_model_api
+●●●●●● 2mm □△○
+_build_state_context
+state
+●●●●●● 1mm □
+'health'
+'knowledge_base'
+'source_code'
+'database'
+'chats'
+'apis'
+'capabilities'
+'overall'
+'llm'
+'healthy'
+'up'
+'total_files'
+'total_directories'
+'total_size_mb'
+42
+5
+1.5
+'total_python_files'
+'total_lines'
+'modules'
+100
+20000
+'api'
+10
+'connected'
+'table_count'
+'row_counts'
+●●●●●● 3mm □△○
+8
+'chats'
+50
+'total_chats'
+'total_messages'
+10
+100
+'total_routes'
+200
+'chat'
+'rag_retrieval'
+ctx
+●●●●●● 1mm □
+_build_state_context
+●●●●●● 1mm □△
+state
+●●●●●● 2mm □△
+'healthy'
+ctx
+'42 files'
+ctx
+'100 Python files'
+ctx
+'chats: 50 rows'
+ctx
+'10 conversations'
+ctx
+'200 registered endpoints'
+ctx
+●●●●●● 2mm △
+TestLibrarianFsHelpers
+'Test librarian filesystem helpers.'
+●●●●●● 1mm □
+test_suggest_directory_python
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_suggest_directory
+result
+●●●●●● 1mm □
+_suggest_directory
+●●●●●● 1mm □△
+'main.py'
+'import os'
+'.py'
+●●●●●● 2mm □△
+result
+'code/python'
+●●●●●● 1mm □
+test_suggest_directory_markdown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_suggest_directory
+result
+●●●●●● 1mm □
+_suggest_directory
+●●●●●● 1mm □△
+'README.md'
+'# Readme'
+'.md'
+●●●●●● 2mm □△
+result
+'documentation'
+●●●●●● 1mm □
+test_suggest_directory_csv
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_suggest_directory
+result
+●●●●●● 1mm □
+_suggest_directory
+●●●●●● 1mm □△
+'data.csv'
+'col1,col2'
+'.csv'
+●●●●●● 2mm □△
+result
+'data/csv'
+●●●●●● 1mm □
+test_suggest_directory_readme
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_suggest_directory
+result
+●●●●●● 1mm □
+_suggest_directory
+●●●●●● 1mm □△
+'README.txt'
+'About'
+'.txt'
+●●●●●● 2mm □△
+result
+'documentation'
+●●●●●● 1mm □
+test_suggest_directory_unknown
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_suggest_directory
+result
+●●●●●● 1mm □
+_suggest_directory
+●●●●●● 1mm □△
+'weird.xyz'
+'blah'
+'.xyz'
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_resolve_safe_path_escape
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_resolve_safe_path
+pytest
+●●●●●● 1mm □△
+Exception
+●●●●●● 2mm □△
+_resolve_safe_path
+●●●●●● 1mm □△
+'../../etc/passwd'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_format_bytes
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.librarian_autonomous_api
+●●●●●● 2mm □△○
+_read_file_preview
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+result
+●●●●●● 1mm □
+_read_file_preview
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+'/nonexistent/file.txt'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'[Unable to read'
+result
+'[Binary'
+result
+result
+''
+●●●●●● 2mm △
+TestKimiClient
+'Test Kimi LLM client initialization.'
+●●●●●● 1mm □
+test_kimi_client_init
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+client
+●●●●●● 1mm □
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+'test-key'
+'moonshot'
+client
+client
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_kimi_client_no_key
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+client
+●●●●●● 1mm □
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestLLMFactory
+'Test LLM factory supports all providers with governance wrapping.'
+●●●●●● 1mm □
+test_factory_default
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+client
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_factory_kimi
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+client
+GovernanceAwareLLM
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+client
+'_inner'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_factory_openai
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+client
+GovernanceAwareLLM
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_kimi_client
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+client
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+client
+GovernanceAwareLLM
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_raw_client_no_wrapper
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_raw_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+client
+●●●●●● 1mm □
+get_raw_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+client
+GovernanceAwareLLM
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_governance_prefix_builds
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+build_governance_prefix
+prefix
+●●●●●● 1mm □
+build_governance_prefix
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+prefix
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

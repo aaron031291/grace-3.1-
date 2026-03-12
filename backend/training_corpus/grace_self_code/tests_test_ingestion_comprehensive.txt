@@ -1,0 +1,2661 @@
+## test_ingestion_comprehensive.py
+'\nComprehensive Test Suite for Ingestion Module\n==============================================\nTests for TextChunker and TextIngestionService.\n\nCoverage:\n- TextChunker initialization and configuration\n- Structure-aware text splitting\n- Semantic chunking with embeddings\n- Simple character-based chunking (fallback)\n- Cosine similarity calculation\n- TextIngestionService initialization\n- Document ingestion workflow\n- Chunk processing and storage\n- Error handling\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+AsyncMock
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 2mm □△○
+math
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm △
+MockNumpyArray
+●●●●●● 3mm □△
+list
+●●●●●● 1mm □△
+'Simple mock for numpy arrays.'
+●●●●●● 2mm △
+MockNumpyLinalg
+●●●●●● 1mm □
+norm
+●●●●●● 1mm □△
+arr
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+math
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x
+x
+arr
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm △
+MockNumpy
+●●●●●● 1mm □
+array
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+MockNumpyArray
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+dot
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+y
+x
+y
+●●●●●● 3mm □
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+linalg
+●●●●●● 1mm □
+MockNumpyLinalg
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_np
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_np
+●●●●●● 1mm □
+MockNumpy
+mock_np
+●●●●●● 1mm □
+MockNumpy
+mock_np
+●●●●●● 1mm □
+MockNumpyLinalg
+sys
+'numpy'
+●●●●●● 1mm □
+mock_np
+np
+●●●●●● 1mm □
+MockNumpy
+mock_embedding
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'embedding'
+●●●●●● 1mm □
+mock_embedding
+mock_vector_db
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_vector_db
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_vector_db
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'vector_db'
+●●●●●● 1mm □
+mock_vector_db
+sys
+'vector_db.client'
+●●●●●● 1mm □
+mock_vector_db
+mock_confidence
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'confidence_scorer'
+●●●●●● 1mm □
+mock_confidence
+mock_database
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_database
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'database'
+●●●●●● 1mm □
+mock_database
+sys
+'database.session'
+●●●●●● 1mm □
+mock_database
+mock_models
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_models
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'models'
+●●●●●● 1mm □
+mock_models
+sys
+'models.database_models'
+●●●●●● 1mm □
+mock_models
+mock_settings
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_settings
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'settings'
+●●●●●● 1mm □
+mock_settings
+mock_cognitive
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_cognitive
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'cognitive'
+●●●●●● 1mm □
+mock_cognitive
+sys
+'cognitive.decorators'
+●●●●●● 1mm □
+mock_cognitive
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestTextChunkerInit
+'Test TextChunker initialization.'
+●●●●●● 1mm □
+test_default_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TextChunker with default parameters.'
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+chunk_size
+chunk_overlap
+embedding_model
+use_semantic_chunking
+similarity_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+512
+100
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_overlap
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_semantic_chunking
+embedding_model
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+similarity_threshold
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunker
+512
+chunker
+100
+chunker
+●●●●●● 2mm □
+chunker
+●●●●●● 1mm □
+chunker
+0.5
+●●●●●● 1mm □
+test_custom_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TextChunker with custom parameters.'
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+chunk_size
+chunk_overlap
+embedding_model
+use_semantic_chunking
+similarity_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+512
+100
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_overlap
+●●●●●● 3mm △
+●●●●●● 1mm □
+embedding_model
+●●●●●● 3mm △
+●●●●●● 1mm □
+use_semantic_chunking
+embedding_model
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+similarity_threshold
+mock_model
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunker
+1024
+chunker
+200
+chunker
+●●●●●● 2mm □
+chunker
+●●●●●● 3mm □△○
+chunker
+0.7
+●●●●●● 2mm △
+TestTextChunkerStructureSplit
+'Test structure-aware text splitting.'
+●●●●●● 1mm □
+test_split_by_paragraphs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test splitting text by paragraphs.'
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+text
+chunk_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+512
+paragraphs
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+paragraphs
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+paragraphs
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+paragraphs
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+text
+●●●●●● 1mm □
+'First paragraph.\n\nSecond paragraph.\n\nThird paragraph.'
+result
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+result
+0
+'First paragraph.'
+result
+1
+'Second paragraph.'
+result
+2
+'Third paragraph.'
+●●●●●● 1mm □
+test_split_large_paragraph_into_sentences
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test splitting large paragraphs into sentences.'
+●●●●●● 2mm □△○
+re
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+text
+chunk_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+50
+paragraphs
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+paragraphs
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+paragraphs
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □
+paragraph
+paragraphs
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+paragraph
+●●●●●● 2mm □△
+chunk_size
+sentences
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(?<=[.!?])\\s+'
+paragraph
+●●●●●● 2mm □△
+segments
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+sentences
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+segments
+●●●●●● 1mm □△
+paragraph
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+segments
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+text
+●●●●●● 1mm □
+'This is a long paragraph. It has multiple sentences. Each sentence is important.'
+result
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+'This is a long paragraph.'
+result
+0
+●●●●●● 1mm □
+test_empty_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test splitting empty text.'
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+paragraphs
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+paragraphs
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+paragraphs
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+paragraphs
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+result
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+test_whitespace_only
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test splitting whitespace-only text.'
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+paragraphs
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+paragraphs
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+paragraphs
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+paragraphs
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+result
+●●●●●● 1mm □
+split_by_structure
+●●●●●● 1mm □△
+'   \n\n   \n\n   '
+●●●●●● 2mm □△
+result
+●●●●●● 2mm △
+TestTextChunkerCosineSimilarity
+'Test cosine similarity calculation.'
+●●●●●● 1mm □
+test_identical_vectors
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine similarity of identical vectors.'
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+vec
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1.0
+2.0
+3.0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+vec
+vec
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □
+test_orthogonal_vectors
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine similarity of orthogonal vectors.'
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+vec_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1.0
+0.0
+●●●●●● 2mm □△
+vec_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+0.0
+1.0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+vec_a
+vec_b
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □
+test_opposite_vectors
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine similarity of opposite vectors.'
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+vec_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1.0
+0.0
+●●●●●● 2mm □△
+vec_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1.0
+0.0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+vec_a
+vec_b
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+1.0
+●●●●●● 2mm □△
+0.01
+●●●●●● 1mm □
+test_zero_vector
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cosine similarity with zero vector.'
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+dot_product
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+norm_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □
+norm_a
+0
+norm_b
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+dot_product
+●●●●●● 3mm □△
+norm_a
+●●●●●● 2mm □△
+norm_b
+●●●●●● 2mm □△
+vec_a
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+0.0
+0.0
+●●●●●● 2mm □△
+vec_b
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+1.0
+1.0
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+vec_a
+vec_b
+●●●●●● 2mm □△
+result
+0.0
+●●●●●● 2mm △
+TestTextChunkerSimpleChunking
+'Test simple character-based chunking.'
+●●●●●● 1mm □
+test_simple_chunking_basic
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test basic simple chunking.'
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+chunk_size
+chunk_overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+100
+20
+chunks
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 1mm □△
+chunk_overlap
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+start
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+text
+start
+end
+●●●●●● 2mm □
+chunk_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+'char_start'
+'char_end'
+chunk_text
+start
+end
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+text
+●●●●●● 1mm □
+'A'
+●●●●●● 2mm □△
+250
+result
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+3
+result
+0
+'char_start'
+0
+result
+0
+'char_end'
+100
+●●●●●● 1mm □
+test_simple_chunking_short_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test simple chunking with text shorter than chunk size.'
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+chunk_size
+chunk_overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+100
+20
+chunks
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 1mm □△
+chunk_overlap
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+start
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+text
+start
+end
+●●●●●● 2mm □
+chunk_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+'char_start'
+'char_end'
+chunk_text
+start
+end
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+text
+●●●●●● 1mm □
+'Short text'
+result
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+result
+0
+'text'
+'Short text'
+●●●●●● 1mm □
+test_simple_chunking_overlap
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that chunks have proper overlap.'
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+chunk_size
+chunk_overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+50
+10
+chunks
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 1mm □△
+chunk_overlap
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+start
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunk_text
+●●●●●● 1mm □
+text
+start
+end
+●●●●●● 2mm □
+chunk_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+'char_start'
+'char_end'
+chunk_text
+start
+end
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+text
+●●●●●● 1mm □
+'0123456789'
+●●●●●● 2mm □△
+10
+result
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+2
+result
+1
+'char_start'
+result
+0
+'char_end'
+●●●●●● 2mm △
+TestTextChunkerSemanticChunking
+'Test semantic chunking with embeddings.'
+●●●●●● 1mm □
+test_semantic_chunking_returns_chunks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that semantic chunking produces chunks.'
+mock_embeddings
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+0.1
+0.3
+0.5
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+20
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+mock_embeddings
+●●●●●● 1mm □
+_semantic_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+segments
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'. '
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+current_chunk
+●●●●●● 1mm □
+current_length
+●●●●●● 1mm □
+0
+current_start
+●●●●●● 1mm □
+0
+i
+segment
+●●●●●● 2mm □
+●●●●●● 1mm □△
+segments
+●●●●●● 2mm □△
+current_chunk
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+current_length
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segment
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_length
+●●●●●● 3mm △
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+segments
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+chunk_text
+●●●●●● 1mm □
+'. '
+●●●●●● 1mm □△
+current_chunk
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+'char_start'
+'char_end'
+chunk_text
+current_start
+current_start
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk_text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+current_start
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk_text
+●●●●●● 2mm □△
+current_chunk
+●●●●●● 1mm □
+current_length
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'First sentence. Second sentence. Third sentence.'
+result
+●●●●●● 1mm □
+chunker
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'text'
+result
+0
+'char_start'
+result
+0
+'char_end'
+result
+0
+●●●●●● 1mm □
+test_semantic_chunking_fallback_on_empty
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test semantic chunking falls back for empty segments.'
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+_simple_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'text'
+'char_start'
+'char_end'
+text
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_semantic_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+segments
+●●●●●● 1mm □
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+text
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+segments
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+'char_start'
+'char_end'
+text
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+chunker
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestTextChunkerChunkText
+'Test the main chunk_text method.'
+●●●●●● 1mm □
+test_chunk_text_uses_semantic_when_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test chunk_text uses semantic chunking when model available.'
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_semantic_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+'method'
+text
+'semantic'
+●●●●●● 1mm □
+_simple_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+'method'
+text
+'simple'
+●●●●●● 1mm □
+chunk_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+chunker
+●●●●●● 1mm □△
+'Test text'
+●●●●●● 2mm □△
+result
+0
+'method'
+'semantic'
+●●●●●● 1mm □
+test_chunk_text_uses_simple_when_no_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test chunk_text uses simple chunking when no model.'
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+_semantic_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+'method'
+text
+'semantic'
+●●●●●● 1mm □
+_simple_chunk
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'text'
+'method'
+text
+'simple'
+●●●●●● 1mm □
+chunk_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+chunker
+●●●●●● 1mm □△
+'Test text'
+●●●●●● 2mm □△
+result
+0
+'method'
+'simple'
+●●●●●● 2mm △
+TestTextIngestionServiceInit
+'Test TextIngestionService initialization.'
+●●●●●● 1mm □
+test_default_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TextIngestionService with defaults.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+collection_name
+chunk_size
+chunk_overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'documents'
+512
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+collection_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_overlap
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+'documents'
+service
+512
+service
+100
+●●●●●● 1mm □
+test_custom_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test TextIngestionService with custom config.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+collection_name
+chunk_size
+chunk_overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'documents'
+512
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+collection_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_size
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunk_overlap
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+'custom_collection'
+service
+1024
+service
+200
+●●●●●● 2mm △
+TestTextIngestionServiceIngest
+'Test document ingestion workflow.'
+●●●●●● 1mm □
+test_ingest_text_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful text ingestion.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'documents'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+ingest_text
+●●●●●● 1mm □△
+self
+text
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+chunks
+●●●●●● 1mm □
+'text'
+'char_start'
+'char_end'
+text
+100
+0
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+chunks
+●●●●●● 3mm ○
+'status'
+'chunks_created'
+'collection'
+'success'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunks
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'Test document content '
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □△
+result
+'status'
+'success'
+result
+'chunks_created'
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+service
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_ingest_text_with_metadata
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test text ingestion with metadata.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+ingest_text
+●●●●●● 1mm □△
+self
+text
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+metadata
+●●●●●● 3mm ○
+'status'
+'metadata'
+'success'
+●●●●●● 3mm △
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metadata
+●●●●●● 1mm □
+'source'
+'author'
+'test.txt'
+'Test'
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'Test content'
+●●●●●● 2mm □△
+result
+'metadata'
+'source'
+'test.txt'
+result
+'metadata'
+'author'
+'Test'
+●●●●●● 1mm □
+test_ingest_empty_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion of empty text.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+ingest_text
+●●●●●● 1mm □△
+self
+text
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm □
+text
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+'Empty text provided'
+●●●●●● 3mm ○
+'status'
+'success'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+''
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'Empty'
+result
+'message'
+●●●●●● 1mm □
+test_ingest_file_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test successful file ingestion.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+ingest_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'status'
+'file_path'
+'chunks_created'
+'success'
+file_path
+5
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'/path/to/document.txt'
+●●●●●● 2mm □△
+result
+'status'
+'success'
+result
+'file_path'
+'/path/to/document.txt'
+●●●●●● 1mm □
+test_ingest_file_not_found
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test file ingestion with non-existent file.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+ingest_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+'File not found: '
+file_path
+●●●●●● 3mm ○
+'status'
+'success'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'/nonexistent/file.txt'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+●●●●●● 2mm △
+TestTextIngestionServiceHashGeneration
+'Test content hash generation.'
+●●●●●● 1mm □
+test_generate_content_hash
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test content hash generation.'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 1mm □
+generate_content_hash
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+content
+●●●●●● 1mm □
+'Test content'
+hash1
+●●●●●● 1mm □
+generate_content_hash
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+hash2
+●●●●●● 1mm □
+generate_content_hash
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+hash1
+hash2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hash1
+●●●●●● 2mm □△
+64
+●●●●●● 1mm □
+test_different_content_different_hash
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test different content produces different hash.'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 1mm □
+generate_content_hash
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+hash1
+●●●●●● 1mm □
+generate_content_hash
+●●●●●● 1mm □△
+'Content 1'
+●●●●●● 2mm □△
+hash2
+●●●●●● 1mm □
+generate_content_hash
+●●●●●● 1mm □△
+'Content 2'
+●●●●●● 2mm □△
+hash1
+hash2
+●●●●●● 2mm △
+TestTextIngestionServiceDeduplication
+'Test content deduplication.'
+●●●●●● 1mm □
+test_detect_duplicate_content
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test detecting duplicate content.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_duplicate
+●●●●●● 1mm □△
+self
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+content_hash
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+store_hash
+●●●●●● 1mm □△
+self
+content_hash
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content_hash
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+hashlib
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hash1
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+'Content'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+hash1
+●●●●●● 2mm □△
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+hash1
+●●●●●● 2mm □△
+service
+●●●●●● 1mm □△
+hash1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestIngestionIntegration
+'Integration tests for ingestion workflow.'
+●●●●●● 1mm □
+test_full_ingestion_pipeline
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete ingestion pipeline.'
+●●●●●● 2mm △
+MockIngestionPipeline
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+process
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'text'
+'index'
+text
+100
+0
+'text'
+'index'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+180
+text
+80
+180
+text
+80
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+0.1
+●●●●●● 2mm □△
+384
+_
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'status'
+'chunks_processed'
+'vectors_stored'
+'success'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+pipeline
+●●●●●● 1mm □
+MockIngestionPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'A'
+●●●●●● 2mm □△
+200
+●●●●●● 2mm □△
+result
+'status'
+'success'
+result
+'chunks_processed'
+2
+result
+'vectors_stored'
+2
+●●●●●● 1mm □
+test_batch_ingestion
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test batch document ingestion.'
+●●●●●● 2mm △
+MockBatchIngestion
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+ingest_batch
+●●●●●● 1mm □△
+self
+documents
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+results
+●●●●●● 1mm □
+doc
+documents
+results
+●●●●●● 1mm □△
+'status'
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+'total'
+'successful'
+'failed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+documents
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+r
+r
+results
+r
+'status'
+'success'
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+ingester
+●●●●●● 1mm □
+MockBatchIngestion
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+ingester
+●●●●●● 1mm □△
+'Doc 1'
+'Doc 2'
+'Doc 3'
+●●●●●● 2mm □△
+result
+'total'
+3
+result
+'successful'
+3
+result
+'failed'
+0
+●●●●●● 2mm △
+TestIngestionErrorHandling
+'Test error handling in ingestion.'
+●●●●●● 1mm □
+test_embedding_failure_fallback
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test fallback when embedding fails.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Embedding error'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'success'
+Exception
+●●●●●● 3mm ○
+'status'
+'message'
+'fallback'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'stored_without_embedding'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'Test'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+result
+'fallback'
+'stored_without_embedding'
+●●●●●● 1mm □
+test_database_error_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test database error handling.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Database error'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'success'
+Exception
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+'Database error: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'Test'
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'Database error'
+result
+'message'
+●●●●●● 1mm □
+test_vector_db_error_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test vector database error handling.'
+●●●●●● 2mm △
+MockTextIngestionService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△
+'Vector DB unavailable'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store_vectors
+●●●●●● 1mm □△
+self
+vectors
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+vectors
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'success'
+Exception
+●●●●●● 3mm ○
+'status'
+'message'
+'error'
+'Vector storage failed: '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockTextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+384
+●●●●●● 2mm □△
+result
+'status'
+'error'
+'Vector storage failed'
+result
+'message'
+●●●●●● 2mm △
+TestIngestionEdgeCases
+'Test edge cases in ingestion.'
+●●●●●● 1mm □
+test_very_short_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion of very short text.'
+●●●●●● 2mm △
+MockTextChunker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+512
+●●●●●● 1mm □
+chunk_text
+●●●●●● 1mm □△
+self
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'text'
+'char_start'
+'char_end'
+text
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+chunker
+●●●●●● 1mm □
+MockTextChunker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+chunker
+●●●●●● 1mm □△
+'Hi'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+result
+0
+'text'
+'Hi'
+●●●●●● 1mm □
+test_very_long_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion of very long text.'
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+chunk_size
+overlap
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+512
+100
+chunks
+●●●●●● 1mm □
+start
+●●●●●● 1mm □
+●●●●●● 1mm □△
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+chunk_size
+●●●●●● 1mm □△
+overlap
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+start
+●●●●●● 3mm ○
+chunk_size
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □△
+'text'
+text
+start
+end
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+chunks
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+long_text
+●●●●●● 1mm □
+'A'
+●●●●●● 2mm □△
+10000
+result
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+long_text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+10
+chunk
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chunk
+'text'
+●●●●●● 2mm □△
+512
+●●●●●● 1mm □
+test_unicode_text
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion of unicode text.'
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+chunk_size
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+512
+●●●●●● 3mm ○
+'text'
+text
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+unicode_text
+●●●●●● 1mm □
+'这是中文文本。これは日本語です。Это русский текст.'
+result
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+unicode_text
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+1
+'中文'
+result
+0
+'text'
+'日本語'
+result
+0
+'text'
+●●●●●● 1mm □
+test_special_characters
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion of text with special characters.'
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'text'
+text
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+special_text
+●●●●●● 1mm □
+'Test <html>&amp; "quotes" \'apostrophe\' @#$%'
+result
+●●●●●● 1mm □
+simple_chunk
+●●●●●● 1mm □△
+special_text
+●●●●●● 2mm □△
+result
+0
+'text'
+special_text
+●●●●●● 1mm □
+test_mixed_newlines
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling of mixed newline styles.'
+●●●●●● 1mm □
+normalize_newlines
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □△
+'\r\n'
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'\r'
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+text
+●●●●●● 1mm □
+'Line1\r\nLine2\rLine3\nLine4'
+normalized
+●●●●●● 1mm □
+normalize_newlines
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+'\r'
+normalized
+normalized
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+3

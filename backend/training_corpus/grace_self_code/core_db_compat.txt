@@ -1,0 +1,360 @@
+## db_compat.py
+'\nDatabase Compatibility Layer — dialect-agnostic types and utilities.\n\nEnsures ORM models and queries work identically on SQLite and PostgreSQL.\nImport these types instead of raw sqlalchemy types when you need\nJSON columns, array columns, or dialect-specific behavior.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+TypeDecorator
+Text
+types
+●●●●●● 3mm □△○
+sqlalchemy.dialects
+●●●●●● 2mm □△○
+postgresql
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_postgres
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+os
+●●●●●● 1mm □△
+'DATABASE_TYPE'
+'sqlite'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'postgresql'
+●●●●●● 3mm △
+●●●●●● 2mm △
+JSONColumn
+●●●●●● 3mm □△
+TypeDecorator
+TypeDecorator
+'\n    Dialect-agnostic JSON column.\n\n    - PostgreSQL: uses native JSONB (indexed, queryable)\n    - SQLite:     stores as TEXT with automatic JSON serialization\n\n    Usage in models:\n        from core.db_compat import JSONColumn\n        metadata_col = Column(JSONColumn, default={})\n    '
+impl
+●●●●●● 1mm □
+Text
+cache_ok
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+load_dialect_impl
+●●●●●● 1mm □△
+self
+dialect
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dialect
+'postgresql'
+●●●●●● 3mm ○
+dialect
+●●●●●● 1mm □△
+postgresql
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+dialect
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_bind_param
+●●●●●● 1mm □△
+self
+value
+dialect
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+dialect
+'postgresql'
+●●●●●● 3mm ○
+value
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_result_value
+●●●●●● 1mm □△
+self
+value
+dialect
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+dialect
+'postgresql'
+●●●●●● 3mm ○
+value
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+json
+TypeError
+●●●●●● 3mm ○
+value
+●●●●●● 3mm ○
+value
+●●●●●● 2mm △
+ArrayColumn
+●●●●●● 3mm □△
+TypeDecorator
+TypeDecorator
+'\n    Dialect-agnostic ARRAY column.\n\n    - PostgreSQL: uses native ARRAY type\n    - SQLite:     stores as JSON TEXT\n    '
+impl
+●●●●●● 1mm □
+Text
+cache_ok
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+load_dialect_impl
+●●●●●● 1mm □△
+self
+dialect
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dialect
+'postgresql'
+●●●●●● 3mm ○
+dialect
+●●●●●● 1mm □△
+postgresql
+●●●●●● 1mm □△
+types
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+dialect
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_bind_param
+●●●●●● 1mm □△
+self
+value
+dialect
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+dialect
+'postgresql'
+●●●●●● 3mm ○
+value
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_result_value
+●●●●●● 1mm □△
+self
+value
+dialect
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+dialect
+'postgresql'
+●●●●●● 3mm ○
+value
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+json
+TypeError
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+value
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+get_table_stats
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+'\n    Get row counts for all tables — works on both SQLite and PostgreSQL.\n    Returns dict of {table_name: row_count}.\n    '
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+inspect
+stats
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □
+inspect
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+table_names
+●●●●●● 1mm □
+inspector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+name
+table_names
+count
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT COUNT(*) FROM "'
+name
+'"'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+count
+0
+stats
+name
+●●●●●● 1mm □
+count
+Exception
+stats
+name
+●●●●●● 1mm □
+1
+Exception
+logger
+●●●●●● 1mm □△
+'get_table_stats error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+stats
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_db_size_mb
+●●●●●● 1mm □△
+engine
+●●●●●● 2mm □△
+'Get database size in MB — works on both SQLite and PostgreSQL.'
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+dialect
+●●●●●● 1mm □
+engine
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+●●●●●● 2mm □
+dialect
+'postgresql'
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT pg_database_size(current_database())'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+●●●●●● 1mm △
+dialect
+'sqlite'
+result
+●●●●●● 1mm □
+conn
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT page_count * page_size FROM pragma_page_count(), pragma_page_size()'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+1048576
+2
+●●●●●● 2mm □△
+0.0
+Exception
+logger
+●●●●●● 1mm □△
+'get_db_size_mb error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○

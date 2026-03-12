@@ -1,0 +1,587 @@
+## grace_file_integration.py
+'\nGrace File Management Integration\n\nIntegrates all Grace-aligned file management components:\n- FileIntelligenceAgent (deep understanding)\n- AdaptiveFileProcessor (learning-based optimization)\n- FileHealthMonitor (autonomous health)\n- GenesisFileTracker (complete tracking)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+time
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraceFileManager
+'\n    Complete Grace-aligned file management system.\n\n    Integrates:\n    - Deep content understanding\n    - Adaptive learning\n    - Health monitoring\n    - Complete tracking\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+trust_level
+genesis_service
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'knowledge_base'
+5
+●●●●●● 2mm □
+'\n        Initialize Grace File Manager.\n\n        Args:\n            session: Database session\n            knowledge_base_path: Path to knowledge base\n            trust_level: Trust level for autonomous actions\n            genesis_service: Genesis Key service\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_level
+●●●●●● 3mm □△○
+file_manager.file_intelligence_agent
+●●●●●● 2mm □△○
+get_file_intelligence_agent
+●●●●●● 3mm □△○
+file_manager.adaptive_file_processor
+●●●●●● 2mm □△○
+get_adaptive_file_processor
+●●●●●● 3mm □△○
+file_manager.file_health_monitor
+●●●●●● 2mm □△○
+get_file_health_monitor
+●●●●●● 3mm □△○
+file_manager.genesis_file_tracker
+●●●●●● 2mm □△○
+get_genesis_file_tracker
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_file_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_file_intelligence_agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_adaptive_file_processor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_file_health_monitor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Initialized with trust_level='
+trust_level
+', kb='
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_file_intelligently
+●●●●●● 1mm □△
+self
+file_path
+user_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'system'
+●●●●●● 2mm □
+'\n        Process a file with full Grace intelligence.\n\n        This is the main entry point for file processing with:\n        1. Deep content understanding\n        2. Adaptive strategy selection\n        3. Complete tracking\n        4. Learning from outcomes\n\n        Args:\n            file_path: Path to file\n            user_id: User who uploaded\n            metadata: Additional metadata\n\n        Returns:\n            Processing result dict\n        '
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Processing file intelligently: '
+path
+●●●●●● 2mm □△
+upload_key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Analyzing file content...'
+●●●●●● 2mm □△
+intelligence
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Determining optimal strategy...'
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+processing_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+result
+●●●●●● 1mm □
+'success'
+'file_path'
+'intelligence'
+'strategy'
+'processing_time'
+'upload_key_id'
+●●●●●● 3mm □△○
+file_path
+'summary'
+'quality_score'
+'complexity_level'
+'topics'
+'entities'
+'relationships'
+intelligence
+intelligence
+intelligence
+intelligence
+intelligence
+intelligence
+'chunk_size'
+'overlap'
+'use_semantic_chunking'
+'embedding_batch_size'
+'quality_threshold'
+strategy
+strategy
+strategy
+strategy
+strategy
+processing_time
+upload_key_id
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] File processed intelligently: quality='
+intelligence
+'.2f'
+', complexity='
+intelligence
+', chunk_size='
+strategy
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Error processing file: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'file_path'
+'error'
+'processing_time'
+●●●●●● 1mm □
+file_path
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_ingestion_outcome
+●●●●●● 1mm □△
+self
+file_id
+file_path
+processing_result
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Record ingestion outcome and learn from it.\n\n        Call this AFTER ingestion completes to enable learning.\n\n        Args:\n            file_id: Document ID\n            file_path: Path to file\n            processing_result: Result from ingestion\n        '
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Recording ingestion outcome for file_id='
+file_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+file_manager.adaptive_file_processor
+●●●●●● 2mm □△○
+ProcessingStrategy
+strategy_data
+●●●●●● 1mm □
+processing_result
+●●●●●● 1mm □△
+'strategy'
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+ProcessingStrategy
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Ingestion outcome recorded and learned from'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Error recording outcome: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+run_health_check
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Run file system health check.\n\n        Returns:\n            Health report dict\n        '
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Running health check...'
+●●●●●● 2mm □△
+report
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'health_status'
+'anomalies_count'
+'anomalies'
+'healing_actions_count'
+'healing_actions'
+'recommendations'
+'timestamp'
+report
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+report
+report
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Health check complete: status='
+report
+', anomalies='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+', actions='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+report
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Health check failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'health_status'
+'error'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_file_intelligence
+●●●●●● 1mm □△
+self
+file_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n        Get intelligence data for a file.\n\n        Args:\n            file_id: Document ID\n\n        Returns:\n            Intelligence dict or None\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 2mm □△○
+json
+query
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n                SELECT\n                    content_summary,\n                    extracted_entities,\n                    detected_topics,\n                    quality_score,\n                    complexity_level,\n                    recommended_strategy\n                FROM file_intelligence\n                WHERE document_id = :doc_id\n            '
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+'doc_id'
+file_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 3mm ○
+'summary'
+'entities'
+'topics'
+'quality_score'
+'complexity_level'
+'recommended_strategy'
+result
+0
+result
+1
+json
+●●●●●● 1mm □△
+result
+1
+●●●●●● 2mm □△
+result
+2
+json
+●●●●●● 1mm □△
+result
+2
+●●●●●● 2mm □△
+result
+3
+result
+4
+result
+5
+json
+●●●●●● 1mm □△
+result
+5
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Error getting intelligence: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_file_relationships
+●●●●●● 1mm □△
+self
+file_id
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+'\n        Get relationships for a file.\n\n        Args:\n            file_id: Document ID\n\n        Returns:\n            List of relationship dicts\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 2mm □△○
+json
+query
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'\n                SELECT\n                    file_b_id,\n                    relationship_type,\n                    strength,\n                    relationship_metadata\n                FROM file_relationships\n                WHERE file_a_id = :file_id\n                ORDER BY strength DESC\n            '
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+'file_id'
+file_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+relationships
+●●●●●● 1mm □
+row
+results
+relationships
+●●●●●● 1mm □△
+'related_file_id'
+'relationship_type'
+'strength'
+'metadata'
+row
+0
+row
+1
+row
+2
+row
+3
+json
+●●●●●● 1mm □△
+row
+3
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+relationships
+Exception
+logger
+●●●●●● 1mm □△
+'[GRACE-FILE-MANAGER] Error getting relationships: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_performance_metrics
+●●●●●● 1mm □△
+self
+days
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+7
+'\n        Get file processing performance metrics.\n\n        Args:\n            days: Number of days to analyze\n\n        Returns:\n            Performance metrics dict\n        '
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'period_days'
+'total_processed'
+'success_rate'
+'avg_quality_score'
+'avg_processing_time'
+days
+summary
+●●●●●● 1mm □△
+'total_processed'
+0
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □△
+'success_rate'
+0.0
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □△
+'avg_quality'
+0.0
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □△
+'avg_time'
+0.0
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_grace_file_manager
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_grace_file_manager
+●●●●●● 1mm □△
+session
+knowledge_base_path
+trust_level
+genesis_service
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+'knowledge_base'
+5
+●●●●●● 2mm □
+'\n    Get or create GraceFileManager singleton.\n\n    Args:\n        session: Database session\n        knowledge_base_path: Path to knowledge base\n        trust_level: Trust level for autonomous actions\n        genesis_service: Genesis Key service\n\n    Returns:\n        GraceFileManager instance\n    '
+●●●●●● 2mm □
+_grace_file_manager
+●●●●●● 2mm □
+_grace_file_manager
+●●●●●● 1mm □
+GraceFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_grace_file_manager
+GraceFileManager

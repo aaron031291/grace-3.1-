@@ -1,0 +1,114 @@
+## consequence_engine.py
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+●●●●●● 3mm □△○
+events
+●●●●●● 2mm □△○
+CognitiveEvent
+●●●●●● 3mm □△○
+dependency_graph
+●●●●●● 2mm □△○
+DependencyGraph
+●●●●●● 2mm △
+ConsequenceResult
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+risk_score
+description
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+risk_score
+●●●●●● 3mm △
+●●●●●● 1mm □
+description
+●●●●●● 2mm △
+ConsequenceEngine
+'\n    Simulates the blast radius of potential actions using the dependency graph,\n    ensuring compliance with risk thresholds.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+graph
+●●●●●● 2mm □△
+DependencyGraph
+●●●●●● 3mm △
+●●●●●● 1mm □
+graph
+●●●●●● 1mm □
+simulate_consequences
+●●●●●● 1mm □△
+self
+event
+impacted_components
+●●●●●● 2mm □△
+CognitiveEvent
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Computes risk based on severity, recurrence, and number of impacted downstream systems.\n        '
+base_risk
+●●●●●● 1mm □
+event
+●●●●●● 2mm □△
+0.1
+recurrence_penalty
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+0.05
+0.2
+●●●●●● 2mm □△
+impact_penalty
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+impacted_components
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.05
+0.4
+●●●●●● 2mm □△
+total_risk
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+base_risk
+●●●●●● 3mm ○
+recurrence_penalty
+●●●●●● 3mm ○
+impact_penalty
+1.0
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+'Event '
+event
+' from '
+event
+' impacts '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+impacted_components
+●●●●●● 2mm □△
+' downstream components. Severity '
+event
+', Occurred '
+event
+' times.'
+●●●●●● 3mm ○
+ConsequenceResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ConsequenceResult

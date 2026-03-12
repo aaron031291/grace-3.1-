@@ -1,0 +1,2072 @@
+## grace_autonomous_engine.py
+'\nGrace Autonomous Engine\n\nCore engine for autonomous task execution:\n- Sub-agents management\n- Multi-threading and parallel processing\n- Background task processing\n- Task scheduling and prioritization\n- Distributed execution\n- Self-healing and recovery\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+ProcessPoolExecutor
+as_completed
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Callable
+Dict
+List
+Optional
+Set
+●●●●●● 2mm □△○
+heapq
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+traceback
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'GraceAutonomousEngine'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ExecutionMode
+●●●●●● 3mm □△
+Enum
+Enum
+SEQUENTIAL
+●●●●●● 1mm □
+'sequential'
+PARALLEL
+●●●●●● 1mm □
+'parallel'
+BACKGROUND
+●●●●●● 1mm □
+'background'
+DISTRIBUTED
+●●●●●● 1mm □
+'distributed'
+STREAMING
+●●●●●● 1mm □
+'streaming'
+●●●●●● 2mm △
+AgentStatus
+●●●●●● 3mm □△
+Enum
+Enum
+IDLE
+●●●●●● 1mm □
+'idle'
+BUSY
+●●●●●● 1mm □
+'busy'
+PROCESSING
+●●●●●● 1mm □
+'processing'
+WAITING
+●●●●●● 1mm □
+'waiting'
+ERROR
+●●●●●● 1mm □
+'error'
+OFFLINE
+●●●●●● 1mm □
+'offline'
+●●●●●● 2mm △
+TaskPriority
+●●●●●● 3mm □△
+Enum
+Enum
+CRITICAL
+●●●●●● 1mm □
+0
+HIGH
+●●●●●● 1mm □
+1
+MEDIUM
+●●●●●● 1mm □
+2
+LOW
+●●●●●● 1mm □
+3
+BACKGROUND
+●●●●●● 1mm □
+4
+●●●●●● 2mm △
+ExecutionContext
+'Context passed to task executors'
+task_id
+●●●●●● 1mm ○
+parent_task_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+user_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+memory_context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+execution_params
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+TaskResult
+'Result from task execution'
+task_id
+●●●●●● 1mm ○
+success
+●●●●●● 3mm △
+data
+●●●●●● 2mm □○
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+duration_ms
+●●●●●● 2mm ○
+0
+sub_results
+●●●●●● 3mm □△
+'TaskResult'
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ScheduledTask
+'Task scheduled for future execution'
+task_id
+●●●●●● 1mm ○
+scheduled_time
+datetime
+handler
+●●●●●● 1mm △○
+args
+●●●●●● 3mm □△
+kwargs
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+priority
+TaskPriority
+TaskPriority
+recurring
+●●●●●● 3mm △
+●●●●●● 1mm □
+interval_seconds
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+__lt__
+●●●●●● 1mm □△
+self
+other
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+other
+●●●●●● 3mm ○
+●●●●●● 3mm △
+other
+●●●●●● 3mm ○
+●●●●●● 3mm △
+other
+dataclass
+●●●●●● 2mm △
+SubAgent
+'Individual sub-agent for task execution'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+agent_id
+name
+capabilities
+max_concurrent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+agent_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 3mm △
+●●●●●● 1mm □
+capabilities
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_concurrent
+●●●●●● 3mm △
+●●●●●● 1mm □
+AgentStatus
+●●●●●● 3mm △
+Set
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+current_load
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+0
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+success_rate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+total
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+total
+1.0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+avg_processing_time_ms
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+total
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+total
+0
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+can_handle
+●●●●●● 1mm □△
+self
+task_capabilities
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'Check if agent can handle task based on capabilities'
+●●●●●● 2mm □
+task_capabilities
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+task_capabilities
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+assign_task
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Assign a task to this agent'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AgentStatus
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+complete_task
+●●●●●● 1mm □△
+self
+task_id
+success
+duration_ms
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+'Mark a task as completed'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+duration_ms
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+next_task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+next_task
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+AgentStatus
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'agent_id'
+'name'
+'capabilities'
+'status'
+'current_load'
+'success_rate'
+'avg_processing_time_ms'
+'queued_tasks'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+SubAgentPool
+'Pool of sub-agents for distributed execution'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_agents
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_agents
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+SubAgent
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_agent
+●●●●●● 1mm □△
+self
+name
+capabilities
+max_concurrent
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+1
+'Create a new sub-agent'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+RuntimeError
+●●●●●● 1mm □△
+'Maximum agent limit reached'
+●●●●●● 2mm □△
+agent_id
+●●●●●● 1mm □
+'SA-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+SubAgent
+●●●●●● 1mm □△
+agent_id
+name
+capabilities
+max_concurrent
+●●●●●● 2mm □△
+●●●●●● 3mm △
+agent_id
+●●●●●● 1mm □
+agent
+logger
+●●●●●● 1mm □△
+'Created sub-agent: '
+agent_id
+' ('
+name
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+agent
+SubAgent
+●●●●●● 1mm □
+get_agent
+●●●●●● 1mm □△
+self
+agent_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agent_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+SubAgent
+●●●●●● 1mm □
+get_best_agent
+●●●●●● 1mm □△
+self
+required_capabilities
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Get the best available agent for a task'
+available_agents
+●●●●●● 1mm □
+a
+a
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+a
+a
+●●●●●● 1mm □△
+required_capabilities
+●●●●●● 2mm □△
+●●●●●● 2mm □
+available_agents
+●●●●●● 3mm ○
+●●●●●● 2mm □
+available_agents
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+available_agents
+0
+●●●●●● 2mm □○
+SubAgent
+●●●●●● 1mm □
+get_all_agents
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+SubAgent
+●●●●●● 1mm □
+remove_agent
+●●●●●● 1mm □△
+self
+agent_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+agent_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+agent_id
+logger
+●●●●●● 1mm □△
+'Removed sub-agent: '
+agent_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+agents
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total_agents'
+'idle_agents'
+'busy_agents'
+'total_completed'
+'total_failed'
+'avg_success_rate'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agents
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a
+a
+agents
+a
+AgentStatus
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a
+a
+agents
+a
+AgentStatus
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+a
+agents
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+a
+agents
+●●●●●● 2mm □△
+agents
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+a
+agents
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+agents
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+TaskScheduler
+'Scheduler for delayed and recurring tasks'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+ScheduledTask
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 1mm □
+schedule
+●●●●●● 1mm □△
+self
+task_id
+handler
+delay_seconds
+scheduled_time
+priority
+recurring
+interval_seconds
+args
+kwargs
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+datetime
+TaskPriority
+●●●●●● 3mm △
+●●●●●● 2mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+0
+●●●●●● 2mm □
+TaskPriority
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Schedule a task for execution'
+●●●●●● 2mm □
+scheduled_time
+●●●●●● 2mm □
+scheduled_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+scheduled_task
+●●●●●● 1mm □
+ScheduledTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+heapq
+●●●●●● 1mm □△
+●●●●●● 3mm △
+scheduled_task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Scheduled task '
+task_id
+' for '
+scheduled_time
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+cancel
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Cancel a scheduled task'
+●●●●●● 3mm △
+original_len
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+t
+t
+●●●●●● 3mm △
+t
+task_id
+heapq
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+original_len
+●●●●●● 3mm △
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start the scheduler'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Task scheduler started'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the scheduler'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Task scheduler stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_scheduler
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Main scheduler loop'
+●●●●●● 3mm △
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+tasks_to_execute
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+0
+now
+task
+●●●●●● 1mm □
+heapq
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+tasks_to_execute
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+task
+new_task
+●●●●●● 1mm □
+ScheduledTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+heapq
+●●●●●● 1mm □△
+●●●●●● 3mm △
+new_task
+●●●●●● 2mm □△
+task
+tasks_to_execute
+task
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error executing scheduled task '
+task
+': '
+e
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+asyncio
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_scheduled_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get all scheduled tasks'
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'task_id'
+'scheduled_time'
+'priority'
+'recurring'
+t
+t
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+t
+t
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+ParallelExecutor
+'Executor for parallel and background task processing'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_threads
+max_processes
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+10
+4
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ProcessPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TaskResult
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+execute_parallel
+●●●●●● 1mm □△
+self
+tasks
+handler
+timeout
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm △○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'Execute multiple tasks in parallel using threads'
+futures
+●●●●●● 1mm □
+task
+tasks
+task_id
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'task_id'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+task_id
+handler
+task
+●●●●●● 2mm □△
+futures
+task_id
+●●●●●● 1mm □
+future
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+future
+results
+●●●●●● 1mm □
+task_id
+future
+futures
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+Exception
+results
+●●●●●● 1mm □△
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+TaskResult
+●●●●●● 1mm □
+execute_background
+●●●●●● 1mm □△
+self
+task_id
+handler
+args
+kwargs
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Execute a task in background'
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+task_id
+handler
+args
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+future
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+execute_cpu_intensive
+●●●●●● 1mm □△
+self
+task_id
+handler
+args
+kwargs
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Execute CPU-intensive task in process pool'
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+handler
+args
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+future
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_execute_with_tracking
+●●●●●● 1mm □△
+self
+task_id
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'Execute a task with timing and error tracking'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result_data
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Task '
+task_id
+' failed: '
+e
+'\n'
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+result
+●●●●●● 3mm ○
+result
+TaskResult
+●●●●●● 1mm □
+get_result
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get the result of a completed task'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+TaskResult
+●●●●●● 1mm □
+is_complete
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if a task is complete'
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+future
+●●●●●● 3mm ○
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+cancel
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Cancel a running task'
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+future
+●●●●●● 3mm ○
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_active_count
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get count of active tasks'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+shutdown
+●●●●●● 1mm □△
+self
+wait
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'Shutdown the executor'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GraceAutonomousEngine
+'\n    Main Grace Autonomous Engine\n\n    Coordinates:\n    - Sub-agent pool for distributed execution\n    - Task scheduling for delayed/recurring tasks\n    - Parallel executor for concurrent processing\n    - Priority queue for task ordering\n    - Self-healing and recovery\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_agents
+max_threads
+max_processes
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+10
+10
+4
+●●●●●● 3mm △
+●●●●●● 1mm □
+SubAgentPool
+●●●●●● 1mm □△
+max_agents
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TaskScheduler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ParallelExecutor
+●●●●●● 1mm □△
+max_threads
+max_processes
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TaskResult
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace Autonomous Engine initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start the autonomous engine'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Main Agent'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Learning Agent'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Diagnostic Agent'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace Autonomous Engine started'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the autonomous engine'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace Autonomous Engine stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+register_handler
+●●●●●● 1mm □△
+self
+task_type
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+'Register a handler for a task type'
+●●●●●● 3mm △
+task_type
+●●●●●● 1mm □
+handler
+logger
+●●●●●● 1mm □△
+'Registered handler for task type: '
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm □
+submit_task
+●●●●●● 1mm □△
+self
+task_id
+task_type
+data
+priority
+execution_mode
+required_capabilities
+scheduled_time
+dependencies
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+TaskPriority
+ExecutionMode
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+datetime
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+TaskPriority
+ExecutionMode
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Submit a task for execution'
+task_data
+●●●●●● 1mm □
+'task_id'
+'task_type'
+'data'
+'priority'
+'execution_mode'
+'required_capabilities'
+'dependencies'
+'submitted_at'
+'status'
+task_id
+task_type
+data
+priority
+execution_mode
+required_capabilities
+dependencies
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'queued'
+●●●●●● 3mm △
+●●●●●● 2mm □
+scheduled_time
+scheduled_time
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_data
+'status'
+●●●●●● 1mm □
+'scheduled'
+●●●●●● 1mm △
+dependencies
+pending_deps
+●●●●●● 1mm □
+d
+d
+dependencies
+d
+●●●●●● 3mm △
+●●●●●● 2mm □
+pending_deps
+heapq
+●●●●●● 1mm □△
+●●●●●● 3mm △
+priority
+task_id
+task_data
+●●●●●● 2mm □△
+task_data
+'status'
+●●●●●● 1mm □
+'waiting_dependencies'
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+task_data
+●●●●●● 3mm △
+'tasks_submitted'
+1
+logger
+●●●●●● 1mm □△
+'Submitted task '
+task_id
+' ('
+task_type
+') - '
+task_data
+'status'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_execute_task
+●●●●●● 1mm □△
+self
+task_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Execute a task based on its execution mode'
+task_id
+●●●●●● 1mm □
+task_data
+'task_id'
+task_type
+●●●●●● 1mm □
+task_data
+'task_type'
+execution_mode
+●●●●●● 1mm □
+task_data
+'execution_mode'
+handler
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+task_data
+'status'
+●●●●●● 1mm □
+'running'
+task_data
+'started_at'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+execution_mode
+ExecutionMode
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+handler
+task_data
+●●●●●● 2mm □△
+●●●●●● 1mm △
+execution_mode
+ExecutionMode
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+handler
+task_data
+●●●●●● 2mm □△
+●●●●●● 2mm □
+execution_mode
+ExecutionMode
+agent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+●●●●●● 1mm □△
+'required_capabilities'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent
+agent
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+task_data
+'assigned_agent'
+●●●●●● 1mm □
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+handler
+task_data
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+self
+task_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Process a single task'
+task_id
+●●●●●● 1mm □
+task_data
+'task_id'
+task_type
+●●●●●● 1mm □
+task_data
+'task_type'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 3mm △
+●●●●●● 2mm □△
+result_data
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+task_data
+●●●●●● 2mm □△
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_data
+'status'
+●●●●●● 1mm □
+'completed'
+●●●●●● 3mm △
+'tasks_completed'
+1
+Exception
+duration_ms
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+TaskResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_data
+'status'
+●●●●●● 1mm □
+'failed'
+task_data
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'tasks_failed'
+1
+logger
+●●●●●● 1mm □△
+'Task '
+task_id
+' failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+task_id
+●●●●●● 1mm □
+result
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'assigned_agent'
+task_data
+agent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+'assigned_agent'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent
+agent
+●●●●●● 1mm □△
+task_id
+result
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □
+_default_handler
+●●●●●● 1mm □△
+self
+task_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Default task handler'
+logger
+●●●●●● 1mm □△
+'Executing task with default handler: '
+task_data
+'task_id'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'data'
+'completed'
+task_data
+●●●●●● 1mm □△
+'data'
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm □
+_process_dependency_queue
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Process tasks waiting on dependencies'
+new_queue
+●●●●●● 1mm □
+priority
+task_id
+task_data
+●●●●●● 3mm △
+pending_deps
+●●●●●● 1mm □
+d
+d
+task_data
+●●●●●● 1mm □△
+'dependencies'
+●●●●●● 2mm □△
+d
+●●●●●● 3mm △
+●●●●●● 2mm □
+pending_deps
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_data
+●●●●●● 2mm □△
+●●●●●● 3mm □
+new_queue
+●●●●●● 1mm □△
+priority
+task_id
+task_data
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+new_queue
+heapq
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_sub_task
+●●●●●● 1mm □△
+self
+parent_task_id
+task_type
+data
+priority
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+TaskPriority
+●●●●●● 2mm □
+'Create a sub-task under a parent task'
+sub_task_id
+●●●●●● 1mm □
+parent_task_id
+'-SUB-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+6
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parent
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+parent_task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+parent
+priority
+●●●●●● 2mm □
+priority
+●●●●●● 1mm □
+parent
+●●●●●● 1mm □△
+'priority'
+TaskPriority
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_task_status
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get status of a task'
+●●●●●● 2mm □
+task_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+task_id
+●●●●●● 2mm □
+task_id
+●●●●●● 3mm △
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+task_id
+●●●●●● 3mm ○
+'task_id'
+'status'
+'result'
+'error'
+'duration_ms'
+task_id
+result
+'completed'
+'failed'
+result
+result
+result
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_metrics
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get engine metrics'
+uptime
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'uptime_seconds'
+'tasks_submitted'
+'tasks_completed'
+'tasks_failed'
+'active_tasks'
+'queued_tasks'
+'completion_rate'
+'agent_stats'
+'executor_active'
+'scheduled_tasks'
+uptime
+●●●●●● 3mm △
+'tasks_submitted'
+●●●●●● 3mm △
+'tasks_completed'
+●●●●●● 3mm △
+'tasks_failed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'tasks_completed'
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+1
+●●●●●● 3mm △
+'tasks_submitted'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+scale
+●●●●●● 1mm □△
+self
+max_agents
+max_threads
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Scale the engine capacity'
+●●●●●● 2mm □
+max_agents
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_agents
+●●●●●● 2mm □
+max_threads
+logger
+●●●●●● 1mm □△
+'Scaled engine: max_agents='
+max_agents
+', max_threads='
+max_threads
+●●●●●● 2mm □△
+_engine_instance
+●●●●●● 2mm □○
+GraceAutonomousEngine
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_autonomous_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the singleton autonomous engine instance'
+●●●●●● 2mm □
+_engine_instance
+●●●●●● 2mm □
+_engine_instance
+●●●●●● 1mm □
+GraceAutonomousEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_engine_instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_engine_instance
+GraceAutonomousEngine

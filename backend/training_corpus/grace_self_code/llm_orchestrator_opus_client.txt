@@ -1,0 +1,380 @@
+## opus_client.py
+"\nOpus 4.6 (Anthropic Claude) LLM Client.\n\nOpus has higher capability than Kimi and can:\n- Audit Kimi's outputs and improve them\n- Teach Grace with deeper reasoning\n- Identify holes in Oracle and memory mesh/Magma\n- Serve as the primary model for complex tasks\n"
+●●●●●● 2mm □△○
+requests
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Union
+●●●●●● 3mm □△○
+base_client
+●●●●●● 2mm □△○
+BaseLLMClient
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+OPUS_BASE_URL
+●●●●●● 1mm □
+'https://api.anthropic.com/v1'
+OPUS_DEFAULT_MODEL
+●●●●●● 1mm □
+'claude-sonnet-4-20250514'
+●●●●●● 2mm △
+OpusLLMClient
+●●●●●● 3mm □△
+BaseLLMClient
+BaseLLMClient
+"Client for Anthropic's Claude/Opus API."
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+api_key
+base_url
+model
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+api_key
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_API_KEY'
+''
+●●●●●● 2mm □△
+settings
+●●●●●● 3mm △
+●●●●●● 1mm □
+base_url
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_BASE_URL'
+OPUS_BASE_URL
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'OPUS_MODEL'
+OPUS_DEFAULT_MODEL
+●●●●●● 2mm □△
+●●●●●● 1mm □
+generate
+●●●●●● 1mm □△
+self
+prompt
+model_id
+system_prompt
+temperature
+max_tokens
+stream
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+prompt
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+chat
+●●●●●● 1mm □△
+self
+messages
+model
+stream
+temperature
+max_tokens
+system_prompt
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+system
+●●●●●● 1mm □
+''
+filtered_messages
+●●●●●● 1mm □
+msg
+messages
+●●●●●● 2mm □
+msg
+●●●●●● 1mm □△
+'role'
+●●●●●● 2mm □△
+'system'
+system
+●●●●●● 1mm □
+msg
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm □
+filtered_messages
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 2mm □
+system_prompt
+system
+●●●●●● 1mm □
+system
+system
+●●●●●● 3mm ○
+'\n\n'
+●●●●●● 3mm ○
+system_prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+system_prompt
+headers
+●●●●●● 1mm □
+'x-api-key'
+'anthropic-version'
+'content-type'
+●●●●●● 3mm △
+'2023-06-01'
+'application/json'
+payload
+●●●●●● 1mm □
+'model'
+'messages'
+'max_tokens'
+'temperature'
+model
+●●●●●● 3mm △
+filtered_messages
+'role'
+'content'
+'user'
+'Hello'
+max_tokens
+4096
+temperature
+●●●●●● 2mm □
+temperature
+0.7
+●●●●●● 2mm □
+system
+payload
+'system'
+●●●●●● 1mm □
+system
+url
+●●●●●● 1mm □
+●●●●●● 3mm △
+'/messages'
+response
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+response
+200
+logger
+●●●●●● 1mm □△
+'Opus error ('
+response
+'): '
+response
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content_blocks
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'content'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+''
+block
+content_blocks
+●●●●●● 2mm □
+block
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'text'
+text
+block
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+Exception
+logger
+●●●●●● 1mm □△
+'Opus API failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+is_running
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+headers
+●●●●●● 1mm □
+'x-api-key'
+'anthropic-version'
+'content-type'
+●●●●●● 3mm △
+'2023-06-01'
+'application/json'
+r
+●●●●●● 1mm □
+requests
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'/messages'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+200
+400
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_all_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'id'
+'name'
+●●●●●● 3mm △
+'Opus 4.6'
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+model_exists
+●●●●●● 1mm □△
+self
+model_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+audit_kimi_output
+●●●●●● 1mm □△
+self
+kimi_output
+original_prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+"Opus audits Kimi's output and suggests improvements."
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'audit'
+'auditor'
+response
+'opus'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+identify_knowledge_gaps
+●●●●●● 1mm □△
+self
+knowledge_summary
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Opus identifies holes in Oracle and memory mesh.'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'gaps'
+'auditor'
+response
+'opus'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

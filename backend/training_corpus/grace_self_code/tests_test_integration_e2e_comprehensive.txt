@@ -1,0 +1,3286 @@
+## test_integration_e2e_comprehensive.py
+'\nComprehensive Integration and E2E Test Suite\n=============================================\nTests for full system integration, end-to-end workflows,\nRAG pipeline, cognitive flows, API integration, and performance.\n\nCoverage:\n- Full RAG Pipeline\n- Cognitive Flow E2E\n- API Integration\n- Security E2E\n- Performance Tests\n- Error Recovery\n- System Health\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+MagicMock
+patch
+AsyncMock
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+sys
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_sqlalchemy
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+'sqlalchemy'
+●●●●●● 1mm □
+mock_sqlalchemy
+sys
+'sqlalchemy.orm'
+●●●●●● 1mm □
+mock_sqlalchemy
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TaskType
+●●●●●● 3mm □△
+Enum
+Enum
+GENERAL
+●●●●●● 1mm □
+'general'
+CODE_GENERATION
+●●●●●● 1mm □
+'code_generation'
+SEARCH
+●●●●●● 1mm □
+'search'
+ANALYSIS
+●●●●●● 1mm □
+'analysis'
+●●●●●● 2mm △
+OperationStatus
+●●●●●● 3mm □△
+Enum
+Enum
+PENDING
+●●●●●● 1mm □
+'pending'
+IN_PROGRESS
+●●●●●● 1mm □
+'in_progress'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+●●●●●● 2mm △
+TestRAGPipelineIntegration
+'Integration tests for the full RAG pipeline.'
+●●●●●● 1mm □
+test_complete_rag_workflow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete RAG workflow: query → retrieve → generate → respond.'
+●●●●●● 2mm △
+MockRAGPipeline
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+process_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+d
+'content'
+d
+docs
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'query'
+'retrieved_docs'
+'response'
+'confidence'
+query
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+docs
+●●●●●● 2mm □△
+response
+0.9
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+pipeline
+●●●●●● 1mm □
+MockRAGPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+'id'
+'content'
+'1'
+'Python is a programming language'
+'id'
+'content'
+'2'
+'Python uses indentation'
+pipeline
+●●●●●● 1mm □
+'Python is an interpreted language'
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'What is Python?'
+●●●●●● 2mm □△
+result
+'retrieved_docs'
+2
+'Python'
+result
+'response'
+result
+'confidence'
+0.9
+●●●●●● 1mm □
+test_rag_with_empty_retrieval
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RAG handling when no documents are retrieved.'
+●●●●●● 2mm △
+MockRAGPipeline
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+docs
+●●●●●● 3mm ○
+'query'
+'retrieved_docs'
+'response'
+'confidence'
+'fallback'
+query
+0
+"I don't have enough information to answer that."
+0.3
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'response'
+'Normal response'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+pipeline
+●●●●●● 1mm □
+MockRAGPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'Unknown topic'
+●●●●●● 2mm □△
+result
+'retrieved_docs'
+0
+result
+'fallback'
+●●●●●● 3mm □△○
+result
+'confidence'
+0.5
+●●●●●● 1mm □
+test_rag_with_reranking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RAG with document reranking.'
+●●●●●● 2mm △
+MockRAGPipeline
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_with_rerank
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+docs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+reranked
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+docs
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+reranked
+5
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+pipeline
+●●●●●● 1mm □
+MockRAGPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+'id'
+'score'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+0.5
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □
+'id'
+'score'
+'5'
+0.95
+'id'
+'score'
+'2'
+0.92
+'id'
+'score'
+'8'
+0.88
+result
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+'test query'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+5
+pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_rag_caching
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RAG response caching.'
+●●●●●● 2mm △
+MockRAGPipeline
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+process_query
+●●●●●● 1mm □△
+self
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+cache_key
+●●●●●● 1mm □
+●●●●●● 2mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cache_key
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 3mm △
+cache_key
+●●●●●● 3mm △
+1
+result
+●●●●●● 1mm □
+'response'
+'cached'
+'Generated response'
+●●●●●● 1mm □
+●●●●●● 3mm △
+cache_key
+●●●●●● 1mm □
+result
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+pipeline
+●●●●●● 1mm □
+MockRAGPipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pipeline
+●●●●●● 1mm □△
+'What is AI?'
+●●●●●● 2mm □△
+pipeline
+1
+pipeline
+0
+pipeline
+●●●●●● 1mm □△
+'What is AI?'
+●●●●●● 2mm □△
+pipeline
+1
+pipeline
+1
+●●●●●● 2mm △
+TestCognitiveFlowE2E
+'End-to-end tests for cognitive processing flow.'
+●●●●●● 1mm □
+test_full_ooda_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete OODA loop execution.'
+●●●●●● 2mm △
+MockCognitiveSystem
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'idle'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+observe
+●●●●●● 1mm □△
+self
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'observe'
+●●●●●● 3mm △
+●●●●●● 1mm □
+input_data
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+orient
+●●●●●● 1mm □△
+self
+observations
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'orient'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'context'
+'factors'
+'analyzed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+observations
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □
+decide
+●●●●●● 1mm □△
+self
+orientation
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'decide'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'action'
+'confidence'
+'alternatives_considered'
+'execute'
+0.9
+3
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □
+act
+●●●●●● 1mm □△
+self
+decision
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'act'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'success'
+'output'
+●●●●●● 3mm □△○
+'Action completed'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm □
+run_full_cycle
+●●●●●● 1mm □△
+self
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+obs
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+ori
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+obs
+●●●●●● 2mm □△
+dec
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ori
+●●●●●● 2mm □△
+act
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+dec
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+act
+●●●●●● 1mm □○
+system
+●●●●●● 1mm □
+MockCognitiveSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+system
+●●●●●● 1mm □△
+'query'
+'Test input'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+system
+'act'
+●●●●●● 1mm □
+test_cognitive_decision_with_constraints
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cognitive decision making with constraints.'
+●●●●●● 2mm △
+CognitiveConstraints
+max_complexity
+●●●●●● 3mm ○
+0.5
+require_reversibility
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+min_confidence
+●●●●●● 3mm ○
+0.7
+dataclass
+●●●●●● 2mm △
+MockCognitiveSystem
+●●●●●● 1mm □
+evaluate_decision
+●●●●●● 1mm □△
+self
+decision
+constraints
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+CognitiveConstraints
+●●●●●● 2mm □
+decision
+●●●●●● 1mm □△
+'complexity'
+0
+●●●●●● 2mm □△
+constraints
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Exceeds complexity limit'
+●●●●●● 2mm □
+decision
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+constraints
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Below confidence threshold'
+●●●●●● 2mm □
+constraints
+decision
+●●●●●● 1mm □△
+'reversible'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Action is not reversible'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+'Decision approved'
+Tuple
+●●●●●● 3mm △
+●●●●●● 1mm ○
+system
+●●●●●● 1mm □
+MockCognitiveSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+constraints
+●●●●●● 1mm □
+CognitiveConstraints
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+valid_decision
+●●●●●● 1mm □
+'complexity'
+'confidence'
+'reversible'
+0.3
+0.9
+●●●●●● 3mm □△○
+approved
+msg
+●●●●●● 1mm □
+system
+●●●●●● 1mm □△
+valid_decision
+constraints
+●●●●●● 2mm □△
+approved
+●●●●●● 3mm □△○
+complex_decision
+●●●●●● 1mm □
+'complexity'
+'confidence'
+'reversible'
+0.8
+0.9
+●●●●●● 3mm □△○
+approved
+msg
+●●●●●● 1mm □
+system
+●●●●●● 1mm □△
+complex_decision
+constraints
+●●●●●● 2mm □△
+approved
+●●●●●● 1mm □
+'complexity'
+msg
+●●●●●● 1mm □
+test_learning_integration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test cognitive system integration with learning.'
+●●●●●● 2mm △
+MockCognitiveWithLearning
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+make_decision
+●●●●●● 1mm □△
+self
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+1
+pattern
+●●●●●● 3mm △
+●●●●●● 2mm □
+pattern
+'trigger'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pattern
+'response'
+●●●●●● 3mm ○
+'action'
+'confidence'
+'default'
+0.5
+●●●●●● 1mm □○
+●●●●●● 1mm □
+learn_from_outcome
+●●●●●● 1mm □△
+self
+input_data
+outcome
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+outcome
+●●●●●● 1mm □△
+'success'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'trigger'
+'response'
+'learned_at'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+50
+outcome
+●●●●●● 1mm □△
+'decision'
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+system
+●●●●●● 1mm □
+MockCognitiveWithLearning
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision1
+●●●●●● 1mm □
+system
+●●●●●● 1mm □△
+'type'
+'new_query'
+●●●●●● 2mm □△
+decision1
+'confidence'
+0.5
+system
+●●●●●● 1mm □△
+'type'
+'code_review'
+'success'
+'decision'
+●●●●●● 3mm □△○
+'action'
+'confidence'
+'approve'
+0.95
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+system
+●●●●●● 2mm □△
+1
+●●●●●● 2mm △
+TestAPIIntegration
+'Integration tests for API endpoints.'
+●●●●●● 1mm □
+test_query_endpoint_integration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test query API endpoint integration.'
+●●●●●● 2mm △
+MockAPIHandler
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+rag_pipeline
+auth_service
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+rag_pipeline
+●●●●●● 3mm △
+●●●●●● 1mm □
+auth_service
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'token'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'status'
+'Unauthorized'
+401
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+'query'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'data'
+200
+result
+●●●●●● 1mm □○
+mock_rag
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_rag
+●●●●●● 1mm □
+'response'
+'confidence'
+'Answer'
+0.9
+mock_auth
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_auth
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+handler
+●●●●●● 1mm □
+MockAPIHandler
+●●●●●● 1mm □△
+mock_rag
+mock_auth
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+'token'
+'query'
+'valid_token'
+'What is AI?'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+result
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+run_test
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'status'
+200
+'data'
+result
+●●●●●● 1mm □
+test_api_rate_limiting
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test API rate limiting.'
+●●●●●● 2mm △
+MockRateLimiter
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+requests_per_minute
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+60
+●●●●●● 3mm △
+●●●●●● 1mm □
+requests_per_minute
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+is_allowed
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+minute_key
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+'%Y%m%d%H%M'
+●●●●●● 2mm □△
+key
+●●●●●● 1mm □
+user_id
+':'
+minute_key
+current
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+current
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current
+●●●●●● 1mm □△
+1
+Tuple
+●●●●●● 3mm △
+●●●●●● 2mm ○
+limiter
+●●●●●● 1mm □
+MockRateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+allowed
+remaining
+●●●●●● 1mm □
+limiter
+●●●●●● 1mm □△
+'user_1'
+●●●●●● 2mm □△
+allowed
+●●●●●● 3mm □△○
+allowed
+remaining
+●●●●●● 1mm □
+limiter
+●●●●●● 1mm □△
+'user_1'
+●●●●●● 2mm □△
+allowed
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_api_error_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test API error handling.'
+●●●●●● 2mm △
+MockAPIHandler
+●●●●●● 1mm □
+handle_request
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 1mm □△
+'query'
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Missing query parameter'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+'query'
+●●●●●● 2mm □△
+1000
+ValueError
+●●●●●● 1mm □△
+'Query too long'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'data'
+200
+'Success'
+ValueError
+●●●●●● 3mm ○
+'status'
+'error'
+400
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'status'
+'error'
+500
+'Internal server error'
+●●●●●● 1mm □○
+handler
+●●●●●● 1mm □
+MockAPIHandler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'status'
+400
+'Missing query'
+result
+'error'
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+'query'
+'x'
+●●●●●● 2mm □△
+2000
+●●●●●● 2mm □△
+result
+'status'
+400
+'too long'
+result
+'error'
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+'query'
+'test'
+●●●●●● 2mm □△
+result
+'status'
+200
+●●●●●● 1mm □
+test_api_response_formatting
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test API response formatting.'
+●●●●●● 2mm △
+MockAPIResponse
+●●●●●● 1mm □
+format_success
+●●●●●● 1mm □△
+data
+metadata
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'success'
+'data'
+'metadata'
+'timestamp'
+●●●●●● 3mm □△○
+data
+metadata
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+format_error
+●●●●●● 1mm □△
+error
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+'success'
+'error'
+'timestamp'
+●●●●●● 1mm □
+'message'
+'code'
+error
+code
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+success
+●●●●●● 1mm □
+MockAPIResponse
+●●●●●● 1mm □△
+'answer'
+'Test'
+'processing_time_ms'
+150
+●●●●●● 2mm □△
+success
+'success'
+●●●●●● 3mm □△○
+'timestamp'
+success
+error
+●●●●●● 1mm □
+MockAPIResponse
+●●●●●● 1mm □△
+'Not found'
+404
+●●●●●● 2mm □△
+error
+'success'
+●●●●●● 1mm □
+error
+'error'
+'code'
+404
+●●●●●● 2mm △
+TestSecurityE2E
+'End-to-end security tests.'
+●●●●●● 1mm □
+test_authentication_flow
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete authentication flow.'
+●●●●●● 2mm △
+MockAuthService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'user1'
+'password123'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+authenticate
+●●●●●● 1mm □△
+self
+username
+password
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+username
+●●●●●● 2mm □△
+password
+token
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+token
+●●●●●● 1mm □
+'user'
+'created_at'
+'expires_at'
+username
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+token
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+validate_token
+●●●●●● 1mm □△
+self
+token
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+token
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+token_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+token
+●●●●●● 3mm ○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token_data
+'expires_at'
+●●●●●● 3mm △
+auth
+●●●●●● 1mm □
+MockAuthService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+token
+●●●●●● 1mm □
+auth
+●●●●●● 1mm □△
+'user1'
+'password123'
+●●●●●● 2mm □△
+token
+●●●●●● 2mm □
+auth
+●●●●●● 1mm □△
+token
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+token
+●●●●●● 1mm □
+auth
+●●●●●● 1mm □△
+'user1'
+'wrongpass'
+●●●●●● 2mm □△
+token
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_authorization_checks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test authorization for different operations.'
+●●●●●● 2mm △
+MockAuthorizationService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'admin'
+'user'
+'guest'
+'read'
+'write'
+'delete'
+'admin'
+'read'
+'write'
+'read'
+●●●●●● 1mm □
+can_perform
+●●●●●● 1mm □△
+self
+role
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+allowed
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+role
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+action
+allowed
+●●●●●● 3mm △
+auth
+●●●●●● 1mm □
+MockAuthorizationService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+auth
+●●●●●● 1mm □△
+'admin'
+'delete'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+auth
+●●●●●● 1mm □△
+'admin'
+'admin'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+auth
+●●●●●● 1mm □△
+'user'
+'read'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+auth
+●●●●●● 1mm □△
+'user'
+'delete'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+auth
+●●●●●● 1mm □△
+'guest'
+'read'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+auth
+●●●●●● 1mm □△
+'guest'
+'write'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_input_sanitization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test input sanitization.'
+●●●●●● 2mm △
+MockInputSanitizer
+●●●●●● 1mm □
+sanitize_query
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+dangerous
+●●●●●● 1mm □
+"'; DROP"
+'OR 1=1'
+'--'
+'/*'
+result
+●●●●●● 1mm □
+query
+pattern
+dangerous
+result
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+pattern
+''
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+sanitize_html
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm ○
+re
+●●●●●● 1mm □△
+'<[^>]+>'
+''
+text
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+sanitizer
+●●●●●● 1mm □
+MockInputSanitizer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+malicious
+●●●●●● 1mm □
+"'; DROP TABLE users; --"
+clean
+●●●●●● 1mm □
+sanitizer
+●●●●●● 1mm □△
+malicious
+●●●●●● 2mm □△
+'DROP'
+clean
+xss
+●●●●●● 1mm □
+"<script>alert('xss')</script>Hello"
+clean
+●●●●●● 1mm □
+sanitizer
+●●●●●● 1mm □△
+xss
+●●●●●● 2mm □△
+'<script>'
+clean
+'Hello'
+clean
+●●●●●● 1mm □
+test_rate_limiting_per_user
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test rate limiting per user.'
+●●●●●● 2mm △
+MockRateLimiter
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+10
+●●●●●● 1mm □
+record_request
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+now
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+minute
+●●●●●● 1mm □
+now
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+user_id
+●●●●●● 1mm □
+user_data
+●●●●●● 1mm □
+●●●●●● 3mm △
+user_id
+count
+●●●●●● 1mm □
+user_data
+●●●●●● 1mm □△
+minute
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □
+count
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+user_data
+minute
+●●●●●● 1mm □
+count
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+limiter
+●●●●●● 1mm □
+MockRateLimiter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+limiter
+●●●●●● 1mm □△
+'user1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+limiter
+●●●●●● 1mm □△
+'user1'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+limiter
+●●●●●● 1mm □△
+'user2'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestPerformanceE2E
+'End-to-end performance tests.'
+●●●●●● 1mm □
+test_query_latency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test query processing latency.'
+●●●●●● 2mm △
+MockPerformanceTracker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+measure_latency
+●●●●●● 1mm □△
+self
+operation
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+operation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+elapsed_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+elapsed_ms
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed_ms
+●●●●●● 1mm □
+get_avg_latency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_p95_latency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+sorted_latencies
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+idx
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_latencies
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.95
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+sorted_latencies
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+idx
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sorted_latencies
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+tracker
+●●●●●● 1mm □
+MockPerformanceTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+avg
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avg
+10.0
+●●●●●● 1mm □
+test_throughput_measurement
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test throughput measurement.'
+●●●●●● 2mm △
+MockThroughputMeter
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+record_request
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_throughput
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+duration
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+duration
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+duration
+0
+●●●●●● 3mm ○
+meter
+●●●●●● 1mm □
+MockThroughputMeter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+meter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+meter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+meter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+throughput
+●●●●●● 1mm □
+meter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+throughput
+0
+●●●●●● 1mm □
+test_memory_usage_tracking
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test memory usage tracking.'
+●●●●●● 2mm △
+MockMemoryTracker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+100.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+100.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+100.0
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+measure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.1
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_delta
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+get_peak
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+tracker
+●●●●●● 1mm □
+MockMemoryTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+delta
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+delta
+0
+●●●●●● 1mm □
+test_concurrent_request_handling
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test handling concurrent requests.'
+●●●●●● 2mm △
+MockConcurrencyTester
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_concurrent
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_concurrent
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+try_acquire
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+release
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+tester
+●●●●●● 1mm □
+MockConcurrencyTester
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+tester
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+tester
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+tester
+1
+tester
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tester
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestErrorRecovery
+'Tests for error recovery mechanisms.'
+●●●●●● 1mm □
+test_retry_mechanism
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test retry mechanism for failed operations.'
+●●●●●● 2mm △
+MockRetryHandler
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+max_retries
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+3
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_retries
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+execute_with_retry
+●●●●●● 1mm □△
+self
+operation
+●●●●●● 2mm □△
+last_error
+●●●●●● 1mm □
+●●●●●● 2mm □
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+result
+●●●●●● 1mm □
+operation
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+result
+Exception
+last_error
+●●●●●● 1mm □
+e
+●●●●●● 2mm □
+attempt
+●●●●●● 3mm △
+time
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+last_error
+●●●●●● 2mm □△
+Tuple
+●●●●●● 3mm △
+Any
+handler
+●●●●●● 1mm □
+MockRetryHandler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fail_count
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+flaky_operation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fail_count
+0
+1
+●●●●●● 2mm □
+fail_count
+0
+3
+Exception
+●●●●●● 1mm □△
+'Temporary failure'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Success'
+success
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+flaky_operation
+●●●●●● 2mm □△
+success
+●●●●●● 3mm □△○
+result
+'Success'
+handler
+3
+●●●●●● 1mm □
+test_circuit_breaker
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test circuit breaker pattern.'
+●●●●●● 2mm △
+MockCircuitBreaker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+failure_threshold
+reset_timeout
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+3
+30
+●●●●●● 3mm △
+●●●●●● 1mm □
+failure_threshold
+●●●●●● 3mm △
+●●●●●● 1mm □
+reset_timeout
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+'closed'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+record_failure
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+●●●●●● 3mm △
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+'open'
+●●●●●● 1mm □
+record_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+'closed'
+●●●●●● 1mm □
+can_proceed
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'closed'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 3mm △
+'open'
+●●●●●● 2mm □
+●●●●●● 3mm △
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+'half-open'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+breaker
+●●●●●● 1mm □
+MockCircuitBreaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+breaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+3
+●●●●●● 2mm □△
+breaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+breaker
+'open'
+breaker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_fallback_mechanism
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test fallback mechanism.'
+●●●●●● 2mm △
+MockFallbackService
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+execute
+●●●●●● 1mm □△
+self
+operation
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'source'
+'result'
+'primary'
+'Primary result'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+'source'
+'result'
+'fallback'
+'Fallback result'
+●●●●●● 1mm □○
+service
+●●●●●● 1mm □
+MockFallbackService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'query'
+●●●●●● 2mm □△
+result
+'source'
+'primary'
+service
+●●●●●● 1mm □
+●●●●●● 1mm □
+result
+●●●●●● 1mm □
+service
+●●●●●● 1mm □△
+'query'
+●●●●●● 2mm □△
+result
+'source'
+'fallback'
+service
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestSystemHealth
+'Tests for system health monitoring.'
+●●●●●● 1mm □
+test_health_check_all_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test comprehensive health check.'
+●●●●●● 2mm △
+MockHealthChecker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'database'
+'vector_db'
+'llm'
+'cache'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+check_health
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+all_healthy
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+component
+healthy
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+component
+●●●●●● 1mm □
+'healthy'
+'latency_ms'
+healthy
+healthy
+10
+●●●●●● 2mm □
+●●●●●● 2mm □
+healthy
+all_healthy
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+'healthy'
+'components'
+'timestamp'
+all_healthy
+status
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+checker
+●●●●●● 1mm □
+MockHealthChecker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'healthy'
+●●●●●● 3mm □△○
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+c
+'healthy'
+c
+health
+'components'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+checker
+'llm'
+●●●●●● 1mm □
+●●●●●● 1mm □
+health
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health
+'healthy'
+●●●●●● 1mm □
+health
+'components'
+'llm'
+'healthy'
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_readiness_probe
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test readiness probe.'
+●●●●●● 2mm △
+MockReadinessChecker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'database'
+'config'
+'models_loaded'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+is_ready
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+not_ready
+●●●●●● 1mm □
+dep
+ready
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ready
+not_ready
+●●●●●● 1mm □△
+dep
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+not_ready
+●●●●●● 2mm □△
+0
+not_ready
+Tuple
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+checker
+●●●●●● 1mm □
+MockReadinessChecker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ready
+issues
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ready
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+0
+checker
+'models_loaded'
+●●●●●● 1mm □
+●●●●●● 1mm □
+ready
+issues
+●●●●●● 1mm □
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ready
+●●●●●● 1mm □
+'models_loaded'
+issues
+●●●●●● 1mm □
+test_liveness_probe
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test liveness probe.'
+●●●●●● 2mm △
+MockLivenessChecker
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+30
+●●●●●● 1mm □
+record_heartbeat
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_alive
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+elapsed
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+elapsed
+●●●●●● 3mm △
+●●●●●● 3mm △
+checker
+●●●●●● 1mm □
+MockLivenessChecker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+checker
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+checker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestDataConsistency
+'Tests for data consistency across components.'
+●●●●●● 1mm □
+test_cache_database_consistency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test consistency between cache and database.'
+●●●●●● 2mm △
+MockDataStore
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+write
+●●●●●● 1mm □△
+self
+key
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+value
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+value
+●●●●●● 1mm □
+read
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+key
+'cache'
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+value
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+value
+●●●●●● 3mm ○
+value
+'database'
+●●●●●● 3mm ○
+●●●●●● 2mm □
+'not_found'
+Tuple
+Any
+●●●●●● 1mm ○
+●●●●●● 1mm □
+invalidate_cache
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+is_consistent
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm ○
+key
+●●●●●● 3mm △
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+store
+●●●●●● 1mm □
+MockDataStore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+store
+●●●●●● 1mm □△
+'user:1'
+'name'
+'Alice'
+●●●●●● 2mm □△
+store
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+store
+'user:1'
+●●●●●● 1mm □
+'name'
+'Bob'
+store
+●●●●●● 1mm □△
+'user:1'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_eventual_consistency
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test eventual consistency model.'
+●●●●●● 2mm △
+MockEventualConsistentStore
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+write
+●●●●●● 1mm □△
+self
+key
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+value
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+value
+●●●●●● 2mm □△
+●●●●●● 1mm □
+sync_replicas
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+key
+value
+●●●●●● 3mm △
+replica
+●●●●●● 3mm △
+replica
+key
+●●●●●● 1mm □
+value
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+is_fully_synced
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+key
+r
+r
+●●●●●● 3mm △
+●●●●●● 2mm □△
+primary_value
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+●●●●●● 3mm ○
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+primary_value
+r
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+store
+●●●●●● 1mm □
+MockEventualConsistentStore
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+store
+●●●●●● 1mm □△
+'data:1'
+'value1'
+●●●●●● 2mm □△
+store
+●●●●●● 1mm □△
+'data:1'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+store
+●●●●●● 1mm □△
+'data:1'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestUserFlowE2E
+'End-to-end tests for user workflows.'
+●●●●●● 1mm □
+test_complete_user_session
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test complete user session workflow.'
+●●●●●● 2mm △
+MockUserSession
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+login
+●●●●●● 1mm □△
+self
+username
+password
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+username
+password
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+query
+●●●●●● 1mm □△
+self
+question
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'error'
+'Not authenticated'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+'answer'
+'confidence'
+'Response to: '
+question
+0.9
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm □
+logout
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □
+MockUserSession
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'user'
+'pass'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm △○
+●●●●●● 3mm □△○
+result1
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'What is AI?'
+●●●●●● 2mm □△
+'answer'
+result1
+result2
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'Explain machine learning'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+2
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+result3
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+'Another question'
+●●●●●● 2mm □△
+'error'
+result3
+●●●●●● 1mm □
+test_multi_turn_conversation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test multi-turn conversation handling.'
+●●●●●● 2mm △
+MockConversationManager
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+start_conversation
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+conv_id
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+conv_id
+●●●●●● 1mm □
+'user_id'
+'turns'
+'context'
+user_id
+●●●●●● 3mm ○
+conv_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+add_turn
+●●●●●● 1mm □△
+self
+conv_id
+user_msg
+assistant_msg
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+conv_id
+●●●●●● 3mm △
+ValueError
+●●●●●● 1mm □△
+'Conversation not found'
+●●●●●● 2mm □△
+conv
+●●●●●● 1mm □
+●●●●●● 3mm △
+conv_id
+conv
+'turns'
+●●●●●● 1mm □△
+'user'
+'assistant'
+user_msg
+assistant_msg
+●●●●●● 2mm □△
+conv
+'context'
+●●●●●● 1mm □△
+user_msg
+assistant_msg
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_context
+●●●●●● 1mm □△
+self
+conv_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+conv_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'context'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+manager
+●●●●●● 1mm □
+MockConversationManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conv_id
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'user1'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+conv_id
+'Hello'
+'Hi! How can I help?'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+conv_id
+'What is Python?'
+'Python is a programming language.'
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+conv_id
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+4
+●●●●●● 2mm △
+TestSystemIntegration
+'Tests for full system integration.'
+●●●●●● 1mm □
+test_full_stack_integration
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test full stack integration.'
+●●●●●● 2mm △
+MockFullStack
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+process_request
+●●●●●● 1mm □△
+self
+request
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+retrieval_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+'query'
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+retrieval_result
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'request_processed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'result'
+●●●●●● 3mm □△○
+decision
+●●●●●● 1mm □○
+stack
+●●●●●● 1mm □
+MockFullStack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stack
+●●●●●● 1mm □
+'docs'
+'doc1'
+stack
+●●●●●● 1mm □
+'response'
+'Answer'
+result
+●●●●●● 1mm □
+stack
+●●●●●● 1mm □△
+'query'
+'Test question'
+●●●●●● 2mm □△
+result
+'success'
+●●●●●● 3mm □△○
+stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stack
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_component_interaction
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test interaction between components.'
+●●●●●● 2mm △
+MockComponentA
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+process
+●●●●●● 1mm □△
+self
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'A processed: '
+input_data
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm △
+MockComponentB
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+component_a
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+component_a
+●●●●●● 1mm □
+process
+●●●●●● 1mm □△
+self
+input_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+a_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+input_data
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'B processed: '
+a_result
+●●●●●● 1mm ○
+a
+●●●●●● 1mm □
+MockComponentA
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+b
+●●●●●● 1mm □
+MockComponentB
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+b
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+'A processed'
+result
+'B processed'
+result
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+'--tb=short'
+●●●●●● 2mm □△

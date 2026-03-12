@@ -1,0 +1,260 @@
+## corrigible_plan.py
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+CorrigiblePlan
+'\n    Spindle Autonomy Layer. \n    Drafts actions from the Semantic Dictionary and verifies them via Z3 theorem proving\n    before allowing execution. Only applies if the change is proved to be causally safe\n    and entropy-reversible in under 20ms.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+20
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_z3
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+z3
+●●●●●● 3mm △
+●●●●●● 1mm □
+z3
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'[Corrigible-Plan] Z3 not installed. Falling back to deterministic syntax checks only.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_prove_geometric_safety
+●●●●●● 1mm □△
+self
+ast_shadow_mask
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Emits a mathematical proof that the AST delta is causally valid and reversible.\n        Fails if proof takes longer than 20ms.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+time
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ast_shadow_mask
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△○
+z3
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+x
+●●●●●● 1mm □
+z3
+●●●●●● 1mm □△
+'ast_delta_entropy'
+●●●●●● 2mm □△
+y
+●●●●●● 1mm □
+z3
+●●●●●● 1mm □△
+'workspace_safety_bounds'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+0
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+y
+100
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+x
+y
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timeout'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+elapsed_ms
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □
+result
+z3
+elapsed_ms
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[Corrigible-Plan] Z3 Proof Failed or Timed out ('
+elapsed_ms
+'.2f'
+'ms)'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[Corrigible-Plan] Z3 solver error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+draft_autonomous_action
+●●●●●● 1mm □△
+self
+trigger_condition
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Autonomously selects an intent from the Semantic Dictionary based on a system trigger,\n        drafts the AST shadow modification, and runs the Z3 proof.\n        '
+●●●●●● 3mm □△○
+core.dynamic_dictionary
+●●●●●● 2mm □△○
+get_dynamic_dictionary
+semantic_dict
+●●●●●● 1mm □
+get_dynamic_dictionary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target_word
+●●●●●● 1mm □
+'failed'
+trigger_condition
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'heal'
+'verify'
+braille_intent
+●●●●●● 1mm □
+semantic_dict
+●●●●●● 1mm □△
+target_word
+●●●●●● 2mm □△
+●●●●●● 2mm □
+braille_intent
+logger
+●●●●●● 1mm □△
+"[Corrigible-Plan] No semantic mapping found for autonomy trigger '"
+target_word
+"'."
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+ast_shadow_mask
+●●●●●● 1mm □
+'AST_DELTA_MASK:['
+braille_intent
+']_TARGET:'
+trigger_condition
+logger
+●●●●●● 1mm □△
+"[Corrigible-Plan] Drafted action: '"
+target_word
+"' -> "
+braille_intent
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ast_shadow_mask
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[Corrigible-Plan] ✅ Action mathematically proven safe. Entropy valid.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action_type'
+'braille_intent'
+'ast_mask'
+'status'
+target_word
+braille_intent
+ast_shadow_mask
+'provably_safe'
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[Corrigible-Plan] ❌ Action rejected. Z3 geometric proof failed.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'[Corrigible-Plan] Autonomy drafting failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_corrigible_plan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CorrigiblePlan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CorrigiblePlan

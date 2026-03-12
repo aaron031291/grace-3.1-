@@ -1,0 +1,1457 @@
+## active_learning_system.py
+'\nGrace Active Learning System\n\nTransforms passive RAG into active learning where Grace:\n1. Studies training materials from AI research folder\n2. Practices skills in the sandbox environment\n3. Learns from successes and failures\n4. Builds persistent knowledge and abilities\n\nArchitecture:\n- AI Research Folder = Curriculum (what to learn)\n- Cognitive Framework = How to think and learn\n- Learning Memory = What has been learned\n- Sandbox = Practice environment\n- File Manager = Her world to interact with\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Dict
+Any
+Optional
+Tuple
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+core.datetime_utils
+●●●●●● 2mm □△○
+as_naive_utc
+●●●●●● 3mm □△○
+cognitive.engine
+●●●●●● 2mm □△○
+CognitiveEngine
+DecisionContext
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningMemoryManager
+TrustScorer
+LearningExample
+LearningPattern
+●●●●●● 3mm □△○
+cognitive.predictive_context_loader
+●●●●●● 2mm □△○
+PredictiveContextLoader
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TrainingSession
+'\n    Represents a focused training session where Grace learns a specific skill.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session_id
+skill_name
+learning_objectives
+training_materials
+practice_tasks
+success_criteria
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 1mm □
+session_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+skill_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_objectives
+●●●●●● 3mm △
+●●●●●● 1mm □
+training_materials
+●●●●●● 3mm △
+●●●●●● 1mm □
+practice_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □
+success_criteria
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 2mm △
+SkillLevel
+"Tracks Grace's proficiency in a specific skill."
+NOVICE
+●●●●●● 1mm □
+'novice'
+BEGINNER
+●●●●●● 1mm □
+'beginner'
+INTERMEDIATE
+●●●●●● 1mm □
+'intermediate'
+ADVANCED
+●●●●●● 1mm □
+'advanced'
+EXPERT
+●●●●●● 1mm □
+'expert'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+skill_name
+current_level
+proficiency_score
+practice_hours
+success_rate
+tasks_completed
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+NOVICE
+0.0
+0.0
+0.0
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+skill_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+current_level
+●●●●●● 3mm △
+●●●●●● 1mm □
+proficiency_score
+●●●●●● 3mm △
+●●●●●● 1mm □
+practice_hours
+●●●●●● 3mm △
+●●●●●● 1mm □
+success_rate
+●●●●●● 3mm △
+●●●●●● 1mm □
+tasks_completed
+●●●●●● 2mm △
+GraceActiveLearningSystem
+'\n    Active learning system that trains Grace using cognitive framework.\n\n    Core capabilities:\n    1. **Study**: Extract knowledge from training materials\n    2. **Practice**: Apply knowledge in sandbox\n    3. **Learn**: Build persistent skills from experience\n    4. **Adapt**: Improve based on outcomes\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+retriever
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+DocumentRetriever
+Path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+retriever
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+CognitiveEngine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+TrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+PredictiveContextLoader
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+TrainingSession
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+SkillLevel
+●●●●●● 1mm □
+study_topic
+●●●●●● 1mm □△
+self
+topic
+learning_objectives
+max_materials
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+10
+'\n        Study a topic from training materials WITH PREDICTIVE FETCHING.\n\n        Grace reads relevant documents, extracts key concepts,\n        builds internal knowledge representation, AND proactively\n        pre-fetches related topics she\'ll likely need next.\n\n        Args:\n            topic: What to study (e.g., "Python functions", "REST APIs")\n            learning_objectives: What Grace should learn\n            max_materials: Max training documents to study\n\n        Returns:\n            Study results with extracted concepts, examples, AND prefetched contexts\n        '
+logger
+●●●●●● 1mm □△
+'Grace studying topic: '
+topic
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+predictive_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+study_materials
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+max_materials
+●●●●●● 2mm □△
+concepts
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+study_materials
+learning_objectives
+●●●●●● 2mm □△
+focus_areas
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+concepts
+learning_objectives
+●●●●●● 2mm □△
+examples_created
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prefetched_topics
+●●●●●● 1mm □
+predictive_result
+●●●●●● 1mm □△
+'ready_topics'
+●●●●●● 2mm □△
+prefetch_stats
+●●●●●● 1mm □
+predictive_result
+●●●●●● 1mm □△
+'statistics'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'topic'
+'materials_studied'
+'concepts_learned'
+'focus_areas'
+'examples_stored'
+'prefetched_topics'
+'prefetch_statistics'
+'timestamp'
+topic
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+study_materials
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+concepts
+●●●●●● 2mm □△
+focus_areas
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples_created
+●●●●●● 2mm □△
+prefetched_topics
+prefetch_stats
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_find_relevant_training_materials
+●●●●●● 1mm □△
+self
+topic
+max_materials
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+'Find documents from AI research folder relevant to topic.'
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+materials_by_doc
+●●●●●● 1mm □
+chunk
+results
+doc_id
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_id
+materials_by_doc
+materials_by_doc
+doc_id
+●●●●●● 1mm □
+'document_id'
+'source'
+'chunks'
+'relevance_score'
+doc_id
+chunk
+●●●●●● 1mm □△
+'metadata'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'source'
+''
+●●●●●● 2mm □△
+0.0
+materials_by_doc
+doc_id
+'chunks'
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+materials_by_doc
+doc_id
+'relevance_score'
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+materials_by_doc
+doc_id
+'relevance_score'
+chunk
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+materials
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+materials_by_doc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+max_materials
+●●●●●● 3mm ○
+materials
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_key_concepts
+●●●●●● 1mm □△
+self
+materials
+learning_objectives
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Extract key concepts from training materials.\n\n        This is where Grace identifies:\n        - Definitions and terminology\n        - Code patterns and examples\n        - Best practices and anti-patterns\n        - Prerequisites and dependencies\n        '
+concepts
+●●●●●● 1mm □
+material
+materials
+chunk
+material
+'chunks'
+text
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+concept
+●●●●●● 1mm □
+'text'
+'source_document'
+'source_file'
+'relevance_score'
+'extracted_at'
+'learning_objectives'
+text
+material
+'document_id'
+material
+'source'
+chunk
+●●●●●● 1mm □△
+'score'
+0.0
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_objectives
+concepts
+●●●●●● 1mm □△
+concept
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+concepts
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_prioritize_learning_focus
+●●●●●● 1mm □△
+self
+concepts
+learning_objectives
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+'\n        Determine what Grace should focus on first.\n\n        Uses cognitive engine to prioritize based on:\n        - Learning objectives\n        - Current skill level\n        - Concept dependencies\n        '
+sorted_concepts
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+concepts
+●●●●●● 2mm □△
+focus_areas
+●●●●●● 1mm □
+objective
+learning_objectives
+3
+focus_areas
+●●●●●● 1mm □△
+objective
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+focus_areas
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_store_learning_examples
+●●●●●● 1mm □△
+self
+topic
+concepts
+materials
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+"\n        Store learned concepts as learning examples in memory WITH TRUST SCORES.\n\n        Trust scoring includes:\n        1. **Source Reliability** - Quality of training material\n        2. **Data Confidence** - How accurate/relevant the content is\n        3. **Operational Confidence** - Grace's ability to apply this knowledge\n        4. **Consistency** - Alignment with existing knowledge\n        "
+example_ids
+●●●●●● 1mm □
+concept
+concepts
+20
+source_reliability
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+concept
+'source_file'
+●●●●●● 2mm □△
+data_confidence
+●●●●●● 1mm □
+concept
+'relevance_score'
+operational_confidence
+●●●●●● 1mm □
+0.3
+consistency_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+concept
+'text'
+●●●●●● 2mm □△
+trust_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example_ids
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+example_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_assess_source_reliability
+●●●●●● 1mm □△
+self
+source_file
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Assess reliability of training material source.\n\n        **Scoring:**\n        - Academic papers / peer-reviewed: 0.9-1.0\n        - Technical books: 0.8-0.9\n        - Official documentation: 0.8-0.9\n        - Tutorials / guides: 0.6-0.7\n        - Unknown source: 0.5\n        '
+source_lower
+●●●●●● 1mm □
+source_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+x
+source_lower
+x
+'ieee'
+'acm'
+'arxiv'
+'journal'
+'conference'
+'research'
+'paper'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.95
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+x
+source_lower
+x
+'oreilly'
+'manning'
+'apress'
+'packt'
+'cambridge'
+'mit'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.9
+●●●●●● 2mm □
+'.pdf'
+source_lower
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+x
+source_lower
+x
+'book'
+'guide'
+'textbook'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.85
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+x
+source_lower
+x
+'docs'
+'documentation'
+'official'
+'reference'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.8
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+x
+source_lower
+x
+'tutorial'
+'course'
+'learn'
+'training'
+'beginner'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.7
+●●●●●● 3mm ○
+0.75
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_assess_consistency
+●●●●●● 1mm □△
+self
+topic
+concept_text
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Assess how consistent new concept is with existing knowledge.\n\n        **Checks:**\n        - Does it contradict existing examples?\n        - Does it align with established patterns?\n        - Is it mainstream or outlier knowledge?\n        '
+existing
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+'topic'
+topic
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+●●●●●● 3mm ○
+0.6
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'embedding_model'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+new_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+concept_text
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □
+example
+existing
+existing_text
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+example
+existing_text
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+example
+existing_text
+' '
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing_text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+existing_text
+●●●●●● 2mm □△
+similarity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+new_embedding
+existing_embedding
+●●●●●● 2mm □△
+similarities
+●●●●●● 1mm □△
+similarity
+●●●●●● 2mm □△
+●●●●●● 2mm □
+similarities
+avg_similarity
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.5
+●●●●●● 3mm ○
+avg_similarity
+●●●●●● 2mm □△
+0.4
+Exception
+logger
+●●●●●● 1mm □△
+'Semantic similarity assessment failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.7
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_cosine_similarity
+●●●●●● 1mm □△
+self
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+'Calculate cosine similarity between two vectors.'
+●●●●●● 2mm □
+vec1
+vec2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec1
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+vec2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0.0
+dot_product
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+b
+a
+b
+●●●●●● 3mm □
+●●●●●● 1mm □△
+vec1
+vec2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+norm1
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+a
+a
+vec1
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+0.5
+norm2
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+b
+b
+vec2
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+0.5
+●●●●●● 2mm □
+norm1
+0
+norm2
+0
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+dot_product
+●●●●●● 3mm □△
+norm1
+●●●●●● 2mm □△
+norm2
+●●●●●● 3mm ○
+●●●●●● 1mm □
+practice_skill
+●●●●●● 1mm □△
+self
+skill_name
+task
+sandbox_context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Practice a skill in the sandbox environment.\n\n        Grace attempts a task using learned knowledge.\n        Records outcome for learning.\n\n        Args:\n            skill_name: Skill being practiced\n            task: Task description and requirements\n            sandbox_context: Sandbox state (files, environment, etc.)\n\n        Returns:\n            Practice result with outcome and feedback\n        '
+logger
+●●●●●● 1mm □△
+'Grace practicing skill: '
+skill_name
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+DecisionContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task_analysis
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+sandbox_context
+●●●●●● 2mm □△
+relevant_knowledge
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill_name
+task_analysis
+●●●●●● 2mm □△
+approach
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_analysis
+relevant_knowledge
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+approach
+sandbox_context
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill_name
+task
+approach
+outcome
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'skill'
+'task'
+'approach'
+'outcome'
+'success'
+'feedback'
+'timestamp'
+skill_name
+task
+●●●●●● 1mm □△
+'description'
+●●●●●● 2mm □△
+approach
+outcome
+outcome
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+outcome
+●●●●●● 1mm □△
+'feedback'
+''
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_analyze_practice_task
+●●●●●● 1mm □△
+self
+task
+sandbox_context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Analyze what the task requires.'
+●●●●●● 3mm ○
+'description'
+'requirements'
+'complexity'
+'sandbox_state'
+task
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'requirements'
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □△
+'complexity'
+0.5
+●●●●●● 2mm □△
+sandbox_context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_retrieve_applicable_knowledge
+●●●●●● 1mm □△
+self
+skill_name
+task_analysis
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Retrieve learned knowledge applicable to this task.\n\n        Queries learning memory for relevant examples.\n        '
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+'knowledge_extraction'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+examples
+●●●●●● 3mm □△
+LearningExample
+●●●●●● 1mm □
+_decide_practice_approach
+●●●●●● 1mm □△
+self
+task_analysis
+knowledge
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm □△
+LearningExample
+'\n        Decide how to approach the practice task.\n\n        Based on learned knowledge and task requirements.\n        '
+●●●●●● 3mm ○
+'strategy'
+'knowledge_used'
+'estimated_success_rate'
+'apply_learned_patterns'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ex
+●●●●●● 2mm □△
+ex
+knowledge
+5
+0.6
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_execute_practice_task
+●●●●●● 1mm □△
+self
+task
+approach
+sandbox_context
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Execute the practice task in sandbox.\n\n        NOTE: This is a simulation. In production, this would:\n        - Execute code in isolated sandbox\n        - Interact with file manager\n        - Observe results\n        - Compare to expected outcome\n        '
+simulated_success
+●●●●●● 1mm □
+approach
+●●●●●● 1mm □△
+'estimated_success_rate'
+0.5
+●●●●●● 2mm □△
+0.5
+●●●●●● 3mm ○
+'success'
+'output'
+'feedback'
+'execution_time'
+simulated_success
+'Task executed in sandbox'
+simulated_success
+'Good attempt'
+'Needs improvement'
+1.5
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_learn_from_practice
+●●●●●● 1mm □△
+self
+skill_name
+task
+approach
+outcome
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+"\n        Learn from practice outcome WITH TRUST SCORE UPDATES.\n\n        Updates:\n        1. **Operational Confidence** - Grace's ability to apply knowledge increases with practice\n        2. **Data Confidence** - Validates accuracy of training materials\n        3. **Trust Score** - Overall confidence in this knowledge\n        4. **Skill Proficiency** - Tracks improvement over time\n        "
+success
+●●●●●● 1mm □
+outcome
+●●●●●● 1mm □△
+'success'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+operational_confidence
+●●●●●● 1mm □
+success
+0.8
+0.4
+trust_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+example
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill_name
+operational_confidence
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+skill_name
+success
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_related_knowledge_confidence
+●●●●●● 1mm □△
+self
+skill_name
+operational_confidence
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'\n        Update operational confidence for knowledge examples related to this skill.\n\n        When Grace successfully practices a skill, the operational confidence\n        for related theoretical knowledge increases.\n        '
+knowledge_examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+'knowledge_extraction'
+LearningExample
+●●●●●● 1mm □△
+'topic'
+skill_name
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+knowledge_examples
+●●●●●● 2mm □
+example
+metadata
+●●●●●● 1mm □
+example
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+metadata
+●●●●●● 1mm □
+old_confidence
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'operational_confidence'
+0.3
+●●●●●● 2mm □△
+new_confidence
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.95
+old_confidence
+●●●●●● 3mm ○
+operational_confidence
+●●●●●● 3mm □△
+2
+●●●●●● 2mm □△
+metadata
+'operational_confidence'
+●●●●●● 1mm □
+new_confidence
+metadata
+'last_practiced'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+example
+●●●●●● 1mm □
+metadata
+example
+●●●●●● 1mm □
+new_confidence
+example
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_update_skill_level
+●●●●●● 1mm □△
+self
+skill_name
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+"Update Grace's proficiency in a skill."
+●●●●●● 2mm □
+skill_name
+●●●●●● 3mm △
+●●●●●● 3mm △
+skill_name
+●●●●●● 1mm □
+SkillLevel
+●●●●●● 1mm □△
+skill_name
+●●●●●● 2mm □△
+skill
+●●●●●● 1mm □
+●●●●●● 3mm △
+skill_name
+skill
+1
+total_successes
+●●●●●● 1mm □
+skill
+●●●●●● 2mm □△
+skill
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □
+success
+total_successes
+1
+skill
+●●●●●● 1mm □
+total_successes
+●●●●●● 3mm □△
+skill
+skill
+●●●●●● 1mm □
+skill
+●●●●●● 2mm □△
+1
+●●●●●● 3mm ○
+skill
+●●●●●● 3mm □△
+100
+●●●●●● 2mm □
+skill
+0.8
+skill
+SkillLevel
+skill
+●●●●●● 1mm □
+SkillLevel
+●●●●●● 1mm △
+skill
+1.5
+skill
+SkillLevel
+skill
+●●●●●● 1mm □
+SkillLevel
+●●●●●● 1mm □
+extract_learning_patterns
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'\n        Extract patterns from accumulated learning examples.\n\n        Identifies:\n        - What approaches work best\n        - Common mistakes to avoid\n        - Prerequisites for success\n        - Optimal learning sequences\n        '
+examples
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+'practice_outcome'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+examples
+●●●●●● 2mm □△
+10
+logger
+●●●●●● 1mm □△
+'Not enough examples to extract patterns yet'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+patterns
+●●●●●● 1mm □
+●●●●●● 3mm ○
+patterns
+●●●●●● 3mm □△
+LearningPattern
+●●●●●● 1mm □
+create_training_curriculum
+●●●●●● 1mm □△
+self
+skill_name
+target_proficiency
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+SkillLevel
+'\n        Create a structured training curriculum for a skill.\n\n        Args:\n            skill_name: Skill to train (e.g., "Python programming", "API design")\n            target_proficiency: Desired skill level\n\n        Returns:\n            Curriculum with study materials and practice tasks\n        '
+curriculum
+●●●●●● 1mm □
+'skill_name'
+'target_proficiency'
+'study_phases'
+'practice_tasks'
+'assessment_criteria'
+skill_name
+target_proficiency
+curriculum
+'study_phases'
+●●●●●● 1mm □△
+'phase'
+'topics'
+'learning_objectives'
+'foundations'
+skill_name
+' basics'
+skill_name
+' core concepts'
+'Understand '
+skill_name
+' fundamentals'
+'Learn '
+skill_name
+' syntax and structure'
+'Identify '
+skill_name
+' use cases'
+●●●●●● 2mm □△
+curriculum
+'practice_tasks'
+●●●●●● 1mm □△
+'phase'
+'tasks'
+'application'
+'description'
+'complexity'
+'Simple '
+skill_name
+' exercise'
+0.3
+'description'
+'complexity'
+'Moderate '
+skill_name
+' project'
+0.6
+'description'
+'complexity'
+'Complex '
+skill_name
+' challenge'
+0.9
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+curriculum
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_skill_assessment
+●●●●●● 1mm □△
+self
+skill_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"Get Grace's current proficiency in a skill."
+●●●●●● 2mm □
+skill_name
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'skill'
+'level'
+'proficiency_score'
+'status'
+skill_name
+SkillLevel
+0.0
+'not_started'
+skill
+●●●●●● 1mm □
+●●●●●● 3mm △
+skill_name
+●●●●●● 3mm ○
+'skill'
+'level'
+'proficiency_score'
+'success_rate'
+'tasks_completed'
+'practice_hours'
+skill_name
+skill
+skill
+skill
+skill
+skill
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

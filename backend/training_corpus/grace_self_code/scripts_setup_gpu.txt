@@ -1,0 +1,476 @@
+## setup_gpu.py
+'\nSet up GPU components for GRACE: PyTorch with CUDA, and EMBEDDING_DEVICE=cuda.\nRun from backend with venv active:  python scripts/setup_gpu.py\nOr from project root:  py -3.12 backend/scripts/setup_gpu.py  (use 3.12 for CUDA wheels)\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+re
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+BACKEND
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ENV_FILE
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'.env'
+ENV_EXAMPLE
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'.env.example'
+TORCH_CUDA_INDEX
+●●●●●● 1mm □
+'https://download.pytorch.org/whl/cu121'
+●●●●●● 1mm □
+_python_version_ok_for_cuda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □
+sys
+●●●●●● 3mm ○
+v
+3
+v
+11
+12
+●●●●●● 1mm □
+run
+●●●●●● 1mm □△
+cmd
+capture
+shell
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+r
+●●●●●● 1mm □
+subprocess
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+cmd
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+cmd
+' '
+●●●●●● 1mm □△
+cmd
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+0
+r
+''
+●●●●●● 3mm ○
+r
+''
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+check_nvidia_smi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ok
+out
+●●●●●● 1mm □
+run
+●●●●●● 1mm □△
+'nvidia-smi'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] nvidia-smi not found or failed. Install NVIDIA drivers.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] NVIDIA driver OK'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+out
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+400
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+install_torch_cuda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Installing PyTorch with CUDA 12.1 (this may take a few minutes)...'
+●●●●●● 2mm □△
+ok
+out
+●●●●●● 1mm □
+run
+●●●●●● 1mm □△
+sys
+'-m'
+'pip'
+'install'
+'--upgrade'
+'--force-reinstall'
+'torch'
+'--index-url'
+TORCH_CUDA_INDEX
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] PyTorch CUDA install completed.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+'No matching distribution'
+out
+'none'
+out
+●●●●●● 2mm □△○
+platform
+py_ver
+●●●●●● 1mm □
+platform
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] No PyTorch CUDA wheels for Python '
+py_ver
+'. Installing default torch (may be CPU-only).'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] For GPU embeddings, use Python 3.11 or 3.12:  py -3.12 -m venv venv  then re-run this script.'
+●●●●●● 2mm □△
+ok2
+out2
+●●●●●● 1mm □
+run
+●●●●●● 1mm □△
+sys
+'-m'
+'pip'
+'install'
+'--upgrade'
+'torch'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ok2
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] PyTorch install failed:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out2
+●●●●●● 2mm □△
+1500
+out2
+1500
+out2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] PyTorch (default) installed. Set EMBEDDING_DEVICE=cuda when using Python 3.11/3.12 for GPU.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+verify_torch_cuda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Verify CUDA works with a real kernel (catches RTX 5090 / sm_120 with PyTorch built for older archs).'
+●●●●●● 2mm □△○
+torch
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] PyTorch installed but CUDA not available (driver or GPU issue).'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+name
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+mem_gb
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+1000000000.0
+torch
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 2mm □
+'no kernel image is available'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] '
+name
+' detected but PyTorch has no kernel for this GPU (e.g. RTX 5090 / sm_120).'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Use CPU for embeddings until PyTorch ships sm_120 support. Setting EMBEDDING_DEVICE=cpu.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] PyTorch CUDA OK: '
+name
+' ('
+mem_gb
+'.1f'
+' GB)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Verify failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+set_env_embedding_device
+●●●●●● 1mm □△
+use_cuda
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'Set EMBEDDING_DEVICE in .env to cuda or cpu to match actual capability.'
+●●●●●● 2mm □
+ENV_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ENV_EXAMPLE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+ENV_EXAMPLE
+ENV_FILE
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Created .env from .env.example'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] No .env or .env.example; set EMBEDDING_DEVICE=cuda or cpu manually.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+value
+●●●●●● 1mm □
+use_cuda
+'cuda'
+'cpu'
+text
+●●●●●● 1mm □
+ENV_FILE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'EMBEDDING_DEVICE='
+text
+new_text
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'EMBEDDING_DEVICE=\\w+'
+'EMBEDDING_DEVICE='
+value
+text
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'EMBEDDING_DEFAULT='
+text
+new_text
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(EMBEDDING_DEFAULT=[^\\n]*)'
+'\\1\nEMBEDDING_DEVICE='
+value
+text
+●●●●●● 2mm □△
+new_text
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\nEMBEDDING_DEVICE='
+value
+'\n'
+●●●●●● 2mm □
+new_text
+text
+ENV_FILE
+●●●●●● 1mm □△
+new_text
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Set EMBEDDING_DEVICE='
+value
+' in backend/.env'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] EMBEDDING_DEVICE='
+value
+' already set.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'=== GRACE GPU setup ===\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_python_version_ok_for_cuda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Current Python is '
+sys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+'. CUDA wheels are for 3.11 or 3.12.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] From project root run:  py -3.12 backend\\scripts\\setup_gpu.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[GPU] Or create a 3.12 venv:  cd backend  &&  py -3.12 -m venv venv  &&  venv\\Scripts\\activate  &&  pip install -r requirements.txt  &&  python scripts\\setup_gpu.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+check_nvidia_smi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nStopping. Fix NVIDIA drivers and re-run.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+install_torch_cuda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cuda_ok
+●●●●●● 1mm □
+verify_torch_cuda
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cuda_ok
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'CUDA not available; embeddings will use CPU.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_env_embedding_device
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cuda_ok
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDone. Restart the backend to use GPU for embeddings.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nDone. Embeddings will use CPU. For GPU: use Python 3.11 or 3.12, then re-run this script.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

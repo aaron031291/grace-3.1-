@@ -1,0 +1,2568 @@
+## pipeline.py
+'\nCognitive Pipeline — Deep intelligence chain.\n\n9 stages, each doing real cognitive work:\n  1. TimeSense     → temporal awareness\n  2. OODA          → observe project state, orient constraints, decide approach\n  3. Ambiguity     → detect assumptions against actual project files\n  4. Invariants    → validate 12 core invariants before acting\n  5. Generate      → LLM call (governance auto-injected)\n  6. Contradiction → compare output against knowledge base\n  7. Hallucination → ground-truth verification against project files\n  8. Trust         → score confidence, influence future decisions\n  9. Genesis       → provenance tracking\n\nPlus: feedback loop for learning from outcomes.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+PipelineContext
+'State flowing through the pipeline — each stage enriches it.'
+prompt
+●●●●●● 1mm ○
+system_prompt
+●●●●●● 1mm ○
+''
+project_folder
+●●●●●● 1mm ○
+''
+current_file
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+time_context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ooda
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ambiguity
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+invariants
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+llm_response
+●●●●●● 1mm ○
+''
+contradictions
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+verification
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_score
+●●●●●● 3mm ○
+0.5
+trust_context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+stages_passed
+●●●●●● 1mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stages_failed
+●●●●●● 1mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_files
+●●●●●● 1mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_context
+●●●●●● 1mm ○
+''
+learned_patterns
+●●●●●● 1mm □△
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+started_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 2mm □
+SessionLocal
+●●●●●● 3mm ○
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm △
+CognitivePipeline
+●●●●●● 1mm □
+run
+●●●●●● 1mm □△
+self
+prompt
+system_prompt
+project_folder
+current_file
+use_kimi
+skip_stages
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+''
+''
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+skip
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+skip_stages
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'time_sense'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'ooda'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'ambiguity'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'invariants'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'trust_pre'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'generate'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+use_kimi
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+'contradiction'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+'hallucination'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'trust_post'
+skip
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ctx
+PipelineContext
+●●●●●● 1mm □
+_stage_timesense
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+●●●●●● 3mm □△○
+cognitive.time_sense
+●●●●●● 2mm □△○
+TimeSense
+ctx
+●●●●●● 1mm □
+TimeSense
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'time_sense'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'time_sense'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'TimeSense: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_ooda
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+observations
+●●●●●● 1mm □
+'prompt_type'
+_classify_prompt
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+kb
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+project_path
+●●●●●● 1mm □
+kb
+●●●●●● 3mm □△
+ctx
+●●●●●● 2mm □
+project_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □
+tech_stack
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+project_path
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+s
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+s
+'node_modules'
+'__pycache__'
+'.git'
+'venv'
+●●●●●● 2mm □△
+rel
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+kb
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+files
+●●●●●● 1mm □△
+rel
+●●●●●● 2mm □△
+ext
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.py'
+tech_stack
+●●●●●● 1mm □△
+'python'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.js'
+'.jsx'
+tech_stack
+●●●●●● 1mm □△
+'javascript'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.ts'
+'.tsx'
+tech_stack
+●●●●●● 1mm □△
+'typescript'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ext
+'.html'
+tech_stack
+●●●●●● 1mm □△
+'html'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+'.css'
+tech_stack
+●●●●●● 1mm □△
+'css'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+files
+50
+observations
+'file_count'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+observations
+'tech_stack'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+tech_stack
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+target
+●●●●●● 1mm □
+_get_kb
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+ctx
+●●●●●● 2mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+target
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+3000
+ctx
+●●●●●● 1mm □
+content
+observations
+'current_file_lines'
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+observations
+'learned_patterns'
+●●●●●● 1mm □
+observations
+'episodic'
+●●●●●● 1mm □
+observations
+'procedures'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+item
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+inp
+●●●●●● 1mm □
+item
+●●●●●● 1mm □△
+'input'
+●●●●●● 2mm □△
+''
+100
+ctx
+●●●●●● 1mm □△
+'input'
+'trust'
+inp
+100
+item
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+observations
+'learned_patterns'
+●●●●●● 1mm □△
+'input'
+'trust'
+inp
+50
+item
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ep
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observations
+'episodic'
+●●●●●● 1mm □△
+'problem'
+'action'
+'outcome'
+'trust'
+ep
+●●●●●● 1mm □△
+'problem'
+●●●●●● 2mm □△
+''
+80
+ep
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+''
+80
+ep
+●●●●●● 1mm □△
+'outcome'
+●●●●●● 2mm □△
+''
+80
+ep
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+observations
+'procedures'
+●●●●●● 1mm □△
+'name'
+'goal'
+'trust'
+'success'
+p
+●●●●●● 1mm □△
+'name'
+''
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'goal'
+●●●●●● 2mm □△
+''
+80
+p
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+'success_rate'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+genesis.realtime
+●●●●●● 2mm □△○
+get_realtime_engine
+get_realtime_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+query_context
+query_causal
+magma_ctx
+●●●●●● 1mm □
+query_context
+●●●●●● 1mm □△
+ctx
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+magma_ctx
+observations
+'magma_context'
+●●●●●● 1mm □
+magma_ctx
+300
+●●●●●● 2mm □
+observations
+'prompt_type'
+'bug_fix'
+causal
+●●●●●● 1mm □
+query_causal
+●●●●●● 1mm □△
+ctx
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+causal
+observations
+'causal_insight'
+●●●●●● 1mm □
+causal
+200
+Exception
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fc_results
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+ctx
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fc_results
+observations
+'flash_cache_refs'
+●●●●●● 1mm □
+'name'
+'uri'
+'trust'
+r
+●●●●●● 1mm □△
+'source_name'
+''
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'source_uri'
+''
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'trust_score'
+0
+●●●●●● 2mm □△
+r
+fc_results
+5
+Exception
+observations
+'approach'
+●●●●●● 1mm □
+observations
+'prompt_type'
+'code_generation'
+'bug_fix'
+'direct'
+'analytical'
+ctx
+●●●●●● 1mm □
+observations
+ctx
+●●●●●● 1mm □△
+'ooda'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'ooda'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'OODA: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_ambiguity
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+known
+●●●●●● 1mm □
+inferred
+●●●●●● 1mm □
+assumed
+●●●●●● 1mm □
+unknown
+●●●●●● 1mm □
+known
+●●●●●● 1mm □△
+'prompt'
+ctx
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+known
+●●●●●● 1mm □△
+'project'
+ctx
+●●●●●● 2mm □△
+●●●●●● 3mm □
+unknown
+●●●●●● 1mm □△
+'project'
+'No project folder specified'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+known
+●●●●●● 1mm □△
+'file'
+ctx
+●●●●●● 2mm □△
+●●●●●● 3mm □
+assumed
+●●●●●● 1mm □△
+'file'
+'No specific file — will create new'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'tech_stack'
+●●●●●● 2mm □△
+known
+●●●●●● 1mm □△
+'tech_stack'
+', '
+●●●●●● 1mm □△
+ctx
+'tech_stack'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+assumed
+●●●●●● 1mm □△
+'tech_stack'
+'Assumed from prompt context'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'file_count'
+0
+●●●●●● 2mm □△
+0
+known
+●●●●●● 1mm □△
+'project_state'
+ctx
+'file_count'
+' files exist'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+inferred
+●●●●●● 1mm □△
+'project_state'
+'Empty or new project'
+●●●●●● 2mm □△
+prompt_lower
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+implicit_refs
+●●●●●● 1mm □
+keyword
+'the database'
+'the api'
+'the server'
+'the model'
+'the config'
+'the auth'
+●●●●●● 2mm □
+keyword
+prompt_lower
+found
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+1
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+ctx
+●●●●●● 2mm □△
+●●●●●● 2mm □
+found
+known
+●●●●●● 1mm □△
+'reference'
+"'"
+keyword
+"' found in project"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+assumed
+●●●●●● 1mm □△
+'reference'
+"'"
+keyword
+"' referenced but not found in project"
+●●●●●● 2mm □△
+●●●●●● 3mm □
+implicit_refs
+●●●●●● 1mm □△
+keyword
+●●●●●● 2mm □△
+has_blocking
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unknown
+●●●●●● 2mm □△
+0
+ctx
+●●●●●● 1mm □△
+'approach'
+●●●●●● 2mm □△
+'analytical'
+consensus_resolution
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+has_blocking
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unknown
+●●●●●● 2mm □△
+2
+●●●●●● 3mm □△○
+cognitive.circuit_breaker
+●●●●●● 2mm □△○
+enter_loop
+exit_loop
+●●●●●● 2mm □
+enter_loop
+●●●●●● 1mm □△
+'cognitive_consensus'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.consensus_engine
+●●●●●● 2mm □△○
+run_consensus
+_check_model_available
+available
+●●●●●● 1mm □
+m
+m
+'qwen'
+'reasoning'
+_check_model_available
+●●●●●● 1mm □△
+m
+●●●●●● 2mm □△
+●●●●●● 2mm □
+available
+unknowns_text
+●●●●●● 1mm □
+', '
+●●●●●● 1mm □△
+k
+': '
+v
+k
+v
+unknown
+●●●●●● 2mm □△
+cr
+●●●●●● 1mm □
+run_consensus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cr
+●●●●●● 1mm □△
+'passed'
+●●●●●● 2mm □△
+consensus_resolution
+●●●●●● 1mm □
+cr
+500
+u_key
+u_val
+unknown
+inferred
+●●●●●● 1mm □△
+u_key
+'[consensus] '
+consensus_resolution
+100
+●●●●●● 2mm □△
+exit_loop
+●●●●●● 1mm □△
+'cognitive_consensus'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □
+'known'
+'inferred'
+'assumed'
+'unknown'
+'implicit_refs'
+'has_blocking'
+'consensus_resolution'
+'known_count'
+'assumed_count'
+'unknown_count'
+known
+inferred
+assumed
+unknown
+implicit_refs
+has_blocking
+consensus_resolution
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+known
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+assumed
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+unknown
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'ambiguity'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'ambiguity'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'Ambiguity: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_invariants
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+violations
+●●●●●● 1mm □
+warnings
+●●●●●● 1mm □
+●●●●●● 2mm □
+'ooda'
+ctx
+warnings
+●●●●●● 1mm □△
+'ooda_incomplete: OODA observation not completed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'has_blocking'
+●●●●●● 2mm □△
+violations
+●●●●●● 1mm □△
+'blocking_unknowns: Cannot proceed with unresolved unknowns'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'assumed_count'
+0
+●●●●●● 2mm □△
+3
+warnings
+●●●●●● 1mm □△
+'many_assumptions: '
+ctx
+'assumed_count'
+' assumptions made'
+●●●●●● 2mm □△
+prompt_lower
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+prompt_lower
+w
+'delete'
+'remove'
+'drop'
+'destroy'
+'overwrite'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'irreversible_action: Prompt involves potentially irreversible operation'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+5
+warnings
+●●●●●● 1mm □△
+'vague_prompt: Prompt may be too vague for deterministic output'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+prompt_lower
+w
+'all files'
+'entire'
+'everything'
+'whole project'
+'refactor all'
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □△
+'large_blast_radius: Operation affects many files'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+2000
+warnings
+●●●●●● 1mm □△
+'complex_request: Very long prompt — consider breaking into smaller tasks'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'approach'
+●●●●●● 2mm □△
+'direct'
+ctx
+●●●●●● 1mm □△
+'assumed_count'
+0
+●●●●●● 2mm □△
+2
+warnings
+●●●●●● 1mm □△
+'low_optionality: Direct approach with many assumptions — consider alternatives'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'period'
+●●●●●● 2mm □△
+'late_night'
+warnings
+●●●●●● 1mm □△
+'off_hours: Running during off-hours — outputs should be reviewed'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'delete'
+prompt_lower
+'deploy'
+prompt_lower
+warnings
+●●●●●● 1mm □△
+'needs_simulation: Destructive/deployment action — simulate first'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'valid'
+'violations'
+'warnings'
+'violation_count'
+'warning_count'
+'checked'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+0
+violations
+warnings
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+violations
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+warnings
+●●●●●● 2mm □△
+12
+ctx
+●●●●●● 1mm □△
+'invariants'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'invariants'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'Invariants: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_trust_pre
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+trust_threshold
+●●●●●● 1mm □
+0.6
+●●●●●● 2mm □
+ctx
+ctx
+●●●●●● 1mm □
+p
+p
+ctx
+p
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+trust_threshold
+ctx
+'threshold'
+●●●●●● 1mm □
+trust_threshold
+ctx
+'patterns_after_filter'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'trust_pre'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'trust_pre'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'TrustPre: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_generate
+●●●●●● 1mm □△
+self
+ctx
+use_kimi
+●●●●●● 2mm □△
+PipelineContext
+●●●●●● 3mm △
+●●●●●● 2mm □
+use_kimi
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_kimi_client
+client
+●●●●●● 1mm □
+get_kimi_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+●●●●●● 3mm □
+task_type
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'prompt_type'
+●●●●●● 2mm □△
+'code_generation'
+'bug_fix'
+'refactor'
+'testing'
+'code'
+'reason'
+●●●●●● 3mm □
+client
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+task_type
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.agent_rules_api
+●●●●●● 2mm □△○
+get_agent_rules_context
+agent_rules
+●●●●●● 1mm □
+get_agent_rules_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+agent_rules
+ctx
+●●●●●● 1mm □
+ctx
+''
+●●●●●● 3mm ○
+agent_rules
+Exception
+enriched
+●●●●●● 1mm □
+ctx
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'tech_stack'
+●●●●●● 2mm □△
+enriched
+'\n[Tech stack: '
+', '
+●●●●●● 1mm □△
+ctx
+'tech_stack'
+●●●●●● 2mm □△
+']'
+●●●●●● 2mm □
+ctx
+enriched
+'\n[Current file context:\n'
+ctx
+2000
+']'
+●●●●●● 2mm □
+ctx
+enriched
+'\n['
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+' learned patterns available]'
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'episodic'
+●●●●●● 2mm □△
+enriched
+'\n[Past experiences: '
+'; '
+●●●●●● 1mm □△
+e
+'problem'
+50
+●●●●●● 3mm ○
+'→'
+●●●●●● 3mm ○
+e
+'outcome'
+30
+e
+ctx
+'episodic'
+2
+●●●●●● 2mm □△
+']'
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'procedures'
+●●●●●● 2mm □△
+enriched
+'\n[Known skills: '
+', '
+●●●●●● 1mm □△
+p
+'name'
+p
+ctx
+'procedures'
+3
+●●●●●● 2mm □△
+']'
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'warnings'
+●●●●●● 2mm □△
+enriched
+'\n[Warnings: '
+'; '
+●●●●●● 1mm □△
+ctx
+'warnings'
+3
+●●●●●● 2mm □△
+']'
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'magma_context'
+●●●●●● 2mm □△
+enriched
+'\n[Memory context: '
+ctx
+'magma_context'
+500
+']'
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'causal_insight'
+●●●●●● 2mm □△
+enriched
+'\n[Causal insight: '
+ctx
+'causal_insight'
+']'
+messages
+●●●●●● 1mm □
+'role'
+'content'
+'user'
+enriched
+●●●●●● 2mm □
+ctx
+messages
+●●●●●● 1mm □△
+0
+'role'
+'content'
+'system'
+ctx
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'generate'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'generate'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'Generate: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_contradiction
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+issues
+●●●●●● 1mm □
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'tech_stack'
+●●●●●● 2mm □△
+stack
+●●●●●● 1mm □
+ctx
+'tech_stack'
+●●●●●● 2mm □
+'python'
+stack
+'const '
+ctx
+'function '
+ctx
+'def '
+ctx
+issues
+●●●●●● 1mm □△
+'language_mismatch: Python project but output looks like JavaScript'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'javascript'
+stack
+'def '
+ctx
+'function '
+ctx
+issues
+●●●●●● 1mm □△
+'language_mismatch: JavaScript project but output looks like Python'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+retriever
+●●●●●● 1mm □
+DocumentRetriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunks
+●●●●●● 1mm □
+retriever
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+chunk
+chunks
+existing_text
+●●●●●● 1mm □
+chunk
+●●●●●● 1mm □△
+'text'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+output_lower
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+chunk
+●●●●●● 1mm □△
+'score'
+0
+●●●●●● 2mm □△
+0.85
+●●●●●● 2mm □
+'not '
+existing_text
+'not '
+output_lower
+200
+issues
+●●●●●● 1mm □△
+'semantic_contradiction: Output may contradict existing document (similarity '
+chunk
+'score'
+'.0%'
+')'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □△○
+re
+imports
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'(?:from|import)\\s+([\\w.]+)'
+ctx
+●●●●●● 2mm □△
+imp
+imports
+10
+top_module
+●●●●●● 1mm □
+imp
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+stdlib
+●●●●●● 1mm □
+'os'
+'sys'
+'json'
+'datetime'
+'typing'
+'pathlib'
+'re'
+'logging'
+'collections'
+'functools'
+'itertools'
+'math'
+'hashlib'
+'uuid'
+'time'
+'abc'
+'dataclasses'
+'enum'
+'copy'
+'io'
+'subprocess'
+'threading'
+'asyncio'
+'contextlib'
+'traceback'
+'unittest'
+'pytest'
+common_packages
+●●●●●● 1mm □
+'fastapi'
+'pydantic'
+'sqlalchemy'
+'requests'
+'numpy'
+'pandas'
+'flask'
+'django'
+'react'
+'express'
+'next'
+●●●●●● 2mm □
+top_module
+stdlib
+top_module
+common_packages
+●●●●●● 2mm □
+ctx
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+top_module
+f
+f
+ctx
+●●●●●● 2mm □△
+issues
+●●●●●● 1mm □△
+"unresolved_import: '"
+imp
+"' not found in project or standard library"
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'checked'
+'issues'
+'issue_count'
+'semantic_check'
+●●●●●● 3mm □△○
+issues
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+0
+'performed'
+'clean'
+ctx
+●●●●●● 1mm □△
+'contradiction'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'contradiction'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'Contradiction: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_hallucination
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+●●●●●● 2mm □△○
+re
+file_refs
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[\\w/]+\\.\\w{1,4}'
+ctx
+●●●●●● 2mm □△
+project_file_set
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+hallucinated_refs
+●●●●●● 1mm □
+verified_refs
+●●●●●● 1mm □
+ref
+file_refs
+20
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+ref
+pf
+pf
+project_file_set
+●●●●●● 2mm □△
+verified_refs
+●●●●●● 1mm □△
+ref
+●●●●●● 2mm □△
+●●●●●● 1mm △
+ref
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+1
+ref
+●●●●●● 1mm □△
+'0.'
+●●●●●● 2mm □△
+ref
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+hallucinated_refs
+●●●●●● 1mm □△
+ref
+●●●●●● 2mm □△
+grounding_score
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hallucinated_refs
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.15
+contradiction_score
+●●●●●● 1mm □
+1.0
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm □△
+'issue_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+0.2
+quality_score
+●●●●●● 1mm □
+0.7
+●●●●●● 2mm □
+'def '
+ctx
+'class '
+ctx
+'function '
+ctx
+quality_score
+0.1
+●●●●●● 2mm □
+'TODO'
+ctx
+'FIXME'
+ctx
+quality_score
+0.1
+●●●●●● 2mm □
+'error'
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'handle'
+ctx
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+quality_score
+0.05
+trust_check
+●●●●●● 1mm □
+0.5
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+sys_trust
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust_check
+●●●●●● 1mm □
+sys_trust
+●●●●●● 1mm □△
+'system_trust'
+50
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+100
+Exception
+internal_score
+●●●●●● 1mm □
+0.5
+db
+●●●●●● 1mm □
+_get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+db
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+docs
+●●●●●● 1mm □
+db
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+"SELECT COUNT(*) FROM documents WHERE status='completed'"
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+internal_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.9
+0.4
+●●●●●● 3mm ○
+docs
+●●●●●● 2mm □△
+0.01
+●●●●●● 2mm □△
+Exception
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+structural_score
+●●●●●● 1mm □
+0.7
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+10
+structural_score
+●●●●●● 1mm □
+0.2
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+50
+structural_score
+●●●●●● 1mm □
+0.8
+●●●●●● 2mm □
+'```'
+ctx
+structural_score
+0.1
+weights
+●●●●●● 1mm □
+0.25
+0.15
+0.15
+0.15
+0.15
+0.15
+scores
+●●●●●● 1mm □
+grounding_score
+contradiction_score
+quality_score
+trust_check
+internal_score
+structural_score
+confidence
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1
+s
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+w
+s
+●●●●●● 3mm □
+●●●●●● 1mm □△
+weights
+scores
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+kimi_verification
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_enhanced
+●●●●●● 2mm □△○
+get_kimi_enhanced
+kimi
+●●●●●● 1mm □
+get_kimi_enhanced
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kimi_result
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+ctx
+500
+ctx
+2000
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kimi_result
+●●●●●● 1mm □△
+'kimi_available'
+●●●●●● 2mm □△
+kimi_verification
+●●●●●● 1mm □
+kimi_result
+●●●●●● 2mm □
+kimi_result
+●●●●●● 1mm □△
+'verified'
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+confidence
+●●●●●● 3mm ○
+0.1
+●●●●●● 2mm □△
+●●●●●● 1mm △
+kimi_result
+●●●●●● 1mm □△
+'issues'
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.1
+confidence
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □
+'verified'
+'confidence'
+'grounded'
+'verified_refs'
+'hallucinated_refs'
+'kimi_verification'
+'layers'
+confidence
+0.5
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+confidence
+2
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+hallucinated_refs
+●●●●●● 2mm □△
+0
+verified_refs
+10
+hallucinated_refs
+10
+kimi_verification
+'1_grounding'
+'2_contradiction'
+'3_quality'
+'4_trust'
+'5_internal'
+'6_structural'
+'7_cross_model'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+grounding_score
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+contradiction_score
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+quality_score
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+trust_check
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+internal_score
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+structural_score
+2
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+kimi_verification
+kimi_verification
+●●●●●● 1mm □△
+'confidence'
+0
+●●●●●● 2mm □△
+0
+2
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'hallucination'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'hallucination'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'Hallucination: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_trust_post
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+engine
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'prompt_type'
+●●●●●● 2mm □△
+'question'
+'deterministic'
+'llm'
+●●●●●● 2mm □
+ctx
+source
+●●●●●● 1mm □
+'internal'
+component_id
+●●●●●● 1mm □
+'pipeline_'
+ctx
+●●●●●● 1mm □△
+'prompt_type'
+'general'
+●●●●●● 2mm □△
+comp_score
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+adjustment
+●●●●●● 1mm □
+0
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'grounded'
+●●●●●● 2mm □△
+adjustment
+10
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'issue_count'
+0
+●●●●●● 2mm □△
+0
+adjustment
+5
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'valid'
+●●●●●● 2mm □△
+adjustment
+5
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'has_blocking'
+●●●●●● 2mm □△
+adjustment
+5
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+0
+adjustment
+5
+comp_score
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+100
+comp_score
+●●●●●● 3mm ○
+adjustment
+●●●●●● 2mm □△
+verification_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+comp_score
+80
+ctx
+verification_result
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+comp_score
+●●●●●● 3mm □△
+100
+2
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'component_trust'
+'trend'
+'needs_verification'
+'needs_remediation'
+'remediation_type'
+'verification_level'
+'verification_result'
+'chunk_scores'
+comp_score
+comp_score
+comp_score
+comp_score
+comp_score
+verification_result
+●●●●●● 1mm □△
+'verification_level'
+'none'
+●●●●●● 2mm □△
+verification_result
+'id'
+'score'
+'source'
+c
+c
+c
+c
+comp_score
+10
+ctx
+●●●●●● 1mm □△
+'trust_post'
+●●●●●● 2mm □△
+Exception
+score
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'grounded'
+●●●●●● 2mm □△
+score
+0.2
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'issue_count'
+0
+●●●●●● 2mm □△
+0
+score
+0.15
+●●●●●● 2mm □
+ctx
+●●●●●● 1mm □△
+'valid'
+●●●●●● 2mm □△
+score
+0.1
+ctx
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+score
+2
+●●●●●● 2mm □△
+1.0
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'trust_post'
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'TrustPost: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_stage_genesis
+●●●●●● 1mm □△
+self
+ctx
+●●●●●● 2mm □△
+PipelineContext
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+ctx
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □△
+'genesis'
+●●●●●● 2mm □△
+Exception
+ctx
+●●●●●● 1mm □△
+'genesis'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FeedbackLoop
+'Records outcomes and updates learning memory.'
+●●●●●● 1mm □
+record_outcome
+●●●●●● 1mm □△
+genesis_key
+prompt
+output
+outcome
+correction
+trust_delta
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+0
+"\n        Record the outcome of a pipeline generation via unified memory.\n        outcome: 'positive', 'negative', 'failure'\n        "
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+'positive'
+'negative'
+'failure'
+0.8
+0.3
+0.1
+●●●●●● 1mm □△
+outcome
+0.5
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trust_delta
+source
+●●●●●● 1mm □
+'cognitive_pipeline'
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+outcome
+'positive'
+trust
+0.8
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.magma_bridge
+●●●●●● 2mm □△○
+ingest
+store_pattern
+store_decision
+store_procedure
+ingest
+●●●●●● 1mm □△
+outcome
+': '
+prompt
+200
+' → '
+output
+200
+●●●●●● 2mm □△
+●●●●●● 2mm □
+outcome
+'positive'
+store_pattern
+●●●●●● 1mm □△
+'successful_generation'
+prompt
+200
+●●●●●● 2mm □△
+store_decision
+●●●●●● 1mm □△
+'generate'
+'code'
+'Successfully generated: '
+prompt
+100
+●●●●●● 2mm □△
+●●●●●● 1mm △
+outcome
+'negative'
+store_pattern
+●●●●●● 1mm □△
+'failed_generation'
+prompt
+100
+' → correction: '
+correction
+correction
+100
+'none'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+outcome
+'positive'
+trust
+0.8
+store_procedure
+●●●●●● 1mm □△
+'Learned: '
+prompt
+50
+prompt
+200
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FEEDBACK] Recorded '
+outcome
+' outcome, trust='
+trust
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FEEDBACK] Failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+get_relevant_patterns
+●●●●●● 1mm □△
+prompt
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Get high-trust patterns via unified memory.'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+rows
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'input'
+'expected'
+'actual'
+'trust'
+'type'
+r
+●●●●●● 1mm □△
+'input'
+●●●●●● 2mm □△
+''
+200
+r
+●●●●●● 1mm □△
+'expected'
+●●●●●● 2mm □△
+''
+200
+''
+r
+●●●●●● 1mm □△
+'trust'
+0
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+'type'
+''
+●●●●●● 2mm □△
+r
+rows
+Exception
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □
+_classify_prompt
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+lower
+●●●●●● 1mm □
+prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'delete all'
+'remove all'
+'drop '
+'destroy'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'destructive'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'fix '
+'bug'
+'error'
+'debug'
+'broken'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'bug_fix'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'test '
+'tests '
+'spec '
+'assert'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'testing'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'refactor'
+'improve'
+'optimize'
+'clean up'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'refactor'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'explain'
+'what does'
+'how does'
+'why '
+'describe'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'question'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'write'
+'create'
+'build'
+'implement'
+'code'
+'make'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'code_generation'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+w
+lower
+w
+'delete'
+'remove'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'destructive'
+●●●●●● 3mm ○
+'general'
+●●●●●● 1mm ○

@@ -1,0 +1,242 @@
+## verify_grace_os_stage3.py
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TaskType
+GENERAL
+●●●●●● 1mm □
+'general'
+●●●●●● 2mm △
+LLMOrchestrator
+●●●●●● 2mm △
+MCPClient
+mock_llm_mod
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_llm_mod
+●●●●●● 1mm □
+TaskType
+mock_llm_mod
+●●●●●● 1mm □
+LLMOrchestrator
+sys
+'llm_orchestrator.llm_orchestrator'
+●●●●●● 1mm □
+mock_llm_mod
+mock_mcp_mod
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_mcp_mod
+●●●●●● 1mm □
+MCPClient
+sys
+'grace_mcp.client'
+●●●●●● 1mm □
+mock_mcp_mod
+●●●●●● 3mm □△○
+grace_os.kernel.message_bus
+●●●●●● 2mm □△○
+MessageBus
+●●●●●● 3mm □△○
+grace_os.kernel.layer_registry
+●●●●●● 2mm □△○
+LayerRegistry
+●●●●●● 3mm □△○
+grace_os.kernel.session_manager
+●●●●●● 2mm □△○
+SessionManager
+●●●●●● 3mm □△○
+grace_os.layers.l2_planning.planning_layer
+●●●●●● 2mm □△○
+PlanningLayer
+●●●●●● 3mm □△○
+grace_os.layers.l6_codegen.codegen_layer
+●●●●●● 2mm □△○
+CodegenLayer
+●●●●●● 3mm □△○
+grace_os.layers.l7_testing.testing_layer
+●●●●●● 2mm □△○
+TestingLayer
+●●●●●● 2mm △
+MockLLM
+●●●●●● 1mm □
+execute_task
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 2mm △
+Result
+success
+●●●●●● 3mm △
+content
+●●●●●● 1mm ○
+audit_trail
+●●●●●● 1mm □△
+dataclass
+●●●●●● 2mm □
+'Decompose'
+prompt
+content
+●●●●●● 1mm □
+'[{"id": "t1", "description": "Write hello world", "type": "codegen"}]'
+●●●●●● 3mm □
+content
+●●●●●● 1mm □
+"print('hello world')"
+●●●●●● 3mm ○
+Result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MockMCP
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'MockMCP: Called '
+tool_name
+' with '
+arguments
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'content'
+●●●●●● 3mm □△○
+'Tool call successful'
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'GraceBootstrap'
+●●●●●● 2mm □△
+bus
+●●●●●● 1mm □
+MessageBus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+registry
+●●●●●● 1mm □
+LayerRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+llm
+●●●●●● 1mm □
+MockLLM
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mcp
+●●●●●● 1mm □
+MockMCP
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+l2
+●●●●●● 1mm □
+PlanningLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+l6
+●●●●●● 1mm □
+CodegenLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+l7
+●●●●●● 1mm □
+TestingLayer
+●●●●●● 1mm □△
+bus
+registry
+llm
+mcp
+●●●●●● 2mm □△
+l2
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+l6
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+l7
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Kernel and Layers initialized and running.'
+●●●●●● 2mm □△
+session_mgr
+●●●●●● 1mm □
+SessionManager
+●●●●●● 1mm □△
+bus
+registry
+●●●●●● 2mm □△
+trace_id
+●●●●●● 1mm □
+session_mgr
+●●●●●● 1mm □△
+'Create a hello world script.'
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+session_mgr
+●●●●●● 1mm □△
+trace_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Final Session Status: '
+status
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+asyncio
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

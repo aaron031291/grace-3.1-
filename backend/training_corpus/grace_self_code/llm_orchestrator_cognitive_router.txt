@@ -1,0 +1,281 @@
+## cognitive_router.py
+'\nCognitive Router — Pilar 1 of the Qwen Manifesto\nDynamically routes tasks based on deterministic trust scores and risk levels.\n- High-trust/High-complexity tasks -> Opus (High trust cognitive reasoning)\n- Low-trust/Low-complexity tasks -> Qwen (Fast, parallelizable execution)\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+get_llm_for_task
+●●●●●● 3mm □△○
+llm_orchestrator.multi_llm_client
+●●●●●● 2mm □△○
+TaskType
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+HIGH_TRUST_THRESHOLD
+●●●●●● 1mm □
+80.0
+MEDIUM_TRUST_THRESHOLD
+●●●●●● 1mm □
+60.0
+●●●●●● 2mm △
+CognitiveRouter
+'\n    Dynamically routes workloads between models based on:\n    a) The complexity/risk of the task.\n    b) The established deterministic Trust Score of the component/model.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+trust_engine
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+TrustEngine
+●●●●●● 2mm □
+●●●●●● 2mm □
+trust_engine
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+TrustEngine
+●●●●●● 1mm □
+TE
+●●●●●● 3mm △
+●●●●●● 1mm □
+TE
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_engine
+●●●●●● 1mm □
+delegate_task
+●●●●●● 1mm □△
+self
+prompt
+task_type
+component_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+TaskType
+●●●●●● 1mm ○
+'general_orchestrator'
+'\n        Routes the task to the most appropriate model based on trust and complexity.\n        '
+logger
+●●●●●● 1mm □△
+"[CognitiveRouter] Delegating task for component '"
+component_id
+"'. Type: "
+task_type
+●●●●●● 2mm □△
+component_score
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+current_trust
+●●●●●● 1mm □
+50.0
+●●●●●● 2mm □
+component_score
+current_trust
+●●●●●● 1mm □
+component_score
+logger
+●●●●●● 1mm □△
+"[CognitiveRouter] Component '"
+component_id
+"' has Deterministic Trust Score: "
+current_trust
+'.2f'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 2mm □△
+current_trust
+MEDIUM_TRUST_THRESHOLD
+model_provider
+●●●●●● 1mm □
+'opus'
+logger
+●●●●●● 1mm □△
+'[CognitiveRouter] Routing to High-Trust Model (Opus) due to high complexity or low component trust.'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model_provider
+●●●●●● 1mm □
+'ollama'
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+'[CognitiveRouter] Routing to Fast/Low-Trust Model (Qwen) for parallelizable execution.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_provider
+'ollama'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+_ollama_with_model
+client
+●●●●●● 1mm □
+_ollama_with_model
+●●●●●● 1mm □△
+'qwen3:14b'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_provider
+'ollama'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_type
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+response
+task_type
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'model_used'
+'output'
+'routed_trust_score'
+●●●●●● 3mm □△○
+model_provider
+response
+current_trust
+Exception
+logger
+●●●●●● 1mm □△
+'[CognitiveRouter] Failed to delegate task: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+'model_used'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+model_provider
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_is_high_risk_task
+●●●●●● 1mm □△
+self
+task_type
+●●●●●● 2mm □△
+TaskType
+'Determines if a task requires deep cognitive reasoning and high safety.'
+high_risk_types
+●●●●●● 1mm □
+TaskType
+TaskType
+TaskType
+TaskType
+●●●●●● 3mm ○
+task_type
+high_risk_types
+●●●●●● 3mm △
+●●●●●● 1mm □
+_should_cross_validate
+●●●●●● 1mm □△
+self
+task_type
+●●●●●● 2mm □△
+TaskType
+"Determines if a fast model's output should be validated by the heavyweight model."
+●●●●●● 3mm ○
+task_type
+TaskType
+●●●●●● 3mm △
+●●●●●● 1mm □
+_cross_validate_with_opus
+●●●●●● 1mm □△
+self
+original_prompt
+qwen_output
+task_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+TaskType
+"\n        Pipes Qwen's output to Opus for a deterministic/logical check.\n        "
+logger
+●●●●●● 1mm □△
+'[CognitiveRouter] Initiating Cross-Model Validation Pipeline (Opus validating Qwen).'
+●●●●●● 2mm □△
+opus_client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+validation_prompt
+●●●●●● 1mm □
+"You are the senior validation node. A lighter model generated the following response to this prompt: '"
+original_prompt
+"'.\n\nOUTPUT TO VALIDATE:\n"
+qwen_output
+'\n\nIdentify any logical flaws, hallucinations, or unsafe syntax. If it is correct, return the original text. If flawed, return the corrected text.'
+validated_response
+●●●●●● 1mm □
+opus_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+validated_response
+Exception
+logger
+●●●●●● 1mm □△
+'[CognitiveRouter] Cross-reference validation failed: '
+e
+'. Returning original output.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+qwen_output
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_cognitive_router
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+CognitiveRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+CognitiveRouter

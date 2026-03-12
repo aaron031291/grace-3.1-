@@ -1,0 +1,568 @@
+## genesis_keys_connector.py
+'\nGenesis Keys Connector - Universal Tracking Integration\n\nConnects Genesis Keys system to Layer 1 message bus for:\n- Automatic key creation on ingestion\n- User contribution tracking\n- Cross-component provenance\n'
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+ComponentType
+Message
+get_message_bus
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKeysConnector
+"\n    Connects Genesis Keys to Layer 1 message bus.\n\n    Autonomous Actions:\n    1. File ingested → Auto-create Genesis Key\n    2. Learning created → Auto-create learning Genesis Key\n    3. User contribution → Track in user's Genesis profile\n    4. Version control commit → Link to Genesis Keys\n    "
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+kb_path
+message_bus
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+kb_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] Registered with message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register all autonomous actions for Genesis Keys.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] ⭐ Registered 3 autonomous actions'
+●●●●●● 2mm □△
+Message
+'Handle file ingestion - auto-create Genesis Key.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_type'
+●●●●●● 2mm □△
+document_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'document_id'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] 🤖 Created Genesis Key: '
+genesis_key_id
+' for file: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'Handle learning creation - auto-create Genesis Key.'
+learning_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'learning_id'
+●●●●●● 2mm □△
+experience_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'experience_type'
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key_id
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] ✓ Existing Genesis Key: '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] 🤖 Created Genesis Key: '
+genesis_key_id
+' for learning: '
+learning_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Message
+'Handle user contribution - track in Genesis profile.'
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+contribution_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'contribution_type'
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] 🤖 User contribution: '
+user_id
+' ('
+contribution_type
+') → '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers for other components.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] 🔧 Registered 3 request handlers'
+●●●●●● 2mm □△
+Message
+'Handle request to create Genesis Key for a file.'
+file_path
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+file_type
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'file_type'
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_create_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+_create_key
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] ✓ Created file Genesis Key: '
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_key_id'
+'file_path'
+'created'
+genesis_key_id
+file_path
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+'Handle request for Genesis Key details.'
+genesis_key_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_key
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+_get_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key
+●●●●●● 3mm ○
+'error'
+'Genesis Key not found: '
+genesis_key_id
+●●●●●● 3mm ○
+'genesis_key_id'
+'key_type'
+'created_at'
+'immutable'
+genesis_key
+genesis_key
+genesis_key
+genesis_key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+Message
+"Handle request for user's Genesis Key contributions."
+user_id
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_contributions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+GenesisKey
+●●●●●● 1mm □△
+'"user_id": "'
+user_id
+'"'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+keys
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+_get_contributions
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'user_id'
+'total_contributions'
+'genesis_keys'
+user_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+'genesis_key_id'
+'key_type'
+'created_at'
+key
+key
+key
+key
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+keys
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Subscribe to events from other components.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] 📡 Subscribed to 1 event topic'
+●●●●●● 2mm □△
+Message
+'Handle version control commit - link Genesis Keys.'
+commit_hash
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'commit_hash'
+●●●●●● 2mm □△
+affected_files
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'affected_files'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] 📦 Commit created: '
+commit_hash
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+affected_files
+●●●●●● 2mm □△
+' files)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_create_genesis_key
+●●●●●● 1mm □△
+self
+key_type
+entity_type
+entity_id
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Create a new Genesis Key.'
+timestamp
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+hash_input
+●●●●●● 1mm □
+key_type
+'-'
+entity_type
+'-'
+entity_id
+'-'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+hash_input
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+genesis_key_id
+●●●●●● 1mm □
+'GK-'
+key_type
+'-'
+entity_type
+'-'
+timestamp
+'-'
+key_hash
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+genesis_key
+●●●●●● 1mm □
+GenesisKey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+genesis_key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+genesis_key_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+create_genesis_keys_connector
+●●●●●● 1mm □△
+session
+kb_path
+message_bus
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Layer1MessageBus
+●●●●●● 2mm □
+'Create and initialize Genesis Keys connector.'
+connector
+●●●●●● 1mm □
+GenesisKeysConnector
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+kb_path
+message_bus
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[GENESIS-KEYS-CONNECTOR] ✓ Initialized and connected to message bus'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+connector
+GenesisKeysConnector

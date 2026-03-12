@@ -1,0 +1,2544 @@
+## intelligent_cicd_orchestrator.py
+'\nIntelligent CI/CD Orchestrator\n==============================\nThe BRAIN that connects all autonomous systems with the CI/CD pipeline.\n\nThis orchestrator provides:\n1. CLOSED-LOOP FEEDBACK: Production metrics → Learning → Test selection → Deployment\n2. INTELLIGENT TEST SELECTION: ML-based test prioritization\n3. AUTONOMOUS PIPELINE TRIGGERING: Self-triggering based on system state\n4. GENESIS KEY INTEGRATION: Full traceability across all CI/CD operations\n5. WEBHOOK EVENT PROCESSING: Real-time event-driven automation\n6. SELF-HEALING INTEGRATION: Auto-healing triggered by CI/CD failures\n\nArchitecture:\n    ┌─────────────────────────────────────────────────────────────────────┐\n    │                  INTELLIGENT CI/CD ORCHESTRATOR                      │\n    ├─────────────────────────────────────────────────────────────────────┤\n    │                                                                      │\n    │  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐  │\n    │  │   Adaptive   │    │  Autonomous  │    │    Intelligent      │  │\n    │  │    CI/CD     │ ←→ │   Triggers   │ ←→ │   Test Selector     │  │\n    │  └──────────────┘    └──────────────┘    └──────────────────────┘  │\n    │         ↑                   ↑                       ↑              │\n    │         │                   │                       │              │\n    │         ↓                   ↓                       ↓              │\n    │  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐  │\n    │  │  Autonomous  │    │   Webhook    │    │   Learning Memory    │  │\n    │  │   Healing    │ ←→ │  Processor   │ ←→ │     Integration      │  │\n    │  └──────────────┘    └──────────────┘    └──────────────────────┘  │\n    │         ↑                   ↑                       ↑              │\n    │         └───────────────────┴───────────────────────┘              │\n    │                             ↓                                       │\n    │                    ┌──────────────┐                                 │\n    │                    │ Genesis Keys │                                 │\n    │                    │  (Tracking)  │                                 │\n    │                    └──────────────┘                                 │\n    │                                                                      │\n    └─────────────────────────────────────────────────────────────────────┘\n\nGRACE can autonomously:\n- Monitor production health and trigger CI/CD based on anomalies\n- Select optimal tests to run based on code changes and historical data\n- Trigger healing actions when pipelines fail\n- Learn from CI/CD outcomes to improve future decisions\n- Create and track Genesis Keys for all operations\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Optional
+Any
+Tuple
+Callable
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm □△○
+statistics
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+IntelligenceMode
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Intelligence level for CI/CD decisions.'
+RULE_BASED
+●●●●●● 1mm □
+'rule_based'
+ML_ASSISTED
+●●●●●● 1mm □
+'ml_assisted'
+FULLY_AUTONOMOUS
+●●●●●● 1mm □
+'fully_autonomous'
+●●●●●● 2mm △
+TriggerSource
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Sources that can trigger CI/CD actions.'
+GIT_PUSH
+●●●●●● 1mm □
+'git_push'
+GIT_PR
+●●●●●● 1mm □
+'git_pull_request'
+WEBHOOK
+●●●●●● 1mm □
+'webhook'
+SCHEDULED
+●●●●●● 1mm □
+'scheduled'
+ANOMALY_DETECTED
+●●●●●● 1mm □
+'anomaly_detected'
+HEALTH_DEGRADATION
+●●●●●● 1mm □
+'health_degradation'
+LEARNING_OPPORTUNITY
+●●●●●● 1mm □
+'learning_opportunity'
+USER_REQUEST
+●●●●●● 1mm □
+'user_request'
+AUTONOMOUS_DECISION
+●●●●●● 1mm □
+'autonomous_decision'
+HEALING_RESPONSE
+●●●●●● 1mm □
+'healing_response'
+●●●●●● 2mm △
+TestSelectionStrategy
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Strategies for intelligent test selection.'
+ALL_TESTS
+●●●●●● 1mm □
+'all_tests'
+CHANGED_ONLY
+●●●●●● 1mm □
+'changed_only'
+IMPACT_ANALYSIS
+●●●●●● 1mm □
+'impact_analysis'
+FAILURE_PREDICTION
+●●●●●● 1mm □
+'failure_prediction'
+RISK_BASED
+●●●●●● 1mm □
+'risk_based'
+BANDIT_SELECTION
+●●●●●● 1mm □
+'bandit_selection'
+●●●●●● 2mm △
+PipelineDecision
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Decisions the orchestrator can make.'
+TRIGGER_FULL
+●●●●●● 1mm □
+'trigger_full'
+TRIGGER_PARTIAL
+●●●●●● 1mm □
+'trigger_partial'
+DEFER
+●●●●●● 1mm □
+'defer'
+SKIP
+●●●●●● 1mm □
+'skip'
+REQUEST_APPROVAL
+●●●●●● 1mm □
+'request_approval'
+SANDBOX_FIRST
+●●●●●● 1mm □
+'sandbox_first'
+●●●●●● 2mm △
+TestMetrics
+'Metrics for a test or test suite.'
+test_id
+●●●●●● 1mm ○
+pass_rate
+●●●●●● 3mm ○
+1.0
+avg_duration
+●●●●●● 3mm ○
+0.0
+failure_recency
+●●●●●● 3mm ○
+0.0
+coverage_value
+●●●●●● 3mm ○
+0.0
+flakiness_score
+●●●●●● 3mm ○
+0.0
+last_run
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+total_runs
+●●●●●● 2mm ○
+0
+priority_score
+●●●●●● 3mm ○
+0.5
+dataclass
+●●●●●● 2mm △
+WebhookEvent
+'A webhook event from GitHub/GitLab/etc.'
+●●●●●● 1mm △
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+event_type
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+genesis_key
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+processed
+●●●●●● 3mm △
+●●●●●● 1mm □
+actions_triggered
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ClosedLoopMetric
+'Metric for closed-loop feedback.'
+metric_name
+●●●●●● 1mm ○
+value
+●●●●●● 3mm ○
+timestamp
+●●●●●● 1mm ○
+source
+●●●●●● 1mm ○
+trend
+●●●●●● 1mm ○
+'stable'
+alert_threshold
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+IntelligentDecision
+'An intelligent CI/CD decision with full context.'
+decision_id
+●●●●●● 1mm ○
+decision
+PipelineDecision
+confidence
+●●●●●● 3mm ○
+reasoning
+●●●●●● 1mm ○
+intelligence_mode
+IntelligenceMode
+trigger_source
+TriggerSource
+test_strategy
+TestSelectionStrategy
+tests_selected
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+pipeline_modifications
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+genesis_key
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+IntelligentTestSelector
+'\n    ML-based intelligent test selection.\n\n    Uses:\n    - Multi-armed bandit for test prioritization\n    - Historical failure patterns\n    - Code change impact analysis\n    - Test coverage data\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+TestMetrics
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+record_test_result
+●●●●●● 1mm □△
+self
+test_id
+passed
+duration
+coverage
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+0.0
+'Record a test result for learning.'
+●●●●●● 2mm □
+test_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+test_id
+●●●●●● 1mm □
+TestMetrics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+test_id
+alpha
+●●●●●● 1mm □
+0.2
+metrics
+●●●●●● 1mm □
+alpha
+●●●●●● 2mm □△
+passed
+1.0
+0.0
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△
+alpha
+●●●●●● 2mm □△
+metrics
+metrics
+●●●●●● 1mm □
+alpha
+●●●●●● 2mm □△
+duration
+●●●●●● 3mm ○
+1
+●●●●●● 1mm □△
+alpha
+●●●●●● 2mm □△
+metrics
+●●●●●● 2mm □
+passed
+metrics
+●●●●●● 1mm □
+1.0
+●●●●●● 3mm □
+metrics
+0.9
+●●●●●● 2mm □
+coverage
+0
+metrics
+●●●●●● 1mm □
+coverage
+metrics
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metrics
+1
+●●●●●● 2mm □
+test_id
+●●●●●● 3mm △
+●●●●●● 3mm △
+test_id
+●●●●●● 1mm □
+'successes'
+'failures'
+0
+0
+●●●●●● 2mm □
+passed
+●●●●●● 3mm △
+test_id
+'successes'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+test_id
+'failures'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_id
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_compute_priority
+●●●●●● 1mm □△
+self
+test_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Compute test priority score.'
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+●●●●●● 3mm ○
+priority
+●●●●●● 1mm □
+0.0
+priority
+0.35
+●●●●●● 2mm □△
+metrics
+priority
+0.25
+●●●●●● 2mm □△
+metrics
+priority
+0.2
+●●●●●● 2mm □△
+1.0
+●●●●●● 1mm □△
+metrics
+duration_penalty
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+metrics
+●●●●●● 3mm □△
+60.0
+●●●●●● 2mm □△
+priority
+0.1
+●●●●●● 2mm □△
+1.0
+●●●●●● 1mm □△
+duration_penalty
+arms
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_id
+'successes'
+'failures'
+0
+0
+●●●●●● 2mm □△
+total
+●●●●●● 1mm □
+arms
+'successes'
+●●●●●● 3mm ○
+arms
+'failures'
+●●●●●● 2mm □
+total
+0
+exploration_bonus
+●●●●●● 1mm □
+2
+●●●●●● 2mm □△
+total
+●●●●●● 3mm □○
+0.5
+●●●●●● 3mm □△
+total
+priority
+0.1
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+exploration_bonus
+●●●●●● 2mm □△
+●●●●●● 3mm □
+priority
+0.1
+metrics
+●●●●●● 1mm □
+priority
+●●●●●● 1mm □
+select_tests
+●●●●●● 1mm □△
+self
+strategy
+changed_files
+max_tests
+time_budget
+●●●●●● 2mm □△
+TestSelectionStrategy
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Select tests to run based on strategy.\n\n        Returns list of test IDs ordered by priority.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[TestSelector] No test metrics available, returning all tests'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_tests
+●●●●●● 1mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+selected
+●●●●●● 1mm □
+●●●●●● 2mm □
+strategy
+TestSelectionStrategy
+selected
+●●●●●● 1mm □
+t
+t
+all_tests
+●●●●●● 1mm △
+strategy
+TestSelectionStrategy
+●●●●●● 2mm □
+changed_files
+selected
+●●●●●● 1mm □
+t
+t
+all_tests
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+t
+f
+●●●●●● 2mm □△
+f
+changed_files
+●●●●●● 2mm □△
+●●●●●● 2mm □
+strategy
+TestSelectionStrategy
+selected
+●●●●●● 1mm □
+t
+t
+all_tests
+t
+0.3
+remaining
+●●●●●● 1mm □
+t
+t
+all_tests
+t
+selected
+selected
+●●●●●● 1mm □△
+t
+t
+remaining
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+3
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+remaining
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+10
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+strategy
+TestSelectionStrategy
+selected
+●●●●●● 1mm □
+t
+t
+all_tests
+t
+0.5
+t
+0.2
+●●●●●● 2mm □
+strategy
+TestSelectionStrategy
+selected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+all_tests
+max_tests
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_tests
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+strategy
+TestSelectionStrategy
+●●●●●● 2mm □
+changed_files
+selected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+changed_files
+all_tests
+●●●●●● 2mm □△
+●●●●●● 3mm □
+selected
+●●●●●● 1mm □
+t
+t
+all_tests
+●●●●●● 2mm □
+max_tests
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+selected
+●●●●●● 2mm □△
+max_tests
+selected
+●●●●●● 1mm □
+selected
+max_tests
+●●●●●● 2mm □
+time_budget
+selected
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+selected
+time_budget
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'strategy'
+'tests_selected'
+'total_tests'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+strategy
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+selected
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_tests
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[TestSelector] Selected '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+selected
+●●●●●● 2mm □△
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_tests
+●●●●●● 2mm □△
+' tests using '
+strategy
+' strategy'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+selected
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_test_matches_file
+●●●●●● 1mm □△
+self
+test_id
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Check if a test is related to a file.'
+test_name
+●●●●●● 1mm □
+test_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'test_'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'_test'
+''
+●●●●●● 2mm □△
+file_name
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+test_name
+file_name
+file_name
+test_name
+●●●●●● 3mm △
+●●●●●● 1mm □
+_bandit_select
+●●●●●● 1mm □△
+self
+tests
+n
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+TestMetrics
+●●●●●● 2mm ○
+'Select tests using Thompson sampling (multi-armed bandit).'
+●●●●●● 2mm □△○
+random
+scores
+●●●●●● 1mm □
+test
+tests
+arms
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test
+'successes'
+'failures'
+1
+1
+●●●●●● 2mm □△
+alpha
+●●●●●● 1mm □
+arms
+'failures'
+●●●●●● 3mm ○
+1
+beta
+●●●●●● 1mm □
+arms
+'successes'
+●●●●●● 3mm ○
+1
+score
+●●●●●● 1mm □
+random
+●●●●●● 1mm □△
+alpha
+beta
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □△
+test
+score
+●●●●●● 2mm □△
+scores
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+test_id
+test_id
+_
+scores
+n
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_impact_based_selection
+●●●●●● 1mm □△
+self
+changed_files
+all_tests
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+TestMetrics
+'Select tests based on code change impact.'
+selected
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_path
+changed_files
+path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+test
+all_tests
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test
+file_path
+●●●●●● 2mm □△
+selected
+●●●●●● 1mm □△
+test
+●●●●●● 2mm □△
+module
+●●●●●● 1mm □
+path
+test
+all_tests
+●●●●●● 2mm □
+module
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+selected
+●●●●●● 1mm □△
+test
+●●●●●● 2mm □△
+test
+all_tests
+5
+selected
+●●●●●● 1mm □△
+test
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+selected
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_apply_time_budget
+●●●●●● 1mm □△
+self
+test_ids
+budget
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Filter tests to fit within time budget.'
+result
+●●●●●● 1mm □
+total_time
+●●●●●● 1mm □
+0.0
+test_id
+test_ids
+metrics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+test_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+●●●●●● 2mm □
+total_time
+●●●●●● 3mm ○
+metrics
+budget
+result
+●●●●●● 1mm □△
+test_id
+●●●●●● 2mm □△
+total_time
+metrics
+●●●●●● 3mm ○
+result
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm △
+WebhookEventProcessor
+'\n    Process webhook events from CI/CD providers.\n\n    Converts external events into internal triggers and actions.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+WebhookEvent
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+register_handler
+●●●●●● 1mm □△
+self
+event_type
+handler
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm △○
+WebhookEvent
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Register a handler for an event type.'
+●●●●●● 2mm □
+event_type
+●●●●●● 3mm △
+●●●●●● 3mm △
+event_type
+●●●●●● 1mm □
+●●●●●● 3mm △
+event_type
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+WebhookEvent
+'Process a single webhook event.'
+logger
+●●●●●● 1mm □△
+'[WebhookProcessor] Processing '
+event
+' from '
+event
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+'event_id'
+'event_type'
+'handlers_invoked'
+'actions_triggered'
+event
+event
+0
+handlers
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+handlers
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+handler
+handlers
+result
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+results
+'actions_triggered'
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'actions'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+'handlers_invoked'
+1
+Exception
+logger
+●●●●●● 1mm □△
+'[WebhookProcessor] Handler error: '
+e
+●●●●●● 2mm □△
+event
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+event
+●●●●●● 1mm □
+results
+'actions_triggered'
+●●●●●● 3mm △
+1
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+parse_webhook_event
+●●●●●● 1mm □△
+self
+payload
+source
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'webhook'
+'Parse a git host / CI webhook event (generic).'
+event_type
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'action'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'pull_request'
+payload
+event_type
+●●●●●● 1mm □
+'pull_request.'
+payload
+●●●●●● 1mm □△
+'action'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'pusher'
+payload
+event_type
+●●●●●● 1mm □
+'push'
+●●●●●● 2mm □
+'workflow_run'
+payload
+event_type
+●●●●●● 1mm □
+'workflow_run.'
+payload
+●●●●●● 1mm □△
+'action'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'check_run'
+payload
+event_type
+●●●●●● 1mm □
+'check_run.'
+payload
+●●●●●● 1mm □△
+'action'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+WebhookEvent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+WebhookEvent
+●●●●●● 1mm □
+_generate_event_id
+●●●●●● 1mm □△
+self
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Generate unique event ID.'
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+category
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate Genesis Key for webhook event.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'webhook:'
+category
+':'
+action
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'GK-webhook-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 2mm △
+ClosedLoopFeedback
+'\n    Closed-loop feedback system connecting:\n    Production Metrics → Learning System → CI/CD Decisions\n\n    This enables the system to:\n    - Learn from production issues\n    - Improve test selection based on real-world failures\n    - Automatically trigger pipelines when issues are detected\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+ClosedLoopMetric
+●●●●●● 3mm △
+●●●●●● 1mm □
+2.0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+record_metric
+●●●●●● 1mm □△
+self
+name
+value
+source
+alert_threshold
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'production'
+●●●●●● 2mm □
+'Record a metric from production or CI.'
+●●●●●● 2mm □
+name
+●●●●●● 3mm △
+●●●●●● 3mm △
+name
+●●●●●● 1mm □
+recent
+●●●●●● 1mm □
+●●●●●● 3mm △
+name
+●●●●●● 3mm △
+name
+10
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent
+●●●●●● 2mm □△
+3
+recent_avg
+●●●●●● 1mm □
+statistics
+●●●●●● 1mm □△
+m
+m
+recent
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+recent_avg
+●●●●●● 2mm □△
+1.1
+trend
+●●●●●● 1mm □
+'degrading'
+●●●●●● 1mm △
+value
+recent_avg
+●●●●●● 2mm □△
+0.9
+trend
+●●●●●● 1mm □
+'improving'
+trend
+●●●●●● 1mm □
+'stable'
+●●●●●● 3mm □
+trend
+●●●●●● 1mm □
+'stable'
+metric
+●●●●●● 1mm □
+ClosedLoopMetric
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+name
+●●●●●● 1mm □△
+metric
+●●●●●● 2mm □△
+●●●●●● 3mm △
+name
+●●●●●● 1mm □
+●●●●●● 3mm △
+name
+100
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+value
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+metric
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+metric
+●●●●●● 1mm □
+_is_anomaly
+●●●●●● 1mm □△
+self
+name
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Detect if a value is anomalous using statistical analysis.'
+history
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+history
+●●●●●● 2mm □△
+10
+●●●●●● 3mm ○
+●●●●●● 1mm □
+values
+●●●●●● 1mm □
+m
+m
+history
+30
+mean
+●●●●●● 1mm □
+statistics
+●●●●●● 1mm □△
+values
+●●●●●● 2mm □△
+stdev
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+values
+●●●●●● 2mm □△
+1
+statistics
+●●●●●● 1mm □△
+values
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+stdev
+0
+●●●●●● 3mm ○
+●●●●●● 1mm □
+z_score
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+value
+●●●●●● 1mm □△
+mean
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+stdev
+●●●●●● 3mm ○
+z_score
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+_trigger_anomaly_response
+●●●●●● 1mm □△
+self
+name
+metric
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ClosedLoopMetric
+'Trigger autonomous response to anomaly.'
+logger
+●●●●●● 1mm □△
+'[ClosedLoop] Anomaly detected in '
+name
+': '
+metric
+' (trend: '
+metric
+')'
+●●●●●● 2mm □△
+action
+●●●●●● 1mm □
+'timestamp'
+'metric_name'
+'metric_value'
+'action'
+'recommendation'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+name
+metric
+'trigger_investigation'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+metric
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_recommendation
+●●●●●● 1mm □△
+self
+name
+metric
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+ClosedLoopMetric
+'Get recommendation based on metric type.'
+●●●●●● 2mm □
+'error'
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Trigger targeted tests for error-prone components'
+●●●●●● 1mm △
+'latency'
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Run performance regression tests'
+●●●●●● 2mm □
+'memory'
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Run memory leak detection tests'
+●●●●●● 1mm △
+'coverage'
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+metric
+'degrading'
+●●●●●● 3mm ○
+'Run full test suite to identify coverage gaps'
+●●●●●● 3mm ○
+'Monitor and investigate if trend continues'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_trigger_recommendation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get recommended trigger based on feedback loop analysis.'
+recent_actions
+●●●●●● 1mm □
+●●●●●● 3mm △
+5
+●●●●●● 2mm □
+recent_actions
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+recent_actions
+●●●●●● 2mm □△
+2
+●●●●●● 3mm ○
+TriggerSource
+name
+metrics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metrics
+metrics
+1
+'degrading'
+●●●●●● 3mm ○
+TriggerSource
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+TriggerSource
+●●●●●● 2mm △
+IntelligentCICDOrchestrator
+'\n    The central brain connecting all autonomous systems with CI/CD.\n\n    Integrates:\n    - Adaptive CI/CD (trust scoring, KPIs)\n    - Autonomous triggers (Genesis Keys)\n    - Intelligent test selection (ML-based)\n    - Webhook processing (event-driven)\n    - Closed-loop feedback (production → learning)\n    - Self-healing (failure response)\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+intelligence_mode
+●●●●●● 2mm □△
+IntelligenceMode
+IntelligenceMode
+●●●●●● 3mm △
+●●●●●● 1mm □
+intelligence_mode
+●●●●●● 3mm △
+●●●●●● 1mm □
+IntelligentTestSelector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+WebhookEventProcessor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ClosedLoopFeedback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+IntelligentDecision
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Initialized with mode='
+intelligence_mode
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_default_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register default webhook event handlers.'
+WebhookEvent
+'Handle push events.'
+payload
+●●●●●● 1mm □
+event
+branch
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'ref'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'refs/heads/'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+branch
+'main'
+'develop'
+●●●●●● 3mm ○
+'actions'
+'type'
+'pipeline'
+'reason'
+'priority'
+'trigger_pipeline'
+'ci'
+'Push to '
+branch
+branch
+'main'
+'high'
+'medium'
+●●●●●● 3mm ○
+'actions'
+●●●●●● 1mm □○
+WebhookEvent
+'Handle pull request events.'
+payload
+●●●●●● 1mm □
+event
+action
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+action
+'opened'
+'synchronize'
+●●●●●● 3mm ○
+'actions'
+'type'
+'pipeline'
+'test_strategy'
+'reason'
+'trigger_pipeline'
+'pr-check'
+'impact_analysis'
+'PR '
+action
+●●●●●● 3mm ○
+'actions'
+●●●●●● 1mm □○
+WebhookEvent
+'Handle workflow run failures.'
+payload
+●●●●●● 1mm □
+event
+●●●●●● 2mm □
+payload
+●●●●●● 1mm □△
+'action'
+●●●●●● 2mm □△
+'completed'
+conclusion
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'workflow_run'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'conclusion'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+conclusion
+'failure'
+●●●●●● 3mm ○
+'actions'
+'type'
+'reason'
+'healing_action'
+'trigger_healing'
+'Workflow failed'
+'investigate_failure'
+'type'
+'metric'
+'value'
+'update_feedback'
+'ci_failure_rate'
+1.0
+●●●●●● 3mm ○
+'actions'
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'push'
+handle_push
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'pull_request.opened'
+handle_pr
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'pull_request.synchronize'
+handle_pr
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'workflow_run.completed'
+handle_workflow_failure
+●●●●●● 2mm □△
+TriggerSource
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Make an intelligent decision about CI/CD pipeline execution.\n\n        Uses all sub-systems to make the best decision:\n        - Test selector for optimal test coverage\n        - Feedback loop for production insights\n        - Trust scores for safety\n        '
+decision_id
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'decision'
+trigger_source
+●●●●●● 2mm □△
+test_strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_source
+context
+●●●●●● 2mm □△
+selected_tests
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+feedback_recommendation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+IntelligenceMode
+decision
+confidence
+reasoning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_source
+context
+test_strategy
+feedback_recommendation
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 3mm △
+IntelligenceMode
+decision
+confidence
+reasoning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_source
+context
+test_strategy
+feedback_recommendation
+●●●●●● 2mm □△
+decision
+confidence
+reasoning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_source
+context
+●●●●●● 2mm □△
+intelligent_decision
+●●●●●● 1mm □
+IntelligentDecision
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision_id
+●●●●●● 1mm □
+intelligent_decision
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Decision: '
+decision
+' (confidence='
+confidence
+'.2%'
+', tests='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+selected_tests
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+intelligent_decision
+IntelligentDecision
+TriggerSource
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Determine optimal test selection strategy.'
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+TriggerSource
+●●●●●● 3mm ○
+TestSelectionStrategy
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+●●●●●● 3mm ○
+TestSelectionStrategy
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+●●●●●● 3mm ○
+TestSelectionStrategy
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'changed_files'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TestSelectionStrategy
+●●●●●● 2mm □
+context
+●●●●●● 1mm □△
+'fast_feedback'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+TestSelectionStrategy
+●●●●●● 3mm ○
+TestSelectionStrategy
+TestSelectionStrategy
+TriggerSource
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+TestSelectionStrategy
+●●●●●● 2mm □○
+TriggerSource
+'Make fully autonomous decision using LLM orchestration.'
+●●●●●● 3mm □△○
+llm_orchestrator.llm_orchestrator
+●●●●●● 2mm □△○
+get_llm_orchestrator
+orchestrator
+●●●●●● 1mm □
+get_llm_orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+prompt
+●●●●●● 1mm □
+'CI/CD Pipeline Decision Required\n\nTrigger: '
+trigger_source
+'\nTest Strategy: '
+test_strategy
+'\nFeedback Recommendation: '
+feedback_recommendation
+feedback_recommendation
+'None'
+'\nContext: '
+json
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+500
+'\n\nBased on this information, decide:\n1. Should we trigger the pipeline? (trigger_full, trigger_partial, defer, skip, sandbox_first)\n2. What\'s your confidence level? (0-100%)\n3. Brief reasoning (1-2 sentences)\n\nRespond in JSON format:\n{"decision": "...", "confidence": 85, "reasoning": "..."}'
+response
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+re
+json_match
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'\\{[\\s\\S]*\\}'
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □
+json_match
+result
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+json_match
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+decision
+●●●●●● 1mm □
+PipelineDecision
+●●●●●● 1mm □△
+result
+●●●●●● 1mm □△
+'decision'
+'trigger_full'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+confidence
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'confidence'
+70
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+100
+reasoning
+●●●●●● 1mm □
+result
+●●●●●● 1mm □△
+'reasoning'
+'LLM decision'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision
+confidence
+reasoning
+Exception
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] LLM decision failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_source
+context
+●●●●●● 2mm □△
+Tuple
+PipelineDecision
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+TriggerSource
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+TestSelectionStrategy
+●●●●●● 2mm □○
+TriggerSource
+'Make ML-assisted decision combining rules and ML insights.'
+base_decision
+base_confidence
+base_reasoning
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+trigger_source
+context
+●●●●●● 2mm □△
+●●●●●● 2mm □
+feedback_recommendation
+●●●●●● 2mm □
+feedback_recommendation
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.95
+base_confidence
+●●●●●● 3mm ○
+0.1
+●●●●●● 2mm □△
+base_reasoning
+' + Anomaly detected in production'
+●●●●●● 1mm △
+feedback_recommendation
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+base_confidence
+base_reasoning
+' + Health degradation detected'
+●●●●●● 2mm □
+test_strategy
+TestSelectionStrategy
+base_confidence
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+0.9
+base_confidence
+●●●●●● 3mm ○
+0.05
+●●●●●● 2mm □△
+base_reasoning
+' (prioritizing likely-to-fail tests)'
+●●●●●● 3mm ○
+base_decision
+base_confidence
+base_reasoning
+Tuple
+PipelineDecision
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_rule_based_decision
+●●●●●● 1mm □△
+self
+trigger_source
+context
+●●●●●● 2mm □△
+TriggerSource
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Make rule-based decision.'
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+0.85
+'Standard CI trigger from '
+trigger_source
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+0.7
+'Autonomous trigger requires sandbox validation'
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+0.75
+'Responding to '
+trigger_source
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+0.65
+'Healing action requires validation'
+●●●●●● 2mm □
+trigger_source
+TriggerSource
+●●●●●● 3mm ○
+PipelineDecision
+0.8
+'Scheduled pipeline run'
+●●●●●● 3mm ○
+PipelineDecision
+0.5
+'Unknown trigger source: '
+trigger_source
+Tuple
+PipelineDecision
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+IntelligentDecision
+'Execute a pipeline decision.'
+result
+●●●●●● 1mm □
+'decision_id'
+'genesis_key'
+'status'
+'pipeline_run_id'
+'sandbox_run_id'
+decision
+decision
+'pending'
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+genesis.adaptive_cicd
+●●●●●● 2mm □△○
+get_adaptive_cicd
+AdaptiveTriggerReason
+adaptive
+●●●●●● 1mm □
+get_adaptive_cicd
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+PipelineDecision
+trigger_result
+●●●●●● 1mm □
+adaptive
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'pipeline_run_id'
+●●●●●● 1mm □
+trigger_result
+●●●●●● 1mm □△
+'trigger_id'
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'triggered'
+●●●●●● 1mm △
+decision
+PipelineDecision
+trigger_result
+●●●●●● 1mm □
+adaptive
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'pipeline_run_id'
+●●●●●● 1mm □
+trigger_result
+●●●●●● 1mm □△
+'trigger_id'
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'triggered_partial'
+●●●●●● 2mm □
+decision
+PipelineDecision
+sandbox_result
+●●●●●● 1mm □
+adaptive
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'sandbox_run_id'
+●●●●●● 1mm □
+sandbox_result
+●●●●●● 1mm □△
+'sandbox_id'
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'sandbox_running'
+●●●●●● 1mm △
+decision
+PipelineDecision
+result
+'status'
+●●●●●● 1mm □
+'deferred'
+●●●●●● 2mm □
+decision
+PipelineDecision
+result
+'status'
+●●●●●● 1mm □
+'skipped'
+●●●●●● 1mm △
+decision
+PipelineDecision
+result
+'status'
+●●●●●● 1mm □
+'awaiting_approval'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'decision_id'
+'result'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision
+result
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Execution failed: '
+e
+●●●●●● 2mm □△
+result
+'status'
+●●●●●● 1mm □
+'failed'
+result
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+record_pipeline_outcome
+●●●●●● 1mm □△
+self
+decision_id
+success
+duration
+test_results
+coverage
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Record pipeline outcome for learning.'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+decision_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Decision '
+decision_id
+' not found'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+test_results
+test_id
+passed
+test_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'timestamp'
+'decision_id'
+'decision'
+'test_strategy'
+'tests_selected'
+'success'
+'duration'
+'outcome'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+decision_id
+decision
+decision
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+success
+duration
+success
+'positive'
+'negative'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Recorded outcome for '
+decision_id
+': '
+success
+'SUCCESS'
+'FAILURE'
+' in '
+duration
+'.1f'
+'s'
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Integrate with autonomous healing system on failure.'
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+healing
+●●●●●● 1mm □
+get_autonomous_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cycle_result
+●●●●●● 1mm □
+healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle_result
+'health_status'
+'healthy'
+'degraded'
+decision
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'healing_triggered'
+'healing_result'
+'ci_decision'
+●●●●●● 3mm □△○
+cycle_result
+asdict
+●●●●●● 1mm □△
+decision
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'healing_triggered'
+'healing_result'
+●●●●●● 1mm □
+cycle_result
+Exception
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Healing integration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'healing_triggered'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm ○
+'Integrate with Genesis Key trigger pipeline.'
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+trigger_pipeline
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+status
+'triggers_fired'
+0
+●●●●●● 3mm ○
+'genesis_integrated'
+'triggers_fired'
+'recursive_loops'
+●●●●●● 3mm □△○
+status
+'triggers_fired'
+status
+'recursive_loops_active'
+●●●●●● 3mm ○
+'genesis_integrated'
+'triggers_fired'
+●●●●●● 3mm □△○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'[IntelligentCICD] Genesis integration failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'genesis_integrated'
+'error'
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_generate_decision_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Generate unique decision ID.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'decision:'
+timestamp
+':'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hashlib
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_generate_genesis_key
+●●●●●● 1mm □△
+self
+category
+action
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Generate Genesis Key for CI/CD operations.'
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+'intelligent_cicd:'
+category
+':'
+action
+':'
+timestamp
+key_hash
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+●●●●●● 3mm ○
+'GK-icicd-'
+key_hash
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get orchestrator status.'
+●●●●●● 3mm ○
+'intelligence_mode'
+'decisions_made'
+'pipeline_runs'
+'test_metrics_tracked'
+'webhooks_processed'
+'feedback_metrics'
+'learning_examples'
+'auto_trigger_enabled'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_dashboard_data
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get comprehensive dashboard data.'
+●●●●●● 3mm ○
+'status'
+'recent_decisions'
+'test_metrics'
+'feedback_summary'
+'recent_pipeline_runs'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+d
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+10
+t
+asdict
+●●●●●● 1mm □△
+t
+●●●●●● 2mm □△
+t
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+name
+'latest'
+'trend'
+'count'
+metrics
+metrics
+1
+●●●●●● 2mm □
+metrics
+metrics
+1
+'unknown'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metrics
+●●●●●● 2mm □△
+name
+metrics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+10
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_intelligent_orchestrator
+●●●●●● 2mm □○
+IntelligentCICDOrchestrator
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_intelligent_cicd_orchestrator
+●●●●●● 1mm □△
+intelligence_mode
+●●●●●● 2mm □△
+IntelligenceMode
+IntelligenceMode
+'Get or create global intelligent CI/CD orchestrator.'
+●●●●●● 2mm □
+_intelligent_orchestrator
+●●●●●● 2mm □
+_intelligent_orchestrator
+●●●●●● 1mm □
+IntelligentCICDOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_intelligent_orchestrator
+IntelligentCICDOrchestrator

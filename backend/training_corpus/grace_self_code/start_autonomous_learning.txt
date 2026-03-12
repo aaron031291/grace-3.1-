@@ -1,0 +1,645 @@
+## start_autonomous_learning.py
+"\nGrace Autonomous Learning System - Startup Script\n\nThis script activates Grace's complete autonomous learning cycle:\n1. Learning Orchestrator (8 subagent processes)\n2. Genesis Key Trigger Pipeline\n3. Self-Healing System\n4. Mirror Self-Modeling\n5. Autonomous Ingestion Tracking\n\nUsage:\n    python start_autonomous_learning.py\n\nPress Ctrl+C to gracefully shutdown all processes.\n"
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+signal
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+get_db
+●●●●●● 3mm □△○
+cognitive.learning_subagent_system
+●●●●●● 2mm □△○
+LearningOrchestrator
+●●●●●● 3mm □△○
+genesis.autonomous_triggers
+●●●●●● 2mm □△○
+get_genesis_trigger_pipeline
+●●●●●● 3mm □△○
+cognitive.autonomous_healing_system
+●●●●●● 2mm □△○
+get_autonomous_healing
+TrustLevel
+●●●●●● 3mm □△○
+cognitive.mirror_self_modeling
+●●●●●● 2mm □△○
+get_mirror_system
+orchestrator
+●●●●●● 1mm □
+●●●●●● 2mm □
+trigger_pipeline
+●●●●●● 1mm □
+●●●●●● 2mm □
+healing_system
+●●●●●● 1mm □
+●●●●●● 2mm □
+mirror_system
+●●●●●● 1mm □
+●●●●●● 2mm □
+shutdown_requested
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+signal_handler
+●●●●●● 1mm □△
+sig
+frame
+●●●●●● 2mm □△
+'Handle Ctrl+C gracefully.'
+logger
+●●●●●● 1mm □△
+'\n[SHUTDOWN] Graceful shutdown requested...'
+●●●●●● 2mm □△
+shutdown_requested
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+initialize_systems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Initialize all autonomous learning systems.'
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'🚀 GRACE AUTONOMOUS LEARNING SYSTEM - INITIALIZATION'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[1/5] Initializing database connection...'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.config
+●●●●●● 2mm □△○
+DatabaseConfig
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+db_config
+●●●●●● 1mm □
+DatabaseConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+DatabaseConnection
+●●●●●● 1mm □△
+db_config
+●●●●●● 2mm □△
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+next
+●●●●●● 1mm □△
+get_db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Database connection established'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[2/5] Starting Learning Orchestrator...'
+●●●●●● 2mm □△
+knowledge_base_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □
+LearningOrchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Learning Orchestrator running with 8 subagents:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - 3 Study Agents (autonomous concept extraction)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - 2 Practice Agents (skill validation)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - 1 Mirror Agent (self-reflection)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - 1 Trust Scorer (confidence tracking)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - 1 Predictive Context Agent (pre-fetching)'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[3/5] Connecting Genesis Key Trigger Pipeline...'
+●●●●●● 2mm □△
+trigger_pipeline
+●●●●●● 1mm □
+get_genesis_trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Trigger Pipeline connected to Genesis Keys'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - File ingestion triggers autonomous learning'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Practice failures trigger gap-filling study'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - User queries trigger predictive prefetch'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[4/5] Activating Self-Healing System...'
+●●●●●● 2mm □△
+healing_system
+●●●●●● 1mm □
+get_autonomous_healing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Self-Healing System active'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Trust Level: MEDIUM_RISK_AUTO'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Autonomous healing enabled for safe actions'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Learning from healing outcomes enabled'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[5/5] Activating Mirror Self-Modeling...'
+●●●●●● 2mm □△
+mirror_system
+●●●●●● 1mm □
+get_mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Mirror System active'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Observing last 24 hours of operations'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Pattern detection threshold: 3 occurrences'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  - Self-awareness tracking enabled'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✅ ALL SYSTEMS OPERATIONAL'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △○
+●●●●●● 1mm □
+monitor_learning_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Monitor and display learning activity.'
+logger
+●●●●●● 1mm □△
+'\n🔄 AUTONOMOUS LEARNING CYCLE ACTIVE\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace is now autonomously:'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Learning from ingested files'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Practicing new skills'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Healing from failures'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Observing her own behavior'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  • Improving recursively\n'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Press Ctrl+C to shutdown gracefully...\n'
+●●●●●● 2mm □△
+cycle_count
+●●●●●● 1mm □
+0
+last_health_check
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_mirror_analysis
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutdown_requested
+time
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+cycle_count
+1
+current_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orchestrator
+stats
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cycle_count
+●●●●●● 2mm □○
+6
+0
+logger
+●●●●●● 1mm □△
+'[STATS] Tasks: '
+stats
+'total_submitted'
+' submitted, '
+stats
+'total_completed'
+' completed, Study queue: '
+stats
+'study_queue_size'
+', Practice queue: '
+stats
+'practice_queue_size'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+current_time
+●●●●●● 1mm □△
+last_health_check
+300
+logger
+●●●●●● 1mm □△
+'[HEALTH] Running periodic health check...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+healing_system
+cycle_result
+●●●●●● 1mm □
+healing_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[HEALTH] Status: '
+cycle_result
+'health_status'
+', Anomalies: '
+cycle_result
+'anomalies_detected'
+', Actions executed: '
+cycle_result
+'actions_executed'
+●●●●●● 2mm □△
+last_health_check
+●●●●●● 1mm □
+current_time
+●●●●●● 2mm □
+current_time
+●●●●●● 1mm □△
+last_mirror_analysis
+600
+logger
+●●●●●● 1mm □△
+'[MIRROR] Running self-modeling analysis...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mirror_system
+orchestrator
+self_model
+●●●●●● 1mm □
+mirror_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+improvement_result
+●●●●●● 1mm □
+mirror_system
+●●●●●● 1mm □△
+orchestrator
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MIRROR] Patterns: '
+self_model
+'behavioral_patterns'
+'total_detected'
+', Suggestions: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+self_model
+'improvement_suggestions'
+●●●●●● 2mm □△
+', Actions triggered: '
+improvement_result
+'actions_triggered'
+', Self-awareness: '
+self_model
+'self_awareness_score'
+'.2f'
+●●●●●● 2mm □△
+last_mirror_analysis
+●●●●●● 1mm □
+current_time
+KeyboardInterrupt
+Exception
+logger
+●●●●●● 1mm □△
+'[ERROR] Monitoring error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+shutdown_systems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Gracefully shutdown all systems.'
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'🛑 SHUTTING DOWN AUTONOMOUS LEARNING SYSTEM'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orchestrator
+logger
+●●●●●● 1mm □△
+'\n[1/3] Stopping Learning Orchestrator...'
+●●●●●● 2mm □△
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ All subagent processes stopped'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error stopping orchestrator: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trigger_pipeline
+logger
+●●●●●● 1mm □△
+'\n[2/3] Disconnecting Trigger Pipeline...'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+trigger_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ Pipeline stats: '
+status
+'triggers_fired'
+' triggers fired'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting trigger stats: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n[3/3] Final Statistics...'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+orchestrator
+stats
+●●●●●● 1mm □
+orchestrator
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total tasks submitted: '
+stats
+'total_submitted'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total tasks completed: '
+stats
+'total_completed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total study tasks: '
+stats
+'study_completed'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Total practice tasks: '
+stats
+'practice_completed'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error getting final stats: '
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✅ SHUTDOWN COMPLETE'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Main entry point.'
+signal
+●●●●●● 1mm □△
+signal
+signal_handler
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □
+initialize_systems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+monitor_learning_cycle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FATAL] Error during initialization: '
+e
+●●●●●● 2mm □△
+shutdown_requested
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+shutdown_systems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+Path
+●●●●●● 1mm □△
+'logs'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\n'
+'='
+●●●●●● 2mm □△
+80
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Grace Autonomous Learning System'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Started: '
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d %H:%M:%S'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+80
+'\n'
+●●●●●● 2mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△

@@ -1,0 +1,214 @@
+## test_url_detection.py
+"\nSimple standalone test for URL validator document detection.\nThis test doesn't require any dependencies.\n"
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 1mm □
+is_downloadable_document
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if URL points to a downloadable document for RAG.'
+document_extensions
+●●●●●● 1mm □
+'.pdf'
+'.doc'
+'.docx'
+'.txt'
+'.rtf'
+'.ppt'
+'.pptx'
+'.odp'
+'.xls'
+'.xlsx'
+'.csv'
+'.ods'
+'.epub'
+'.mobi'
+url_lower
+●●●●●● 1mm □
+url
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ext
+document_extensions
+●●●●●● 2mm □
+ext
+url_lower
+●●●●●● 2mm □
+url_lower
+●●●●●● 1mm □△
+ext
+●●●●●● 2mm □△
+ext
+'?'
+url_lower
+ext
+'#'
+url_lower
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Document URL Detection Test'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+test_cases
+●●●●●● 1mm □
+'https://example.com/document.pdf'
+●●●●●● 3mm □△○
+'PDF document'
+'https://example.com/presentation.pptx'
+●●●●●● 3mm □△○
+'PowerPoint presentation'
+'https://example.com/spreadsheet.xlsx'
+●●●●●● 3mm □△○
+'Excel spreadsheet'
+'https://example.com/file.docx'
+●●●●●● 3mm □△○
+'Word document'
+'https://example.com/data.csv'
+●●●●●● 3mm □△○
+'CSV file'
+'https://example.com/document.pdf?download=true'
+●●●●●● 3mm □△○
+'PDF with query params'
+'https://example.com/file.doc'
+●●●●●● 3mm □△○
+'Old Word format'
+'https://example.com/image.jpg'
+●●●●●● 1mm □
+'Image file'
+'https://example.com/video.mp4'
+●●●●●● 1mm □
+'Video file'
+'https://example.com/page.html'
+●●●●●● 1mm □
+'HTML page'
+'https://example.com/'
+●●●●●● 1mm □
+'Homepage'
+'https://example.com/archive.zip'
+●●●●●● 1mm □
+'Archive file'
+passed
+●●●●●● 1mm □
+0
+failed
+●●●●●● 1mm □
+0
+url
+expected
+description
+test_cases
+result
+●●●●●● 1mm □
+is_downloadable_document
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+result
+expected
+'✓'
+'✗'
+●●●●●● 2mm □
+result
+expected
+passed
+1
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' PASS: '
+description
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   URL: '
+url
+●●●●●● 2mm □△
+●●●●●● 3mm □
+failed
+1
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+' FAIL: '
+description
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   URL: '
+url
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'   Expected: '
+expected
+', Got: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Results: '
+passed
+' passed, '
+failed
+' failed'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+failed
+0
+0
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+exit
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

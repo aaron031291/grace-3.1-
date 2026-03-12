@@ -1,0 +1,342 @@
+## execution_registry.py
+'\nCentral execution registry — lightweight discovery and routing layer.\n\nRegisters brains, models, and components. Used for:\n- Discovery (list brains, actions, components)\n- No forced rewrite of call paths — call_brain and brain_api stay as-is.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+BrainEntry
+'Registered brain with its actions.'
+name
+●●●●●● 1mm ○
+actions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+ComponentEntry
+'Registered component.'
+name
+●●●●●● 1mm ○
+description
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+metrics
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ExecutionRegistry
+'Central registry of brains, models, components.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+BrainEntry
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ComponentEntry
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+register_brain
+●●●●●● 1mm □△
+self
+name
+actions
+description
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Register a brain and its actions.'
+●●●●●● 3mm △
+name
+●●●●●● 1mm □
+BrainEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+register_component
+●●●●●● 1mm □△
+self
+name
+description
+metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'Register a component.'
+●●●●●● 3mm △
+name
+●●●●●● 1mm □
+ComponentEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+register_model
+●●●●●● 1mm □△
+self
+name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Register a model (LLM, embedding, etc.).'
+●●●●●● 2mm □
+name
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+list_brains
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all registered brains with actions.'
+●●●●●● 3mm ○
+'name'
+'actions'
+'description'
+b
+b
+b
+b
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_components
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all registered components.'
+●●●●●● 3mm ○
+'name'
+'description'
+'metrics'
+c
+c
+c
+c
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+list_models
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List registered models.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_registry
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Full registry snapshot for inspection.'
+●●●●●● 3mm ○
+'brains'
+'components'
+'models'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_registry
+●●●●●● 2mm □○
+ExecutionRegistry
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global registry.'
+●●●●●● 2mm □
+_registry
+●●●●●● 2mm □
+_registry
+●●●●●● 1mm □
+ExecutionRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_registry
+ExecutionRegistry
+●●●●●● 1mm □
+init_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Initialize registry from known brains, components, models.\n    Call at app startup.\n    '
+r
+●●●●●● 1mm □
+get_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.brain_api_v2
+●●●●●● 2mm □△○
+_chat
+_files
+_govern
+_ai
+_system
+_data
+_tasks
+_code
+brains_map
+●●●●●● 1mm □
+'chat'
+'files'
+'govern'
+'ai'
+'system'
+'data'
+'tasks'
+'code'
+_chat
+'Chat, consensus, world model'
+_files
+'Files, docs, filing, categorization'
+_govern
+'Governance, approvals, KPIs'
+_ai
+'AI pipeline, learning, diagnostics'
+_system
+'System, runtime, health'
+_data
+'Data, retrieval, ingestion'
+_tasks
+'Tasks, planning'
+_code
+'Code, generate, projects'
+name
+factory
+desc
+brains_map
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handlers
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+factory
+●●●●●● 2mm □△
+factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+factory
+actions
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+handlers
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+handlers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+r
+●●●●●● 1mm □△
+name
+actions
+desc
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Registry: could not load brains: %s'
+e
+●●●●●● 2mm □△
+comp
+desc
+'rag'
+'RAG retrieval and chat with context'
+'ingestion'
+'Document ingestion'
+'learning'
+'Learning memory, patterns'
+'autonomous_loop'
+'Autonomous loop'
+'brain_orchestrator'
+'Multi-brain orchestration'
+r
+●●●●●● 1mm □△
+comp
+desc
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+r
+ExecutionRegistry
