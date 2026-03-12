@@ -1,0 +1,2045 @@
+## layer_integrations.py
+"\nMagma Memory - Deep Layer Integrations\n\nIntegrates Magma Memory with Grace's 4-layer cognitive architecture:\n- Layer 1: Message Bus connector for event-driven memory\n- Layer 2: Interpreter pattern memory for recurring issues\n- Layer 3: Judgement decision memory for precedent-based decisions\n- Layer 4: Action Router memory for learned procedures\n\nPlus Security integrations:\n- Genesis Keys: Full provenance tracking\n- Trust Scoring: Neural trust-aware retrieval\n- Governance: Constitutional memory enforcement\n"
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+List
+Any
+Optional
+Callable
+Tuple
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_executor
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MagmaComponentType
+●●●●●● 3mm □△
+Enum
+Enum
+'Magma-specific component types for Layer 1.'
+MAGMA_MEMORY
+●●●●●● 1mm □
+'magma_memory'
+MAGMA_GRAPHS
+●●●●●● 1mm □
+'magma_graphs'
+MAGMA_INFERENCE
+●●●●●● 1mm □
+'magma_inference'
+MAGMA_CONSOLIDATION
+●●●●●● 1mm □
+'magma_consolidation'
+●●●●●● 2mm △
+MagmaEvent
+'Event for Magma memory operations.'
+event_type
+●●●●●● 1mm ○
+payload
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source_layer
+●●●●●● 2mm ○
+1
+dataclass
+●●●●●● 2mm △
+MagmaMessageBusConnector
+'\n    Connects Magma Memory to Layer 1 Message Bus.\n\n    Provides:\n    - Automatic memory ingestion from events\n    - Graph-based context retrieval for queries\n    - Causal inference triggers\n    - Memory consolidation scheduling\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+message_bus
+auto_ingest
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+'\n        Initialize Magma connector for Layer 1.\n\n        Args:\n            magma_memory: MagmaMemory instance\n            message_bus: Layer1MessageBus instance (optional, uses global)\n            auto_ingest: Automatically ingest events into memory\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+●●●●●● 3mm △
+●●●●●● 1mm □
+auto_ingest
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] MagmaMessageBusConnector initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+connect
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Connect to message bus and register all handlers.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+get_message_bus
+ComponentType
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_message_bus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ComponentType
+ImportError
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Message bus not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Connected to Layer 1 Message Bus'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+_register_autonomous_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register autonomous actions triggered by events.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Registered '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+' autonomous actions'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_request_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register request handlers for other components.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Registered 4 request handlers'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_subscribe_to_events
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Subscribe to events from other components.'
+topics
+●●●●●● 1mm □
+'ingestion.file_processed'
+'rag.retrieval_complete'
+'cognitive.decision_made'
+'genesis_keys.key_created'
+'diagnostic.judgement_complete'
+'action_router.action_executed'
+topic
+topics
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Subscribed to '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topics
+●●●●●● 2mm □△
+' event topics'
+●●●●●● 2mm □△
+'Handle new learning experience - auto-ingest into Magma.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+payload
+●●●●●● 1mm □
+message
+content
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 3mm ○
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Auto-ingested learning: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' segments, '
+result
+' concepts'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Handle error detection - trigger causal inference.'
+payload
+●●●●●● 1mm □
+message
+error_type
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'error_type'
+'unknown'
+●●●●●● 2mm □△
+error_context
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'context'
+''
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+payload
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'What causes '
+error_type
+'? Context: '
+error_context
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Causal inference for error: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+' claims found'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Handle low activity period - run memory consolidation.'
+logger
+●●●●●● 1mm □△
+'[MAGMA-L1] Running background memory consolidation'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'consolidation'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Handle pattern detection - notify other systems.'
+payload
+●●●●●● 1mm □
+message
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Handle general system events - potentially ingest.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+topic
+●●●●●● 1mm □
+message
+payload
+●●●●●● 1mm □
+message
+ingestible_topics
+●●●●●● 1mm □
+'cognitive.decision_made'
+'action_router.action_executed'
+'diagnostic.judgement_complete'
+●●●●●● 2mm □
+topic
+ingestible_topics
+●●●●●● 3mm ○
+content_parts
+●●●●●● 1mm □
+'Event: '
+topic
+●●●●●● 2mm □
+'decision'
+payload
+content_parts
+●●●●●● 1mm □△
+'Decision: '
+payload
+'decision'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'action'
+payload
+content_parts
+●●●●●● 1mm □△
+'Action: '
+payload
+'action'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'result'
+payload
+content_parts
+●●●●●● 1mm □△
+'Result: '
+payload
+'result'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'reason'
+payload
+content_parts
+●●●●●● 1mm □△
+'Reason: '
+payload
+'reason'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+'. '
+●●●●●● 1mm □△
+content_parts
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'Handle memory query request.'
+query
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+max_results
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'max_results'
+10
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'results'
+'query'
+'id'
+'content'
+'score'
+'sources'
+r
+r
+r
+r
+r
+results
+query
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Handle context retrieval for LLM.'
+query
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+max_length
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'max_length'
+4000
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'context'
+'query'
+context
+query
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Handle causal inference request.'
+query
+●●●●●● 1mm □
+message
+●●●●●● 1mm □△
+'query'
+''
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_executor
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'query'
+'causal_claims'
+'causal_chains'
+query
+'cause'
+'effect'
+'relation'
+'confidence'
+'strength'
+claim
+claim
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+claim
+'value'
+●●●●●● 2mm □△
+claim
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+claim
+●●●●●● 2mm □△
+claim
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+claim
+'value'
+●●●●●● 2mm □△
+claim
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+claim
+●●●●●● 2mm □△
+claim
+result
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Handle statistics request.'
+●●●●●● 3mm ○
+'graphs'
+'consolidation_queue'
+name
+'nodes'
+'edges'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graph
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+graph
+●●●●●● 2mm □△
+name
+graph
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'consolidation'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+PatternMemoryEntry
+'A pattern stored in Magma for Layer 2.'
+pattern_id
+●●●●●● 1mm ○
+pattern_type
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+frequency
+●●●●●● 2mm ○
+first_seen
+datetime
+last_seen
+datetime
+affected_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+evidence_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+embedding_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+InterpreterPatternMemory
+'\n    Layer 2 Integration: Pattern memory for interpreters.\n\n    Stores and retrieves recurring patterns to improve pattern detection:\n    - Similar past patterns\n    - Pattern evolution over time\n    - Cross-pattern correlations\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+●●●●●● 2mm □△
+'\n        Initialize pattern memory.\n\n        Args:\n            magma_memory: MagmaMemory instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+PatternMemoryEntry
+logger
+●●●●●● 1mm □△
+'[MAGMA-L2] InterpreterPatternMemory initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store_pattern
+●●●●●● 1mm □△
+self
+pattern_type
+description
+confidence
+affected_components
+evidence
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Store a detected pattern in Magma memory.\n\n        Returns:\n            Pattern ID\n        '
+●●●●●● 2mm □△○
+uuid
+pattern_id
+●●●●●● 1mm □
+'pattern-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+content
+●●●●●● 1mm □
+'Pattern detected: '
+pattern_type
+'. '
+description
+' Confidence: '
+confidence
+'.2f'
+'. Affected: '
+', '
+●●●●●● 1mm □△
+affected_components
+●●●●●● 2mm □△
+'.'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+PatternMemoryEntry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+pattern_id
+●●●●●● 1mm □
+entry
+logger
+●●●●●● 1mm □△
+'[MAGMA-L2] Stored pattern: '
+pattern_id
+' ('
+pattern_type
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+pattern_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_similar_patterns
+●●●●●● 1mm □△
+self
+description
+pattern_type
+min_confidence
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.5
+5
+'\n        Find similar patterns from memory.\n\n        Args:\n            description: Pattern description to match\n            pattern_type: Optional filter by type\n            min_confidence: Minimum confidence threshold\n            top_k: Maximum results\n\n        Returns:\n            List of similar pattern entries\n        '
+query
+●●●●●● 1mm □
+'Pattern: '
+description
+●●●●●● 2mm □
+pattern_type
+query
+●●●●●● 1mm □
+pattern_type
+' pattern: '
+description
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+similar_patterns
+●●●●●● 1mm □
+result
+results
+metadata
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'pattern'
+stored_pattern_id
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'pattern_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+stored_pattern_id
+stored_pattern_id
+●●●●●● 3mm △
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+stored_pattern_id
+●●●●●● 2mm □
+entry
+min_confidence
+similar_patterns
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similar_patterns
+top_k
+●●●●●● 3mm □△
+PatternMemoryEntry
+●●●●●● 1mm □
+update_pattern_frequency
+●●●●●● 1mm □△
+self
+pattern_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Update pattern frequency when seen again.'
+●●●●●● 2mm □
+pattern_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+entry
+●●●●●● 1mm □
+●●●●●● 3mm △
+pattern_id
+entry
+1
+entry
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L2] Updated pattern frequency: '
+pattern_id
+' (now seen '
+entry
+' times)'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_pattern_evolution
+●●●●●● 1mm □△
+self
+pattern_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get pattern evolution over time.'
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+evolution
+●●●●●● 1mm □
+entry
+entry
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+entry
+pattern_type
+evolution
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+evolution
+●●●●●● 3mm □△
+PatternMemoryEntry
+●●●●●● 2mm △
+DecisionPrecedent
+'A past decision stored in Magma for Layer 3.'
+decision_id
+●●●●●● 1mm ○
+health_status
+●●●●●● 1mm ○
+recommended_action
+●●●●●● 1mm ○
+confidence
+●●●●●● 3mm ○
+risk_level
+●●●●●● 1mm ○
+context_summary
+●●●●●● 1mm ○
+outcome
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+outcome_success
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+JudgementDecisionMemory
+'\n    Layer 3 Integration: Decision memory for judgement.\n\n    Stores and retrieves past decisions to inform future judgements:\n    - Similar past situations\n    - Decision outcomes\n    - Risk precedents\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+●●●●●● 2mm □△
+'\n        Initialize decision memory.\n\n        Args:\n            magma_memory: MagmaMemory instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+DecisionPrecedent
+logger
+●●●●●● 1mm □△
+'[MAGMA-L3] JudgementDecisionMemory initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store_decision
+●●●●●● 1mm □△
+self
+health_status
+recommended_action
+confidence
+risk_level
+context_summary
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Store a judgement decision in Magma memory.\n\n        Returns:\n            Decision ID\n        '
+●●●●●● 2mm □△○
+uuid
+decision_id
+●●●●●● 1mm □
+'decision-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+content
+●●●●●● 1mm □
+'Judgement decision: '
+recommended_action
+'. Health: '
+health_status
+'. Risk: '
+risk_level
+'. Confidence: '
+confidence
+'.2f'
+'. Context: '
+context_summary
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+precedent
+●●●●●● 1mm □
+DecisionPrecedent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+decision_id
+●●●●●● 1mm □
+precedent
+logger
+●●●●●● 1mm □△
+'[MAGMA-L3] Stored decision: '
+decision_id
+' ('
+recommended_action
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+decision_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_precedents
+●●●●●● 1mm □△
+self
+health_status
+risk_level
+context
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'\n        Find similar past decisions as precedents.\n\n        Args:\n            health_status: Current health status\n            risk_level: Current risk level\n            context: Current context description\n            top_k: Maximum results\n\n        Returns:\n            List of relevant precedents\n        '
+query
+●●●●●● 1mm □
+'Decision for '
+health_status
+' health with '
+risk_level
+' risk. Context: '
+context
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+precedents
+●●●●●● 1mm □
+result
+results
+metadata
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'decision'
+decision_id
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'decision_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+decision_id
+decision_id
+●●●●●● 3mm △
+precedents
+●●●●●● 1mm □△
+●●●●●● 3mm △
+decision_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+precedents
+top_k
+●●●●●● 3mm □△
+DecisionPrecedent
+●●●●●● 1mm □
+record_outcome
+●●●●●● 1mm □△
+self
+decision_id
+outcome
+success
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Record the outcome of a past decision.'
+●●●●●● 2mm □
+decision_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+precedent
+●●●●●● 1mm □
+●●●●●● 3mm △
+decision_id
+precedent
+●●●●●● 1mm □
+outcome
+precedent
+●●●●●● 1mm □
+success
+outcome_content
+●●●●●● 1mm □
+'Decision outcome for '
+decision_id
+': '
+outcome
+'. Success: '
+success
+'. Original action: '
+precedent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+outcome_content
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L3] Recorded outcome for '
+decision_id
+': '
+success
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_success_rate
+●●●●●● 1mm □△
+self
+action_type
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get success rate for a specific action type.\n\n        Returns:\n            (success_rate, sample_count)\n        '
+relevant
+●●●●●● 1mm □
+p
+p
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+action_type
+p
+●●●●●● 2mm □
+●●●●●● 2mm □
+relevant
+●●●●●● 3mm ○
+0.5
+0
+successes
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+p
+relevant
+p
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+successes
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+relevant
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+relevant
+●●●●●● 2mm □△
+Tuple
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm △
+ActionProcedure
+'A learned procedure stored in Magma for Layer 4.'
+procedure_id
+●●●●●● 1mm ○
+action_type
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+description
+●●●●●● 1mm ○
+target_components
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+steps
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+success_rate
+●●●●●● 3mm ○
+times_used
+●●●●●● 2mm ○
+avg_duration_ms
+●●●●●● 3mm ○
+genesis_key_ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+last_used
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+ActionRouterMemory
+'\n    Layer 4 Integration: Action memory for the action router.\n\n    Stores and retrieves learned procedures and action outcomes:\n    - Successful healing procedures\n    - Action execution history\n    - Component-specific remediation patterns\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+●●●●●● 2mm □△
+'\n        Initialize action memory.\n\n        Args:\n            magma_memory: MagmaMemory instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+ActionProcedure
+logger
+●●●●●● 1mm □△
+'[MAGMA-L4] ActionRouterMemory initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+store_procedure
+●●●●●● 1mm □△
+self
+action_type
+name
+description
+target_components
+steps
+success
+duration_ms
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Store an executed procedure in Magma memory.\n\n        Returns:\n            Procedure ID\n        '
+●●●●●● 2mm □△○
+uuid
+procedure_id
+●●●●●● 1mm □
+'proc-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+12
+content
+●●●●●● 1mm □
+'Procedure: '
+name
+' ('
+action_type
+'). '
+description
+' Target: '
+', '
+●●●●●● 1mm □△
+target_components
+●●●●●● 2mm □△
+'. Steps: '
+'; '
+●●●●●● 1mm □△
+steps
+●●●●●● 2mm □△
+'. Success: '
+success
+'. Duration: '
+duration_ms
+'.0f'
+'ms.'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+procedure
+●●●●●● 1mm □
+ActionProcedure
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+procedure_id
+●●●●●● 1mm □
+procedure
+logger
+●●●●●● 1mm □△
+'[MAGMA-L4] Stored procedure: '
+procedure_id
+' ('
+name
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedure_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+find_procedures
+●●●●●● 1mm □△
+self
+action_type
+target_component
+min_success_rate
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+0.5
+5
+'\n        Find relevant procedures for an action.\n\n        Args:\n            action_type: Type of action needed\n            target_component: Optional component filter\n            min_success_rate: Minimum success rate\n            top_k: Maximum results\n\n        Returns:\n            List of relevant procedures\n        '
+query
+●●●●●● 1mm □
+'Procedure for '
+action_type
+●●●●●● 2mm □
+target_component
+query
+' targeting '
+target_component
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm □
+result
+results
+metadata
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+metadata
+●●●●●● 1mm □△
+'type'
+●●●●●● 2mm □△
+'procedure'
+proc_id
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □△
+'procedure_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+proc_id
+proc_id
+●●●●●● 3mm △
+proc
+●●●●●● 1mm □
+●●●●●● 3mm △
+proc_id
+●●●●●● 2mm □
+proc
+min_success_rate
+procedures
+●●●●●● 1mm □△
+proc
+●●●●●● 2mm □△
+procedures
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedures
+top_k
+●●●●●● 3mm □△
+ActionProcedure
+●●●●●● 1mm □
+update_procedure_outcome
+●●●●●● 1mm □△
+self
+procedure_id
+success
+duration_ms
+genesis_key_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Update procedure statistics after use.'
+●●●●●● 2mm □
+procedure_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+proc
+●●●●●● 1mm □
+●●●●●● 3mm △
+procedure_id
+old_total
+●●●●●● 1mm □
+proc
+new_total
+●●●●●● 1mm □
+old_total
+●●●●●● 3mm ○
+1
+proc
+●●●●●● 1mm □
+proc
+●●●●●● 2mm □△
+old_total
+●●●●●● 3mm ○
+success
+1
+0
+●●●●●● 3mm □△
+new_total
+proc
+●●●●●● 1mm □
+proc
+●●●●●● 2mm □△
+old_total
+●●●●●● 3mm ○
+duration_ms
+●●●●●● 3mm □△
+new_total
+proc
+●●●●●● 1mm □
+new_total
+proc
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+genesis_key_id
+proc
+●●●●●● 1mm □△
+genesis_key_id
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA-L4] Updated procedure '
+procedure_id
+': success_rate='
+proc
+'.2f'
+', times_used='
+proc
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_best_procedure
+●●●●●● 1mm □△
+self
+action_type
+target_component
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Get the best procedure for an action.'
+procedures
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+target_component
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+procedures
+procedures
+0
+●●●●●● 2mm □
+●●●●●● 2mm □○
+ActionProcedure
+●●●●●● 2mm △
+MagmaGenesisIntegration
+'\n    Security Integration: Genesis Keys tracking for Magma operations.\n\n    Provides:\n    - Full provenance tracking for all Magma operations\n    - Audit trail for memory queries and updates\n    - Rollback capability through Genesis Keys\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+genesis_service
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Initialize Genesis integration.\n\n        Args:\n            magma_memory: MagmaMemory instance\n            genesis_service: GenesisKeyService instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_service
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Genesis Keys integration initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+connect_genesis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Connect to Genesis Key service.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+genesis.genesis_key_service
+●●●●●● 2mm □△○
+get_genesis_service
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_genesis_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Genesis Key service not available: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+track_ingestion
+●●●●●● 1mm □△
+self
+content
+result
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Track memory ingestion with Genesis Key.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+key
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_query
+●●●●●● 1mm □△
+self
+query
+results
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Track memory query with Genesis Key.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+key
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+track_causal_inference
+●●●●●● 1mm □△
+self
+query
+result
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Track causal inference with Genesis Key.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 2mm □
+key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+key
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm △
+MagmaTrustIntegration
+'\n    Security Integration: Trust-aware memory operations.\n\n    Provides:\n    - Trust-weighted retrieval results\n    - Trust scoring for memory nodes\n    - Trust decay over time\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+trust_scorer
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Initialize trust integration.\n\n        Args:\n            magma_memory: MagmaMemory instance\n            trust_scorer: NeuralTrustScorer instance (optional)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_scorer
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Trust scoring integration initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+connect_trust_scorer
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Connect to neural trust scorer.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+ml_intelligence.neural_trust_scorer
+●●●●●● 2mm □△○
+NeuralTrustScorer
+●●●●●● 3mm △
+●●●●●● 1mm □
+NeuralTrustScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+ImportError
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Neural trust scorer not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+get_trusted_results
+●●●●●● 1mm □△
+self
+query
+min_trust
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+0.5
+10
+'\n        Get trust-filtered retrieval results.\n\n        Args:\n            query: Search query\n            min_trust: Minimum trust score\n            top_k: Maximum results\n\n        Returns:\n            Trust-filtered results\n        '
+results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+results
+top_k
+trusted_results
+●●●●●● 1mm □
+result
+results
+metadata
+●●●●●● 1mm □
+result
+features
+●●●●●● 1mm □
+'source_reliability'
+'outcome_quality'
+'consistency_score'
+'validation_count'
+'invalidation_count'
+'age_days'
+'content_length'
+'has_code'
+'has_structure'
+'has_references'
+'usage_frequency'
+'success_rate'
+metadata
+●●●●●● 1mm □△
+'source_reliability'
+0.7
+●●●●●● 2mm □△
+0.7
+0.8
+metadata
+●●●●●● 1mm □△
+'validation_count'
+0
+●●●●●● 2mm □△
+0
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'code'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+2
+'http'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+0.5
+0.8
+trust_score
+uncertainty
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+features
+●●●●●● 2mm □△
+●●●●●● 2mm □
+trust_score
+min_trust
+result
+●●●●●● 1mm □
+result
+result
+'trust_score'
+●●●●●● 1mm □
+trust_score
+result
+'trust_uncertainty'
+●●●●●● 1mm □
+uncertainty
+trusted_results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+trusted_results
+top_k
+●●●●●● 3mm □△
+●●●●●● 1mm □
+update_trust_from_feedback
+●●●●●● 1mm □△
+self
+result_id
+helpful
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+'Update trust based on user feedback.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Trust feedback for '
+result_id
+': helpful='
+helpful
+●●●●●● 2mm □△
+●●●●●● 2mm △
+MagmaGovernanceIntegration
+'\n    Security Integration: Constitutional governance for memory.\n\n    Provides:\n    - Memory operation governance checks\n    - Constitutional rule enforcement\n    - Audit logging for compliance\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+magma_memory
+governance_engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'\n        Initialize governance integration.\n\n        Args:\n            magma_memory: MagmaMemory instance\n            governance_engine: GovernanceEngine instance\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+magma_memory
+●●●●●● 3mm △
+●●●●●● 1mm □
+governance_engine
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Governance integration initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+connect_governance
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Connect to governance engine.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+security.governance
+●●●●●● 2mm □△○
+get_governance_engine
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_governance_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+ImportError
+logger
+●●●●●● 1mm □△
+'[MAGMA-SECURITY] Governance engine not available'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+check_ingestion_allowed
+●●●●●● 1mm □△
+self
+content
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Check if memory ingestion is allowed by governance.\n\n        Returns:\n            (allowed, reason)\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+pii_patterns
+●●●●●● 1mm □
+'ssn:'
+'social security'
+'credit card'
+'password:'
+'api_key:'
+'secret:'
+content_lower
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pattern
+pii_patterns
+●●●●●● 2mm □
+pattern
+content_lower
+●●●●●● 3mm ○
+●●●●●● 1mm □
+'Content may contain sensitive data (pattern: '
+pattern
+')'
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+Tuple
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+check_query_allowed
+●●●●●● 1mm □△
+self
+query
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Check if memory query is allowed by governance.\n\n        Returns:\n            (allowed, reason)\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+Tuple
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+log_governance_event
+●●●●●● 1mm □△
+self
+event_type
+details
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Log governance event for audit trail.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[MAGMA-GOVERNANCE] '
+event_type
+': user='
+user_id
+', details='
+details
+●●●●●● 2mm □△
+●●●●●● 1mm □
+create_magma_layer_integrations
+●●●●●● 1mm □△
+magma_memory
+message_bus
+genesis_service
+trust_scorer
+governance_engine
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Create all Magma layer integrations.\n\n    Returns:\n        Dict containing all integration instances\n    '
+integrations
+●●●●●● 1mm □
+'layer1_connector'
+'layer2_patterns'
+'layer3_decisions'
+'layer4_actions'
+'genesis'
+'trust'
+'governance'
+MagmaMessageBusConnector
+●●●●●● 1mm □△
+magma_memory
+message_bus
+●●●●●● 2mm □△
+InterpreterPatternMemory
+●●●●●● 1mm □△
+magma_memory
+●●●●●● 2mm □△
+JudgementDecisionMemory
+●●●●●● 1mm □△
+magma_memory
+●●●●●● 2mm □△
+ActionRouterMemory
+●●●●●● 1mm □△
+magma_memory
+●●●●●● 2mm □△
+MagmaGenesisIntegration
+●●●●●● 1mm □△
+magma_memory
+genesis_service
+●●●●●● 2mm □△
+MagmaTrustIntegration
+●●●●●● 1mm □△
+magma_memory
+trust_scorer
+●●●●●● 2mm □△
+MagmaGovernanceIntegration
+●●●●●● 1mm □△
+magma_memory
+governance_engine
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[MAGMA] Created all layer integrations'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+integrations
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

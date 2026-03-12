@@ -1,0 +1,1302 @@
+## healing.py
+'\nSelf-Healing Actions for Diagnostic Machine\n\nImplements concrete healing actions for:\n- Database connection recovery\n- Vector database reset\n- Cache clearing\n- Memory management\n- Service restart coordination\n- Log rotation\n- Configuration reload\n\nAll actions are reversible where possible (Invariant 4).\n'
+●●●●●● 2mm □△○
+gc
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+signal
+●●●●●● 2mm □△○
+subprocess
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+Callable
+List
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+HealingActionType
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Types of healing actions.'
+DATABASE_RECONNECT
+●●●●●● 1mm □
+'database_reconnect'
+VECTOR_DB_RESET
+●●●●●● 1mm □
+'vector_db_reset'
+CACHE_CLEAR
+●●●●●● 1mm □
+'cache_clear'
+GARBAGE_COLLECTION
+●●●●●● 1mm □
+'garbage_collection'
+LOG_ROTATION
+●●●●●● 1mm □
+'log_rotation'
+CONFIG_RELOAD
+●●●●●● 1mm □
+'config_reload'
+SERVICE_RESTART
+●●●●●● 1mm □
+'service_restart'
+CONNECTION_POOL_RESET
+●●●●●● 1mm □
+'connection_pool_reset'
+EMBEDDING_MODEL_RELOAD
+●●●●●● 1mm □
+'embedding_model_reload'
+SESSION_CLEANUP
+●●●●●● 1mm □
+'session_cleanup'
+●●●●●● 2mm △
+HealingRisk
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+'Risk level of healing actions.'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+HealingResult
+'Result of a healing action.'
+action_type
+HealingActionType
+success
+●●●●●● 3mm △
+message
+●●●●●● 1mm ○
+duration_ms
+●●●●●● 3mm ○
+0.0
+pre_state
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+post_state
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+rollback_available
+●●●●●● 3mm △
+●●●●●● 1mm □
+rollback_command
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+timestamp
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+HealingActionConfig
+'Configuration for a healing action.'
+action_type
+HealingActionType
+enabled
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+risk_level
+HealingRisk
+HealingRisk
+timeout_seconds
+●●●●●● 2mm ○
+60
+max_retries
+●●●●●● 2mm ○
+3
+requires_confirmation
+●●●●●● 3mm △
+●●●●●● 1mm □
+parameters
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dataclass
+●●●●●● 2mm △
+HealingActionRegistry
+'\n    Registry of all available healing actions.\n\n    Provides a central place to register and discover healing capabilities.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+HealingActionType
+HealingActionConfig
+●●●●●● 3mm △
+●●●●●● 1mm □○
+HealingActionType
+●●●●●● 1mm △○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_default_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register default healing actions.'
+defaults
+●●●●●● 1mm □
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingActionConfig
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+config
+defaults
+●●●●●● 3mm △
+config
+●●●●●● 1mm □
+config
+●●●●●● 1mm □
+register_handler
+●●●●●● 1mm □△
+self
+action_type
+handler
+●●●●●● 2mm □△
+HealingActionType
+●●●●●● 1mm △○
+'Register a handler for a healing action.'
+●●●●●● 3mm △
+action_type
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □
+get_action
+●●●●●● 1mm □△
+self
+action_type
+●●●●●● 2mm □△
+HealingActionType
+'Get configuration for an action.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+HealingActionConfig
+●●●●●● 1mm □
+get_handler
+●●●●●● 1mm □△
+self
+action_type
+●●●●●● 2mm □△
+HealingActionType
+'Get handler for an action.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm △○
+●●●●●● 1mm □
+list_actions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'List all registered actions.'
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+HealingActionConfig
+●●●●●● 2mm △
+HealingExecutor
+'\n    Executes self-healing actions with safety checks.\n\n    Implements:\n    - Pre-condition verification\n    - Action execution with timeout\n    - Post-condition verification\n    - Rollback on failure\n    - Logging and audit trail\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+registry
+dry_run
+log_dir
+●●●●●● 2mm □△
+HealingActionRegistry
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+registry
+HealingActionRegistry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+dry_run
+●●●●●● 3mm △
+●●●●●● 1mm □
+log_dir
+Path
+●●●●●● 1mm □△
+log_dir
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+●●●●●● 3mm □△
+'healing'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_register_default_handlers
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Register default healing action handlers.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+HealingActionType
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+execute
+●●●●●● 1mm □△
+self
+action_type
+parameters
+●●●●●● 2mm □△
+HealingActionType
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'Execute a healing action.'
+start_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+parameters
+●●●●●● 1mm □
+parameters
+config
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+config
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+handler
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pre_state
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'[DRY RUN] Would execute: '
+action_type
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+handler
+●●●●●● 1mm □△
+parameters
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □
+pre_state
+Exception
+logger
+●●●●●● 1mm □△
+'Healing action '
+action_type
+' failed: '
+e
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+end_time
+●●●●●● 1mm □△
+start_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+HealingResult
+●●●●●● 1mm □
+_capture_state
+●●●●●● 1mm □△
+self
+action_type
+●●●●●● 2mm □△
+HealingActionType
+'Capture relevant state before/after healing.'
+state
+●●●●●● 1mm □
+'timestamp'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+psutil
+state
+'memory_percent'
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+state
+'cpu_percent'
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+state
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_log_healing_action
+●●●●●● 1mm □△
+self
+result
+●●●●●● 2mm □△
+HealingResult
+'Log healing action for audit trail.'
+today
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+log_file
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm □△
+'healing_'
+today
+'.jsonl'
+●●●●●● 2mm □△○
+json
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+log_file
+'a'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+'action_type'
+'success'
+'message'
+'duration_ms'
+'timestamp'
+'pre_state'
+'post_state'
+result
+result
+result
+result
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'\n'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to log healing action: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_heal_database
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reset database connection pool.'
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Database connection closed for reset'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Database healing failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_vector_db
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reset vector database client connection.'
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+_client
+●●●●●● 2mm □△○
+vector_db.client
+●●●●●● 1mm □
+vdb_module
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+vdb_module
+'_client'
+●●●●●● 2mm □△
+vdb_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+new_client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_client
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'Qdrant client not available'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+retrieval.qdrant_client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Vector DB healing failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_cache
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Clear application caches.'
+cleared
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+functools
+●●●●●● 2mm □△○
+linecache
+linecache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cleared
+●●●●●● 1mm □△
+'linecache'
+●●●●●● 2mm □△
+cache_dirs
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'cache'
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'.cache'
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'__pycache__'
+cache_dir
+cache_dirs
+●●●●●● 2mm □
+cache_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+cache_dir
+●●●●●● 2mm □△
+cache_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cleared
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+cache_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Could not clear '
+cache_dir
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.memory_mesh_cache
+●●●●●● 2mm □△○
+MemoryMeshCache
+MemoryMeshCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cleared
+●●●●●● 1mm □△
+'memory_mesh_cache'
+●●●●●● 2mm □△
+ImportError
+AttributeError
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Cache clearing failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_gc
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Force garbage collection.'
+●●●●●● 2mm □△○
+psutil
+mem_before
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+mem_before
+●●●●●● 1mm □
+●●●●●● 2mm □
+gc
+●●●●●● 1mm □△
+0
+●●●●●● 2mm □△
+gc
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+gc
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+unreachable
+●●●●●● 1mm □
+gc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem_after
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+freed
+●●●●●● 1mm □
+mem_before
+mem_before
+●●●●●● 1mm □△
+mem_after
+0
+ImportError
+freed
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'GC failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_logs
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Rotate and compress old log files.'
+log_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'logs'
+rotated
+●●●●●● 1mm □
+errors
+●●●●●● 1mm □
+●●●●●● 2mm □
+log_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_size_mb
+●●●●●● 1mm □
+params
+●●●●●● 1mm □△
+'max_size_mb'
+50
+●●●●●● 2mm □△
+max_size_bytes
+●●●●●● 1mm □
+max_size_mb
+●●●●●● 2mm □△
+1024
+●●●●●● 2mm □△
+1024
+log_file
+log_dir
+●●●●●● 1mm □△
+'*.log'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+log_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+max_size_bytes
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+rotated_name
+●●●●●● 1mm □
+log_file
+'_'
+timestamp
+log_file
+rotated_path
+●●●●●● 1mm □
+log_file
+●●●●●● 3mm □△
+rotated_name
+log_file
+●●●●●● 1mm □△
+rotated_path
+●●●●●● 2mm □△
+rotated
+●●●●●● 1mm □△
+log_file
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+gzip
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rotated_path
+'rb'
+●●●●●● 2mm □△
+f_in
+gzip
+●●●●●● 1mm □△
+rotated_path
+'.gz'
+'wb'
+●●●●●● 2mm □△
+f_out
+shutil
+●●●●●● 1mm □△
+f_in
+f_out
+●●●●●● 2mm □△
+rotated_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+errors
+●●●●●● 1mm □△
+log_file
+': '
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+message
+●●●●●● 1mm □
+'Rotated '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+rotated
+●●●●●● 2mm □△
+' log files'
+●●●●●● 2mm □
+errors
+message
+'. Errors: '
+'; '
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Log rotation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_config
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reload configuration from files.'
+reloaded
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+settings
+importlib
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+reloaded
+●●●●●● 1mm □△
+'settings'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm □△○
+dotenv
+●●●●●● 2mm □△○
+load_dotenv
+load_dotenv
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reloaded
+●●●●●● 1mm □△
+'env_vars'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Config reload failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_sessions
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Cleanup expired or stale sessions.'
+cleaned
+●●●●●● 1mm □
+0
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+cleaned
+1
+ImportError
+temp_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'temp'
+●●●●●● 2mm □
+temp_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+temp_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cleaned
+1
+Exception
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Session cleanup failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_connection_pool
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reset connection pools.'
+reset
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+database.connection
+●●●●●● 2mm □△○
+DatabaseConnection
+engine
+●●●●●● 1mm □
+DatabaseConnection
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reset
+●●●●●● 1mm □△
+'database'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'DB pool reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+requests
+requests
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+reset
+●●●●●● 1mm □△
+'http'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Connection pool reset failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+●●●●●● 1mm □
+_heal_embedding_model
+●●●●●● 1mm □△
+self
+params
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+'Reload embedding model.'
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 2mm □△○
+embedding
+●●●●●● 1mm □
+emb_module
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+emb_module
+'_model'
+●●●●●● 2mm □△
+emb_module
+●●●●●● 1mm □
+●●●●●● 2mm □
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Embedding model reload failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+HealingResult
+_healing_executor
+●●●●●● 2mm □○
+HealingExecutor
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_healing_executor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create global healing executor.'
+●●●●●● 2mm □
+_healing_executor
+●●●●●● 2mm □
+_healing_executor
+●●●●●● 1mm □
+HealingExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_healing_executor
+HealingExecutor
+●●●●●● 1mm □
+execute_healing
+●●●●●● 1mm □△
+action_type
+params
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'Convenience function to execute a healing action.'
+action
+●●●●●● 1mm □
+HealingActionType
+●●●●●● 1mm □△
+action_type
+●●●●●● 2mm □△
+ValueError
+●●●●●● 3mm ○
+HealingResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+get_healing_executor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+action
+params
+●●●●●● 2mm □△
+HealingResult

@@ -1,0 +1,418 @@
+## integration_example.py
+'\nGenesis Comprehensive Tracking - Integration Example\n\nThis shows how the comprehensive tracking system captures ALL inputs:\n- User uploads\n- AI responses\n- Coding agent actions\n- External API calls\n- Web fetches\n- File operations\n- Database changes\n- Librarian actions\n\nEvery action creates a Genesis Key for complete audit trail.\n'
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+SessionLocal
+●●●●●● 3mm □△○
+genesis.comprehensive_tracker
+●●●●●● 2mm □△○
+ComprehensiveTracker
+●●●●●● 3mm □△○
+genesis.tracking_middleware
+●●●●●● 2mm □△○
+SessionTracker
+●●●●●● 1mm □
+example_user_upload_with_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Example: User uploads a PDF, gets ingested, librarian processes it.\n\n    Creates Genesis Keys for:\n    1. User upload\n    2. File ingestion\n    3. AI text extraction (if used)\n    4. Librarian processing\n    5. Tag assignment\n    6. Relationship detection\n    '
+SessionLocal
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+'user_12345'
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+upload_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created upload Genesis Key: '
+upload_key
+●●●●●● 2mm □△
+ingestion_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created ingestion Genesis Key: '
+ingestion_key
+●●●●●● 2mm □△
+ai_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created AI extraction Genesis Key: '
+ai_key
+●●●●●● 2mm □△
+librarian_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Created librarian Genesis Key: '
+librarian_key
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Complete Genesis Key chain created for user upload!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Upload → Ingestion → AI → Librarian'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  All actions linked and traceable'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_ai_code_generation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Example: AI generates code for a new feature.\n\n    Tracks:\n    1. User request\n    2. AI code generation\n    3. File write\n    4. Database update\n    '
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Tracked AI code generation with complete chain:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  User Request → AI Generation → File Write'
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_external_api_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Example: System fetches data from external API.\n\n    Tracks:\n    1. API call to external service\n    2. Response processing\n    3. Database storage\n    '
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+api_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Tracked external API call: '
+api_key
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_web_fetch_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Example: System fetches HTML content from web.\n\n    Tracks web fetch with full content metadata.\n    '
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+web_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Tracked web fetch: '
+web_key
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_session_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Example: Track entire session with multiple operations.\n\n    Uses SessionTracker context manager to automatically track\n    session start, all operations, and session end.\n    '
+SessionTracker
+●●●●●● 1mm □△
+'librarian-batch-processing'
+●●●●●● 2mm □△
+tracker
+doc_id
+1
+2
+3
+4
+5
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ All operations tracked under single session'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Session start/end automatically recorded'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_complete_user_journey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'\n    Example: Complete user journey from input to result.\n\n    Demonstrates full tracking of:\n    1. User asks question\n    2. AI processes query\n    3. System retrieves documents (with tags)\n    4. External API enrichment\n    5. AI generates response\n    6. Response delivered to user\n    '
+db
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+ComprehensiveTracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+input_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+query_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+api_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response_key
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Complete user journey tracked:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Input → Query Processing → Retrieval → API Enrichment → Response'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  All '
+5
+' steps linked with Genesis Keys'
+●●●●●● 2mm □△
+timeline
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ Session timeline: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+timeline
+●●●●●● 2mm □△
+' events'
+●●●●●● 2mm □△
+event
+timeline
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+event
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'GENESIS COMPREHENSIVE TRACKING - EXAMPLES'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Example 1: User Upload with Full Tracking ---'
+●●●●●● 2mm □△
+example_user_upload_with_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Example 2: AI Code Generation ---'
+●●●●●● 2mm □△
+example_ai_code_generation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Example 3: External API Call ---'
+●●●●●● 2mm □△
+example_external_api_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Example 4: Web Fetch ---'
+●●●●●● 2mm □△
+example_web_fetch_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Example 5: Session Tracking ---'
+●●●●●● 2mm □△
+example_session_tracking
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n--- Example 6: Complete User Journey ---'
+●●●●●● 2mm □△
+example_complete_user_journey
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'ALL EXAMPLES COMPLETED'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+70
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nGenesis Keys track:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ User inputs (messages, uploads)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ AI responses (decisions, code generation)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Coding agent actions'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ External API calls'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Web fetches (HTML content)'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ File operations'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Database changes'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ Librarian actions'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  ✓ System events'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nComplete audit trail for EVERYTHING!'
+●●●●●● 2mm □△

@@ -1,0 +1,137 @@
+## test_braille_mapper.py
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+backend.cognitive.braille_mapper
+●●●●●● 2mm □△○
+BrailleMapper
+●●●●●● 1mm □
+test_braille_mapper_loads
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □
+BrailleMapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+mapper
+●●●●●● 2mm □△
+0
+'Mapper should have loaded entries'
+●●●●●● 1mm □
+test_valid_keyword
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □
+BrailleMapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+def_mapping
+●●●●●● 1mm □
+mapper
+●●●●●● 1mm □△
+'def'
+●●●●●● 2mm □△
+def_mapping
+●●●●●● 2mm □
+def_mapping
+'braille'
+'●●●●●● 1mm □'
+def_mapping
+'genesis_key'
+'GRACE-PY-001'
+●●●●●● 1mm □
+test_braille_to_python
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □
+BrailleMapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+python_mappings
+●●●●●● 1mm □
+mapper
+●●●●●● 1mm □△
+'●●●●●● 1mm □'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+python_mappings
+●●●●●● 2mm □△
+0
+keywords
+●●●●●● 1mm □
+m
+'keyword'
+m
+python_mappings
+'def'
+keywords
+●●●●●● 1mm □
+test_genesis_key_lookup
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □
+BrailleMapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_mapping
+●●●●●● 1mm □
+mapper
+●●●●●● 1mm □△
+'GRACE-PY-001'
+●●●●●● 2mm □△
+genesis_mapping
+●●●●●● 2mm □
+genesis_mapping
+'keyword'
+'def'
+●●●●●● 1mm □
+test_invalid_keyword
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □
+BrailleMapper
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mapper
+●●●●●● 1mm □△
+'non_existent_keyword'
+●●●●●● 2mm □△
+●●●●●● 2mm □

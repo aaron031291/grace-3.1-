@@ -1,0 +1,426 @@
+## test_semantic_system.py
+'\nQuick test script to verify the semantic contradiction detection system.\nThis tests the confidence scorer with contradiction detection.\n'
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_contradiction_detector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test SemanticContradictionDetector directly.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing SemanticContradictionDetector'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+confidence_scorer
+●●●●●● 2mm □△○
+SemanticContradictionDetector
+logger
+●●●●●● 1mm □△
+'Initializing SemanticContradictionDetector...'
+●●●●●● 2mm □△
+detector
+●●●●●● 1mm □
+SemanticContradictionDetector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+detector
+logger
+●●●●●● 1mm □△
+'⚠ NLI model not available - model will be skipped'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  This is expected if running without internet or Hugging Face credentials'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Detector still functional with fallback behavior'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'✓ Detector initialized successfully'
+●●●●●● 2mm □△
+test_pairs
+●●●●●● 1mm □
+'The Earth is round'
+'The Earth is flat'
+'Water boils at 100C'
+'Water boils at 100C'
+'Python is a language'
+'Cats are animals'
+logger
+●●●●●● 1mm □△
+'\nTesting contradiction detection:'
+●●●●●● 2mm □△
+text1
+text2
+test_pairs
+score
+●●●●●● 1mm □
+detector
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"  '"
+text1
+"' vs '"
+text2
+"'"
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'    → Contradiction score: '
+score
+'.4f'
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'  Error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to test detector: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+test_confidence_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Test ConfidenceScorer with mock dependencies.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Testing ConfidenceScorer'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+MagicMock
+●●●●●● 3mm □△○
+confidence_scorer
+●●●●●● 2mm □△○
+ConfidenceScorer
+logger
+●●●●●● 1mm □△
+'Initializing ConfidenceScorer with mocked dependencies...'
+●●●●●● 2mm □△
+mock_embedding_model
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_embedding_model
+●●●●●● 1mm □
+0.1
+0.2
+0.3
+0.4
+0.5
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+10
+●●●●●● 2mm □△
+mock_qdrant_client
+●●●●●● 1mm □
+MagicMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_qdrant_client
+●●●●●● 1mm □
+'score'
+'payload'
+0.85
+'text'
+'Related document 1'
+'score'
+'payload'
+0.75
+'text'
+'Related document 2'
+scorer
+●●●●●● 1mm □
+ConfidenceScorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'✓ ConfidenceScorer initialized successfully'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'\nCalculating confidence scores:'
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'This is a test document about machine learning.'
+result
+●●●●●● 1mm □
+scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+"  Text: '"
+text
+"'"
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Confidence Score: '
+result
+'confidence_score'
+'.3f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Source Reliability: '
+result
+'source_reliability'
+'.3f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Content Quality: '
+result
+'content_quality'
+'.3f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Consensus Score: '
+result
+'consensus_score'
+'.3f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Recency: '
+result
+'recency'
+'.3f'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Contradictions Detected: '
+result
+●●●●●● 1mm □△
+'contradictions_detected'
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'  Contradiction Count: '
+result
+●●●●●● 1mm □△
+'contradiction_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'confidence_score'
+result
+'contradictions_detected'
+result
+'contradiction_count'
+result
+logger
+●●●●●● 1mm □△
+'\n✓ ConfidenceScorer working correctly'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to test scorer: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Run all tests.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'SEMANTIC CONTRADICTION DETECTION SYSTEM TEST'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+results
+●●●●●● 1mm □△
+'SemanticContradictionDetector'
+test_contradiction_detector
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □△
+'ConfidenceScorer'
+test_confidence_scorer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'TEST SUMMARY'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+name
+passed
+results
+status
+●●●●●● 1mm □
+passed
+'✓ PASSED'
+'✗ FAILED'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+status
+': '
+name
+●●●●●● 2mm □△
+all_passed
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+passed
+_
+passed
+results
+●●●●●● 2mm □△
+●●●●●● 2mm □
+all_passed
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✓ All tests passed!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n✗ Some tests failed'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

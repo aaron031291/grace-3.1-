@@ -1,0 +1,890 @@
+## test_integration_chain.py
+'\nIntegration tests — validates the full cognitive pipeline chain.\nTests real logic, not just imports.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+os
+sys
+●●●●●● 1mm □△
+0
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPipelineTimeSense
+●●●●●● 1mm □
+test_produces_valid_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'day_of_week'
+'Monday'
+'Tuesday'
+'Wednesday'
+'Thursday'
+'Friday'
+'Saturday'
+'Sunday'
+ctx
+'period'
+'late_night'
+'morning'
+'afternoon'
+'evening'
+'night'
+'time_sense'
+ctx
+●●●●●● 2mm △
+TestPipelineOODA
+●●●●●● 1mm □
+test_classifies_code_generation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Write a login function'
+●●●●●● 2mm □△
+ctx
+'prompt_type'
+'code_generation'
+●●●●●● 1mm □
+test_classifies_bug_fix
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Fix the authentication bug'
+●●●●●● 2mm □△
+ctx
+'prompt_type'
+'bug_fix'
+●●●●●● 1mm □
+test_classifies_question
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'What does this function do?'
+●●●●●● 2mm □△
+ctx
+'prompt_type'
+'question'
+●●●●●● 1mm □
+test_classifies_refactor
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Refactor the database module'
+●●●●●● 2mm □△
+ctx
+'prompt_type'
+'refactor'
+●●●●●● 1mm □
+test_classifies_testing
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Write tests for the API'
+●●●●●● 2mm □△
+ctx
+'prompt_type'
+'testing'
+●●●●●● 1mm □
+test_classifies_destructive
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Delete all temp files'
+●●●●●● 2mm □△
+ctx
+'prompt_type'
+'destructive'
+●●●●●● 1mm □
+test_detects_approach
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Build a REST API'
+●●●●●● 2mm □△
+ctx
+'approach'
+'direct'
+●●●●●● 1mm □
+test_question_is_analytical
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'Explain how authentication works'
+●●●●●● 2mm □△
+ctx
+'approach'
+'analytical'
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+self
+prompt
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+●●●●●● 3mm ○
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPipelineAmbiguity
+●●●●●● 1mm □
+test_tracks_knowns_with_full_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'known_count'
+3
+ctx
+'unknown_count'
+0
+●●●●●● 1mm □
+test_tracks_unknowns_without_project
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'unknown_count'
+1
+●●●●●● 1mm □
+test_detects_implicit_references
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ctx
+'implicit_refs'
+●●●●●● 2mm □△
+1
+●●●●●● 1mm □
+test_no_blocking_for_analytical
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'has_blocking'
+●●●●●● 1mm □
+●●●●●● 2mm △
+TestPipelineInvariants
+●●●●●● 1mm □
+test_passes_valid_prompt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'valid'
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+test_warns_on_short_prompt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'vague_prompt'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm □△
+'warnings'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_warns_on_destructive
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'warnings'
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'irreversible'
+w
+w
+warnings
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_warns_on_large_blast_radius
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □△
+'warnings'
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'blast_radius'
+w
+w
+warnings
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_checks_all_12
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+'checked'
+12
+●●●●●● 2mm △
+TestPipelineContradiction
+●●●●●● 1mm □
+test_detects_language_mismatch_python
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+PipelineContext
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'tech_stack'
+'python'
+ctx
+●●●●●● 1mm □
+"const app = require('express');\nfunction handler() {}"
+ctx
+●●●●●● 1mm □
+'ooda'
+p
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+ctx
+'issue_count'
+0
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'language_mismatch'
+i
+i
+ctx
+'issues'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_no_contradiction_when_matching
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+PipelineContext
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'tech_stack'
+'python'
+ctx
+●●●●●● 1mm □
+"def hello():\n    print('hello')"
+ctx
+●●●●●● 1mm □
+'ooda'
+p
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+ctx
+'issue_count'
+0
+●●●●●● 2mm △
+TestPipelineHallucination
+●●●●●● 1mm □
+test_calculates_confidence
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+PipelineContext
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'src/app.py'
+'src/utils.py'
+ctx
+●●●●●● 1mm □
+'import src.app\nfrom nonexistent.module import thing'
+ctx
+●●●●●● 1mm □
+'issue_count'
+0
+ctx
+●●●●●● 1mm □
+p
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+0
+ctx
+'confidence'
+1.0
+●●●●●● 1mm □
+test_perfect_grounding
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+PipelineContext
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □
+"def hello():\n    return 'world'"
+ctx
+●●●●●● 1mm □
+'issue_count'
+0
+ctx
+●●●●●● 1mm □
+p
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+ctx
+'grounded'
+●●●●●● 3mm □△○
+●●●●●● 2mm △
+TestPipelineTrust
+●●●●●● 1mm □
+test_high_trust_for_clean_run
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+PipelineContext
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'grounded'
+●●●●●● 3mm □△○
+ctx
+●●●●●● 1mm □
+'issue_count'
+0
+ctx
+●●●●●● 1mm □
+'valid'
+●●●●●● 3mm □△○
+ctx
+●●●●●● 1mm □
+'has_blocking'
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □
+'time_sense'
+'ooda'
+'ambiguity'
+'invariants'
+'generate'
+'contradiction'
+'hallucination'
+ctx
+●●●●●● 1mm □
+p
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+ctx
+0.8
+●●●●●● 1mm □
+test_lower_trust_for_issues
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+PipelineContext
+ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm □
+'grounded'
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □
+'issue_count'
+2
+ctx
+●●●●●● 1mm □
+'valid'
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □
+'has_blocking'
+●●●●●● 3mm □△○
+ctx
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □
+ctx
+●●●●●● 1mm □
+'ooda'
+'ambiguity'
+p
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+clean_ctx
+●●●●●● 1mm □
+PipelineContext
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+clean_ctx
+●●●●●● 1mm □
+'grounded'
+●●●●●● 3mm □△○
+clean_ctx
+●●●●●● 1mm □
+'issue_count'
+0
+clean_ctx
+●●●●●● 1mm □
+'valid'
+●●●●●● 3mm □△○
+clean_ctx
+●●●●●● 1mm □
+'has_blocking'
+●●●●●● 1mm □
+clean_ctx
+●●●●●● 1mm □
+clean_ctx
+●●●●●● 1mm □
+'time_sense'
+'ooda'
+'ambiguity'
+'invariants'
+'generate'
+clean_ctx
+●●●●●● 1mm □
+p
+●●●●●● 1mm □△
+clean_ctx
+●●●●●● 2mm □△
+ctx
+clean_ctx
+●●●●●● 2mm △
+TestPipelineFullChain
+●●●●●● 1mm □
+test_full_pre_generation_chain
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+CognitivePipeline
+ctx
+●●●●●● 1mm □
+CognitivePipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'time_sense'
+ctx
+'ooda'
+ctx
+'ambiguity'
+ctx
+'invariants'
+ctx
+'trust_pre'
+ctx
+ctx
+'prompt_type'
+'code_generation'
+ctx
+'valid'
+●●●●●● 3mm □△○
+ctx
+'checked'
+12
+●●●●●● 2mm △
+TestFeedbackLoop
+●●●●●● 1mm □
+test_record_does_not_raise
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+FeedbackLoop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_patterns_returns_list
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+FeedbackLoop
+patterns
+●●●●●● 1mm □
+FeedbackLoop
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+patterns
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestPromptClassification
+●●●●●● 1mm □
+test_all_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.pipeline
+●●●●●● 2mm □△○
+_classify_prompt
+_classify_prompt
+●●●●●● 1mm □△
+'write a function'
+●●●●●● 2mm □△
+'code_generation'
+_classify_prompt
+●●●●●● 1mm □△
+'fix this bug'
+●●●●●● 2mm □△
+'bug_fix'
+_classify_prompt
+●●●●●● 1mm □△
+'what does this do'
+●●●●●● 2mm □△
+'question'
+_classify_prompt
+●●●●●● 1mm □△
+'optimize the code'
+●●●●●● 2mm □△
+'refactor'
+_classify_prompt
+●●●●●● 1mm □△
+'write tests for the API'
+●●●●●● 2mm □△
+'testing'
+_classify_prompt
+●●●●●● 1mm □△
+'delete all temp files'
+●●●●●● 2mm □△
+'destructive'
+_classify_prompt
+●●●●●● 1mm □△
+'hello'
+●●●●●● 2mm □△
+'general'
+●●●●●● 2mm △
+TestGovernanceWrapper
+●●●●●● 1mm □
+test_wraps_every_client
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+llm_orchestrator.governance_wrapper
+●●●●●● 2mm □△○
+GovernanceAwareLLM
+●●●●●● 1mm □
+●●●●●● 1mm □△
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+GovernanceAwareLLM
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_persona_loads
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.governance_rules_api
+●●●●●● 2mm □△○
+get_active_persona
+p
+●●●●●● 1mm □
+get_active_persona
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'personal'
+p
+'professional'
+p
+●●●●●● 2mm △
+TestManifest
+●●●●●● 1mm □
+test_summary_counts
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.manifest_api
+●●●●●● 2mm □△○
+_get_summary
+s
+●●●●●● 1mm □
+_get_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+'endpoints'
+100
+s
+'frontend_tabs'
+12
+s
+'intelligence_systems'
+28
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

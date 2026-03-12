@@ -1,0 +1,582 @@
+## shadow_20260308215329_health.py
+'\nComprehensive Health Check API\n==============================\nHealth checks for all GRACE services and components.\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+Depends
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+Field
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Optional
+List
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ServiceHealth
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Health status for a single service.'
+name
+●●●●●● 1mm ○
+status
+●●●●●● 1mm ○
+latency_ms
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+message
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+●●●●●● 2mm △
+SystemHealth
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'Overall system health response.'
+status
+●●●●●● 1mm ○
+timestamp
+●●●●●● 1mm ○
+version
+●●●●●● 1mm ○
+'3.1'
+uptime_seconds
+●●●●●● 2mm □○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+services
+●●●●●● 3mm □△
+ServiceHealth
+summary
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+_startup_time
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Check LLM service health. Uses circuit breaker to avoid thundering herd when LLM is down.'
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+core.resilience
+●●●●●● 2mm □△○
+get_breaker
+client
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+provider
+●●●●●● 1mm □
+settings
+settings
+'llm'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cb
+●●●●●● 1mm □
+get_breaker
+●●●●●● 1mm □△
+'llm'
+●●●●●● 2mm □△
+is_running
+●●●●●● 1mm □
+cb
+●●●●●● 1mm □△
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_running
+models
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+provider
+●●●●●● 1mm □
+settings
+settings
+'llm'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ServiceHealth
+'Check database connection health.'
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ServiceHealth
+'Check Qdrant vector database health.'
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ServiceHealth
+'Check embedding model health.'
+●●●●●● 2mm □△○
+time
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedder
+embedder
+●●●●●● 1mm □
+get_embedder
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+test_result
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+'health check'
+●●●●●● 2mm □△
+latency
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+●●●●●● 2mm □
+test_result
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+test_result
+'shape'
+●●●●●● 2mm □△
+test_result
+0
+0
+dimension
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+test_result
+●●●●●● 2mm □△
+1
+test_result
+0
+test_result
+1
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ServiceHealth
+'Check system memory usage.'
+●●●●●● 2mm □△○
+psutil
+memory
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'healthy'
+●●●●●● 2mm □
+memory
+90
+status
+●●●●●● 1mm □
+'unhealthy'
+●●●●●● 1mm △
+memory
+80
+status
+●●●●●● 1mm □
+'degraded'
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ServiceHealth
+'Check disk space.'
+●●●●●● 2mm □△○
+psutil
+disk
+●●●●●● 1mm □
+psutil
+●●●●●● 1mm □△
+'/'
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+'healthy'
+●●●●●● 2mm □
+disk
+95
+status
+●●●●●● 1mm □
+'unhealthy'
+●●●●●● 1mm △
+disk
+85
+status
+●●●●●● 1mm □
+'degraded'
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ServiceHealth
+'\n    Comprehensive health check for all GRACE services.\n    Use GET /health for the simple status/llm_running response expected by the frontend.\n\n    Returns status of:\n    - Ollama LLM service\n    - Database connection\n    - Qdrant vector database\n    - Embedding model\n    - System memory\n    - Disk space\n    '
+checks
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+check_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_disk
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+services
+●●●●●● 1mm □
+check
+checks
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+check
+Exception
+●●●●●● 2mm □△
+services
+●●●●●● 1mm □△
+ServiceHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+services
+●●●●●● 1mm □△
+check
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+'healthy'
+'degraded'
+'unhealthy'
+'unknown'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+services
+s
+'healthy'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+services
+s
+'degraded'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+services
+s
+'unhealthy'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+s
+services
+s
+'unknown'
+'error'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+summary
+'unhealthy'
+0
+overall_status
+●●●●●● 1mm □
+'unhealthy'
+●●●●●● 1mm △
+summary
+'degraded'
+0
+overall_status
+●●●●●● 1mm □
+'degraded'
+●●●●●● 2mm □
+summary
+'unknown'
+0
+overall_status
+●●●●●● 1mm □
+'degraded'
+●●●●●● 3mm □
+overall_status
+●●●●●● 1mm □
+'healthy'
+uptime
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+_startup_time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+SystemHealth
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/full'
+●●●●●● 2mm □△
+'\n    Kubernetes-style readiness probe.\n    Returns 200 if service is ready to accept traffic.\n    '
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+SessionLocal
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+text
+●●●●●● 3mm △○
+●●●●●● 1mm □
+SessionLocal
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+text
+●●●●●● 1mm □△
+'SELECT 1'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'ready'
+Exception
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+HTTPException
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/ready'
+●●●●●● 2mm □△
+'\n    Kubernetes-style liveness probe.\n    Returns 200 if service is alive (basic check).\n    '
+●●●●●● 3mm ○
+'status'
+'timestamp'
+'alive'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/live'
+●●●●●● 2mm □△

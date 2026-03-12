@@ -1,0 +1,524 @@
+## workspace_models.py
+"\nWorkspace and multi-tenant models for Grace's internal platform.\n\nArchitecture:\n  Workspace (container) → holds one AI instance (Tommy AI, Rebecca AI, etc.)\n    ├── has its own knowledge_base/\n    ├── has its own file versions (internal VCS)\n    ├── has its own pipeline runs (internal CI/CD)\n    └── Grace is the intelligence behind all of them\n\nGrace manages all workspaces — she is the brain that fixes, heals,\ncodes, and learns for every tenant AI.\n"
+●●●●●● 3mm □△○
+sqlalchemy
+●●●●●● 2mm □△○
+Column
+String
+Text
+Boolean
+Integer
+Float
+DateTime
+JSON
+ForeignKey
+Index
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+relationship
+●●●●●● 3mm □△○
+database.base
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 2mm □△○
+enum
+●●●●●● 2mm △
+Workspace
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+"\n    A self-contained AI workspace — the 'container' for an independent AI system.\n\n    Each workspace is like a virtual project folder:\n      - Tommy AI has workspace_id='tommy-ai'\n      - Rebecca AI has workspace_id='rebecca-ai'\n    Grace is the intelligence backbone behind all of them.\n    "
+__tablename__
+●●●●●● 1mm □
+'workspaces'
+workspace_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+description
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+owner_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_active
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+root_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+total_files
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+total_versions
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+total_pipeline_runs
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+file_versions
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'FileVersion'
+●●●●●● 2mm □△
+branches
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'Branch'
+●●●●●● 2mm □△
+pipeline_runs
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'PipelineRun'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_workspace_owner'
+'owner_id'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<Workspace(id='
+●●●●●● 3mm △
+", workspace_id='"
+●●●●●● 3mm △
+"', name='"
+●●●●●● 3mm △
+"')>"
+●●●●●● 2mm △
+Branch
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+"\n    A branch within a workspace's internal VCS.\n    Replaces git branches — no external dependency.\n    "
+__tablename__
+●●●●●● 1mm □
+'vcs_branches'
+workspace_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'workspaces.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+is_default
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+is_active
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+head_version_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'file_versions.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parent_branch_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'vcs_branches.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'Workspace'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_branch_workspace_name'
+'workspace_id'
+'name'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<Branch(id='
+●●●●●● 3mm △
+", name='"
+●●●●●● 3mm △
+"', workspace_id="
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+FileVersion
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+"\n    Internal version control — every file change is tracked as a version.\n    Replaces git commits — no external dependency.\n\n    Each version stores:\n      - The file path (relative to workspace root)\n      - A content hash for integrity\n      - The full diff from previous version\n      - The commit message (what changed and why)\n      - Who made the change\n      - Which branch it's on\n    "
+__tablename__
+●●●●●● 1mm □
+'file_versions'
+workspace_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'workspaces.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+branch_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'vcs_branches.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+file_path
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+version_number
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+content_hash
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+64
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+content_size
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+diff_from_previous
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+full_content
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+operation
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+commit_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+author
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+parent_version_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'file_versions.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'Workspace'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_fv_workspace_file'
+'workspace_id'
+'file_path'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_fv_workspace_branch'
+'workspace_id'
+'branch_id'
+●●●●●● 2mm □△
+Index
+●●●●●● 1mm □△
+'idx_fv_hash'
+'content_hash'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<FileVersion(id='
+●●●●●● 3mm △
+", file='"
+●●●●●● 3mm △
+"', v"
+●●●●●● 3mm △
+')>'
+●●●●●● 2mm △
+PipelineRun
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+'\n    Internal CI/CD pipeline run — replaces GitHub Actions.\n    Grace triggers, monitors, and heals pipelines autonomously.\n    '
+__tablename__
+●●●●●● 1mm □
+'pipeline_runs'
+workspace_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+ForeignKey
+●●●●●● 1mm □△
+'workspaces.id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+run_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+pipeline_name
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+trigger
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+100
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+50
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+started_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+completed_at
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 2mm □△
+duration_seconds
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△○
+●●●●●● 2mm □△
+stages
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+config
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+artifacts
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+JSON
+●●●●●● 2mm □△
+error_message
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+Text
+●●●●●● 2mm □△
+triggered_by
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+255
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+workspace
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □△
+'Workspace'
+●●●●●● 2mm □△
+__table_args__
+●●●●●● 1mm □
+Index
+●●●●●● 1mm □△
+'idx_pr_workspace_status'
+'workspace_id'
+'status'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<PipelineRun(id='
+●●●●●● 3mm △
+", run_id='"
+●●●●●● 3mm △
+"', status='"
+●●●●●● 3mm △
+"')>"

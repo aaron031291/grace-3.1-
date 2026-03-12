@@ -1,0 +1,1076 @@
+## kb_integration.py
+'\nGenesis Key Knowledge Base Integration.\n\nAuto-populates Genesis Keys in knowledge_base/layer_1/genesis_key folder.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+models.genesis_key_models
+●●●●●● 2mm □△○
+GenesisKey
+●●●●●● 3mm □△○
+filelock
+●●●●●● 2mm □△○
+FileLock
+Timeout
+●●●●●● 1mm □
+FileLockTimeout
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_path_locks
+●●●●●● 2mm □△
+_path_locks_mu
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+GenesisKBIntegration
+'\n    Integrates Genesis Keys with Knowledge Base.\n\n    Auto-saves all Genesis Keys to knowledge_base/layer_1/genesis_key/\n    for ingestion and retrieval.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+kb_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+kb_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+kb_base_path
+●●●●●● 3mm □
+backend_dir
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+backend_dir
+'knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'layer_1'
+'genesis_key'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ensure_directories
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure the genesis_key directory structure exists.'
+Path
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+readme_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'README.md'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+readme_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+readme_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+'# Genesis Key Knowledge Base\n\nThis folder contains all Genesis Keys tracked in the system.\n\n## Structure\n\n- User folders: `{user_id}/` - Keys organized by user\n- Session files: `{user_id}/session_{session_id}.json` - Keys grouped by session\n- Profile files: `{user_id}/profile.json` - User profile information\n\n## Purpose\n\nGenesis Keys are automatically ingested into the knowledge base for:\n- Historical tracking and auditing\n- AI-powered analysis and insights\n- User behavior patterns\n- Error trend analysis\n- Session reconstruction\n\n## Automatic Population\n\nThis folder is automatically populated by the Genesis Key system.\nAll user actions, inputs, and outputs are tracked here from the first login.\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_get_path_lock
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Per-file process lock to serialize writes and reduce file lock contention.'
+_path_locks_mu
+●●●●●● 2mm □
+file_path
+_path_locks
+_path_locks
+file_path
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_path_locks
+file_path
+threading
+●●●●●● 1mm □
+save_genesis_key
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+'\n        Save Genesis Key to knowledge base.\n\n        Accepts either a GenesisKey ORM object or a plain dict (extracted_key_data).\n        This duck-typing approach avoids SQLAlchemy DetachedInstanceError when called\n        after the DB session has closed.\n\n        Args:\n            key: GenesisKey ORM object OR dict with equivalent fields\n\n        Returns:\n            Path to saved file, or None on failure\n        '
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+field
+default
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+●●●●●● 1mm □△
+field
+default
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+key
+field
+default
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+'system'
+session_id
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'session_id'
+●●●●●● 2mm □△
+when_timestamp
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'when_timestamp'
+●●●●●● 2mm □△
+user_folder
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+user_id
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+user_folder
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id
+filename
+●●●●●● 1mm □
+'session_'
+session_id
+'.json'
+●●●●●● 3mm □
+ts
+●●●●●● 1mm □
+when_timestamp
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ts
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+ts
+●●●●●● 2mm □△
+Exception
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+date_str
+●●●●●● 1mm □
+ts
+●●●●●● 1mm □△
+'%Y-%m-%d'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+filename
+●●●●●● 1mm □
+'keys_'
+date_str
+'.json'
+file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+user_folder
+filename
+●●●●●● 2mm □△
+lock_path
+●●●●●● 1mm □
+file_path
+'.lock'
+path_lock
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+file_lock
+●●●●●● 1mm □
+FileLock
+●●●●●● 1mm □△
+lock_path
+●●●●●● 2mm □△
+max_retries
+●●●●●● 1mm □
+4
+attempt
+●●●●●● 1mm □
+●●●●●● 1mm □△
+max_retries
+●●●●●● 2mm □△
+path_lock
+file_lock
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+key
+●●●●●● 2mm □△
+FileLockTimeout
+●●●●●● 2mm □
+attempt
+max_retries
+●●●●●● 1mm □△
+1
+time
+●●●●●● 1mm □△
+0.3
+●●●●●● 2mm □△
+attempt
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+●●●●●● 3mm □
+logger
+●●●●●● 1mm □△
+"Failed to save Genesis Key to KB: The file lock '%s' could not be acquired after %s attempts."
+lock_path
+max_retries
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to save Genesis Key to KB: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_write_key_to_file
+●●●●●● 1mm □△
+self
+file_path
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Hold file lock already; load, append key, write. Caller must hold path_lock and file_lock.\n        \n        Accepts both GenesisKey ORM objects and plain dicts.\n        '
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+field
+default
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+key
+●●●●●● 1mm □△
+field
+default
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+key
+field
+default
+●●●●●● 2mm □△
+user_id
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'user_id'
+●●●●●● 2mm □△
+session_id
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'session_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+keys_data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+json
+backup_path
+●●●●●● 1mm □
+file_path
+'.corrupt.'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+shutil
+shutil
+●●●●●● 1mm □△
+file_path
+backup_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Corrupted KB file backed up to: %s'
+backup_path
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to backup corrupted file: %s'
+backup_err
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'JSON decode error in %s: %s'
+file_path
+e
+●●●●●● 2mm □△
+keys_data
+●●●●●● 1mm □
+'user_id'
+'session_id'
+'created_at'
+'keys'
+user_id
+session_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+keys_data
+●●●●●● 1mm □
+'user_id'
+'session_id'
+'created_at'
+'keys'
+user_id
+session_id
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+when_ts
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'when_timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+when_ts
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ts_str
+●●●●●● 1mm □
+when_ts
+●●●●●● 1mm △
+when_ts
+●●●●●● 2mm □
+ts_str
+●●●●●● 1mm □
+when_ts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts_str
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key_type_raw
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'key_type'
+'unknown'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+key_type_raw
+'value'
+●●●●●● 2mm □△
+key_type_str
+●●●●●● 1mm □
+key_type_raw
+●●●●●● 3mm □
+key_type_str
+●●●●●● 1mm □
+key_type_raw
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+key_type_raw
+●●●●●● 2mm □△
+'unknown'
+status_raw
+●●●●●● 1mm □
+_get
+●●●●●● 1mm □△
+'status'
+'active'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+status_raw
+'value'
+●●●●●● 2mm □△
+status_str
+●●●●●● 1mm □
+status_raw
+●●●●●● 3mm □
+status_str
+●●●●●● 1mm □
+status_raw
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+status_raw
+●●●●●● 2mm □△
+'active'
+key_dict
+●●●●●● 1mm □
+'key_id'
+'key_type'
+'status'
+'timestamp'
+'what'
+'where'
+'when'
+'why'
+'who'
+'how'
+'file_path'
+'line_number'
+'function_name'
+'code_before'
+'code_after'
+'is_error'
+'error_type'
+'error_message'
+'has_fix_suggestion'
+'fix_applied'
+'metadata_human'
+'metadata_ai'
+'input_data'
+'output_data'
+'context_data'
+'commit_sha'
+'branch_name'
+'tags'
+_get
+●●●●●● 1mm □△
+'key_id'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key_type_str
+status_str
+ts_str
+_get
+●●●●●● 1mm □△
+'what_description'
+_get
+●●●●●● 1mm □△
+'what'
+'No description'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'where_location'
+_get
+●●●●●● 1mm □△
+'where'
+'Unknown location'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+ts_str
+_get
+●●●●●● 1mm □△
+'why_reason'
+_get
+●●●●●● 1mm □△
+'why'
+'Not provided'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'who_actor'
+_get
+●●●●●● 1mm □△
+'who'
+'System'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'how_method'
+_get
+●●●●●● 1mm □△
+'how'
+'Automatic'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'line_number'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'function_name'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'code_before'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'code_after'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'error_type'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'error_message'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'has_fix_suggestion'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'fix_applied'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'metadata_human'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'metadata_ai'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'input_data'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'output_data'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'context_data'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'commit_sha'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'branch_name'
+●●●●●● 2mm □△
+_get
+●●●●●● 1mm □△
+'tags'
+●●●●●● 2mm □△
+keys_data
+'keys'
+●●●●●● 1mm □△
+key_dict
+●●●●●● 2mm □△
+keys_data
+'last_updated'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys_data
+'total_keys'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys_data
+'keys'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+keys_data
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Genesis Key saved to KB: %s'
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm ○
+●●●●●● 1mm □
+save_user_profile
+●●●●●● 1mm □△
+self
+user_id
+profile_data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+'\n        Save user profile to knowledge base.\n\n        Args:\n            user_id: Genesis user ID\n            profile_data: User profile information\n\n        Returns:\n            Path to saved profile file\n        '
+user_folder
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+user_id
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+user_folder
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+profile_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+user_folder
+'profile.json'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+profile_path
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+profile_path
+'r'
+●●●●●● 2mm □△
+f
+existing_profile
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+existing_profile
+●●●●●● 1mm □△
+profile_data
+●●●●●● 2mm □△
+profile_data
+●●●●●● 1mm □
+existing_profile
+profile_data
+'last_updated'
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+profile_path
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+profile_data
+f
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'User profile saved to KB: '
+profile_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+profile_path
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to save user profile to KB: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_user_keys
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Get all Genesis Keys for a user from knowledge base.\n\n        Args:\n            user_id: Genesis user ID\n\n        Returns:\n            List of Genesis Keys\n        '
+user_folder
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+●●●●●● 3mm △
+user_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+user_folder
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_keys
+●●●●●● 1mm □
+filename
+os
+●●●●●● 1mm □△
+user_folder
+●●●●●● 2mm □△
+●●●●●● 2mm □
+filename
+●●●●●● 1mm □△
+'.json'
+●●●●●● 2mm □△
+filename
+'profile.json'
+file_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+user_folder
+filename
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'r'
+●●●●●● 2mm □△
+f
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'keys'
+data
+all_keys
+●●●●●● 1mm □△
+data
+'keys'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+all_keys
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to get user keys from KB: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+create_user_summary
+●●●●●● 1mm □△
+self
+user_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Create a comprehensive summary of a user's activity.\n\n        Args:\n            user_id: Genesis user ID\n\n        Returns:\n            Summary dictionary\n        "
+keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+user_id
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+'user_id'
+'total_keys'
+'total_errors'
+'total_fixes'
+'key_types'
+'active_sessions'
+'files_modified'
+'first_activity'
+'last_activity'
+user_id
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+keys
+k
+●●●●●● 1mm □△
+'is_error'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+k
+keys
+k
+●●●●●● 1mm □△
+'fix_applied'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+key
+keys
+key_type
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'key_type'
+'unknown'
+●●●●●● 2mm □△
+summary
+'key_types'
+key_type
+●●●●●● 1mm □
+summary
+'key_types'
+●●●●●● 1mm □△
+key_type
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+key
+●●●●●● 1mm □△
+'session_id'
+●●●●●● 2mm □△
+summary
+'active_sessions'
+●●●●●● 1mm □△
+key
+'session_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+●●●●●● 1mm □△
+'file_path'
+●●●●●● 2mm □△
+summary
+'files_modified'
+●●●●●● 1mm □△
+key
+'file_path'
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+key
+●●●●●● 1mm □△
+'timestamp'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+timestamp
+●●●●●● 2mm □
+summary
+'first_activity'
+timestamp
+summary
+'first_activity'
+summary
+'first_activity'
+●●●●●● 1mm □
+timestamp
+●●●●●● 2mm □
+summary
+'last_activity'
+timestamp
+summary
+'last_activity'
+summary
+'last_activity'
+●●●●●● 1mm □
+timestamp
+summary
+'active_sessions'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+summary
+'active_sessions'
+●●●●●● 2mm □△
+summary
+'files_modified'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+summary
+'files_modified'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+summary
+●●●●●● 2mm □△
+_kb_integration
+●●●●●● 2mm □○
+GenesisKBIntegration
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_kb_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global KB integration instance.'
+●●●●●● 2mm □
+_kb_integration
+●●●●●● 2mm □
+_kb_integration
+●●●●●● 1mm □
+GenesisKBIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_kb_integration
+GenesisKBIntegration

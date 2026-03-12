@@ -1,0 +1,1712 @@
+## test_utils_comprehensive.py
+'\nComprehensive Test Suite for Utils Module\n==========================================\nTests for error_suppression, structured_logging, and rag_prompt utilities.\n\nCoverage:\n- Error suppression settings checks\n- StructuredLogFormatter JSON formatting\n- StructuredLogger extended functionality\n- Request context management\n- Log decorators (sync and async)\n- LoggingMiddleware ASGI\n- RAG prompt building\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+unittest.mock
+●●●●●● 2mm □△○
+Mock
+AsyncMock
+MagicMock
+patch
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 2mm □△○
+uuid
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+0
+'/home/user/grace-3.1-/backend'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestErrorSuppression
+'Test error suppression utility functions.'
+●●●●●● 1mm □
+test_should_suppress_genesis_error_no_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test genesis error suppression when settings unavailable.'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'sys.modules'
+'settings'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+utils.error_suppression
+●●●●●● 1mm □
+es
+importlib
+●●●●●● 1mm □△
+es
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+es
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_should_suppress_genesis_error_with_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test genesis error suppression with settings.'
+mock_settings
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_settings
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utils.error_suppression.settings'
+mock_settings
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+utils.error_suppression
+●●●●●● 2mm □△○
+should_suppress_genesis_error
+result
+●●●●●● 1mm □
+should_suppress_genesis_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_should_suppress_qdrant_error_with_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test qdrant error suppression with settings.'
+mock_settings
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_settings
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utils.error_suppression.settings'
+mock_settings
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+utils.error_suppression
+●●●●●● 2mm □△○
+should_suppress_qdrant_error
+result
+●●●●●● 1mm □
+should_suppress_qdrant_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_should_suppress_ingestion_error_with_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test ingestion error suppression with settings.'
+mock_settings
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_settings
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utils.error_suppression.settings'
+mock_settings
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+utils.error_suppression
+●●●●●● 2mm □△○
+should_suppress_ingestion_error
+result
+●●●●●● 1mm □
+should_suppress_ingestion_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_should_suppress_embedding_error_with_settings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test embedding error suppression with settings.'
+mock_settings
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_settings
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'utils.error_suppression.settings'
+mock_settings
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+utils.error_suppression
+●●●●●● 2mm □△○
+should_suppress_embedding_error
+result
+●●●●●● 1mm □
+should_suppress_embedding_error
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestStructuredLogFormatter
+'Test StructuredLogFormatter class.'
+●●●●●● 1mm □
+test_formatter_initialization
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatter initialization.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+formatter
+'test_service'
+formatter
+'testing'
+●●●●●● 1mm □
+test_formatter_default_values
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatter default values.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+formatter
+'grace'
+formatter
+'development'
+●●●●●● 1mm □
+test_format_basic_log
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatting basic log record.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+data
+'level'
+'INFO'
+data
+'message'
+'Test message'
+data
+'service'
+'test'
+data
+'environment'
+'test'
+data
+'logger'
+'test.logger'
+'timestamp'
+data
+data
+'location'
+'line'
+42
+●●●●●● 1mm □
+test_format_with_exception
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatting log with exception.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Test error'
+●●●●●● 2mm □△
+ValueError
+●●●●●● 2mm □△○
+sys
+exc_info
+●●●●●● 1mm □
+sys
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'exception'
+data
+data
+'exception'
+'type'
+'ValueError'
+'Test error'
+data
+'exception'
+'message'
+data
+'exception'
+'traceback'
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_format_with_context_vars
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatting with context variables.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+set_request_context
+clear_request_context
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+data
+'request_id'
+'REQ-123'
+data
+'user_id'
+'USER-456'
+data
+'session_id'
+'SESS-789'
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_format_with_extra_fields
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatting with extra fields.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+'action'
+'duration_ms'
+'login'
+150
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+data
+'extra'
+'action'
+'login'
+data
+'extra'
+'duration_ms'
+150
+●●●●●● 1mm □
+test_format_non_serializable_extra
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatting with non-serializable extra data.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'complex_object'
+data
+●●●●●● 1mm □△
+'extra'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestStructuredLogger
+'Test StructuredLogger class.'
+●●●●●● 1mm □
+test_info_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test info logging with context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogger
+logger
+●●●●●● 1mm □
+StructuredLogger
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Test message'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_error_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test error logging with context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogger
+logger
+●●●●●● 1mm □
+StructuredLogger
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Error message'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_warning_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test warning logging with context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogger
+logger
+●●●●●● 1mm □
+StructuredLogger
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Warning message'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_debug_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test debug logging with context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogger
+logger
+●●●●●● 1mm □
+StructuredLogger
+●●●●●● 1mm □△
+'test'
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Debug message'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestSetupStructuredLogging
+'Test setup_structured_logging function.'
+●●●●●● 1mm □
+test_setup_json_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test setup with JSON output.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+setup_structured_logging
+StructuredLogFormatter
+logger
+●●●●●● 1mm □
+setup_structured_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+logger
+●●●●●● 2mm □△
+0
+formatter
+●●●●●● 1mm □
+logger
+0
+●●●●●● 1mm □
+●●●●●● 1mm □△
+formatter
+StructuredLogFormatter
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_setup_standard_output
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test setup with standard output.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+setup_structured_logging
+logger
+●●●●●● 1mm □
+setup_structured_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 2mm □
+formatter
+●●●●●● 1mm □
+logger
+0
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+formatter
+'service_name'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestContextManagement
+'Test request context management.'
+●●●●●● 1mm □
+test_set_request_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test setting request context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+set_request_context
+clear_request_context
+request_id_var
+user_id_var
+session_id_var
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'REQ-123'
+user_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'USER-456'
+session_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'SESS-789'
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_clear_request_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test clearing request context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+set_request_context
+clear_request_context
+request_id_var
+user_id_var
+session_id_var
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+user_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+session_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+test_generate_request_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test request ID generation.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+generate_request_id
+id1
+●●●●●● 1mm □
+generate_request_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+id2
+●●●●●● 1mm □
+generate_request_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+id1
+id2
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+id1
+●●●●●● 2mm □△
+36
+●●●●●● 1mm □
+test_partial_context_set
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test setting partial context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+set_request_context
+clear_request_context
+request_id_var
+user_id_var
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'REQ-ONLY'
+user_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestLogDecorators
+'Test log decorators.'
+●●●●●● 1mm □
+test_log_function_call_success
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test log_function_call decorator on success.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_function_call
+●●●●●● 1mm □
+sample_function
+●●●●●● 1mm □△
+x
+y
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+x
+●●●●●● 3mm ○
+y
+log_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+sample_function
+●●●●●● 1mm □△
+1
+2
+●●●●●● 2mm □△
+result
+3
+●●●●●● 1mm □
+test_log_function_call_with_exception
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test log_function_call decorator on exception.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_function_call
+●●●●●● 1mm □
+failing_function
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ValueError
+●●●●●● 1mm □△
+'Test error'
+●●●●●● 2mm □△
+log_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+ValueError
+●●●●●● 2mm □△
+failing_function
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_log_function_call_with_kwargs
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test log_function_call decorator with kwargs.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_function_call
+●●●●●● 1mm □
+function_with_kwargs
+●●●●●● 1mm □△
+a
+b
+c
+●●●●●● 2mm □△
+10
+20
+●●●●●● 3mm ○
+a
+●●●●●● 3mm ○
+b
+●●●●●● 3mm ○
+c
+log_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+function_with_kwargs
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+result
+30
+'Test log_async_function_call decorator on success.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_async_function_call
+asyncio
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+x
+●●●●●● 2mm □△
+y
+log_async_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+async_sample_function
+●●●●●● 1mm □△
+3
+4
+●●●●●● 2mm □△
+result
+12
+pytest
+'Test log_async_function_call decorator on exception.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_async_function_call
+asyncio
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+RuntimeError
+●●●●●● 1mm □△
+'Async error'
+●●●●●● 2mm □△
+log_async_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □△
+RuntimeError
+●●●●●● 2mm □△
+async_failing_function
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 1mm □
+test_log_function_call_custom_logger
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test log_function_call with custom logger.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_function_call
+custom_logger
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+custom_logger
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+custom_logger
+●●●●●● 1mm □
+Mock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+logged_function
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'done'
+log_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+logged_function
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+'done'
+custom_logger
+1
+●●●●●● 2mm △
+TestLoggingMiddleware
+'Test LoggingMiddleware ASGI middleware.'
+'Test middleware passes through non-HTTP requests.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+LoggingMiddleware
+mock_app
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+middleware
+●●●●●● 1mm □
+LoggingMiddleware
+●●●●●● 1mm □△
+mock_app
+●●●●●● 2mm □△
+scope
+●●●●●● 1mm □
+'type'
+'path'
+'websocket'
+'/ws'
+middleware
+●●●●●● 1mm □△
+scope
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+mock_app
+●●●●●● 1mm □△
+scope
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □△
+pytest
+'Test middleware logs HTTP requests.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+LoggingMiddleware
+clear_request_context
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mock_app
+●●●●●● 1mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+message
+'type'
+'http.response.start'
+middleware
+●●●●●● 1mm □
+LoggingMiddleware
+●●●●●● 1mm □△
+mock_app
+●●●●●● 2mm □△
+scope
+●●●●●● 1mm □
+'type'
+'method'
+'path'
+'http'
+'GET'
+'/api/test'
+middleware
+●●●●●● 1mm □△
+scope
+●●●●●● 2mm □
+mock_send
+●●●●●● 2mm □△
+mock_app
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+'Test middleware sets request ID in context.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+LoggingMiddleware
+request_id_var
+clear_request_context
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+captured_request_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+captured_request_id
+●●●●●● 1mm □
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+middleware
+●●●●●● 1mm □
+LoggingMiddleware
+●●●●●● 1mm □△
+capture_app
+●●●●●● 2mm □△
+scope
+●●●●●● 1mm □
+'type'
+'method'
+'path'
+'http'
+'POST'
+'/api/submit'
+middleware
+●●●●●● 1mm □△
+scope
+●●●●●● 2mm □
+AsyncMock
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+captured_request_id
+●●●●●● 2mm □
+pytest
+●●●●●● 2mm △
+TestRagPrompt
+'Test RAG prompt utilities.'
+●●●●●● 1mm □
+test_build_rag_prompt_with_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test building RAG prompt with context.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+query
+●●●●●● 1mm □
+'What is the capital of France?'
+context
+●●●●●● 1mm □
+'France is a country in Europe. Its capital is Paris.'
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+'What is the capital of France?'
+result
+'France is a country in Europe'
+result
+'<context>'
+result
+'</context>'
+result
+●●●●●● 1mm □
+test_build_rag_prompt_no_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test building RAG prompt without context.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+query
+●●●●●● 1mm □
+'What is the capital of France?'
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □
+●●●●●● 2mm □△
+result
+query
+●●●●●● 1mm □
+test_build_rag_prompt_empty_context
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test building RAG prompt with empty context.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+query
+●●●●●● 1mm □
+'What is the capital of France?'
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+''
+●●●●●● 2mm □△
+result
+query
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+'   '
+●●●●●● 2mm □△
+result
+query
+●●●●●● 1mm □
+test_build_rag_prompt_formatting
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RAG prompt formatting structure.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+query
+●●●●●● 1mm □
+'Explain the process'
+context
+●●●●●● 1mm □
+'The process involves three steps: A, B, C.'
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+'Based on the following context'
+●●●●●● 2mm □△
+'User Question:'
+result
+context
+result
+●●●●●● 1mm □
+test_build_rag_system_prompt
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test building RAG system prompt.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_system_prompt
+result
+●●●●●● 1mm □
+build_rag_system_prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+0
+'knowledge assistant'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'context'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_build_rag_system_prompt_rules
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RAG system prompt contains critical rules.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_system_prompt
+result
+●●●●●● 1mm □
+build_rag_system_prompt
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'MUST'
+result
+'context'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cannot answer'
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'I cannot'
+result
+●●●●●● 1mm □
+test_rag_prompt_preserves_query
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test that query is preserved exactly in prompt.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+query
+●●●●●● 1mm □
+'Complex query with \'quotes\' and "double quotes" and special chars: <>&'
+context
+●●●●●● 1mm □
+'Some context'
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+query
+result
+●●●●●● 2mm △
+TestGetLogger
+'Test get_logger function.'
+●●●●●● 1mm □
+test_get_logger_returns_logger
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_logger returns a logger instance.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+get_logger
+logger
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+'test.module'
+●●●●●● 2mm □△
+logger
+●●●●●● 2mm □
+logger
+'test.module'
+●●●●●● 1mm □
+test_get_logger_same_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_logger returns same logger for same name.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+get_logger
+logger1
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+'same.name'
+●●●●●● 2mm □△
+logger2
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+'same.name'
+●●●●●● 2mm □△
+logger1
+logger2
+●●●●●● 1mm □
+test_get_logger_different_names
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test get_logger returns different loggers for different names.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+get_logger
+logger1
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+'first.logger'
+●●●●●● 2mm □△
+logger2
+●●●●●● 1mm □
+get_logger
+●●●●●● 1mm □△
+'second.logger'
+●●●●●● 2mm □△
+logger1
+logger2
+logger1
+'first.logger'
+logger2
+'second.logger'
+●●●●●● 2mm △
+TestUtilsIntegration
+'Integration tests for utils module.'
+●●●●●● 1mm □
+test_structured_logging_end_to_end
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test structured logging end-to-end.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+setup_structured_logging
+set_request_context
+clear_request_context
+generate_request_id
+get_logger
+●●●●●● 2mm □△○
+io
+output
+●●●●●● 1mm □
+io
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+handler
+●●●●●● 1mm □△
+logging
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+setup_structured_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+handler
+●●●●●● 1mm □△
+StructuredLogFormatter
+●●●●●● 1mm □△
+'integration_test'
+'test'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+handler
+●●●●●● 2mm □△
+request_id
+●●●●●● 1mm □
+generate_request_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Integration test message'
+●●●●●● 2mm □△
+log_output
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+log_output
+log_data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+log_output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+log_data
+'service'
+'integration_test'
+log_data
+'message'
+'Integration test message'
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_decorator_with_structured_logging
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test decorator integration with structured logging.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_function_call
+setup_structured_logging
+clear_request_context
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+setup_structured_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+call_count
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+tracked_function
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+call_count
+1
+●●●●●● 3mm ○
+x
+●●●●●● 2mm □△
+2
+log_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+tracked_function
+●●●●●● 1mm □△
+5
+●●●●●● 2mm □△
+result
+10
+call_count
+1
+'Test async decorator integration.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+log_async_function_call
+setup_structured_logging
+set_request_context
+clear_request_context
+generate_request_id
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+setup_structured_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+request_id
+●●●●●● 1mm □
+generate_request_id
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'processed'
+data
+log_async_function_call
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+async_tracked_function
+●●●●●● 1mm □△
+'key'
+'value'
+●●●●●● 2mm □△
+result
+'processed'
+'key'
+'value'
+clear_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+pytest
+●●●●●● 2mm △
+TestEdgeCases
+'Test edge cases and error handling.'
+●●●●●● 1mm □
+test_formatter_with_none_exc_info
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatter handles None exc_info.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+'exception'
+data
+●●●●●● 1mm □
+test_formatter_with_empty_message
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test formatter handles empty message.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+StructuredLogFormatter
+formatter
+●●●●●● 1mm □
+StructuredLogFormatter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+record
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+formatter
+●●●●●● 1mm □△
+record
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+data
+'message'
+''
+●●●●●● 1mm □
+test_rag_prompt_with_special_characters
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test RAG prompt with special characters.'
+●●●●●● 3mm □△○
+utils.rag_prompt
+●●●●●● 2mm □△○
+build_rag_prompt
+query
+●●●●●● 1mm □
+"What about <script>alert('xss')</script>?"
+context
+●●●●●● 1mm □
+'Context with & and < and > symbols'
+result
+●●●●●● 1mm □
+build_rag_prompt
+●●●●●● 1mm □△
+query
+context
+●●●●●● 2mm □△
+'<script>'
+result
+'&'
+result
+●●●●●● 1mm □
+test_context_isolation
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Test context variables are isolated.'
+●●●●●● 3mm □△○
+utils.structured_logging
+●●●●●● 2mm □△○
+set_request_context
+clear_request_context
+request_id_var
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+set_request_context
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+0.01
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+request_id_var
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+pytest
+●●●●●● 1mm □△
+__file__
+'-v'
+●●●●●● 2mm □△

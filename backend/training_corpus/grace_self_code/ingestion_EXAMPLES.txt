@@ -1,0 +1,914 @@
+## EXAMPLES.py
+'\nExamples and integration patterns for the File-Based Ingestion Manager.\nShows how to use the manager in different contexts.\n'
+●●●●●● 1mm □
+example_basic_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Basic example: Scan for changes and process them.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+results
+●●●●●● 2mm □
+result
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ '
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+': '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Document ID: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Message: '
+result
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ '
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+': '
+result
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Error: '
+result
+'\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_continuous_watch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Watch directory continuously for changes.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_process_specific_actions
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Handle specific file actions manually.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kb_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'backend/knowledge_base'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Processing new file...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 3mm □△
+'new_guide.md'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Document ID: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nProcessing modified file...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+kb_path
+●●●●●● 3mm □△
+'existing_guide.md'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nProcessing deleted file...'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+'backend/knowledge_base/old_guide.md'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Success: '
+result
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_fastapi_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+"\n    Example: Using the file manager with FastAPI.\n    This shows how it's integrated in app.py\n    "
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+FastAPI
+BackgroundTasks
+Depends
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+api.file_ingestion
+●●●●●● 2mm □△○
+get_file_manager
+app
+●●●●●● 1mm □
+FastAPI
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Scan and process all changes.'
+results
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'total'
+'successful'
+'failed'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/api/scan-knowledge-base'
+●●●●●● 2mm □△
+BackgroundTasks
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Start background scan (non-blocking).'
+●●●●●● 1mm □
+scan_task
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+file_manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Background scan complete: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' changes'
+●●●●●● 2mm □△
+background_tasks
+●●●●●● 1mm □△
+scan_task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'scan started'
+app
+●●●●●● 1mm □△
+'/api/scan-background'
+●●●●●● 2mm □△
+IngestionFileManager
+Depends
+●●●●●● 1mm □△
+get_file_manager
+●●●●●● 2mm □△
+'Get manager status.'
+git_dir
+●●●●●● 1mm □
+file_manager
+●●●●●● 3mm □△
+'.git'
+●●●●●● 3mm ○
+'initialized'
+'tracked_files'
+'git_initialized'
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_manager
+●●●●●● 2mm □△
+git_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+app
+●●●●●● 1mm □△
+'/api/ingestion-status'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_error_handling
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Proper error handling when using the manager.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+errors
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 2mm □
+errors
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nEncountered '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+errors
+●●●●●● 2mm □△
+' errors:'
+●●●●●● 2mm □△
+error_result
+errors
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+error_result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Change: '
+error_result
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'    Error: '
+error_result
+●●●●●● 2mm □△
+successes
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 2mm □
+successes
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nSuccessfully processed '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+successes
+●●●●●● 2mm □△
+' files:'
+●●●●●● 2mm □△
+success_result
+successes
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+success_result
+' (ID: '
+success_result
+')'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Failed to initialize manager: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_batch_import
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Batch import documents from external source.'
+●●●●●● 2mm □△○
+shutil
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+source_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'external_documents'
+●●●●●● 2mm □△
+dest_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+'backend/knowledge_base/imported'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+source_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dest_dir
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+file
+source_dir
+●●●●●● 1mm □△
+'*'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+relative
+●●●●●● 1mm □
+file
+●●●●●● 1mm □△
+source_dir
+●●●●●● 2mm □△
+dest_file
+●●●●●● 1mm □
+dest_dir
+●●●●●● 3mm □△
+relative
+dest_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+file
+dest_file
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Copied: '
+relative
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nScanning and ingesting...'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+successful
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+results
+r
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nImport complete: '
+successful
+'/'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+results
+●●●●●● 2mm □△
+' successful'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_state_management
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Managing ingestion state.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+●●●●●● 2mm □△○
+json
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Tracking '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manager
+●●●●●● 2mm □△
+' files'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+'ingestion_state_backup.json'
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+manager
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'State backed up to ingestion_state_backup.json'
+●●●●●● 2mm □△
+old_count
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manager
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Cleared '
+old_count
+' tracked files'
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Reloaded '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+manager
+●●●●●● 2mm □△
+' files'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_git_operations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Direct git operations.'
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □
+manager
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Git initialized'
+●●●●●● 2mm □△
+untracked
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Untracked files: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+untracked
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'documents/guide.md'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ File staged'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'Manual ingestion of document'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Changes committed'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_custom_processing
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Custom processing logic on top of manager.'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+IngestionResult
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+●●●●●● 2mm △
+CustomIngestionManager
+●●●●●● 3mm □△
+IngestionFileManager
+IngestionFileManager
+'Extended manager with custom logic.'
+●●●●●● 1mm □
+process_new_file
+●●●●●● 1mm □△
+self
+filepath
+●●●●●● 2mm □△
+Path
+'Override with custom logic.'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[CUSTOM] Processing new file: '
+filepath
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+'SKIP'
+content
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[CUSTOM] Skipping file marked with SKIP'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+IngestionResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+CustomIngestionManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+example_monitoring_logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Example: Set up monitoring and advanced logging.'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+ingestion.file_manager
+●●●●●● 2mm □△○
+IngestionFileManager
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 3mm □△○
+api.ingest
+●●●●●● 2mm □△○
+get_ingestion_service
+logging
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'ingestion_monitor'
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+get_ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+manager
+●●●●●● 1mm □
+IngestionFileManager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Starting ingestion scan'
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+manager
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+by_type
+●●●●●● 1mm □
+result
+results
+change_type
+●●●●●● 1mm □
+result
+by_type
+change_type
+●●●●●● 1mm □
+by_type
+●●●●●● 1mm □△
+change_type
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+logger
+●●●●●● 1mm □△
+'Scan complete. Results by type: '
+by_type
+●●●●●● 2mm □△
+failures
+●●●●●● 1mm □
+r
+r
+results
+r
+●●●●●● 2mm □
+failures
+logger
+●●●●●● 1mm □△
+'Encountered '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failures
+●●●●●● 2mm □△
+' failures'
+●●●●●● 2mm □△
+failure
+failures
+logger
+●●●●●● 1mm □△
+'  '
+failure
+': '
+failure
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'See function definitions above for usage examples'
+●●●●●● 2mm □△

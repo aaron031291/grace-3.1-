@@ -1,0 +1,402 @@
+## architecture_proposer.py
+"\nArchitecture Proposer\n\nAllows users to submit a simple JSON specification for a new component.\nGrace (via Qwen) queries the ArchitectureCompass to find integration points,\ndetermines a 'Need Score', and formulates an integration plan.\nIf the user accepts the proposal, the specification is handed over to the \nHUNTER Assimilator coding agent for autonomous assembly and deployment.\n"
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ArchitectureProposer
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+propose
+●●●●●● 1mm □△
+self
+json_spec
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Analyze a JSON component spec and return a proposal with a need score.'
+name
+●●●●●● 1mm □
+json_spec
+●●●●●● 1mm □△
+'name'
+'Unknown Component'
+●●●●●● 2mm □△
+desc
+●●●●●● 1mm □
+json_spec
+●●●●●● 1mm □△
+'description'
+'No description provided'
+●●●●●● 2mm □△
+caps
+●●●●●● 1mm □
+json_spec
+●●●●●● 1mm □△
+'capabilities'
+●●●●●● 2mm □△
+compass_context
+●●●●●● 1mm □
+''
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+compass
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+existing
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cap
+caps
+existing
+●●●●●● 1mm □△
+compass
+●●●●●● 1mm □△
+cap
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+existing
+compass_context
+●●●●●● 1mm □
+'\nExisting components with similar capabilities: '
+', '
+●●●●●● 1mm □△
+existing
+●●●●●● 2mm □△
+'\n'
+●●●●●● 3mm □
+compass_context
+●●●●●● 1mm □
+'\nNo existing components claim these precise capabilities. This is a novel addition.\n'
+diag
+●●●●●● 1mm □
+compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+compass_context
+'Total components in Grace: '
+diag
+●●●●●● 1mm □△
+'total_components'
+'?'
+●●●●●● 2mm □△
+'\n'
+Exception
+logger
+●●●●●● 1mm □△
+'[Proposer] Failed to query compass: '
+e
+●●●●●● 2mm □△
+compass_context
+●●●●●● 1mm □
+'Could not reach ArchitectureCompass.'
+prompt
+●●●●●● 1mm □
+"\nYou are Grace's Chief Software Architect. A user has proposed adding the following new component to your architecture:\n\nCOMPONENT SPECIFICATION:\nName: "
+name
+'\nDescription: '
+desc
+'\nCapabilities: '
+', '
+●●●●●● 1mm □△
+caps
+●●●●●● 2mm □△
+'\n\nCURRENT ARCHITECTURE STATE:\n'
+compass_context
+'\n\nTASK:\n1. Determine how much Grace NEEDS this component (0-10 scale). \n   - 10 = Solves critical missing capability\n   - 5 = Nice to have, overlaps slightly\n   - 1 = Completely redundant\n2. List 1-3 existing Grace components this new module should connect to (Incoming/Outgoing).\n3. Briefly explain the **Value Proposition** of building this.\n\nFORMAT YOUR RESPONSE AS STRICT JSON ONLY:\n{\n  "need_score": 8.5,\n  "connections": ["cognitive/event_bus.py", "database/connection.py"],\n  "value_proposition": "Short explanation of value"\n}\n'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_for_task
+qwen
+●●●●●● 1mm □
+get_llm_for_task
+●●●●●● 1mm □△
+'reason'
+●●●●●● 2mm □△
+Exception
+qwen
+●●●●●● 1mm □
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+qwen
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'response'
+response
+●●●●●● 1mm □△
+'content'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+response
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+start
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'{'
+●●●●●● 2mm □△
+end
+●●●●●● 1mm □
+text
+●●●●●● 1mm □△
+'}'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+start
+1
+end
+start
+raw_json
+●●●●●● 1mm □
+text
+start
+end
+●●●●●● 3mm □
+raw_json
+●●●●●● 1mm □
+text
+prediction
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+raw_json
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[Proposer] LLM Generation failed: '
+e
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □
+'need_score'
+'connections'
+'value_proposition'
+5.0
+'api/brain_api_v2.py'
+'Could not analyze via LLM (Error: '
+e
+'). Defaulting to standard API integration.'
+proposal_id
+●●●●●● 1mm □
+'prop_'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+proposal
+●●●●●● 1mm □
+'proposal_id'
+'spec'
+'score'
+'connections'
+'value'
+'status'
+proposal_id
+json_spec
+prediction
+●●●●●● 1mm □△
+'need_score'
+5.0
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □△
+'connections'
+●●●●●● 2mm □△
+prediction
+●●●●●● 1mm □△
+'value_proposition'
+''
+●●●●●● 2mm □△
+'proposed'
+●●●●●● 3mm △
+proposal_id
+●●●●●● 1mm □
+proposal
+●●●●●● 3mm ○
+proposal
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+build
+●●●●●● 1mm □△
+self
+proposal_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Trigger the HUNTER Assimilator to build the proposed component.'
+●●●●●● 2mm □
+proposal_id
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'error'
+'Proposal not found.'
+proposal
+●●●●●● 1mm □
+●●●●●● 3mm △
+proposal_id
+spec
+●●●●●● 1mm □
+proposal
+'spec'
+prompt
+●●●●●● 1mm □
+'\nI am using the HUNTER protocol. Build the following component and integrate it into Grace:\n\nName: '
+spec
+●●●●●● 1mm □△
+'name'
+●●●●●● 2mm □△
+'\nDescription: '
+spec
+●●●●●● 1mm □△
+'description'
+●●●●●● 2mm □△
+'\nCapabilities: '
+', '
+●●●●●● 1mm □△
+spec
+●●●●●● 1mm □△
+'capabilities'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\n\nIt should connect to: '
+', '
+●●●●●● 1mm □△
+proposal
+●●●●●● 1mm □△
+'connections'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'\nValue: '
+proposal
+●●●●●● 1mm □△
+'value'
+●●●●●● 2mm □△
+'\n\nWrite the full Python code for this component. Ensure it uses standard Grace imports (like `logger`).\nProvide the code in a standard markdown filepath block, e.g. ```filepath: cognitive/new_component.py\n'
+●●●●●● 3mm □△○
+cognitive.hunter_assimilator
+●●●●●● 2mm □△○
+get_hunter
+hunter
+●●●●●● 1mm □
+get_hunter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+hunter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+proposal
+'status'
+●●●●●● 1mm □
+'building'
+proposal
+'hunter_request_id'
+●●●●●● 1mm □
+result
+●●●●●● 3mm ○
+'status'
+'message'
+'request_id'
+'building'
+'Handed over to HUNTER Assimilator'
+result
+Exception
+logger
+●●●●●● 1mm □△
+'[Proposer] Failed to trigger builder: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'error'
+'Failed to start builder: '
+e
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_proposer
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_architecture_proposer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_proposer
+●●●●●● 2mm □
+_proposer
+●●●●●● 1mm □
+ArchitectureProposer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_proposer
+ArchitectureProposer

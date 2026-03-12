@@ -1,0 +1,1762 @@
+## reverse_knn.py
+'\nReverse kNN Oracle Discovery — Find What Grace DOESN\'T Know\n\nNot "find similar" but "find what\'s MISSING":\n  - Knowledge gaps: topics with fewer than K neighbours (sparse regions)\n  - Isolated knowledge: nearest neighbour is far away (disconnected facts)\n  - Stale knowledge: clusters where all data is old (needs refresh)\n  - Demand gaps: user queries with no good matches (supply vs demand)\n\nEmbedding sources (all used for training-data-aware gap analysis):\n  - Qdrant documents\n  - Learning memory (LearningExample): embedded on the fly so neighbor search\n    sees sparse regions in training data; filled content is stored back as training data.\nRun nightly or on-demand. Results feed into idle learner and\nknowledge expansion cycle to automatically fill gaps.\n'
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+math
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+defaultdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+Optional
+Tuple
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+GAPS_DIR
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'data'
+●●●●●● 3mm □△
+'knowledge_gaps'
+●●●●●● 2mm △
+ReverseKNNOracle
+"Discover what Grace doesn't know by analysing embedding density."
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+scan_knowledge_gaps
+●●●●●● 1mm □△
+self
+k
+distance_threshold
+min_neighbours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+10
+0.6
+3
+'\n        Full gap analysis across all knowledge sources.\n        Returns gaps sorted by severity.\n        '
+gaps
+●●●●●● 1mm □
+'sparse_regions'
+'isolated_points'
+'stale_clusters'
+'demand_gaps'
+'summary'
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+embeddings
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+eid
+vec
+meta
+●●●●●● 2mm □
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □
+j
+_
+other_vec
+_
+●●●●●● 2mm □
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+j
+dist
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+vec
+other_vec
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □△
+dist
+●●●●●● 2mm □△
+distances
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+near_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+d
+distances
+k
+d
+distance_threshold
+●●●●●● 2mm □△
+●●●●●● 2mm □
+near_count
+min_neighbours
+gaps
+'sparse_regions'
+●●●●●● 1mm □△
+'id'
+'topic'
+'neighbours_within_threshold'
+'nearest_distance'
+'severity'
+eid
+meta
+●●●●●● 1mm □△
+'source'
+meta
+●●●●●● 1mm □△
+'title'
+eid
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+near_count
+distances
+distances
+0
+1.0
+near_count
+0
+'high'
+'medium'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+distances
+distances
+0
+0.8
+gaps
+'isolated_points'
+●●●●●● 1mm □△
+'id'
+'topic'
+'nearest_distance'
+'severity'
+eid
+meta
+●●●●●● 1mm □△
+'source'
+eid
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+distances
+0
+3
+●●●●●● 2mm □△
+'high'
+●●●●●● 2mm □△
+by_source
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+eid
+vec
+meta
+embeddings
+source
+●●●●●● 1mm □
+meta
+●●●●●● 1mm □△
+'source'
+'unknown'
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □
+meta
+●●●●●● 1mm □△
+'created_at'
+''
+●●●●●● 2mm □△
+by_source
+source
+●●●●●● 1mm □△
+created
+●●●●●● 2mm □△
+cutoff
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+source
+dates
+by_source
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+dates
+●●●●●● 1mm △○
+●●●●●● 1mm □△
+d
+cutoff
+d
+dates
+d
+●●●●●● 2mm □△
+gaps
+'stale_clusters'
+●●●●●● 1mm □△
+'source'
+'count'
+'oldest'
+'severity'
+source
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+dates
+●●●●●● 2mm □△
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+d
+d
+dates
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+d
+d
+dates
+d
+●●●●●● 2mm □△
+'unknown'
+'medium'
+●●●●●● 2mm □△
+total_gaps
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'sparse_regions'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'isolated_points'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'stale_clusters'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'demand_gaps'
+●●●●●● 2mm □△
+gaps
+'summary'
+●●●●●● 1mm □
+'total_embeddings'
+'total_gaps'
+'sparse_regions'
+'isolated_points'
+'stale_clusters'
+'demand_gaps'
+'health_score'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+total_gaps
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'sparse_regions'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'isolated_points'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'stale_clusters'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'demand_gaps'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+100
+●●●●●● 1mm □△
+total_gaps
+●●●●●● 2mm □△
+2
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+gaps
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.event_bus
+●●●●●● 2mm □△○
+publish
+publish
+●●●●●● 1mm □△
+'knowledge.gaps_discovered'
+'total_gaps'
+'sparse'
+'isolated'
+total_gaps
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'sparse_regions'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'isolated_points'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+gaps
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fill_gaps_actively
+●●●●●● 1mm □△
+self
+max_gaps
+auto_ingest
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+5
+●●●●●● 3mm □△○
+'\n        Actively fill knowledge gaps through 4 data pathways:\n          1. FlashCache — cached API/web refs\n          2. Web search — SerpAPI\n          3. Direct fetch — known URLs (e.g. Python PEPs)\n          4. External sources — GitHub (repos), Stack Overflow, research papers (arXiv)\n\n        Each gap topic is tried in order until data is acquired.\n        Results flow into FlashCache + Oracle + unified memory.\n        '
+gaps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fill_results
+●●●●●● 1mm □
+topic
+topics
+●●●●●● 2mm □
+topic
+result
+●●●●●● 1mm □
+'topic'
+'pathways_tried'
+'data_acquired'
+topic
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+refs
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+api_refs
+●●●●●● 1mm □
+r
+r
+refs
+r
+●●●●●● 1mm □△
+'source_type'
+●●●●●● 2mm □△
+'api'
+'web'
+ref
+api_refs
+2
+uri
+●●●●●● 1mm □
+ref
+●●●●●● 1mm □△
+'source_uri'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □
+uri
+uri
+●●●●●● 1mm □△
+'internal://'
+●●●●●● 2mm □△
+streamed
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+ref
+●●●●●● 1mm □△
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+streamed
+streamed
+●●●●●● 1mm □△
+'error'
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □
+streamed
+●●●●●● 1mm □△
+'text'
+streamed
+●●●●●● 1mm □△
+'data'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+50
+result
+'pathways_tried'
+●●●●●● 1mm □△
+'pathway'
+'source'
+'chars'
+'flash_cache_stream'
+ref
+●●●●●● 1mm □△
+'source_name'
+uri
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'data_acquired'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+auto_ingest
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+5000
+'flash_cache:'
+uri
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+result
+'data_acquired'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 2mm □
+settings
+●●●●●● 3mm □△○
+search.serpapi_service
+●●●●●● 2mm □△○
+SerpAPIService
+serp
+●●●●●● 1mm □
+SerpAPIService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+search_results
+●●●●●● 1mm □
+serp
+●●●●●● 1mm □△
+topic
+' software engineering best practices'
+●●●●●● 2mm □△
+sr
+search_results
+result
+'pathways_tried'
+●●●●●● 1mm □△
+'pathway'
+'source'
+'title'
+'web_search'
+sr
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+sr
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+search_results
+result
+'data_acquired'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+auto_ingest
+combined
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+r
+'title'
+': '
+r
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+r
+search_results
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+combined
+'web_search'
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm □
+result
+'data_acquired'
+●●●●●● 2mm □△○
+requests
+●●●●●● 1mm □
+req
+known_urls
+●●●●●● 1mm □
+'python'
+'https://peps.python.org/api/peps.json'
+keyword
+url
+known_urls
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keyword
+topic
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+resp
+●●●●●● 1mm □
+req
+●●●●●● 1mm □△
+url
+●●●●●● 2mm □△
+●●●●●● 2mm □
+resp
+200
+data
+●●●●●● 1mm □
+resp
+5000
+result
+'pathways_tried'
+●●●●●● 1mm □△
+'pathway'
+'source'
+'chars'
+'direct_fetch'
+url
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+'data_acquired'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+auto_ingest
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+data
+'direct:'
+url
+●●●●●● 2mm □△
+Exception
+Exception
+●●●●●● 2mm □
+result
+'data_acquired'
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+●●●●●● 3mm □△○
+search.external_sources
+●●●●●● 2mm □△○
+fetch_all_external
+ext
+●●●●●● 1mm □
+fetch_all_external
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+hit
+ext
+result
+'pathways_tried'
+●●●●●● 1mm □△
+'pathway'
+'source'
+'title'
+hit
+●●●●●● 1mm □△
+'source'
+'external'
+●●●●●● 2mm □△
+hit
+●●●●●● 1mm □△
+'link'
+''
+●●●●●● 2mm □△
+hit
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+ext
+result
+'data_acquired'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+combined
+●●●●●● 1mm □
+'\n'
+●●●●●● 1mm □△
+h
+●●●●●● 1mm □△
+'title'
+''
+●●●●●● 2mm □△
+': '
+h
+●●●●●● 1mm □△
+'snippet'
+''
+●●●●●● 2mm □△
+h
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □
+auto_ingest
+combined
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+topic
+combined
+5000
+'external:'
+●●●●●● 3mm ○
+','
+●●●●●● 1mm □△
+h
+●●●●●● 1mm □△
+'source'
+''
+●●●●●● 2mm □△
+h
+ext
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+h
+ext
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+Exception
+logger
+●●●●●● 1mm □△
+'External sources (GitHub/StackOverflow/arXiv) failed: %s'
+e
+●●●●●● 2mm □△
+fill_results
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+acquired
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+r
+fill_results
+r
+'data_acquired'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'topics_processed'
+'gaps_filled'
+'results'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+fill_results
+●●●●●● 2mm □△
+acquired
+fill_results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_ingest_discovery
+●●●●●● 1mm □△
+self
+topic
+content
+source
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Ingest discovered data into Oracle + unified memory.'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+kw
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+topic
+' '
+content
+500
+●●●●●● 2mm □△
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+log_query
+●●●●●● 1mm □△
+self
+query
+had_results
+best_score
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+'Log a user query for demand-gap analysis.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'query'
+'had_results'
+'best_score'
+'timestamp'
+query
+had_results
+best_score
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+500
+●●●●●● 1mm □
+get_demand_gaps
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Find topics users ask about but Oracle can't answer."
+no_result_queries
+●●●●●● 1mm □
+q
+q
+●●●●●● 3mm △
+q
+'had_results'
+low_score_queries
+●●●●●● 1mm □
+q
+q
+●●●●●● 3mm △
+q
+'best_score'
+0.3
+q
+'had_results'
+topics
+●●●●●● 1mm □
+●●●●●● 2mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 2mm □△
+q
+no_result_queries
+●●●●●● 3mm ○
+low_score_queries
+words
+●●●●●● 1mm □
+q
+'query'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+w
+words
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+3
+topics
+w
+1
+●●●●●● 3mm ○
+'topic'
+'demand_count'
+'severity'
+t
+c
+c
+3
+'high'
+'medium'
+t
+c
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+topics
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+20
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+suggest_expansion_topics
+●●●●●● 1mm □△
+self
+limit
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+10
+'Suggest topics to expand based on gaps.'
+gaps
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+topics
+●●●●●● 1mm □
+gap
+gaps
+●●●●●● 1mm □△
+'sparse_regions'
+●●●●●● 2mm □△
+limit
+topics
+●●●●●● 1mm □△
+gap
+●●●●●● 1mm □△
+'topic'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+gap
+gaps
+●●●●●● 1mm □△
+'demand_gaps'
+●●●●●● 2mm □△
+limit
+topics
+●●●●●● 1mm □△
+gap
+●●●●●● 1mm □△
+'topic'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+t
+t
+topics
+t
+limit
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_load_all_embeddings
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load embeddings from vector DB, FlashCache, and learning memory (training data).'
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+results
+results
+0
+point
+results
+0
+vec
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+point
+'vector'
+●●●●●● 2mm □△
+point
+payload
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+point
+'payload'
+●●●●●● 2mm □△
+point
+●●●●●● 2mm □
+vec
+embeddings
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+point
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+vec
+●●●●●● 2mm □△
+payload
+●●●●●● 2mm □△
+Exception
+learning_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □△
+learning_embeddings
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Learning memory embeddings skipped: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_load_learning_memory_embeddings
+●●●●●● 1mm □△
+self
+limit
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+500
+0.3
+'\n        Load learning examples and embed them for use as training-data-aware neighbor search.\n        Used for gap analysis so sparse regions in learning memory get filled from API/web/FlashCache.\n        '
+out
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+session_scope
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+_from_json_str
+Exception
+●●●●●● 3mm ○
+out
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+embedder
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Embedder unavailable for learning memory'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 2mm □
+embedder
+●●●●●● 2mm □
+●●●●●● 3mm ○
+out
+texts
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+metas
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+ids
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+session_scope
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+rows
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LearningExample
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+r
+rows
+eid
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'id'
+''
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+eid
+ic
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'input_context'
+''
+●●●●●● 2mm □△
+'{}'
+eo
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'expected_output'
+''
+●●●●●● 2mm □△
+'{}'
+d_ic
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ic
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+ic
+●●●●●● 2mm □△
+ic
+d_eo
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+eo
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+_from_json_str
+●●●●●● 1mm □△
+eo
+●●●●●● 2mm □△
+eo
+text_ic
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+d_ic
+●●●●●● 2mm □△
+1200
+text_eo
+●●●●●● 1mm □
+json
+●●●●●● 1mm □△
+d_eo
+●●●●●● 2mm □△
+1200
+text
+●●●●●● 1mm □
+text_ic
+' '
+text_eo
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' '
+created
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'created_at'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+created_at
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+created
+'isoformat'
+●●●●●● 2mm □△
+created
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+created
+''
+●●●●●● 2mm □△
+trust
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'trust_score'
+0
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □△
+example_type
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+r
+'example_type'
+''
+●●●●●● 2mm □△
+''
+●●●●●● 2mm □△
+texts
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+ids
+●●●●●● 1mm □△
+'learning_memory_'
+eid
+●●●●●● 2mm □△
+metas
+●●●●●● 1mm □△
+'source'
+'created_at'
+'trust_score'
+'example_type'
+'title'
+'learning_memory'
+created_at
+trust
+example_type
+example_type
+eid
+●●●●●● 2mm □△
+●●●●●● 2mm □
+texts
+●●●●●● 3mm ○
+out
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+emb
+●●●●●● 1mm □
+embedder
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+emb
+●●●●●● 2mm □
+●●●●●● 3mm ○
+out
+arr
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+emb
+●●●●●● 2mm □△
+●●●●●● 2mm □
+arr
+1
+vec_list
+●●●●●● 1mm □
+arr
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+vec_list
+●●●●●● 1mm □
+arr
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ids
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+arr
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+i
+vec
+●●●●●● 2mm □
+●●●●●● 1mm □△
+vec_list
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+ids
+●●●●●● 2mm □△
+i
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+metas
+●●●●●● 2mm □△
+vec
+out
+●●●●●● 1mm □△
+ids
+i
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+vec
+●●●●●● 2mm □△
+metas
+i
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Embedding learning memory failed: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+out
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □
+_text_based_gap_analysis
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Fallback gap analysis using text matching when embeddings unavailable.'
+gaps
+●●●●●● 1mm □
+'sparse_regions'
+'isolated_points'
+'stale_clusters'
+'demand_gaps'
+'summary'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+mem
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+stats
+●●●●●● 1mm □
+mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+table
+data
+stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+data
+●●●●●● 1mm □△
+'count'
+0
+●●●●●● 2mm □△
+0
+gaps
+'sparse_regions'
+●●●●●● 1mm □△
+'topic'
+'neighbours_within_threshold'
+'severity'
+table
+0
+'high'
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm □△○
+cognitive.flash_cache
+●●●●●● 2mm □△○
+get_flash_cache
+fc
+●●●●●● 1mm □
+get_flash_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+fc_stats
+●●●●●● 1mm □
+fc
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fc_stats
+●●●●●● 1mm □△
+'total_entries'
+0
+●●●●●● 2mm □△
+10
+gaps
+'sparse_regions'
+●●●●●● 1mm □△
+'topic'
+'neighbours_within_threshold'
+'severity'
+'flash_cache'
+fc_stats
+●●●●●● 1mm □△
+'total_entries'
+0
+●●●●●● 2mm □△
+'medium'
+●●●●●● 2mm □△
+Exception
+total
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'sparse_regions'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+gaps
+'demand_gaps'
+●●●●●● 2mm □△
+gaps
+'summary'
+●●●●●● 1mm □
+'total_gaps'
+'method'
+'note'
+total
+'text_based_fallback'
+'Embedding-based analysis unavailable — using text fallback'
+●●●●●● 3mm ○
+gaps
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_cosine_distance
+●●●●●● 1mm □△
+self
+a
+b
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+a
+b
+●●●●●● 3mm ○
+1.0
+min_len
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+a
+b
+●●●●●● 1mm □
+a
+min_len
+b
+min_len
+dot
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+y
+x
+y
+●●●●●● 3mm □
+●●●●●● 1mm □△
+a
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mag_a
+●●●●●● 1mm □
+math
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x
+x
+a
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+mag_b
+●●●●●● 1mm □
+math
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+x
+●●●●●● 2mm □△
+x
+x
+b
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mag_a
+0
+mag_b
+0
+●●●●●● 3mm ○
+1.0
+●●●●●● 3mm ○
+1.0
+●●●●●● 1mm □△
+dot
+●●●●●● 3mm □△
+mag_a
+●●●●●● 2mm □△
+mag_b
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_save_gaps
+●●●●●● 1mm □△
+self
+gaps
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+GAPS_DIR
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ts
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d_%H%M%S'
+●●●●●● 2mm □△
+GAPS_DIR
+●●●●●● 3mm □△
+'gaps_'
+ts
+'.json'
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+gaps
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_reverse_knn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_instance
+●●●●●● 2mm □
+_instance
+●●●●●● 1mm □
+ReverseKNNOracle
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_instance
+ReverseKNNOracle
+●●●●●● 1mm □
+scan_knowledge_gaps
+●●●●●● 1mm □△
+k
+distance_threshold
+min_neighbours
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+10
+0.6
+3
+'Module-level entry: run neighbor-by-neighbor gap analysis (for brain API / learning memory).'
+●●●●●● 3mm ○
+get_reverse_knn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+fill_gaps_from_sources
+●●●●●● 1mm □△
+max_gaps
+auto_ingest
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 3mm △
+5
+●●●●●● 3mm □△○
+'Run neighbor search then pull from API, web search, and FlashCache to fill gaps.'
+●●●●●● 3mm ○
+get_reverse_knn
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

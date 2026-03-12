@@ -1,0 +1,71 @@
+## test_braille_router.py
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+sys
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+ActionRouter
+●●●●●● 3mm □△○
+diagnostic_machine.judgement
+●●●●●● 2mm □△○
+JudgementResult
+HealthStatus
+ConfidenceScore
+●●●●●● 3mm □△○
+diagnostic_machine.sensors
+●●●●●● 2mm □△○
+SensorData
+●●●●●● 3mm □△○
+diagnostic_machine.interpreters
+●●●●●● 2mm □△○
+InterpretedData
+●●●●●● 1mm □
+test_router_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+ActionRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'ActionRouter initialized successfully with the new Braille imports.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+diagnostic_machine.action_router
+●●●●●● 2mm □△○
+BRAILLE_COMPILER_AVAILABLE
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Braille Compiler Available: '
+BRAILLE_COMPILER_AVAILABLE
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nIntegration test passed! The deterministic bitmask engine is wired.'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Error initializing ActionRouter: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+__name__
+'__main__'
+test_router_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△

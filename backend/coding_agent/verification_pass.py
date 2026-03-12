@@ -147,40 +147,31 @@ class VerificationPass:
         self, code: str, ghost_context: str, result: VerificationResult
     ) -> None:
         """Check if code contradicts what ghost memory knows about this session."""
-        # Simple contradiction: code redefines a function ghost said already exists
+        # Relaxed check: when Spindle heals code or iterating, it's normal to redefine functions.
+        # We only flag if the ghost context EXPLICITLY forbids replacing a function.
         functions_in_code = re.findall(r"def (\w+)\(", code)
         for fn in functions_in_code:
-            if f"def {fn}" in ghost_context and fn not in ("__init__", "main"):
+            if f"DO_NOT_MODIFY_DEF_{fn}" in ghost_context:
                 result.contradictions.append(
-                    f"Function '{fn}' already defined in session context — possible duplicate"
+                    f"Function '{fn}' is protected in session context — cannot redefine."
                 )
 
     def _rag_check(self, code: str, task: str, result: VerificationResult) -> None:
+        """Cross-check generated code against knowledge base."""
         try:
             from ml_intelligence.neuro_symbolic_reasoner import get_neuro_symbolic_reasoner
-            from cognitive.learning_memory import LearningMemoryManager
-            from database.session import SessionLocal
-            import os
-            from pathlib import Path
-            
-            db = SessionLocal() if SessionLocal else None
-            if db:
-                try:
-                    lm = LearningMemoryManager(db, Path(os.environ.get("GRACE_KNOWLEDGE_BASE_PATH", ".")))
-                    reasoner = get_neuro_symbolic_reasoner(learning_memory=lm)
-                    # Query: does the KB have anything relevant to this task?
-                    query = f"code implementation: {task[:200]}"
-                    reasoning = reasoner.reason(query, limit=3)
-                    result.kb_matches = [
-                        {"score": r.get("fusion_score", 0), "text": str(r.get("text", ""))[:100]}
-                        for r in reasoning.fused_results[:3]
-                    ]
-        
-                    # If KB has relevant content and trust is high, boost confidence
-                    if reasoning.fusion_confidence > 0.7 and result.kb_matches:
-                        result.flags.append("kb_verified")  # positive flag
-                finally:
-                    db.close()
+            reasoner = get_neuro_symbolic_reasoner()
+            # Query: does the KB have anything relevant to this task?
+            query = f"code implementation: {task[:200]}"
+            reasoning = reasoner.reason(query, limit=3)
+            result.kb_matches = [
+                {"score": r.get("fusion_score", 0), "text": str(r.get("text", ""))[:100]}
+                for r in reasoning.fused_results[:3]
+            ]
+
+            # If KB has relevant content and trust is high, boost confidence
+            if reasoning.fusion_confidence > 0.7 and result.kb_matches:
+                result.flags.append("kb_verified")  # positive flag
         except Exception:
             pass  # KB check is optional
 

@@ -1,0 +1,1419 @@
+## introspection_api.py
+'\nSystem Introspection & Deterministic Validation API\n=====================================================\nEnables anyone to search, explore, and validate the entire Grace system.\n\nEndpoints:\n- GET  /api/system/search?q=...          - Search everything (files, APIs, models, configs)\n- GET  /api/system/index                 - Full system index\n- GET  /api/system/index/files           - All indexed files\n- GET  /api/system/index/endpoints       - All API endpoints\n- GET  /api/system/index/connectors      - All Layer 1 connectors with actions\n- GET  /api/system/index/models          - All models, weights, LLM configs\n- GET  /api/system/index/data-flows      - Data flow relationships\n- GET  /api/system/index/rebuild         - Force rebuild index\n- GET  /api/system/validate              - Run deterministic validation\n- GET  /api/system/validate/silent       - Find silent failures\n- GET  /api/system/validate/wiring       - Find unwired routers\n- GET  /api/system/validate/imports      - Find broken imports\n- GET  /api/system/validate/kimi-opus    - Validate Kimi/Opus connectivity\n'
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+Query
+●●●●●● 3mm □△○
+pydantic
+●●●●●● 2mm □△○
+BaseModel
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Query
+●●●●●● 1mm □△
+Ellipsis
+●●●●●● 2mm □△
+"\n    Search the entire Grace system.\n    \n    A newcomer can ask anything: 'consensus engine', 'kimi', 'RAG',\n    'embedding', 'database', 'healing' — and get back relevant files,\n    endpoints, connectors, classes, functions, and settings.\n    "
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+search_system
+●●●●●● 1mm □
+_search
+●●●●●● 3mm ○
+_search
+●●●●●● 1mm □△
+q
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/search'
+●●●●●● 2mm □△
+'\n    Full system index — every file, endpoint, connector, model, setting.\n    This is the complete cognitive map of Grace.\n    '
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+'timestamp'
+'file_count'
+'total_classes'
+'total_functions'
+'total_endpoints'
+'connector_count'
+'llm_providers'
+'ml_models'
+'settings_count'
+'data_flows'
+'categories'
+index
+index
+index
+index
+index
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 1mm □△
+'llm_providers'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 1mm □△
+'ml_models'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+f
+index
+summary
+'categories'
+f
+●●●●●● 1mm □
+summary
+'categories'
+●●●●●● 1mm □△
+f
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+summary
+router
+●●●●●● 1mm □△
+'/index'
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+'All indexed Python files with classes, functions, imports.'
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+files
+●●●●●● 1mm □
+index
+●●●●●● 2mm □
+category
+files
+●●●●●● 1mm □
+f
+f
+files
+f
+category
+●●●●●● 3mm ○
+'files'
+'total'
+asdict
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+f
+files
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+files
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/index/files'
+●●●●●● 2mm □△
+'All discovered API endpoints with methods, paths, functions.'
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'endpoints'
+'total'
+asdict
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+e
+index
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/index/endpoints'
+●●●●●● 2mm □△
+'All Layer 1 connectors with autonomous actions, handlers, subscriptions.'
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'connectors'
+'total'
+asdict
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+c
+index
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/index/connectors'
+●●●●●● 2mm □△
+'All models, weights, LLM configurations.'
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+index
+router
+●●●●●● 1mm □△
+'/index/models'
+●●●●●● 2mm □△
+'Data flow relationships between components.'
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'data_flows'
+'total'
+index
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+index
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/index/data-flows'
+●●●●●● 2mm □△
+'Force rebuild the system index.'
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+get_system_index
+index
+●●●●●● 1mm □
+get_system_index
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'status'
+'file_count'
+'total_classes'
+'total_functions'
+'total_endpoints'
+'rebuilt'
+index
+index
+index
+index
+router
+●●●●●● 1mm □△
+'/index/rebuild'
+●●●●●● 2mm □△
+'\n    Run full deterministic validation pipeline.\n    \n    Finds: silent failures, unwired routers, broken imports,\n    Layer 1 initialization issues, config gaps, Kimi/Opus connectivity.\n    \n    No LLM needed. Pure structural analysis.\n    '
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+run_full_validation
+report
+●●●●●● 1mm □
+run_full_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate'
+●●●●●● 2mm □△
+'Find all except:pass and error-swallowing patterns.'
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+detect_silent_failures
+●●●●●● 1mm □
+_detect
+issues
+●●●●●● 1mm □
+_detect
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'category'
+'total'
+'issues'
+'silent_failures'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+issues
+router
+●●●●●● 1mm □△
+'/validate/silent-failures'
+●●●●●● 2mm □△
+"Find API routers that exist but aren't registered in app.py."
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+detect_unwired_routers
+issues
+●●●●●● 1mm □
+detect_unwired_routers
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'category'
+'total'
+'issues'
+'unwired_routers'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+issues
+router
+●●●●●● 1mm □△
+'/validate/wiring'
+●●●●●● 2mm □△
+'Find imports referencing non-existent modules.'
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+detect_broken_imports
+issues
+●●●●●● 1mm □
+detect_broken_imports
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'category'
+'total'
+'issues'
+'broken_imports'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+issues
+router
+●●●●●● 1mm □△
+'/validate/imports'
+●●●●●● 2mm □△
+'Validate Kimi and Opus are properly wired and reachable.'
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+validate_kimi_opus
+●●●●●● 1mm □
+_validate
+issues
+●●●●●● 1mm □
+_validate
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+validate_configuration
+config_issues
+●●●●●● 1mm □
+i
+i
+validate_configuration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'kimi'
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'opus'
+i
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+all_issues
+●●●●●● 1mm □
+issues
+●●●●●● 3mm ○
+config_issues
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'category'
+'total'
+'issues'
+'kimi_opus'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+all_issues
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+all_issues
+router
+●●●●●● 1mm □△
+'/validate/kimi-opus'
+●●●●●● 2mm □△
+'Check Layer 1 message bus and connector initialization.'
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+check_layer1_initialization
+issues
+●●●●●● 1mm □
+check_layer1_initialization
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+●●●●●● 3mm ○
+'category'
+'total'
+'issues'
+'layer1_initialization'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+issues
+●●●●●● 2mm □△
+asdict
+●●●●●● 1mm □△
+i
+●●●●●● 2mm □△
+i
+issues
+router
+●●●●●● 1mm □△
+'/validate/layer1'
+●●●●●● 2mm □△
+'\n    Deterministic validation of the Genesis Key system.\n\n    Checks: schema integrity, chain integrity (parent_key_id),\n    fix linkage, KB sync, user profiles, connector wiring,\n    route wiring, timestamp ordering, import chain.\n\n    No LLM needed. Pure structural + data analysis.\n    '
+●●●●●● 3mm □△○
+genesis.deterministic_genesis_validator
+●●●●●● 2mm □△○
+run_genesis_validation
+report
+●●●●●● 1mm □
+run_genesis_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/genesis'
+●●●●●● 2mm □△
+'\n    Deterministic validation of the RAG pipeline.\n\n    Checks: embedding model, Qdrant connectivity, document-chunk\n    consistency, ingestion pipeline wiring, retriever wiring,\n    RAG prompt integrity, KB file tracking, connector registration,\n    import chain, API wiring.\n\n    No LLM needed. Pure structural + data analysis.\n    '
+●●●●●● 3mm □△○
+retrieval.deterministic_rag_validator
+●●●●●● 2mm □△○
+run_rag_validation
+report
+●●●●●● 1mm □
+run_rag_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+report
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/rag'
+●●●●●● 2mm □△
+'\n    Deterministic lifecycle scan: probe all components, scan unhealthy ones.\n\n    Auto-discovers components from component health registry and\n    semantic search, probes each one, and scans any dead components.\n\n    Read-only diagnostic — does NOT attempt fixes.\n    '
+●●●●●● 3mm □△○
+core.deterministic_lifecycle
+●●●●●● 2mm □△○
+lifecycle_scan
+●●●●●● 3mm ○
+lifecycle_scan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/lifecycle'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+''
+'\n    Full deterministic lifecycle with recursive self-healing.\n\n    The agentic deterministic loop:\n    1. PROBE → is it alive?\n    2. TEST → does it work correctly?\n    3. SCAN → find problems deterministically (AST, imports, deps)\n    4. FIX → try deterministic auto-fix (no LLM)\n    5. REASON → if unfixed → LLM reasoning (constrained by facts)\n    6. HEAL → self-heal via coding agent / healing coordinator\n    7. VERIFY → re-probe + re-test after fix\n    8. LOOP → recursive until healthy or max iterations\n\n    If component_id is empty, runs for ALL registered components.\n    '
+●●●●●● 2mm □
+component_id
+●●●●●● 3mm □△○
+core.deterministic_lifecycle
+●●●●●● 2mm □△○
+run_lifecycle
+_registry
+register_component
+●●●●●● 2mm □
+component_id
+_registry
+register_component
+●●●●●● 1mm □△
+component_id
+component_id
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+run_lifecycle
+●●●●●● 1mm □△
+component_id
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+core.deterministic_lifecycle
+●●●●●● 2mm □△○
+run_lifecycle_all
+●●●●●● 3mm □
+●●●●●● 3mm ○
+run_lifecycle_all
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/lifecycle/heal'
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+''
+50
+'Get the deterministic lifecycle event log.'
+●●●●●● 3mm □△○
+core.deterministic_logger
+●●●●●● 2mm □△○
+get_event_log
+get_event_summary
+●●●●●● 3mm ○
+'events'
+'summary'
+get_event_log
+●●●●●● 1mm □△
+component
+●●●●●● 2mm □
+limit
+●●●●●● 2mm □△
+get_event_summary
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/lifecycle/events'
+●●●●●● 2mm □△
+'Get all components registered in the deterministic lifecycle system.'
+●●●●●● 3mm □△○
+core.deterministic_lifecycle
+●●●●●● 2mm □△○
+get_registry
+reg
+●●●●●● 1mm □
+get_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'registry'
+'total'
+reg
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+reg
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/validate/lifecycle/registry'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AskAboutProblemsRequest
+●●●●●● 3mm □△
+BaseModel
+BaseModel
+question
+●●●●●● 1mm ○
+use_kimi
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+use_opus
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+'\n    Find ALL problems in the system right now.\n\n    Combines:\n    1. Deterministic validation (broken imports, silent failures, unwired routers)\n    2. Connection validation (which services are connected/disconnected)\n    3. Runtime health (database, LLM, Qdrant, embedding)\n\n    Returns a single unified problem list that you can then feed to\n    /api/system/problems/ask-kimi-opus to get AI-powered fix suggestions.\n    '
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+asdict
+problems
+●●●●●● 1mm □
+'timestamp'
+'total_problems'
+'critical'
+'warning'
+'categories'
+'structural_issues'
+'connection_issues'
+'runtime_issues'
+●●●●●● 2mm □
+0
+0
+0
+●●●●●● 3mm □△○
+deterministic_validator
+●●●●●● 2mm □△○
+run_full_validation
+validation
+●●●●●● 1mm □
+run_full_validation
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problems
+'timestamp'
+●●●●●● 1mm □
+validation
+issue
+validation
+●●●●●● 2mm □
+issue
+●●●●●● 1mm □△
+'tests/'
+●●●●●● 2mm □△
+entry
+●●●●●● 1mm □
+asdict
+●●●●●● 1mm □△
+issue
+●●●●●● 2mm □△
+problems
+'structural_issues'
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+cat
+●●●●●● 1mm □
+issue
+problems
+'categories'
+cat
+●●●●●● 1mm □
+problems
+'categories'
+●●●●●● 1mm □△
+cat
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+issue
+'critical'
+problems
+'critical'
+1
+●●●●●● 1mm △
+issue
+'warning'
+problems
+'warning'
+1
+Exception
+problems
+'structural_issues'
+●●●●●● 1mm □△
+'category'
+'severity'
+'file'
+'line'
+'message'
+'validator_error'
+'critical'
+'deterministic_validator.py'
+●●●●●● 2mm □
+'Validator failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+connection_validator
+●●●●●● 2mm □△○
+validate_all_connections
+ConnectionStatus
+conn_report
+●●●●●● 1mm □
+validate_all_connections
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+conn
+conn_report
+●●●●●● 2mm □
+conn
+ConnectionStatus
+ConnectionStatus
+entry
+●●●●●● 1mm □
+'name'
+'category'
+'status'
+'message'
+'actions_failing'
+'actions_total'
+conn
+conn
+conn
+conn
+conn
+conn
+problems
+'connection_issues'
+●●●●●● 1mm □△
+entry
+●●●●●● 2mm □△
+problems
+'categories'
+'disconnected_service'
+●●●●●● 1mm □
+problems
+'categories'
+●●●●●● 1mm □△
+'disconnected_service'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+problems
+'critical'
+1
+Exception
+problems
+'connection_issues'
+●●●●●● 1mm □△
+'name'
+'status'
+'message'
+'connection_validator'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api.health
+●●●●●● 2mm □△○
+check_llm
+check_database
+check_qdrant
+check_embedding_model
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm ○
+asyncio
+●●●●●● 1mm □△
+check_llm
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_database
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_qdrant
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+check_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+loop
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+loop
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+health_checks
+●●●●●● 1mm □
+●●●●●● 3mm □
+health_checks
+●●●●●● 1mm □
+loop
+●●●●●● 1mm □△
+_gather
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+check
+health_checks
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+check
+'status'
+●●●●●● 2mm □△
+check
+'unhealthy'
+'degraded'
+problems
+'runtime_issues'
+●●●●●● 1mm □△
+'service'
+'status'
+'message'
+check
+check
+check
+●●●●●● 2mm □△
+problems
+'categories'
+'runtime_unhealthy'
+●●●●●● 1mm □
+problems
+'categories'
+●●●●●● 1mm □△
+'runtime_unhealthy'
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+Exception
+problems
+'total_problems'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+'structural_issues'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+'connection_issues'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+problems
+'runtime_issues'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+problems
+router
+●●●●●● 1mm □△
+'/problems'
+●●●●●● 2mm □△
+AskAboutProblemsRequest
+'\n    Ask Kimi and/or Opus about the system\'s problems.\n\n    First runs the full problem scan, then sends the results plus your\n    question to Kimi and Opus for AI-powered diagnosis and fix suggestions.\n\n    Example questions:\n    - "What are the most important things to fix first?"\n    - "Why is Qdrant disconnected and how do I fix it?"\n    - "Explain the silent failures and which ones matter"\n    - "Give me a prioritized fix plan"\n    '
+problems_data
+●●●●●● 1mm □
+get_all_problems
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+problem_summary
+●●●●●● 1mm □
+'Grace system has '
+problems_data
+'total_problems'
+' problems: '
+problems_data
+'critical'
+' critical, '
+problems_data
+'warning'
+' warnings.\n\n'
+●●●●●● 2mm □
+problems_data
+'connection_issues'
+problem_summary
+'DISCONNECTED SERVICES:\n'
+c
+problems_data
+'connection_issues'
+10
+problem_summary
+'  - '
+c
+'name'
+' ('
+c
+●●●●●● 1mm □△
+'category'
+''
+●●●●●● 2mm □△
+'): '
+c
+●●●●●● 1mm □△
+'message'
+'disconnected'
+●●●●●● 2mm □△
+'\n'
+problem_summary
+'\n'
+●●●●●● 2mm □
+problems_data
+'structural_issues'
+by_cat
+●●●●●● 1mm □
+s
+problems_data
+'structural_issues'
+cat
+●●●●●● 1mm □
+s
+'category'
+by_cat
+●●●●●● 1mm □△
+cat
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+problem_summary
+'STRUCTURAL ISSUES:\n'
+cat
+items
+by_cat
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+critical_items
+●●●●●● 1mm □
+i
+i
+items
+i
+'severity'
+'critical'
+problem_summary
+'  - '
+cat
+': '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+items
+●●●●●● 2mm □△
+' total ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+critical_items
+●●●●●● 2mm □△
+' critical)\n'
+item
+critical_items
+3
+problem_summary
+'    * '
+item
+'file'
+':'
+item
+●●●●●● 1mm □△
+'line'
+'?'
+●●●●●● 2mm □△
+' - '
+item
+'message'
+100
+'\n'
+problem_summary
+'\n'
+●●●●●● 2mm □
+problems_data
+'runtime_issues'
+problem_summary
+'RUNTIME ISSUES:\n'
+r
+problems_data
+'runtime_issues'
+problem_summary
+'  - '
+r
+'service'
+': '
+r
+'status'
+' - '
+r
+●●●●●● 1mm □△
+'message'
+''
+●●●●●● 2mm □△
+'\n'
+full_prompt
+●●●●●● 1mm □
+'You are analyzing the Grace AI system. Here is the current state:\n\n'
+problem_summary
+'\nUser question: '
+●●●●●● 3mm □△
+'\n\nGive specific, actionable answers. Reference file paths and exact fixes.'
+responses
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+kimi
+●●●●●● 1mm □
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kimi
+kimi_response
+●●●●●● 1mm □
+kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+'kimi'
+●●●●●● 1mm □
+'model'
+'response'
+'status'
+'kimi'
+kimi_response
+'success'
+●●●●●● 3mm □
+responses
+'kimi'
+●●●●●● 1mm □
+'model'
+'status'
+'response'
+'kimi'
+'no_api_key'
+●●●●●● 2mm □
+Exception
+responses
+'kimi'
+●●●●●● 1mm □
+'model'
+'status'
+'error'
+'response'
+'kimi'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.opus_client
+●●●●●● 2mm □△○
+OpusLLMClient
+opus
+●●●●●● 1mm □
+OpusLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+opus
+opus_response
+●●●●●● 1mm □
+opus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+responses
+'opus'
+●●●●●● 1mm □
+'model'
+'response'
+'status'
+'opus'
+opus_response
+'success'
+●●●●●● 3mm □
+responses
+'opus'
+●●●●●● 1mm □
+'model'
+'status'
+'response'
+'opus'
+'no_api_key'
+●●●●●● 2mm □
+Exception
+responses
+'opus'
+●●●●●● 1mm □
+'model'
+'status'
+'error'
+'response'
+'opus'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'question'
+'problem_count'
+'critical_count'
+'responses'
+'problem_summary'
+●●●●●● 3mm □△
+problems_data
+'total_problems'
+problems_data
+'critical'
+responses
+problem_summary
+router
+●●●●●● 1mm □△
+'/problems/ask-kimi-opus'
+●●●●●● 2mm □△
+AskAboutProblemsRequest
+'\n    Ask Kimi and/or Opus anything about the Grace system.\n\n    This searches the system index for context relevant to your question,\n    then sends it to the models along with your question.\n\n    Example questions:\n    - "How does the consensus engine work?"\n    - "What connects to the memory mesh?"\n    - "Explain the RAG pipeline data flow"\n    - "What models are configured and which are working?"\n    '
+●●●●●● 3mm □△○
+system_introspector
+●●●●●● 2mm □△○
+search_system
+search_results
+●●●●●● 1mm □
+search_system
+●●●●●● 1mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+context
+●●●●●● 1mm □
+"Grace system search results for '"
+●●●●●● 3mm □△
+"':\n\n"
+●●●●●● 2mm □
+search_results
+●●●●●● 1mm □△
+'files'
+●●●●●● 2mm □△
+context
+'RELEVANT FILES:\n'
+f
+search_results
+'files'
+8
+context
+'  - '
+f
+'path'
+' ('
+f
+'category'
+'): '
+f
+●●●●●● 1mm □△
+'docstring'
+''
+●●●●●● 2mm □△
+150
+'\n'
+context
+'\n'
+●●●●●● 2mm □
+search_results
+●●●●●● 1mm □△
+'endpoints'
+●●●●●● 2mm □△
+context
+'RELEVANT API ENDPOINTS:\n'
+e
+search_results
+'endpoints'
+5
+context
+'  - '
+e
+'method'
+' '
+e
+'path'
+' -> '
+e
+'function'
+' ('
+e
+'file'
+')\n'
+context
+'\n'
+●●●●●● 2mm □
+search_results
+●●●●●● 1mm □△
+'connectors'
+●●●●●● 2mm □△
+context
+'RELEVANT CONNECTORS:\n'
+c
+search_results
+'connectors'
+5
+context
+'  - '
+c
+'name'
+' ('
+c
+'type'
+'): '
+c
+'file'
+'\n'
+context
+'\n'
+full_prompt
+●●●●●● 1mm □
+'You are explaining the Grace AI system architecture.\n\n'
+context
+'\nUser question: '
+●●●●●● 3mm □△
+'\n\nAnswer based on the system information above. Be specific about file paths and connections.'
+responses
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.kimi_client
+●●●●●● 2mm □△○
+KimiLLMClient
+kimi
+●●●●●● 1mm □
+KimiLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+kimi
+responses
+'kimi'
+●●●●●● 1mm □
+'model'
+'response'
+'status'
+'kimi'
+kimi
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'success'
+●●●●●● 3mm □
+responses
+'kimi'
+●●●●●● 1mm □
+'model'
+'status'
+'response'
+'kimi'
+'no_api_key'
+●●●●●● 2mm □
+Exception
+responses
+'kimi'
+●●●●●● 1mm □
+'model'
+'status'
+'error'
+'response'
+'kimi'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+llm_orchestrator.opus_client
+●●●●●● 2mm □△○
+OpusLLMClient
+opus
+●●●●●● 1mm □
+OpusLLMClient
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+opus
+responses
+'opus'
+●●●●●● 1mm □
+'model'
+'response'
+'status'
+'opus'
+opus
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'success'
+●●●●●● 3mm □
+responses
+'opus'
+●●●●●● 1mm □
+'model'
+'status'
+'response'
+'opus'
+'no_api_key'
+●●●●●● 2mm □
+Exception
+responses
+'opus'
+●●●●●● 1mm □
+'model'
+'status'
+'error'
+'response'
+'opus'
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'question'
+'search_results_count'
+'responses'
+'context_used'
+●●●●●● 3mm □△
+search_results
+●●●●●● 1mm □△
+'total_results'
+0
+●●●●●● 2mm □△
+responses
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+context
+●●●●●● 2mm □△
+500
+context
+500
+●●●●●● 3mm ○
+'...'
+context
+router
+●●●●●● 1mm □△
+'/ask'
+●●●●●● 2mm □△

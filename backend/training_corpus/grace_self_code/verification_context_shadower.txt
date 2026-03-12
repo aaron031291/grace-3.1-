@@ -1,0 +1,470 @@
+## context_shadower.py
+'\nbackend/verification/context_shadower.py\n─────────────────────────────────────────────────────────────────────────────\nContext Shadowing & Atomic Hot-Swapping for Continual Context Evolution.\n\n1. Takes proposed code from Grace and writes it to `__grACE_shadow/`.\n2. Triggers the 12-Layer VVT Pipeline on the shadow module.\n3. If VVT mints a Trust Coin, it atomically hot-swaps the module into `sys.modules`.\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+sys
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+shutil
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+verification.deterministic_vvt_pipeline
+●●●●●● 2mm □△○
+vvt_vault
+●●●●●● 3mm □△○
+verification.constitutional_interpreter
+●●●●●● 2mm □△○
+ConstitutionalInterpreter
+ConstitutionalViolation
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+'ContextShadower'
+●●●●●● 2mm □△
+SHADOW_DIR
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+'__grACE_shadow'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ContextShadower
+'Quarantine sandbox to test LLM rewrites before replacing production files.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+os
+●●●●●● 1mm □△
+SHADOW_DIR
+●●●●●● 2mm □△
+init_file
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+SHADOW_DIR
+'__init__.py'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+os
+●●●●●● 1mm □△
+init_file
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+init_file
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+'# Auto-generated package init for Grace Shadow Execution\n'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+propose_module_update
+●●●●●● 1mm □△
+self
+target_file_path
+new_code_content
+module_name_to_test
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Takes new code proposed by the LLM and runs it through the VVT gauntlet.\n        If it survives, it is atomically swapped into production.\n        '
+logger
+●●●●●● 1mm □△
+'Context Shadower engaged for proposed update to: '
+target_file_path
+●●●●●● 2mm □△
+timestamp
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'%Y%m%d%H%M%S'
+●●●●●● 2mm □△
+base_name
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+target_file_path
+●●●●●● 2mm □△
+shadow_name
+●●●●●● 1mm □
+'shadow_'
+timestamp
+'_'
+base_name
+shadow_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+SHADOW_DIR
+shadow_name
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+shadow_path
+'w'
+●●●●●● 2mm □△
+f
+f
+●●●●●● 1mm □△
+new_code_content
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Shadow module written to quarantine: '
+shadow_path
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □
+ConstitutionalInterpreter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+interpreter
+●●●●●● 1mm □△
+new_code_content
+module_name_to_test
+●●●●●● 2mm □△
+ConstitutionalViolation
+logger
+●●●●●● 1mm □△
+'Shadow module '
+module_name_to_test
+' violated the Domain Constitution: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'status'
+'logs'
+'error'
+●●●●●● 1mm □
+'CONSTITUTION_VIOLATION'
+'Pre-Execution Formal Proof Failed: '
+e
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Shadow module passed Constitutional Formal Proof. Minting VVT_CONTRACT_COIN.'
+●●●●●● 2mm □△
+contract_coin
+●●●●●● 1mm □
+'VVT_CONTRACT_COIN'
+vvt_passed
+●●●●●● 1mm □
+vvt_vault
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+vvt_passed
+logger
+●●●●●● 1mm □△
+'Shadow module FAILED the VVT gauntlet. Quarantine swap aborted.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'status'
+'logs'
+'error'
+●●●●●● 1mm □
+'VVT_FAILED'
+log
+res
+vvt_vault
+log
+res
+vvt_vault
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+vvt_vault
+1
+'error'
+'VVT Pipeline halted execution.'
+●●●●●● 2mm □△
+'Unknown error'
+trust_coin
+●●●●●● 1mm □
+'VVT_PLATINUM_COIN'
+logger
+●●●●●● 1mm □△
+'Shadow module passed VVT gauntlet. Trust Coin Minted: '
+trust_coin
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target_file_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Target file is HIGH-RISK. Engaging Global Approval Engine.'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+governance.inline_approval_engine
+●●●●●● 2mm □△○
+get_approval_engine
+engine
+●●●●●● 1mm □
+get_approval_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_approved
+reason
+●●●●●● 1mm □
+engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_approved
+logger
+●●●●●● 1mm □△
+'Global Governance REJECTED the hot-swap: '
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'context_evolution'
+'rejected'
+●●●●●● 2mm □△
+tracker
+●●●●●● 1mm □△
+'context_evolution'
+'requests'
+●●●●●● 2mm □△
+ImportError
+●●●●●● 3mm ○
+'success'
+'status'
+'logs'
+'error'
+●●●●●● 1mm □
+'GOVERNANCE_REJECTED'
+'Global approval denied: '
+reason
+'Hot-swap aborted by Inline Approval Engine.'
+ImportError
+logger
+●●●●●● 1mm □△
+'Failed to route to Inline Approval Engine. Proceeding with caution.'
+●●●●●● 2mm □△
+swap_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target_file_path
+shadow_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+target_file_path
+trust_coin
+contract_coin
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'status'
+'trust_coin'
+'contract_coin'
+'logs'
+●●●●●● 3mm □△○
+'ATOMIC_SWAP_COMPLETE'
+trust_coin
+contract_coin
+'Shadow module verified by Constitution.'
+'Trust coin minted.'
+'sys.modules hot-swapped atomically.'
+Exception
+logger
+●●●●●● 1mm □△
+'Atomic swap failed mid-flight: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'status'
+'error'
+●●●●●● 1mm □
+'ATOMIC_SWAP_FAILED'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_atomic_modules_swap
+●●●●●● 1mm □△
+self
+prod_file_path
+quarantine_file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+"\n        Safely replace the physical file AND hot-reload it into Python's sys.modules.\n        "
+backup_path
+●●●●●● 1mm □
+prod_file_path
+'.bak'
+shutil
+●●●●●● 1mm □△
+prod_file_path
+backup_path
+●●●●●● 2mm □△
+shutil
+●●●●●● 1mm □△
+quarantine_file_path
+prod_file_path
+●●●●●● 2mm □△
+abs_prod
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+prod_file_path
+●●●●●● 2mm □△
+backend_base
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+abs_prod
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+rel_path
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+abs_prod
+backend_base
+●●●●●● 2mm □△
+mod_path
+●●●●●● 1mm □
+rel_path
+●●●●●● 1mm □△
+os
+'.'
+●●●●●● 2mm □△
+3
+●●●●●● 2mm □
+mod_path
+sys
+importlib
+●●●●●● 1mm □△
+sys
+mod_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Hot-swapped memory module: '
+mod_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+shutil
+●●●●●● 1mm □△
+backup_path
+prod_file_path
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Physical file swap reverted due to error: '
+e
+●●●●●● 2mm □△
+e
+●●●●●● 3mm △
+●●●●●● 1mm □
+_log_evolution
+●●●●●● 1mm □△
+self
+file_path
+coin
+contract_coin
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'N/A'
+'Send evolution event to telemetry.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ImportError
+●●●●●● 1mm □
+_is_high_risk
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Determines if a file path is considered a high-risk core component.'
+high_risk_keywords
+●●●●●● 1mm □
+'memory_tables'
+'guardian'
+'verification'
+'governance'
+'settings.py'
+'validation_api.py'
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+keyword
+file_path
+keyword
+high_risk_keywords
+●●●●●● 2mm □△
+●●●●●● 3mm △
+shadower
+●●●●●● 1mm □
+ContextShadower
+●●●●●● 1mm □△
+●●●●●● 2mm □△

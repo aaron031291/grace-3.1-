@@ -1,0 +1,377 @@
+## magma_bridge.py
+'\nMagma Bridge — Connects Magma Memory to every system in Grace.\n\nSingle integration point that:\n- Pipeline queries Magma for context before generation\n- Pipeline stores outcomes in Magma after generation\n- Immune system stores healing patterns and decisions\n- Trust engine queries causal relationships\n- Coding agent gets project-relevant memory\n- World model includes Magma stats\n- Feedback loop stores experiences as patterns/decisions/procedures\n\nThis replaces scattered try/except imports with one reliable bridge.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+_magma
+●●●●●● 1mm □
+●●●●●● 2mm □
+_available
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create Magma singleton. Returns None if unavailable.'
+●●●●●● 2mm □
+_available
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+_magma
+●●●●●● 2mm □
+●●●●●● 3mm ○
+_magma
+●●●●●● 3mm □△○
+cognitive.magma.grace_magma_system
+●●●●●● 2mm □△○
+get_grace_magma
+_magma
+●●●●●● 1mm □
+get_grace_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_available
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+_magma
+Exception
+logger
+●●●●●● 1mm □△
+'Magma unavailable: '
+e
+●●●●●● 2mm □△
+_available
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+is_available
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+get_magma_graphs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the Magma Relation Graphs (Causal, Semantic, Temporal, Entity).'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+m
+'graphs'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+m
+●●●●●● 2mm □
+m
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+m
+'memory'
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+m
+'graphs'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+m
+RuntimeError
+●●●●●● 1mm □△
+'Magma graphs not available'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+query_context
+●●●●●● 1mm □△
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Query Magma for relevant context. Returns text for LLM prompt.'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+''
+ctx
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+ctx
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+ctx
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+ctx
+●●●●●● 2mm □△
+2000
+Exception
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+query_results
+●●●●●● 1mm □△
+query
+limit
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'Query Magma for structured results.'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△
+results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+Exception
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □
+query_causal
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Ask Magma WHY something happens — causal reasoning.'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+●●●●●● 2mm □
+result
+●●●●●● 1mm □
+m
+●●●●●● 1mm □△
+question
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+ingest
+●●●●●● 1mm □△
+content
+source
+metadata
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+'system'
+●●●●●● 2mm □
+'Ingest content into Magma memory.'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+m
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+store_pattern
+●●●●●● 1mm □△
+pattern_type
+description
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'Store a pattern (from immune system, pipeline, etc.).'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+m
+●●●●●● 1mm □△
+pattern_type
+description
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+store_decision
+●●●●●● 1mm □△
+action
+target
+rationale
+data
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 2mm □
+'Store a decision (OODA, healing, governance).'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+m
+●●●●●● 1mm □△
+action
+target
+rationale
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+store_procedure
+●●●●●● 1mm □△
+name
+description
+steps
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'Store a learned procedure (skill).'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+m
+●●●●●● 1mm □△
+name
+description
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get Magma memory statistics.'
+m
+●●●●●● 1mm □
+_get_magma
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+m
+●●●●●● 3mm ○
+'available'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+m
+'get_stats'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+●●●●●● 3mm □△○
+m
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+m
+'stats'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'available'
+●●●●●● 3mm □△○
+m
+●●●●●● 3mm ○
+'available'
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm ○
+'available'
+'error'
+●●●●●● 3mm □△○
+'stats unavailable'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

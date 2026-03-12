@@ -1,0 +1,1197 @@
+## contradiction_detector.py
+'\nContradiction Detector - Cognitive Consistency Enforcement\n\nAddresses Clarity Class 10 (Contradiction Detection):\n- Detect logical contradictions in reasoning\n- Identify drift from established patterns\n- Flag conflicting outputs\n- Trigger AVN (Ambiguity/Validation/Negotiation) fallback\n\nContradiction types:\n1. Logical: Direct logical contradictions in reasoning\n2. Temporal: Contradictions with previous outputs\n3. Constitutional: Contradictions with core rules\n4. Pattern: Drift from learned patterns\n5. Confidence: Overconfident claims without support\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+re
+●●●●●● 3mm □△○
+collections
+●●●●●● 2mm □△○
+deque
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+Set
+Tuple
+●●●●●● 3mm □△○
+core.base_component
+●●●●●● 2mm □△○
+BaseComponent
+ComponentRole
+●●●●●● 3mm □△○
+core.loop_output
+●●●●●● 2mm □△○
+GraceLoopOutput
+ReasoningStep
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ContradictionType
+●●●●●● 3mm □△
+Enum
+Enum
+'Types of contradictions.'
+LOGICAL
+●●●●●● 1mm □
+'logical'
+TEMPORAL
+●●●●●● 1mm □
+'temporal'
+CONSTITUTIONAL
+●●●●●● 1mm □
+'constitutional'
+PATTERN
+●●●●●● 1mm □
+'pattern'
+CONFIDENCE
+●●●●●● 1mm □
+'confidence'
+SEMANTIC
+●●●●●● 1mm □
+'semantic'
+●●●●●● 2mm △
+ContradictionSeverity
+●●●●●● 3mm □△
+Enum
+Enum
+'Severity levels for contradictions.'
+LOW
+●●●●●● 1mm □
+'low'
+MEDIUM
+●●●●●● 1mm □
+'medium'
+HIGH
+●●●●●● 1mm □
+'high'
+CRITICAL
+●●●●●● 1mm □
+'critical'
+●●●●●● 2mm △
+AVNAction
+●●●●●● 3mm □△
+Enum
+Enum
+'Actions for Ambiguity/Validation/Negotiation fallback.'
+ACCEPT
+●●●●●● 1mm □
+'accept'
+REJECT
+●●●●●● 1mm □
+'reject'
+CLARIFY
+●●●●●● 1mm □
+'clarify'
+NEGOTIATE
+●●●●●● 1mm □
+'negotiate'
+ESCALATE
+●●●●●● 1mm □
+'escalate'
+●●●●●● 2mm △
+Contradiction
+'A detected contradiction.'
+contradiction_id
+●●●●●● 1mm ○
+contradiction_type
+ContradictionType
+severity
+ContradictionSeverity
+description
+●●●●●● 1mm ○
+source_a
+●●●●●● 1mm ○
+source_b
+●●●●●● 1mm ○
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggested_resolution
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+detected_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'contradiction_id'
+'type'
+'severity'
+'description'
+'source_a'
+'source_b'
+'context'
+'suggested_resolution'
+'detected_at'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+AVNResult
+'Result of AVN fallback processing.'
+action
+AVNAction
+reasoning
+●●●●●● 1mm ○
+modified_output
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+contradictions_resolved
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+requires_human_review
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'action'
+'reasoning'
+'modified_output'
+'contradictions_resolved'
+'requires_human_review'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+LintResult
+'Result of cognition linting.'
+passed
+●●●●●● 3mm △
+contradictions
+●●●●●● 3mm □△
+Contradiction
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+suggestions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+avn_result
+●●●●●● 2mm □○
+AVNResult
+●●●●●● 2mm □
+lint_time_ms
+●●●●●● 3mm ○
+0.0
+●●●●●● 1mm □
+has_critical
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+ContradictionSeverity
+c
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+has_high
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+ContradictionSeverity
+c
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'passed'
+'contradictions'
+'warnings'
+'suggestions'
+'avn_result'
+'lint_time_ms'
+'has_critical'
+'has_high'
+●●●●●● 3mm △
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+GraceCognitionLinter
+●●●●●● 3mm □△
+BaseComponent
+BaseComponent
+'\n    Lints cognitive outputs for contradictions and inconsistencies.\n\n    Provides:\n    - Logical contradiction detection\n    - Temporal consistency checking\n    - Constitutional alignment verification\n    - Pattern drift detection\n    - Confidence validation\n    - AVN fallback handling\n\n    Usage:\n        linter = GraceCognitionLinter()\n        await linter.activate()\n\n        result = await linter.lint(loop_output)\n\n        if not result.passed:\n            # Handle contradictions\n            if result.has_critical:\n                # Block operation\n                pass\n            elif result.avn_result:\n                # Apply AVN resolution\n                pass\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+Set
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_lints'
+'passed'
+'failed'
+'contradictions_found'
+'avn_invocations'
+0
+0
+0
+0
+0
+'Initialize the linter.'
+logger
+●●●●●● 1mm □△
+'[LINTER] Cognition linter activated'
+●●●●●● 2mm □△
+'Cleanup.'
+logger
+●●●●●● 1mm □△
+'[LINTER] Cognition linter deactivated'
+●●●●●● 2mm □△
+GraceLoopOutput
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+'\n        Lint a cognitive loop output for contradictions.\n\n        Args:\n            output: The loop output to lint\n            context: Additional context for linting\n\n        Returns:\n            LintResult with contradictions and recommendations\n        '
+●●●●●● 2mm □△○
+time
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'total_lints'
+1
+contradictions
+●●●●●● 3mm □△
+Contradiction
+warnings
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+suggestions
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+contradictions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'contradictions_found'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+contradictions
+●●●●●● 2mm □△
+has_critical
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+ContradictionSeverity
+c
+contradictions
+●●●●●● 2mm □△
+has_high
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+ContradictionSeverity
+c
+contradictions
+●●●●●● 2mm □△
+passed
+●●●●●● 1mm □
+has_critical
+has_high
+●●●●●● 2mm □
+passed
+●●●●●● 3mm △
+'failed'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+'passed'
+1
+c
+contradictions
+●●●●●● 2mm □
+c
+suggestions
+●●●●●● 1mm □△
+c
+●●●●●● 2mm □△
+avn_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+contradictions
+passed
+●●●●●● 3mm △
+'avn_invocations'
+1
+avn_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+contradictions
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+lint_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+●●●●●● 2mm □△
+1000
+●●●●●● 3mm ○
+LintResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+LintResult
+GraceLoopOutput
+'Check for logical contradictions within the output.'
+contradictions
+●●●●●● 1mm □
+claims
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+i
+claim_a
+●●●●●● 2mm □
+●●●●●● 1mm □△
+claims
+●●●●●● 2mm □△
+claim_b
+claims
+i
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+claim_a
+claim_b
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+contradictions
+●●●●●● 3mm □△
+Contradiction
+GraceLoopOutput
+'Check for contradictions with recent outputs.'
+contradictions
+●●●●●● 1mm □
+recent
+●●●●●● 1mm □
+o
+o
+●●●●●● 3mm △
+o
+output
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+o
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+recent
+●●●●●● 3mm ○
+contradictions
+current_claims
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+prev_output
+recent
+10
+prev_claims
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prev_output
+●●●●●● 2mm □△
+current_claim
+current_claims
+prev_claim
+prev_claims
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current_claim
+prev_claim
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+contradictions
+●●●●●● 3mm □△
+Contradiction
+GraceLoopOutput
+'Check for contradictions with constitutional rules.'
+contradictions
+●●●●●● 1mm □
+claims
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+result_text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+' '
+●●●●●● 3mm ○
+output
+claim
+claims
+violation
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+claim
+●●●●●● 2mm □△
+●●●●●● 2mm □
+violation
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+safety_patterns
+●●●●●● 1mm □
+'bypass\\s+(safety|security)'
+'Attempting to bypass safety measures'
+'ignore\\s+(warning|constraint)'
+'Ignoring safety constraints'
+'override\\s+(governance|policy)'
+'Overriding governance'
+pattern
+violation_type
+safety_patterns
+●●●●●● 2mm □
+re
+●●●●●● 1mm □△
+pattern
+result_text
+re
+●●●●●● 2mm □△
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+contradictions
+●●●●●● 3mm □△
+Contradiction
+GraceLoopOutput
+'Check for overconfident claims without support.'
+contradictions
+●●●●●● 1mm □
+●●●●●● 2mm □
+output
+0.9
+output
+2
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+output
+step_confidences
+●●●●●● 1mm □
+s
+s
+output
+avg_step_conf
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+step_confidences
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+step_confidences
+●●●●●● 2mm □△
+●●●●●● 2mm □
+output
+avg_step_conf
+●●●●●● 3mm ○
+0.3
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+contradictions
+●●●●●● 3mm □△
+Contradiction
+GraceLoopOutput
+'Check for drift from established patterns.'
+contradictions
+●●●●●● 1mm □
+baseline
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 2mm □
+baseline
+●●●●●● 3mm ○
+contradictions
+●●●●●● 2mm □
+'avg_steps'
+baseline
+expected_steps
+●●●●●● 1mm □
+baseline
+'avg_steps'
+●●●●●● 2mm □
+output
+expected_steps
+●●●●●● 2mm □△
+0.3
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'avg_duration_ms'
+baseline
+expected_duration
+●●●●●● 1mm □
+baseline
+'avg_duration_ms'
+●●●●●● 2mm □
+output
+expected_duration
+●●●●●● 2mm □△
+0.1
+contradictions
+●●●●●● 1mm □△
+Contradiction
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+contradictions
+●●●●●● 3mm □△
+Contradiction
+GraceLoopOutput
+●●●●●● 3mm □△
+Contradiction
+'\n        Invoke Ambiguity/Validation/Negotiation fallback.\n\n        Decides how to handle contradictions:\n        - Accept with warning\n        - Reject entirely\n        - Request clarification\n        - Propose alternative\n        - Escalate to human\n        '
+critical_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+contradictions
+c
+ContradictionSeverity
+●●●●●● 2mm □△
+high_count
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+contradictions
+c
+ContradictionSeverity
+●●●●●● 2mm □△
+●●●●●● 2mm □
+critical_count
+0
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+c
+ContradictionType
+c
+contradictions
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+AVNResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+AVNResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+high_count
+0
+logical
+●●●●●● 1mm □
+c
+c
+contradictions
+c
+ContradictionType
+●●●●●● 2mm □
+logical
+●●●●●● 3mm ○
+AVNResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+AVNResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+AVNResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+AVNResult
+●●●●●● 1mm □
+_attempt_resolution
+●●●●●● 1mm □△
+self
+output
+contradictions
+●●●●●● 2mm □△
+GraceLoopOutput
+●●●●●● 3mm □△
+Contradiction
+'Attempt automatic resolution of contradictions.'
+modified
+●●●●●● 1mm □
+output
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+confidence_issues
+●●●●●● 1mm □
+c
+c
+contradictions
+c
+ContradictionType
+●●●●●● 2mm □
+confidence_issues
+modified
+'confidence'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+output
+output
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □
+c
+c
+contradictions
+modified
+'result_summary'
+●●●●●● 1mm □
+output
+' [WARNINGS: '
+'; '
+●●●●●● 1mm □△
+warnings
+3
+●●●●●● 2mm □△
+']'
+●●●●●● 3mm ○
+modified
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_extract_claims
+●●●●●● 1mm □△
+self
+output
+●●●●●● 2mm □△
+GraceLoopOutput
+'Extract claims from loop output.'
+claims
+●●●●●● 1mm □
+step
+output
+●●●●●● 2mm □
+step
+sentences
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[.!?]'
+step
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+sentences
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+output
+sentences
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'[.!?]'
+output
+●●●●●● 2mm □△
+claims
+●●●●●● 1mm □△
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+s
+sentences
+s
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+claims
+50
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_are_contradictory
+●●●●●● 1mm □△
+self
+claim_a
+claim_b
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Check if two claims are logically contradictory.'
+a_lower
+●●●●●● 1mm □
+claim_a
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+b_lower
+●●●●●● 1mm □
+claim_b
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+negation_pairs
+●●●●●● 1mm □
+'is not'
+'is'
+'cannot'
+'can'
+"won't"
+'will'
+"doesn't"
+'does'
+"isn't"
+'is'
+'never'
+'always'
+'false'
+'true'
+'no'
+'yes'
+neg
+pos
+negation_pairs
+●●●●●● 2mm □
+neg
+a_lower
+pos
+b_lower
+a_words
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+a_lower
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+b_words
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+b_lower
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+overlap
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+a_words
+●●●●●● 3mm △
+b_words
+●●●●●● 2mm □△
+●●●●●● 2mm □
+overlap
+2
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+_are_temporally_contradictory
+●●●●●● 1mm □△
+self
+current
+previous
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Check if current claim contradicts a previous one.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+current
+previous
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+_check_constitutional_violation
+●●●●●● 1mm □△
+self
+claim
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Check if claim violates constitutional rules.'
+claim_lower
+●●●●●● 1mm □
+claim
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+violations
+●●●●●● 1mm □
+'harm human'
+'ignore safety'
+'bypass governance'
+'hide from audit'
+'act without permission'
+'Human Centricity'
+'Safety First'
+'Transparency Required'
+'Transparency Required'
+'Trust Earned'
+pattern
+rule
+violations
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+pattern
+claim_lower
+●●●●●● 3mm ○
+rule
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_load_constitutional_claims
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Load constitutional claims from governance.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+'human_wellbeing_priority'
+'safety_first'
+'transparency_required'
+'trust_earned'
+'reversibility_preferred'
+●●●●●● 1mm □
+_store_output
+●●●●●● 1mm □△
+self
+output
+●●●●●● 2mm □△
+GraceLoopOutput
+'Store output in history for temporal checks.'
+●●●●●● 2mm □
+output
+●●●●●● 3mm △
+●●●●●● 1mm □△
+output
+●●●●●● 2mm □△
+●●●●●● 1mm □
+update_pattern_baseline
+●●●●●● 1mm □△
+self
+loop_type
+metrics
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'Update pattern baseline for a loop type.'
+●●●●●● 3mm △
+loop_type
+●●●●●● 1mm □
+metrics
+●●●●●● 1mm □
+get_stats
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get linting statistics.'
+●●●●●● 3mm ○
+'history_size'
+'claim_history_size'
+'pattern_baselines'
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_linter
+●●●●●● 2mm □○
+GraceCognitionLinter
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cognition_linter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get or create the global cognition linter.'
+●●●●●● 2mm □
+_linter
+●●●●●● 2mm □
+_linter
+●●●●●● 1mm □
+GraceCognitionLinter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[LINTER] Created global Cognition Linter'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_linter
+GraceCognitionLinter
+●●●●●● 1mm □
+reset_linter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Reset linter (for testing).'
+_linter
+●●●●●● 1mm □
+●●●●●● 2mm □

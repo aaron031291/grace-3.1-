@@ -1,0 +1,839 @@
+## file_intelligence_agent.py
+'\nGrace File Intelligence Agent\n\nUnderstands file content deeply, not just formats.\nBuilds semantic understanding of knowledge base.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_llm_client
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+FileIntelligence
+"Deep intelligence about a file's content."
+content_summary
+●●●●●● 1mm ○
+extracted_entities
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+detected_topics
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+quality_score
+●●●●●● 3mm ○
+complexity_level
+●●●●●● 1mm ○
+recommended_chunk_strategy
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+relationships
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+metadata
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+FileIntelligenceAgent
+'\n    Understands file content, not just formats.\n    Builds semantic understanding of knowledge base.\n\n    Grace Principle: Self-Awareness\n    - Knows what files contain, not just where they are\n    - Understands meaning and context\n    - Discovers relationships autonomously\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+file_handler
+llm_client
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Initialize intelligence agent.\n\n        Args:\n            file_handler: FileHandler for text extraction\n            llm_client: LLM client for AI analysis (defaults to factory)\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+file_handler
+●●●●●● 3mm △
+●●●●●● 1mm □
+llm_client
+get_llm_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-INTELLIGENCE] Agent initialized'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+analyze_file_deeply
+●●●●●● 1mm □△
+self
+file_path
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+'\n        Deep content analysis beyond format extraction.\n\n        Args:\n            file_path: Path to file\n            content: Pre-extracted content (optional)\n\n        Returns:\n            FileIntelligence with complete understanding\n        '
+●●●●●● 2mm □
+content
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+content
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+content
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+entities
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+topics
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+quality
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+complexity
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+chunk_strategy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+relationships
+●●●●●● 1mm □
+metadata
+●●●●●● 1mm □
+'file_size'
+'line_count'
+'word_count'
+'analyzed_at'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+content
+●●●●●● 1mm □△
+'\n'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[FILE-INTELLIGENCE] Analyzed '
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+': quality='
+quality
+'.2f'
+', complexity='
+complexity
+', topics='
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+topics
+●●●●●● 2mm □△
+', entities='
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+v
+●●●●●● 2mm □△
+v
+entities
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FileIntelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[FILE-INTELLIGENCE] Analysis failed for '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+FileIntelligence
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileIntelligence
+●●●●●● 1mm □
+_generate_summary
+●●●●●● 1mm □△
+self
+content
+max_length
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+200
+'Generate AI-powered content summary.'
+●●●●●● 2mm □
+content
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+50
+●●●●●● 3mm ○
+'Content too short for summary'
+●●●●●● 2mm □
+●●●●●● 3mm △
+prompt
+●●●●●● 1mm □
+'Summarize the following text in 1-2 sentences (max '
+max_length
+' chars):\n\n'
+content
+2000
+'\n\nSummary:'
+response
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+summary
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+summary
+●●●●●● 3mm ○
+summary
+max_length
+Exception
+logger
+●●●●●● 1mm □△
+'LLM summary failed, using fallback: '
+e
+●●●●●● 2mm □△
+sentences
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sentences
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sentences
+0
+●●●●●● 2mm □△
+max_length
+●●●●●● 3mm ○
+sentences
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'.'
+words
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+30
+●●●●●● 3mm ○
+' '
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'...'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_extract_entities
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Extract named entities from content.\n\n        Returns:\n            Dict with entity types: {people: [], places: [], concepts: []}\n        '
+entities
+●●●●●● 1mm □
+'people'
+'places'
+'concepts'
+'organizations'
+words
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+potential_entities
+●●●●●● 1mm □
+i
+word
+●●●●●● 2mm □
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 2mm □
+i
+0
+word
+0
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+word
+●●●●●● 2mm □△
+3
+clean_word
+●●●●●● 1mm □
+word
+●●●●●● 1mm □△
+'.,!?;:'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+clean_word
+clean_word
+potential_entities
+potential_entities
+●●●●●● 1mm □△
+clean_word
+●●●●●● 2mm □△
+entities
+'concepts'
+●●●●●● 1mm □
+potential_entities
+20
+●●●●●● 3mm ○
+entities
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_detect_topics
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Detect main topics in content.\n\n        Returns:\n            List of detected topics\n        '
+topic_keywords
+●●●●●● 1mm □
+'python'
+'javascript'
+'data_science'
+'web_development'
+'database'
+'devops'
+'python'
+'django'
+'flask'
+'pandas'
+'numpy'
+'javascript'
+'js'
+'react'
+'node'
+'typescript'
+'data'
+'analysis'
+'machine learning'
+'statistics'
+'model'
+'html'
+'css'
+'web'
+'frontend'
+'backend'
+'api'
+'sql'
+'database'
+'query'
+'table'
+'postgresql'
+'mysql'
+'docker'
+'kubernetes'
+'ci/cd'
+'deployment'
+'aws'
+content_lower
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+detected_topics
+●●●●●● 1mm □
+topic
+keywords
+topic_keywords
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+kw
+content_lower
+kw
+keywords
+●●●●●● 2mm □△
+detected_topics
+●●●●●● 1mm □△
+topic
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+detected_topics
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_assess_quality
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'\n        Assess content quality.\n\n        Returns:\n            Quality score 0.0-1.0\n        '
+score
+●●●●●● 1mm □
+0.5
+●●●●●● 2mm □
+500
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+50000
+score
+0.1
+●●●●●● 1mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+50000
+score
+0.05
+paragraph_count
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'\n\n'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+paragraph_count
+2
+score
+0.1
+sentence_count
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+content
+●●●●●● 1mm □△
+'!'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+content
+●●●●●● 1mm □△
+'?'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+sentence_count
+5
+score
+0.1
+words
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+0
+unique_ratio
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 2mm □
+unique_ratio
+0.3
+score
+0.1
+punct_ratio
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+c
+content
+c
+'.,!?;:'
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+punct_ratio
+0.1
+score
+0.1
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+score
+1.0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+_assess_complexity
+●●●●●● 1mm □△
+self
+content
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+"\n        Assess content complexity level.\n\n        Returns:\n            'beginner', 'intermediate', or 'advanced'\n        "
+words
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+words
+●●●●●● 3mm ○
+'unknown'
+avg_word_length
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+w
+words
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+sentences
+●●●●●● 1mm □
+content
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+avg_sentence_length
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+sentences
+●●●●●● 2mm □△
+1
+●●●●●● 2mm □△
+complex_words
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+w
+words
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+w
+●●●●●● 2mm □△
+10
+●●●●●● 2mm □△
+complex_ratio
+●●●●●● 1mm □
+complex_words
+●●●●●● 3mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+words
+●●●●●● 2mm □△
+●●●●●● 2mm □
+avg_word_length
+5
+avg_sentence_length
+15
+●●●●●● 3mm ○
+'beginner'
+●●●●●● 1mm △
+complex_ratio
+0.15
+avg_sentence_length
+25
+●●●●●● 3mm ○
+'advanced'
+●●●●●● 3mm ○
+'intermediate'
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_recommend_chunking_strategy
+●●●●●● 1mm □△
+self
+file_path
+content
+complexity
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Recommend optimal chunking strategy.\n\n        Returns:\n            Strategy dict with chunk_size, overlap, use_semantic, etc.\n        '
+file_type
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+strategy
+●●●●●● 1mm □
+'chunk_size'
+'overlap'
+'use_semantic'
+'embedding_batch_size'
+512
+50
+●●●●●● 1mm □
+32
+●●●●●● 2mm □
+file_type
+'.pdf'
+'.docx'
+'.txt'
+strategy
+'chunk_size'
+●●●●●● 1mm □
+1024
+strategy
+'overlap'
+●●●●●● 1mm □
+100
+strategy
+'use_semantic'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm △
+file_type
+'.py'
+'.js'
+'.java'
+'.cpp'
+'.c'
+strategy
+'chunk_size'
+●●●●●● 1mm □
+256
+strategy
+'overlap'
+●●●●●● 1mm □
+25
+strategy
+'use_semantic'
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+file_type
+'.md'
+'.rst'
+strategy
+'chunk_size'
+●●●●●● 1mm □
+512
+strategy
+'overlap'
+●●●●●● 1mm □
+50
+strategy
+'use_semantic'
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+complexity
+'advanced'
+strategy
+'chunk_size'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+strategy
+'chunk_size'
+●●●●●● 2mm □△
+1.5
+●●●●●● 2mm □△
+strategy
+'overlap'
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+strategy
+'overlap'
+●●●●●● 2mm □△
+1.5
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+content
+●●●●●● 2mm □△
+100000
+strategy
+'embedding_batch_size'
+●●●●●● 1mm □
+16
+●●●●●● 3mm ○
+strategy
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_default_strategy
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get default chunking strategy.'
+●●●●●● 3mm ○
+'chunk_size'
+'overlap'
+'use_semantic'
+'embedding_batch_size'
+512
+50
+●●●●●● 1mm □
+32
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_intelligence_agent
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_file_intelligence_agent
+●●●●●● 1mm □△
+file_handler
+llm_client
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n    Get or create FileIntelligenceAgent singleton.\n\n    Args:\n        file_handler: Optional FileHandler instance\n        llm_client: Optional LLM client instance\n\n    Returns:\n        FileIntelligenceAgent instance\n    '
+●●●●●● 2mm □
+_intelligence_agent
+●●●●●● 2mm □
+_intelligence_agent
+●●●●●● 1mm □
+FileIntelligenceAgent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_intelligence_agent
+FileIntelligenceAgent

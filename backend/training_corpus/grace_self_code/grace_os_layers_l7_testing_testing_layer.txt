@@ -1,0 +1,126 @@
+## testing_layer.py
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Dict
+List
+●●●●●● 3mm □△○
+grace_layer
+●●●●●● 2mm □△○
+GraceLayer
+●●●●●● 3mm □△○
+kernel.message_protocol
+●●●●●● 2mm □△○
+LayerMessage
+LayerResponse
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+TestingLayer
+●●●●●● 3mm □△
+GraceLayer
+GraceLayer
+'\n    Layer 7: Sandbox Execution & Testing.\n    Runs tests using MCP terminal tools and reports results.\n    '
+●●●●●● 1mm □
+layer_name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'L7_Testing'
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+capabilities
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'test_execution'
+'test_generation'
+'build_validation'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+accepted_message_types
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'VERIFY_TASK'
+●●●●●● 3mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+LayerMessage
+'\n        Main entry point for L7.\n        '
+●●●●●● 2mm □
+message
+'VERIFY_TASK'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'failure'
+'error'
+'Unsupported message type: '
+message
+●●●●●● 2mm □△
+LayerResponse
+LayerMessage
+'\n        Runs tests and handles failures via code-fix loop.\n        '
+logger
+●●●●●● 1mm □△
+'[L7] Verifying code changes...'
+●●●●●● 2mm □△
+test_passed
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+test_passed
+logger
+●●●●●● 1mm □△
+'[L7] Tests failed! Triggering self-healing loop back to L6...'
+●●●●●● 2mm □△
+fix_msg
+●●●●●● 1mm □
+'error_trace'
+'original_task'
+'AssertionError: expected 5, got 4 in example_math.py'
+message
+●●●●●● 1mm □△
+'description'
+''
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'partial'
+'message'
+'Tests failed. Fix requested from L6.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+message
+'success'
+'message'
+'Tests passed.'
+●●●●●● 2mm □△
+LayerResponse

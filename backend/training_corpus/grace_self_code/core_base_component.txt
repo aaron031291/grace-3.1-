@@ -1,0 +1,862 @@
+## base_component.py
+'\nBase Component - Unified Component Abstraction\n\nAddresses Clarity Class 1 (Structural Ambiguity):\n- Consistent component definitions\n- Clear lifecycle methods\n- Standardized status reporting\n- Trust and role tracking\n\nAll Grace components should inherit from BaseComponent.\n'
+●●●●●● 3mm □△○
+__future__
+●●●●●● 2mm □△○
+annotations
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+abc
+●●●●●● 2mm □△○
+ABC
+abstractmethod
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+Set
+TYPE_CHECKING
+●●●●●● 2mm □
+TYPE_CHECKING
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+Layer1MessageBus
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ComponentState
+●●●●●● 3mm □△
+Enum
+Enum
+'Component lifecycle states.'
+UNINITIALIZED
+●●●●●● 1mm □
+'uninitialized'
+INITIALIZING
+●●●●●● 1mm □
+'initializing'
+ACTIVE
+●●●●●● 1mm □
+'active'
+PAUSED
+●●●●●● 1mm □
+'paused'
+DEGRADED
+●●●●●● 1mm □
+'degraded'
+ERROR
+●●●●●● 1mm □
+'error'
+STOPPING
+●●●●●● 1mm □
+'stopping'
+STOPPED
+●●●●●● 1mm □
+'stopped'
+●●●●●● 2mm △
+ComponentRole
+●●●●●● 3mm □△
+Enum
+Enum
+'Component functional roles in the Grace system.'
+COGNITIVE
+●●●●●● 1mm □
+'cognitive'
+MEMORY
+●●●●●● 1mm □
+'memory'
+EXECUTION
+●●●●●● 1mm □
+'execution'
+LEARNING
+●●●●●● 1mm □
+'learning'
+GOVERNANCE
+●●●●●● 1mm □
+'governance'
+ORCHESTRATION
+●●●●●● 1mm □
+'orchestration'
+INTEGRATION
+●●●●●● 1mm □
+'integration'
+INFRASTRUCTURE
+●●●●●● 1mm □
+'infrastructure'
+●●●●●● 2mm △
+ComponentManifest
+'\n    Metadata describing a component.\n\n    Addresses Clarity Class 4 (Subsystem Activation Ambiguity):\n    - Trust flags\n    - Active state tracking\n    - Role tags\n    - Capability declarations\n    '
+component_id
+●●●●●● 1mm ○
+name
+●●●●●● 1mm ○
+version
+●●●●●● 1mm ○
+role
+ComponentRole
+description
+●●●●●● 1mm ○
+trust_level
+●●●●●● 3mm ○
+0.5
+is_trusted
+●●●●●● 3mm △
+●●●●●● 1mm □
+requires_governance
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+capabilities
+Set
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+dependencies
+Set
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tags
+Set
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_active_at
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'component_id'
+'name'
+'version'
+'role'
+'description'
+'trust_level'
+'is_trusted'
+'requires_governance'
+'capabilities'
+'dependencies'
+'tags'
+'created_at'
+'last_active_at'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 2mm △
+BaseComponent
+●●●●●● 3mm □△
+ABC
+ABC
+'\n    Abstract base class for all Grace components.\n\n    Provides:\n    - Unified lifecycle management (activate, deactivate, pause, resume)\n    - Standardized status reporting\n    - Health checking\n    - Message bus integration\n    - Trust tracking\n\n    Usage:\n        class MyComponent(BaseComponent):\n            def __init__(self):\n                super().__init__(\n                    name="MyComponent",\n                    version="1.0.0",\n                    role=ComponentRole.COGNITIVE,\n                    description="Does something useful",\n                )\n\n            async def _do_activate(self):\n                # Component-specific activation logic\n                pass\n\n            async def _do_deactivate(self):\n                # Component-specific cleanup\n                pass\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+name
+version
+role
+description
+requires_governance
+capabilities
+dependencies
+tags
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+ComponentRole
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+Set
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Set
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+Set
+●●●●●● 1mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+' '
+'_'
+●●●●●● 2mm □△
+'-'
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+8
+●●●●●● 3mm △
+●●●●●● 1mm □
+ComponentManifest
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ComponentState
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'activations'
+'deactivations'
+'errors'
+'operations'
+'successes'
+'failures'
+0
+0
+0
+0
+0
+0
+●●●●●● 3mm △
+●●●●●● 2mm □○
+'Layer1MessageBus'
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'['
+name
+'] BaseComponent initialized: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □
+component_id
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Unique component identifier.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+name
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Human-readable component name.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+manifest
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Component manifest with metadata.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+ComponentManifest
+●●●●●● 1mm □
+state
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Current component state.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+ComponentState
+●●●●●● 1mm □
+is_active
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Whether component is active and ready.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ComponentState
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+is_available
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Whether component can accept operations.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+ComponentState
+ComponentState
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+trust_level
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Current trust level.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+'\n        Activate the component.\n\n        Returns True if activation succeeded.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+ComponentState
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Already active'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+●●●●●● 3mm △
+ComponentState
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Cannot activate while stopping'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Activating...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'activations'
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Activated successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'errors'
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Activation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+'\n        Deactivate the component gracefully.\n\n        Returns True if deactivation succeeded.\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+ComponentState
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Already stopped'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Deactivating...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'deactivations'
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Deactivated successfully'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'errors'
+1
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Deactivation failed: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+'Pause component operations (can resume).'
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Cannot pause - not active'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Paused'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+'Resume paused component.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+ComponentState
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Cannot resume - not paused'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Resumed'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'Mark component as degraded but functional.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+ComponentState
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+reason
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Degraded: '
+reason
+●●●●●● 2mm □△
+'\n        Component-specific activation logic.\n\n        Override this in subclasses to:\n        - Initialize resources\n        - Connect to dependencies\n        - Start background tasks\n        '
+abstractmethod
+'\n        Component-specific deactivation logic.\n\n        Override this in subclasses to:\n        - Release resources\n        - Stop background tasks\n        - Flush buffers\n        '
+abstractmethod
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get comprehensive component status.'
+●●●●●● 3mm ○
+'component_id'
+'name'
+'state'
+'is_active'
+'is_available'
+'error'
+'trust_level'
+'stats'
+'manifest'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'\n        Perform health check.\n\n        Override in subclasses for specific health checks.\n        '
+healthy
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'component_id'
+'healthy'
+'state'
+'error'
+'uptime_seconds'
+●●●●●● 3mm △
+healthy
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_get_uptime_seconds
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Calculate uptime since last activation.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+0.0
+●●●●●● 3mm ○
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+adjust_trust
+●●●●●● 1mm □△
+self
+delta
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'Adjust trust level (clamped to 0.0-1.0).'
+old_trust
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0.0
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+1.0
+old_trust
+●●●●●● 3mm ○
+delta
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+0.8
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] Trust adjusted: '
+old_trust
+'.3f'
+' -> '
+●●●●●● 3mm △
+'.3f'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+set_trusted
+●●●●●● 1mm □△
+self
+trusted
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'Explicitly set trusted status.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+trusted
+●●●●●● 1mm □
+record_operation
+●●●●●● 1mm □△
+self
+success
+●●●●●● 2mm □△
+●●●●●● 3mm △
+'Record an operation result.'
+●●●●●● 3mm △
+'operations'
+1
+●●●●●● 2mm □
+success
+●●●●●● 3mm △
+'successes'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+'failures'
+1
+●●●●●● 1mm □
+get_success_rate
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get operation success rate.'
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+'operations'
+●●●●●● 2mm □
+total
+0
+●●●●●● 3mm ○
+1.0
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'successes'
+●●●●●● 3mm □△
+total
+●●●●●● 3mm ○
+●●●●●● 1mm □
+set_message_bus
+●●●●●● 1mm □△
+self
+message_bus
+●●●●●● 2mm □△
+'Layer1MessageBus'
+'Set message bus for event publishing.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+message_bus
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+'Publish event to message bus.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'['
+●●●●●● 3mm △
+'] No message bus configured'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+layer1.message_bus
+●●●●●● 2mm □△○
+ComponentType
+role_to_type
+●●●●●● 1mm □
+ComponentRole
+ComponentRole
+ComponentRole
+ComponentRole
+ComponentType
+ComponentType
+ComponentType
+ComponentType
+component_type
+●●●●●● 1mm □
+role_to_type
+●●●●●● 1mm □△
+●●●●●● 3mm △
+ComponentType
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_set_state
+●●●●●● 1mm □△
+self
+new_state
+●●●●●● 2mm □△
+ComponentState
+'Set component state with history tracking.'
+old_state
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+new_state
+●●●●●● 2mm □
+new_state
+ComponentState
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'from_state'
+'to_state'
+'timestamp'
+old_state
+new_state
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+100
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+100
+●●●●●● 1mm □
+__repr__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'<'
+●●●●●● 3mm △
+'('
+●●●●●● 3mm △
+', state='
+●●●●●● 3mm △
+')>'
+●●●●●● 1mm ○

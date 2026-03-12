@@ -1,0 +1,287 @@
+## admin_api.py
+'\nRestricted Admin API — safe live control of the running system.\n\nEndpoints: registry, state, reload-config, trigger-diagnostics.\nRequires ADMIN_TOKEN header or query param (env ADMIN_TOKEN).\n'
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Optional
+●●●●●● 3mm □△○
+fastapi
+●●●●●● 2mm □△○
+APIRouter
+Depends
+HTTPException
+Header
+Query
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □
+APIRouter
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_admin_token
+●●●●●● 1mm □△
+x_admin_token
+token
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+Header
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+Query
+●●●●●● 1mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □△
+'Require valid admin token.'
+required
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'ADMIN_TOKEN'
+''
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+required
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+provided
+●●●●●● 1mm □
+x_admin_token
+token
+''
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+provided
+required
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 2mm □
+Depends
+●●●●●● 1mm □△
+_check_admin_token
+●●●●●● 2mm □△
+'List all registered brains, components, and models.'
+●●●●●● 3mm □△○
+core.execution_registry
+●●●●●● 2mm □△○
+get_registry
+init_registry
+r
+●●●●●● 1mm □
+get_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+r
+●●●●●● 1mm □
+init_registry
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ok'
+'data'
+●●●●●● 3mm □△○
+r
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Admin registry: %s'
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/registry'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Depends
+●●●●●● 1mm □△
+_check_admin_token
+●●●●●● 2mm □△
+'KPI summary, component health, basic state.'
+out
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_kpi_dashboard
+out
+'kpi_dashboard'
+●●●●●● 1mm □
+get_kpi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+out
+'kpi_dashboard'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+ml_intelligence.kpi_tracker
+●●●●●● 2mm □△○
+get_kpi_tracker
+tracker
+●●●●●● 1mm □
+get_kpi_tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tracker
+out
+'system_trust'
+●●●●●● 1mm □
+tracker
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+'components'
+●●●●●● 1mm □
+name
+tracker
+●●●●●● 1mm □△
+name
+●●●●●● 2mm □△
+name
+'brain_chat'
+'brain_ai'
+'rag'
+'ingestion'
+'learning'
+Exception
+out
+'system_trust'
+●●●●●● 1mm □
+●●●●●● 2mm □
+out
+'components'
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm ○
+'ok'
+'data'
+●●●●●● 3mm □△○
+out
+Exception
+logger
+●●●●●● 1mm □△
+'Admin state: %s'
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/state'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Depends
+●●●●●● 1mm □△
+_check_admin_token
+●●●●●● 2mm □△
+'Trigger config reload (if supported). No module reimport.'
+●●●●●● 2mm □△○
+importlib
+●●●●●● 2mm □△○
+settings
+importlib
+●●●●●● 1mm □△
+settings
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ok'
+'message'
+●●●●●● 3mm □△○
+'Config reloaded'
+ImportError
+●●●●●● 3mm ○
+'ok'
+'message'
+●●●●●● 3mm □△○
+'No settings module to reload'
+Exception
+logger
+●●●●●● 1mm □△
+'Admin reload-config: %s'
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/reload-config'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+Depends
+●●●●●● 1mm □△
+_check_admin_token
+●●●●●● 2mm □△
+'Run diagnostics in background. Returns immediately.'
+●●●●●● 3mm □△○
+core.background_tasks
+●●●●●● 2mm □△○
+submit_background
+●●●●●● 1mm □
+_run
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+core.governance_engine
+●●●●●● 2mm □△○
+get_kpi_dashboard
+get_kpi_dashboard
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Diagnostics run: %s'
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □
+submit_background
+●●●●●● 1mm □△
+_run
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'ok'
+'message'
+●●●●●● 3mm □△○
+'Diagnostics triggered in background'
+Exception
+logger
+●●●●●● 1mm □△
+'Admin trigger-diagnostics: %s'
+e
+●●●●●● 2mm □△
+HTTPException
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+router
+●●●●●● 1mm □△
+'/trigger-diagnostics'
+●●●●●● 2mm □△

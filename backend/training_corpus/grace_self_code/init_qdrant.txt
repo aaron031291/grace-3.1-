@@ -1,0 +1,282 @@
+## init_qdrant.py
+"\nInitialize Qdrant collection for Grace API.\nRun this script to create the 'documents' collection with the correct vector dimensions.\n"
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+backend_dir
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+vector_db.client
+●●●●●● 2mm □△○
+get_qdrant_client
+●●●●●● 3mm □△○
+embedding.embedder
+●●●●●● 2mm □△○
+get_embedding_model
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Qdrant Collection Initialization'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[1/4] Loading embedding model...'
+●●●●●● 2mm □△
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+vector_size
+●●●●●● 1mm □
+model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Embedding model loaded'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Model path: '
+model
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Vector dimension: '
+vector_size
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Failed to load embedding model: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[2/4] Connecting to Qdrant...'
+●●●●●● 2mm □△
+client
+●●●●●● 1mm □
+get_qdrant_client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Connected to Qdrant'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Host: '
+client
+':'
+client
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Failed to connect to Qdrant'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Connection error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[3/4] Creating collection...'
+●●●●●● 2mm □△
+collection_name
+●●●●●● 1mm □
+'documents'
+●●●●●● 2mm □
+client
+●●●●●● 1mm □△
+collection_name
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"✓ Collection '"
+collection_name
+"' already exists"
+●●●●●● 2mm □△
+info
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+collection_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+info
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Vectors count: '
+info
+●●●●●● 1mm □△
+'vectors_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Points count: '
+info
+●●●●●● 1mm □△
+'points_count'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+success
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+success
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+"✓ Collection '"
+collection_name
+"' created successfully"
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Vector size: '
+vector_size
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  Distance metric: cosine'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Failed to create collection'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Error creating collection: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n[4/4] Verifying collections...'
+●●●●●● 2mm □△
+collections
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Available collections: '
+collections
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✗ Error listing collections: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\n'
+●●●●●● 3mm ○
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'✓ Qdrant setup complete!'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'='
+●●●●●● 2mm □△
+60
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'\nNext steps:'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'1. Restart the backend: python app.py'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'2. Check logs for: [OK] Qdrant connection verified'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'3. Test ingestion with web scraper or file upload'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+__name__
+'__main__'
+success
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+success
+0
+1
+●●●●●● 2mm □△

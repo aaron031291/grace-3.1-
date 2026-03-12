@@ -65,7 +65,6 @@ from search.serpapi_service import SerpAPIService
 from api.codebase_hub_api import router as codebase_hub_router
 from api.whitelist_hub_api import router as whitelist_hub_router
 from api.devlab_api import router as devlab_router
-from api.test_verify_api import router as test_verify_router
 from api.sandbox_api import router as sandbox_router
 from api.tasks_hub_api import router as tasks_hub_router
 
@@ -476,23 +475,14 @@ async def lifespan(app: FastAPI):
             
             # Ensure database is initialized in this thread context
             print("\n[AUTO-INGEST] Verifying database connection...", flush=True)
-            max_db_retries = 30
-            db_ready = False
-            for db_retry in range(max_db_retries):
-                try:
-                    engine = DatabaseConnection.get_engine()
-                    if engine:
-                        print("[AUTO-INGEST] [OK] Database engine verified", flush=True)
-                        db_ready = True
-                        break
-                except RuntimeError as e:
-                    if db_retry % 5 == 0:
-                        print(f"[AUTO-INGEST] [WARN] Waiting for DB to initialize...", flush=True)
-                    time.sleep(2)
-                    
-            if not db_ready:
-                print("[AUTO-INGEST] [FAIL] Database failed to initialize after 60s timeout.", flush=True)
-                return
+            try:
+                engine = DatabaseConnection.get_engine()
+                if engine:
+                    print("[AUTO-INGEST] [OK] Database engine verified", flush=True)
+            except RuntimeError as e:
+                print(f"[AUTO-INGEST] [WARN] Database not initialized yet: {e}", flush=True)
+                print("[AUTO-INGEST] Waiting 2 seconds...", flush=True)
+                time.sleep(2)
             
             # Initialize session factory in this thread if needed
             print("[AUTO-INGEST] Initializing session factory...", flush=True)
@@ -724,13 +714,6 @@ app.add_middleware(
     max_age=security_config.CORS_MAX_AGE,
 )
 
-# Add Multi-Trigger Fabric Exception Middleware (must be before routers)
-try:
-    from self_healing.trigger_fabric import _wire_fastapi_middleware
-    _wire_fastapi_middleware(app)
-except Exception as e:
-    print(f"[WARN] Failed to wire trigger_fabric middleware: {e}")
-
 # =============================================================================
 # API ROUTERS — v1 resource layer + minimal core
 # =============================================================================
@@ -772,11 +755,11 @@ from api.kpi_api import router as kpi_router
 from api.planner_api import router as planner_router
 from api.scrape_api import router as scrape_router
 from api.version_control_api import router as version_control_router
+from api.hitl_dashboard import router as hitl_dashboard_router
 
 app.include_router(codebase_hub_router, prefix="/api")
 app.include_router(whitelist_hub_router, prefix="/api")
 app.include_router(devlab_router, prefix="/api")
-app.include_router(test_verify_router)
 app.include_router(sandbox_router, prefix="/api")
 app.include_router(tasks_hub_router, prefix="/api")
 app.include_router(schema_evolution_router, prefix="/api")
@@ -788,6 +771,7 @@ app.include_router(kpi_router)
 app.include_router(planner_router)
 app.include_router(scrape_router)
 app.include_router(version_control_router)
+app.include_router(hitl_dashboard_router)
 
 from api.docs_library_api import router as docs_library_router
 app.include_router(docs_library_router)

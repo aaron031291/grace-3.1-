@@ -1,0 +1,53 @@
+## GraceCognitionLinter.py
+●●●●●● 2mm □△○
+ast
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 2mm △
+GraceCognitionLinter
+'\n    Static analyzer for playbooks/logic updates.\n    Flags missing telemetry exports, unbounded loops, or policy violations before runtime.\n    '
+●●●●●● 1mm □
+lint_file
+●●●●●● 1mm □△
+self
+filepath
+●●●●●● 2mm □△
+Path
+'\n        Minimal example checking for the presence of logging in playbooks or\n        cognitive scripts to satisfy Pillar 1 baseline (component_meta.pillar).\n        '
+violations
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+filepath
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'.py'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+filepath
+'r'
+●●●●●● 2mm □△
+f
+content
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'import logging'
+content
+'logger'
+content
+violations
+●●●●●● 1mm □△
+'Missing mandatory telemetry/logging in '
+filepath
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+violations
+●●●●●● 1mm □△
+●●●●●● 1mm ○

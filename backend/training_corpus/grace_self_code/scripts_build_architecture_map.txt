@@ -1,0 +1,122 @@
+## build_architecture_map.py
+'\nBuild the Architecture Compass and export the full map to JSON.\nRun from backend/:  python scripts/build_architecture_map.py\nOutput: backend/architecture_map.json\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+sys
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+BACKEND
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+0
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+BACKEND
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.architecture_compass
+●●●●●● 2mm □△○
+get_compass
+c
+●●●●●● 1mm □
+get_compass
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+m
+●●●●●● 1mm □
+c
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+out
+●●●●●● 1mm □
+BACKEND
+●●●●●● 3mm □△
+'architecture_map.json'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+out
+'w'
+●●●●●● 2mm □△
+f
+json
+●●●●●● 1mm □△
+m
+f
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Built architecture map: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+m
+'components'
+●●●●●● 2mm □△
+' components -> '
+out
+●●●●●● 2mm □△
+chat_nlp
+●●●●●● 1mm □
+p
+p
+i
+m
+'components'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'chat_response'
+i
+●●●●●● 1mm □△
+'capabilities'
+●●●●●● 2mm □△
+'full_nlp'
+i
+●●●●●● 1mm □△
+'capabilities'
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Components with chat_response or full_nlp: '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+chat_nlp
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+p
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+chat_nlp
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'  - '
+p
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm □
+__name__
+'__main__'
+sys
+●●●●●● 1mm □△
+main
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△

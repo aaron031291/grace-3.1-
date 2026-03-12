@@ -1,0 +1,375 @@
+## test_api_governance.py
+'\nTests for Governance API endpoints.\nUpdated to match actual API implementation.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestGovernanceStatus
+'Test governance status endpoints.'
+●●●●●● 1mm □
+test_get_governance_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting governance system status via stats endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/stats'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_governance_overview
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting governance overview via stats endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/stats'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGovernanceRules
+'Test governance rules endpoints.'
+●●●●●● 1mm □
+test_get_rules
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting governance rules.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/rules'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'rules'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_create_rule
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test creating a governance rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/rules/new'
+●●●●●● 2mm □△
+response
+200
+201
+422
+500
+●●●●●● 1mm □
+test_get_rule_by_id
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting a specific rule - toggle endpoint as proxy.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/rules'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_update_rule
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test updating a governance rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/rules/test-rule-id'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_delete_rule
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test deleting a governance rule.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/rules/nonexistent-rule'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+pytest
+●●●●●● 2mm △
+TestGovernanceApprovals
+'Test governance approval endpoints.'
+●●●●●● 1mm □
+test_get_pending_approvals
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting pending approvals via decisions endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/decisions/pending'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_approve_action
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test approving an action via confirm endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/decisions/test-action-id/confirm'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_reject_action
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test rejecting an action via deny endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/decisions/test-action-id/deny'
+●●●●●● 2mm □△
+response
+200
+404
+422
+500
+●●●●●● 1mm □
+test_get_approval_history
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting approval history.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/decisions/history'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGovernancePillars
+'Test governance pillars endpoints.'
+●●●●●● 1mm □
+test_get_pillars
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting governance pillars.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/pillars'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 2mm □
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_pillar_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting pillar status via main pillars endpoint.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/pillars'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGovernanceAudit
+'Test governance audit endpoints.'
+●●●●●● 1mm □
+test_get_audit_log
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting audit log via decisions history.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/decisions/history'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_get_audit_log_filtered
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting filtered audit log.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/decisions/history'
+●●●●●● 2mm □△
+response
+200
+500
+pytest
+●●●●●● 2mm △
+TestGovernanceDocuments
+'Test governance document endpoints.'
+●●●●●● 1mm □
+test_upload_governance_document
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test uploading a governance document.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/documents/upload'
+●●●●●● 2mm □△
+response
+200
+201
+422
+500
+●●●●●● 1mm □
+test_get_governance_documents
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting governance documents.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/documents'
+●●●●●● 2mm □△
+response
+200
+500
+●●●●●● 1mm □
+test_get_document_by_id
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting specific governance document.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/governance/documents'
+●●●●●● 2mm □△
+response
+200
+500
+pytest

@@ -254,8 +254,8 @@ class HealingCoordinator:
             return {"step": "rediagnose", "fix": None, "note": "No additional context found"}
 
         try:
-            from llm_orchestrator.factory import get_llm_for_task
-            client = get_llm_for_task("self_healing")
+            from llm_orchestrator.factory import get_llm_client
+            client = get_llm_client()
             fix = client.chat(messages=[
                 {"role": "system", "content": "You are fixing a system problem. Use the additional context to provide a specific fix."},
                 {"role": "user", "content": f"Problem: {problem.get('description', '')}\nError: {problem.get('error', '')}\nAdditional context:{extra_context}\n\nProvide the fix."},

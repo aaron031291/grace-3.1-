@@ -1,0 +1,1002 @@
+## redis_cache.py
+'\nRedis Caching Layer\n===================\nProvides caching functionality using Redis for improved performance.\nSupports TTL, tags, and cache invalidation patterns.\n'
+●●●●●● 2mm □△○
+json
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Any
+Optional
+Callable
+TypeVar
+Union
+List
+●●●●●● 3mm □△○
+functools
+●●●●●● 2mm □△○
+wraps
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+timedelta
+●●●●●● 2mm □△○
+logging
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+T
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+'T'
+●●●●●● 2mm □△
+●●●●●● 2mm △
+RedisCache
+'\n    Redis-based caching client with async support.\n\n    Features:\n    - Automatic serialization/deserialization\n    - TTL (Time To Live) support\n    - Cache tags for group invalidation\n    - Distributed locking\n    - Connection pooling\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+host
+port
+db
+password
+prefix
+default_ttl
+max_connections
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+'localhost'
+6379
+0
+●●●●●● 2mm □
+'grace:'
+3600
+10
+'\n        Initialize Redis cache client.\n\n        Args:\n            host: Redis host\n            port: Redis port\n            db: Redis database number\n            password: Redis password (optional)\n            prefix: Key prefix for all cache entries\n            default_ttl: Default TTL in seconds\n            max_connections: Maximum connection pool size\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □
+host
+●●●●●● 3mm △
+●●●●●● 1mm □
+port
+●●●●●● 3mm △
+●●●●●● 1mm □
+db
+●●●●●● 3mm △
+●●●●●● 1mm □
+password
+●●●●●● 3mm △
+●●●●●● 1mm □
+prefix
+●●●●●● 3mm △
+●●●●●● 1mm □
+default_ttl
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_connections
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+'Establish connection to Redis.'
+●●●●●● 2mm □△○
+redis.asyncio
+●●●●●● 1mm □
+redis
+●●●●●● 3mm △
+●●●●●● 1mm □
+redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+redis
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Connected to Redis at '
+●●●●●● 3mm △
+':'
+●●●●●● 3mm △
+●●●●●● 2mm □△
+ImportError
+logger
+●●●●●● 1mm □△
+'redis package not installed. Using in-memory fallback.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Failed to connect to Redis: '
+e
+'. Using in-memory fallback.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+InMemoryFallback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Close Redis connection.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Disconnected from Redis'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_make_key
+●●●●●● 1mm □△
+self
+key
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Generate prefixed cache key.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+key
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_serialize
+●●●●●● 1mm □△
+self
+value
+●●●●●● 2mm □△
+Any
+'Serialize value for storage.'
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_deserialize
+●●●●●● 1mm □△
+self
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Deserialize value from storage.'
+●●●●●● 2mm □
+value
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+json
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+Any
+●●●●●● 1mm ○
+'\n        Get value from cache.\n\n        Args:\n            key: Cache key\n\n        Returns:\n            Cached value or None if not found\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+value
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+value
+●●●●●● 3mm □△○
+api.metrics
+●●●●●● 2mm □△○
+inc_cache_hit
+inc_cache_hit
+●●●●●● 1mm □△
+'redis'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm □△○
+api.metrics
+●●●●●● 2mm □△○
+inc_cache_miss
+●●●●●● 3mm □
+inc_cache_miss
+●●●●●● 1mm □△
+'redis'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+●●●●●● 2mm □
+Exception
+logger
+●●●●●● 1mm □△
+'Cache get error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+Any
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+'\n        Set value in cache.\n\n        Args:\n            key: Cache key\n            value: Value to cache\n            ttl: Time to live in seconds (optional)\n            tags: List of tags for group invalidation (optional)\n\n        Returns:\n            True if successful\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+serialized
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+expire
+●●●●●● 1mm □
+ttl
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_key
+expire
+serialized
+●●●●●● 2mm □△
+●●●●●● 2mm □
+tags
+tag
+tags
+tag_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'tag:'
+tag
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tag_key
+full_key
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tag_key
+expire
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+Exception
+logger
+●●●●●● 1mm □△
+'Cache set error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'\n        Delete value from cache.\n\n        Args:\n            key: Cache key\n\n        Returns:\n            True if deleted\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Cache delete error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'\n        Invalidate all cache entries with a specific tag.\n\n        Args:\n            tag: Tag to invalidate\n\n        Returns:\n            Number of entries invalidated\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tag_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'tag:'
+tag
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tag_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tag_key
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Invalidated '
+count
+" cache entries with tag '"
+tag
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+●●●●●● 3mm ○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Cache tag invalidation error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'*'
+'\n        Clear cache entries matching pattern.\n\n        Args:\n            pattern: Glob pattern (default: all)\n\n        Returns:\n            Number of entries cleared\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_pattern
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+pattern
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □
+key
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+keys
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+keys
+count
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+keys
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Cleared '
+count
+" cache entries matching '"
+pattern
+"'"
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+count
+●●●●●● 3mm ○
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Cache clear error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+0
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+'Check if key exists in cache.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_key
+●●●●●● 2mm □△
+0
+Exception
+logger
+●●●●●● 1mm □△
+'Cache exists error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm ○
+'Get remaining TTL for a key.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_key
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Cache TTL error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm ○
+10
+●●●●●● 3mm □△○
+5
+'\n        Acquire a distributed lock.\n\n        Args:\n            name: Lock name\n            timeout: Lock expiration in seconds\n            blocking: Whether to block waiting for lock\n            blocking_timeout: Max time to wait for lock\n\n        Returns:\n            Lock token if acquired, None otherwise\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+uuid
+token
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+uuid
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+lock_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'lock:'
+name
+●●●●●● 2mm □△
+end_time
+●●●●●● 1mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+blocking_timeout
+●●●●●● 3mm □△○
+acquired
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+lock_key
+token
+●●●●●● 2mm □△
+●●●●●● 2mm □
+acquired
+●●●●●● 3mm ○
+token
+●●●●●● 2mm □
+blocking
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+end_time
+●●●●●● 3mm ○
+●●●●●● 2mm □
+asyncio
+●●●●●● 1mm □△
+0.1
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Release a distributed lock.\n\n        Args:\n            name: Lock name\n            token: Lock token from acquire_lock\n\n        Returns:\n            True if released successfully\n        '
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+lock_key
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'lock:'
+name
+●●●●●● 2mm □△
+script
+●●●●●● 1mm □
+'\n        if redis.call("get", KEYS[1]) == ARGV[1] then\n            return redis.call("del", KEYS[1])\n        else\n            return 0\n        end\n        '
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+script
+1
+lock_key
+token
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+1
+Exception
+logger
+●●●●●● 1mm □△
+'Lock release error: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 2mm △
+InMemoryFallback
+'In-memory cache fallback when Redis is unavailable.'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+key
+●●●●●● 3mm △
+key
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+value
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+expire
+count
+●●●●●● 1mm □
+0
+key
+keys
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+count
+1
+●●●●●● 3mm ○
+count
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+key
+●●●●●● 3mm △
+1
+0
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+remaining
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+key
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+0
+remaining
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+1
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+key
+●●●●●● 3mm △
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+key
+●●●●●● 1mm □△
+value
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+seconds
+●●●●●● 1mm □
+scan_iter
+●●●●●● 1mm □△
+self
+match
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'*'
+●●●●●● 2mm □△○
+fnmatch
+key
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+fnmatch
+●●●●●● 1mm □△
+key
+match
+●●●●●● 2mm □△
+key
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+nx
+key
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+value
+●●●●●● 2mm □
+ex
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm △
+key
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ex
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+key
+●●●●●● 1mm □
+args
+0
+token
+●●●●●● 1mm □
+args
+1
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+key
+●●●●●● 2mm □△
+token
+●●●●●● 3mm △
+key
+●●●●●● 3mm ○
+1
+●●●●●● 3mm ○
+0
+●●●●●● 1mm □
+cached
+●●●●●● 1mm □△
+ttl
+key_prefix
+tags
+cache_none
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+3600
+''
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n    Decorator for caching function results.\n\n    Args:\n        ttl: Cache TTL in seconds\n        key_prefix: Prefix for cache key\n        tags: Tags for group invalidation\n        cache_none: Whether to cache None results\n\n    Usage:\n        @cached(ttl=300, key_prefix="user", tags=["users"])\n        async def get_user(user_id: int):\n            return await db.get_user(user_id)\n    '
+●●●●●● 1mm □
+decorator
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+●●●●●● 1mm △○
+Ellipsis
+T
+key_parts
+●●●●●● 1mm □
+key_prefix
+func
+key_parts
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+arg
+●●●●●● 2mm □△
+arg
+args
+●●●●●● 2mm □△
+key_parts
+●●●●●● 1mm □△
+k
+'='
+v
+k
+v
+●●●●●● 2mm □○
+●●●●●● 1mm □△
+kwargs
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+key_string
+●●●●●● 1mm □
+':'
+●●●●●● 1mm □△
+key_parts
+●●●●●● 2mm □△
+cache_key
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+key_string
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □
+get_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cached_value
+●●●●●● 1mm □
+cache
+●●●●●● 1mm □△
+cache_key
+●●●●●● 2mm □△
+●●●●●● 2mm □
+cached_value
+●●●●●● 2mm □
+●●●●●● 3mm ○
+cached_value
+result
+●●●●●● 1mm □
+func
+●●●●●● 1mm □△
+args
+●●●●●● 2mm □△
+●●●●●● 2mm □
+result
+●●●●●● 2mm □
+cache_none
+cache
+●●●●●● 1mm □△
+cache_key
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+func
+●●●●●● 2mm □△
+T
+●●●●●● 3mm ○
+wrapper
+●●●●●● 1mm △○
+Ellipsis
+T
+●●●●●● 3mm ○
+decorator
+_cache_instance
+●●●●●● 2mm □○
+RedisCache
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get the global cache instance.'
+●●●●●● 2mm □
+_cache_instance
+●●●●●● 2mm □
+●●●●●● 2mm □△○
+os
+_cache_instance
+●●●●●● 1mm □
+RedisCache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_cache_instance
+RedisCache
+'Initialize the cache connection.'
+cache
+●●●●●● 1mm □
+get_cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cache
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Close the cache connection.'
+●●●●●● 2mm □
+_cache_instance
+_cache_instance
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_cache_instance
+●●●●●● 1mm □
+●●●●●● 2mm □

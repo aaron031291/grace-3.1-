@@ -1,0 +1,272 @@
+## sandbox_modifier.py
+'\nSandbox Modifier - Enforces strict governance and Ghost Shadow tracking\nfor any autonomous modifications Grace/Spindle makes to the Braille Sandbox.\n'
+●●●●●● 2mm □△○
+difflib
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+get_session
+●●●●●● 3mm □△○
+database.models.braille_node
+●●●●●● 2mm □△○
+BrailleSandboxNode
+●●●●●● 3mm □△○
+cognitive.ghost_memory
+●●●●●● 2mm □△○
+get_ghost_memory
+●●●●●● 3mm □△○
+cognitive.corrigible_plan
+●●●●●● 2mm □△○
+get_corrigible_plan
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 1mm □
+shadow_track_changes
+●●●●●● 1mm □△
+old_ast
+new_ast
+ghost_mem
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Ghost Shadow tracking: performs line-by-line comparison between old and new ASTs\n    and silently records the exact modifications into Ghost Memory.\n    '
+old_lines
+●●●●●● 1mm □
+old_ast
+old_ast
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+new_lines
+●●●●●● 1mm □
+new_ast
+new_ast
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+diff
+●●●●●● 1mm □
+●●●●●● 1mm □△
+●●●●●● 1mm □△
+difflib
+●●●●●● 1mm □△
+old_lines
+new_lines
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+changes_tracked
+●●●●●● 1mm □
+0
+line
+diff
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'+++'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+'---'
+●●●●●● 2mm □△
+line
+●●●●●● 1mm □△
+'@@'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+line
+●●●●●● 1mm □△
+'+'
+●●●●●● 2mm □△
+ghost_mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes_tracked
+1
+●●●●●● 1mm △
+line
+●●●●●● 1mm □△
+'-'
+●●●●●● 2mm □△
+ghost_mem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+changes_tracked
+1
+●●●●●● 3mm ○
+changes_tracked
+●●●●●● 2mm ○
+●●●●●● 1mm □
+modify_sandbox_node
+●●●●●● 1mm □△
+file_path
+new_ast_content
+reason
+actor
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'Spindle'
+'\n    Safely modify a Braille Sandbox Node with full Genesis Key and Ghost Shadow tracking.\n    '
+ghost
+●●●●●● 1mm □
+get_ghost_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'Sandbox Modification: '
+file_path
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'system_event'
+'Initiating governed modification of '
+file_path
+' for reason: '
+reason
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+ImportError
+track
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'Genesis Tracker not found, modifications will not generate Genesis Keys.'
+●●●●●● 2mm □△
+get_session
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △○
+node
+●●●●●● 1mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+BrailleSandboxNode
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+BrailleSandboxNode
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+ghost
+●●●●●● 1mm □△
+'error'
+'Node not found in Sandbox for '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Node not found'
+old_ast
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+actor
+'Spindle_Autonomy'
+corrigible
+●●●●●● 1mm □
+get_corrigible_plan
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_provable
+●●●●●● 1mm □
+corrigible
+●●●●●● 1mm □△
+new_ast_content
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_provable
+ghost
+●●●●●● 1mm □△
+'error'
+'Z3 Geometric Proof failed for AST modification on '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'error'
+●●●●●● 1mm □
+'Z3 Proof limit exceeded. Modification reverted.'
+●●●●●● 3mm □
+ghost
+●●●●●● 1mm □△
+'success'
+'Z3 Geometric Proof passed. Entropy bounds verified.'
+●●●●●● 2mm □△
+changes_count
+●●●●●● 1mm □
+shadow_track_changes
+●●●●●● 1mm □△
+old_ast
+new_ast_content
+ghost
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'system_event'
+'Tracked '
+changes_count
+' AST modifications in Ghost Shadow.'
+●●●●●● 2mm □△
+node
+●●●●●● 1mm □
+new_ast_content
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+genesis_key_id
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+track
+genesis_key_id
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ghost
+●●●●●● 1mm □△
+'success'
+"Genesis Key '"
+genesis_key_id
+"' generated for transaction."
+●●●●●● 2mm □△
+reflection
+●●●●●● 1mm □
+ghost
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'success'
+'file_path'
+'changes_count'
+'genesis_key'
+'ghost_playbook_status'
+●●●●●● 3mm □△○
+file_path
+changes_count
+genesis_key_id
+reflection
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

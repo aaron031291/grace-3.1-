@@ -1,0 +1,1005 @@
+## deterministic_coding_contracts.py
+'\nDeterministic Coding Contracts\n================================\nGovernance contracts turned into deterministic coding process enforcement.\n\nInstead of telling the LLM "follow these rules" in a prompt (soft enforcement),\nthese contracts are HARD enforcement — each step is verified deterministically\nbefore the LLM is allowed to proceed.\n\nContract Structure:\n  1. PRE-CONDITIONS:  Deterministic checks that MUST pass before code generation\n  2. GENERATION:      LLM generates code (constrained by deterministic facts)\n  3. POST-CONDITIONS: Deterministic checks that MUST pass after code generation\n  4. VERIFICATION:    AST parse, import check, syntax check, security scan\n  5. APPROVAL:        Trust score + consensus + governance gate\n\nIf any step fails, the contract is violated and the code is REJECTED.\nThe LLM never sees this as a suggestion — it\'s enforced by code.\n\nContracts:\n  - CodeGenerationContract:  For any code produced by LLM\n  - CodeFixContract:         For deterministic → LLM fix escalation\n  - ComponentCreationContract: For new component creation\n  - HealingContract:         For self-healing code changes\n'
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+time
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Callable
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+BACKEND_ROOT
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+ContractVerdict
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+PASS
+●●●●●● 1mm □
+'pass'
+FAIL
+●●●●●● 1mm □
+'fail'
+WARN
+●●●●●● 1mm □
+'warn'
+●●●●●● 2mm △
+ContractStep
+'A single step in a deterministic coding contract.'
+name
+●●●●●● 1mm ○
+stage
+●●●●●● 1mm ○
+deterministic
+●●●●●● 3mm △
+verdict
+ContractVerdict
+ContractVerdict
+message
+●●●●●● 1mm ○
+''
+details
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+duration_ms
+●●●●●● 3mm ○
+0
+dataclass
+●●●●●● 2mm △
+ContractResult
+'Result of executing a deterministic coding contract.'
+contract_name
+●●●●●● 1mm ○
+component
+●●●●●● 1mm ○
+started_at
+●●●●●● 1mm ○
+completed_at
+●●●●●● 1mm ○
+''
+verdict
+ContractVerdict
+ContractVerdict
+steps
+●●●●●● 3mm □△
+ContractStep
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+violations
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+code_accepted
+●●●●●● 3mm △
+●●●●●● 1mm □
+genesis_key_id
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+●●●●●● 1mm □
+to_dict
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'contract_name'
+'component'
+'started_at'
+'completed_at'
+'verdict'
+'steps'
+'violations'
+'code_accepted'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+asdict
+●●●●●● 1mm □△
+s
+●●●●●● 2mm □△
+s
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+dataclass
+●●●●●● 1mm □
+check_syntax
+●●●●●● 1mm □△
+code
+filename
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'<generated>'
+'AST parse — catches syntax errors deterministically.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ContractStep
+●●●●●● 1mm □
+check_imports_resolve
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Verify all imports in generated code can resolve.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+top
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+0
+local_dirs
+●●●●●● 1mm □
+d
+d
+BACKEND_ROOT
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+d
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+top
+local_dirs
+mod_path
+●●●●●● 1mm □
+node
+●●●●●● 1mm □△
+'.'
+'/'
+●●●●●● 2mm □△
+possible
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+mod_path
+'.py'
+BACKEND_ROOT
+●●●●●● 3mm □△
+mod_path
+●●●●●● 3mm □△
+'__init__.py'
+●●●●●● 2mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+p
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+p
+possible
+●●●●●● 2mm □△
+broken
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+broken
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ContractStep
+●●●●●● 1mm □
+check_no_dangerous_patterns
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Detect dangerous patterns: eval, exec, os.system, subprocess.call with shell=True.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+warnings
+●●●●●● 1mm □
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+func
+●●●●●● 1mm □
+node
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+func
+'eval'
+'exec'
+warnings
+●●●●●● 1mm □△
+'Dangerous call: '
+func
+'() at line '
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'system'
+'popen'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+func
+'os'
+warnings
+●●●●●● 1mm □△
+'Dangerous call: os.'
+func
+'() at line '
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □
+func
+'call'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+func
+ast
+●●●●●● 2mm □△
+func
+'subprocess'
+kw
+node
+●●●●●● 2mm □
+kw
+'shell'
+●●●●●● 1mm □
+●●●●●● 1mm □△
+kw
+ast
+●●●●●● 2mm □△
+kw
+warnings
+●●●●●● 1mm □△
+'subprocess.call with shell=True at line '
+node
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 2mm □
+warnings
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ContractStep
+●●●●●● 1mm □
+check_has_docstring
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Verify generated code has module-level docstring.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+code
+●●●●●● 2mm □△
+docstring
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+docstring
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+SyntaxError
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ContractStep
+●●●●●● 1mm □
+check_file_exists
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Pre-condition: verify the target file exists (for fixes).'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □
+full
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ContractStep
+●●●●●● 1mm □
+check_trust_score
+●●●●●● 1mm □△
+component
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.5
+'Approval gate: trust score must be above threshold.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+cognitive.trust_engine
+●●●●●● 2mm □△○
+get_trust_engine
+te
+●●●●●● 1mm □
+get_trust_engine
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+te
+●●●●●● 1mm □△
+component
+component
+''
+●●●●●● 2mm □△
+score
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+score
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+score
+●●●●●● 2mm □△
+0.7
+●●●●●● 2mm □
+score
+min_trust
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ContractStep
+●●●●●● 1mm □
+execute_code_generation_contract
+●●●●●● 1mm □△
+component
+generated_code
+file_path
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 2mm □
+0.5
+'\n    Contract for ANY code generated by LLM.\n\n    Pre-conditions:  (none for new code)\n    Verification:    Syntax, imports, security, docstring\n    Approval:        Trust gate\n    '
+result
+●●●●●● 1mm □
+ContractResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_syntax
+●●●●●● 1mm □△
+generated_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_imports_resolve
+●●●●●● 1mm □△
+generated_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_no_dangerous_patterns
+●●●●●● 1mm □△
+generated_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_has_docstring
+●●●●●● 1mm □△
+generated_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_trust_score
+●●●●●● 1mm □△
+component
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_finalize
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ContractResult
+●●●●●● 1mm □
+execute_code_fix_contract
+●●●●●● 1mm □△
+component
+file_path
+fix_code
+original_problems
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 2mm □
+0.5
+'\n    Contract for deterministic → LLM fix escalation.\n\n    Pre-conditions:  File exists, original problems documented\n    Verification:    Syntax, imports, security\n    Approval:        Trust gate\n    '
+result
+●●●●●● 1mm □
+ContractResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_file_exists
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+original_problems
+result
+●●●●●● 1mm □△
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □△
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_syntax
+●●●●●● 1mm □△
+fix_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_imports_resolve
+●●●●●● 1mm □△
+fix_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_no_dangerous_patterns
+●●●●●● 1mm □△
+fix_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_trust_score
+●●●●●● 1mm □△
+component
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_finalize
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ContractResult
+●●●●●● 1mm □
+execute_component_creation_contract
+●●●●●● 1mm □△
+component
+component_code
+file_path
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+0.6
+'\n    Contract for new component creation.\n\n    Pre-conditions:  File should NOT already exist (new component)\n    Verification:    Syntax, imports, security, docstring (required)\n    Approval:        Higher trust gate (0.6)\n    '
+result
+●●●●●● 1mm □
+ContractResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+full
+●●●●●● 1mm □
+BACKEND_ROOT
+●●●●●● 3mm □△
+file_path
+●●●●●● 2mm □
+full
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+result
+●●●●●● 1mm □△
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_syntax
+●●●●●● 1mm □△
+component_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_imports_resolve
+●●●●●● 1mm □△
+component_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_no_dangerous_patterns
+●●●●●● 1mm □△
+component_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc_step
+●●●●●● 1mm □
+check_has_docstring
+●●●●●● 1mm □△
+component_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+doc_step
+ContractVerdict
+doc_step
+●●●●●● 1mm □
+ContractVerdict
+doc_step
+●●●●●● 1mm □
+'New components MUST have a module docstring'
+result
+●●●●●● 1mm □△
+doc_step
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_trust_score
+●●●●●● 1mm □△
+component
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_finalize
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ContractResult
+●●●●●● 1mm □
+execute_healing_contract
+●●●●●● 1mm □△
+component
+healing_code
+healing_method
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+'unknown'
+0.5
+'\n    Contract for self-healing code changes.\n\n    Verification:    Syntax, imports, security (strict)\n    Approval:        Trust gate\n    '
+result
+●●●●●● 1mm □
+ContractResult
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+ContractStep
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_syntax
+●●●●●● 1mm □△
+healing_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_imports_resolve
+●●●●●● 1mm □△
+healing_code
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+security
+●●●●●● 1mm □
+check_no_dangerous_patterns
+●●●●●● 1mm □△
+healing_code
+●●●●●● 2mm □△
+●●●●●● 2mm □
+security
+ContractVerdict
+security
+●●●●●● 1mm □
+'BLOCKED: Healing code contains dangerous patterns — '
+security
+result
+●●●●●● 1mm □△
+security
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □△
+check_trust_score
+●●●●●● 1mm □△
+component
+min_trust
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+_finalize
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+ContractResult
+●●●●●● 1mm □
+_finalize
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+ContractResult
+'Compute final verdict from steps.'
+result
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+failures
+●●●●●● 1mm □
+s
+s
+result
+s
+ContractVerdict
+warnings
+●●●●●● 1mm □
+s
+s
+result
+s
+ContractVerdict
+●●●●●● 2mm □
+failures
+result
+●●●●●● 1mm □
+ContractVerdict
+result
+●●●●●● 1mm □
+s
+s
+failures
+result
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm △
+warnings
+result
+●●●●●● 1mm □
+ContractVerdict
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+result
+●●●●●● 1mm □
+ContractVerdict
+result
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+gk
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+gk
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+gk
+'key_id'
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+gk
+Exception
+logger
+●●●●●● 1mm □△
+'[CONTRACT] '
+result
+' for '
+result
+': '
+result
+' ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+failures
+●●●●●● 2mm □△
+' failures, '
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+warnings
+●●●●●● 2mm □△
+' warnings)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_available_contracts
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'List all available deterministic coding contracts.'
+●●●●●● 3mm ○
+'code_generation'
+'code_fix'
+'component_creation'
+'healing'
+'description'
+'stages'
+'checks'
+'Enforced on any code generated by LLM'
+'verify'
+'approve'
+'syntax'
+'imports'
+'security'
+'docstring'
+'trust'
+'description'
+'stages'
+'checks'
+'Enforced when deterministic fix fails and LLM generates a fix'
+'pre'
+'verify'
+'approve'
+'file_exists'
+'problems_documented'
+'syntax'
+'imports'
+'security'
+'trust'
+'description'
+'stages'
+'checks'
+'Enforced when creating a new component'
+'pre'
+'verify'
+'approve'
+'file_not_exists'
+'syntax'
+'imports'
+'security'
+'docstring_required'
+'trust'
+'description'
+'stages'
+'checks'
+'Enforced on self-healing code changes'
+'pre'
+'verify'
+'approve'
+'healing_method'
+'syntax'
+'imports'
+'security_strict'
+'trust'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any

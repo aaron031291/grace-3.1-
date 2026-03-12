@@ -1,0 +1,81 @@
+## submit_plan.py
+●●●●●● 2mm □△○
+pathlib
+json
+sys
+os
+project_root
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+os
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+'..'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+project_root
+sys
+sys
+●●●●●● 1mm □△
+project_root
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+backend.cognitive.consensus_actuation
+●●●●●● 2mm □△○
+get_actuation_gateway
+plan_path
+●●●●●● 1mm □
+pathlib
+●●●●●● 1mm □△
+'C:\\\\Users\\\\aaron\\\\.gemini\\\\antigravity\\\\brain\\\\ed308d71-9d41-46d0-bead-d7a7a8aa26e5\\\\implementation_plan.md'
+●●●●●● 2mm □△
+●●●●●● 2mm □
+plan_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileNotFoundError
+●●●●●● 1mm □△
+'Implementation plan not found at '
+plan_path
+●●●●●● 2mm □△
+plan_content
+●●●●●● 1mm □
+plan_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+gateway
+●●●●●● 1mm □
+get_actuation_gateway
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+payload
+●●●●●● 1mm □
+'action_type'
+'params'
+'submit_coding_task'
+'instructions'
+'dry_run'
+'target_file'
+'error_class'
+plan_content
+●●●●●● 1mm □
+●●●●●● 2mm □
+''
+result
+●●●●●● 1mm □
+gateway
+●●●●●● 1mm □△
+payload
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+json
+●●●●●● 1mm □△
+result
+●●●●●● 2mm □△
+●●●●●● 2mm □△

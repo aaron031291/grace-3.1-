@@ -1,0 +1,19 @@
+## __init__.py
+'\nGrace OS — MCP (Model Context Protocol) Integration Module.\n\nThis module provides:\n- MCPClient: Connects to MCP servers (DesktopCommanderMCP) via stdio transport\n- MCPOrchestrator: Manages multi-turn tool-calling loops between LLM and MCP\n- AuditLogger: Logs every tool call for observability and trust scoring\n'
+●●●●●● 3mm □△○
+grace_mcp.client
+●●●●●● 2mm □△○
+MCPClient
+●●●●●● 3mm □△○
+grace_mcp.orchestrator
+●●●●●● 2mm □△○
+MCPOrchestrator
+●●●●●● 3mm □△○
+grace_mcp.audit_logger
+●●●●●● 2mm □△○
+AuditLogger
+__all__
+●●●●●● 1mm □
+'MCPClient'
+'MCPOrchestrator'
+'AuditLogger'

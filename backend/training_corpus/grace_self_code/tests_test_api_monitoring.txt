@@ -1,0 +1,212 @@
+## test_api_monitoring.py
+'\nTests for Monitoring API endpoints.\n'
+●●●●●● 2mm □△○
+pytest
+●●●●●● 3mm □△○
+fastapi.testclient
+●●●●●● 2mm □△○
+TestClient
+●●●●●● 2mm △
+TestMonitoringOrgans
+'Test monitoring organs (development progress) endpoints.'
+●●●●●● 1mm □
+test_get_organs_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting organs development status.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/monitoring/organs'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'organs'
+data
+'overall_progress'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'organs'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+data
+'organs'
+organ
+●●●●●● 1mm □
+data
+'organs'
+0
+'id'
+organ
+'name'
+organ
+'percentage'
+organ
+'status'
+organ
+pytest
+●●●●●● 2mm △
+TestMonitoringHealth
+'Test monitoring health endpoints.'
+●●●●●● 1mm □
+test_get_system_health
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting system health.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/monitoring/health'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'status'
+data
+'services'
+data
+data
+'status'
+'healthy'
+'degraded'
+'partial'
+'unhealthy'
+pytest
+●●●●●● 2mm △
+TestMonitoringMetrics
+'Test monitoring metrics endpoints.'
+●●●●●● 1mm □
+test_get_realtime_metrics
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting real-time metrics.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/monitoring/metrics'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'cpu_usage'
+data
+'memory_usage'
+data
+'disk_usage'
+data
+'timestamp'
+data
+pytest
+●●●●●● 2mm △
+TestMonitoringComponents
+'Test monitoring component status endpoints.'
+●●●●●● 1mm □
+test_get_component_status
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting component status.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/monitoring/components'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'components'
+data
+'total'
+data
+'healthy'
+data
+pytest
+●●●●●● 2mm △
+TestMonitoringActivity
+'Test monitoring activity endpoints.'
+●●●●●● 1mm □
+test_get_recent_activity
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting recent activity.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/monitoring/activity'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'activities'
+data
+●●●●●● 1mm □
+●●●●●● 1mm □△
+data
+'activities'
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+test_get_activity_with_limit
+●●●●●● 1mm □△
+self
+client
+●●●●●● 2mm □△
+'Test getting activity with limit.'
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+'/monitoring/activity?limit=5'
+●●●●●● 2mm □△
+response
+200
+data
+●●●●●● 1mm □
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+data
+'activities'
+●●●●●● 2mm □△
+5
+pytest

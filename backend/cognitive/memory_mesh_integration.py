@@ -141,7 +141,6 @@ class MemoryMeshIntegration:
         except Exception as e:
             # If the circuit breaker check fails, we fail OPEN (safe) for MVP
             print(f"Circuit breaker check failed: {e}")
-
         learning_example = self.learning_memory.ingest_learning_data(
             learning_type=experience_type,
             learning_data=learning_data,
@@ -190,7 +189,7 @@ class MemoryMeshIntegration:
                 tags=["memory-mesh", "learning", experience_type],
                 parent_key_id=genesis_key_id,
             )
-        except ImportError:
+        except Exception:
             pass
 
         return learning_example.id
@@ -336,7 +335,6 @@ class MemoryMeshIntegration:
     def feedback_loop_update(
         self,
         learning_example_id: str,
-        actual_outcome: Dict[str, Any],
         success: bool
     ):
         """

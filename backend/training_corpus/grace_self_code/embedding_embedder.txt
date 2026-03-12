@@ -1,0 +1,1100 @@
+## embedder.py
+'\nEmbedding module for generating text embeddings using Qwen3-Embedding-4B model.\n'
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+os
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+numpy
+●●●●●● 1mm □
+np
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+List
+Union
+Optional
+Tuple
+●●●●●● 2mm □△○
+torch
+●●●●●● 3mm □△○
+sentence_transformers
+●●●●●● 2mm □△○
+SentenceTransformer
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+settings
+●●●●●● 2mm □△○
+settings
+USE_SETTINGS
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+ImportError
+USE_SETTINGS
+●●●●●● 1mm □
+●●●●●● 1mm □
+_cuda_fallback_logged
+●●●●●● 1mm □
+●●●●●● 1mm □
+_env_cpu_fix_attempted
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+_set_env_embedding_device_cpu_once
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Set EMBEDDING_DEVICE=cpu in backend/.env so next run does not request CUDA (no warning).'
+●●●●●● 2mm □
+_env_cpu_fix_attempted
+●●●●●● 3mm ○
+_env_cpu_fix_attempted
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □△○
+re
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+env_file
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'.env'
+●●●●●● 2mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+text
+●●●●●● 1mm □
+env_file
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'EMBEDDING_DEVICE='
+text
+●●●●●● 3mm ○
+new_text
+●●●●●● 1mm □
+re
+●●●●●● 1mm □△
+'EMBEDDING_DEVICE=\\w+'
+'EMBEDDING_DEVICE=cpu'
+text
+●●●●●● 2mm □△
+●●●●●● 2mm □
+new_text
+text
+env_file
+●●●●●● 1mm □△
+new_text
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Set EMBEDDING_DEVICE=cpu in backend/.env (CUDA not available). Restart to use GPU after running setup_gpu.py with Python 3.11/3.12.'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □
+_cuda_really_works
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'True only if a real CUDA kernel runs (catches RTX 5090 / sm_120 with old PyTorch).'
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+torch
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+RuntimeError
+●●●●●● 2mm □
+'no kernel image is available'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'CUDA'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+●●●●●● 2mm △
+EmbeddingModel
+'\n    Wrapper for Qwen3-Embedding-4B model for text embeddings.\n    \n    IMPORTANT: Use get_embedding_model() function to get instances.\n    Direct instantiation should only happen via the singleton factory.\n    '
+_instance_count
+●●●●●● 1mm □
+0
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+model_path
+device
+normalize_embeddings
+max_length
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 2mm □
+"\n        Initialize the embedding model.\n        \n        NOTE: This should only be called by get_embedding_model() singleton factory.\n        \n        Args:\n            model_path: Path to the model directory. If None, uses default from settings\n            device: Device to run model on ('cuda', 'cpu'). Defaults to 'cpu' for stability\n            normalize_embeddings: Whether to normalize embeddings to unit length\n            max_length: Maximum sequence length. Model supports up to 32k tokens\n        "
+EmbeddingModel
+1
+instance_num
+●●●●●● 1mm □
+EmbeddingModel
+●●●●●● 2mm □
+instance_num
+1
+logger
+●●●●●● 1mm □△
+'EmbeddingModel instance #%s created in this process; use get_embedding_model() singleton. This can happen in uvicorn workers (each process has its own singleton).'
+instance_num
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+normalize_embeddings
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_length
+32768
+●●●●●● 2mm □
+device
+●●●●●● 2mm □
+●●●●●● 2mm □
+USE_SETTINGS
+device
+●●●●●● 1mm □
+settings
+device
+●●●●●● 1mm □
+device
+'cpu'
+●●●●●● 2mm □
+device
+'cuda'
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_cuda_fallback_logged
+_cuda_fallback_logged
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'CUDA requested but not available (PyTorch CPU-only or no GPU). Falling back to CPU. For GPU: use Python 3.11/3.12, run backend\\scripts\\setup_gpu.py, then restart.'
+●●●●●● 2mm □△
+_set_env_embedding_device_cpu_once
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+device
+●●●●●● 1mm □
+'cpu'
+●●●●●● 1mm △
+_cuda_really_works
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+_cuda_fallback_logged
+_cuda_fallback_logged
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'CUDA device seen but no compatible kernel (e.g. RTX 5090 / sm_120 with current PyTorch). Falling back to CPU. Set EMBEDDING_DEVICE=cpu in .env or wait for PyTorch with sm_120 support.'
+●●●●●● 2mm □△
+_set_env_embedding_device_cpu_once
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+device
+●●●●●● 1mm □
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+device
+●●●●●● 2mm □
+model_path
+●●●●●● 2mm □
+●●●●●● 2mm □
+USE_SETTINGS
+model_path
+●●●●●● 1mm □
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+settings
+'EMBEDDING_MODEL_PATH'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 2mm □
+model_path
+Path
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_default
+●●●●●● 1mm □
+settings
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+local_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+embedding_default
+●●●●●● 2mm □
+local_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+local_path
+●●●●●● 2mm □△
+●●●●●● 3mm □
+model_path
+●●●●●● 1mm □
+embedding_default
+●●●●●● 3mm □
+●●●●●● 2mm □△○
+os
+●●●●●● 3mm □
+embedding_default
+●●●●●● 1mm □
+os
+●●●●●● 1mm □△
+'EMBEDDING_DEFAULT'
+'all-MiniLM-L6-v2'
+●●●●●● 2mm □△
+●●●●●● 3mm □
+backend_dir
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □
+local_path
+●●●●●● 1mm □
+backend_dir
+●●●●●● 3mm □△
+'models'
+●●●●●● 3mm □△
+'embedding'
+●●●●●● 3mm □△
+embedding_default
+●●●●●● 1mm △
+local_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+model_path
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+local_path
+●●●●●● 2mm □△
+model_path
+●●●●●● 1mm □
+embedding_default
+●●●●●● 2mm □
+model_path
+path_obj
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+path_obj
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm △
+'/'
+model_path
+path_obj
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+FileNotFoundError
+●●●●●● 1mm □△
+'Model path does not exist: '
+model_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+SentenceTransformer
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Failed to load model on '
+●●●●●● 3mm △
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'Retrying with CPU...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □
+SentenceTransformer
+●●●●●● 1mm □△
+model_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+model_path
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cuda'
+●●●●●● 2mm □
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__del__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"Destructor to unload model from VRAM. Skip if this is the global singleton (avoid 'model unloaded' runtime error)."
+●●●●●● 2mm □△○
+sys
+mod
+●●●●●● 1mm □
+sys
+●●●●●● 1mm □△
+'embedding.embedder'
+●●●●●● 2mm □△
+sys
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm □
+mod
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+mod
+'_embedding_model_instance'
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+Exception
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+unload_model
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+"\n        Unload the model from VRAM and clear cache.\n        Call this when you're done using the model to free up memory.\n        "
+●●●●●● 2mm □
+●●●●●● 3mm △○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'model'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cpu'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'cpu'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cuda'
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[OK] Model unloaded from VRAM'
+●●●●●● 2mm □△
+Exception
+●●●●●● 1mm □△○
+●●●●●● 1mm □△
+'[WARN] Warning while unloading model: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ensure_model_loaded
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ensure model is loaded, raise error if not.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 2mm □
+RuntimeError
+●●●●●● 1mm □△
+'Model has been unloaded. Create a new instance to use embeddings.'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+embed_text
+●●●●●● 1mm □△
+self
+text
+normalize
+instruction
+batch_size
+convert_to_numpy
+convert_to_tensor
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+32
+●●●●●● 3mm □△○
+●●●●●● 1mm □
+'\n        Generate embeddings for text(s).\n        \n        Args:\n            text: Single text string or list of text strings\n            normalize: Override default normalization setting for this call\n            instruction: Optional instruction to guide the embedding (instruction-aware model)\n            batch_size: Batch size for processing (default 8 to prevent memory issues on CPU)\n            convert_to_numpy: Convert output to numpy array\n            convert_to_tensor: Convert output to torch tensor\n            \n        Returns:\n            Embeddings as numpy array or torch tensor depending on convert_to_* flags\n            Shape: (num_texts, embedding_dim) or (embedding_dim,) for single text\n        '
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+is_single_text
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+text
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+texts
+●●●●●● 1mm □
+is_single_text
+text
+text
+●●●●●● 2mm □
+instruction
+texts
+●●●●●● 1mm □
+instruction
+' '
+t
+t
+texts
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cpu'
+batch_size
+●●●●●● 1mm □
+●●●●●● 2mm ○
+●●●●●● 1mm □△
+batch_size
+8
+●●●●●● 2mm □△
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+'cuda'
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+torch
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+is_single_text
+embeddings
+●●●●●● 1mm □
+embeddings
+0
+●●●●●● 3mm ○
+embeddings
+●●●●●● 3mm □○
+np
+torch
+●●●●●● 1mm □
+embed_with_scores
+●●●●●● 1mm □△
+self
+texts
+normalize
+instruction
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm △
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+32
+'\n        Generate embeddings and return with their statistical scores.\n        \n        Args:\n            texts: List of text strings\n            normalize: Override default normalization setting\n            instruction: Optional instruction to guide the embedding\n            batch_size: Batch size for processing\n            \n        Returns:\n            Tuple of (embeddings, norm_scores) where norm_scores is L2 norm of each embedding\n        '
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+norms
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+embeddings
+norms
+Tuple
+np
+●●●●●● 3mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+similarity
+●●●●●● 1mm □△
+self
+text1
+text2
+metric
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'cosine'
+"\n        Calculate similarity between texts.\n        \n        Args:\n            text1: Single text or list of texts\n            text2: Single text or list of texts\n            metric: Similarity metric ('cosine', 'euclidean', 'manhattan')\n            \n        Returns:\n            Similarity score(s). Float for single pair, array for multiple pairs\n        "
+●●●●●● 3mm □△○
+sklearn.metrics.pairwise
+●●●●●● 2mm □△○
+cosine_similarity
+euclidean_distances
+embeddings1
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text1
+●●●●●● 2mm □△
+embeddings2
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+text2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings1
+●●●●●● 2mm □△
+1
+embeddings1
+●●●●●● 1mm □
+embeddings1
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+embeddings2
+●●●●●● 2mm □△
+1
+embeddings2
+●●●●●● 1mm □
+embeddings2
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metric
+'cosine'
+similarities
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+embeddings1
+embeddings2
+●●●●●● 2mm □△
+●●●●●● 1mm △
+metric
+'euclidean'
+similarities
+●●●●●● 1mm □
+euclidean_distances
+●●●●●● 1mm □△
+embeddings1
+embeddings2
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metric
+'manhattan'
+similarities
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+embeddings1
+np
+●●●●●● 1mm □△
+embeddings2
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown metric: '
+metric
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+text1
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+text2
+●●●●●● 1mm ○
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+similarities
+0
+0
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+similarities
+●●●●●● 3mm □○
+●●●●●● 3mm ○
+np
+●●●●●● 1mm □
+most_similar
+●●●●●● 1mm □△
+self
+query
+candidates
+top_k
+metric
+instruction
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+5
+'cosine'
+●●●●●● 2mm □
+'\n        Find most similar candidates to a query.\n        \n        Args:\n            query: Query text\n            candidates: List of candidate texts\n            top_k: Number of top results to return\n            metric: Similarity metric to use\n            instruction: Optional instruction for embeddings\n            \n        Returns:\n            List of (text, similarity_score) tuples, sorted by similarity descending\n        '
+query_embedding
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+query
+●●●●●● 2mm □△
+candidate_embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+sklearn.metrics.pairwise
+●●●●●● 2mm □△○
+cosine_similarity
+euclidean_distances
+query_embedding
+●●●●●● 1mm □
+query_embedding
+●●●●●● 1mm □△
+1
+1
+●●●●●● 2mm □△
+●●●●●● 2mm □
+metric
+'cosine'
+similarities
+●●●●●● 1mm □
+cosine_similarity
+●●●●●● 1mm □△
+query_embedding
+candidate_embeddings
+●●●●●● 2mm □△
+0
+●●●●●● 1mm △
+metric
+'euclidean'
+similarities
+●●●●●● 1mm □
+euclidean_distances
+●●●●●● 1mm □△
+query_embedding
+candidate_embeddings
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+metric
+'manhattan'
+similarities
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+query_embedding
+●●●●●● 1mm □△
+candidate_embeddings
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown metric: '
+metric
+●●●●●● 2mm □△
+top_indices
+●●●●●● 1mm □
+np
+●●●●●● 1mm □△
+similarities
+●●●●●● 2mm □△
+1
+top_k
+results
+●●●●●● 1mm □
+candidates
+i
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+similarities
+i
+●●●●●● 2mm □△
+i
+top_indices
+●●●●●● 3mm ○
+results
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm ○
+●●●●●● 1mm □
+cluster_texts
+●●●●●● 1mm □△
+self
+texts
+num_clusters
+instruction
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+5
+●●●●●● 2mm □
+'\n        Cluster texts using K-means clustering.\n        \n        Args:\n            texts: List of texts to cluster\n            num_clusters: Number of clusters to create\n            instruction: Optional instruction for embeddings\n            \n        Returns:\n            List of cluster assignments for each text\n        '
+●●●●●● 3mm □△○
+sklearn.cluster
+●●●●●● 2mm □△○
+KMeans
+embeddings
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+texts
+●●●●●● 2mm □△
+kmeans
+●●●●●● 1mm □
+KMeans
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+cluster_labels
+●●●●●● 1mm □
+kmeans
+●●●●●● 1mm □△
+embeddings
+●●●●●● 2mm □△
+clusters
+●●●●●● 1mm □
+_
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_clusters
+●●●●●● 2mm □△
+idx
+label
+●●●●●● 2mm □
+●●●●●● 1mm □△
+cluster_labels
+●●●●●● 2mm □△
+clusters
+label
+●●●●●● 1mm □△
+idx
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+c
+c
+clusters
+c
+●●●●●● 3mm □△
+●●●●●● 3mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_embedding_dimension
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get the embedding dimension of the model.'
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm ○
+●●●●●● 1mm □
+get_model_info
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get information about the loaded model.'
+●●●●●● 3mm ○
+'model_path'
+'device'
+'embedding_dimension'
+'max_length'
+'normalize_embeddings'
+'model_loaded'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □△
+_embedding_model_instance
+●●●●●● 1mm □
+●●●●●● 2mm □
+_embedding_model_loaded
+●●●●●● 1mm □
+●●●●●● 1mm □
+_embedding_model_lock
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+model_path
+device
+reset
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n    Get or create the global embedding model instance (singleton pattern).\n    The model is loaded ONLY ONCE on first call and reused thereafter.\n    Thread-safe so concurrent startup (e.g. lifespan + workers) does not create duplicates.\n    \n    CRITICAL: This is the ONLY way to get the embedding model.\n    Direct EmbeddingModel() instantiation should never happen in production code.\n    \n    Args:\n        model_path: Path to model (only used on first initialization, ignored on subsequent calls)\n        device: Device to use (only used on first initialization, ignored on subsequent calls)\n        reset: Force reload the model (not recommended in production)\n        \n    Returns:\n        EmbeddingModel instance (always the same singleton instance in this process)\n    '
+●●●●●● 2mm □
+_embedding_model_loaded
+reset
+●●●●●● 3mm ○
+_embedding_model_instance
+●●●●●● 2mm □
+_embedding_model_instance
+●●●●●● 2mm □
+reset
+●●●●●● 3mm ○
+_embedding_model_instance
+_embedding_model_lock
+●●●●●● 2mm □
+_embedding_model_loaded
+reset
+●●●●●● 3mm ○
+_embedding_model_instance
+●●●●●● 2mm □
+_embedding_model_instance
+●●●●●● 2mm □
+reset
+●●●●●● 3mm ○
+_embedding_model_instance
+_embedding_model_instance
+●●●●●● 1mm □
+EmbeddingModel
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+_embedding_model_loaded
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm ○
+_embedding_model_instance
+EmbeddingModel
+●●●●●● 1mm □
+embed
+●●●●●● 1mm □△
+text
+instruction
+batch_size
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+32
+'\n    Convenience function to embed text using the default model.\n    \n    Args:\n        text: Single text or list of texts\n        instruction: Optional instruction for the embeddings\n        batch_size: Batch size for processing\n        \n    Returns:\n        Embeddings as numpy arrays\n    '
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+model
+●●●●●● 1mm □△
+text
+●●●●●● 2mm □△
+●●●●●● 3mm □○
+np
+●●●●●● 3mm □△
+np
+●●●●●● 1mm □
+similarity
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n    Convenience function to calculate similarity between two texts.\n    \n    Args:\n        text1: First text\n        text2: Second text\n        \n    Returns:\n        Cosine similarity score\n    '
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+model
+●●●●●● 1mm □△
+text1
+text2
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 1mm □
+most_similar
+●●●●●● 1mm □△
+query
+candidates
+top_k
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+5
+'\n    Convenience function to find most similar candidates.\n    \n    Args:\n        query: Query text\n        candidates: List of candidate texts\n        top_k: Number of results to return\n        \n    Returns:\n        List of (text, similarity_score) tuples\n    '
+model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+model
+●●●●●● 1mm □△
+query
+candidates
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+Tuple
+●●●●●● 1mm ○
+●●●●●● 3mm ○

@@ -1,0 +1,1417 @@
+## qwen_agents.py
+'\nQwen Sub-Agent System\n========================\nEach Qwen model runs as a specialized, independent agent with:\n- Background processing (daemon threads)\n- Multi-threading (ThreadPoolExecutor per agent)\n- Task queue (priority queue with backpressure)\n- 9-layer coding pipeline integration (8 original + contract enforcement)\n- Structured AI-to-AI communication (no NLP between agents)\n- Progress tracking and Genesis key provenance\n\nAgents:\n  CodeAgent   (qwen3.5:27b)  — code generation, structured output, fixes\n  ReasonAgent (qwen3.5:27b)  — deep analysis, architecture, planning\n  FastAgent   (qwen3.5:9b)   — triage, classification, summaries, synthesis\n\nThe agents collaborate via structured messages (GraceMessage/GraceResponse),\nnot NLP. Human-readable text is generated only at the output boundary.\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+uuid
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ThreadPoolExecutor
+Future
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+asdict
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timezone
+●●●●●● 3mm □△○
+enum
+●●●●●● 2mm □△○
+Enum
+●●●●●● 3mm □△○
+queue
+●●●●●● 2mm □△○
+PriorityQueue
+Empty
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+Optional
+List
+Callable
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+AgentRole
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+CODE
+●●●●●● 1mm □
+'code'
+REASON
+●●●●●● 1mm □
+'reason'
+FAST
+●●●●●● 1mm □
+'fast'
+●●●●●● 2mm △
+TaskPriority
+●●●●●● 3mm □△
+int
+Enum
+●●●●●● 2mm ○
+Enum
+CRITICAL
+●●●●●● 1mm □
+0
+HIGH
+●●●●●● 1mm □
+1
+NORMAL
+●●●●●● 1mm □
+2
+LOW
+●●●●●● 1mm □
+3
+BACKGROUND
+●●●●●● 1mm □
+4
+●●●●●● 2mm △
+TaskStatus
+●●●●●● 3mm □△
+str
+Enum
+●●●●●● 1mm ○
+Enum
+QUEUED
+●●●●●● 1mm □
+'queued'
+RUNNING
+●●●●●● 1mm □
+'running'
+COMPLETED
+●●●●●● 1mm □
+'completed'
+FAILED
+●●●●●● 1mm □
+'failed'
+CANCELLED
+●●●●●● 1mm □
+'cancelled'
+●●●●●● 2mm △
+AgentTask
+task_id
+●●●●●● 1mm ○
+prompt
+●●●●●● 1mm ○
+role
+AgentRole
+priority
+TaskPriority
+TaskPriority
+status
+TaskStatus
+TaskStatus
+context
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+use_pipeline
+●●●●●● 3mm △
+●●●●●● 1mm □
+execution_allowed
+●●●●●● 3mm △
+●●●●●● 1mm □
+project_folder
+●●●●●● 1mm ○
+''
+created_at
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+started_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+completed_at
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+duration_ms
+●●●●●● 3mm ○
+0
+progress
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+__lt__
+●●●●●● 1mm □△
+self
+other
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+other
+dataclass
+●●●●●● 2mm △
+QwenAgent
+'\n    A single Qwen model running as an independent agent.\n    Has its own thread pool, task queue, and background worker.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+role
+max_workers
+●●●●●● 2mm □△
+AgentRole
+●●●●●● 2mm ○
+2
+●●●●●● 3mm △
+●●●●●● 1mm □
+role
+●●●●●● 3mm △
+●●●●●● 1mm □
+AgentRole
+AgentRole
+AgentRole
+'code'
+'reason'
+'fast'
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+PriorityQueue
+PriorityQueue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+AgentTask
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □○
+threading
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+'total_tasks'
+'completed'
+'failed'
+'total_duration_ms'
+'avg_duration_ms'
+0
+0
+0
+0
+0
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start the background worker thread.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[QwenAgent:'
+●●●●●● 3mm △
+'] started'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the background worker.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[QwenAgent:'
+●●●●●● 3mm △
+'] stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+submit
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+AgentTask
+"Submit a task to this agent's queue. Returns task_id."
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+task
+●●●●●● 3mm △
+'total_tasks'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[QwenAgent:'
+●●●●●● 3mm △
+'] task queued: '
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+●●●●●● 1mm ○
+●●●●●● 1mm □
+submit_sync
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+AgentTask
+'Submit and wait for result. Blocks the caller.'
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+task
+●●●●●● 3mm △
+'total_tasks'
+1
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task
+AgentTask
+●●●●●● 1mm □
+get_task
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □○
+AgentTask
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+'role'
+'running'
+'queue_size'
+'active_tasks'
+'stats'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+1
+t
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+t
+TaskStatus
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_worker_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Background worker that processes tasks from the queue.'
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+task
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+f
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+Empty
+Exception
+logger
+●●●●●● 1mm □△
+'[QwenAgent:'
+●●●●●● 3mm △
+'] worker error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_execute_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+AgentTask
+'Execute a single task — runs in thread pool.'
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+TaskStatus
+task
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm □
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+TaskStatus
+Exception
+task
+●●●●●● 1mm □
+TaskStatus
+task
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+500
+logger
+●●●●●● 1mm □△
+'[QwenAgent:'
+●●●●●● 3mm △
+'] task '
+task
+' failed: '
+e
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+timezone
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+●●●●●● 2mm □△
+1000
+1
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □
+task
+TaskStatus
+●●●●●● 3mm △
+'completed'
+1
+●●●●●● 3mm □
+●●●●●● 3mm △
+'failed'
+1
+●●●●●● 3mm △
+'total_duration_ms'
+task
+total
+●●●●●● 1mm □
+●●●●●● 3mm △
+'completed'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+'failed'
+●●●●●● 3mm △
+'avg_duration_ms'
+●●●●●● 1mm □
+total
+0
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'total_duration_ms'
+●●●●●● 3mm □△
+total
+1
+●●●●●● 2mm □△
+0
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_run_direct
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+AgentTask
+'Direct LLM call — fast path, no pipeline overhead.'
+●●●●●● 3mm □△○
+llm_orchestrator.factory
+●●●●●● 2mm □△○
+get_ai_mode_client
+client
+●●●●●● 1mm □
+get_ai_mode_client
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 2mm □△
+system
+●●●●●● 1mm □
+task
+●●●●●● 1mm □△
+'system_prompt'
+''
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □
+●●●●●● 2mm □
+system
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'system'
+system
+●●●●●● 2mm □△
+messages
+●●●●●● 1mm □△
+'role'
+'content'
+'user'
+task
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+client
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+text
+●●●●●● 1mm □
+'message'
+response
+response
+●●●●●● 1mm □△
+'message'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'content'
+''
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □△
+'response'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □
+text
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+response
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'response'
+'model'
+'method'
+text
+●●●●●● 3mm △
+●●●●●● 3mm △
+'direct'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_run_with_pipeline
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+AgentTask
+'Run through the full 9-layer coding pipeline (8 + contract enforcement).'
+●●●●●● 3mm □△○
+core.coding_pipeline
+●●●●●● 2mm □△○
+get_coding_pipeline
+pipeline
+●●●●●● 1mm □
+get_coding_pipeline
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+'phase'
+'layer'
+'status'
+'pipeline'
+0
+'starting'
+run_id
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+task
+'project_folder'
+'execution_allowed'
+task
+task
+●●●●●● 2mm □△
+task
+'run_id'
+●●●●●● 1mm □
+run_id
+task
+'phase'
+●●●●●● 1mm □
+'running'
+timeout
+●●●●●● 1mm □
+300
+start
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start
+timeout
+progress
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+progress
+task
+●●●●●● 1mm □△
+'percent'
+'current_layer'
+'current_layer_name'
+'completed_chunks'
+'total_chunks'
+progress
+●●●●●● 1mm □△
+'percent'
+0
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □△
+'current_layer'
+0
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □△
+'current_layer_name'
+''
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □△
+'completed_chunks'
+0
+●●●●●● 2mm □△
+progress
+●●●●●● 1mm □△
+'total_chunks'
+0
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+progress
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'passed'
+'failed'
+'plan_rejected'
+'budget_exceeded'
+time
+●●●●●● 1mm □△
+2
+●●●●●● 2mm □△
+final
+●●●●●● 1mm □
+pipeline
+●●●●●● 1mm □△
+run_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+final
+final
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'passed'
+'failed'
+'plan_rejected'
+'budget_exceeded'
+●●●●●● 3mm ○
+'status'
+'run_id'
+'progress'
+'timeout'
+run_id
+task
+result
+●●●●●● 1mm □
+'status'
+'run_id'
+'pipeline'
+'method'
+final
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+run_id
+final
+'9_layer_pipeline'
+●●●●●● 2mm □
+final
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+'passed'
+task
+contract_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+final
+●●●●●● 2mm □△
+result
+'contract'
+●●●●●● 1mm □
+contract_result
+result
+'method'
+●●●●●● 1mm □
+'9_layer_pipeline'
+●●●●●● 3mm ○
+result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_run_layer_9_contract
+●●●●●● 1mm □△
+self
+task
+pipeline_result
+●●●●●● 2mm □△
+AgentTask
+●●●●●● 2mm □△
+'Layer 9: Contract enforcement on pipeline output.'
+●●●●●● 3mm □△○
+core.grace_protocol
+●●●●●● 2mm □△○
+GraceMessage
+OperationType
+OutputMode
+route_message
+msg
+●●●●●● 1mm □
+GraceMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+response
+●●●●●● 1mm □
+route_message
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+response
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'error'
+'stage'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+'layer_9_contract'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_on_task_done
+●●●●●● 1mm □△
+self
+future
+task
+●●●●●● 2mm □△
+Future
+AgentTask
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[QwenAgent:'
+●●●●●● 3mm △
+'] callback error: '
+e
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_track_genesis
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+AgentTask
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 2mm △
+QwenAgentPool
+'\n    Manages all 3 Qwen agents. Provides:\n    - Parallel multi-agent execution\n    - Background task submission\n    - Coordinated agent collaboration\n    - 9-layer pipeline routing for code tasks\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+AgentRole
+AgentRole
+AgentRole
+QwenAgent
+●●●●●● 1mm □△
+AgentRole
+●●●●●● 2mm □△
+QwenAgent
+●●●●●● 1mm □△
+AgentRole
+●●●●●● 2mm □△
+QwenAgent
+●●●●●● 1mm □△
+AgentRole
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+start_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start all agent background workers.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[AgentPool] All 3 Qwen agents started'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop_all
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop all agents.'
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 1mm □
+submit_background
+●●●●●● 1mm □△
+self
+prompt
+role
+priority
+use_pipeline
+execution_allowed
+project_folder
+context
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+AgentRole
+TaskPriority
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+AgentRole
+TaskPriority
+●●●●●● 1mm □
+●●●●●● 1mm □
+''
+●●●●●● 2mm □
+'Submit a task for background processing. Returns task_id immediately.'
+task
+●●●●●● 1mm □
+AgentTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+role
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+run_parallel
+●●●●●● 1mm □△
+self
+prompt
+roles
+context
+timeout
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+AgentRole
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+120
+'\n        Run the prompt across multiple agents in parallel (multi-threaded).\n        Returns results from all agents.\n        '
+●●●●●● 2mm □
+roles
+●●●●●● 2mm □
+roles
+●●●●●● 1mm □
+AgentRole
+AgentRole
+AgentRole
+futures
+●●●●●● 1mm □
+role
+roles
+task
+●●●●●● 1mm □
+AgentTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+role
+task
+●●●●●● 2mm □△
+futures
+role
+●●●●●● 1mm □
+future
+task
+results
+●●●●●● 1mm □
+role
+future
+task
+futures
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+completed_task
+●●●●●● 1mm □
+future
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+results
+role
+●●●●●● 1mm □
+'task_id'
+'status'
+'result'
+'duration_ms'
+completed_task
+completed_task
+completed_task
+completed_task
+Exception
+results
+role
+●●●●●● 1mm □
+'task_id'
+'status'
+'error'
+task
+'error'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+200
+●●●●●● 3mm ○
+results
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+run_pipeline_with_agents
+●●●●●● 1mm □△
+self
+prompt
+execution_allowed
+project_folder
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □
+''
+'\n        Run the 9-layer coding pipeline using the code agent.\n        Background processing — returns task_id for progress tracking.\n        '
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+run_collaborative
+●●●●●● 1mm □△
+self
+prompt
+context
+execution_allowed
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+'\n        Collaborative multi-agent workflow:\n        1. FastAgent triages and classifies\n        2. All 3 agents process in parallel (multi-threaded)\n        3. ReasonAgent synthesizes results\n        4. Contract enforcement on code output\n        '
+ctx
+●●●●●● 1mm □
+context
+triage_task
+●●●●●● 1mm □
+AgentTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+triage_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+AgentRole
+●●●●●● 1mm □△
+triage_task
+●●●●●● 2mm □△
+triage_text
+●●●●●● 1mm □
+triage_result
+triage_result
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+''
+parallel_results
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+prompt
+●●●●●● 2mm □△
+synthesis_input
+●●●●●● 1mm □
+''
+role_name
+res
+parallel_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+res
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'response'
+●●●●●● 2mm □△
+synthesis_input
+'\n['
+role_name
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+' MODEL]: '
+res
+'result'
+'response'
+1500
+'\n'
+●●●●●● 2mm □
+synthesis_input
+●●●●●● 3mm ○
+'response'
+'triage'
+'agent_results'
+'All agents failed to produce output.'
+triage_text
+parallel_results
+synthesis_task
+●●●●●● 1mm □
+AgentTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+synthesis_result
+●●●●●● 1mm □
+●●●●●● 3mm △
+AgentRole
+●●●●●● 1mm □△
+synthesis_task
+●●●●●● 2mm □△
+code_output
+●●●●●● 1mm □
+parallel_results
+●●●●●● 1mm □△
+'code'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'result'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+contract_result
+●●●●●● 1mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+code_output
+execution_allowed
+●●●●●● 3mm □△○
+core.grace_protocol
+●●●●●● 2mm □△○
+GraceMessage
+OperationType
+OutputMode
+route_message
+msg
+●●●●●● 1mm □
+GraceMessage
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contract_result
+●●●●●● 1mm □
+route_message
+●●●●●● 1mm □△
+msg
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+'response'
+'triage'
+'agent_results'
+'contract'
+'timing'
+synthesis_result
+synthesis_result
+●●●●●● 1mm □△
+'response'
+''
+●●●●●● 2mm □△
+''
+triage_text
+k
+'status'
+'duration_ms'
+v
+●●●●●● 1mm □△
+'status'
+●●●●●● 2mm □△
+v
+●●●●●● 1mm □△
+'duration_ms'
+●●●●●● 2mm □△
+k
+v
+parallel_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+contract_result
+'triage_ms'
+'parallel_ms'
+'synthesis_ms'
+triage_result
+●●●●●● 3mm ○
+●●●●●● 1mm □△
+r
+●●●●●● 1mm □△
+'duration_ms'
+0
+●●●●●● 2mm □△
+r
+parallel_results
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+synthesis_result
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_task
+●●●●●● 1mm □△
+self
+task_id
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+'Get task status by ID (searches all agents).'
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+agent
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+●●●●●● 3mm ○
+'task_id'
+'role'
+'status'
+'progress'
+'result'
+'error'
+'created_at'
+'started_at'
+'completed_at'
+'duration_ms'
+task
+task
+task
+task
+task
+TaskStatus
+task
+●●●●●● 2mm □
+task
+task
+task
+task
+task
+●●●●●● 3mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+get_pool_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get status of all agents.'
+●●●●●● 3mm ○
+'started'
+'agents'
+●●●●●● 3mm △
+role
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+role
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+_pool
+●●●●●● 2mm □○
+QwenAgentPool
+●●●●●● 2mm □
+●●●●●● 1mm □
+get_agent_pool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Get singleton agent pool.'
+●●●●●● 2mm □
+_pool
+●●●●●● 2mm □
+_pool
+●●●●●● 1mm □
+QwenAgentPool
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+_pool
+QwenAgentPool

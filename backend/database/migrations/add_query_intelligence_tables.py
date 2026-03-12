@@ -10,7 +10,6 @@ Creates tables for tracking multi-tier query handling:
 from sqlalchemy import create_engine, text
 from database.connection import DatabaseConnection
 from database.base import Base
-from models.query_intelligence_models import QueryHandlingLog, KnowledgeGap, ContextSubmission
 
 
 def upgrade():

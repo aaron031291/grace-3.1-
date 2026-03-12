@@ -41,7 +41,6 @@ export default function CodebaseTab({ _domain = "Global (All Domains)" }) {
   // Analysis state
   const [analyzePath, setAnalyzePath] = useState("");
   const [useKimi, _setUseKimi] = useState(false);
-
   const showToast = (msg, type = 'info') => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
@@ -119,14 +118,6 @@ export default function CodebaseTab({ _domain = "Global (All Domains)" }) {
     e.stopPropagation();
     setSelectedNode(node);
     setAnalyzePath(node.path);
-
-    // Inject selected file into universal Dev Lab agent context
-    window.selectedArtifacts = [{
-      id: node.path,
-      type: node.type === 'directory' ? 'folder' : 'code',
-      name: node.name
-    }];
-
     setContextMenu({ x: e.clientX, y: e.clientY, node });
   };
 
@@ -308,7 +299,6 @@ export default function CodebaseTab({ _domain = "Global (All Domains)" }) {
           onContextMenu={(e) => handleContextMenu(e, node)}
           data-artifact-type={isDir ? 'folder' : 'code'}
           data-artifact-id={node.path}
-          data-context-item={JSON.stringify({ path: node.path, name: node.name, type: node.type })}
           style={{
             display: 'flex', alignItems: 'center', padding: '4px 8px', paddingLeft: 8 + depth * 12,
             cursor: 'pointer', fontSize: 13, color: isSel ? '#fff' : C.text,

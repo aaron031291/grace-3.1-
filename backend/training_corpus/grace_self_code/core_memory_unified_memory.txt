@@ -1,0 +1,181 @@
+## unified_memory.py
+'\nUnified Memory — sessionful facade for memory when you have a DB session.\n\nFor global (singleton) access without a session, use:\n  from cognitive.unified_memory import get_unified_memory\n  mem = get_unified_memory()\n\nThis module provides a sessionful facade that merges:\n  - cognitive/learning_memory.py (LearningExample, LearningPattern, LearningMemoryManager)\n  - cognitive/episodic_memory.py (Episode, EpisodicBuffer)\n  - cognitive/memory_mesh_integration.py (MemoryMeshIntegration)\n  - cognitive/memory_mesh_learner.py (MemoryMeshLearner)\n\nAll Grace memory ultimately uses the same backends; this is the facade for\ncallers that already have a session and optional knowledge_base_path.\n'
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+cognitive.learning_memory
+●●●●●● 2mm □△○
+LearningExample
+LearningPattern
+LearningMemoryManager
+TrustScorer
+●●●●●● 3mm □△○
+cognitive.episodic_memory
+●●●●●● 2mm □△○
+Episode
+EpisodicBuffer
+●●●●●● 3mm □△○
+cognitive.memory_mesh_integration
+●●●●●● 2mm □△○
+MemoryMeshIntegration
+●●●●●● 3mm □△○
+cognitive.memory_mesh_learner
+●●●●●● 2mm □△○
+MemoryMeshLearner
+get_memory_mesh_learner
+●●●●●● 1mm □
+get_unified_memory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+'Return the global singleton. Re-export from cognitive.unified_memory.'
+●●●●●● 3mm □△○
+cognitive.unified_memory
+●●●●●● 2mm □△○
+get_unified_memory
+●●●●●● 1mm □
+_get
+●●●●●● 3mm ○
+_get
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm △
+UnifiedMemory
+'Sessionful facade for all memory operations (use when you have session + optional kb_path).'
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+session
+knowledge_base_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △○
+kb
+●●●●●● 1mm □
+knowledge_base_path
+Path
+●●●●●● 1mm □△
+knowledge_base_path
+●●●●●● 2mm □△
+Path
+●●●●●● 1mm □△
+'.'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningMemoryManager
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+kb
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+EpisodicBuffer
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+MemoryMeshIntegration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □
+MemoryMeshLearner
+●●●●●● 1mm □△
+●●●●●● 3mm △○
+●●●●●● 2mm □△
+●●●●●● 1mm □
+ingest_experience
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Ingest a learning experience into the full memory pipeline.'
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+recall_similar
+●●●●●● 1mm □△
+self
+problem
+k
+min_trust
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 3mm ○
+5
+0.5
+'Recall similar past episodes.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+problem
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_learning_suggestions
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get learning suggestions from the mesh learner.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_training_data
+●●●●●● 1mm □△
+self
+min_trust
+limit
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 2mm ○
+0.7
+100
+'Get high-trust training data.'
+●●●●●● 3mm ○
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+track
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Create a Genesis key.'
+●●●●●● 3mm □△○
+api._genesis_tracker
+●●●●●● 2mm □△○
+track
+●●●●●● 3mm ○
+track
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+●●●●●● 3mm ○
+●●●●●● 2mm □
+__all__
+●●●●●● 1mm □
+'UnifiedMemory'
+'get_unified_memory'
+'LearningExample'
+'LearningPattern'
+'Episode'
+'EpisodicBuffer'
+'MemoryMeshIntegration'
+'MemoryMeshLearner'

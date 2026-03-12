@@ -1,0 +1,2 @@
+## __init__.py
+'Telemetry and self-modeling services for Grace.'

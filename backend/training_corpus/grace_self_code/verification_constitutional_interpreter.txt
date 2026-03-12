@@ -1,0 +1,385 @@
+## constitutional_interpreter.py
+●●●●●● 2mm □△○
+ast
+●●●●●● 2mm □△○
+yaml
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+CONSTITUTION_PATH
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+__file__
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+'config'
+●●●●●● 3mm □△
+'domain_constitution.yaml'
+●●●●●● 2mm △
+ConstitutionalViolation
+●●●●●● 3mm □△
+Exception
+Exception
+'Raised when proposed code violates the Domain Constitution.'
+●●●●●● 2mm △
+ConstitutionalInterpreter
+'\n    Evaluates proposed LLM-generated code against a rigid "Domain Constitution."\n    Uses AST analysis to mathematically guarantee that the code respects safely limitations\n    (no unauthorized modules, no excessive complexity) before it is hot-swapped.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+config_path
+●●●●●● 2mm □△
+Path
+CONSTITUTION_PATH
+●●●●●● 3mm △
+●●●●●● 1mm □
+config_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'forbidden_modules'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'forbidden_operations'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'performance_constraints'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'max_ast_depth'
+25
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+'performance_constraints'
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'max_lines'
+500
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_load_constitution
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Constitution not found at '
+●●●●●● 3mm △
+'. Using safe defaults.'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'forbidden_modules'
+'os'
+'subprocess'
+'socket'
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+'r'
+●●●●●● 2mm □△
+f
+●●●●●● 3mm ○
+yaml
+●●●●●● 1mm □△
+f
+●●●●●● 2mm □△
+yaml
+logger
+●●●●●● 1mm □△
+'Failed to parse domain_constitution.yaml: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'forbidden_modules'
+'os'
+'subprocess'
+'socket'
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+verify_contract
+●●●●●● 1mm □△
+self
+source_code
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+'\n        Parses the AST of the proposed code and proves it adheres to the constitution.\n        Raises ConstitutionalViolation if it fails, otherwise returns True (Proof of Contract).\n        '
+lines
+●●●●●● 1mm □
+source_code
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+●●●●●● 3mm △
+ConstitutionalViolation
+●●●●●● 1mm □△
+'Module '
+module_name
+' exceeds max line count ('
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+lines
+●●●●●● 2mm □△
+' > '
+●●●●●● 3mm △
+').'
+●●●●●● 2mm □△
+tree
+●●●●●● 1mm □
+ast
+●●●●●● 1mm □△
+source_code
+●●●●●● 2mm □△
+SyntaxError
+ConstitutionalViolation
+●●●●●● 1mm □△
+'Syntax error in proposed code: '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'Verified Proof-of-Contract for module: '
+module_name
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+●●●●●● 3mm □△○
+●●●●●● 3mm △
+●●●●●● 1mm □
+_analyze_ast
+●●●●●● 1mm □△
+self
+tree
+●●●●●● 2mm □△
+ast
+'Walks the AST to ensure no forbidden constructs are present.'
+●●●●●● 1mm □
+calculate_depth
+●●●●●● 1mm □△
+node
+current_depth
+●●●●●● 2mm □△
+0
+●●●●●● 2mm □
+current_depth
+●●●●●● 3mm △
+ConstitutionalViolation
+●●●●●● 1mm □△
+'AST depth exceeds allowed maximum of '
+●●●●●● 3mm △
+'.'
+●●●●●● 2mm □△
+child
+ast
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+calculate_depth
+●●●●●● 1mm □△
+child
+current_depth
+●●●●●● 3mm ○
+1
+●●●●●● 2mm □△
+calculate_depth
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+node
+ast
+●●●●●● 1mm □△
+tree
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+alias
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+alias
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+alias
+node
+full_name
+●●●●●● 1mm □
+node
+'.'
+alias
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_name
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+full_name
+●●●●●● 1mm □
+node
+'.'
+node
+●●●●●● 3mm △
+●●●●●● 1mm □△
+full_name
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+node
+●●●●●● 2mm □
+'bare_except'
+●●●●●● 3mm △
+ConstitutionalViolation
+●●●●●● 1mm □△
+"Bare 'except:' blocks are forbidden by the constitution."
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 1mm △
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+●●●●●● 2mm □
+'infinite_loop'
+●●●●●● 3mm △
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+node
+ast
+●●●●●● 2mm □△
+node
+●●●●●● 3mm □△○
+has_break
+●●●●●● 1mm □
+●●●●●● 2mm △○
+●●●●●● 1mm □△
+●●●●●● 1mm □
+●●●●●● 1mm □△
+n
+ast
+●●●●●● 2mm □△
+n
+ast
+●●●●●● 1mm □△
+node
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+has_break
+ConstitutionalViolation
+●●●●●● 1mm □△
+"Found a 'while True:' loop with no 'break' statement."
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_check_forbidden_module
+●●●●●● 1mm □△
+self
+module_name
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+forbidden
+●●●●●● 3mm △
+●●●●●● 2mm □
+module_name
+forbidden
+module_name
+●●●●●● 1mm □△
+forbidden
+'.'
+●●●●●● 2mm □△
+ConstitutionalViolation
+●●●●●● 1mm □△
+'Import of forbidden module or sub-module: '
+module_name
+●●●●●● 2mm □△

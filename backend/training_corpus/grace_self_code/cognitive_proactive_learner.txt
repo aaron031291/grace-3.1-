@@ -1,0 +1,1389 @@
+## proactive_learner.py
+'\nProactive Background Learning System\n\nGrace learns automatically in the background when new training data arrives.\n\nKey Features:\n- File system monitoring for new documents\n- Automatic ingestion + study when files detected\n- Multi-processing for parallel learning\n- Subagent architecture for autonomous operation\n- Background task queue for async learning\n- Progress tracking and reporting\n'
+●●●●●● 2mm □△○
+asyncio
+●●●●●● 2mm □△○
+logging
+●●●●●● 3mm □△○
+pathlib
+●●●●●● 2mm □△○
+Path
+●●●●●● 3mm □△○
+typing
+●●●●●● 2mm □△○
+Dict
+Any
+List
+Optional
+Set
+●●●●●● 3mm □△○
+datetime
+●●●●●● 2mm □△○
+datetime
+timedelta
+●●●●●● 3mm □△○
+dataclasses
+●●●●●● 2mm □△○
+dataclass
+field
+●●●●●● 3mm □△○
+concurrent.futures
+●●●●●● 2mm □△○
+ProcessPoolExecutor
+ThreadPoolExecutor
+●●●●●● 3mm □△○
+queue
+●●●●●● 2mm □△○
+Queue
+Empty
+●●●●●● 2mm □△○
+threading
+●●●●●● 2mm □△○
+time
+●●●●●● 2mm □△○
+hashlib
+●●●●●● 3mm □△○
+sqlalchemy.orm
+●●●●●● 2mm □△○
+Session
+●●●●●● 3mm □△○
+watchdog.observers
+●●●●●● 2mm □△○
+Observer
+●●●●●● 3mm □△○
+watchdog.events
+●●●●●● 2mm □△○
+FileSystemEventHandler
+FileSystemEvent
+●●●●●● 3mm □△○
+database.session
+●●●●●● 2mm □△○
+initialize_session_factory
+●●●●●● 3mm □△○
+cognitive.active_learning_system
+●●●●●● 2mm □△○
+GraceActiveLearningSystem
+●●●●●● 3mm □△○
+retrieval.retriever
+●●●●●● 2mm □△○
+DocumentRetriever
+●●●●●● 3mm □△○
+embedding
+●●●●●● 2mm □△○
+get_embedding_model
+logger
+●●●●●● 1mm □
+logging
+●●●●●● 1mm □△
+__name__
+●●●●●● 2mm □△
+●●●●●● 2mm △
+LearningTask
+'A learning task for Grace to process.'
+task_id
+●●●●●● 1mm ○
+task_type
+●●●●●● 1mm ○
+file_path
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+topic
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+learning_objectives
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+priority
+●●●●●● 2mm ○
+5
+created_at
+datetime
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+status
+●●●●●● 1mm ○
+'pending'
+result
+●●●●●● 2mm □○
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm □
+error
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □
+dataclass
+●●●●●● 2mm △
+LearningProgress
+"Track Grace's learning progress."
+total_files_processed
+●●●●●● 2mm ○
+0
+total_concepts_learned
+●●●●●● 2mm ○
+0
+total_practice_sessions
+●●●●●● 2mm ○
+0
+active_topics
+Set
+●●●●●● 1mm ○
+field
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+last_learning_time
+●●●●●● 2mm □○
+datetime
+●●●●●● 2mm □
+files_in_queue
+●●●●●● 2mm ○
+0
+learning_velocity
+●●●●●● 3mm ○
+0.0
+dataclass
+●●●●●● 2mm △
+FileMonitorHandler
+●●●●●● 3mm □△
+FileSystemEventHandler
+FileSystemEventHandler
+'\n    Monitors knowledge base for new files.\n\n    When new files are detected, automatically triggers:\n    1. File ingestion\n    2. Concept extraction (study)\n    3. Knowledge storage in Layer 1\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+learning_queue
+knowledge_base_path
+●●●●●● 2mm □△
+Queue
+Path
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_queue
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+Set
+●●●●●● 1mm ○
+●●●●●● 1mm □○
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_get_file_hash
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Calculate file hash to detect changes.'
+hasher
+●●●●●● 1mm □
+hashlib
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'rb'
+●●●●●● 2mm □△
+f
+chunk
+iter
+●●●●●● 1mm □△
+f
+●●●●●● 1mm □△
+8192
+●●●●●● 2mm □△
+b''
+●●●●●● 2mm □△
+hasher
+●●●●●● 1mm □△
+chunk
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+hasher
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'Error hashing file '
+file_path
+': '
+e
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+''
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_is_valid_training_file
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Check if file is valid training material.'
+valid_extensions
+●●●●●● 1mm □
+'.pdf'
+'.docx'
+'.doc'
+'.txt'
+'.md'
+'.py'
+'.json'
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+valid_extensions
+●●●●●● 3mm △
+●●●●●● 1mm □
+on_created
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+FileSystemEvent
+'Handle new file creation.'
+●●●●●● 2mm □
+event
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+file_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm △
+logger
+●●●●●● 1mm □△
+'File already processed: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+logger
+●●●●●● 1mm □△
+'[PROACTIVE] New training file detected: '
+file_path
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+file_hash
+logger
+●●●●●● 1mm □△
+'[PROACTIVE] Learning task queued: '
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+on_modified
+●●●●●● 1mm □△
+self
+event
+●●●●●● 2mm □△
+FileSystemEvent
+'Handle file modifications.'
+●●●●●● 2mm □
+event
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+event
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+new_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+old_hash
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+old_hash
+new_hash
+old_hash
+logger
+●●●●●● 1mm □△
+'[PROACTIVE] Training file updated: '
+file_path
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 1mm □
+new_hash
+●●●●●● 2mm △
+ProactiveLearningSubagent
+'\n    Autonomous learning subagent.\n\n    Runs independently in background, processing learning tasks\n    from the queue without blocking main application.\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+agent_id
+learning_queue
+knowledge_base_path
+max_concurrent_tasks
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+Queue
+Path
+●●●●●● 2mm ○
+2
+●●●●●● 3mm △
+●●●●●● 1mm □
+agent_id
+●●●●●● 3mm △
+●●●●●● 1mm □
+learning_queue
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_concurrent_tasks
+●●●●●● 3mm △
+●●●●●● 1mm □
+ThreadPoolExecutor
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+LearningTask
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+●●●●●● 3mm △
+●●●●●● 1mm □
+0
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+agent_id
+'] Initialized (max_concurrent='
+max_concurrent_tasks
+')'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start the subagent.'
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 3mm □△○
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Starting background learning...'
+●●●●●● 2mm □△
+processing_thread
+●●●●●● 1mm □
+threading
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+processing_thread
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop the subagent.'
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Stopping...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_processing_loop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Main processing loop - runs continuously in background.'
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Processing loop started'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Empty
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+time
+●●●●●● 1mm □△
+1
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Processing task: '
+task
+●●●●●● 2mm □△
+future
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+task
+●●●●●● 2mm □△
+●●●●●● 3mm △
+task
+●●●●●● 1mm □
+task
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+Exception
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Error in processing loop: '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Processing loop stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_process_task
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Process a single learning task.'
+task
+●●●●●● 1mm □
+'processing'
+start_time
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Starting: '
+task
+' - '
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'ingest_and_study'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 1mm △
+task
+'study'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 2mm □
+task
+'practice'
+result
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+●●●●●● 3mm □
+ValueError
+●●●●●● 1mm □△
+'Unknown task type: '
+task
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+result
+task
+●●●●●● 1mm □
+'completed'
+●●●●●● 3mm △
+1
+●●●●●● 2mm □
+'concepts_learned'
+result
+●●●●●● 3mm △
+result
+'concepts_learned'
+elapsed
+●●●●●● 1mm □
+time
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+start_time
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Completed: '
+task
+' in '
+elapsed
+'.1f'
+'s (concepts: '
+result
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+')'
+●●●●●● 2mm □△
+Exception
+task
+●●●●●● 1mm □
+'failed'
+task
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+e
+●●●●●● 2mm □△
+●●●●●● 3mm △
+1
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Task failed: '
+task
+' - '
+e
+●●●●●● 2mm □△
+●●●●●● 2mm □△○
+traceback
+traceback
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □
+_ingest_and_study
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'\n        Ingest a new file and study its contents.\n\n        NOW ROUTES THROUGH LAYER 1 for complete integration!\n        '
+●●●●●● 3mm □△○
+ingestion.service
+●●●●●● 2mm □△○
+TextIngestionService
+●●●●●● 3mm □△○
+file_manager.file_handler
+●●●●●● 2mm □△○
+extract_file_text
+●●●●●● 3mm □△○
+models.database_models
+●●●●●● 2mm □△○
+Document
+●●●●●● 3mm □△○
+genesis.layer1_integration
+●●●●●● 2mm □△○
+get_layer1_integration
+file_path
+●●●●●● 1mm □
+Path
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Ingesting via Layer 1: '
+file_path
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+extract_file_text
+●●●●●● 1mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 1mm □
+●●●●●● 1mm □△
+result
+●●●●●● 3mm □△
+●●●●●● 2mm □△
+text
+error
+●●●●●● 1mm □
+result
+●●●●●● 2mm □
+error
+Exception
+●●●●●● 1mm □△
+'Extraction error: '
+error
+●●●●●● 2mm □△
+●●●●●● 3mm □
+text
+●●●●●● 1mm □
+result
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+file_path
+'rb'
+●●●●●● 2mm □△
+f
+file_bytes
+●●●●●● 1mm □
+f
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layer1
+●●●●●● 1mm □
+get_layer1_integration
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+layer1_result
+●●●●●● 1mm □
+layer1
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] File processed through Layer 1: Genesis Key = '
+layer1_result
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+doc
+●●●●●● 1mm □
+Document
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □△
+doc
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+ingestion_service
+●●●●●● 1mm □
+TextIngestionService
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+asyncio
+●●●●●● 1mm □△
+ingestion_service
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Ingested: '
+file_path
+' (doc_id='
+doc
+')'
+●●●●●● 2mm □△
+topic
+●●●●●● 1mm □
+●●●●●● 3mm △
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+learning_system
+●●●●●● 1mm □
+GraceActiveLearningSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+study_result
+●●●●●● 1mm □
+learning_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[SUBAGENT-'
+●●●●●● 3mm △
+'] Studied: '
+topic
+' - '
+study_result
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+' concepts learned'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'file_path'
+'document_id'
+'topic'
+'concepts_learned'
+'genesis_key_id'
+'layer1_integrated'
+'ingested'
+'studied'
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+file_path
+●●●●●● 2mm □△
+doc
+topic
+study_result
+●●●●●● 1mm □△
+'concepts_learned'
+0
+●●●●●● 2mm □△
+layer1_result
+●●●●●● 1mm □△
+'genesis_key_id'
+●●●●●● 2mm □△
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_study_topic
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Study a topic from training materials.'
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_system
+●●●●●● 1mm □
+GraceActiveLearningSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+result
+●●●●●● 1mm □
+learning_system
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+result
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_practice_skill
+●●●●●● 1mm □△
+self
+task
+●●●●●● 2mm □△
+LearningTask
+'Practice a skill.'
+session_factory
+●●●●●● 1mm □
+initialize_session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+db
+●●●●●● 1mm □
+session_factory
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+embedding_model
+●●●●●● 1mm □
+get_embedding_model
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+learning_system
+●●●●●● 1mm □
+GraceActiveLearningSystem
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+'skill'
+'practiced'
+task
+●●●●●● 3mm □△○
+db
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 1mm □
+_infer_topic_from_path
+●●●●●● 1mm □△
+self
+file_path
+●●●●●● 2mm □△
+Path
+'Infer learning topic from file path and name.'
+parent
+●●●●●● 1mm □
+file_path
+topic_mappings
+●●●●●● 1mm □
+'ai research'
+'backend'
+'frontend'
+'databases'
+'testing'
+'python'
+'api'
+'architecture'
+'AI and machine learning'
+'Backend development'
+'Frontend development'
+'Database design'
+'Testing and TDD'
+'Python programming'
+'API design'
+'Software architecture'
+parent_lower
+●●●●●● 1mm □
+parent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+key
+topic
+topic_mappings
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 2mm □
+key
+parent_lower
+●●●●●● 3mm ○
+topic
+●●●●●● 3mm ○
+file_path
+●●●●●● 1mm □△
+'_'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+'-'
+' '
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 1mm □
+_cleanup_completed_tasks
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Remove completed tasks from tracking.'
+completed
+●●●●●● 1mm □
+task_id
+task_id
+task
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+'completed'
+'failed'
+task_id
+completed
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task_id
+●●●●●● 2mm □
+●●●●●● 2mm □△
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get subagent status.'
+●●●●●● 3mm ○
+'agent_id'
+'is_running'
+'current_tasks'
+'tasks_completed'
+'tasks_failed'
+'total_concepts_learned'
+'success_rate'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm □△○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+0
+●●●●●● 3mm △
+●●●●●● 3mm □△
+●●●●●● 3mm △
+●●●●●● 3mm ○
+●●●●●● 3mm △
+0
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
+●●●●●● 2mm △
+ProactiveLearningOrchestrator
+'\n    Orchestrates proactive learning system.\n\n    Manages:\n    - File system monitoring\n    - Learning task queue\n    - Multiple learning subagents\n    - Progress tracking\n    '
+●●●●●● 1mm □
+__init__
+●●●●●● 1mm □△
+self
+knowledge_base_path
+num_subagents
+max_concurrent_per_agent
+●●●●●● 2mm □△
+Path
+●●●●●● 2mm ○
+●●●●●● 2mm ○
+2
+2
+●●●●●● 3mm △
+●●●●●● 1mm □
+knowledge_base_path
+●●●●●● 3mm △
+●●●●●● 1mm □
+num_subagents
+●●●●●● 3mm △
+●●●●●● 1mm □
+max_concurrent_per_agent
+●●●●●● 3mm △
+●●●●●● 1mm □
+Queue
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+FileMonitorHandler
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+Observer
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 3mm □△
+ProactiveLearningSubagent
+i
+●●●●●● 1mm □
+●●●●●● 1mm □△
+num_subagents
+●●●●●● 2mm □△
+agent
+●●●●●● 1mm □
+ProactiveLearningSubagent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+agent
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+LearningProgress
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+●●●●●● 2mm □
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Initialized with '
+num_subagents
+' subagents ('
+max_concurrent_per_agent
+' concurrent tasks each)'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+start
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Start proactive learning system.'
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Starting proactive learning system...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Monitoring: '
+●●●●●● 3mm △
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] System online with '
+●●●●●● 3mm △
+' learning agents'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+stop
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Stop proactive learning system.'
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Stopping proactive learning system...'
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] System stopped'
+●●●●●● 2mm □△
+●●●●●● 1mm □
+add_learning_task
+●●●●●● 1mm □△
+self
+task_type
+topic
+learning_objectives
+file_path
+priority
+●●●●●● 2mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 3mm □△
+●●●●●● 1mm ○
+●●●●●● 2mm □○
+●●●●●● 1mm ○
+●●●●●● 2mm ○
+●●●●●● 2mm □
+●●●●●● 2mm □
+●●●●●● 2mm □
+5
+'\n        Manually add a learning task to the queue.\n\n        Returns task_id for tracking.\n        '
+task_id
+●●●●●● 1mm □
+task_type
+'_'
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+task
+●●●●●● 1mm □
+LearningTask
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+task
+●●●●●● 2mm □△
+logger
+●●●●●● 1mm □△
+'[ORCHESTRATOR] Task queued: '
+task_id
+' (priority='
+priority
+')'
+●●●●●● 2mm □△
+●●●●●● 3mm ○
+task_id
+●●●●●● 1mm ○
+●●●●●● 1mm □
+get_status
+●●●●●● 1mm □△
+self
+●●●●●● 2mm □△
+'Get system status.'
+total_completed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+agent
+agent
+●●●●●● 3mm △
+●●●●●● 2mm □△
+total_failed
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+agent
+agent
+●●●●●● 3mm △
+●●●●●● 2mm □△
+total_concepts
+●●●●●● 1mm □
+●●●●●● 1mm ○
+●●●●●● 1mm □△
+agent
+agent
+●●●●●● 3mm △
+●●●●●● 2mm □△
+●●●●●● 2mm □
+●●●●●● 3mm △
+hours_running
+●●●●●● 1mm □
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+learning_velocity
+●●●●●● 1mm □
+hours_running
+0
+total_concepts
+●●●●●● 3mm □△
+hours_running
+0
+●●●●●● 3mm □
+learning_velocity
+●●●●●● 1mm □
+0
+●●●●●● 3mm ○
+'status'
+'num_subagents'
+'queue_size'
+'total_tasks_completed'
+'total_tasks_failed'
+'total_concepts_learned'
+'learning_velocity_per_hour'
+'uptime_hours'
+'subagents'
+●●●●●● 3mm △
+0
+'running'
+'stopped'
+●●●●●● 3mm △
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+total_completed
+total_failed
+total_concepts
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+learning_velocity
+2
+●●●●●● 2mm □△
+●●●●●● 3mm △
+datetime
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 1mm □△
+●●●●●● 3mm △
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+●●●●●● 3mm □△
+3600
+0
+agent
+●●●●●● 1mm □△
+●●●●●● 2mm □△
+agent
+●●●●●● 3mm △
+●●●●●● 1mm □○
+●●●●●● 1mm ○
+Any
