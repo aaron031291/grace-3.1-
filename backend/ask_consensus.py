@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from cognitive.consensus_engine import run_consensus
 
-prompt = "As the consensus mechanism (Opus, Kimi, and Qwen), do you have full fluidity throughout the system and have access to everything you need to have access to in order to accomplish self-healing, coding, learning, and evolution? Please analyze your current capabilities, access levels, and any limitations."
+prompt = "As the consensus mechanism (Opus, Kimi, and Qwen), we are going through every file and component this weekend, checking what works and what's wrong. Before we do a 1-by-1 review, are there documents, components, orphaned logic, or redundant code that have no relevance to the actual system and can be safely deleted? Please list specific files, directories, or architectural components that are no longer relevant."
 
 print(f"Querying Consensus Engine with prompt:\n{prompt}\n")
 

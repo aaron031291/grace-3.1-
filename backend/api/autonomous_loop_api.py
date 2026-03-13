@@ -182,21 +182,40 @@ def _run_cycle() -> dict:
                     {"type": p.get("type"), "message": p.get("message", p.get("error", ""))[:200]}
                     for p in for_human
                 ]
+                from api.spindle_autonomy import autonomy_gate
+                actually_for_human = []
                 for p in for_human:
-                    logger.error(
-                        "FLAG_FOR_HUMAN: [%s] %s",
-                        p.get("type", ""),
-                        p.get("message", p.get("error", ""))[:300],
-                    )
-                try:
-                    from api.brain_api_v2 import call_brain
-                    call_brain("system", "notify", {
-                        "title": "Ouroboros: Issues need human attention",
-                        "message": "; ".join((p.get("message", p.get("error", "")) or "")[:80] for p in for_human[:3]),
-                        "type": "escalate",
-                    })
-                except Exception:
-                    pass
+                    trust = _get_trust_score(p.get("target", "system"))
+                    gate = autonomy_gate(p, trust)
+                    
+                    if not gate["autonomy"]:
+                        logger.error(
+                            "FLAG_FOR_HUMAN (escalated, trust=%.2f): [%s] %s",
+                            trust,
+                            p.get("type", ""),
+                            p.get("message", p.get("error", ""))[:300],
+                        )
+                        actually_for_human.append(p)
+                    else:
+                        logger.info(
+                            "AUTONOMY_GATE (passed, fallback=%s, trust=%.2f): [%s] %s - bypassing FLAG_FOR_HUMAN",
+                            gate["fallback"],
+                            trust,
+                            p.get("type", ""),
+                            p.get("message", p.get("error", ""))[:300],
+                        )
+                        p["flag_for_human"] = False
+                        
+                if actually_for_human:
+                    try:
+                        from api.brain_api_v2 import call_brain
+                        call_brain("system", "notify", {
+                            "title": "Ouroboros: Issues need human attention",
+                            "message": "; ".join((p.get("message", p.get("error", "")) or "")[:80] for p in actually_for_human[:3]),
+                            "type": "escalate",
+                        })
+                    except Exception:
+                        pass
     except Exception:
         pass
 

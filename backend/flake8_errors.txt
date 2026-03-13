@@ -1,3 +1,0 @@
-.\venv_gpu\Lib\site-packages\sympy\polys\numberfields\resolvent_lookup.py: "pyflakes[F]" failed during execution due to RecursionError('maximum recursion depth exceeded')
-Run flake8 with greater verbosity to see more details
-0

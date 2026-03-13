@@ -1,8 +1,0 @@
-From https://github.com/aaron031291/grace-3.1-
- * branch              main       -> FETCH_HEAD
-error: The following untracked working tree files would be overwritten by checkout:
-	docs/architecture/GRACE_UNIFIED_ARCHITECTURE.md
-	docs/architecture/HYBRID_MEMORY_SYSTEM.md
-Please move or remove them before you switch branches.
-Aborting
-error: could not detach HEAD

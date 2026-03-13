@@ -12,6 +12,10 @@ import threading
 import os
 from pathlib import Path
 
+# Mark this process as the Spindle parallel runtime 
+# so internal Grace libraries do not attempt to bind host ports
+os.environ["IS_SPINDLE_DAEMON"] = "1"
+
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -21,8 +25,8 @@ from cognitive.deterministic_validator import verify_autonomy
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("spindle_daemon")
 
-ZMQ_PUB_ENDPOINT = "tcp://127.0.0.1:5516"  # Spindle PUBs here, Grace SUBs
-ZMQ_SUB_ENDPOINT = "tcp://127.0.0.1:5515"  # Spindle SUBs here, Grace PUBs
+ZMQ_PUB_ENDPOINT = "tcp://127.0.0.1:5521"  # Spindle PUBs here, Grace SUBs
+ZMQ_SUB_ENDPOINT = "tcp://127.0.0.1:5520"  # Spindle SUBs here, Grace PUBs
 
 class SpindleDaemon:
     def __init__(self):
@@ -84,7 +88,10 @@ class SpindleDaemon:
                 
     def handle_event(self, topic: str, data: dict):
         """React to Genesis Keys or other Grace events."""
-        if topic == "genesis.key_created" or topic.startswith("healing"):
+        is_error = data.get("is_error", False)
+        
+        # Only trigger on explicit healing requests or actual error keys
+        if topic.startswith("healing") or (topic == "genesis.key_created" and is_error):
             logger.info(f"[SPINDLE] Autonomous action triggered by {topic}")
             
             # Extract actionable problem from event payload

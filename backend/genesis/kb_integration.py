@@ -1,4 +1,5 @@
-"""
+if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+    """
 Genesis Key Knowledge Base Integration.
 
 Auto-populates Genesis Keys in knowledge_base/layer_1/genesis_key folder.
@@ -15,6 +16,12 @@ from pathlib import Path
 
 from models.genesis_key_models import GenesisKey
 from filelock import FileLock, Timeout as FileLockTimeout
+
+
+try:
+    from settings import settings
+except ImportError:
+    settings = None
 
 logger = logging.getLogger(__name__)
 
@@ -140,7 +147,8 @@ All user actions, inputs, and outputs are tracked here from the first login.
                     if attempt < max_retries - 1:
                         time.sleep(0.3 * (attempt + 1))
                     else:
-                        logger.error(
+                        if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                            logger.error(
                             "Failed to save Genesis Key to KB: The file lock '%s' could not be "
                             "acquired after %s attempts.", lock_path, max_retries
                         )
@@ -148,7 +156,8 @@ All user actions, inputs, and outputs are tracked here from the first login.
             return None
 
         except Exception as e:
-            logger.error("Failed to save Genesis Key to KB: %s", e)
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error("Failed to save Genesis Key to KB: %s", e)
             return None
 
     def _write_key_to_file(self, file_path: str, key) -> str:
@@ -176,8 +185,10 @@ All user actions, inputs, and outputs are tracked here from the first login.
                         shutil.copy2(file_path, backup_path)
                         logger.warning("Corrupted KB file backed up to: %s", backup_path)
                     except Exception as backup_err:
-                        logger.error("Failed to backup corrupted file: %s", backup_err)
-                    logger.error("JSON decode error in %s: %s", file_path, e)
+                        if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                            logger.error("Failed to backup corrupted file: %s", backup_err)
+                    if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                        logger.error("JSON decode error in %s: %s", file_path, e)
                     keys_data = {
                         "user_id": user_id,
                         "session_id": session_id,
@@ -288,7 +299,8 @@ All user actions, inputs, and outputs are tracked here from the first login.
             return profile_path
 
         except Exception as e:
-            logger.error(f"Failed to save user profile to KB: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Failed to save user profile to KB: {e}")
             return None
 
     def get_user_keys(self, user_id: str) -> list:
@@ -320,7 +332,8 @@ All user actions, inputs, and outputs are tracked here from the first login.
             return all_keys
 
         except Exception as e:
-            logger.error(f"Failed to get user keys from KB: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Failed to get user keys from KB: {e}")
             return []
 
     def create_user_summary(self, user_id: str) -> dict:

@@ -1,5 +1,0 @@
-This is a test file to verify Genesis Key tracking.
-Modifying this file should trigger:
-1. File Watcher detection
-2. Genesis Key creation in database
-3. Log entry confirming tracking

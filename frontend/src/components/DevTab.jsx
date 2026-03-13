@@ -120,6 +120,8 @@ function PlanArena({ setActivePillar }) {
     { role: 'assistant', content: 'Welcome to the 9-Layer Architect. Describe your concept, and Qwen, DeepSeek, and Kimi will discuss it and break it down into an executable 9-layer architectural plan, including Technical Specs.' }
   ]);
   const [input, setInput] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const toggleVoice = () => setIsRecording(!isRecording);
   const [layers, setLayers] = useState([
     { id: 1, name: "Runtime & Environment", status: "pending", desc: "Waiting for input..." },
     { id: 2, name: "Decompose & Plan", status: "pending", desc: "Waiting for input..." },
@@ -144,9 +146,6 @@ function PlanArena({ setActivePillar }) {
       setLayers(l => l.map(layer => layer.id === 3 ? { ...layer, status: 'active', desc: 'Defining DB Schema and API Interface.' } : layer));
     }, 1000);
   };
-
-  const [isRecording, setIsRecording] = useState(false);
-  const toggleVoice = () => setIsRecording(!isRecording);
 
   const deploySubAgents = () => {
     // Bridge to Build Arena

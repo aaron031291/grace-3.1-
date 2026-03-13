@@ -151,18 +151,9 @@ export default function PersistentVoicePanel({
       }
     };
 
-    recognition.onend = () => {
-      setIsListening(false);
-      // Restart if continuous mode is enabled
-      if (isEnabled && settings.continuousListen) {
-        setTimeout(() => {
-          startListening();
-        }, 100);
-      }
-    };
-
+    // Note: We handle onend in startListening/stopListening to avoid circular dependencies
     return recognition;
-  }, [settings.continuousListen, isEnabled, handleFinalTranscript, startListening]);
+  }, [settings.continuousListen, handleFinalTranscript]);
 
   // Handle final transcript
   const handleFinalTranscript = useCallback(async (text) => {
@@ -197,7 +188,20 @@ export default function PersistentVoicePanel({
   const startListening = useCallback(() => {
     try {
       if (!recognitionRef.current) {
-        recognitionRef.current = initRecognition();
+        const recognition = initRecognition();
+        
+        if (recognition) {
+            recognition.onend = () => {
+                setIsListening(false);
+                // Restart if continuous mode is enabled
+                if (isEnabled && settings.continuousListen) {
+                    setTimeout(() => {
+                        startListening();
+                    }, 100);
+                }
+            };
+            recognitionRef.current = recognition;
+        }
       }
       if (recognitionRef.current && !isListening) {
         recognitionRef.current.start();
@@ -205,11 +209,12 @@ export default function PersistentVoicePanel({
     } catch (err) {
       console.error("Failed to start listening:", err);
     }
-  }, [initRecognition, isListening]);
+  }, [initRecognition, isListening, isEnabled, settings.continuousListen]);
 
   // Stop listening
   const stopListening = useCallback(() => {
     if (recognitionRef.current) {
+      recognitionRef.current.onend = null; // Prevent generic restart
       recognitionRef.current.stop();
     }
     setIsListening(false);

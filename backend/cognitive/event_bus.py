@@ -103,8 +103,8 @@ _zmq_pub_socket = None
 _zmq_thread = None
 
 # We use local TCP instead of strict IPC for robust Windows compatibility.
-ZMQ_PUB_ENDPOINT = "tcp://127.0.0.1:5515"  # Grace broadcasts here (Spindle SUBs to this)
-ZMQ_SUB_ENDPOINT = "tcp://127.0.0.1:5516"  # Grace listens here (Spindle PUBs to this)
+ZMQ_PUB_ENDPOINT = "tcp://127.0.0.1:5520"  # Grace broadcasts here (Spindle SUBs to this)
+ZMQ_SUB_ENDPOINT = "tcp://127.0.0.1:5521"  # Grace listens here (Spindle PUBs to this)
 
 def _zmq_bridge_loop():
     import zmq
@@ -151,6 +151,11 @@ def _zmq_bridge_loop():
 def start_zmq_bridge():
     """Initializes the ZeroMQ pub/sub bridge for isolated parallel runtimes (e.g. Spindle)."""
     global _zmq_thread
+    import os
+    if os.environ.get("IS_SPINDLE_DAEMON") == "1":
+        logger.debug("[ZMQ-BRIDGE] Running inside Spindle daemon. Skipping host ZMQ bind.")
+        return
+
     if _zmq_thread is None:
         try:
             import zmq

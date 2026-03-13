@@ -1,4 +1,5 @@
-"""
+if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+    """
 Genesis Key Autonomous Trigger Pipeline
 
 Genesis Keys are the CENTRAL TRIGGER for all autonomous actions.
@@ -579,7 +580,8 @@ class GenesisTriggerPipeline:
                 )
 
         except Exception as e:
-            logger.error(f"Error triggering multi-LLM verification: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error triggering multi-LLM verification: {e}")
 
         return actions
 
@@ -658,7 +660,8 @@ class GenesisTriggerPipeline:
             if hasattr(settings, 'SUPPRESS_GENESIS_ERRORS') and settings.SUPPRESS_GENESIS_ERRORS:
                 logger.debug(f"Spindle isolation or health check failed (suppressed): {e}")
             else:
-                logger.error(f"Error triggering health check: {e}")
+                if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                    logger.error(f"Error triggering health check: {e}")
 
         return actions
 
@@ -729,7 +732,8 @@ class GenesisTriggerPipeline:
                 session.close()
 
         except Exception as e:
-            logger.error(f"Error triggering mirror analysis: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error triggering mirror analysis: {e}")
 
         return actions
 

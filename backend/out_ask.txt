@@ -1,3 +1,0 @@
-Running consensus with Kimi, Qwen, and Opus...
-
---- CONSENSUS RESULT ---

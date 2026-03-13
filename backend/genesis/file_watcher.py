@@ -1,4 +1,5 @@
-"""
+if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+    """
 File System Watcher for Automatic Version Control.
 
 Watches file changes in the workspace and automatically creates
@@ -15,6 +16,12 @@ from pathlib import Path
 from datetime import datetime, timezone
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+
+
+try:
+    from settings import settings
+except ImportError:
+    settings = None
 
 logger = logging.getLogger(__name__)
 
@@ -185,7 +192,8 @@ class GenesisFileWatcher(FileSystemEventHandler):
             )
 
         except Exception as e:
-            logger.error(f"[FILE_WATCHER] Error tracking {file_path}: {e}", exc_info=True)
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"[FILE_WATCHER] Error tracking {file_path}: {e}", exc_info=True)
 
     def on_modified(self, event):
         """Handle file modification events."""
@@ -276,7 +284,8 @@ class GenesisFileWatcher(FileSystemEventHandler):
             logger.info(f"[FILE_WATCHER] Tracked deletion: {rel_path}")
 
         except Exception as e:
-            logger.error(f"[FILE_WATCHER] Error tracking deletion {file_path}: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"[FILE_WATCHER] Error tracking deletion {file_path}: {e}")
 
     def get_statistics(self) -> Dict[str, Any]:
         """Get watcher statistics."""
@@ -344,7 +353,8 @@ class FileWatcherService:
             return True
 
         except Exception as e:
-            logger.error(f"[FILE_WATCHER_SERVICE] Failed to start watching {watch_path}: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"[FILE_WATCHER_SERVICE] Failed to start watching {watch_path}: {e}")
             return False
 
     def stop_watching(self, watch_path: str) -> bool:
@@ -365,7 +375,8 @@ class FileWatcherService:
             return True
 
         except Exception as e:
-            logger.error(f"[FILE_WATCHER_SERVICE] Failed to stop watching {watch_path}: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"[FILE_WATCHER_SERVICE] Failed to stop watching {watch_path}: {e}")
             return False
 
     def stop_all(self):

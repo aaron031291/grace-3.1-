@@ -1,4 +1,5 @@
-"""
+if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+    """
 Symbiotic Genesis Key Version Control System.
 
 Genesis Keys and version control work as ONE unified system:
@@ -22,6 +23,12 @@ from genesis.genesis_key_service import get_genesis_service
 from genesis.file_version_tracker import get_file_version_tracker
 from genesis.repo_scanner import get_repo_scanner
 from database.session import get_session, session_scope
+
+
+try:
+    from settings import settings
+except ImportError:
+    settings = None
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +224,8 @@ class SymbioticVersionControl:
             }
 
         except Exception as e:
-            logger.error(f"Error getting complete history: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error getting complete history: {e}")
             raise
 
     def rollback_to_version(
@@ -300,7 +308,8 @@ class SymbioticVersionControl:
             }
 
         except Exception as e:
-            logger.error(f"Error in symbiotic rollback: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error in symbiotic rollback: {e}")
             raise
 
     def _get_or_create_file_genesis_key(self, rel_path: str) -> str:
@@ -318,7 +327,8 @@ class SymbioticVersionControl:
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
         except Exception as e:
-            logger.error(f"Error computing hash for {file_path}: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error computing hash for {file_path}: {e}")
             return None
 
     def _read_file_content(self, file_path: str) -> Optional[str]:
@@ -330,7 +340,8 @@ class SymbioticVersionControl:
             logger.info(f"Binary file: {file_path}")
             return None
         except Exception as e:
-            logger.error(f"Error reading {file_path}: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error reading {file_path}: {e}")
             return None
 
     def watch_file(
@@ -400,7 +411,8 @@ class SymbioticVersionControl:
             }
 
         except Exception as e:
-            logger.error(f"Error getting symbiotic stats: {e}")
+            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+                logger.error(f"Error getting symbiotic stats: {e}")
             return {
                 "error": str(e),
                 "message": "Could not get symbiotic stats"
