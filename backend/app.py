@@ -758,6 +758,7 @@ from api.scrape_api import router as scrape_router
 from api.version_control_api import router as version_control_router
 from api.hitl_dashboard import router as hitl_dashboard_router
 from api.consensus_fixer_api import router as consensus_fixer_router
+from api.agent_api import router as agent_router
 
 app.include_router(codebase_hub_router, prefix="/api")
 app.include_router(whitelist_hub_router, prefix="/api")
@@ -779,6 +780,7 @@ app.include_router(scrape_router)
 app.include_router(version_control_router)
 app.include_router(hitl_dashboard_router)
 app.include_router(consensus_fixer_router)
+app.include_router(agent_router, prefix="/api/agents")
 
 from api.docs_library_api import router as docs_library_router
 app.include_router(docs_library_router)

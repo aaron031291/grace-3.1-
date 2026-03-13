@@ -162,6 +162,27 @@ async def get_immune_playbooks():
     except Exception as e:
         return {"error": str(e)}
 
+class AutonomousHealRequest(BaseModel):
+    file_path: str
+    content: str
+    errors: list[str]
+    source: str = "ui_fallback"
+
+@immune_router.post("/heal/autonomous")
+async def trigger_autonomous_healing_loop(req: AutonomousHealRequest):
+    """Trigger the deep 13th loop for autonomous file healing."""
+    try:
+        from cognitive.autonomous_healing_loop import heal_content
+        result = heal_content(
+            file_path=req.file_path,
+            content=req.content,
+            errors=req.errors,
+            source=req.source
+        )
+        return {"success": result.get("success", False), "result": result}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
 diagnostic_router = APIRouter(prefix="/api/diagnostic", tags=["Diagnostic Machine"])
 
 @diagnostic_router.get("/sensors")

@@ -1,0 +1,104 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+tests/backend/cognitive/test_learning_memory.py::test_json_coercion_learning_models PASSED [ 16%]
+tests/backend/cognitive/test_learning_memory.py::test_trust_scorer_calculation PASSED [ 33%]
+tests/backend/cognitive/test_learning_memory.py::test_trust_update_on_validation FAILED [ 50%]
+tests/backend/cognitive/test_learning_memory.py::test_ingest_learning_data PASSED [ 66%]
+tests/backend/cognitive/test_learning_memory.py::test_pattern_extraction_trigger PASSED [ 83%]
+tests/backend/cognitive/test_learning_memory.py::test_decay_trust_scores FAILED [100%]
+
+================================== FAILURES ===================================
+_______________________ test_trust_update_on_validation _______________________
+
+    def test_trust_update_on_validation():
+        scorer = TrustScorer()
+        ex = LearningExample(trust_score=0.5, times_validated=0, times_invalidated=0)
+    
+        # Validate boosts trust
+        scorer.update_trust_on_validation(ex, True)
+        assert ex.times_validated == 1
+        assert ex.trust_score == 0.55
+    
+        # Invalidate reduces trust
+        scorer.update_trust_on_validation(ex, False)
+        assert ex.times_invalidated == 1
+>       assert ex.trust_score == 0.44
+E       assert 0.44000000000000006 == 0.44
+E        +  where 0.44000000000000006 = <LearningExample(id=None)>.trust_score
+
+tests\backend\cognitive\test_learning_memory.py:60: AssertionError
+___________________________ test_decay_trust_scores ___________________________
+
+    def test_decay_trust_scores():
+        session = MagicMock()
+        manager = LearningMemoryManager(session=session)
+    
+        # Mock two examples, one brand new, one 90 days old
+        now = datetime.now(timezone.utc)
+        old = now - timedelta(days=90)
+    
+        ex_new = LearningExample(source="inferred", trust_score=0.5, created_at=now)
+        ex_old = LearningExample(source="inferred", trust_score=0.5, created_at=old)
+    
+        session.query.return_value.all.return_value = [ex_new, ex_old]
+    
+>       manager.decay_trust_scores()
+
+tests\backend\cognitive\test_learning_memory.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\cognitive\learning_memory.py:628: in decay_trust_scores
+    example.trust_score = self.trust_scorer.calculate_trust_score(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.cognitive.learning_memory.TrustScorer object at 0x000001FDF2D28BD0>
+source = 'inferred', outcome_quality = None, consistency_score = None
+validation_history = {'invalidated': None, 'validated': None}, age_days = 0
+
+    def calculate_trust_score(
+        self,
+        source: str,
+        outcome_quality: float,
+        consistency_score: float,
+        validation_history: Dict[str, int],
+        age_days: float
+    ) -> float:
+        """
+        Calculate comprehensive trust score.
+    
+        Args:
+            source: Source of learning example
+            outcome_quality: Quality of outcome (0-1)
+            consistency_score: Consistency with other knowledge (0-1)
+            validation_history: {'validated': N, 'invalidated': M}
+            age_days: Age in days
+    
+        Returns:
+            Trust score (0-1)
+        """
+        # 1. Source reliability (40% weight)
+        source_score = self.source_weights.get(source, 0.5)
+    
+        # 2. Outcome quality (30% weight)
+        outcome_score = outcome_quality
+    
+        # 3. Consistency (20% weight)
+        consistency = consistency_score
+    
+        # 4. Validation history (10% weight)
+        validated = validation_history.get('validated', 0)
+        invalidated = validation_history.get('invalidated', 0)
+>       total = validated + invalidated
+                ^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+
+backend\cognitive\learning_memory.py:192: TypeError
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_learning_memory.py::test_trust_update_on_validation
+FAILED tests/backend/cognitive/test_learning_memory.py::test_decay_trust_scores
+========================= 2 failed, 4 passed in 0.28s =========================

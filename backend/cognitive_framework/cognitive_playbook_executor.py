@@ -47,7 +47,7 @@ class PlaybookExecutor:
                 what=f"Cognitive execution of playbook '{playbook_id}' for event {event.id}",
                 who="cognitive_framework",
                 how="cognitive_playbook_executor.execute",
-                input_data={"playbook_id": playbook_id, "event": event.dict(), "decision_id": clarity_decision_id},
+                input_data={"playbook_id": playbook_id, "event": event.model_dump(), "decision_id": clarity_decision_id},
                 tags=["playbook", playbook_id]
             )
         except Exception as e:

@@ -1,0 +1,53 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 3 items
+
+tests/backend/cognitive/test_healing_coordinator.py::test_resolve_via_self_healing_fast_path FAILED [ 33%]
+tests/backend/cognitive/test_healing_coordinator.py::test_resolve_via_coding_agent FAILED [ 66%]
+tests/backend/cognitive/test_healing_coordinator.py::test_resolve_via_coordinated_fix FAILED [100%]
+
+================================== FAILURES ===================================
+___________________ test_resolve_via_self_healing_fast_path ___________________
+tests\backend\cognitive\test_healing_coordinator.py:46: in test_resolve_via_self_healing_fast_path
+    mock_run_background.assert_called_with(MagicMock(), "learn_after_heal")
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:939: in assert_called_with
+    raise AssertionError(_error_message()) from cause
+E   AssertionError: expected call not found.
+E   Expected: run_background(<MagicMock id='2267219632656'>, 'learn_after_heal')
+E     Actual: run_background(<function HealingCoordinator._trigger_learn_after_heal.<locals>._do at 0x0000020FAE4F5D00>, 'learn_after_heal')
+________________________ test_resolve_via_coding_agent ________________________
+tests\backend\cognitive\test_healing_coordinator.py:92: in test_resolve_via_coding_agent
+    mock_run_background.assert_called_with(MagicMock(), "heal_learn_after_code_fix")
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:939: in assert_called_with
+    raise AssertionError(_error_message()) from cause
+E   AssertionError: expected call not found.
+E   Expected: run_background(<MagicMock id='2267185369488'>, 'heal_learn_after_code_fix')
+E     Actual: run_background(<function HealingCoordinator._trigger_heal_and_learn_after_code_fix.<locals>._do at 0x0000020FDA7C7100>, 'heal_learn_after_code_fix')
+______________________ test_resolve_via_coordinated_fix _______________________
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:1375: in patched
+    with self.decoration_helper(patched,
+..\..\AppData\Local\Programs\Python\Python311\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:1357: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\contextlib.py:517: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:1430: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\pkgutil.py:715: in resolve_name
+    result = getattr(result, p)
+             ^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'embedding' has no attribute 'embedder'
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_healing_coordinator.py::test_resolve_via_self_healing_fast_path
+FAILED tests/backend/cognitive/test_healing_coordinator.py::test_resolve_via_coding_agent
+FAILED tests/backend/cognitive/test_healing_coordinator.py::test_resolve_via_coordinated_fix
+============================== 3 failed in 4.41s ==============================

@@ -91,7 +91,7 @@ async def test_cognitive_framework_e2e_pipeline(sample_cognitive_event):
         
         # 1. Orient & Observe check
         assert "orientation" in ooda_context
-        assert ooda_context["orientation"]["original_problem"] == f"Needs coding or research resolution for event evt_test_456"
+        assert ooda_context["orientation"]["original_problem"] == f"Needs coding or research resolution for event evt_test_456 (guardian.log_error)"
         assert "Must be reversible" in ooda_context["orientation"]["constraints"]
         
         # 2. Chess Mode Decision Check

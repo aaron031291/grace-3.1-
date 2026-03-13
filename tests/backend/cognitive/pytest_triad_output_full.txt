@@ -1,0 +1,59 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/backend/cognitive/test_triad_orchestrator.py::test_qwen_triad_logical_execution FAILED
+
+================================== FAILURES ===================================
+______________________ test_qwen_triad_logical_execution ______________________
+
+    @pytest.mark.asyncio
+    async def test_qwen_triad_logical_execution():
+        """
+        Verifies that the Triad Orchestrator can split a logical problem into 3 branches
+        (triage, coding, reasoning), execute them via the live LLM pipeline (no deep mocks),
+        and synthesize a final cohesive JSON response.
+        """
+        orchestrator = get_triad_orchestrator()
+    
+        # A specific logic puzzle testing calculation, code logic, and reasoning
+        test_prompt = "If a system heals 3 bugs per hour, but introduces 1 bug every 2 hours, how many net bugs are healed after 6 hours? Formulate the mathematical reasoning step-by-step."
+    
+        # Execute the live pipeline
+        result = await orchestrator.process(
+            prompt=test_prompt,
+            system_prompt="You are a system logic evaluator. Output JSON always.",
+            execution_allowed=False  # Keep it safe, no arbitrary code execution
+        )
+    
+        # Assertions on the synthesis structure
+        assert isinstance(result, dict), f"Expected dict, got {type(result)}"
+    
+        # Check that synthesis keys are present (verifying the JSON parsing worked)
+        assert "response" in result or "synthesis" in result or "final_decision" in result or "answer" in result or "reasoning" in result or "net_bugs" in str(result).lower()
+    
+        # Verify the math was solved correctly in the output text
+        result_text = str(result).lower()
+>       assert "15" in result_text or "fifteen" in result_text, f"Triad failed the basic logic puzzle. Output: {result_text}"
+E       AssertionError: Triad failed the basic logic puzzle. Output: {'response': 'i apologize, but i was unable to generate a response. please try again.', 'triage': {'intent': '', 'urgency': 'medium', 'needs_code': false, 'needs_reasoning': true}, 'governance': 'read_only', 'execution_allowed': false, 'subsystem_context': {'time': {'timestamp': '2026-03-13t21:17:38.859461+00:00', 'date': '2026-03-13', 'time': '21:17:38', 'day_of_week': 'friday', 'day_number': 4, 'is_weekend': false, 'is_business_hours': false, 'period': 'night', 'period_label': 'night', 'hour': 21, 'week_number': 11, 'month': 'march', 'year': 2026}, 'memory': true, 'genesis': false, 'diagnostics': false, 'healing': true, 'learning': false, 'governance': true, 'mirror': true, 'trust': {'system_trust': 0.5, 'health': {'system_trust_score': 0.5, 'status': 'fair', 'component_count': 0, 'components': {}}}}, 'model_outputs': {'code_model': none, 'reason_model': none, 'fast_model': none}, 'timing': {'total_ms': 5787.8, 'gather_ms': 4975.8, 'triad_ms': 52.0}}
+E       assert ('15' in "{'response': 'i apologize, but i was unable to generate a response. please try again.', 'triage': {'intent': '', 'urgency': 'medium', 'needs_code': false, 'needs_reasoning': true}, 'governance': 'read_only', 'execution_allowed': false, 'subsystem_context': {'time': {'timestamp': '2026-03-13t21:17:38.859461+00:00', 'date': '2026-03-13', 'time': '21:17:38', 'day_of_week': 'friday', 'day_number': 4, 'is_weekend': false, 'is_business_hours': false, 'period': 'night', 'period_label': 'night', 'hour': 21, 'week_number': 11, 'month': 'march', 'year': 2026}, 'memory': true, 'genesis': false, 'diagnostics': false, 'healing': true, 'learning': false, 'governance': true, 'mirror': true, 'trust': {'system_trust': 0.5, 'health': {'system_trust_score': 0.5, 'status': 'fair', 'component_count': 0, 'components': {}}}}, 'model_outputs': {'code_model': none, 'reason_model': none, 'fast_model': none}, 'timing': {'total_ms': 5787.8, 'gather_ms': 4975.8, 'triad_ms': 52.0}}" or 'fifteen' in "{'response': 'i apologize, but i was unable to generate a response. please try again.', 'triage': {'intent': '', 'urgency': 'medium', 'needs_code': false, 'needs_reasoning': true}, 'governance': 'read_only', 'execution_allowed': false, 'subsystem_context': {'time': {'timestamp': '2026-03-13t21:17:38.859461+00:00', 'date': '2026-03-13', 'time': '21:17:38', 'day_of_week': 'friday', 'day_number': 4, 'is_weekend': false, 'is_business_hours': false, 'period': 'night', 'period_label': 'night', 'hour': 21, 'week_number': 11, 'month': 'march', 'year': 2026}, 'memory': true, 'genesis': false, 'diagnostics': false, 'healing': true, 'learning': false, 'governance': true, 'mirror': true, 'trust': {'system_trust': 0.5, 'health': {'system_trust_score': 0.5, 'status': 'fair', 'component_count': 0, 'components': {}}}}, 'model_outputs': {'code_model': none, 'reason_model': none, 'fast_model': none}, 'timing': {'total_ms': 5787.8, 'gather_ms': 4975.8, 'triad_ms': 52.0}}")
+
+tests\backend\cognitive\test_triad_orchestrator.py:37: AssertionError
+------------------------------ Captured log call ------------------------------
+WARNING  retrieval:__init__.py:10 Could not import retriever: cannot import name 'cached_download' from 'huggingface_hub' (C:\Users\aaron\AppData\Local\Programs\Python\Python311\Lib\site-packages\huggingface_hub\__init__.py)
+WARNING  layer1.components:__init__.py:30 Could not import RAGConnector: cannot import name 'EmbeddingModel' from 'embedding.embedder' (c:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\embedding\embedder.py)
+WARNING  ml_intelligence:__init__.py:88 ML Intelligence components not available: cannot import name 'DocumentRetriever' from 'retrieval.retriever' (c:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\retrieval\retriever.py)
+============================== warnings summary ===============================
+tests/backend/cognitive/test_triad_orchestrator.py::test_qwen_triad_logical_execution
+tests/backend/cognitive/test_triad_orchestrator.py::test_qwen_triad_logical_execution
+  c:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\models\database_models.py:19: SAWarning: This declarative base already contains a class with the same class name and module name as backend.models.database_models.User, and will be replaced in the string-lookup table.
+    class User(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_triad_orchestrator.py::test_qwen_triad_logical_execution
+======================== 1 failed, 2 warnings in 5.87s ========================

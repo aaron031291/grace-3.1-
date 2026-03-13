@@ -20,9 +20,9 @@ import json
 from models.database_models import (
     LearningExample,
     Episode,
-    Procedure,
-    GenesisKey
+    Procedure
 )
+from models.genesis_key_models import GenesisKey
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,7 @@ class GenesisMemoryChain:
             # Episodes
             episodes = self.session.query(Episode).filter(
                 Episode.genesis_key_id == genesis_key_id
-            ).order_by(Episode.timestamp).all()
+            ).order_by(Episode.created_at).all()
 
             # Procedures (via learning examples)
             procedures = self.session.query(Procedure).join(
@@ -97,8 +97,8 @@ class GenesisMemoryChain:
             # Build chain
             chain = {
                 "genesis_key_id": genesis_key_id,
-                "genesis_key_name": genesis_key.name if genesis_key else "Unknown",
-                "source": genesis_key.source if genesis_key else "Unknown",
+                "genesis_key_name": genesis_key.key_id if genesis_key else "Unknown",
+                "source": genesis_key.who_actor if genesis_key else "Unknown",
                 "created_at": genesis_key.created_at.isoformat() if genesis_key and genesis_key.created_at else None,
 
                 "learning_journey": {
@@ -142,7 +142,7 @@ class GenesisMemoryChain:
 
         except Exception as e:
             logger.error(f"[GENESIS-MEMORY-CHAIN] Error getting chain: {e}")
-            return {}
+            raise
 
     def _calculate_trust_trend(self, trust_scores: List[float]) -> str:
         """
@@ -294,10 +294,10 @@ class GenesisMemoryChain:
             timeline.append({
                 "timestamp": genesis_key.created_at.isoformat(),
                 "event_type": "genesis_key_created",
-                "description": f"Genesis Key '{genesis_key.name}' created",
+                "description": f"Genesis Key '{genesis_key.key_id}' created",
                 "data": {
-                    "genesis_key_id": genesis_key.id,
-                    "source": genesis_key.source
+                    "genesis_key_id": genesis_key.key_id,
+                    "source": genesis_key.who_actor
                 }
             })
 
@@ -317,9 +317,9 @@ class GenesisMemoryChain:
 
         # Episodes
         for ep in episodes:
-            if ep.timestamp:
+            if ep.created_at:
                 timeline.append({
-                    "timestamp": ep.timestamp.isoformat(),
+                    "timestamp": ep.created_at.isoformat(),
                     "event_type": "episode_created",
                     "description": f"Episode created (trust={ep.trust_score:.2f})",
                     "data": {
@@ -364,13 +364,13 @@ class GenesisMemoryChain:
             # Get all Genesis Keys with learning
             genesis_keys = self.session.query(
                 GenesisKey.id,
-                GenesisKey.name,
+                GenesisKey.key_id,
                 func.count(LearningExample.id).label('example_count')
             ).outerjoin(
                 LearningExample,
-                GenesisKey.id == LearningExample.genesis_key_id
+                GenesisKey.key_id == LearningExample.genesis_key_id
             ).group_by(
-                GenesisKey.id, GenesisKey.name
+                GenesisKey.id, GenesisKey.key_id
             ).having(
                 func.count(LearningExample.id) >= min_learning_examples
             ).all()

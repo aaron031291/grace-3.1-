@@ -1,0 +1,25 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 4 items
+
+tests/backend/cognitive/test_proactive_healing_engine.py::test_healing_orchestration_cycle PASSED [ 25%]
+tests/backend/cognitive/test_proactive_healing_engine.py::test_circuit_breaker_prevents_loops FAILED [ 50%]
+tests/backend/cognitive/test_proactive_healing_engine.py::test_delegates_to_immune_system PASSED [ 75%]
+tests/backend/cognitive/test_proactive_healing_engine.py::test_delegates_to_diagnostic_machine PASSED [100%]
+
+================================== FAILURES ===================================
+_____________________ test_circuit_breaker_prevents_loops _____________________
+tests\backend\cognitive\test_proactive_healing_engine.py:73: in test_circuit_breaker_prevents_loops
+    mock_broadcast.assert_called_once()
+C:\Python314\Lib\unittest\mock.py:964: in assert_called_once
+    raise AssertionError(msg)
+E   AssertionError: Expected '_broadcast_healing_event' to have been called once. Called 0 times.
+------------------------------ Captured log call ------------------------------
+WARNING  backend.cognitive.proactive_healing_engine:proactive_healing_engine.py:672 [PROACTIVE-HEALING] Circuit breaker tripped for database_reconnect
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_proactive_healing_engine.py::test_circuit_breaker_prevents_loops
+========================= 1 failed, 3 passed in 5.59s =========================

@@ -399,6 +399,8 @@ class LearningExample(BaseModel):
     content_quality = Column(Float, default=0.5)
     consensus_score = Column(Float, default=0.5)
     recency_score = Column(Float, default=1.0)
+    genesis_key_id = Column(String(255), nullable=True, index=True)
+    procedure_id = Column(Integer, nullable=True, index=True)
 
 
 class LearningPattern(BaseModel):
@@ -425,6 +427,7 @@ class Episode(BaseModel):
     trust_score = Column(Float, default=0.5, index=True)
     source = Column(String(255), default="system")
     context = Column(Text, nullable=True)
+    genesis_key_id = Column(String(255), nullable=True, index=True)
 
 
 class Procedure(BaseModel):
@@ -439,6 +442,7 @@ class Procedure(BaseModel):
     trust_score = Column(Float, default=0.5, index=True)
     success_rate = Column(Float, default=0.5)
     usage_count = Column(Integer, default=0)
+    genesis_key_id = Column(String(255), nullable=True, index=True)
 
 
 class LLMUsageStats(BaseModel):

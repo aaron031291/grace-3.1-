@@ -498,7 +498,8 @@ class QwenTriadOrchestrator:
                 system_prompt,
             ))
         else:
-            tasks.append(asyncio.coroutine(lambda: "")())
+            async def _empty(): return ""
+            tasks.append(_empty())
 
         if ctx.triage.get("needs_reasoning", True):
             tasks.append(self._call_model(
@@ -509,7 +510,8 @@ class QwenTriadOrchestrator:
                 system_prompt,
             ))
         else:
-            tasks.append(asyncio.coroutine(lambda: "")())
+            async def _empty(): return ""
+            tasks.append(_empty())
 
         tasks.append(self._call_model(
             "fast",
@@ -520,6 +522,12 @@ class QwenTriadOrchestrator:
         ))
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        for i, res in enumerate(results):
+            if isinstance(res, Exception):
+                logger.error(f"Triad task {i} failed with exception: {res}")
+                import traceback
+                traceback.print_exception(type(res), res, res.__traceback__)
 
         ctx.code_output = results[0] if not isinstance(results[0], Exception) else ""
         ctx.reason_output = results[1] if not isinstance(results[1], Exception) else ""

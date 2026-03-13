@@ -1,0 +1,112 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 4 items
+
+tests/backend/cognitive/test_engine.py::test_engine_ooda_happy_path FAILED [ 25%]
+tests/backend/cognitive/test_engine.py::test_engine_strict_mode_blocks_unknowns FAILED [ 50%]
+tests/backend/cognitive/test_engine.py::test_engine_strict_mode_blocks_act_validation PASSED [ 75%]
+tests/backend/cognitive/test_engine.py::test_engine_decision_freeze PASSED [100%]
+
+================================== FAILURES ===================================
+_________________________ test_engine_ooda_happy_path _________________________
+
+    def test_engine_ooda_happy_path():
+        # Mocking DecisionLogger to prevent file writes
+        mock_logger = MagicMock()
+    
+        engine = CognitiveEngine(decision_logger=mock_logger, enable_strict_mode=True)
+    
+        # 1. Begin Decision
+        ctx = engine.begin_decision(
+            problem_statement="Test feature implementation",
+            goal="Add OODA tests",
+            success_criteria=["Tests pass"]
+        )
+        assert ctx.decision_id in engine.get_active_decisions()[0].decision_id
+    
+        # 2. Observe
+        engine.observe(ctx, {
+            "status": "ready",
+            "unknown_var": None,
+            "inferred_var": {"inferred": True, "value": "guess", "confidence": 0.6}
+        })
+>       assert ctx.ambiguity_ledger.known_variables["status"] == "ready"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'AmbiguityLedger' object has no attribute 'known_variables'
+
+tests\backend\cognitive\test_engine.py:28: AttributeError
+___________________ test_engine_strict_mode_blocks_unknowns ___________________
+
+    def test_engine_strict_mode_blocks_unknowns():
+        mock_logger = MagicMock()
+        engine = CognitiveEngine(decision_logger=mock_logger, enable_strict_mode=True)
+    
+        ctx = engine.begin_decision("Irreversible DB drop", "Drop", ["Drop complete"])
+        ctx.is_reversible = False  # Irreversible action
+    
+        # Observe blocking unknown
+        ctx.ambiguity_ledger.add_unknown("db_connected_users", blocking=True)
+    
+        # Orient should raise ValueError due to strict mode + blocking unknowns + irreversible
+        with pytest.raises(ValueError, match="Blocking unknowns prevent irreversible action"):
+>           engine.orient(ctx, constraints={}, context_info={})
+
+tests\backend\cognitive\test_engine.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\cognitive\engine.py:194: in orient
+    self.ooda.orient(context_info, constraints)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.cognitive.ooda.OODALoop object at 0x000001B0E5E09210>
+context = {}, constraints = {}
+
+    def orient(
+        self,
+        context: Dict[str, Any],
+        constraints: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """
+        ORIENT: Understand the context and constraints.
+    
+        What context matters? What are the constraints?
+    
+        Args:
+            context: Contextual information
+            constraints: Constraints on the solution space
+        """
+        if self.state.current_phase != OODAPhase.ORIENT:
+>           raise ValueError(
+                f"Cannot orient in phase {self.state.current_phase}. "
+                "Must complete OBSERVE first."
+            )
+E           ValueError: Cannot orient in phase OODAPhase.OBSERVE. Must complete OBSERVE first.
+
+backend\cognitive\ooda.py:79: ValueError
+
+During handling of the above exception, another exception occurred:
+
+    def test_engine_strict_mode_blocks_unknowns():
+        mock_logger = MagicMock()
+        engine = CognitiveEngine(decision_logger=mock_logger, enable_strict_mode=True)
+    
+        ctx = engine.begin_decision("Irreversible DB drop", "Drop", ["Drop complete"])
+        ctx.is_reversible = False  # Irreversible action
+    
+        # Observe blocking unknown
+        ctx.ambiguity_ledger.add_unknown("db_connected_users", blocking=True)
+    
+        # Orient should raise ValueError due to strict mode + blocking unknowns + irreversible
+>       with pytest.raises(ValueError, match="Blocking unknowns prevent irreversible action"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'Blocking unknowns prevent irreversible action'
+E         Actual message: 'Cannot orient in phase OODAPhase.OBSERVE. Must complete OBSERVE first.'
+
+tests\backend\cognitive\test_engine.py:78: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_engine.py::test_engine_ooda_happy_path - ...
+FAILED tests/backend/cognitive/test_engine.py::test_engine_strict_mode_blocks_unknowns
+========================= 2 failed, 2 passed in 0.11s =========================

@@ -1,0 +1,67 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/backend/cognitive/test_immune_system.py::test_rollback_mechanism FAILED [100%]
+
+================================== FAILURES ===================================
+___________________________ test_rollback_mechanism ___________________________
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:1375: in patched
+    with self.decoration_helper(patched,
+..\..\AppData\Local\Programs\Python\Python311\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:1357: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\contextlib.py:517: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:1430: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\pkgutil.py:700: in resolve_name
+    mod = importlib.import_module(modname)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\importlib\__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\api\__init__.py:5: in <module>
+    from .ingest import router as ingest_router
+backend\api\ingest.py:12: in <module>
+    from backend.ingestion.service import TextIngestionService
+backend\ingestion\__init__.py:5: in <module>
+    from .service import TextIngestionService, TextChunker
+backend\ingestion\service.py:19: in <module>
+    from backend.models.database_models import Document, DocumentChunk
+backend\models\database_models.py:19: in <module>
+    class User(BaseModel):
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\decl_api.py:847: in __init_subclass__
+    _as_declarative(cls._sa_registry, cls, cls.__dict__)
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\decl_base.py:247: in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\decl_base.py:328: in setup_mapping
+    return _ClassScanMapperConfig(
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\decl_base.py:578: in __init__
+    self._setup_table(table)
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\decl_base.py:1729: in _setup_table
+    table_cls(
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\util\deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\sql\schema.py:436: in __new__
+    return cls._new(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\sql\schema.py:468: in _new
+    raise exc.InvalidRequestError(
+E   sqlalchemy.exc.InvalidRequestError: Table 'users' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+------------------------------ Captured log call ------------------------------
+WARNING  retrieval:__init__.py:10 Could not import retriever: cannot import name 'cached_download' from 'huggingface_hub' (C:\Users\aaron\AppData\Local\Programs\Python\Python311\Lib\site-packages\huggingface_hub\__init__.py)
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_immune_system.py::test_rollback_mechanism
+============================== 1 failed in 4.60s ==============================
