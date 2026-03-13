@@ -24,7 +24,7 @@ Security Integrations:
 
 RECOMMENDED: Use GraceMagmaSystem for the unified experience:
 
-    from cognitive.magma import get_grace_magma
+    from backend.cognitive.magma import get_grace_magma
 
     magma = get_grace_magma()
 
@@ -51,7 +51,7 @@ RECOMMENDED: Use GraceMagmaSystem for the unified experience:
 
 Alternative: Use MagmaMemory for low-level access:
 
-    from cognitive.magma import MagmaMemory
+    from backend.cognitive.magma import MagmaMemory
 
     magma = MagmaMemory()
     result = magma.ingest("Content here")
@@ -59,7 +59,7 @@ Alternative: Use MagmaMemory for low-level access:
 """
 
 # Core relation graphs
-from cognitive.magma.relation_graphs import (
+from backend.cognitive.magma.relation_graphs import (
     MagmaRelationGraphs,
     SemanticGraph,
     TemporalGraph,
@@ -72,7 +72,7 @@ from cognitive.magma.relation_graphs import (
 )
 
 # Intent-aware routing
-from cognitive.magma.intent_router import (
+from backend.cognitive.magma.intent_router import (
     IntentAwareRouter,
     QueryIntent,
     AnchorType,
@@ -85,7 +85,7 @@ from cognitive.magma.intent_router import (
 )
 
 # RRF Fusion
-from cognitive.magma.rrf_fusion import (
+from backend.cognitive.magma.rrf_fusion import (
     MagmaFusion,
     RRFFusion,
     WeightedRRFFusion,
@@ -98,7 +98,7 @@ from cognitive.magma.rrf_fusion import (
 )
 
 # Topological retrieval
-from cognitive.magma.topological_retrieval import (
+from backend.cognitive.magma.topological_retrieval import (
     AdaptiveTopologicalRetriever,
     GraphTraverser,
     TraversalPolicy,
@@ -107,7 +107,7 @@ from cognitive.magma.topological_retrieval import (
 )
 
 # Synaptic ingestion
-from cognitive.magma.synaptic_ingestion import (
+from backend.cognitive.magma.synaptic_ingestion import (
     SynapticIngestionPipeline,
     EventSegmenter,
     SemanticLinker,
@@ -120,7 +120,7 @@ from cognitive.magma.synaptic_ingestion import (
 )
 
 # Async consolidation
-from cognitive.magma.async_consolidation import (
+from backend.cognitive.magma.async_consolidation import (
     AsyncOperationQueue,
     NeighborRetriever,
     ContextSynthesizer,
@@ -132,7 +132,7 @@ from cognitive.magma.async_consolidation import (
 )
 
 # Causal inference
-from cognitive.magma.causal_inference import (
+from backend.cognitive.magma.causal_inference import (
     LLMCausalInferencer,
     CausalPatternDetector,
     CausalClaim,
@@ -142,7 +142,7 @@ from cognitive.magma.causal_inference import (
 )
 
 # Unified Grace Magma System (RECOMMENDED)
-from cognitive.magma.grace_magma_system import (
+from backend.cognitive.magma.grace_magma_system import (
     GraceMagmaSystem,
     GraceMagmaConfig,
     get_grace_magma,
@@ -154,7 +154,7 @@ from cognitive.magma.grace_magma_system import (
 )
 
 # Layer integrations
-from cognitive.magma.layer_integrations import (
+from backend.cognitive.magma.layer_integrations import (
     MagmaMessageBusConnector,
     InterpreterPatternMemory,
     JudgementDecisionMemory,

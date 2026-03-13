@@ -1,0 +1,16 @@
+--- COGNITIVE ORPHANS (15) ---
+autonomous_healing_loop.py
+autonomous_master_integration.py
+blueprint_engine.py
+genesis_memory_chains.py
+graph_persistence.py
+knowledge_cycle.py
+memory_mesh_metrics.py
+memory_mesh_snapshot.py
+memory_reconciler.py
+qwen_triad_orchestrator.py
+sandbox_engine.py
+semantic_procedure_finder.py
+telemetry_evaluator.py
+training_pipeline.py
+user_pattern_learner.py

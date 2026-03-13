@@ -17,7 +17,7 @@ from datetime import datetime
 import re
 import logging
 
-from cognitive.magma.relation_graphs import (
+from backend.cognitive.magma.relation_graphs import (
     MagmaRelationGraphs,
     GraphNode,
     GraphEdge,

@@ -16,7 +16,7 @@ The librarian system automatically organizes and indexes all files from:
 
 from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, CheckConstraint
 from sqlalchemy.orm import relationship
-from database.base import BaseModel
+from backend.database.base import BaseModel
 from datetime import datetime
 
 

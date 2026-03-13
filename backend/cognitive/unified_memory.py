@@ -34,11 +34,11 @@ _DEFAULT_KB_PATH = Path(os.environ.get("GRACE_KNOWLEDGE_BASE_PATH", "."))
 def _get_session():
     """Get a DB session. Caller must close it (or use as context)."""
     try:
-        from database.session import SessionLocal
+        from backend.database.session import SessionLocal
         if SessionLocal is None:
-            from database.session import initialize_session_factory
+            from backend.database.session import initialize_session_factory
             initialize_session_factory()
-            from database.session import SessionLocal as SL
+            from backend.database.session import SessionLocal as SL
             return SL()
         return SessionLocal()
     except Exception as e:
@@ -389,7 +389,7 @@ class UnifiedMemory:
             return
             
         try:
-            from cognitive.episodic_memory import Episode
+            from backend.cognitive.episodic_memory import Episode
             from datetime import datetime, timedelta
             
             # Look at episodes from the last hour
@@ -411,7 +411,7 @@ class UnifiedMemory:
                 if count >= 3: # Threshold for repeated failure
                     logger.warning(f"[ACTIVE-RESILIENCE] Detected {count} repeated failures for module '{source}'. Dispatching self-healing event.")
                     try:
-                        from cognitive.event_bus import publish_async
+                        from backend.cognitive.event_bus import publish_async
                         publish_async("system.repeated_failure_detected", {
                             "module": source,
                             "failure_count": count,
@@ -437,7 +437,7 @@ class UnifiedMemory:
                     if avg_trust < 0.5:
                         logger.warning(f"[ACTIVE-RESILIENCE] Trust degradation detected for '{source}' (Avg: {avg_trust:.2f}). Dispatching retraining workflow.")
                         try:
-                            from cognitive.event_bus import publish_async
+                            from backend.cognitive.event_bus import publish_async
                             publish_async("learning.needs_retraining", {
                                 "model_or_source": source,
                                 "average_trust": avg_trust,

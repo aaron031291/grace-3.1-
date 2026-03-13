@@ -21,15 +21,15 @@ import logging
 from collections import deque
 import heapq
 
-from cognitive.magma.relation_graphs import (
+from backend.cognitive.magma.relation_graphs import (
     MagmaRelationGraphs,
     GraphNode,
     GraphEdge,
     RelationType,
     BaseRelationGraph
 )
-from cognitive.magma.intent_router import QueryAnalysis, Anchor, AnchorType
-from cognitive.magma.rrf_fusion import RetrievalResult
+from backend.cognitive.magma.intent_router import QueryAnalysis, Anchor, AnchorType
+from backend.cognitive.magma.rrf_fusion import RetrievalResult
 
 logger = logging.getLogger(__name__)
 

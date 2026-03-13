@@ -491,6 +491,30 @@ def layer4_verify(aligned_output: str, prompt: str) -> dict:
     except Exception as e:
         logger.warning(f"Constitutional alignment check failed: {e}")
 
+    # Z3 Physics Formal Verification
+    try:
+        from backend.cognitive.physics.qwen_z3_pipeline import QwenZ3Pipeline
+        from backend.cognitive.physics.z3_sandbox import Z3Sandbox
+
+        # Translate aligned output to formal logic
+        z3_pipeline = QwenZ3Pipeline()
+        z3_constraint = z3_pipeline.generate_z3_constraint(aligned_output[:2000])
+
+        if z3_constraint:
+            # Validate formally against laws of physics
+            sandbox = Z3Sandbox()
+            is_valid, sandbox_msg = sandbox.test_generated_constraint(z3_constraint)
+
+            verification["z3_verified"] = is_valid
+            if not is_valid:
+                verification["contradiction_flags"].append(f"Z3 Physics Violation: {sandbox_msg}")
+        else:
+            # Failed to generate a constraint, neutral pass
+            verification["z3_verified"] = "Skipped"
+    except Exception as e:
+        logger.warning(f"Z3 Physics validation failed: {e}")
+        verification["z3_verified"] = "Error"
+
     # Determine pass/fail
     trust = verification.get("trust_score", 0)
     if isinstance(trust, dict):

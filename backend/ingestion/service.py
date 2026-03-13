@@ -12,12 +12,12 @@ from pathlib import Path
 from datetime import datetime, timezone
 import numpy as np
 
-from embedding import EmbeddingModel
-from vector_db.client import get_qdrant_client
-from database import session as db_session
-from database.session import initialize_session_factory
-from models.database_models import Document, DocumentChunk
-from settings import settings
+from backend.embedding import EmbeddingModel
+from backend.vector_db.client import get_qdrant_client
+from backend.database import session as db_session
+from backend.database.session import initialize_session_factory
+from backend.models.database_models import Document, DocumentChunk
+from backend.settings import settings
 
 # Import cognitive blueprint decorators
 try:

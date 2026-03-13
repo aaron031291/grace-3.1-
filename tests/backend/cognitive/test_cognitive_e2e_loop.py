@@ -15,16 +15,17 @@ from backend.cognitive_framework.cognitive_blueprint import OODALoopExecutor
 
 # Core Subsystems to mock
 from backend.core.clarity_framework import ClarityFramework
+import backend.api._genesis_tracker
 
 @pytest.fixture
 def sample_cognitive_event():
     """Generates a high-risk error event simulating a subsystem crash."""
     return CognitiveEvent(
-        id="evt_test_123",
-        type="system.crash",
-        source_component="database_service",
-        payload={"error": "Connection pool exhausted", "stack_trace": "..."},
-        severity=5,
+        id="evt_test_456",
+        type="guardian.log_error",
+        source_component="api_service",
+        payload={"error": "SyntaxWarning in module", "stack_trace": "..."},
+        severity=3,
         timestamp="2026-03-14T10:00:00Z"
     )
 
@@ -37,16 +38,15 @@ async def test_cognitive_framework_e2e_pipeline(sample_cognitive_event):
     
     # Setup Mocks so we don't hit live Event Bus / Database
     with patch("backend.core.clarity_framework.ClarityFramework.record_decision") as mock_clarity, \
-         patch("backend.cognitive.event_bus.get_event_bus") as mock_bus_getter, \
-         patch("backend.cognitive_framework.cognitive_playbook_executor.queue_submit") as mock_queue_submit, \
+         patch("backend.cognitive.event_bus.publish") as mock_bus_publish, \
+         patch("backend.coding_agent.task_queue.submit") as mock_queue_submit, \
          patch("backend.api._genesis_tracker.track") as mock_track:
          
         # Mock Task Queue
         mock_queue_submit.return_value = "task_999"
 
-        # Mock Event Bus
-        mock_bus = MagicMock()
-        mock_bus_getter.return_value = mock_bus
+        # Mock Event Bus Publish
+        mock_bus_publish.return_value = None
         
         # Mock Clarity Framework Return
         mock_decision = MagicMock()
@@ -69,9 +69,9 @@ async def test_cognitive_framework_e2e_pipeline(sample_cognitive_event):
         clarity_args, clarity_kwargs = mock_clarity.call_args
         
         assert "what" in clarity_kwargs
-        assert "Processed event system.crash" in clarity_kwargs["what"]
+        assert "Processed event guardian.log_error" in clarity_kwargs["what"]
         assert "who" in clarity_kwargs and clarity_kwargs["who"]["actor"] == "cognitive_framework"
-        assert "where" in clarity_kwargs and "database_service" in clarity_kwargs["where"]["impacted_components"]
+        assert "where" in clarity_kwargs and "api_service" in clarity_kwargs["where"]["impacted_components"]
         assert "risk_score" in clarity_kwargs
         
         # Phase B: The OODA Loop and Chess Mode Integration
@@ -91,7 +91,7 @@ async def test_cognitive_framework_e2e_pipeline(sample_cognitive_event):
         
         # 1. Orient & Observe check
         assert "orientation" in ooda_context
-        assert ooda_context["orientation"]["original_problem"] == f"Needs coding or research resolution for event evt_test_123"
+        assert ooda_context["orientation"]["original_problem"] == f"Needs coding or research resolution for event evt_test_456"
         assert "Must be reversible" in ooda_context["orientation"]["constraints"]
         
         # 2. Chess Mode Decision Check

@@ -20,8 +20,8 @@ import time
 import uuid
 import logging
 
-from cognitive.magma.relation_graphs import MagmaRelationGraphs, GraphNode
-from cognitive.magma.rrf_fusion import RetrievalResult, FusedResult
+from backend.cognitive.magma.relation_graphs import MagmaRelationGraphs, GraphNode
+from backend.cognitive.magma.rrf_fusion import RetrievalResult, FusedResult
 
 logger = logging.getLogger(__name__)
 

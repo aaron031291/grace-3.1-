@@ -1,0 +1,126 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/backend/cognitive/test_unified_memory_e2e_loop.py::test_unified_memory_12_layer_e2e_loop FAILED [100%]
+
+================================== FAILURES ===================================
+____________________ test_unified_memory_12_layer_e2e_loop ____________________
+
+    @pytest.mark.asyncio
+    async def test_unified_memory_12_layer_e2e_loop():
+        """
+        Tests the full 12-layer Memory Subsystem loop:
+        1. Memory Ingestion (Episodic)
+        2. Trust Degradation Anomaly Detection (analyze_for_resilience)
+        3. Event Bus Publication (system.repeated_failure_detected)
+        4. Websocket Broadcast interception (Simulated via Bus context)
+        5. Cognitive Framework Ingestion
+        6. Blast Radius & Consequence Engine Context
+        7. OODA Loop Orientation
+        8. OODA Loop Chess-Mode Generation
+        9. 16-Question Evaluation
+        10. Actuation Routing (Playbook Executor)
+        11. Swarm Coding Agent/Learning Loop Task Queue Dispatch
+        12. Clarity Framework 5W1H Ledger Recording
+        """
+    
+        # 1. Setup our Mocks for the 12 Layers to avoid needing a live DB/ZMQ
+        with patch("backend.core.clarity_framework.ClarityFramework.record_decision") as mock_clarity, \
+             patch("backend.coding_agent.task_queue.submit") as mock_queue, \
+             patch("backend.cognitive.event_bus.publish") as mock_publish, \
+             patch("backend.cognitive.event_bus.publish_async") as mock_publish_async, \
+             patch("backend.api._genesis_tracker.track") as mock_track, \
+             patch("backend.cognitive.unified_memory._get_session") as mock_session_getter:
+    
+            # Mock the DB Session for memory retrieval
+            mock_session = MagicMock()
+            mock_session_getter.return_value = mock_session
+    
+            # Setup simulated degraded episodes (Trust < 0.5) to trigger the anomaly
+            mock_episode = MagicMock()
+            mock_episode.source = "synaptic_core_orchestration"
+            mock_episode.trust_score = 0.2
+            mock_episode.outcome = "failed to generate valid response"
+            mock_episode.timestamp = datetime.utcnow()
+    
+            # Mock the sqlalchemy query chain: session.query().filter().order_by().limit().all()
+            mock_query = MagicMock()
+            mock_session.query.return_value = mock_query
+            mock_query.filter.return_value = mock_query
+            mock_query.order_by.return_value = mock_query
+            mock_query.limit.return_value = mock_query
+            mock_query.all.return_value = [mock_episode, mock_episode, mock_episode] # 3 failures triggers it
+    
+            # --- LAYER 1-3: Memory Ingestion & Resilience Anomaly Detection ---
+            mem = UnifiedMemory.get_instance()
+            mem.analyze_for_resilience()
+    
+            # Assert Layer 3: Event Bus published the retraining event due to degraded trust
+>           mock_publish_async.assert_called_with(
+                "learning.needs_retraining",
+                {
+                    "model_or_source": "synaptic_core_orchestration",
+                    "average_trust": 0.2, # Exact average of our three mocks
+                    "episode_count": 3
+                },
+                source="unified_memory"
+            )
+
+tests\backend\cognitive\test_unified_memory_e2e_loop.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock name='publish_async' id='2333855476880'>
+args = ('learning.needs_retraining', {'average_trust': 0.2, 'episode_count': 3, 'model_or_source': 'synaptic_core_orchestration'})
+kwargs = {'source': 'unified_memory'}
+expected = "publish_async('learning.needs_retraining', {'model_or_source': 'synaptic_core_orchestration', 'average_trust': 0.2, 'episode_count': 3}, source='unified_memory')"
+actual = 'not called.'
+error_message = "expected call not found.\nExpected: publish_async('learning.needs_retraining', {'model_or_source': 'synaptic_core_orchestration', 'average_trust': 0.2, 'episode_count': 3}, source='unified_memory')\n  Actual: not called."
+
+    def assert_called_with(self, /, *args, **kwargs):
+        """assert that the last call was made with the specified arguments.
+    
+        Raises an AssertionError if the args and keyword args passed in are
+        different to the last call to the mock."""
+        if self.call_args is None:
+            expected = self._format_mock_call_signature(args, kwargs)
+            actual = 'not called.'
+            error_message = ('expected call not found.\nExpected: %s\n  Actual: %s'
+                    % (expected, actual))
+>           raise AssertionError(error_message)
+E           AssertionError: expected call not found.
+E           Expected: publish_async('learning.needs_retraining', {'model_or_source': 'synaptic_core_orchestration', 'average_trust': 0.2, 'episode_count': 3}, source='unified_memory')
+E             Actual: not called.
+
+..\..\AppData\Local\Programs\Python\Python311\Lib\unittest\mock.py:930: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    backend.cognitive.unified_memory:unified_memory.py:450 [ACTIVE-RESILIENCE] Analysis failed: No module named 'database'
+============================== warnings summary ===============================
+tests/backend/cognitive/test_unified_memory_e2e_loop.py::test_unified_memory_12_layer_e2e_loop
+  C:\Users\aaron\AppData\Local\Programs\Python\Python311\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread zmq-event-bridge
+  
+  Traceback (most recent call last):
+    File "C:\Users\aaron\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+      self.run()
+    File "C:\Users\aaron\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 982, in run
+      self._target(*self._args, **self._kwargs)
+    File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\cognitive\event_bus.py", line 116, in _zmq_bridge_loop
+      _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
+    File "C:\Users\aaron\AppData\Roaming\Python\Python311\site-packages\zmq\sugar\socket.py", line 320, in bind
+      super().bind(addr)
+    File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+    File "zmq/backend/cython/_zmq.py", line 190, in zmq.backend.cython._zmq._check_rc
+  zmq.error.ZMQError: Address in use (addr='tcp://127.0.0.1:5520')
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/backend/cognitive/test_unified_memory_e2e_loop.py::test_unified_memory_12_layer_e2e_loop
+======================== 1 failed, 1 warning in 7.87s =========================

@@ -36,6 +36,7 @@ class EscalationManager:
         elif risk_score <= 0.5:
             response["level"] = 1
             response["action"] = "research_mission"
+            response["playbook"] = "research_mission_default"
             
         elif risk_score <= 0.7:
             response["level"] = 2

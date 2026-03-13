@@ -28,9 +28,8 @@ class PlaybookExecutor:
 
         # 1. Dispatch event to Event Bus for real-time dashboards
         try:
-            from cognitive.event_bus import get_event_bus
-            bus = get_event_bus()
-            bus.publish("cognitive.playbook_executor", {
+            from backend.cognitive.event_bus import publish as bus_publish
+            bus_publish("cognitive.playbook_executor", {
                 "action": "execute",
                 "playbook_id": playbook_id,
                 "event_id": event.id,
@@ -42,7 +41,7 @@ class PlaybookExecutor:
         # 2. Track via Genesis Tracker
         genesis_id = None
         try:
-            from api._genesis_tracker import track
+            from backend.api._genesis_tracker import track
             genesis_id = track(
                 key_type="system_event",
                 what=f"Cognitive execution of playbook '{playbook_id}' for event {event.id}",
@@ -65,7 +64,7 @@ class PlaybookExecutor:
                 ooda_executor = OODALoopExecutor()
                 
                 # Run the OODA loop explicitly before delegating the coding task
-                problem_statement = f"Needs coding or research resolution for event {event.id}"
+                problem_statement = f"Needs coding or research resolution for event {event.id} ({event.type})"
                 event_ctx = {"event_type": event.type, "payload": event.payload, "component": event.source_component}
                 
                 # Await the asynchronous thought process (Chess Mode + 16 Questions)

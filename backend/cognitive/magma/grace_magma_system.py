@@ -21,7 +21,7 @@ Security Integration:
 - Governance: Constitutional enforcement
 
 Usage:
-    from cognitive.magma.grace_magma_system import GraceMagmaSystem, get_grace_magma
+    from backend.cognitive.magma.grace_magma_system import GraceMagmaSystem, get_grace_magma
 
     # Get singleton instance
     magma = get_grace_magma()
@@ -141,12 +141,12 @@ class GraceMagmaSystem:
 
             try:
                 # 1. Initialize core Magma memory
-                from cognitive.magma import MagmaMemory
+                from backend.cognitive.magma import MagmaMemory
                 self._magma = MagmaMemory(embedding_fn=self._embedding_fn)
                 logger.info("[GRACE-MAGMA] Core MagmaMemory initialized")
 
                 # 2. Initialize layer integrations
-                from cognitive.magma.layer_integrations import (
+                from backend.cognitive.magma.layer_integrations import (
                     MagmaMessageBusConnector,
                     InterpreterPatternMemory,
                     JudgementDecisionMemory,

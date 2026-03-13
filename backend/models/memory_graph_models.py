@@ -11,7 +11,7 @@ what topics they focus on, and how Grace should adapt.
 
 from sqlalchemy import Column, String, Text, Boolean, Integer, Float, DateTime, JSON, ForeignKey, Index
 from sqlalchemy.orm import relationship
-from database.base import BaseModel
+from backend.database.base import BaseModel
 from datetime import datetime, timezone
 
 
