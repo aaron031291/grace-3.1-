@@ -353,6 +353,16 @@ COMPLIANCE_PRESETS = {
             "Regular exercises and testing must be conducted",
         ],
     },
+    "iso_42001": {
+        "name": "ISO/IEC 42001 Artificial Intelligence Management System",
+        "rules": [
+            "AI system impact and risk assessments must be continuously documented",
+            "Algorithmic transparency and explainability must be maintained (5W1H)",
+            "Bias, fairness, and hallucination metrics must be monitored in real-time",
+            "Clear boundaries for autonomous actuation must be strictly enforced",
+            "Robust human-in-the-loop (HITL) oversight procedures must exist for high-risk actions",
+        ],
+    },
 }
 
 

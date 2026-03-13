@@ -90,6 +90,7 @@ def submit(
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "time_context": time_ctx,   # available to worker/handler
+        "ooda_context": context.get("ooda_context", {}) if context else {} # Preserved OODA logic from Cognitive Framework
     }
 
     with _queue_lock:

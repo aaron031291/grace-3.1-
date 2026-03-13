@@ -1,5 +1,4 @@
-if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
-    """
+"""
 Genesis Key Knowledge Base Integration.
 
 Auto-populates Genesis Keys in knowledge_base/layer_1/genesis_key folder.

@@ -130,6 +130,29 @@ class DeepTestEngine:
         except Exception:
             pass
 
+        # Event Bus and WebSocket publishing
+        try:
+            from cognitive.event_bus import publish_async
+            from diagnostic_machine.realtime import get_event_emitter
+            import asyncio
+            
+            publish_async("test.logic_tests_completed", results, source="deep_test_engine")
+            
+            emitter = get_event_emitter()
+            async def _emit():
+                await emitter.emit_cycle_completed(results)
+                
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop.create_task(_emit())
+                else:
+                    loop.run_until_complete(_emit())
+            except RuntimeError:
+                asyncio.run(_emit())
+        except Exception as e:
+            logger.warning(f"[TESTS] Failed to publish logic test results: {e}")
+
         self._save_results("logic_test", results)
         return results
 
@@ -395,6 +418,29 @@ class DeepTestEngine:
                 mini_result["total"] = len(checks)
                 mini_result["duration_ms"] = round((time.time() - cycle_start) * 1000, 1)
                 self._stress_results.append(mini_result)
+
+                # Event Bus and WebSocket publishing for stress test cycle
+                try:
+                    from diagnostic_machine.realtime import get_event_emitter
+                    from cognitive.event_bus import publish_async
+                    import asyncio
+                    
+                    publish_async("stress_test.cycle_completed", mini_result, source="deep_test_engine")
+                    
+                    emitter = get_event_emitter()
+                    async def _emit():
+                        await emitter.emit_cycle_completed(mini_result)
+                        
+                    try:
+                        loop = asyncio.get_event_loop()
+                        if loop.is_running():
+                            loop.create_task(_emit())
+                        else:
+                            loop.run_until_complete(_emit())
+                    except RuntimeError:
+                        asyncio.run(_emit())
+                except Exception as e:
+                    logger.warning(f"[STRESS] Failed to publish stress test results: {e}")
 
                 # If something broke, trigger healing + consensus diagnosis
                 if passed < len(checks):

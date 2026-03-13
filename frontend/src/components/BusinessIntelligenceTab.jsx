@@ -161,8 +161,82 @@ export default function BusinessIntelligenceTab() {
           </div>
         )}
 
+        {/* Cognitive Framework Live Feed */}
+        <CognitiveLiveFeed />
+
         <BackendPanel prefixes={['/kpi', '/telemetry', '/monitoring', '/api/bi']} label="BI & Analytics" />
       </div>
+    </div>
+  );
+}
+
+function CognitiveLiveFeed() {
+  const [decisions, setDecisions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchDecisions = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/bi/clarity-decisions`);
+      if (res.ok) {
+        const data = await res.json();
+        setDecisions(data.decisions || []);
+      }
+    } catch (e) {
+      console.error("Failed to fetch cognitive decisions:", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDecisions();
+    const intv = setInterval(fetchDecisions, 10000);
+    return () => clearInterval(intv);
+  }, [fetchDecisions]);
+
+  return (
+    <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '16px 18px', marginTop: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+        <div style={{ fontSize: 14, fontWeight: 800 }}>⚡ Cognitive Framework Live Feed (5W1H)</div>
+        <div style={{ fontSize: 11, color: C.dim }}>{decisions.length} Recent Decisions</div>
+      </div>
+      
+      {loading && decisions.length === 0 ? (
+        <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>Awaiting Cognitive Streams...</div>
+      ) : decisions.length === 0 ? (
+        <div style={{ padding: 20, textAlign: 'center', color: C.dim, fontSize: 12 }}>No recent cognitive actions detected.</div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: 400, overflowY: 'auto', paddingRight: 4 }}>
+          {decisions.map(d => (
+            <div key={d.id} style={{ background: C.bgDark, border: `1px solid ${C.border}`, borderRadius: 6, padding: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: C.accent }}>{d.what}</span>
+                <span style={{ fontSize: 10, color: C.dim }}>{new Date(d.when).toLocaleTimeString()}</span>
+              </div>
+              
+              <div style={{ fontSize: 11, color: C.text, marginBottom: 8, fontStyle: 'italic' }}>
+                <span style={{ color: C.muted, fontWeight: 600 }}>Why:</span> {d.why}
+              </div>
+              
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, fontSize: 10 }}>
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: 4 }}>
+                  <span style={{ color: C.muted }}>Who:</span> {typeof d.who === 'string' ? d.who : JSON.stringify(d.who)}
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: 4 }}>
+                  <span style={{ color: C.muted }}>Where:</span> {typeof d.where === 'string' ? d.where : JSON.stringify(d.where)}
+                </div>
+                <div style={{ background: 'rgba(255,152,0,0.1)', padding: '2px 6px', borderRadius: 4, color: C.warn, fontWeight: 600 }}>
+                  Risk: {d.risk_score}
+                </div>
+              </div>
+
+              <div style={{ marginTop: 8, fontSize: 10, color: C.text, background: 'rgba(0,0,0,0.2)', padding: '6px 8px', borderRadius: 4, borderLeft: `2px solid ${C.info}` }}>
+                <span style={{ color: C.info, fontWeight: 600 }}>Action (How):</span> {typeof d.how === 'string' ? d.how : JSON.stringify(d.how)}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

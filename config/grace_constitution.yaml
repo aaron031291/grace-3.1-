@@ -32,6 +32,18 @@ pillars:
     obligations:
       - "Run governance hooks before exposing features"
 
+  - name: "trust_and_transparency"
+    description: "All decisions, blast-radius simulations, and reasoning logic must be securely recorded."
+    obligations:
+      - "Decisions must be logged to the Clarity Framework using the 5W1H schema."
+      - "Artifact tracking must maintain cryptographically sound immutability."
+
+  - name: "self_preservation_and_healing"
+    description: "The system must operate an autonomous closed-loop healing architecture to prevent degradation."
+    obligations:
+      - "Detect, analyze, and mitigate system anomalies natively via the Proactive Healing Engine."
+      - "Execute safety-gated healing playbooks directly via the Playbook Executor."
+
 clauses:
   - id: "clause_1_provenance"
     text: "Baseline mismatch (>0 new/deleted files) without an approved genesis root triggers Guardian Boot Gate failure."

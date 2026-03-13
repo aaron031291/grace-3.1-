@@ -70,6 +70,28 @@ class GraceCharter:
         """
         Helper method checking Clause 4: 
         Actions with risk score > 0.7 must escalate and require explicit approval.
+        Reads the threshold dynamically from the actual Constitution text.
         """
-        # Hardcoded check mapping to clause_4_approval
-        return risk_score <= 0.7
+        limit = 0.7
+        constitution = cls.get_constitution()
+        for clause in constitution.clauses:
+            if clause.id == "clause_4_approval":
+                import re
+                match = re.search(r'>\s*([0-9.]+)', clause.text)
+                if match:
+                    limit = float(match.group(1))
+                break
+        return risk_score <= limit
+
+    @classmethod
+    def validate_kernel_boot(cls, kernel_name: str, has_handshake: bool) -> bool:
+        """
+        Validates Clause 2: Handshake pipeline requirements.
+        Ensures `guardian.signal_kernel_boot()` execution.
+        """
+        if not has_handshake:
+            logger.warning(f"Kernel '{kernel_name}' failed boot validation: missing required handshake.")
+            return False
+            
+        logger.info(f"Kernel '{kernel_name}' successfully passed Handshake Validation.")
+        return True

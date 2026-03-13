@@ -25,6 +25,8 @@ allowed_paths_for_io:
   - "backend/memory_tables/"
   - "knowledge/"
   - "backend/domain_knowledge/"
+  - "backend/core/clarity_framework.py"
+  - "backend/guardian_metrics/"
 
 performance_constraints:
   max_ast_depth: 25   # Prevent overly complex/nested logic

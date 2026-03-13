@@ -1,0 +1,24 @@
+<unknown>:37: SyntaxWarning: "\Z" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\Z"? A raw string is also an option.
+<unknown>:68: SyntaxWarning: "\A" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\A"? A raw string is also an option.
+<unknown>:662: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:663: SyntaxWarning: "\)" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\)"? A raw string is also an option.
+<unknown>:1349: SyntaxWarning: "\]" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\]"? A raw string is also an option.
+<unknown>:1352: SyntaxWarning: "\]" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\]"? A raw string is also an option.
+<unknown>:1354: SyntaxWarning: "\]" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\]"? A raw string is also an option.
+<unknown>:1357: SyntaxWarning: "\]" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\]"? A raw string is also an option.
+<unknown>:1541: SyntaxWarning: "\ " is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\ "? A raw string is also an option.
+<unknown>:1876: SyntaxWarning: "\ " is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\ "? A raw string is also an option.
+<unknown>:31: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<unknown>:79: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<unknown>:29: SyntaxWarning: "\_" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\_"? A raw string is also an option.
+<unknown>:212: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:294: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:429: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<unknown>:1945: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:957: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:300: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:301: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:310: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:314: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+backend/.venv\Lib\site-packages\sympy\polys\numberfields\resolvent_lookup.py: "pyflakes[F]" failed during execution due to RecursionError('maximum recursion depth exceeded')
+Run flake8 with greater verbosity to see more details

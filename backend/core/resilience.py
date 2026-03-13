@@ -127,6 +127,7 @@ class ErrorBoundary:
     def __enter__(self):
         return self
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type:
             logger.error(f"ErrorBoundary[{self.name}]: {exc_type.__name__}: {exc_val}")
             try:

@@ -473,6 +473,24 @@ def layer4_verify(aligned_output: str, prompt: str) -> dict:
     except Exception:
         verification["hallucination_score"] = 0.7
 
+    # Constitutional Alignment Check
+    try:
+        from backend.constitutional.grace_charter import GraceCharter
+        
+        # Simple heuristic risk assessment for the raw output
+        estimated_risk = 0.1
+        if "delete" in aligned_output.lower() or "remove" in aligned_output.lower():
+            estimated_risk += 0.4
+        if "os." in aligned_output or "subprocess" in aligned_output or "eval(" in aligned_output:
+            estimated_risk += 0.5
+            
+        if not GraceCharter.is_risk_acceptable(estimated_risk):
+            verification["contradiction_flags"].append(f"Constitutional Violation: Estimated risk ({estimated_risk}) exceeds Clause 4 limits.")
+    except ImportError:
+        pass
+    except Exception as e:
+        logger.warning(f"Constitutional alignment check failed: {e}")
+
     # Determine pass/fail
     trust = verification.get("trust_score", 0)
     if isinstance(trust, dict):

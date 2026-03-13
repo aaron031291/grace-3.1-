@@ -749,13 +749,15 @@ from api.tasks_hub_api import router as tasks_hub_router
 from api.schema_evolution_api import router as schema_evolution_router
 from api.oracle_api import router as oracle_router
 from api.learn_heal_api import router as learn_heal_router
-from api.system_health_api import router as system_health_router
+from api.system_health_api import router as system_health_router, immune_router, diagnostic_router, proactive_router
+from api.system_audit_api import router as system_audit_router
 from api.bi_api import router as bi_router
 from api.kpi_api import router as kpi_router
 from api.planner_api import router as planner_router
 from api.scrape_api import router as scrape_router
 from api.version_control_api import router as version_control_router
 from api.hitl_dashboard import router as hitl_dashboard_router
+from api.consensus_fixer_api import router as consensus_fixer_router
 
 app.include_router(codebase_hub_router, prefix="/api")
 app.include_router(whitelist_hub_router, prefix="/api")
@@ -766,12 +768,17 @@ app.include_router(schema_evolution_router, prefix="/api")
 app.include_router(oracle_router)
 app.include_router(learn_heal_router)
 app.include_router(system_health_router)
+app.include_router(system_audit_router)
+app.include_router(immune_router)
+app.include_router(diagnostic_router)
+app.include_router(proactive_router)
 app.include_router(bi_router)
 app.include_router(kpi_router)
 app.include_router(planner_router)
 app.include_router(scrape_router)
 app.include_router(version_control_router)
 app.include_router(hitl_dashboard_router)
+app.include_router(consensus_fixer_router)
 
 from api.docs_library_api import router as docs_library_router
 app.include_router(docs_library_router)

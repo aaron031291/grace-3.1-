@@ -1,0 +1,518 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 47 items
+
+backend\tests\test_agent_comprehensive.py .............................. [ 63%]
+...............FF                                                        [100%]
+
+================================== FAILURES ===================================
+_____________ TestAgentIntegration.test_solve_task_complete_flow ______________
+
+self = <agent.grace_agent.GraceAgent object at 0x00000273C05F5450>
+task = 'Do something', context = None, on_action = None
+
+    async def solve_task(
+        self,
+        task: str,
+        context: Dict[str, Any] = None,
+        on_action: Callable[[ActionRequest, ActionResult], None] = None,
+    ) -> TaskResult:
+        """
+        Main entry point: solve a software engineering task.
+    
+        Args:
+            task: Natural language description of the task
+            context: Additional context (files, constraints, etc.)
+            on_action: Callback for each action (for UI updates)
+    
+        Returns:
+            TaskResult with summary, files affected, etc.
+        """
+        task_id = f"TASK-{uuid.uuid4().hex[:12]}"
+        self.current_task = task
+        self.context = context or {}
+        self.action_history = []
+    
+        logger.info(f"Starting task {task_id}: {task[:100]}...")
+    
+        result = TaskResult(task_id=task_id, status=TaskStatus.PLANNING)
+    
+        try:
+            # Phase 1: Understand the task
+            understanding = await self._understand_task(task)
+            logger.info(f"Task understanding: {understanding.get('summary', 'N/A')}")
+    
+            # Phase 2: Create plan
+            result.status = TaskStatus.PLANNING
+            plan = await self._create_plan(task, understanding)
+            logger.info(f"Created plan with {len(plan.get('steps', []))} steps")
+    
+            # Phase 3: Execute plan
+            result.status = TaskStatus.EXECUTING
+            iteration = 0
+    
+            while iteration < self.config.max_iterations:
+                iteration += 1
+    
+                # Decide next action
+                next_action = await self._decide_next_action(plan, self.action_history)
+    
+                if next_action is None:
+                    # No more actions needed
+                    break
+    
+                if next_action.action_type == GraceAction.FINISH:
+                    # Task complete
+                    break
+    
+                # Execute action
+                action_result = await self.execution.execute(next_action)
+                self.action_history.append((next_action, action_result))
+                result.actions_executed += 1
+    
+                # Track success/failure
+                if action_result.success:
+                    result.actions_succeeded += 1
+                else:
+                    result.actions_failed += 1
+    
+                # Track files
+                result.files_created.extend(action_result.files_created)
+                result.files_modified.extend(action_result.files_modified)
+                result.files_deleted.extend(action_result.files_deleted)
+    
+                # Callback for UI
+                if on_action:
+                    on_action(next_action, action_result)
+    
+                # Learn from result
+                if self.config.learn_from_execution:
+                    signals = await self.feedback.process(next_action, action_result)
+                    result.patterns_learned += len(signals)
+                    result.trust_delta += action_result.trust_delta
+    
+                # Check if we should continue
+                if action_result.status == ActionStatus.FAILURE:
+                    # Analyze failure and potentially adjust plan
+                    should_continue = await self._handle_failure(action_result, plan)
+                    if not should_continue:
+                        result.status = TaskStatus.FAILED
+                        result.error = action_result.error
+                        break
+    
+            # Phase 4: Finalize
+            if result.status == TaskStatus.EXECUTING:
+                result.status = TaskStatus.COMPLETED
+    
+            result.summary = await self._create_summary(task, result)
+            result.completed_at = datetime.now(timezone.utc)
+>           result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: can't subtract offset-naive and offset-aware datetimes
+
+backend\agent\grace_agent.py:257: TypeError
+
+During handling of the above exception, another exception occurred:
+
+self = <backend.tests.test_agent_comprehensive.TestAgentIntegration object at 0x00000273C04839D0>
+mock_feedback = <MagicMock name='get_feedback_processor' id='2696172372720'>
+mock_bridge = <MagicMock name='get_execution_bridge' id='2696172379104'>
+
+    @pytest.mark.asyncio
+    @patch('agent.grace_agent.get_execution_bridge')
+    @patch('agent.grace_agent.get_feedback_processor')
+    async def test_solve_task_complete_flow(self, mock_feedback, mock_bridge):
+        """Test complete solve_task flow."""
+        # Setup mocks
+        mock_execution = Mock()
+        mock_bridge.return_value = mock_execution
+        mock_feedback.return_value = Mock()
+    
+        # Mock action result
+        with patch('agent.grace_agent.ActionStatus') as MockStatus, \
+             patch('agent.grace_agent.GraceAction') as MockAction, \
+             patch('agent.grace_agent.create_action') as mock_create:
+    
+            MockStatus.FAILURE = "FAILURE"
+            MockAction.FINISH = "FINISH"
+    
+            # Create agent
+            agent = GraceAgent(config=AgentConfig(max_iterations=3))
+    
+            # Mock _understand_task
+            agent._understand_task = AsyncMock(return_value={
+                "task": "test task",
+                "task_type": "general",
+                "summary": "Test task summary",
+                "entities": [],
+                "context": [],
+            })
+    
+            # Mock _decide_next_action to return FINISH after one iteration
+            call_count = 0
+            async def decide_action(plan, history):
+                nonlocal call_count
+                call_count += 1
+                if call_count > 1:
+                    mock_finish = Mock()
+                    mock_finish.action_type = "FINISH"
+                    return mock_finish
+                return None
+    
+            agent._decide_next_action = decide_action
+    
+            # Run task
+>           result = await agent.solve_task("Do something")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_agent_comprehensive.py:818: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <agent.grace_agent.GraceAgent object at 0x00000273C05F5450>
+task = 'Do something', context = None, on_action = None
+
+    async def solve_task(
+        self,
+        task: str,
+        context: Dict[str, Any] = None,
+        on_action: Callable[[ActionRequest, ActionResult], None] = None,
+    ) -> TaskResult:
+        """
+        Main entry point: solve a software engineering task.
+    
+        Args:
+            task: Natural language description of the task
+            context: Additional context (files, constraints, etc.)
+            on_action: Callback for each action (for UI updates)
+    
+        Returns:
+            TaskResult with summary, files affected, etc.
+        """
+        task_id = f"TASK-{uuid.uuid4().hex[:12]}"
+        self.current_task = task
+        self.context = context or {}
+        self.action_history = []
+    
+        logger.info(f"Starting task {task_id}: {task[:100]}...")
+    
+        result = TaskResult(task_id=task_id, status=TaskStatus.PLANNING)
+    
+        try:
+            # Phase 1: Understand the task
+            understanding = await self._understand_task(task)
+            logger.info(f"Task understanding: {understanding.get('summary', 'N/A')}")
+    
+            # Phase 2: Create plan
+            result.status = TaskStatus.PLANNING
+            plan = await self._create_plan(task, understanding)
+            logger.info(f"Created plan with {len(plan.get('steps', []))} steps")
+    
+            # Phase 3: Execute plan
+            result.status = TaskStatus.EXECUTING
+            iteration = 0
+    
+            while iteration < self.config.max_iterations:
+                iteration += 1
+    
+                # Decide next action
+                next_action = await self._decide_next_action(plan, self.action_history)
+    
+                if next_action is None:
+                    # No more actions needed
+                    break
+    
+                if next_action.action_type == GraceAction.FINISH:
+                    # Task complete
+                    break
+    
+                # Execute action
+                action_result = await self.execution.execute(next_action)
+                self.action_history.append((next_action, action_result))
+                result.actions_executed += 1
+    
+                # Track success/failure
+                if action_result.success:
+                    result.actions_succeeded += 1
+                else:
+                    result.actions_failed += 1
+    
+                # Track files
+                result.files_created.extend(action_result.files_created)
+                result.files_modified.extend(action_result.files_modified)
+                result.files_deleted.extend(action_result.files_deleted)
+    
+                # Callback for UI
+                if on_action:
+                    on_action(next_action, action_result)
+    
+                # Learn from result
+                if self.config.learn_from_execution:
+                    signals = await self.feedback.process(next_action, action_result)
+                    result.patterns_learned += len(signals)
+                    result.trust_delta += action_result.trust_delta
+    
+                # Check if we should continue
+                if action_result.status == ActionStatus.FAILURE:
+                    # Analyze failure and potentially adjust plan
+                    should_continue = await self._handle_failure(action_result, plan)
+                    if not should_continue:
+                        result.status = TaskStatus.FAILED
+                        result.error = action_result.error
+                        break
+    
+            # Phase 4: Finalize
+            if result.status == TaskStatus.EXECUTING:
+                result.status = TaskStatus.COMPLETED
+    
+            result.summary = await self._create_summary(task, result)
+            result.completed_at = datetime.now(timezone.utc)
+            result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+    
+            logger.info(
+                f"Task {task_id} completed: {result.status.value} "
+                f"({result.actions_executed} actions, {result.duration_seconds:.1f}s)"
+            )
+    
+            return result
+    
+        except Exception as e:
+            logger.exception(f"Task {task_id} failed with error")
+            result.status = TaskStatus.FAILED
+            result.error = str(e)
+            result.completed_at = datetime.now(timezone.utc)
+>           result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: can't subtract offset-naive and offset-aware datetimes
+
+backend\agent\grace_agent.py:271: TypeError
+------------------------------ Captured log call ------------------------------
+ERROR    agent.grace_agent:grace_agent.py:267 Task TASK-d38c75b09752 failed with error
+Traceback (most recent call last):
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\agent\grace_agent.py", line 257, in solve_task
+    result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+                               ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+TypeError: can't subtract offset-naive and offset-aware datetimes
+_______________ TestAgentIntegration.test_solve_task_with_error _______________
+
+self = <agent.grace_agent.GraceAgent object at 0x00000273C05F56D0>
+task = 'Fail task', context = None, on_action = None
+
+    async def solve_task(
+        self,
+        task: str,
+        context: Dict[str, Any] = None,
+        on_action: Callable[[ActionRequest, ActionResult], None] = None,
+    ) -> TaskResult:
+        """
+        Main entry point: solve a software engineering task.
+    
+        Args:
+            task: Natural language description of the task
+            context: Additional context (files, constraints, etc.)
+            on_action: Callback for each action (for UI updates)
+    
+        Returns:
+            TaskResult with summary, files affected, etc.
+        """
+        task_id = f"TASK-{uuid.uuid4().hex[:12]}"
+        self.current_task = task
+        self.context = context or {}
+        self.action_history = []
+    
+        logger.info(f"Starting task {task_id}: {task[:100]}...")
+    
+        result = TaskResult(task_id=task_id, status=TaskStatus.PLANNING)
+    
+        try:
+            # Phase 1: Understand the task
+>           understanding = await self._understand_task(task)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\agent\grace_agent.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <AsyncMock id='2696172385152'>, args = ('Fail task',), kwargs = {}
+_call = call('Fail task'), effect = Exception('Test error')
+
+    async def _execute_mock_call(self, /, *args, **kwargs):
+        # This is nearly just like super(), except for special handling
+        # of coroutines
+    
+        _call = _Call((args, kwargs), two=True)
+        self.await_count += 1
+        self.await_args = _call
+        self.await_args_list.append(_call)
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+>               raise effect
+E               Exception: Test error
+
+C:\Python314\Lib\unittest\mock.py:2326: Exception
+
+During handling of the above exception, another exception occurred:
+
+self = <backend.tests.test_agent_comprehensive.TestAgentIntegration object at 0x00000273C0483B10>
+mock_feedback = <MagicMock name='get_feedback_processor' id='2696172382128'>
+mock_bridge = <MagicMock name='get_execution_bridge' id='2696172382464'>
+
+    @pytest.mark.asyncio
+    @patch('agent.grace_agent.get_execution_bridge')
+    @patch('agent.grace_agent.get_feedback_processor')
+    async def test_solve_task_with_error(self, mock_feedback, mock_bridge):
+        """Test solve_task with error handling."""
+        mock_execution = Mock()
+        mock_bridge.return_value = mock_execution
+        mock_feedback.return_value = Mock()
+    
+        agent = GraceAgent()
+    
+        # Mock _understand_task to raise exception
+        agent._understand_task = AsyncMock(side_effect=Exception("Test error"))
+    
+>       result = await agent.solve_task("Fail task")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_agent_comprehensive.py:837: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <agent.grace_agent.GraceAgent object at 0x00000273C05F56D0>
+task = 'Fail task', context = None, on_action = None
+
+    async def solve_task(
+        self,
+        task: str,
+        context: Dict[str, Any] = None,
+        on_action: Callable[[ActionRequest, ActionResult], None] = None,
+    ) -> TaskResult:
+        """
+        Main entry point: solve a software engineering task.
+    
+        Args:
+            task: Natural language description of the task
+            context: Additional context (files, constraints, etc.)
+            on_action: Callback for each action (for UI updates)
+    
+        Returns:
+            TaskResult with summary, files affected, etc.
+        """
+        task_id = f"TASK-{uuid.uuid4().hex[:12]}"
+        self.current_task = task
+        self.context = context or {}
+        self.action_history = []
+    
+        logger.info(f"Starting task {task_id}: {task[:100]}...")
+    
+        result = TaskResult(task_id=task_id, status=TaskStatus.PLANNING)
+    
+        try:
+            # Phase 1: Understand the task
+            understanding = await self._understand_task(task)
+            logger.info(f"Task understanding: {understanding.get('summary', 'N/A')}")
+    
+            # Phase 2: Create plan
+            result.status = TaskStatus.PLANNING
+            plan = await self._create_plan(task, understanding)
+            logger.info(f"Created plan with {len(plan.get('steps', []))} steps")
+    
+            # Phase 3: Execute plan
+            result.status = TaskStatus.EXECUTING
+            iteration = 0
+    
+            while iteration < self.config.max_iterations:
+                iteration += 1
+    
+                # Decide next action
+                next_action = await self._decide_next_action(plan, self.action_history)
+    
+                if next_action is None:
+                    # No more actions needed
+                    break
+    
+                if next_action.action_type == GraceAction.FINISH:
+                    # Task complete
+                    break
+    
+                # Execute action
+                action_result = await self.execution.execute(next_action)
+                self.action_history.append((next_action, action_result))
+                result.actions_executed += 1
+    
+                # Track success/failure
+                if action_result.success:
+                    result.actions_succeeded += 1
+                else:
+                    result.actions_failed += 1
+    
+                # Track files
+                result.files_created.extend(action_result.files_created)
+                result.files_modified.extend(action_result.files_modified)
+                result.files_deleted.extend(action_result.files_deleted)
+    
+                # Callback for UI
+                if on_action:
+                    on_action(next_action, action_result)
+    
+                # Learn from result
+                if self.config.learn_from_execution:
+                    signals = await self.feedback.process(next_action, action_result)
+                    result.patterns_learned += len(signals)
+                    result.trust_delta += action_result.trust_delta
+    
+                # Check if we should continue
+                if action_result.status == ActionStatus.FAILURE:
+                    # Analyze failure and potentially adjust plan
+                    should_continue = await self._handle_failure(action_result, plan)
+                    if not should_continue:
+                        result.status = TaskStatus.FAILED
+                        result.error = action_result.error
+                        break
+    
+            # Phase 4: Finalize
+            if result.status == TaskStatus.EXECUTING:
+                result.status = TaskStatus.COMPLETED
+    
+            result.summary = await self._create_summary(task, result)
+            result.completed_at = datetime.now(timezone.utc)
+            result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+    
+            logger.info(
+                f"Task {task_id} completed: {result.status.value} "
+                f"({result.actions_executed} actions, {result.duration_seconds:.1f}s)"
+            )
+    
+            return result
+    
+        except Exception as e:
+            logger.exception(f"Task {task_id} failed with error")
+            result.status = TaskStatus.FAILED
+            result.error = str(e)
+            result.completed_at = datetime.now(timezone.utc)
+>           result.duration_seconds = (result.completed_at - result.started_at).total_seconds()
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: can't subtract offset-naive and offset-aware datetimes
+
+backend\agent\grace_agent.py:271: TypeError
+------------------------------ Captured log call ------------------------------
+ERROR    agent.grace_agent:grace_agent.py:267 Task TASK-14822598d5a8 failed with error
+Traceback (most recent call last):
+  File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\agent\grace_agent.py", line 190, in solve_task
+    understanding = await self._understand_task(task)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\unittest\mock.py", line 2326, in _execute_mock_call
+    raise effect
+Exception: Test error
+============================== warnings summary ===============================
+tests/test_agent_comprehensive.py: 14 warnings
+  <string>:16: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_agent_comprehensive.py::TestAgentIntegration::test_solve_task_complete_flow
+FAILED backend\tests\test_agent_comprehensive.py::TestAgentIntegration::test_solve_task_with_error
+================== 2 failed, 45 passed, 14 warnings in 4.42s ==================

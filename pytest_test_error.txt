@@ -1,0 +1,44 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\aaron\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2
+plugins: anyio-4.11.0, asyncio-1.3.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 2 items
+
+tests/backend/cognitive/test_cognitive_e2e_loop.py::test_cognitive_framework_e2e_pipeline ERROR [ 50%]
+tests/backend/cognitive/test_cognitive_e2e_loop.py::test_ooda_loop_executor_direct PASSED [100%]
+
+=================================== ERRORS ====================================
+___________ ERROR at setup of test_cognitive_framework_e2e_pipeline ___________
+
+    @pytest.fixture
+    def sample_cognitive_event():
+        """Generates a high-risk error event simulating a subsystem crash."""
+>       return CognitiveEvent(
+            id="evt_test_123",
+            type="system.crash",
+            source_component="database_service",
+            payload={"error": "Connection pool exhausted", "stack_trace": "..."},
+            severity=9,
+            timestamp="2026-03-14T10:00:00Z"
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for CognitiveEvent
+E       severity
+E         Input should be less than or equal to 5 [type=less_than_equal, input_value=9, input_type=int]
+E           For further information visit https://errors.pydantic.dev/2.5/v/less_than_equal
+
+tests\backend\cognitive\test_cognitive_e2e_loop.py:22: ValidationError
+============================== warnings summary ===============================
+tests/backend/cognitive/test_cognitive_e2e_loop.py::test_ooda_loop_executor_direct
+  C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\cognitive_framework\cognitive_blueprint.py:113: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    "chess_mode_decision": decision.dict(),
+
+tests/backend/cognitive/test_cognitive_e2e_loop.py::test_ooda_loop_executor_direct
+  C:\Users\aaron\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\main.py:979: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warnings.warn('The `dict` method is deprecated; use `model_dump` instead.', DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/backend/cognitive/test_cognitive_e2e_loop.py::test_cognitive_framework_e2e_pipeline
+=================== 1 passed, 2 warnings, 1 error in 0.59s ====================

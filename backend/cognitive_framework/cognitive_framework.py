@@ -22,9 +22,10 @@ class CognitiveFramework:
         self.playbook_executor = PlaybookExecutor()
         logger.info("Cognitive Framework Initialized")
 
-    def process_event(self, event: CognitiveEvent) -> Optional[Dict[str, Any]]:
+    async def process_event(self, event: CognitiveEvent) -> Optional[Dict[str, Any]]:
         """
-        Main entry point for processing incoming signals (warnings, errors, etc.)
+        Main asynchronous entry point for processing incoming signals (warnings, errors, etc.)
+        Allows concurrent event processing without blocking the framework.
         """
         logger.info(f"Processing cognitive event: {event.id} ({event.type})")
         
@@ -46,10 +47,10 @@ class CognitiveFramework:
             related_ids=[event.id]
         )
         
-        # 4. Execute the Response
+        # 4. Execute the Response (Await the Async OODA pipeline)
         execution_result = None
         if response_plan.get("playbook"):
-            execution_result = self.playbook_executor.execute(response_plan["playbook"], event, decision.id)
+            execution_result = await self.playbook_executor.execute(response_plan["playbook"], event, decision.id)
             
         return {
             "decision_id": decision.id,

@@ -1,5 +1,4 @@
-if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
-    """
+"""
 Symbiotic Genesis Key Version Control System.
 
 Genesis Keys and version control work as ONE unified system:

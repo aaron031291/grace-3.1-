@@ -7,6 +7,7 @@ from typing import List, Dict, Any, Optional, Tuple
 from vector_db.client import get_qdrant_client
 from database import session as db_session
 from models.database_models import Document, DocumentChunk
+from embedding.embedder import EmbeddingModel
 import json
 import logging
 
@@ -19,7 +20,7 @@ class DocumentRetriever:
     def __init__(
         self,
         collection_name: str = "documents",
-        embedding_model: Optional[EmbeddingModel] = None,
+        embedding_model: Optional['EmbeddingModel'] = None,
     ):
         """
         Initialize document retriever.
@@ -486,7 +487,7 @@ class DocumentRetriever:
 
 def get_retriever(
     collection_name: str = "documents",
-    embedding_model: Optional[EmbeddingModel] = None,
+    embedding_model: Optional['EmbeddingModel'] = None,
 ) -> DocumentRetriever:
     """
     Factory function to get a DocumentRetriever instance.

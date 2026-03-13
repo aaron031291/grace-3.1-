@@ -111,3 +111,11 @@ async def get_full_bi():
             "cache_hit_rate": "85%"
         }
     }
+
+@router.get("/clarity-decisions")
+async def get_clarity_decisions():
+    """Returns the live rolling buffer of Cognitive Framework decisions."""
+    from core.clarity_framework import ClarityFramework
+    decisions = ClarityFramework.get_recent_decisions()
+    return {"decisions": decisions, "count": len(decisions)}
+

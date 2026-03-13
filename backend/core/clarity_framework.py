@@ -27,6 +27,9 @@ class ClarityFramework:
     The decision-log subsystem that records every significant Guardian/cognitive action.
     Provides auditable reasoning for autonomous choices.
     """
+    # Rolling buffer of the most recent decisions for UI exposure (max 50)
+    _recent_decisions: List[Dict] = []
+    _MAX_DECISIONS = 50
 
     @staticmethod
     def _generate_decision_id() -> str:
@@ -35,6 +38,11 @@ class ClarityFramework:
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
         short_uuid = str(uuid.uuid4()).split("-")[0]
         return f"decision_{timestamp}_{short_uuid}"
+
+    @classmethod
+    def get_recent_decisions(cls) -> List[Dict]:
+        """Returns the rolling buffer of recent decisions."""
+        return cls._recent_decisions
 
     @classmethod
     def record_decision(
@@ -74,6 +82,15 @@ class ClarityFramework:
             risk_score=risk_score,
             related_ids=related_ids or []
         )
+        
+        # Append to rolling buffer
+        decision_dict = decision.dict()
+        # Make datetime JSON serializable immediately to avoid UI parsing issues later
+        decision_dict['when'] = decision.when.isoformat()
+        
+        cls._recent_decisions.insert(0, decision_dict)
+        if len(cls._recent_decisions) > cls._MAX_DECISIONS:
+            cls._recent_decisions.pop()
         
         # In a full implementation, this would persist to the `root_registry`
         # and emit an event to the `immutable_log`.

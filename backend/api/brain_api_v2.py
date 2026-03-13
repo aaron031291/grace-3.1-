@@ -586,6 +586,20 @@ def _system() -> dict:
         "trigger_definitions": lambda p: _trigger_definitions(p),
         "run_unified_triggers": lambda p: _run_unified_triggers(p),
         "grace_state": lambda p: _grace_state(),
+        "immune_scan": lambda p: _immune_scan(p),
+        "immune_status": lambda p: _immune_status(),
+        "immune_loop_start": lambda p: _immune_loop_start(),
+        "immune_loop_stop": lambda p: _immune_loop_stop(),
+        "immune_playbooks": lambda p: _immune_playbooks(),
+        "proactive_engine_start": lambda p: _proactive_engine_start(),
+        "proactive_engine_stop": lambda p: _proactive_engine_stop(),
+        "proactive_engine_status": lambda p: _proactive_engine_status(),
+        "trigger_healing_cycle": lambda p: _trigger_healing_cycle(p),
+        "diagnostic_sensors": lambda p: _diagnostic_sensors(),
+        "diagnostic_forensics": lambda p: _diagnostic_forensics(),
+        "stress_test_start": lambda p: _stress_test_start(p),
+        "stress_test_status": lambda p: _stress_test_status(),
+        "stress_test_stop": lambda p: _stress_test_stop(),
         **_agentic_actions("system"),
     }
 
@@ -1946,6 +1960,145 @@ def _run_unified_triggers(p):
 def _knowledge_gaps_deep():
     from core.cognitive_mesh import CognitiveMesh
     return CognitiveMesh.analyze_knowledge_gaps()
+
+def _immune_scan(p):
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        immune = engine._get_immune()
+        if immune:
+            return immune.scan()
+        return {"error": "Immune system not available"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _immune_status():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        immune = engine._get_immune()
+        if immune:
+            return immune.get_status()
+        return {"available": False}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _immune_loop_start():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        immune = engine._get_immune()
+        if immune:
+            immune.start_background_loop()
+            return {"success": True, "status": "running"}
+        return {"error": "Immune system not available"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _immune_loop_stop():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        immune = engine._get_immune()
+        if immune:
+            immune.stop_background_loop()
+            return {"success": True, "status": "stopped"}
+        return {"error": "Immune system not available"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _immune_playbooks():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        immune = engine._get_immune()
+        if immune:
+            return {"playbooks": immune.get_playbook()}
+        return {"playbooks": []}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _proactive_engine_start():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        engine.start()
+        return {"success": True, "status": "running"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _proactive_engine_stop():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        engine.stop()
+        return {"success": True, "status": "stopped"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _proactive_engine_status():
+    try:
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        return {
+            "status": "running" if engine.is_running else "stopped",
+            "cycle_count": getattr(engine, "_cycle_count", 0),
+            "anomalies_handled": engine.get_status().get("anomalies_handled", 0)
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+def _trigger_healing_cycle(p):
+    try:
+        anomaly_type = p.get("anomaly_type")
+        component = p.get("component")
+        context = p.get("context", {})
+        
+        if not anomaly_type or not component:
+            return {"error": "Missing 'anomaly_type' or 'component' parameters."}
+            
+        from cognitive.proactive_healing_engine import get_proactive_engine
+        engine = get_proactive_engine()
+        result = engine.trigger_healing_cycle(
+            anomaly_type=anomaly_type,
+            component=component,
+            context=context
+        )
+        return {"success": True, "result": result}
+    except Exception as e:
+        return {"error": str(e)}
+
+def _diagnostic_sensors():
+    try:
+        from diagnostic_machine.sensors import MetricSensors
+        metrics = MetricSensors.collect_all()
+        return {"sensors_status": "online", "metrics": metrics}
+    except Exception as e:
+        return {"error": str(e), "message": "Sensor collection failed."}
+
+def _diagnostic_forensics():
+    try:
+        from diagnostic_machine.diagnostic_engine import DiagnosticEngine
+        engine = DiagnosticEngine()
+        return engine.run_diagnostic_cycle()
+    except Exception as e:
+        return {"error": str(e)}
+
+def _stress_test_start(p):
+    try:
+        # For unified brain, run synchronously to return results directly, or use an async agentic task
+        from cognitive.deep_test_engine import DeepTestEngine
+        engine = DeepTestEngine.get_instance()
+        return engine.run_logic_tests()
+    except Exception as e:
+        return {"error": str(e)}
+
+def _stress_test_status():
+    from api.system_audit_api import _stress_test_status as status
+    return status
+
+def _stress_test_stop():
+    return {"message": "Stop requested."}
 
 
 

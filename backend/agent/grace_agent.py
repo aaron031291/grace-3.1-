@@ -94,7 +94,7 @@ class TaskResult:
     trust_delta: float = 0.0
 
     # Timing
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = None
     duration_seconds: float = 0.0
 

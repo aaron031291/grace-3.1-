@@ -1067,22 +1067,60 @@ class ProactiveHealingEngine:
 
     def _broadcast_status(self):
         try:
+            from diagnostic_machine.realtime import get_event_emitter
+            from cognitive.event_bus import publish_async
             import asyncio
+            
+            publish_async("system.health_changed", {"status": "healthy", "source": "proactive_healing_engine"})
+            
+            emitter = get_event_emitter()
+            async def _emit():
+                await emitter.emit_engine_started({"module": "proactive_healing_engine", "status": "online"})
+                
             try:
                 loop = asyncio.get_event_loop()
                 if loop.is_running():
-                    return
+                    loop.create_task(_emit())
+                else:
+                    loop.run_until_complete(_emit())
             except RuntimeError:
-                return
-        except Exception:
-            pass
+                asyncio.run(_emit())
+        except Exception as e:
+            self.logger.warning(f"Failed to broadcast status: {e}")
 
     def _broadcast_healing_event(self, issue: Dict):
         try:
             from diagnostic_machine.realtime import get_event_emitter
-            # Fire-and-forget — don't block healing for UI updates
-        except Exception:
-            pass
+            from cognitive.event_bus import publish_async
+            import asyncio
+            import uuid
+            
+            # Publish to internal Event Bus
+            publish_async("healing.started", issue, source="proactive_healing_engine")
+            
+            # Broadcast to UI via WebSockets
+            emitter = get_event_emitter()
+            healing_id = f"heal-{uuid.uuid4().hex[:8]}"
+            action_name = issue.get("heal_action", issue.get("action", "unknown"))
+            target = issue.get("service", issue.get("component", "unknown"))
+            
+            async def _emit():
+                await emitter.emit_healing_started(
+                    healing_id=healing_id,
+                    action_name=action_name,
+                    target=target
+                )
+                
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop.create_task(_emit())
+                else:
+                    loop.run_until_complete(_emit())
+            except RuntimeError:
+                asyncio.run(_emit())
+        except Exception as e:
+            self.logger.warning(f"Failed to broadcast healing event: {e}")
 
     # ====================================================================
     # Capability 27: Notification escalation

@@ -145,6 +145,44 @@ class GraceImmuneSystem:
         except Exception:
             pass
 
+        # Background threading
+        self._background_thread = None
+        self._is_running = False
+
+    def start_background_loop(self):
+        """Start the immune system in continuous background mode."""
+        if self._is_running:
+            return
+        
+        self._is_running = True
+        import threading
+        self._background_thread = threading.Thread(target=self._run_loop, daemon=True, name="ImmuneSystemLoop")
+        self._background_thread.start()
+        logger.info("[IMMUNE] Started autonomous background monitoring loop.")
+
+    def stop_background_loop(self):
+        """Stop the background monitoring loop."""
+        self._is_running = False
+        if self._background_thread:
+            self._background_thread.join(timeout=2.0)
+        logger.info("[IMMUNE] Stopped autonomous background monitoring loop.")
+
+    def _run_loop(self):
+        """The actual continuous background loop."""
+        while self._is_running:
+            try:
+                # Run the scan cycle
+                self.scan()
+            except Exception as e:
+                logger.error(f"[IMMUNE] Background scan cycle crashed: {e}")
+            
+            # Sleep for the adaptive scan interval before running again
+            # Break down sleep to stay responsive to stop commands
+            sleep_time = self._scan_interval
+            while sleep_time > 0 and self._is_running:
+                time.sleep(1)
+                sleep_time -= 1
+
     def _on_realtime_error(self, event: Dict):
         """Called INSTANTLY when an error genesis key is created."""
         self._realtime_errors.append(event)
@@ -266,6 +304,29 @@ class GraceImmuneSystem:
                   tags=["immune", "scan"])
         except Exception:
             pass
+
+        # Event Bus and WebSocket publishing
+        try:
+            from cognitive.event_bus import publish_async
+            from diagnostic_machine.realtime import get_event_emitter
+            import asyncio
+            
+            publish_async("system.immune_scan_completed", result, source="immune_system")
+            
+            emitter = get_event_emitter()
+            async def _emit():
+                await emitter.emit_cycle_completed(result)
+                
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop.create_task(_emit())
+                else:
+                    loop.run_until_complete(_emit())
+            except RuntimeError:
+                asyncio.run(_emit())
+        except Exception as e:
+            logger.warning(f"[IMMUNE] Failed to publish scan results: {e}")
 
         return result
 

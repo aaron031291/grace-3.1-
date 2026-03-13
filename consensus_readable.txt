@@ -1,0 +1,78 @@
+Querying Consensus Engine with prompt:
+As the consensus mechanism (Opus, Kimi, and Qwen), we are going through every file and component this weekend, checking what works and what's wrong. Before we do a 1-by-1 review, are there documents, components, orphaned logic, or redundant code that have no relevance to the actual system and can be safely deleted? Please list specific files, directories, or architectural components that are no longer relevant.
+
+
+================================================================================
+CONSENSUS RESULT:
+================================================================================
+## Final Aligned Response
+
+### What Should Actually Be Deleted
+
+**Based on your sandbox context, here are specific items you can safely investigate for deletion:**
+
+1. **Immediately Check These Files:**
+   - `backend/deterministic_validator.py` - Name suggests it's deprecated by the new Braille/Z3 system
+   - `backend/test_*.py` files - Many exist; grep for those with zero imports or test runs
+   - Any `.backup`, `.old`, or `.unused` variants of core files in your workspace
+   - Migration files older than your last 3 restore points (check `backend/migrate_*.py`)
+
+2. **High-Risk Legacy Patterns to Target:**
+   - Files containing "trust_score", "reputation", or "model_ipc" - these collide with your current consensus module
+   - Individual model logger instances in non-api files (you already have unified logging)
+   - Any standalone model client implementations outside `llm_orchestrator/factory.py`
+
+3. **Clean Documentation:**
+   - Remove obsolete `.md` files that reference pre-Braille architecture
+   - Delete any documentation mentioning removed components (IPC, old memory systems)
+
+### Immediate Action Plan for This Weekend
+
+**Before you start individual file reviews:**
+
+1. **Run these commands in your backend:**
+   ```bash
+   # Find truly orphaned files
+   python -m pip install vulture
+   vulture --min-confidence 80 backend/
+   
+   # Find unused imports
+   python -m pip install flake8
+   flake8 --select=F401 backend/
+   
+   # Generate dependency graph
+   python -m pip install pydeps
+   pydeps backend/app.py --show-deps -o deps.png
+   ```
+
+2. **Automated cleanup candidates:**
+   ```bash
+   # Find zero-reference files
+   grep -r "from.*import" backend/ | cut -d: -f1 | sort -u > imported_files.txt
+   find backend -name "*.py" | grep -v -f imported_files.txt > candidates.txt
+   ```
+
+3. **Safety checks before deletion:**
+   - Verify no Braille mappings reference the file (`grep -r "filename" backend/register_braille_genesis.py`)
+   - Check Genesis hasn't auto-referenced it (`grep -r "filename" genesis/`)
+   - Ensure tests pass without it
+
+### What NOT to Delete Yet
+- Any file in `genesis/` until you've verified all self-healing references
+- Files containing "braille", "deterministic", or "z3" - these are active
+- Core orchestration files even if they appear unused (may have dynamic imports)
+- Migration files that created tables still in your current schema
+
+**Bottom Line:** Start with the automated tools above, then manually verify anything they flag against your active Braille mappings and Genesis references. Delete in small batches, tagging each commit for easy rollback.
+
+================================================================================
+Confidence: 0.7
+Agreements: 5
+  - All three models acknowledge they **lack direct visibility** to the actual file-system; their lists are therefore **pattern-based heuristics**, not absolute guarantees.
+  - Shared warning that **any candidate must be checked for hidden references** (grep, dependency analyser, test suite) before removal.
+  - **Specificity vs. Caution**: Kimi supplies detailed functional categories (trust-cache, IPC, memory-compaction, etc.) and implies many files can already be culled; Opus and Qwen stress that without real paths nothing is known and push a tooling-first, audit-later approach.
+  - **Doc & Test Artefacts**: Opus explicitly flags docs/diagrams and old migration files, Qwen is silent on docs, Kimi focuses only on code modules.
+  - **Tooling Emphasis**: Qwen foregrounds coverage & dependency tools; Opus foregrounds grep/dep-analysis; Kimi foregrounds pattern recognition.
+Disagreements: 0
+================================================================================
+
