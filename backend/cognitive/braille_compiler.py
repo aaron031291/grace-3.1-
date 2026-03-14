@@ -172,7 +172,8 @@ class NLPCompilerEdge:
         except Exception:
             return None
 
-    def process_command(self, natural_language: str, privilege: str, session_context: dict) -> Tuple[Optional[tuple], str]:
+    def process_command(self, natural_language: str, privilege: str, session_context: dict,
+                        use_gate: bool = False) -> Tuple[Optional[tuple], str]:
         json_schema = self.translate_to_json(natural_language, privilege)
         if not json_schema:
             return None, "COMPILE_ERROR_NLP"
@@ -181,10 +182,23 @@ class NLPCompilerEdge:
             d_val, i_val, s_val, c_val = BrailleDictionary.compile_schema(json_schema, session_context)
         except ValueError as e:
             return None, f"COMPILE_ERROR_HALLUCINATION: {e}"
-            
-        is_valid, msg = self.z3_geometry.verify_action(d_val, i_val, s_val, c_val)
-        if is_valid:
-            return (d_val, i_val, s_val, c_val), msg
+
+        if use_gate:
+            from cognitive.physics.spindle_gate import get_spindle_gate
+            gate = get_spindle_gate()
+            verdict = gate.verify(d_val, i_val, s_val, c_val, context=session_context)
+            self._last_proof = verdict.proof
+            self._last_verdict = verdict
+            if verdict.passed and verdict.proof:
+                return (d_val, i_val, s_val, c_val), verdict.proof.reason
+            else:
+                reasons = [r.reason for r in verdict.validator_results if not r.passed]
+                return None, f"GATE_REJECTED: {'; '.join(reasons)}"
+
+        proof = self.z3_geometry.verify_action(d_val, i_val, s_val, c_val)
+        self._last_proof = proof
+        if proof.is_valid:
+            return (d_val, i_val, s_val, c_val), proof.reason
         else:
-            return None, msg
+            return None, proof.reason
 

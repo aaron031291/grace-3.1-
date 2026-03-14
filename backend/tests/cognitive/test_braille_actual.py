@@ -43,16 +43,19 @@ def test_z3_hardware_geometry_logic():
     s_val = BrailleDictionary.STATE_STOPPED
     c_val = BrailleDictionary.PRIV_USER | BrailleDictionary.CTX_ELEVATED
     
-    is_valid, msg = geometry.verify_action(d_val, i_val, s_val, c_val)
-    assert is_valid is True, f"Failed valid proof: {msg}"
-    assert "Z3_SAT" in msg
+    proof = geometry.verify_action(d_val, i_val, s_val, c_val)
+    assert proof.is_valid is True, f"Failed valid proof: {proof.reason}"
+    assert "Z3_SAT" in proof.reason
+    assert proof.result == "SAT"
+    assert proof.constraint_hash  # tamper-detection hash is populated
 
     # --- TEST 2: Rule P2 Invalid Case ---
     # User mutating database WITHOUT elevated context -> Should physically reject
     c_val_invalid = BrailleDictionary.PRIV_USER
-    is_valid, msg = geometry.verify_action(d_val, i_val, s_val, c_val_invalid)
-    assert is_valid is False
-    assert "Z3_UNSAT" in msg
+    proof = geometry.verify_action(d_val, i_val, s_val, c_val_invalid)
+    assert proof.is_valid is False
+    assert "Z3_UNSAT" in proof.reason
+    assert proof.result == "UNSAT"
 
     # --- TEST 3: Rule S1 Invalid Case ---
     # Cannot DELETE IMMUTABLE
@@ -60,9 +63,10 @@ def test_z3_hardware_geometry_logic():
     i_val = BrailleDictionary.INTENT_DELETE
     s_val = BrailleDictionary.STATE_IMMUTABLE
     c_val = BrailleDictionary.PRIV_ADMIN
-    is_valid, msg = geometry.verify_action(d_val, i_val, s_val, c_val)
-    assert is_valid is False
-    assert "Z3_UNSAT" in msg
+    proof = geometry.verify_action(d_val, i_val, s_val, c_val)
+    assert proof.is_valid is False
+    assert "Z3_UNSAT" in proof.reason
+    assert proof.result == "UNSAT"
 
 if __name__ == "__main__":
     pytest.main(['-v', __file__])

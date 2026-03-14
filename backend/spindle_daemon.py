@@ -87,44 +87,95 @@ class SpindleDaemon:
                 time.sleep(0.1)
                 
     def handle_event(self, topic: str, data: dict):
-        """React to Genesis Keys or other Grace events."""
+        """React to Grace events with Z3-verified execution."""
         is_error = data.get("is_error", False)
-        
-        # Only trigger on explicit healing requests or actual error keys
-        if topic.startswith("healing") or (topic == "genesis.key_created" and is_error):
-            logger.info(f"[SPINDLE] Autonomous action triggered by {topic}")
-            
-            # Extract actionable problem from event payload
-            problem = data.get("error", data.get("message", data.get("description", str(data))))
-            logger.info(f"[SPINDLE] Synthesizing fix for: {problem}")
-            
+
+        if not (topic.startswith("healing") or (topic == "genesis.key_created" and is_error)):
+            return
+
+        logger.info(f"[SPINDLE] Autonomous action triggered by {topic}")
+        problem = data.get("error", data.get("message", data.get("description", str(data))))
+
+        # Step 1: Compile through Z3 verification
+        try:
+            from cognitive.braille_compiler import NLPCompilerEdge
+            from cognitive.spindle_executor import get_spindle_executor
+
+            compiler = NLPCompilerEdge()
+            masks, verification_msg = compiler.process_command(
+                natural_language=f"repair {problem}",
+                privilege="system",
+                session_context={"is_emergency": True}
+            )
+
+            if masks:
+                # Z3 SAT — execute through verified dispatch
+                logger.info(f"[SPINDLE] Z3 Verified: {verification_msg}")
+                executor = get_spindle_executor()
+                proof = compiler._last_proof
+                result = executor.execute(proof)
+
+                self._publish("audit.spindle", {
+                    "action": "z3_verified_execution",
+                    "target": topic,
+                    "proof_hash": proof.constraint_hash,
+                    "execution_success": result.success,
+                    "action_taken": result.action_taken,
+                })
+
+                # Persist to event store
+                try:
+                    from cognitive.spindle_event_store import get_event_store
+                    store = get_event_store()
+                    store.append(
+                        topic=f"spindle.execution.{topic}",
+                        source_type="healing",
+                        payload={"problem": problem, "result": result.action_taken, "success": result.success},
+                        proof_hash=proof.constraint_hash,
+                        result="EXECUTED" if result.success else "FAILED",
+                    )
+                except Exception as e:
+                    logger.warning(f"[SPINDLE] Event store write failed: {e}")
+                return
+            else:
+                logger.warning(f"[SPINDLE] Z3 Rejected action: {verification_msg}")
+                self._publish("audit.spindle", {"action": "z3_rejected", "target": topic, "reason": verification_msg})
+                # Don't execute — Z3 said no
+                return
+
+        except Exception as e:
+            logger.warning(f"[SPINDLE] Z3 pipeline unavailable ({e}), falling back to legacy path")
+
+        # Fallback: legacy generate_code path (only if Z3 pipeline is unavailable)
+        # Re-verify autonomy before proceeding
+        is_autonomous, reason = verify_autonomy(self._metrics)
+        if not is_autonomous:
+            logger.warning(f"[SPINDLE] Autonomy re-check failed: {reason}")
+            return
+
+        try:
+            from cognitive.qwen_coding_net import generate_code
             prompt = (
                 f"Spindle Autonomous Daemon intercepted a structural event/warning:\n"
                 f"Topic: {topic}\nDetails: {problem}\n"
                 f"Analyze the system state and write Python code to proactively self-heal or optimize this issue."
             )
-            
-            try:
-                from cognitive.qwen_coding_net import generate_code
-                # Execute full autonomous pipeline: design -> build -> test -> Z3 proof -> deploy
-                result = generate_code(prompt, use_pipeline=True)
-                
-                status = result.get("status")
-                if status in ["deployed", "healed_and_deployed", "completed"]:
-                    logger.info(f"[SPINDLE] Successfully deployed autonomous fix! Status: {status}")
-                    self._publish("audit.spindle", {
-                        "action": "applied_fix", 
-                        "target": topic, 
-                        "code_len": len(result.get("code", "")),
-                        "trust_score": result.get("trust_score")
-                    })
-                else:
-                    logger.warning(f"[SPINDLE] Fix generation did not deploy. Status: {status}")
-                    self._publish("audit.spindle", {"action": "healing_blocked", "target": topic, "reason": status})
-                    
-            except Exception as e:
-                logger.error(f"[SPINDLE] Coding Net exception during autonomous response: {e}")
-                self._publish("audit.spindle", {"action": "error", "target": topic, "error": str(e)})
+            result = generate_code(prompt, use_pipeline=True)
+            status = result.get("status")
+            if status in ["deployed", "healed_and_deployed", "completed"]:
+                logger.info(f"[SPINDLE] Legacy path deployed fix. Status: {status}")
+                self._publish("audit.spindle", {
+                    "action": "legacy_applied_fix",
+                    "target": topic,
+                    "code_len": len(result.get("code", "")),
+                    "trust_score": result.get("trust_score")
+                })
+            else:
+                logger.warning(f"[SPINDLE] Legacy fix did not deploy. Status: {status}")
+                self._publish("audit.spindle", {"action": "healing_blocked", "target": topic, "reason": status})
+        except Exception as e:
+            logger.error(f"[SPINDLE] Legacy path exception: {e}")
+            self._publish("audit.spindle", {"action": "error", "target": topic, "error": str(e)})
 
 if __name__ == "__main__":
     daemon = SpindleDaemon()

@@ -1,6 +1,8 @@
 import os
 from z3 import *
 
+from cognitive.physics.spindle_proof import SpindleProof
+
 class HierarchicalZ3Geometry:
     """
     Spindle Next-Gen: 256-bit Hierarchical Hyperdimensional Computing (HDC)
@@ -121,9 +123,10 @@ class HierarchicalZ3Geometry:
             )
         )
 
-    def verify_action(self, d_val: int, i_val: int, s_val: int, c_val: int) -> tuple[bool, str]:
+    def verify_action(self, d_val: int, i_val: int, s_val: int, c_val: int) -> SpindleProof:
         """
         Pushes the current proposal to the Z3 Solver and validates it formally.
+        Returns a SpindleProof certificate for audit/replay.
         """
         self.solver.push()
         
@@ -133,14 +136,14 @@ class HierarchicalZ3Geometry:
         self.solver.add(self.ctx_mask == c_val)
         
         result = self.solver.check()
+        mask_kwargs = dict(domain_mask=d_val, intent_mask=i_val, state_mask=s_val, context_mask=c_val)
         
         if result == sat:
             self.solver.pop()
-            return True, "Z3_SAT: Valid Topology"
+            return SpindleProof(is_valid=True, result="SAT", reason="Z3_SAT: Valid Topology", **mask_kwargs)
         elif result == unsat:
-            # We can use unsat_core if tracking, but for now a simple rejection
             self.solver.pop()
-            return False, "Z3_UNSAT: Formal Verification Failed. Physics rules violated."
+            return SpindleProof(is_valid=False, result="UNSAT", reason="Z3_UNSAT: Formal Verification Failed. Physics rules violated.", **mask_kwargs)
         else:
             self.solver.pop()
-            return False, "Z3_UNKNOWN: Solver timeout or irreducible constraints."
+            return SpindleProof(is_valid=False, result="UNKNOWN", reason="Z3_UNKNOWN: Solver timeout or irreducible constraints.", **mask_kwargs)
