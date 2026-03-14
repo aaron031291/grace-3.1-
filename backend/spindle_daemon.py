@@ -20,6 +20,10 @@ from dataclasses import dataclass, field
 os.environ["IS_SPINDLE_DAEMON"] = "1"
 sys.path.insert(0, str(Path(__file__).parent))
 
+# Windows: ZMQ needs SelectorEventLoop (Proactor doesn't support add_reader)
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 import zmq
 import zmq.asyncio
 from cognitive.deterministic_validator import verify_autonomy

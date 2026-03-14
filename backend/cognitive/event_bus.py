@@ -110,14 +110,32 @@ def _zmq_bridge_loop():
     import zmq
     global _zmq_context, _zmq_pub_socket
     _zmq_context = zmq.Context()
-    
+
     # Grace PUB socket (broadcasts internal events to Spindle)
     _zmq_pub_socket = _zmq_context.socket(zmq.PUB)
-    _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
-    
+    try:
+        _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
+    except zmq.error.ZMQError as e:
+        # EADDRINUSE or any bind failure - skip bridge without crashing
+        logger.warning(f"[ZMQ-BRIDGE] Could not bind {ZMQ_PUB_ENDPOINT}: {e}. Skipping ZMQ bridge.")
+        try:
+            _zmq_pub_socket.close()
+        except Exception:
+            pass
+        _zmq_pub_socket = None
+        return
+
     # Grace SUB socket (listens for events from Spindle)
     sub_socket = _zmq_context.socket(zmq.SUB)
-    sub_socket.bind(ZMQ_SUB_ENDPOINT)
+    try:
+        sub_socket.bind(ZMQ_SUB_ENDPOINT)
+    except zmq.error.ZMQError as e:
+        logger.warning(f"[ZMQ-BRIDGE] Could not bind {ZMQ_SUB_ENDPOINT}: {e}. Skipping.")
+        try:
+            _zmq_pub_socket.close()
+        except Exception:
+            pass
+        return
     sub_socket.setsockopt_string(zmq.SUBSCRIBE, "")  # Subscribe to all topics
 
     logger.info(f"[ZMQ-BRIDGE] Bound PUB to {ZMQ_PUB_ENDPOINT}, SUB to {ZMQ_SUB_ENDPOINT}")

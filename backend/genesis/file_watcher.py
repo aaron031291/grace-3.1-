@@ -269,9 +269,10 @@ class GenesisFileWatcher(FileSystemEventHandler):
         try:
             # Get relative path from watch root
             rel_path = os.path.relpath(file_path, self.watch_path)
-            
+
             from genesis.genesis_key_service import get_genesis_service
             from models.genesis_key_models import GenesisKeyType
+            from database.session import session_scope
 
             with session_scope() as session:
                 genesis_service = get_genesis_service(session)

@@ -363,6 +363,8 @@ def _start_grace():
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             bufsize=1,
         )
     except FileNotFoundError:
@@ -373,6 +375,8 @@ def _start_grace():
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             bufsize=1,
         )
 
@@ -578,8 +582,7 @@ class LauncherHandler(http.server.BaseHTTPRequestHandler):
             if cmd:
                 _run_terminal_command(cmd)
             self._json({"ok": True})
-        elif self.path == "/fix/kill-port":
-
+        elif self.path in ("/fix/kill-port", "/fix/kill_port"):
             killed = _kill_port(GRACE_PORT)
             _resolve_problem("Port Conflict (WinError 10013)")
             self._json({"ok": killed, "msg": f"Cleared port {GRACE_PORT}"})

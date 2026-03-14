@@ -85,6 +85,7 @@ class Settings:
     # ==================== Component Control Flags (deduplicated) ====================
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
     DISABLE_PROACTIVE_HEALING: bool = os.getenv("DISABLE_PROACTIVE_HEALING", "false").lower() == "true"
+    DISABLE_SPINDLE_DAEMON: bool = os.getenv("DISABLE_SPINDLE_DAEMON", "false").lower() == "true"
 
     # ==================== Error Handling (deduplicated) ====================
     SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"

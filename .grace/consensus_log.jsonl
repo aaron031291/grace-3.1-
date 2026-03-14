@@ -1,0 +1,2 @@
+{"event": "consensus.completed", "timestamp": "2026-03-14T18:31:24.826652+00:00", "models": ["opus", "kimi", "qwen", "reasoning"], "confidence": 0.7, "agreements": 1, "disagreements": 10}
+{"event": "consensus.actuated", "timestamp": "2026-03-14T18:31:25.622414+00:00", "models": ["opus", "kimi", "qwen", "reasoning"], "confidence": 0.7, "agreements": null, "disagreements": null}

@@ -1,0 +1,79 @@
+{
+  "smoke_test": {
+    "component_name": "Smoke Test",
+    "trust_score": 100.0,
+    "trend": "stable",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:32:23.942910+00:00"
+  },
+  "compiler_6190fb08654d6683": {
+    "component_name": "Compiled: ['func:hello']",
+    "trust_score": 97.0,
+    "trend": "stable",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:32:24.551497+00:00"
+  },
+  "qdrant": {
+    "component_name": "qdrant",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:16:45.461268+00:00"
+  },
+  "core\\async_parallel.py": {
+    "component_name": "core\\async_parallel.py",
+    "trust_score": 5.0,
+    "trend": "stable",
+    "needs_remediation": true,
+    "last_updated": "2026-03-14T18:20:09.545224+00:00"
+  },
+  "core\\auto_router.py": {
+    "component_name": "core\\auto_router.py",
+    "trust_score": 3.3,
+    "trend": "down",
+    "needs_remediation": true,
+    "last_updated": "2026-03-14T18:20:09.652975+00:00"
+  },
+  "core\\base_component.py": {
+    "component_name": "core\\base_component.py",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:16:46.209976+00:00"
+  },
+  "logic_test": {
+    "component_name": "Logic Test",
+    "trust_score": 100.0,
+    "trend": "stable",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:26:16.616521+00:00"
+  },
+  "tracking_test": {
+    "component_name": "Track Test",
+    "trust_score": 80.9,
+    "trend": "down",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:26:16.731699+00:00"
+  },
+  "compiler_e6d11ccc9a79d56b": {
+    "component_name": "Compiled: ['func:test']",
+    "trust_score": 97.0,
+    "trend": "stable",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:26:18.214781+00:00"
+  },
+  "system": {
+    "component_name": "system",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:20:09.436854+00:00"
+  },
+  "consensus_engine": {
+    "component_name": "Consensus Roundtable",
+    "trust_score": 88.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-14T18:27:49.044954+00:00"
+  }
+}

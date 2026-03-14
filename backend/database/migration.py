@@ -99,6 +99,9 @@ from models.file_intelligence_models import (  # noqa: F401
 # Import Coding Agent task model — creates coding_agent_tasks table
 from database.models.coding_agent_task import CodingAgentTask  # noqa: F401
 
+# Import Spindle event model — creates spindle_events table
+from models.spindle_event_model import SpindleEvent  # noqa: F401
+
 
 logger = logging.getLogger(__name__)
 

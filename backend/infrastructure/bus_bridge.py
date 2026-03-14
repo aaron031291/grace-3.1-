@@ -108,8 +108,8 @@ class BusBridge:
             return
 
         async def _publish_to_layer1(topic: str, data: Dict[str, Any]) -> None:
-            # Layer1 publish is async
-            await self._layer1_publish(topic=topic, payload=data, source=FORWARDED_SOURCE)
+            from layer1.message_bus import ComponentType
+            await self._layer1_publish(topic=topic, payload=data, from_component=ComponentType.COGNITIVE_ENGINE)
 
         def _handler(evt: Any) -> None:
             try:
