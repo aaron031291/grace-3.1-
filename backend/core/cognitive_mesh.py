@@ -1,5 +1,5 @@
 """
-Cognitive Mesh — wires ALL orphaned cognitive modules into the brain.
+Cognitive Mesh Ã¢â‚¬â€ wires ALL orphaned cognitive modules into the brain.
 
 Connects:
   - OODA loop (observe-orient-decide-act) into brain action routing
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def _safe(func, fallback=None):
-    """Call a function safely — never crash the caller."""
+    """Call a function safely Ã¢â‚¬â€ never crash the caller."""
     try:
         return func()
     except Exception as e:
@@ -35,7 +35,7 @@ class CognitiveMesh:
     The brain calls this instead of importing 8 different modules.
     """
 
-    # ── OODA Loop ─────────────────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ OODA Loop Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def ooda_cycle(observation: str, context: dict = None) -> dict:
         """Run an OODA (Observe-Orient-Decide-Act) cycle."""
@@ -53,7 +53,7 @@ class CognitiveMesh:
             }
         return result
 
-    # ── Ambiguity Resolution ──────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Ambiguity Resolution Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def resolve_ambiguity(text: str, context: dict = None) -> dict:
         """Detect and resolve ambiguity in input."""
@@ -72,7 +72,7 @@ class CognitiveMesh:
             }
         return result
 
-    # ── Procedural Memory ─────────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Procedural Memory Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def find_procedure(goal: str, context: dict = None) -> dict:
         """Find a proven procedure for a goal."""
@@ -93,7 +93,7 @@ class CognitiveMesh:
                 return {"found": False}
         return _safe(_run, {"found": False})
 
-    # ── Reverse KNN ───────────────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Reverse KNN Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def find_similar_patterns(query: str, k: int = 5) -> dict:
         """Find similar patterns using reverse KNN."""
@@ -102,10 +102,10 @@ class CognitiveMesh:
             return scan_knowledge_gaps()
         return _safe(_run, {"patterns": [], "gaps": []})
 
-    # ── Invariant Checking ────────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Invariant Checking Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def check_invariants() -> dict:
-        """Check system invariants — are all constraints satisfied?"""
+        """Check system invariants Ã¢â‚¬â€ are all constraints satisfied?"""
         def _run():
             from cognitive.invariants import check_all_invariants
             return check_all_invariants()
@@ -127,7 +127,7 @@ class CognitiveMesh:
             return {"passed": all(checks.values()), "checks": checks}
         return result
 
-    # ── ML Bandits ────────────────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ ML Bandits Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def bandit_select(options: list, context: dict = None) -> dict:
         """Use multi-armed bandit to select the best option."""
@@ -144,7 +144,7 @@ class CognitiveMesh:
             return {"selected": deterministic_choice(options, seed), "method": "deterministic_fallback"}
         return result or {"selected": options[0] if options else None, "method": "default"}
 
-    # ── Meta-Learning ─────────────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Meta-Learning Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def adapt_learning_rate(current_rate: float, recent_performance: list) -> float:
         """Use meta-learning to adapt the Hebbian learning rate."""
@@ -168,7 +168,7 @@ class CognitiveMesh:
             return max(0.01, current_rate * 0.9)
         return current_rate
 
-    # ── Knowledge Gap Analysis ────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Knowledge Gap Analysis Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def analyze_knowledge_gaps() -> dict:
         """Use memory mesh learner to find knowledge gaps."""
@@ -180,7 +180,7 @@ class CognitiveMesh:
                 return learner.get_learning_suggestions()
         return _safe(_run, {"knowledge_gaps": [], "top_priorities": []})
 
-    # ── Full Cognitive Report ─────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Full Cognitive Report Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @staticmethod
     def full_cognitive_report(query: str = "") -> dict:
         """Run ALL cognitive modules and return unified report."""

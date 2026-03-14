@@ -1,25 +1,25 @@
 """
-Grace Coding Pipeline — 9-Phase Error Mitigation (determinism to the door of LLMs).
+Grace Coding Pipeline Ã¢â‚¬â€ 9-Phase Error Mitigation (determinism to the door of LLMs).
 
 Determinism full scope and full breadth: Phase 0 runs first (Genesis keys, probe agent,
 AST/deterministic bridge, auto-fix). LLM is used only when we can't finish deterministically.
 
 Flow:
-  Phase 0 (deterministic): Search Genesis keys → Probe agent → Deterministic scan + fix →
-  User task → Planner → Consensus on plan → Break into chunks →
-  Each chunk runs through Layers 1–8 → Probe + verify at each layer →
+  Phase 0 (deterministic): Search Genesis keys Ã¢â€ â€™ Probe agent Ã¢â€ â€™ Deterministic scan + fix Ã¢â€ â€™
+  User task Ã¢â€ â€™ Planner Ã¢â€ â€™ Consensus on plan Ã¢â€ â€™ Break into chunks Ã¢â€ â€™
+  Each chunk runs through Layers 1Ã¢â‚¬â€œ8 Ã¢â€ â€™ Probe + verify at each layer Ã¢â€ â€™
   Hand off to LLM only for reasoning/validation/generation when Phase 0 says so.
 
 Phases:
-  0. DETERMINISTIC PRE-PHASE — Genesis error search, probe (testing), AST/parse, auto-fix
-  1. RUNTIME ENVIRONMENT — isolated context per task
-  2. TASK DECOMPOSITION — break into sub-problems
-  3. SOLUTION PROPOSAL — generate 3 diverse approaches
-  4. SOLUTION SELECTION — evaluate and pick best approach
-  5. SIMULATION & REASONING — simulate against requirements
-  6. CODE GENERATION — translate chosen approach into code
-  7. VERIFICATION — deterministic first, then probe, then LLM backup
-  8. DEPLOYMENT GATE — consensus approval, trust score check
+  0. DETERMINISTIC PRE-PHASE Ã¢â‚¬â€ Genesis error search, probe (testing), AST/parse, auto-fix
+  1. RUNTIME ENVIRONMENT Ã¢â‚¬â€ isolated context per task
+  2. TASK DECOMPOSITION Ã¢â‚¬â€ break into sub-problems
+  3. SOLUTION PROPOSAL Ã¢â‚¬â€ generate 3 diverse approaches
+  4. SOLUTION SELECTION Ã¢â‚¬â€ evaluate and pick best approach
+  5. SIMULATION & REASONING Ã¢â‚¬â€ simulate against requirements
+  6. CODE GENERATION Ã¢â‚¬â€ translate chosen approach into code
+  7. VERIFICATION Ã¢â‚¬â€ deterministic first, then probe, then LLM backup
+  8. DEPLOYMENT GATE Ã¢â‚¬â€ consensus approval, trust score check
 
 Cross-cutting: Genesis keys, trust score, probe at every layer, anti-hallucination,
 LLM only where Phase 0 / deterministic path cannot complete.
@@ -202,7 +202,7 @@ class CodingPipeline:
 
         self._track("pipeline_start", f"Pipeline started: {task[:100]}", {"task": task, "run_id": run_id})
 
-        # Phase 0: Deterministic first (Genesis keys, probe, AST, auto-fix) — hand off to LLM only when we can't finish
+        # Phase 0: Deterministic first (Genesis keys, probe, AST, auto-fix) Ã¢â‚¬â€ hand off to LLM only when we can't finish
         phase0_result = None
         try:
             from core.deterministic_first_loop import run_deterministic_first_loop, get_handoff_context
@@ -285,22 +285,22 @@ class CodingPipeline:
                 result.chunks.append(chunk)
                 continue
 
-            # Layer 5 (simulate) — sequential, depends on 3+4
+            # Layer 5 (simulate) Ã¢â‚¬â€ sequential, depends on 3+4
             l5 = self._execute_layer(5, chunk_desc, task, context or {})
             chunk.layers.append(l5)
             self.progress.update_layer(run_id, i, 5, l5.name, l5.status, l5.trust_score)
 
-            # Layer 6 (generate) — sequential, depends on 5
+            # Layer 6 (generate) Ã¢â‚¬â€ sequential, depends on 5
             l6 = self._execute_layer(6, chunk_desc, task, context or {})
             chunk.layers.append(l6)
             self.progress.update_layer(run_id, i, 6, l6.name, l6.status, l6.trust_score)
 
-            # Layer 7 (verify) — sequential, depends on 6
+            # Layer 7 (verify) Ã¢â‚¬â€ sequential, depends on 6
             l7 = self._execute_layer(7, chunk_desc, task, context or {})
             chunk.layers.append(l7)
             self.progress.update_layer(run_id, i, 7, l7.name, l7.status, l7.trust_score)
 
-            # Layer 8 (deploy gate) — sequential
+            # Layer 8 (deploy gate) Ã¢â‚¬â€ sequential
             l8 = self._execute_layer(8, chunk_desc, task, context or {})
             chunk.layers.append(l8)
             self.progress.update_layer(run_id, i, 8, l8.name, l8.status, l8.trust_score)
@@ -341,7 +341,7 @@ class CodingPipeline:
                      {"status": result.status, "run_id": run_id, "chunks": len(result.chunks),
                       "passed": len(passed_chunks), "trust": result.trust_score})
 
-        # Run logic tests — verify generated code works
+        # Run logic tests Ã¢â‚¬â€ verify generated code works
         try:
             from api.brain_api_v2 import call_brain as _cb
             test_result = _cb("ai", "logic_tests", {})
@@ -397,7 +397,7 @@ class CodingPipeline:
         except Exception:
             pass
 
-        # Record as episodic memory — the pipeline outcome is a real learning signal
+        # Record as episodic memory Ã¢â‚¬â€ the pipeline outcome is a real learning signal
         try:
             from database.session import session_scope
             from cognitive.episodic_memory import EpisodicBuffer
@@ -464,7 +464,7 @@ class CodingPipeline:
             # Self-mirror observation
             mirror_obs = self._mirror_observe(layer_num, chunk)
 
-            # Episodic recall — check for similar past failures
+            # Episodic recall Ã¢â‚¬â€ check for similar past failures
             past_failure = None
             try:
                 from database.session import session_scope as _ss
@@ -516,7 +516,7 @@ class CodingPipeline:
                 result.status = "failed"
                 result.output = {"hallucination_detected": hallucination["flags"], "original_output": result.output}
 
-            # Probe check (use Phase 0 probe result when available — deterministic first)
+            # Probe check (use Phase 0 probe result when available Ã¢â‚¬â€ deterministic first)
             result.probe_passed = self._probe_layer(layer_num, context)
 
             # Trust score
@@ -544,7 +544,7 @@ class CodingPipeline:
 
         return result
 
-    # ── Layer implementations ─────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Layer implementations Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
     def _layer_runtime(self, chunk: str, context: dict) -> dict:
         """Layer 1: Check system health, connectivity, rules. Deterministic probe when Phase 0 provided."""
@@ -552,7 +552,7 @@ class CodingPipeline:
         health = call_brain("system", "health", {})
         connectivity = call_brain("system", "connectivity", {})
         rules = call_brain("govern", "rules", {})
-        # Phase 0 (deterministic first) state when present — probe + Genesis + AST already ran
+        # Phase 0 (deterministic first) state when present Ã¢â‚¬â€ probe + Genesis + AST already ran
         phase0 = (context or {}).get("phase0")
         gaps = call_brain("ai", "knowledge_gaps_deep", {})
         out = {
@@ -581,7 +581,7 @@ class CodingPipeline:
         ambiguity = call_brain("ai", "ambiguity", {"text": chunk})
         is_ambiguous = ambiguity.get("data", {}).get("is_ambiguous", False) if ambiguity.get("ok") else False
 
-        # Load project context — LLM sees existing code
+        # Load project context Ã¢â‚¬â€ LLM sees existing code
         from core.environment import get_environment
         env = get_environment()
         project_ctx = call_brain("code", "project_context", {"id": env})
@@ -592,7 +592,7 @@ class CodingPipeline:
         # Search existing code
         existing = call_brain("files", "search", {"query": chunk[:50], "limit": 5})
 
-        # Run models independently — don't block on one slow model
+        # Run models independently Ã¢â‚¬â€ don't block on one slow model
         planner = call_brain("system", "run_independent", {
             "prompt": f"Decompose this into sub-tasks. Follow the governance coding contract.{contract_preamble}\n\nTask:\n{chunk}",
             "models": ["kimi"],
@@ -670,7 +670,7 @@ class CodingPipeline:
         # Load persona for coding style
         persona = call_brain("govern", "persona", {})
 
-        # Project-scoped chat — LLM reasons about THIS project
+        # Project-scoped chat Ã¢â‚¬â€ LLM reasons about THIS project
         from core.environment import get_environment
         env = get_environment()
         scoped = call_brain("code", "project_chat", {
@@ -745,7 +745,7 @@ class CodingPipeline:
         }
 
     def _layer_deploy_gate(self, chunk: str) -> dict:
-        """Layer 8: Deployment gate — check approvals, run auto-cycle, final trust."""
+        """Layer 8: Deployment gate Ã¢â‚¬â€ check approvals, run auto-cycle, final trust."""
         from api.brain_api_v2 import call_brain
         approvals = call_brain("govern", "approvals", {})
         trust = call_brain("system", "trust", {})
@@ -758,7 +758,7 @@ class CodingPipeline:
             "auto_cycle_ran": auto.get("ok", False),
         }
 
-    # ── Cross-cutting concerns ────────────────────────────────
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Cross-cutting concerns Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
     def _consensus(self, topic: str) -> dict:
         try:

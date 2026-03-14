@@ -1,16 +1,16 @@
 """
-Agentic Runner — Background task spawner for all brain domains.
+Agentic Runner Ã¢â‚¬â€ Background task spawner for all brain domains.
 
 Allows any brain action to be submitted as a non-blocking agentic task.
 Results are stored in-memory (with optional persistence) and polled via task_id.
 
 Usage from any brain:
     spawn_task(brain="deterministic", action="scan", payload={})
-    → returns {"task_id": "task_abc123", "status": "queued"}
+    Ã¢â€ â€™ returns {"task_id": "task_abc123", "status": "queued"}
 
 Then poll:
     get_task(task_id)
-    → returns {"task_id": "...", "status": "done", "result": {...}, "elapsed_ms": 1500}
+    Ã¢â€ â€™ returns {"task_id": "...", "status": "done", "result": {...}, "elapsed_ms": 1500}
 """
 
 import logging
@@ -68,7 +68,7 @@ class AgentTaskRunner:
         thread = threading.Thread(target=self._run_task, args=(task_id,), daemon=True)
         thread.start()
 
-        logger.info("[Agent] Spawned task %s → %s/%s", task_id, brain, action)
+        logger.info("[Agent] Spawned task %s Ã¢â€ â€™ %s/%s", task_id, brain, action)
         return task_id
 
     def _run_task(self, task_id: str):

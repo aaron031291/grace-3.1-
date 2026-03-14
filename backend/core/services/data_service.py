@@ -1,4 +1,4 @@
-"""Data domain service — whitelist sources, flash cache."""
+"""Data domain service Ã¢â‚¬â€ whitelist sources, flash cache."""
 from pathlib import Path
 import json, uuid, logging
 from datetime import datetime, timezone

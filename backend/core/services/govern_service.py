@@ -1,4 +1,4 @@
-"""Governance domain service — direct calls, no HTTP."""
+"""Governance domain service Ã¢â‚¬â€ direct calls, no HTTP."""
 from pathlib import Path
 import json, logging
 from datetime import datetime, timezone

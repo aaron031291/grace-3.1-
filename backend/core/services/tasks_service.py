@@ -1,4 +1,4 @@
-"""Tasks domain service — scheduling, time sense."""
+"""Tasks domain service Ã¢â‚¬â€ scheduling, time sense."""
 from pathlib import Path
 import json, uuid, logging
 from datetime import datetime, timezone, timedelta

@@ -259,8 +259,21 @@ def _dispatch(task: Dict) -> None:
 
     try:
         result = handler(task)
-        complete(task["task_id"], success=True, result=result)
-        logger.info("[CODING-AGENT] ✅ Task %s completed successfully", task["task_id"])
+        # Check whether fix_applier actually wrote to disk successfully
+        apply_result = result.get("apply_result", {}) if isinstance(result, dict) else {}
+        actually_applied = apply_result.get("success", False)
+        blocked = result.get("blocked", False) if isinstance(result, dict) else False
+        if blocked:
+            complete(task["task_id"], success=False, error=result.get("reason", "blocked by gate"))
+            logger.warning("[CODING-AGENT] ⛔ Task %s blocked: %s", task["task_id"], result.get("reason", ""))
+        elif actually_applied:
+            complete(task["task_id"], success=True, result=result)
+            logger.info("[CODING-AGENT] ✅ Task %s completed — fix applied to disk", task["task_id"])
+        else:
+            # Code was generated but not applied (no target_file, verification rejected, etc.)
+            apply_reason = apply_result.get("reason", apply_result.get("error", "fix not applied to disk"))
+            complete(task["task_id"], success=False, error=apply_reason)
+            logger.warning("[CODING-AGENT] ⚠️ Task %s generated code but did NOT apply: %s", task["task_id"], apply_reason)
     except Exception as e:
         complete(task["task_id"], success=False, error=str(e))
         logger.error("[CODING-AGENT] ❌ Task %s failed: %s", task["task_id"], e)
@@ -532,9 +545,36 @@ def _default_handler(task: Dict) -> Dict:
         except Exception as ve:
             logger.debug("[CODING-AGENT] Verification pass skipped: %s", ve)
 
-    # ── 6. Apply to disk if we have a target file ───────────────────────
+    # ── 6. Sandbox test → Apply to disk ──────────────────────────────
     target_file = ctx.get("target_file") or ctx.get("file") or ctx.get("location")
+    allow_create = ctx.get("allow_create", False) or ctx.get("create_new", False)
     if generated_code and target_file and target_file.endswith(".py"):
+        # Run in sandbox first — catch runtime explosions before touching disk
+        try:
+            from cognitive.code_sandbox import execute_sandboxed
+            sandbox_result = execute_sandboxed(generated_code, timeout=15)
+            if not sandbox_result.compiled:
+                logger.warning(
+                    "[CODING-AGENT] ⛔ Sandbox compile failed — NOT applying: %s",
+                    sandbox_result.syntax_errors,
+                )
+                code_result["apply_result"] = {
+                    "success": False,
+                    "reason": f"Sandbox compile failed: {sandbox_result.syntax_errors}",
+                }
+                _store_memory_outcome(
+                    instructions=instructions, error_class=error_class,
+                    success=False, result=code_result, task_id=task["task_id"],
+                )
+                return code_result
+            if sandbox_result.static_warnings:
+                logger.info(
+                    "[CODING-AGENT] Sandbox warnings (proceeding): %s",
+                    sandbox_result.static_warnings[:3],
+                )
+        except Exception as sb_err:
+            logger.debug("[CODING-AGENT] Sandbox check skipped: %s", sb_err)
+
         try:
             from coding_agent.fix_applier import get_fix_applier
             apply_result = get_fix_applier().apply(
@@ -542,6 +582,7 @@ def _default_handler(task: Dict) -> Dict:
                 generated_code=generated_code,
                 task_id=task["task_id"],
                 task_description=task["instructions"][:200],
+                allow_create=allow_create,
             )
             code_result["apply_result"] = {
                 "success": apply_result.success,

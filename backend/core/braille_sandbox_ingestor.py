@@ -23,17 +23,17 @@ class BrailleIngestor:
         based on the file path and content.
         """
         if "cognitive" in file_path or "brain" in file_path:
-            return "CG", "COGNITION", "●●●●●● 1mm ○"
+            return "CG", "COGNITION", "Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€” 1mm Ã¢â€”â€¹"
         elif "self_healing" in file_path or "error" in file_path or "healing" in file_path:
-            return "HO", "HOMEOSTASIS", "●●●●●● 1mm □"
+            return "HO", "HOMEOSTASIS", "Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€” 1mm Ã¢â€“Â¡"
         elif "learning" in file_path or "knowledge" in file_path:
-            return "LN", "LEARNING", "●●●●●● 2mm □"
+            return "LN", "LEARNING", "Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€” 2mm Ã¢â€“Â¡"
         elif "governance" in file_path or "trust" in file_path:
-            return "GV", "GOVERNANCE", "●●●●●● 3mm △"
+            return "GV", "GOVERNANCE", "Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€” 3mm Ã¢â€“Â³"
         elif "orchestrator" in file_path or "tasks" in file_path or "agent" in file_path:
-            return "OR", "ORCHESTRATION", "●●●●●● 3mm □"
+            return "OR", "ORCHESTRATION", "Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€” 3mm Ã¢â€“Â¡"
         else:
-            return "SE", "ORCHESTRATION", "●●●●●● 1mm □△" # Default software engineering fallback
+            return "SE", "ORCHESTRATION", "Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€”Ã¢â€” 1mm Ã¢â€“Â¡Ã¢â€“Â³" # Default software engineering fallback
 
     def _generate_genesis_key(self, category: str):
         count = self.sequence_counter.get(category, 1)

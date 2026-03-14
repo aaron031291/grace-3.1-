@@ -1,4 +1,4 @@
-"""Files domain service — direct file system operations and agentic filing (brain + Qwen/librarian)."""
+"""Files domain service Ã¢â‚¬â€ direct file system operations and agentic filing (brain + Qwen/librarian)."""
 from pathlib import Path
 import os
 import json

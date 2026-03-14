@@ -1,16 +1,16 @@
 """
-Cognitive Pipeline — runs automatically on brain actions.
+Cognitive Pipeline Ã¢â‚¬â€ runs automatically on brain actions.
 
 Chains ALL cognitive modules in optimal order:
-  1. OBSERVE (OODA phase 1) — what is happening?
-  2. AMBIGUITY CHECK — is the input clear?
-  3. MEMORY RECALL — have we seen this before?
-  4. INVARIANT CHECK — are constraints satisfied?
-  5. BANDIT SELECT — explore or exploit?
-  6. PREDICT (DL model) — will this succeed?
-  7. DECIDE (OODA phase 3) — what action to take?
-  8. EXECUTE — run the action
-  9. LEARN — record outcome, update weights
+  1. OBSERVE (OODA phase 1) Ã¢â‚¬â€ what is happening?
+  2. AMBIGUITY CHECK Ã¢â‚¬â€ is the input clear?
+  3. MEMORY RECALL Ã¢â‚¬â€ have we seen this before?
+  4. INVARIANT CHECK Ã¢â‚¬â€ are constraints satisfied?
+  5. BANDIT SELECT Ã¢â‚¬â€ explore or exploit?
+  6. PREDICT (DL model) Ã¢â‚¬â€ will this succeed?
+  7. DECIDE (OODA phase 3) Ã¢â‚¬â€ what action to take?
+  8. EXECUTE Ã¢â‚¬â€ run the action
+  9. LEARN Ã¢â‚¬â€ record outcome, update weights
 
 This pipeline wraps brain actions to make them smarter
 without changing any brain code.
@@ -43,7 +43,7 @@ class CognitivePipeline:
         start = time.time()
         context = {"brain": brain, "action": action, "payload_keys": list(payload.keys())}
 
-        # ── Pre-execution intelligence ────────────────────────
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Pre-execution intelligence Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
         prediction = None
         ambiguity = None
         memory = None
@@ -57,7 +57,7 @@ class CognitivePipeline:
             except Exception:
                 pass
 
-        # ── Execute the action ────────────────────────────────
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Execute the action Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
         try:
             result = handler(payload)
             success = True
@@ -67,7 +67,7 @@ class CognitivePipeline:
 
         latency = round((time.time() - start) * 1000, 1)
 
-        # ── Post-execution learning ───────────────────────────
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Post-execution learning Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
         try:
             self._learn(brain, action, success, latency, prediction)
         except Exception:
@@ -88,7 +88,7 @@ class CognitivePipeline:
         return result
 
     def _predict(self, context: dict) -> Optional[dict]:
-        """DL model prediction — will this succeed?"""
+        """DL model prediction Ã¢â‚¬â€ will this succeed?"""
         try:
             from core.deep_learning import get_model, TORCH_AVAILABLE
             if not TORCH_AVAILABLE:

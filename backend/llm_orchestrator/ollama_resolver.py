@@ -9,11 +9,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Fallback lists (in order). Prefer latest Qwen: coding -> Qwen2.5-Coder; reasoning -> Qwen3; document -> Qwen3 (parse/read).
-CODE_FALLBACKS = ["qwen2.5-coder:32b", "qwen3:32b", "qwen2.5-coder:7b", "qwen3:14b", "qwen2.5:7b"]
-REASON_FALLBACKS = ["qwen3:32b", "qwen2.5-coder:32b", "qwen3:14b", "qwen2.5:7b"]
-FAST_FALLBACKS = ["qwen3:14b", "qwen2.5:7b", "qwen3:32b", "qwen2.5-coder:32b"]
-DOCUMENT_FALLBACKS = ["qwen3:32b", "qwen2.5-coder:32b", "qwen3:14b", "qwen2.5:7b"]
+# Fallback lists (in order). Qwen3.5 (MoE, 256K ctx, agentic RL) → Qwen3-Coder → Qwen3.
+CODE_FALLBACKS = ["qwen3.5:35b", "qwen3-coder", "qwen3.5:27b", "qwen3.5:9b", "qwen3:32b"]
+REASON_FALLBACKS = ["qwen3.5:35b", "qwen3.5:27b", "qwen3.5:9b", "qwen3:32b"]
+FAST_FALLBACKS = ["qwen3.5:9b", "qwen3.5:4b", "qwen3.5:2b", "qwen3:14b"]
+DOCUMENT_FALLBACKS = ["qwen3.5:35b", "qwen3.5:27b", "qwen3.5:9b", "qwen3:32b"]
 
 
 def ollama_model_exists(model_name: str, settings) -> bool:
@@ -41,22 +41,22 @@ def resolve_ollama_model(role: str) -> str:
     try:
         from settings import settings
     except Exception:
-        return "qwen3:32b"
+        return "qwen3.5:35b"
 
     if role == "reason":
-        configured = getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3:32b"
+        configured = getattr(settings, "OLLAMA_MODEL_REASON", "") or "qwen3.5:35b"
         fallbacks = REASON_FALLBACKS
     elif role == "code":
-        configured = getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen2.5-coder:32b"
+        configured = getattr(settings, "OLLAMA_MODEL_CODE", "") or "qwen3.5:35b"
         fallbacks = CODE_FALLBACKS
     elif role == "fast":
-        configured = getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3:14b"
+        configured = getattr(settings, "OLLAMA_MODEL_FAST", "") or "qwen3.5:9b"
         fallbacks = FAST_FALLBACKS
     elif role == "document":
-        configured = getattr(settings, "OLLAMA_MODEL_DOCUMENT", "") or "qwen3:32b"
+        configured = getattr(settings, "OLLAMA_MODEL_DOCUMENT", "") or "qwen3.5:35b"
         fallbacks = DOCUMENT_FALLBACKS
     else:
-        return "qwen3:32b"
+        return "qwen3.5:35b"
 
     if ollama_model_exists(configured, settings):
         return configured

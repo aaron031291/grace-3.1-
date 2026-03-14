@@ -1,5 +1,5 @@
 """
-Database Compatibility Layer — dialect-agnostic types and utilities.
+Database Compatibility Layer Ã¢â‚¬â€ dialect-agnostic types and utilities.
 
 Ensures ORM models and queries work identically on SQLite and PostgreSQL.
 Import these types instead of raw sqlalchemy types when you need
@@ -99,7 +99,7 @@ class ArrayColumn(TypeDecorator):
 
 def get_table_stats(engine) -> dict:
     """
-    Get row counts for all tables — works on both SQLite and PostgreSQL.
+    Get row counts for all tables Ã¢â‚¬â€ works on both SQLite and PostgreSQL.
     Returns dict of {table_name: row_count}.
     """
     from sqlalchemy import text, inspect
@@ -124,7 +124,7 @@ def get_table_stats(engine) -> dict:
 
 
 def get_db_size_mb(engine) -> float:
-    """Get database size in MB — works on both SQLite and PostgreSQL."""
+    """Get database size in MB Ã¢â‚¬â€ works on both SQLite and PostgreSQL."""
     from sqlalchemy import text
 
     try:

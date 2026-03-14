@@ -1,5 +1,5 @@
 """
-Grace Deep Learning Model — predicts action success, component risk,
+Grace Deep Learning Model Ã¢â‚¬â€ predicts action success, component risk,
 and trust scores from Genesis key patterns.
 
 Architecture: 3-head MLP on 32-dim feature vector
@@ -28,7 +28,7 @@ try:
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
-    logger.info("PyTorch not available — deep learning disabled")
+    logger.info("PyTorch not available Ã¢â‚¬â€ deep learning disabled")
 
 
 COMPONENT_CLASSES = [

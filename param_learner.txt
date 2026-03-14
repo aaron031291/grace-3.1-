@@ -1,0 +1,49 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 3 items
+
+backend\tests\cognitive\test_proactive_learner_actual.py::test_file_monitor_handler FAILED
+backend\tests\cognitive\test_proactive_learner_actual.py::test_learner_subagent_run_loop PASSED
+backend\tests\cognitive\test_proactive_learner_actual.py::test_orchestrator_add_task PASSED
+
+================================== FAILURES ===================================
+__________________________ test_file_monitor_handler __________________________
+
+    def test_file_monitor_handler():
+        q = queue.Queue()
+        kb_path = Path("/tmp/kb")
+        handler = FileMonitorHandler(q, kb_path)
+    
+        # Mock file hash
+        handler._get_file_hash = MagicMock(return_value="mockhash123")
+    
+        # Event mock
+        event = MagicMock()
+        event.is_directory = False
+        event.src_path = "/tmp/kb/test.py"
+    
+        # Test on_created
+        handler.on_created(event)
+        assert q.qsize() == 1
+        task = q.get()
+        assert task.task_type == "ingest_and_study"
+        assert "mockhash" in task.task_id
+>       assert "/tmp/kb/test.py" in handler.processed_files
+E       AssertionError: assert '/tmp/kb/test.py' in {'\\tmp\\kb\\test.py'}
+E        +  where {'\\tmp\\kb\\test.py'} = <backend.cognitive.proactive_learner.FileMonitorHandler object at 0x00000250D9550830>.processed_files
+
+backend\tests\cognitive\test_proactive_learner_actual.py:32: AssertionError
+============================== warnings summary ===============================
+tests/cognitive/test_proactive_learner_actual.py::test_learner_subagent_run_loop
+tests/cognitive/test_proactive_learner_actual.py::test_orchestrator_add_task
+  <string>:9: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\cognitive\test_proactive_learner_actual.py::test_file_monitor_handler
+=================== 1 failed, 2 passed, 2 warnings in 5.62s ===================

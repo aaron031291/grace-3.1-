@@ -403,6 +403,22 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         description="Trigger: governance rule violated. Action: halt response, queue for human review, log incident. Rollback: block action. Fallback: most restrictive policy.",
         max_depth=1,
     ),
+    "spindle_execution": NamedLoop(
+        name="Spindle Execution Loop",
+        category="safety",
+        components=["spindle_daemon", "spindle_executor", "spindle_gate", "healing_coordinator", "z3_geometry"],
+        status="healthy",
+        description="Spindle Z3-verified execution: NLP→Braille→Z3 proof→gate quorum→execute→heal. Circuit breaks if healing triggers re-healing infinitely. Rollback: reject action. Fallback: HITL escalation.",
+        max_depth=3,
+    ),
+    "spindle_healing": NamedLoop(
+        name="Spindle Healing Escalation Loop",
+        category="healing",
+        components=["spindle_executor", "healing_coordinator", "coding_agent", "consensus_engine"],
+        status="healthy",
+        description="Spindle healing escalation: Z3 execution fails→HealingCoordinator→coding agent→re-verify. Prevents infinite heal-retry cycles. Rollback: mark unresolved. Fallback: HITL.",
+        max_depth=2,
+    ),
 }
 
 # Thread-local call depth tracking

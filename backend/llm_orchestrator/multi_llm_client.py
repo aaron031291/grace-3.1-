@@ -300,28 +300,42 @@ class MultiLLMClient:
             ],
             priority=8
         ),
-        "qwen2.5-coder-32b": LLMModel(
-            name="Qwen 2.5 Coder 32B",
-            model_id="qwen2.5-coder:32b-instruct",
-            capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
-            context_window=32768,
+        "qwen3.5-35b": LLMModel(
+            name="Qwen 3.5 35B (MoE, 3B active)",
+            model_id="qwen3.5:35b",
+            capabilities=[ModelCapability.CODE, ModelCapability.REASONING, ModelCapability.GENERAL],
+            context_window=262144,
             recommended_tasks=[
                 TaskType.CODE_GENERATION,
                 TaskType.CODE_EXPLANATION,
-                TaskType.CODE_REVIEW
+                TaskType.CODE_REVIEW,
+                TaskType.REASONING,
+                TaskType.PLANNING,
             ],
-            priority=9
+            priority=12
         ),
-        "qwen2.5-coder-7b": LLMModel(
-            name="Qwen 2.5 Coder 7B",
-            model_id="qwen2.5-coder:7b-instruct",
-            capabilities=[ModelCapability.CODE],
-            context_window=32768,
+        "qwen3-coder-30b": LLMModel(
+            name="Qwen3-Coder 30B (Agentic MoE)",
+            model_id="qwen3-coder:30b",
+            capabilities=[ModelCapability.CODE, ModelCapability.REASONING],
+            context_window=262144,
             recommended_tasks=[
                 TaskType.CODE_GENERATION,
-                TaskType.QUICK_QUERY
+                TaskType.CODE_DEBUGGING,
+                TaskType.CODE_REVIEW,
             ],
-            priority=7
+            priority=11
+        ),
+        "qwen3.5-9b": LLMModel(
+            name="Qwen 3.5 9B (MoE, fast)",
+            model_id="qwen3.5:9b",
+            capabilities=[ModelCapability.CODE, ModelCapability.GENERAL],
+            context_window=262144,
+            recommended_tasks=[
+                TaskType.CODE_GENERATION,
+                TaskType.QUICK_QUERY,
+            ],
+            priority=8
         ),
         "deepseek-r1-70b": LLMModel(
             name="DeepSeek-R1 70B",
@@ -344,18 +358,6 @@ class MultiLLMClient:
                 TaskType.VALIDATION
             ],
             priority=7
-        ),
-        "qwen2.5-72b": LLMModel(
-            name="Qwen 2.5 72B",
-            model_id="qwen2.5:72b-instruct",
-            capabilities=[ModelCapability.REASONING, ModelCapability.GENERAL],
-            context_window=32768,
-            recommended_tasks=[
-                TaskType.REASONING,
-                TaskType.PLANNING,
-                TaskType.GENERAL
-            ],
-            priority=9
         ),
         "qwen3-32b": LLMModel(
             name="Qwen 3 32B",

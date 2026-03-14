@@ -1,7 +1,15 @@
 import pytest
 import sys
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from backend.cognitive.ml_trainer import GraceMLTrainer
+
+@pytest.fixture(autouse=True)
+def isolated_trainer():
+    # Keep singleton isolated per test
+    GraceMLTrainer._instance = None
+    with patch("backend.cognitive.ml_trainer.GraceMLTrainer._load_observations"):
+        yield
+    GraceMLTrainer._instance = None
 
 def test_ml_trainer_observe():
     trainer = GraceMLTrainer()

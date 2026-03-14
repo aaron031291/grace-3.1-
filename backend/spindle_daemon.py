@@ -124,6 +124,7 @@ class SpindleDaemon:
 
     async def run(self):
         self._running = True
+        self._loop = asyncio.get_running_loop()
         logger.info("[SPINDLE] Booting Async Parallel Runtime...")
 
         is_autonomous, reason = verify_autonomy(self._metrics)
@@ -232,7 +233,7 @@ class SpindleDaemon:
                         "execution_success": result.success,
                         "action_taken": result.action_taken,
                     }),
-                    asyncio.get_event_loop(),
+                    self._loop,
                 )
 
                 # Persist to event store
@@ -248,38 +249,94 @@ class SpindleDaemon:
                 except Exception as e:
                     logger.warning(f"[SUB-AGENT] Event store write failed: {e}")
 
+                # If Z3 execution failed, escalate to HealingCoordinator (full chain with coding agent)
+                if not result.success:
+                    logger.info(f"[SUB-AGENT] Z3 execution failed, escalating to HealingCoordinator")
+                    coord_result = self._escalate_to_coordinator(topic, problem, proof.constraint_hash)
+                    return {"status": "escalated", "z3_action": result.action_taken, "coordination": coord_result}
+
                 return {"status": "executed", "success": result.success, "action": result.action_taken}
             else:
                 self._stats["z3_rejected"] += 1
                 logger.warning(f"[SUB-AGENT] Z3 REJECTED: {verification_msg}")
                 asyncio.run_coroutine_threadsafe(
                     self._publish("audit.spindle", {"action": "z3_rejected", "target": topic, "reason": verification_msg}),
-                    asyncio.get_event_loop(),
+                    self._loop,
                 )
                 return {"status": "rejected", "reason": verification_msg}
 
         except Exception as e:
-            logger.warning(f"[SUB-AGENT] Z3 pipeline unavailable ({e}), trying legacy path")
+            logger.warning(f"[SUB-AGENT] Z3 pipeline unavailable ({e}), escalating to HealingCoordinator")
 
-        # Fallback: legacy path
+        # Fallback: route through HealingCoordinator (includes coding agent at step 4)
         is_autonomous, reason = verify_autonomy(self._metrics)
         if not is_autonomous:
             return {"status": "blocked", "reason": reason}
 
+        coord_result = self._escalate_to_coordinator(topic, problem, proof_hash=None)
+        return {"status": coord_result.get("status", "coordinated"), "coordination": coord_result}
+
+    def _escalate_to_coordinator(self, topic: str, problem: str, proof_hash: str = None) -> Dict[str, Any]:
+        """Escalate a problem to HealingCoordinator for full 7-step resolution (includes coding agent)."""
         try:
-            from cognitive.qwen_coding_net import generate_code
-            prompt = (
-                f"Spindle Autonomous Daemon intercepted:\n"
-                f"Topic: {topic}\nDetails: {problem}\n"
-                f"Write Python code to self-heal this issue."
-            )
-            result = generate_code(prompt, use_pipeline=True)
-            status = result.get("status")
+            from cognitive.healing_coordinator import get_coordinator
+            coordinator = get_coordinator()
+            problem_dict = {
+                "component": topic.replace(".", "_"),
+                "description": problem[:500],
+                "severity": "high",
+            }
+            result = coordinator.resolve(problem_dict)
+            resolved = result.get("resolved", False)
+            resolution = result.get("resolution", "unresolved")
+
             self._stats["events_processed"] += 1
-            return {"status": status, "legacy": True}
+
+            # Write to unified memory so the rest of Grace can learn from this
+            try:
+                from cognitive.unified_memory import get_unified_memory
+                mem = get_unified_memory()
+                mem.store_episode(
+                    problem=f"Spindle escalation: {topic} — {problem[:200]}",
+                    action=f"healing_coordinator:{resolution}",
+                    outcome="resolved" if resolved else "unresolved",
+                    trust=0.8 if resolved else 0.3,
+                    source="spindle_daemon",
+                )
+            except Exception as e:
+                logger.debug(f"[SUB-AGENT] Unified memory write failed: {e}")
+
+            # Audit trail
+            asyncio.run_coroutine_threadsafe(
+                self._publish("audit.spindle", {
+                    "action": "healing_coordinator_escalation",
+                    "target": topic,
+                    "proof_hash": proof_hash,
+                    "resolved": resolved,
+                    "resolution": resolution,
+                    "steps": len(result.get("steps", [])),
+                }),
+                self._loop,
+            )
+
+            # Persist to event store
+            try:
+                from cognitive.spindle_event_store import get_event_store
+                get_event_store().append(
+                    topic=f"spindle.escalation.{topic}",
+                    source_type="healing_coordinator",
+                    payload={"problem": problem[:300], "resolved": resolved, "resolution": resolution},
+                    proof_hash=proof_hash or "",
+                    result="RESOLVED" if resolved else "UNRESOLVED",
+                )
+            except Exception as e:
+                logger.debug(f"[SUB-AGENT] Event store write after escalation: {e}")
+
+            logger.info(f"[SUB-AGENT] HealingCoordinator {'RESOLVED' if resolved else 'UNRESOLVED'}: {resolution}")
+            return {"status": "resolved" if resolved else "unresolved", "resolution": resolution}
         except Exception as e:
             self._stats["errors"] += 1
-            logger.error(f"[SUB-AGENT] Legacy path failed: {e}")
+            logger.error(f"[SUB-AGENT] HealingCoordinator escalation failed: {e}")
             return {"status": "error", "error": str(e)}
 
     # ── Background services ─────────────────────────────────

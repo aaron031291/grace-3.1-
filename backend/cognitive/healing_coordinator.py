@@ -56,6 +56,7 @@ class HealingCoordinator:
             result["resolution"] = "self_healing"
             self._trigger_learn_after_heal(problem, "self_healing")
             self._record_outcome(problem, result, success=True)
+            self._publish_to_spindle(problem, result)
             return result
 
         # Step 2: Diagnostics — Grace + Kimi independently
@@ -75,6 +76,7 @@ class HealingCoordinator:
                 result["resolution"] = "coding_agent"
                 self._trigger_heal_and_learn_after_code_fix(problem, step4)
                 self._record_outcome(problem, result, success=True)
+                self._publish_to_spindle(problem, result)
                 return result
 
         # Step 5: Can't resolve → search for context
@@ -93,6 +95,7 @@ class HealingCoordinator:
             result["resolution"] = "coordinated_fix" if result["resolved"] else "unresolved"
 
         self._record_outcome(problem, result, success=result["resolved"])
+        self._publish_to_spindle(problem, result)
         result["completed_at"] = datetime.now(timezone.utc).isoformat()
         return result
 
@@ -128,7 +131,7 @@ class HealingCoordinator:
 
     def _step_diagnose(self, problem: Dict) -> Dict:
         from core.async_parallel import run_parallel
-        diagnostics = {"step": "diagnose", "grace": None, "kimi": None}
+        diagnostics = {"step": "diagnose", "grace": None, "kimi": None, "opus": None, "reasoning": None}
         desc = problem.get("description", "") or ""
         err = problem.get("error", "") or ""
         comp = problem.get("component", "") or ""
@@ -154,9 +157,29 @@ class HealingCoordinator:
             except Exception as e:
                 return f"Kimi diagnosis unavailable: {e}"
 
-        grace_diag, kimi_diag = run_parallel([_grace, _kimi], return_exceptions=True)
-        diagnostics["grace"] = grace_diag if not isinstance(grace_diag, Exception) else str(grace_diag)
-        diagnostics["kimi"] = kimi_diag if not isinstance(kimi_diag, Exception) else str(kimi_diag)
+        def _opus():
+            try:
+                from llm_orchestrator.factory import get_llm_client
+                return get_llm_client(provider="opus").chat(messages=[
+                    {"role": "system", "content": "You are a system diagnostician. Analyse this problem and provide: root cause, affected components, suggested fix."},
+                    {"role": "user", "content": payload},
+                ], temperature=0.2)
+            except Exception as e:
+                return f"Opus diagnosis unavailable: {e}"
+
+        def _reasoning():
+            try:
+                from llm_orchestrator.factory import get_deepseek_reasoner
+                return get_deepseek_reasoner().chat(messages=[
+                    {"role": "system", "content": "You are a system diagnostician. Analyse this problem and provide: root cause, affected components, suggested fix."},
+                    {"role": "user", "content": payload},
+                ], temperature=0.2)
+            except Exception as e:
+                return f"Reasoning diagnosis unavailable: {e}"
+
+        results = run_parallel([_grace, _kimi, _opus, _reasoning], return_exceptions=True)
+        for key, result in zip(["grace", "kimi", "opus", "reasoning"], results):
+            diagnostics[key] = result if not isinstance(result, Exception) else str(result)
         return diagnostics
 
     # ── Step 3: Agree on best fix ─────────────────────────────────────
@@ -188,30 +211,103 @@ class HealingCoordinator:
     # ── Step 4: Coding agent fix (via brain code/generate) ───────────────
 
     def _step_code_fix(self, problem: Dict, agreement: Dict) -> Dict:
-        """Coding agent fix via brain (code/generate returns {code, prompt})."""
+        """Coding agent fix — routes through 9-layer coding pipeline when available."""
+        prompt = (
+            f"Fix this problem:\n{problem.get('description', '')}\n"
+            f"Error: {problem.get('error', '')}\n"
+            f"Grace diagnosis: {agreement.get('grace_recommendation', '')}\n"
+            f"Kimi diagnosis: {agreement.get('kimi_recommendation', '')}"
+        )
+        fix = None
+        pipeline_used = False
+
+        # PRIMARY: Route through the 9-layer coding pipeline (full verification chain)
         try:
-            from api.brain_api_v2 import call_brain
-            prompt = (
-                f"Fix this problem:\n{problem.get('description', '')}\n"
-                f"Error: {problem.get('error', '')}\n"
-                f"Grace diagnosis: {agreement.get('grace_recommendation', '')}\n"
-                f"Kimi diagnosis: {agreement.get('kimi_recommendation', '')}"
+            from core.coding_pipeline import CodingPipeline
+            pipeline = CodingPipeline()
+            pipeline_result = pipeline.run(
+                task=prompt,
+                context={
+                    "source": "spindle_healing",
+                    "component": problem.get("component", ""),
+                    "severity": problem.get("severity", "high"),
+                    "proof_hash": problem.get("proof_hash", ""),
+                },
             )
-            project_folder = (problem.get("file_path") or "").rsplit("/", 1)[0]
-            r = call_brain("code", "generate", {"prompt": prompt, "project_folder": project_folder})
-            if not r.get("ok"):
-                return {"step": "code_fix", "resolved": False, "error": r.get("error", "brain error")}
-            data = r.get("data") or {}
-            fix = data.get("code") or data.get("response")
-            return {
-                "step": "code_fix",
-                "resolved": bool(fix),
-                "fix": fix[:1000] if isinstance(fix, str) else fix,
-                "trust": data.get("trust_score", 0.5),
-                "pipeline_stages": data.get("stages_passed", []),
-            }
+            if pipeline_result.status == "passed" and pipeline_result.chunks:
+                code_outputs = []
+                for chunk in pipeline_result.chunks:
+                    for layer in chunk.layers:
+                        if layer.layer == 6 and layer.output:
+                            code_data = layer.output if isinstance(layer.output, dict) else {}
+                            code = code_data.get("code", {})
+                            if isinstance(code, dict):
+                                code = code.get("code", code.get("response", ""))
+                            if code:
+                                code_outputs.append(str(code)[:1000])
+                if code_outputs:
+                    fix = "\n".join(code_outputs)
+                    pipeline_used = True
+                    logger.info(f"[HEALING-COORD] 9-layer pipeline produced fix ({len(fix)} chars)")
         except Exception as e:
-            return {"step": "code_fix", "resolved": False, "error": str(e)}
+            logger.debug(f"[HEALING-COORD] 9-layer pipeline unavailable, falling back to brain: {e}")
+
+        # FALLBACK: Direct LLM generation via brain API
+        if not fix:
+            try:
+                from api.brain_api_v2 import call_brain
+                project_folder = (problem.get("file_path") or "").rsplit("/", 1)[0]
+                r = call_brain("code", "generate", {"prompt": prompt, "project_folder": project_folder})
+                if not r.get("ok"):
+                    return {"step": "code_fix", "resolved": False, "error": r.get("error", "brain error")}
+                data = r.get("data") or {}
+                fix = data.get("code") or data.get("response")
+            except Exception as e:
+                return {"step": "code_fix", "resolved": False, "error": str(e)}
+
+        if not fix:
+            return {"step": "code_fix", "resolved": False, "error": "No fix generated"}
+
+        # Hallucination Guard: verify LLM-generated fix before accepting
+        hallucination_verified = True
+        hallucination_details = {}
+        try:
+            from llm_orchestrator.hallucination_guard import HallucinationGuard
+            guard = HallucinationGuard()
+            verification = guard.verify_content(
+                prompt=prompt,
+                content=fix if isinstance(fix, str) else str(fix),
+                enable_consensus=False,
+                enable_grounding=True,
+                enable_trust_verification=True,
+                enable_external_verification=False,
+                confidence_threshold=0.5,
+                max_retry_attempts=1,
+            )
+            hallucination_verified = verification.is_trusted
+            hallucination_details = {
+                "trust_score": verification.trust_score,
+                "confidence": verification.confidence_score,
+                "is_trusted": verification.is_trusted,
+            }
+            if not hallucination_verified:
+                logger.warning(
+                    f"[HEALING-COORD] Hallucination guard REJECTED code fix "
+                    f"(trust={verification.trust_score:.2f}, confidence={verification.confidence_score:.2f})"
+                )
+        except Exception as e:
+            logger.debug(f"[HEALING-COORD] Hallucination guard unavailable: {e}")
+
+        return {
+            "step": "code_fix",
+            "resolved": bool(fix) and hallucination_verified,
+            "fix": fix[:1000] if isinstance(fix, str) else fix,
+            "trust": 0.8 if pipeline_used else 0.5,
+            "pipeline_used": pipeline_used,
+            "pipeline_stages": ["phase0", "L1-L8"] if pipeline_used else [],
+            "hallucination_guard": hallucination_details,
+            "hallucination_verified": hallucination_verified,
+        }
 
     # ── Step 5: Search for external context ───────────────────────────
 
@@ -260,6 +356,26 @@ class HealingCoordinator:
                 {"role": "system", "content": "You are fixing a system problem. Use the additional context to provide a specific fix."},
                 {"role": "user", "content": f"Problem: {problem.get('description', '')}\nError: {problem.get('error', '')}\nAdditional context:{extra_context}\n\nProvide the fix."},
             ], temperature=0.2)
+
+            # Hallucination Guard: verify re-diagnosis fix
+            try:
+                from llm_orchestrator.hallucination_guard import HallucinationGuard
+                guard = HallucinationGuard()
+                verification = guard.verify_content(
+                    prompt=f"Fix: {problem.get('description', '')}",
+                    content=fix if isinstance(fix, str) else str(fix),
+                    enable_consensus=False,
+                    enable_grounding=True,
+                    enable_trust_verification=True,
+                    enable_external_verification=False,
+                    max_retry_attempts=1,
+                )
+                if not verification.is_trusted:
+                    logger.warning(f"[HEALING-COORD] Hallucination guard rejected rediagnosis fix (trust={verification.trust_score:.2f})")
+                    return {"step": "rediagnose", "fix": None, "error": "Hallucination guard rejected fix", "trust_score": verification.trust_score}
+            except Exception as e:
+                logger.debug(f"[HEALING-COORD] Hallucination guard unavailable for rediagnosis: {e}")
+
             return {"step": "rediagnose", "fix": fix}
         except Exception as e:
             return {"step": "rediagnose", "fix": None, "error": str(e)}
@@ -368,6 +484,28 @@ class HealingCoordinator:
             )
         except Exception:
             pass
+
+    def _publish_to_spindle(self, problem: Dict, result: Dict):
+        """Publish resolution results back to Spindle event store for audit trail."""
+        try:
+            from cognitive.spindle_event_store import get_event_store
+            resolved = result.get("resolved", False)
+            get_event_store().append(
+                topic=f"healing.coordinator.{problem.get('component', 'unknown')}",
+                source_type="healing_coordinator",
+                payload={
+                    "component": problem.get("component"),
+                    "description": problem.get("description", "")[:300],
+                    "resolved": resolved,
+                    "resolution": result.get("resolution"),
+                    "steps_count": len(result.get("steps", [])),
+                    "proof_hash": problem.get("proof_hash", ""),
+                },
+                proof_hash=problem.get("proof_hash", ""),
+                result="RESOLVED" if resolved else "UNRESOLVED",
+            )
+        except Exception as e:
+            logger.debug(f"[HEALING-COORD] Spindle event store publish failed: {e}")
 
 
 _coordinator = None

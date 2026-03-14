@@ -74,15 +74,17 @@ class FixApplier:
         generated_code: str,
         task_id: str = "",
         task_description: str = "",
+        allow_create: bool = False,
     ) -> ApplyResult:
         """
-        Apply a generated fix to a file.
+        Apply a generated fix to a file, or create a new file.
 
         Args:
-            file_path: Absolute or relative (to backend/) path of file to fix
+            file_path: Absolute or relative (to backend/) path of file to fix/create
             generated_code: The new code to write
             task_id: Coding agent task ID for traceability
             task_description: Human-readable description for learning records
+            allow_create: If True, allow creating new files (not just patching)
 
         Returns:
             ApplyResult with full details of what happened
@@ -90,7 +92,7 @@ class FixApplier:
         result = ApplyResult(applied_at=datetime.now(timezone.utc).isoformat())
 
         # ── 1. Resolve and validate path ───────────────────────────────
-        target = self._resolve_safe_path(file_path)
+        target = self._resolve_safe_path(file_path, allow_create=allow_create)
         if target is None:
             result.error = f"Unsafe or non-existent path: {file_path}"
             logger.error("[FIX-APPLY] %s", result.error)
@@ -109,14 +111,20 @@ class FixApplier:
             self._record(task_id, task_description, result)
             return result
 
-        # ── 3. Backup original ─────────────────────────────────────────
-        backup = self._backup(target)
-        if backup is None:
-            result.error = "Failed to create backup — aborting for safety"
-            logger.error("[FIX-APPLY] %s", result.error)
-            self._record(task_id, task_description, result)
-            return result
-        result.backup_path = str(backup)
+        # ── 3. Backup original (skip for new files) ──────────────────
+        is_new_file = not target.exists()
+        backup = None
+        if not is_new_file:
+            backup = self._backup(target)
+            if backup is None:
+                result.error = "Failed to create backup — aborting for safety"
+                logger.error("[FIX-APPLY] %s", result.error)
+                self._record(task_id, task_description, result)
+                return result
+            result.backup_path = str(backup)
+        else:
+            # Ensure parent directories exist for new files
+            target.parent.mkdir(parents=True, exist_ok=True)
 
         # ── 4. Write new code ──────────────────────────────────────────
         try:
@@ -125,7 +133,7 @@ class FixApplier:
             logger.info("[FIX-APPLY] Wrote %d lines to %s", result.lines_written, target)
         except Exception as e:
             result.error = f"Write failed: {e}"
-            self._rollback(target, backup, result)
+            self._rollback(target, backup, result, is_new_file=is_new_file)
             self._record(task_id, task_description, result)
             return result
 
@@ -134,7 +142,7 @@ class FixApplier:
             ast.parse(target.read_text(encoding="utf-8"))
         except SyntaxError as se:
             result.error = f"Post-write syntax check failed: {se}"
-            self._rollback(target, backup, result)
+            self._rollback(target, backup, result, is_new_file=is_new_file)
             self._record(task_id, task_description, result)
             return result
 
@@ -169,7 +177,7 @@ class FixApplier:
         self._record(task_id, task_description, result)
         return result
 
-    def _resolve_safe_path(self, file_path: str) -> Optional[Path]:
+    def _resolve_safe_path(self, file_path: str, allow_create: bool = False) -> Optional[Path]:
         """Validate and resolve to an absolute path within backend/."""
         try:
             p = Path(file_path)
@@ -190,10 +198,12 @@ class FixApplier:
                 logger.error("[FIX-APPLY] Only .py files can be patched: %s", resolved)
                 return None
 
-            # Must exist (we're patching, not creating)
             if not resolved.exists():
-                logger.error("[FIX-APPLY] File does not exist: %s", resolved)
-                return None
+                if allow_create:
+                    logger.info("[FIX-APPLY] Creating new file: %s", resolved)
+                else:
+                    logger.error("[FIX-APPLY] File does not exist: %s", resolved)
+                    return None
 
             return resolved
         except Exception as e:
@@ -215,15 +225,21 @@ class FixApplier:
             logger.error("[FIX-APPLY] Backup failed: %s", e)
             return None
 
-    def _rollback(self, target: Path, backup: Path, result: ApplyResult) -> None:
-        """Restore original file from backup."""
+    def _rollback(self, target: Path, backup: Optional[Path], result: ApplyResult, is_new_file: bool = False) -> None:
+        """Restore original file from backup, or delete new file on failure."""
         try:
-            shutil.copy2(backup, target)
+            if is_new_file:
+                # New file that failed validation — remove it entirely
+                if target.exists():
+                    target.unlink()
+                logger.warning("[FIX-APPLY] ⏪ Removed failed new file %s", target.name)
+            elif backup:
+                shutil.copy2(backup, target)
+                logger.warning("[FIX-APPLY] ⏪ Rolled back %s from backup", target.name)
             result.rolled_back = True
             result.success = False
-            logger.warning("[FIX-APPLY] ⏪ Rolled back %s from backup", target.name)
         except Exception as e:
-            logger.error("[FIX-APPLY] Rollback failed: %s — MANUAL RECOVERY NEEDED from %s", e, backup)
+            logger.error("[FIX-APPLY] Rollback failed: %s — MANUAL RECOVERY NEEDED", e)
 
     def _hot_reload(self, target: Path) -> bool:
         """Attempt to hot-reload the module corresponding to the changed file."""

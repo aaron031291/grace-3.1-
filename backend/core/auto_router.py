@@ -1,5 +1,5 @@
 """
-Auto-Router — Grace decides which brain to call.
+Auto-Router Ã¢â‚¬â€ Grace decides which brain to call.
 
 Instead of the user specifying brain + action, they just describe
 what they want and Grace routes to the optimal brain based on:
@@ -151,7 +151,7 @@ def _looks_like_architecture_query(query: str) -> bool:
 
 def smart_call(query: str, payload: dict = None) -> dict:
     """
-    Smart call — just describe what you want, Grace routes it.
+    Smart call Ã¢â‚¬â€ just describe what you want, Grace routes it.
     When NLP match is weak (low confidence), adds nearest_actions: neighbor-by-neighbor
     suggestions so the UI can show "Did you mean: ...?"
     If routed to chat/send without chat_id and query looks like architecture, retry with system/models_summary.
@@ -162,8 +162,8 @@ def smart_call(query: str, payload: dict = None) -> dict:
     from api.brain_api_v2 import call_brain
     result = call_brain(brain, action, payload)
 
-    # Fallback: Ask-tab style query routed to chat/send without chat_id → use models_summary instead
-    # (Any error from chat/send when no chat_id and query looks architectural — don't require "chat_id" in error message)
+    # Fallback: Ask-tab style query routed to chat/send without chat_id Ã¢â€ â€™ use models_summary instead
+    # (Any error from chat/send when no chat_id and query looks architectural Ã¢â‚¬â€ don't require "chat_id" in error message)
     if (
         brain == "chat"
         and action == "send"
@@ -184,7 +184,7 @@ def smart_call(query: str, payload: dict = None) -> dict:
             from api._genesis_tracker import track
             track(
                 key_type="api_request",
-                what=f"Ask fallback: '{query[:50]}' → system/models_summary",
+                what=f"Ask fallback: '{query[:50]}' Ã¢â€ â€™ system/models_summary",
                 who="auto_router",
                 tags=["auto-route", "ask-fallback", "system", "models_summary"],
             )
@@ -209,7 +209,7 @@ def smart_call(query: str, payload: dict = None) -> dict:
         from api._genesis_tracker import track
         track(
             key_type="api_request",
-            what=f"Auto-routed: '{query[:50]}' → {brain}/{action} (conf={confidence})",
+            what=f"Auto-routed: '{query[:50]}' Ã¢â€ â€™ {brain}/{action} (conf={confidence})",
             who="auto_router",
             tags=["auto-route", brain, action],
         )

@@ -1,4 +1,4 @@
-"""Project management service — visual cards, scoped context, mirroring."""
+"""Project management service Ã¢â‚¬â€ visual cards, scoped context, mirroring."""
 
 import json
 import os
@@ -128,7 +128,7 @@ def get_project(project_id: str) -> dict:
 
 
 def get_project_context(project_id: str, max_chars: int = 10000) -> str:
-    """Get project context for scoped LLM chat — file summaries."""
+    """Get project context for scoped LLM chat Ã¢â‚¬â€ file summaries."""
     project_dir = PROJECTS_DIR / project_id
     if not project_dir.exists():
         return ""

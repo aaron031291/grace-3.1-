@@ -1,5 +1,5 @@
 """
-Workspace domain service — bridges dev tab, codebase, docs, and projects
+Workspace domain service Ã¢â‚¬â€ bridges dev tab, codebase, docs, and projects
 through Grace's internal VCS + CI/CD platform.
 
 Sync interface for the Brain API (matching all other brain services).
@@ -42,7 +42,7 @@ def _track(key_type: str, what: str, workspace_id: str, **kw):
         pass
 
 
-# ─── Workspace CRUD ───
+# Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Workspace CRUD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 def ws_list() -> dict:
     from genesis.internal_vcs import _list_workspaces_sync
@@ -60,7 +60,7 @@ def ws_create(p: dict) -> dict:
     return result
 
 
-# ─── VCS operations ───
+# Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ VCS operations Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 def ws_snapshot(p: dict) -> dict:
     from genesis.internal_vcs import get_vcs
@@ -107,7 +107,7 @@ def ws_rollback(p: dict) -> dict:
         p["file_path"], p["target_version"], p.get("author", "grace"),
     )
     _track("code_change",
-           f"VCS rollback: {p['file_path']} → v{p['target_version']}",
+           f"VCS rollback: {p['file_path']} Ã¢â€ â€™ v{p['target_version']}",
            p["workspace_id"], file_path=p["file_path"])
     return result
 
@@ -139,7 +139,7 @@ def ws_create_branch(p: dict) -> dict:
     return result
 
 
-# ─── Pipeline operations ───
+# Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Pipeline operations Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 def ws_pipeline_run(p: dict) -> dict:
     from genesis.internal_pipeline import get_pipeline_runner, PipelineConfig

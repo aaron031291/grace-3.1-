@@ -23,7 +23,7 @@ class Settings:
     
     # ==================== Ollama Configuration ====================
     OLLAMA_URL: str = os.getenv("OLLAMA_URL", "http://localhost:11434")
-    OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "qwen3:14b")
+    OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "qwen3.5:35b")
     
     # ==================== Embedding Configuration ====================
     EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "all-MiniLM-L6-v2")
@@ -136,11 +136,14 @@ class Settings:
     OPUS_MODEL: str = os.getenv("OPUS_MODEL", "claude-sonnet-4-20250514")
 
     # ==================== Local Model Configuration (per-task) ====================
-    # Code: Qwen 2.5 Coder. Reason: Qwen3. Document: Qwen3 (parse/read docs; no GPT 4.1 required).
-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen2.5-coder:32b")
-    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3:32b")
-    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3:14b")
-    OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3:32b")
+    # Code: Qwen3.5 (35B MoE, 3B active, 256K ctx) or Qwen3-Coder (30B MoE, agentic).
+    # Reason: Qwen3.5 (unified vision-language, thinking mode).
+    # Fast: Qwen3.5:9b (small MoE for low-latency).
+    # Document: Qwen3.5 (multimodal, vision+text).
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5:35b")
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3.5:35b")
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3.5:9b")
+    OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3.5:35b")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")

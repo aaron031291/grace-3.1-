@@ -1,5 +1,5 @@
 """
-Async, multi-threading, parallel and background processing — main way of operating.
+Async, multi-threading, parallel and background processing Ã¢â‚¬â€ main way of operating.
 
 Use this module throughout the system for:
 - run_parallel: run independent sync callables in parallel (thread pool)

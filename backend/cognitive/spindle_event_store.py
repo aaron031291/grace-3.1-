@@ -70,12 +70,20 @@ class SpindleEventStore:
 
     def _get_session_scope(self):
         """Lazy import to avoid circular imports at module level."""
-        from backend.database.session import session_scope
-        return session_scope
+        try:
+            from database.session import session_scope
+            return session_scope
+        except ImportError:
+            from backend.database.session import session_scope
+            return session_scope
 
     def _get_model(self):
-        from backend.models.spindle_event_model import SpindleEvent
-        return SpindleEvent
+        try:
+            from models.spindle_event_model import SpindleEvent
+            return SpindleEvent
+        except ImportError:
+            from backend.models.spindle_event_model import SpindleEvent
+            return SpindleEvent
 
     def _probe_db(self) -> bool:
         """Check DB reachability once; cache result."""

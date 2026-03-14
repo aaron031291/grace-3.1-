@@ -1,4 +1,4 @@
-"""Code domain service — codebase, projects, code generation."""
+"""Code domain service Ã¢â‚¬â€ codebase, projects, code generation."""
 from pathlib import Path
 import json, logging
 
@@ -78,7 +78,7 @@ def delete_file(path):
 def generate_code(prompt, project_folder="", use_pipeline=False):
     """
     Generate code via Qwen (latest coder model). Follows pipeline when use_pipeline=True:
-    consensus design → Qwen build → compile/test → self-heal. Otherwise uses Qwen coder only.
+    consensus design Ã¢â€ â€™ Qwen build Ã¢â€ â€™ compile/test Ã¢â€ â€™ self-heal. Otherwise uses Qwen coder only.
     """
     try:
         if use_pipeline:

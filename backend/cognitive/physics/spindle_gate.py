@@ -53,6 +53,8 @@ class SpindleGate:
         self._validators.append(("z3_geometry", self._validate_z3_geometry))
         self._validators.append(("privilege_check", self._validate_privilege))
         self._validators.append(("rate_limiter", self._validate_rate_limit))
+        self._validators.append(("governance", self._validate_governance))
+        self._validators.append(("trust_scorer", self._validate_trust))
 
     def add_validator(self, name: str, validator: Callable):
         self._validators.append((name, validator))
@@ -127,12 +129,27 @@ class SpindleGate:
             f"[GATE] {'PASSED' if quorum_met else 'REJECTED'} "
             f"{votes_for}/{total} (quorum={quorum_needed}) in {wall_ms:.1f}ms"
         )
+
+        # Store gate verdict in unified memory for cross-system learning
+        try:
+            from cognitive.unified_memory import get_unified_memory
+            mem = get_unified_memory()
+            mem.store_episode(
+                problem=f"SpindleGate verdict: d={d_val:#x} i={i_val:#x}",
+                action=f"gate:{'PASSED' if quorum_met else 'REJECTED'} ({votes_for}/{total})",
+                outcome=f"confidence={verdict.confidence:.2f} wall_time={wall_ms:.1f}ms",
+                trust=verdict.confidence,
+                source="spindle_gate",
+            )
+        except Exception:
+            pass
+
         return verdict
 
     async def verify_async(self, d_val: int, i_val: int, s_val: int, c_val: int,
                            context: Dict[str, Any] = None) -> GateVerdict:
         """Async wrapper — runs the parallel verify in executor to avoid blocking event loop."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         return await loop.run_in_executor(None, self.verify, d_val, i_val, s_val, c_val, context)
 
     @staticmethod
@@ -171,7 +188,7 @@ class SpindleGate:
 
     def _validate_rate_limit(self, d, i, s, c, ctx) -> tuple:
         try:
-            from backend.cognitive.spindle_event_store import get_event_store
+            from cognitive.spindle_event_store import get_event_store
             store = get_event_store()
             recent = store.query(source_type="healing", limit=10)
             if len(recent) >= 10:
@@ -183,6 +200,74 @@ class SpindleGate:
         except Exception:
             pass
         return True, "Rate limit check passed", None
+
+    def _validate_governance(self, d, i, s, c, ctx) -> tuple:
+        """Check constitutional governance rules before execution."""
+        try:
+            from security.governance import get_governance_engine, GovernanceContext
+            engine = get_governance_engine()
+
+            # Map bitmask intent to action type
+            from cognitive.braille_compiler import BrailleDictionary as BD
+            intent_map = {
+                BD.INTENT_DELETE: "delete_data",
+                BD.INTENT_STOP: "system_config",
+                BD.INTENT_GRANT: "execute_external",
+                BD.INTENT_REPAIR: "execute_safe",
+                BD.INTENT_QUERY: "read",
+                BD.INTENT_START: "execute_safe",
+            }
+            action_type = intent_map.get(i, "execute_safe")
+            is_destructive = i in (BD.INTENT_DELETE, BD.INTENT_STOP, BD.INTENT_GRANT)
+
+            gov_ctx = GovernanceContext(
+                context_id=f"spindle-gate-{id(self)}",
+                action_type=action_type,
+                actor_id="spindle_daemon",
+                actor_type="ai",
+                target_resource=f"domain_{d:#x}",
+                impact_scope="systemic" if is_destructive else "component",
+                is_reversible=not is_destructive,
+                financial_impact=0.0,
+                metadata={"spindle_gate": True, "domain": d, "intent": i, "state": s, "context": c},
+            )
+            violations = engine.check_constitutional_rules(gov_ctx)
+            hard_blocks = [v for v in violations if v.enforcement_action == "blocked"]
+            if hard_blocks:
+                reasons = "; ".join(v.description for v in hard_blocks)
+                return False, f"Governance BLOCKED: {reasons}", None
+            return True, "Governance check passed", None
+        except Exception as e:
+            # Governance unavailable — pass (fail-open for availability)
+            return True, f"Governance check skipped: {e}", None
+
+    def _validate_trust(self, d, i, s, c, ctx) -> tuple:
+        """Check neural trust score for the target component."""
+        try:
+            from cognitive.trust_engine import get_trust_engine
+            engine = get_trust_engine()
+            from cognitive.braille_compiler import BrailleDictionary as BD
+            domain_names = {
+                BD.DOMAIN_DATABASE: "database",
+                BD.DOMAIN_API: "api",
+                BD.DOMAIN_MEMORY: "memory",
+                BD.DOMAIN_NETWORK: "network",
+                BD.DOMAIN_SYS_CONF: "sys_conf",
+            }
+            component = domain_names.get(d, f"unknown_{d:#x}")
+            dashboard = engine.get_dashboard()
+            component_trust = dashboard.get("components", {}).get(component, {})
+            trust_score = component_trust.get("trust_score", 0.7) if isinstance(component_trust, dict) else 0.7
+
+            # Destructive intents need higher trust
+            is_destructive = i in (BD.INTENT_DELETE, BD.INTENT_STOP, BD.INTENT_GRANT)
+            threshold = 0.6 if is_destructive else 0.3
+
+            if trust_score < threshold:
+                return False, f"Trust too low for {component}: {trust_score:.2f} < {threshold}", None
+            return True, f"Trust check passed: {component}={trust_score:.2f}", None
+        except Exception as e:
+            return True, f"Trust check skipped: {e}", None
 
 
 # Singleton

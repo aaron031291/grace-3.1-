@@ -33,18 +33,18 @@ from database.config import DatabaseConfig, DatabaseType
 from database.migration import create_tables
 from models.repositories import ChatRepository, ChatHistoryRepository
 from models.database_models import Chat
-# ==================== MINIMAL IMPORTS — Brain-Centric Architecture ====================
-# 1. Brain router — contains ALL 93+ actions across 8 domains
+# ==================== MINIMAL IMPORTS Ã¢â‚¬â€ Brain-Centric Architecture ====================
+# 1. Brain router Ã¢â‚¬â€ contains ALL 93+ actions across 8 domains
 from api.brain_api_v2 import router as brain_router
 from api.core.brain_controller import router as brain_v2_router
 
-# 2. Health — required by k8s/load balancers (must be separate route)
+# 2. Health Ã¢â‚¬â€ required by k8s/load balancers (must be separate route)
 from api.health import router as health_router
 
-# 3. Auth — middleware requirement
+# 3. Auth Ã¢â‚¬â€ middleware requirement
 from api.auth import router as auth_router
 
-# 4. Voice — WebSocket (can't route through sync brain)
+# 4. Voice Ã¢â‚¬â€ WebSocket (can't route through sync brain)
 from api.voice_api import router as voice_router
 from api.stream_api import router as stream_router
 from api.completion_api import router as completion_router
@@ -240,7 +240,7 @@ async def lifespan(app: FastAPI):
         create_tables()
         print("[OK] Database tables created/verified")
 
-        # ── Auto-migrate: detect and fix schema drift on every startup ──
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Auto-migrate: detect and fix schema drift on every startup Ã¢â€â‚¬Ã¢â€â‚¬
         # Grace learns from past errors: if any ORM model has columns the
         # live DB doesn't have yet, they are added automatically here.
         try:
@@ -271,10 +271,39 @@ async def lifespan(app: FastAPI):
     # ==================== Lazy Background Init (non-blocking) ====================
     import threading
 
+    def _init_spindle_services():
+        """Initialize all Spindle parallel runtime services."""
+        _logger = logging.getLogger("spindle_init")
+        try:
+            # 1. Bridge cognitive event bus to persistent store
+            from cognitive.spindle_event_store import get_event_store, bridge_to_event_bus
+            store = get_event_store()
+            store.start_background_flush()
+            bridge_to_event_bus()
+            _logger.info("[SPINDLE-INIT] Event store + bridge started")
+
+            # 2. Start CQRS projection background updates
+            from cognitive.spindle_projection import get_spindle_projection
+            get_spindle_projection(auto_start=True)
+            _logger.info("[SPINDLE-INIT] Projection background updates started")
+
+            # 3. Initialize deterministic event bus bridges
+            from core.deterministic_event_bus import initialize_bridges
+            initialize_bridges()
+            _logger.info("[SPINDLE-INIT] Deterministic event bus bridges initialized")
+
+            # 4. Pre-warm executor singleton
+            from cognitive.spindle_executor import get_spindle_executor
+            get_spindle_executor()
+            _logger.info("[SPINDLE-INIT] Executor ready")
+
+        except Exception as e:
+            _logger.warning(f"[SPINDLE-INIT] Non-fatal init error: {e}")
+
     def _background_init():
         """Heavy init tasks run in background so server starts fast."""
 
-        # ── 0. Start error pipeline FIRST — catches all subsequent errors ─
+        # Ã¢â€â‚¬Ã¢â€â‚¬ 0. Start error pipeline FIRST Ã¢â‚¬â€ catches all subsequent errors Ã¢â€â‚¬
         try:
             from self_healing.error_pipeline import get_error_pipeline
             pipe = get_error_pipeline()
@@ -282,7 +311,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Error pipeline: {e}")
 
-        # ── 0a. Start coding agent worker — processes fix tasks from error pipeline ─
+        # Ã¢â€â‚¬Ã¢â€â‚¬ 0a. Start coding agent worker Ã¢â‚¬â€ processes fix tasks from error pipeline Ã¢â€â‚¬
         try:
             from coding_agent.task_queue import start_worker
             start_worker()
@@ -290,7 +319,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Coding agent worker: {e}")
 
-        # ── 0b. Start trigger fabric — multi-source event nervous system ──
+        # Ã¢â€â‚¬Ã¢â€â‚¬ 0b. Start trigger fabric Ã¢â‚¬â€ multi-source event nervous system Ã¢â€â‚¬Ã¢â€â‚¬
         try:
             from self_healing.trigger_fabric import start as start_fabric
             start_fabric(app=app)
@@ -298,7 +327,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Trigger fabric: {e}")
 
-        # ── 0b. Startup health check — validate key tables are queryable ──
+        # Ã¢â€â‚¬Ã¢â€â‚¬ 0b. Startup health check Ã¢â‚¬â€ validate key tables are queryable Ã¢â€â‚¬Ã¢â€â‚¬
         try:
             from database.session import session_scope
             from sqlalchemy import text
@@ -309,11 +338,11 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Startup health check failed: {e}")
 
-        # ── 0c. Autonomous Diagnostics — boot scan then maintenance pulse ─
+        # Ã¢â€â‚¬Ã¢â€â‚¬ 0c. Autonomous Diagnostics Ã¢â‚¬â€ boot scan then maintenance pulse Ã¢â€â‚¬
         try:
             from cognitive.autonomous_diagnostics import AutonomousDiagnostics
             diag = AutonomousDiagnostics.get_instance()
-            # Boot scan (runs on_startup in a background thread — non-blocking)
+            # Boot scan (runs on_startup in a background thread Ã¢â‚¬â€ non-blocking)
             import threading
             threading.Thread(
                 target=diag.on_startup,
@@ -324,7 +353,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Autonomous diagnostics: {e}")
 
-        # ── 0d. Probe agent — periodic light + deep API sweeps ────────────
+        # Ã¢â€â‚¬Ã¢â€â‚¬ 0d. Probe agent Ã¢â‚¬â€ periodic light + deep API sweeps Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
         try:
             import threading, time
 
@@ -386,6 +415,9 @@ async def lifespan(app: FastAPI):
             print("[OK] NLP pipeline ready (voice/intent)")
         except Exception as e:
             print(f"[WARN] NLP warm: {e}")
+
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Spindle parallel runtime services Ã¢â€â‚¬Ã¢â€â‚¬
+        _init_spindle_services()
 
     threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
     print("[OK] Background init started (training, diagnostics, embedding)")
@@ -587,7 +619,7 @@ async def lifespan(app: FastAPI):
         _diag_engine = get_diagnostic_engine(session=_diag_session, kb_path=_kb_path)
         started = _diag_engine.start()
         if started:
-            print("[OK] Diagnostic engine started — self-healing active (60s heartbeat)")
+            print("[OK] Diagnostic engine started Ã¢â‚¬â€ self-healing active (60s heartbeat)")
         else:
             print("[WARN] Diagnostic engine already running")
     except Exception as e:
@@ -630,7 +662,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
-    # ==================== Shutdown — clean up background systems ====================
+    # ==================== Shutdown Ã¢â‚¬â€ clean up background systems ====================
     print("Grace API shutting down...")
 
     try:
@@ -675,6 +707,16 @@ async def lifespan(app: FastAPI):
             print("[OK] Diagnostic engine session closed")
         except Exception:
             pass
+    # Ã¢â€â‚¬Ã¢â€â‚¬ Spindle shutdown Ã¢â€â‚¬Ã¢â€â‚¬
+    try:
+        from cognitive.spindle_event_store import get_event_store
+        get_event_store().stop_background_flush()
+        from cognitive.spindle_projection import get_spindle_projection
+        get_spindle_projection(auto_start=False).stop_background_update()
+        print("[OK] Spindle services stopped")
+    except Exception:
+        pass
+
     try:
         DatabaseConnection.close()
         print("[OK] Database connection closed")
@@ -716,15 +758,15 @@ app.add_middleware(
 )
 
 # =============================================================================
-# API ROUTERS — v1 resource layer + minimal core
+# API ROUTERS Ã¢â‚¬â€ v1 resource layer + minimal core
 # =============================================================================
 
 # Core: needed by app.py's own chat/RAG endpoints
 # =============================================================================
-# BRAIN-CENTRIC ARCHITECTURE — 4 routers only
+# BRAIN-CENTRIC ARCHITECTURE Ã¢â‚¬â€ 4 routers only
 # =============================================================================
 
-# THE BRAIN — 95+ actions, 9 domains (chat, files, govern, ai, system, data, tasks, code, deterministic)
+# THE BRAIN Ã¢â‚¬â€ 95+ actions, 9 domains (chat, files, govern, ai, system, data, tasks, code, deterministic)
 app.include_router(brain_router)                 # /brain/{domain}
 app.include_router(brain_v2_router)              # /api/v2/{domain}/{action}
 
@@ -743,7 +785,7 @@ app.include_router(ingest_router)                    # /ingest/* (document inges
 app.include_router(retrieve_router)                  # /retrieve/* (RAG search; frontend FoldersTab, SearchInternetButton)
 app.include_router(learning_memory_router)           # /api/learning-memory/* (neighbour search, fill gaps, expand)
 app.include_router(admin_router)                     # /api/admin/* (registry, state, reload-config, trigger-diagnostics; requires ADMIN_TOKEN)
-app.include_router(validation_router)                # /api/validation/* (trust scores, KPIs, verification history — frontend dashboard)
+app.include_router(validation_router)                # /api/validation/* (trust scores, KPIs, verification history Ã¢â‚¬â€ frontend dashboard)
 app.include_router(cognitive_events_router)          # /api/cognitive-events/* (WebSocket stream of self-healing logs)
 
 from api.codebase_hub_api import router as codebase_hub_router
@@ -789,6 +831,16 @@ app.include_router(docs_library_router)
 
 from api.chunked_upload_api import router as chunked_upload_router
 app.include_router(chunked_upload_router)
+
+from api.spindle_dashboard_api import router as spindle_dashboard_router
+app.include_router(spindle_dashboard_router)              # /api/spindle/* (dashboard, events, gate, WS)
+
+# Spindle Formal Verification & Autonomous Execution
+try:
+    from api.spindle_api import router as spindle_router
+    app.include_router(spindle_router)
+except Exception as _e:
+    print(f"[WARN] Spindle API router not loaded: {_e}")
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):
@@ -967,7 +1019,7 @@ async def chat(request: ChatRequest):
                 max_tokens=request.top_k
             )
         # ==================== MULTI-TIER QUERY HANDLING ====================
-        # Use multi-tier system: VectorDB → Model Knowledge → User Context Request
+        # Use multi-tier system: VectorDB Ã¢â€ â€™ Model Knowledge Ã¢â€ â€™ User Context Request
         from retrieval.multi_tier_integration import (
             create_multi_tier_handler,
             log_query_handling,
@@ -1569,7 +1621,7 @@ async def send_prompt(chat_id: int, request: PromptRequest, session = Depends(ge
             )
         
         # ==================== MULTI-TIER QUERY HANDLING ====================
-        # Use multi-tier system: Model Knowledge → Internet Search → Context Request
+        # Use multi-tier system: Model Knowledge Ã¢â€ â€™ Internet Search Ã¢â€ â€™ Context Request
         from retrieval.multi_tier_integration import (
             create_multi_tier_handler,
             log_query_handling
@@ -1793,7 +1845,7 @@ async def runtime_status():
 
 @app.post("/api/runtime/pause", tags=["Runtime"])
 async def runtime_pause():
-    """Pause the runtime — stops diagnostic heartbeat and self-healing without killing the process."""
+    """Pause the runtime Ã¢â‚¬â€ stops diagnostic heartbeat and self-healing without killing the process."""
     app.state.runtime_paused = True
     diag = getattr(app.state, "diagnostic_engine", None)
     if diag:
@@ -1801,7 +1853,7 @@ async def runtime_pause():
             diag.pause()
         except Exception:
             pass
-    return {"status": "paused", "message": "Runtime paused — heartbeat and self-healing suspended"}
+    return {"status": "paused", "message": "Runtime paused Ã¢â‚¬â€ heartbeat and self-healing suspended"}
 
 
 @app.post("/api/runtime/resume", tags=["Runtime"])
@@ -1814,7 +1866,7 @@ async def runtime_resume():
             diag.resume()
         except Exception:
             pass
-    return {"status": "resumed", "message": "Runtime resumed — heartbeat and self-healing active"}
+    return {"status": "resumed", "message": "Runtime resumed Ã¢â‚¬â€ heartbeat and self-healing active"}
 
 
 @app.post("/api/runtime/hot-reload", tags=["Runtime"])
@@ -1902,7 +1954,7 @@ async def runtime_resilience():
 
 @app.get("/api/runtime/connectivity", tags=["Runtime"])
 async def runtime_connectivity():
-    """Check connectivity of all external dependencies — Ollama, Qdrant, Kimi, Opus."""
+    """Check connectivity of all external dependencies Ã¢â‚¬â€ Ollama, Qdrant, Kimi, Opus."""
     checks = {}
 
     # Ollama

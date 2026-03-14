@@ -1,5 +1,5 @@
 """
-Brain API v2 — CLEAN version. No HTTP-to-localhost calls.
+Brain API v2 Ã¢â‚¬â€ CLEAN version. No HTTP-to-localhost calls.
 All business logic via direct Python function calls through core/services/.
 
 8 domains, 95+ actions, zero self-HTTP.
@@ -98,7 +98,7 @@ async def _call(brain: str, action: str, payload: dict, handlers: dict,
             except Exception:
                 pass
             return BrainResponse(brain=brain, action=action, ok=False,
-                                 error="Rate limit exceeded — try again in 60s")
+                                 error="Rate limit exceeded Ã¢â‚¬â€ try again in 60s")
     except Exception:
         pass
 
@@ -190,7 +190,7 @@ _calling_brain = "external"
 
 
 def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
-    """Cross-brain call with Hebbian learning — every action gets a Genesis key."""
+    """Cross-brain call with Hebbian learning Ã¢â‚¬â€ every action gets a Genesis key."""
     global _calling_brain
     source = _calling_brain
     brains = {"chat": _chat, "files": _files, "govern": _govern, "ai": _ai,
@@ -288,9 +288,9 @@ def call_brain(brain_name: str, action: str, payload: dict = None) -> dict:
         return {"ok": False, "error": str(e)[:200]}
 
 
-# ═══════════════════════════════════════════════════════════════════
-#  AGENTIC SHARED ACTIONS — injected into every brain domain
-# ═══════════════════════════════════════════════════════════════════
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
+#  AGENTIC SHARED ACTIONS Ã¢â‚¬â€ injected into every brain domain
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
 
 def _agentic_actions(brain_name: str) -> dict:
     """
@@ -313,9 +313,9 @@ def _agentic_actions(brain_name: str) -> dict:
     }
 
 
-# ═══════════════════════════════════════════════════════════════════
-#  HANDLERS — direct function calls, no HTTP
-# ═══════════════════════════════════════════════════════════════════
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
+#  HANDLERS Ã¢â‚¬â€ direct function calls, no HTTP
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
 
 def _chat() -> dict:
     from core.services.chat_service import (
@@ -621,7 +621,7 @@ def _data() -> dict:
         "librarian_categorize":   lambda p: _data_librarian_categorize(p),
         "librarian_on_new_folder": lambda p: _data_librarian_on_new_folder(p),
         "librarian_stats":        lambda p: _data_librarian_stats(),
-        # Semantic entity classification — translate raw data to canonical domain model
+        # Semantic entity classification Ã¢â‚¬â€ translate raw data to canonical domain model
         "classify_entity": lambda p: _classify_entity(p),
         "entity_schema_map": lambda p: _entity_schema_map(),
         **_agentic_actions("data"),
@@ -658,7 +658,7 @@ def _classify_entity(p: dict) -> dict:
 
 
 def _entity_schema_map() -> dict:
-    """Return the full entity → db_table/vector_collection mapping."""
+    """Return the full entity Ã¢â€ â€™ db_table/vector_collection mapping."""
     from cognitive.semantic_entity_classifier import ENTITY_SCHEMA_MAP
     return {
         "entity_buckets": list(ENTITY_SCHEMA_MAP.keys()),
@@ -707,7 +707,7 @@ def _deterministic() -> dict:
 
 
 def _project_scoped_chat(p):
-    """Chat scoped to a specific project — LLM sees project files as context."""
+    """Chat scoped to a specific project Ã¢â‚¬â€ LLM sees project files as context."""
     from core.services.project_service import get_project_context
     project_id = p.get("project_id", p.get("id", ""))
     message = p.get("message", p.get("prompt", ""))
@@ -721,7 +721,7 @@ def _project_scoped_chat(p):
 
 
 def _hunter_assimilate(p):
-    """Run HUNTER assimilation (code → analyse → integrate). Handshake runs on success."""
+    """Run HUNTER assimilation (code Ã¢â€ â€™ analyse Ã¢â€ â€™ integrate). Handshake runs on success."""
     from cognitive.hunter_assimilator import get_hunter
     code = p.get("code", p.get("content", ""))
     description = p.get("description", "")
@@ -738,9 +738,9 @@ def _hunter_assimilate(p):
     }
 
 
-# ═══════════════════════════════════════════════════════════════════
-#  INTERNAL HELPERS — direct calls replacing HTTP
-# ═══════════════════════════════════════════════════════════════════
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
+#  INTERNAL HELPERS Ã¢â‚¬â€ direct calls replacing HTTP
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
 
 
 def _run_consensus_full(p):
@@ -832,7 +832,7 @@ def _oracle_export(p: dict):
 
 
 def _governance_training_cycle(p: dict):
-    """Full cycle: KB → Learning memory → Oracle → Sandbox review; 60d trial, governance, report, +30% approval."""
+    """Full cycle: KB Ã¢â€ â€™ Learning memory Ã¢â€ â€™ Oracle Ã¢â€ â€™ Sandbox review; 60d trial, governance, report, +30% approval."""
     try:
         from cognitive.governance_training_loop import run_full_cycle
         import os
@@ -850,7 +850,7 @@ def _governance_training_cycle(p: dict):
 
 
 def _governance_report(p: dict):
-    """60-day governance report for user-in-loop approval; +30% → add to system."""
+    """60-day governance report for user-in-loop approval; +30% Ã¢â€ â€™ add to system."""
     try:
         from cognitive.governance_training_loop import get_governance_report
         return get_governance_report(experiment_id=p.get("experiment_id"))
@@ -956,40 +956,40 @@ def _decide_autonomous_action(p: dict) -> dict:
     if problem.get("flag_for_human"):
         return {"escalate": True, "reason": reason, "type": "escalate"}
 
-    # Service down → HEAL (system/scan_heal)
+    # Service down Ã¢â€ â€™ HEAL (system/scan_heal)
     if "unreachable" in r or "down" in r or "connection" in r:
         return {"escalate": False, "brain": "system", "action": "scan_heal", "payload": {}, "type": "heal"}
 
-    # No activity (always-on) → HEAL (govern/heal)
+    # No activity (always-on) Ã¢â€ â€™ HEAL (govern/heal)
     if "no activity" in r and severity == "critical":
         return {"escalate": False, "brain": "govern", "action": "heal", "payload": {}, "type": "heal"}
 
-    # High CPU/RAM → HEAL (govern/heal)
+    # High CPU/RAM Ã¢â€ â€™ HEAL (govern/heal)
     if "cpu" in r or "ram" in r or "memory" in r:
         return {"escalate": False, "brain": "govern", "action": "heal", "payload": {}, "type": "heal"}
 
-    # Import/code errors → LEARN (govern/record_gap)
+    # Import/code errors Ã¢â€ â€™ LEARN (govern/record_gap)
     if "import" in r or "module" in r or "dependency" in r:
         return {
             "escalate": False,
             "brain": "govern",
             "action": "record_gap",
             "payload": {
-                "what": f"Code gap: {target} — {reason}",
+                "what": f"Code gap: {target} Ã¢â‚¬â€ {reason}",
                 "target": target,
                 "tags": ["autonomous", "gap", "code-issue"],
             },
             "type": "learn",
         }
 
-    # Test failures → LEARN (govern/record_gap)
+    # Test failures Ã¢â€ â€™ LEARN (govern/record_gap)
     if "test" in r or "failure" in r:
         return {
             "escalate": False,
             "brain": "govern",
             "action": "record_gap",
             "payload": {
-                "what": f"Test gap: {target} — {reason}",
+                "what": f"Test gap: {target} Ã¢â‚¬â€ {reason}",
                 "target": target,
                 "tags": ["autonomous", "gap", "test-failure"],
             },
@@ -1066,7 +1066,7 @@ def _architecture_explain(p):
 
 
 def _architecture_find(p):
-    """What can handle this task? (Capability → components.)"""
+    """What can handle this task? (Capability Ã¢â€ â€™ components.)"""
     try:
         from cognitive.architecture_compass import get_compass
         capability = p.get("capability", p.get("task", ""))
@@ -1168,7 +1168,7 @@ def _embedding_config():
 
 
 def _brain_directory():
-    """All brains (domains) and their actions — queryable API map."""
+    """All brains (domains) and their actions Ã¢â‚¬â€ queryable API map."""
     try:
         d = _build_directory()
         total = sum(len(b["actions"]) for b in d.values())
@@ -1203,7 +1203,7 @@ def _models_summary():
 
 
 def _schema_info():
-    """Database type, name, Qdrant status — schema/storage overview."""
+    """Database type, name, Qdrant status Ã¢â‚¬â€ schema/storage overview."""
     try:
         out = {}
         try:
@@ -1263,7 +1263,7 @@ def _graphs_info():
 
 
 def _deterministic_first_loop(p):
-    """Run deterministic-first loop: Genesis keys → probe → AST/deterministic fix → handoff to LLM only when needed."""
+    """Run deterministic-first loop: Genesis keys Ã¢â€ â€™ probe Ã¢â€ â€™ AST/deterministic fix Ã¢â€ â€™ handoff to LLM only when needed."""
     from core.deterministic_first_loop import run_deterministic_first_loop, get_handoff_context
     result = run_deterministic_first_loop(
         task=p.get("task"),
@@ -2102,9 +2102,9 @@ def _stress_test_stop():
 
 
 
-# ═══════════════════════════════════════════════════════════════════
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
 #  DIRECTORY + ENDPOINTS
-# ═══════════════════════════════════════════════════════════════════
+# Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢Ã¢â€¢
 
 def _build_directory():
     return {
@@ -2162,7 +2162,7 @@ async def brain_deterministic(req: BrainRequest):
 @router.post("/ask")
 async def brain_ask(request: Request):
     """
-    Smart routing — describe what you want in natural language.
+    Smart routing Ã¢â‚¬â€ describe what you want in natural language.
     Grace auto-routes to the optimal brain + action.
 
     POST /brain/ask { "query": "what is the system health?" }

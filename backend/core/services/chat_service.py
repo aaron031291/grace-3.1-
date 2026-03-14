@@ -1,4 +1,4 @@
-"""Chat domain service — direct function calls, no HTTP.
+"""Chat domain service Ã¢â‚¬â€ direct function calls, no HTTP.
 
 Unified conversational spine: RAG + unified memory (episodic recall) + LLM.
 """

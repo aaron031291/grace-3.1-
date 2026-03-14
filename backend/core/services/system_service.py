@@ -1,4 +1,4 @@
-"""System domain service — direct function calls for health, runtime, monitoring."""
+"""System domain service Ã¢â‚¬â€ direct function calls for health, runtime, monitoring."""
 
 import time as _time
 import gc

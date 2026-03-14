@@ -1,5 +1,5 @@
 """
-Brain Orchestrator — intelligent multi-brain coordination.
+Brain Orchestrator Ã¢â‚¬â€ intelligent multi-brain coordination.
 
 Knows when to call which brains simultaneously.
 Manages parallel execution across domains.
@@ -30,7 +30,7 @@ class BrainOrchestrator:
         # Analysis & review
         "analyze":  ["ai", "system", "files"],
         "review":   ["ai", "code", "govern"],
-        # Knowledge & learning — first-class brain targets
+        # Knowledge & learning Ã¢â‚¬â€ first-class brain targets
         "learn":    ["learn", "memory", "ai"],
         "remember": ["memory", "learn", "ai"],
         "search":   ["files", "code", "data"],

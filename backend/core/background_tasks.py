@@ -1,5 +1,5 @@
 """
-Background task runner — opt-in async/thread coordination.
+Background task runner Ã¢â‚¬â€ opt-in async/thread coordination.
 
 Components submit long-running jobs here. No forced rewrite of call paths.
 """
