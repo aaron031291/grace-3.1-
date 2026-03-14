@@ -3,9 +3,9 @@ import os
 import json
 from pathlib import Path
 
-from backend.cognitive.architecture_compass import ArchitectureCompass
-from backend.cognitive.blueprint_engine import Blueprint, FunctionSpec, get_playbook_stats
-from backend.cognitive.architecture_proposer import ArchitectureProposer
+from cognitive.architecture_compass import ArchitectureCompass
+from cognitive.blueprint_engine import Blueprint, FunctionSpec, get_playbook_stats
+from cognitive.architecture_proposer import ArchitectureProposer
 
 def test_compass_actual_logic():
     """Verify that Architecture Compass physically maps the backend without mocks."""

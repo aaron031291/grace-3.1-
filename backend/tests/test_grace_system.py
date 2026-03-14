@@ -119,6 +119,7 @@ class TestLevel2Components:
         assert "Unknown action" in r["error"]
         genesis_test("comp_brain_invalid_action", True)
 
+    @pytest.mark.slow
     def test_brain_all_domains_respond(self):
         from api.brain_api_v2 import call_brain, _build_directory
         d = _build_directory()
@@ -337,12 +338,14 @@ class TestLevel4EndToEnd:
         assert "episodic_analysis" in report
         genesis_test("e2e_intelligence_report", True)
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_full_verification_script(self):
-        """The verify_system.py script passes."""
+        """The verify_system.py script passes (requires full services)."""
         import subprocess
         result = subprocess.run(
             [sys.executable, "scripts/verify_system.py"],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True, text=True, timeout=60,
             cwd=os.path.dirname(os.path.dirname(__file__)),
         )
         assert "ALL CHECKS PASSED" in result.stdout

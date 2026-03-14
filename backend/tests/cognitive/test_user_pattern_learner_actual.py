@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from backend.cognitive.user_pattern_learner import UserPatternLearner, get_user_learner
+from cognitive.user_pattern_learner import UserPatternLearner, get_user_learner
 
 def test_singleton_or_factory():
     learner1 = get_user_learner("user_1")
@@ -9,7 +9,7 @@ def test_singleton_or_factory():
     assert learner1.user_id == "user_1"
     assert learner2.user_id == "user_1"
 
-@patch("backend.cognitive.user_pattern_learner.session_scope")
+@patch("cognitive.user_pattern_learner.session_scope")
 def test_observe_interaction(mock_scope):
     # Mock session
     mock_session = MagicMock()
@@ -28,7 +28,7 @@ def test_observe_interaction(mock_scope):
     # We just ensure it executed the db logic
     assert mock_session.add.called
 
-@patch("backend.cognitive.user_pattern_learner.session_scope")
+@patch("cognitive.user_pattern_learner.session_scope")
 def test_get_adaptation_hints(mock_scope):
     # Setup mock profile
     mock_session = MagicMock()

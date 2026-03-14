@@ -2,7 +2,7 @@ import pytest
 import logging
 import json
 from unittest.mock import MagicMock, patch
-from backend.security.logging import SecurityLogger, get_security_logger, log_security_event
+from security.logging import SecurityLogger, get_security_logger, log_security_event
 
 def test_security_logger_singleton():
     l1 = get_security_logger()

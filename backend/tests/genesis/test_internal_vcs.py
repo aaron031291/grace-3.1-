@@ -4,7 +4,7 @@ import asyncio
 from unittest.mock import MagicMock, patch
 from sqlalchemy.orm import Session
 from models.workspace_models import Workspace, Branch, FileVersion
-from backend.genesis.internal_vcs import InternalVCS, create_workspace, list_workspaces, get_vcs
+from genesis.internal_vcs import InternalVCS, create_workspace, list_workspaces, get_vcs
 
 @pytest.fixture
 def temp_vcs(tmp_path):
@@ -39,7 +39,7 @@ def temp_vcs(tmp_path):
     cm = MagicMock()
     cm.__enter__.return_value = session
     
-    with patch('backend.genesis.internal_vcs.session_scope', return_value=cm) as mock_scope:
+    with patch('genesis.internal_vcs.session_scope', return_value=cm) as mock_scope:
         yield vcs, tmp_path, session
 
 @pytest.mark.asyncio
@@ -93,7 +93,7 @@ async def test_history(temp_vcs):
 
 @pytest.mark.asyncio
 async def test_create_workspace(tmp_path):
-    with patch('backend.genesis.internal_vcs.session_scope') as mock_scope:
+    with patch('genesis.internal_vcs.session_scope') as mock_scope:
         session = MagicMock()
         mock_scope.return_value.__enter__.return_value = session
         

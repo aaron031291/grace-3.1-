@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from backend.app import app
+from app import app
 import json
 
 client = TestClient(app)
@@ -16,7 +16,7 @@ def test_cognitive_events_websocket():
     # Make sure we can connect to the websocket and disconnect without crashing
     with client.websocket_connect("/api/cognitive-events/ws") as websocket:
         # We can publish an event directly to the bus and see if it comes across
-        from backend.cognitive.event_bus import publish
+        from cognitive.event_bus import publish
         
         publish("test.event", data={"connected": True}, source="pytest")
         

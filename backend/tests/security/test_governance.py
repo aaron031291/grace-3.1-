@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime, timezone
-from backend.security.governance import (
+from security.governance import (
     GovernanceEngine,
     GovernanceContext,
     ConstitutionalRule,

@@ -1,5 +1,5 @@
 import pytest
-from backend.cognitive.consensus_pipeline import ConsensusPipeline
+from cognitive.consensus_pipeline import ConsensusPipeline
 
 def test_maker_checker_loop_immediate_approval(monkeypatch):
     """Test when checker immediately approves the maker's output."""
@@ -12,7 +12,7 @@ def test_maker_checker_loop_immediate_approval(monkeypatch):
         def log_to_memory(self, *args, **kwargs):
             pass
 
-    import backend.cognitive.consensus_pipeline as cp
+    import cognitive.consensus_pipeline as cp
     monkeypatch.setattr(cp, "get_synaptic_core", lambda: MockSynaptic())
 
     pipeline = ConsensusPipeline()
@@ -43,7 +43,7 @@ def test_maker_checker_loop_with_revision(monkeypatch):
         def log_to_memory(self, *args, **kwargs):
             pass
 
-    import backend.cognitive.consensus_pipeline as cp
+    import cognitive.consensus_pipeline as cp
     monkeypatch.setattr(cp, "get_synaptic_core", lambda: MockSynaptic())
 
     pipeline = ConsensusPipeline()

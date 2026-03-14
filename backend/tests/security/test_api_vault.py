@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 import os
-from backend.security.api_vault import _mask_key, get_vault, APIVault
+from security.api_vault import _mask_key, get_vault, APIVault
 
 def test_mask_key():
     assert _mask_key("") == "(not set)"

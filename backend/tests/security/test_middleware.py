@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 from fastapi import Request, Response
-from backend.security.middleware import RateLimitMiddleware, RequestValidationMiddleware, SecurityHeadersMiddleware
+from security.middleware import RateLimitMiddleware, RequestValidationMiddleware, SecurityHeadersMiddleware
 
 @pytest.mark.asyncio
 async def test_security_headers_middleware():

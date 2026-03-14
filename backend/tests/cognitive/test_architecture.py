@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from backend.cognitive.architecture_compass import ArchitectureCompass
-from backend.cognitive.architecture_proposer import ArchitectureProposer
+from cognitive.architecture_compass import ArchitectureCompass
+from cognitive.architecture_proposer import ArchitectureProposer
 
-@patch('backend.cognitive.architecture_compass.publish')
+@patch('cognitive.architecture_compass.publish')
 @patch('pathlib.Path.glob')
 @patch('pathlib.Path.exists')
 def test_compass_publish(mock_exists, mock_glob, mock_publish):
@@ -19,9 +19,9 @@ def test_compass_publish(mock_exists, mock_glob, mock_publish):
     topics = [c.args[0] for c in mock_publish.mock_calls]
     assert "architecture.compass_built" in topics
 
-@patch('backend.cognitive.architecture_proposer.publish')
-@patch('backend.cognitive.architecture_proposer.get_llm_client')
-@patch('backend.cognitive.architecture_proposer.get_llm_for_task')
+@patch('cognitive.architecture_proposer.publish')
+@patch('cognitive.architecture_proposer.get_llm_client')
+@patch('cognitive.architecture_proposer.get_llm_for_task')
 def test_proposer_publish(mock_get_llm_task, mock_get_llm_client, mock_publish):
     # Mock LLM prediction to JSON
     mock_llm = MagicMock()
@@ -33,7 +33,7 @@ def test_proposer_publish(mock_get_llm_task, mock_get_llm_client, mock_publish):
     spec = {"name": "TestComponent", "description": "foo", "capabilities": ["bar"]}
     
     # Needs to patch get_compass so we don't try to build the real one
-    with patch('backend.cognitive.architecture_compass.get_compass') as mock_get_compass:
+    with patch('cognitive.architecture_compass.get_compass') as mock_get_compass:
         mock_compass = MagicMock()
         mock_compass.diagnose.return_value = {"total_components": 1}
         mock_compass.find_for.return_value = []

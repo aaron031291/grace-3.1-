@@ -13,6 +13,8 @@ import asyncio
 import logging
 import time
 
+from api.error_responses import error_response, handle_api_error
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/brain", tags=["Brain API"])
 
@@ -791,7 +793,8 @@ def _fill_knowledge_gaps(p: dict):
         auto_ingest = p.get("auto_ingest", True)
         return fill_gaps_from_sources(max_gaps=max_gaps, auto_ingest=auto_ingest)
     except Exception as e:
-        return {"error": str(e), "topics_processed": 0, "gaps_filled": 0}
+        logger.error(f"[brain/fill_knowledge_gaps] {e}", exc_info=True)
+        return {"error": "Failed to fill knowledge gaps", "topics_processed": 0, "gaps_filled": 0}
 
 
 def _learning_memory_expand(p: dict):
@@ -806,7 +809,8 @@ def _learning_memory_expand(p: dict):
         filled = fill_gaps_from_sources(max_gaps=max_gaps, auto_ingest=True)
         return {"scan": gaps, "filled": filled}
     except Exception as e:
-        return {"error": str(e), "scan": None, "filled": None}
+        logger.error(f"[brain/learning_memory_expand] {e}", exc_info=True)
+        return {"error": "Failed to expand learning memory", "scan": None, "filled": None}
 
 
 def _oracle_export(p: dict):
@@ -820,7 +824,8 @@ def _oracle_export(p: dict):
             kb_path = Path(kb_path)
         return run_oracle_export(kb_path=kb_path, limit=p.get("limit", 500), min_trust=p.get("min_trust", 0.3))
     except Exception as e:
-        return {"error": str(e), "exported": 0}
+        logger.error(f"[brain/oracle_export] {e}", exc_info=True)
+        return {"error": "Failed to export to Oracle", "exported": 0}
 
 
 def _governance_training_cycle(p: dict):
@@ -838,7 +843,8 @@ def _governance_training_cycle(p: dict):
             run_sandbox_review=p.get("run_sandbox_review", True),
         )
     except Exception as e:
-        return {"error": str(e), "cycle_at": None}
+        logger.error(f"[brain/governance_training_cycle] {e}", exc_info=True)
+        return {"error": "Governance training cycle failed", "cycle_at": None}
 
 
 def _governance_report(p: dict):
@@ -876,7 +882,8 @@ def _code_generate(p):
             use_pipeline=p.get("use_pipeline", False),
         )
     except Exception as e:
-        return {"error": str(e)}
+        logger.error(f"[brain/code_generate] {e}", exc_info=True)
+        return {"error": "Code generation failed"}
 
 
 def _oracle_dashboard():

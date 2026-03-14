@@ -1,7 +1,7 @@
 import pytest
 import sys
 from unittest.mock import MagicMock
-from backend.cognitive.architecture_proposer import ArchitectureProposer
+from cognitive.architecture_proposer import ArchitectureProposer
 
 # Mock the entire architecture compass module
 mock_ac = MagicMock()
