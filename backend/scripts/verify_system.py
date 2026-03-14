@@ -7,7 +7,9 @@ Usage:
   python scripts/verify_system.py --offline     # import-only checks
 """
 
-import sys, os, time, json
+import sys, os, time, json, io
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault("SKIP_EMBEDDING_LOAD", "true")
@@ -54,7 +56,7 @@ except Exception as e:
 try:
     from api.brain_api_v2 import call_brain, _build_directory
     d = _build_directory()
-    check(f"Brain API: {len(d)} domains", len(d) == 8)
+    check(f"Brain API: {len(d)} domains", len(d) == 9)
     total_actions = sum(len(b["actions"]) for b in d.values())
     check(f"Brain actions: {total_actions}", total_actions >= 80)
 except Exception as e:
