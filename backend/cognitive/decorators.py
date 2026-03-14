@@ -264,6 +264,13 @@ def time_bounded(timeout_seconds: int):
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Any:
+            import os
+            import sys
+            
+            if os.name == 'nt':
+                # Windows doesn't support SIGALRM, so time_bounded is a no-op here
+                return func(*args, **kwargs)
+                
             import signal
 
             def timeout_handler(signum, frame):

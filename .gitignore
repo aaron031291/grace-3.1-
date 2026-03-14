@@ -2,6 +2,10 @@ backend/models/embedding
 backend/knowledge_base
 code_server/
 .env
+.venv/
+venv/
+env/
+venv_gpu/
 */venv/
 */venv_gpu/
 */env/
@@ -54,8 +58,10 @@ dist/
 **/.genesis_*.json
 
 # Knowledge base metadata (auto-generated)
+knowledge_base/
 **/.metadata.json
 **/test_documents/
+**/.ingestion_state.json
 
 # Test artifacts
 diagnostic_report.json
@@ -71,6 +77,7 @@ state/
 artifacts/
 benchmarks/results/
 backend/layer_1/oracle/action_result/
+qdrant_storage/
 
 # Env files
 .env

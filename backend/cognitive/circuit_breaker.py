@@ -437,6 +437,7 @@ def enter_loop(loop_name: str) -> bool:
 
     if depth > max_depth:
         with _depth_lock:
+            _call_depths[loop_name] -= 1
             _metrics[loop_name]["breaks"] += 1
         logger.warning(f"[CIRCUIT BREAKER] Loop '{loop_name}' broken at depth {depth} (max {max_depth})")
 

@@ -4,7 +4,7 @@ from datetime import datetime, timezone, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database.base import Base
+from backend.database.base import Base
 from models.genesis_key_models import GenesisKey, GenesisKeyType
 from backend.cognitive.autonomous_healing_system import AutonomousHealingSystem, TrustLevel, HealthStatus, AnomalyType
 
@@ -39,6 +39,7 @@ def test_autonomous_healing_actual_logic(mock_db_session):
             key_type=GenesisKeyType.ERROR,
             created_at=now - timedelta(minutes=i),
             what_description="Simulated timeout exception",
+            who_actor="system",
             context_data={"file_path": "backend/api/router.py"}
         )
         mock_db_session.add(gk)
@@ -49,7 +50,7 @@ def test_autonomous_healing_actual_logic(mock_db_session):
     assessment = system.assess_system_health()
     
     assert assessment["recent_errors"] == 15
-    assert len(assessment["anomalies_detected"]) > 0
+    assert assessment["anomalies_detected"] > 0
     
     anomaly_types = [a["type"] for a in assessment["anomalies"]]
     assert AnomalyType.ERROR_SPIKE in anomaly_types
