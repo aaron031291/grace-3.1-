@@ -190,6 +190,18 @@ class GenesisFileWatcher(FileSystemEventHandler):
                 f"Version: {result.get('version_number', 'N/A')}"
             )
 
+            # Domain lineage — log to governance layer when path is under data/projects/
+            try:
+                from core.domain_lineage_bridge import log_lineage_from_path
+                log_lineage_from_path(
+                    abs_path=file_path,
+                    operation_type=operation_type,
+                    source="file_watcher",
+                    genesis_key_id=result.get("operation_genesis_key"),
+                )
+            except Exception:
+                pass
+
         except Exception as e:
             if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
                 logger.error(f"[FILE_WATCHER] Error tracking {file_path}: {e}", exc_info=True)

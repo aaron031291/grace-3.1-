@@ -5,8 +5,8 @@ import logging
 from typing import List, Callable
 from pathlib import Path
 
-from backend.cognitive_framework.events import CognitiveEvent
-from backend.cognitive_framework.cognitive_framework import CognitiveFramework
+from cognitive_framework.events import CognitiveEvent
+from cognitive_framework.cognitive_framework import CognitiveFramework
 
 logger = logging.getLogger("error_watcher")
 

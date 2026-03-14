@@ -90,6 +90,20 @@ def route_file_write(relative_path: str, content: str, source: str = "dev_tab",
     try:
         from core.workspace_bridge import write_file
         write_file(str(target), content, source)
+        # Log lineage to domain folder (codebase → governance layer)
+        try:
+            from core.domain_lineage_bridge import log_lineage
+            domain = get_environment(user_id)
+            log_lineage(
+                domain=domain,
+                file_path=relative_path,
+                operation_type="modify",
+                source=source,
+                genesis_key_id=None,
+                user_id=user_id,
+            )
+        except Exception:
+            pass
     except Exception:
         pass
 

@@ -11,7 +11,7 @@ from sqlalchemy import (
     JSON, Text, Boolean, Index, Enum as SQLEnum, ForeignKey
 )
 from sqlalchemy.orm import relationship
-from backend.database.base import BaseModel
+from database.base import BaseModel
 import enum
 
 

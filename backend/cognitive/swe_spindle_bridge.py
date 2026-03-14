@@ -206,11 +206,11 @@ class SWESpindleBridge:
     def _query_high_trust_examples(self) -> List[Any]:
         """Pull LearningExamples with trust >= threshold that contain SWE patterns."""
         try:
-            from backend.database.session import SessionLocal
+            from database.session import SessionLocal
             if SessionLocal is None:
-                from backend.database.session import initialize_session_factory
+                from database.session import initialize_session_factory
                 initialize_session_factory()
-                from backend.database.session import SessionLocal as SL
+                from database.session import SessionLocal as SL
                 session = SL()
             else:
                 session = SessionLocal()
@@ -428,7 +428,7 @@ class SWESpindleBridge:
 
         # Mark the source LearningExample as referenced
         try:
-            from backend.database.session import SessionLocal
+            from database.session import SessionLocal
             session = SessionLocal()
             try:
                 from cognitive.learning_memory import LearningExample as LE
@@ -470,7 +470,7 @@ class SWESpindleBridge:
     def process_example(self, example_id: int) -> Optional[TranslationResult]:
         """Manually process a single LearningExample by ID."""
         try:
-            from backend.database.session import SessionLocal
+            from database.session import SessionLocal
             session = SessionLocal()
             try:
                 from cognitive.learning_memory import LearningExample

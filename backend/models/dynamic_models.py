@@ -6,7 +6,7 @@ All models inside this file are inherently registered to Base.
 
 from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, Enum as SQLEnum
 from sqlalchemy.orm import relationship
-from backend.database.base import BaseModel
+from database.base import BaseModel
 from datetime import datetime
 import enum
 

@@ -1,7 +1,7 @@
 """
 Deterministic build verification Ã¢â‚¬â€ in-brain version.
 
-Same manifest and checks as scripts/verify_built.py, runnable from backend.
+Same manifest and checks as scripts/verify_built.py, runnable from 
 Used by system.verify_built and by the unified trigger loop (determinism trigger).
 """
 

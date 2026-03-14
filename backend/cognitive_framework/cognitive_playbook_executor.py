@@ -28,7 +28,7 @@ class PlaybookExecutor:
 
         # 1. Dispatch event to Event Bus for real-time dashboards
         try:
-            from backend.cognitive.event_bus import publish as bus_publish
+            from cognitive.event_bus import publish as bus_publish
             bus_publish("cognitive.playbook_executor", {
                 "action": "execute",
                 "playbook_id": playbook_id,
@@ -41,7 +41,7 @@ class PlaybookExecutor:
         # 2. Track via Genesis Tracker
         genesis_id = None
         try:
-            from backend.api._genesis_tracker import track
+            from api._genesis_tracker import track
             genesis_id = track(
                 key_type="system_event",
                 what=f"Cognitive execution of playbook '{playbook_id}' for event {event.id}",
@@ -58,8 +58,8 @@ class PlaybookExecutor:
         if "research" in playbook_lower or "log_error_remediation" in playbook_lower or "coding" in playbook_lower:
             # Code fixes and research missions -> Cognitive Blueprint (OODA) -> Task Queue
             try:
-                from backend.coding_agent.task_queue import submit as queue_submit
-                from backend.cognitive_framework.cognitive_blueprint import OODALoopExecutor
+                from coding_agent.task_queue import submit as queue_submit
+                from cognitive_framework.cognitive_blueprint import OODALoopExecutor
                 
                 ooda_executor = OODALoopExecutor()
                 

@@ -6,7 +6,7 @@ database is unavailable the store falls back to an in-memory list
 so the rest of the system keeps running.
 
 Usage:
-    from backend.cognitive.spindle_event_store import get_event_store
+    from cognitive.spindle_event_store import get_event_store
 
     store = get_event_store()
     store.append("healing.started", source_type="healing", payload={...})
@@ -74,7 +74,7 @@ class SpindleEventStore:
             from database.session import session_scope
             return session_scope
         except ImportError:
-            from backend.database.session import session_scope
+            from database.session import session_scope
             return session_scope
 
     def _get_model(self):
@@ -412,7 +412,7 @@ def bridge_to_event_bus() -> None:
     if getattr(bridge_to_event_bus, "_registered", False):
         return
 
-    from backend.cognitive.event_bus import subscribe, Event
+    from cognitive.event_bus import subscribe, Event
 
     store = get_event_store()
 

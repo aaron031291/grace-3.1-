@@ -6,7 +6,7 @@ from typing import List, Optional
 # Add the parent of backend to sys.path so 'backend.xxx' resolves
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from backend.cognitive.braille_mapper import BrailleMapper, mapper as default_mapper
+from cognitive.braille_mapper import BrailleMapper, mapper as default_mapper
 
 class BrailleTranslator(ast.NodeVisitor):
     def __init__(self, mapper: BrailleMapper = default_mapper):

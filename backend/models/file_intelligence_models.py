@@ -6,7 +6,7 @@ Registered in database/migration.py so create_tables() creates them with all oth
 """
 
 from sqlalchemy import Column, Integer, String, Text, Float, DateTime, JSON, ForeignKey
-from backend.database.base import BaseModel
+from database.base import BaseModel
 
 
 class FileIntelligence(BaseModel):

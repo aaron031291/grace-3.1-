@@ -16,7 +16,7 @@ from typing import Dict, List, Optional, Any
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
-from backend.database.session import session_scope
+from database.session import session_scope
 from models.memory_graph_models import GraphNodeRecord, GraphEdgeRecord
 
 logger = logging.getLogger(__name__)

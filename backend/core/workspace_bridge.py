@@ -88,6 +88,18 @@ def write_file(path: str, content: str, source: str = "unknown") -> dict:
     if workspace:
         _update_context(workspace, path, content)
 
+    # Domain lineage — log to governance layer for audit by domain
+    try:
+        from core.domain_lineage_bridge import log_lineage_from_path
+        log_lineage_from_path(
+            abs_path=path,
+            operation_type="modify",
+            source=source,
+            genesis_key_id=gk_id.key_id if hasattr(gk_id, "key_id") else gk_id,
+        )
+    except Exception:
+        pass
+
     # Librarian — auto-categorize, tag, version every file write
     try:
         from core.librarian import ingest_document

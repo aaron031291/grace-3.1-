@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from backend.cognitive.braille_translator import BrailleTranslator
+from cognitive.braille_translator import BrailleTranslator
 
 def test_translate_simple_function():
     source = "def foo(a, b):\n    return a + b"

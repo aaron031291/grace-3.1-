@@ -296,7 +296,7 @@ class GraceImmuneSystem:
 
         # Genesis tracking
         try:
-            from backend.api._genesis_tracker import track
+            from api._genesis_tracker import track
             track(key_type="system",
                   what=f"Immune scan: {result['overall_health']['status']} ({len(anomalies)} anomalies)",
                   how="GraceImmuneSystem.scan",
@@ -747,7 +747,7 @@ class GraceImmuneSystem:
 
         # Genesis track
         try:
-            from backend.api._genesis_tracker import track
+            from api._genesis_tracker import track
             track(key_type="system",
                   what=f"Healing: {action} on {anomaly.component} ({'SUCCESS' if result['success'] else 'FAILED'})",
                   how="GraceImmuneSystem.heal",

@@ -1,6 +1,6 @@
 import logging
 from typing import Dict, Any
-from backend.constitutional.grace_charter import GraceCharter
+from constitutional.grace_charter import GraceCharter
 
 logger = logging.getLogger("governance_prime")
 

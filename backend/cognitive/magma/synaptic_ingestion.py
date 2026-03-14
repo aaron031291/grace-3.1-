@@ -20,7 +20,7 @@ import uuid
 import re
 import logging
 
-from backend.cognitive.magma.relation_graphs import (
+from cognitive.magma.relation_graphs import (
     MagmaRelationGraphs,
     GraphNode,
     GraphEdge,

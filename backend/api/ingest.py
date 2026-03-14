@@ -9,9 +9,9 @@ from typing import List, Optional, Any
 from datetime import datetime, timezone
 import logging
 
-from backend.ingestion.service import TextIngestionService
-from backend.embedding import get_embedding_model
-from backend.vector_db.client import get_qdrant_client
+from ingestion.service import TextIngestionService
+from embedding import get_embedding_model
+from vector_db.client import get_qdrant_client
 
 logger = logging.getLogger(__name__)
 

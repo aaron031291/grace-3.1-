@@ -5,7 +5,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if project_root not in sys.path:
     sys.path.append(project_root)
 
-from backend.cognitive.consensus_actuation import get_actuation_gateway
+from cognitive.consensus_actuation import get_actuation_gateway
 
 # Path to the implementation plan artifact
 plan_path = pathlib.Path(r"C:\\Users\\aaron\\.gemini\\antigravity\\brain\\ed308d71-9d41-46d0-bead-d7a7a8aa26e5\\implementation_plan.md")

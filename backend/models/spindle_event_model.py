@@ -9,7 +9,7 @@ written once and never updated or deleted.
 from sqlalchemy import Column, BigInteger, DateTime, Integer, String, JSON, Index
 from sqlalchemy.sql import func
 
-from backend.database.base import BaseModel
+from database.base import BaseModel
 
 
 class SpindleEvent(BaseModel):

@@ -626,7 +626,7 @@ def layer4_verify(aligned_output: str, prompt: str) -> dict:
 
     # Constitutional Alignment Check
     try:
-        from backend.constitutional.grace_charter import GraceCharter
+        from constitutional.grace_charter import GraceCharter
         
         # Simple heuristic risk assessment for the raw output
         estimated_risk = 0.1
@@ -644,8 +644,8 @@ def layer4_verify(aligned_output: str, prompt: str) -> dict:
 
     # Z3 Physics Formal Verification
     try:
-        from backend.cognitive.physics.qwen_z3_pipeline import QwenZ3Pipeline
-        from backend.cognitive.physics.z3_sandbox import Z3Sandbox
+        from cognitive.physics.qwen_z3_pipeline import QwenZ3Pipeline
+        from cognitive.physics.z3_sandbox import Z3Sandbox
 
         # Translate aligned output to formal logic
         z3_pipeline = QwenZ3Pipeline()

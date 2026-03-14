@@ -10,7 +10,7 @@ These models track:
 from sqlalchemy import Column, Integer, String, Text, Boolean, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from backend.database.base import BaseModel
+from database.base import BaseModel
 
 
 class QueryHandlingLog(BaseModel):

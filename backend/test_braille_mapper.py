@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from backend.cognitive.braille_mapper import BrailleMapper
+from cognitive.braille_mapper import BrailleMapper
 
 def test_braille_mapper_loads():
     mapper = BrailleMapper()

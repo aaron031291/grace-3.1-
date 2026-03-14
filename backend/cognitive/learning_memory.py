@@ -18,7 +18,7 @@ from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON, Boo
 import json
 
 from core.datetime_utils import ensure_aware
-from backend.database.base import BaseModel
+from database.base import BaseModel
 
 
 def _to_json_str(val) -> str:

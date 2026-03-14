@@ -71,7 +71,7 @@ class SpindleProjection:
     def rebuild(self):
         """Rebuild projections from the event store (full replay)."""
         try:
-            from backend.cognitive.spindle_event_store import get_event_store
+            from cognitive.spindle_event_store import get_event_store
             store = get_event_store()
             events = store.replay(after_sequence=0)
 
@@ -94,7 +94,7 @@ class SpindleProjection:
     def update(self):
         """Incremental update — only process new events since last update."""
         try:
-            from backend.cognitive.spindle_event_store import get_event_store
+            from cognitive.spindle_event_store import get_event_store
             store = get_event_store()
             events = store.replay(after_sequence=self._last_sequence)
 

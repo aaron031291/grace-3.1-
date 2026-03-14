@@ -241,3 +241,16 @@ async def install_post_commit_hook():
         return {"status": "installed" if ok else "failed", "success": ok}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Domain Lineage (codebase → governance layer) ──────────────────────────────
+
+@router.get("/domain-lineage/{domain}")
+async def get_domain_lineage(domain: str, limit: int = 100):
+    """Get lineage records for a domain (audit: what changed for domain X)."""
+    try:
+        from core.domain_lineage_bridge import get_lineage_for_domain
+        records = get_lineage_for_domain(domain, limit=limit)
+        return {"domain": domain, "records": records, "count": len(records)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

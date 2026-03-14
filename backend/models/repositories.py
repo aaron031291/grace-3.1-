@@ -4,7 +4,7 @@ These are templates - create specific repositories for your models.
 """
 
 from sqlalchemy.orm import Session
-from backend.database.repository import BaseRepository
+from database.repository import BaseRepository
 from models.database_models import User, Conversation, Message, Embedding, Chat, ChatHistory
 from typing import List, Optional
 from datetime import datetime, timezone

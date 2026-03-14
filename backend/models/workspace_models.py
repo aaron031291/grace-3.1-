@@ -14,7 +14,7 @@ codes, and learns for every tenant AI.
 
 from sqlalchemy import Column, String, Text, Boolean, Integer, Float, DateTime, JSON, ForeignKey, Index
 from sqlalchemy.orm import relationship
-from backend.database.base import BaseModel
+from database.base import BaseModel
 from datetime import datetime, timezone
 import enum
 

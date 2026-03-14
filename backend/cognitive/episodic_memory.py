@@ -8,7 +8,7 @@ OPTIMIZED: Now supports semantic similarity using embeddings
 """
 from sqlalchemy import Column, String, Float, Text, DateTime
 from sqlalchemy.orm import Session, validates
-from backend.database.base import BaseModel
+from database.base import BaseModel
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 import logging
