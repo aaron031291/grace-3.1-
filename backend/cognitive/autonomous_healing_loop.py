@@ -301,29 +301,42 @@ def _surgical_heal(content: str, errors: List[str]) -> str:
         from llm_orchestrator.factory import get_llm_client
         client = get_llm_client()
 
-        # Process each error individually
         healed = content
         for error in errors:
             prompt = (
-                f"Fix this SINGLE error in the text below. "
-                f"Output ONLY the corrected section (the few lines that need changing). "
-                f"Do NOT rewrite the whole content.\n\n"
+                f"Fix this SINGLE error in the code/text below.\n"
+                f"Return the COMPLETE corrected content (not just the changed lines).\n\n"
                 f"Error to fix: {error}\n\n"
-                f"Content (first 2000 chars for context):\n{healed[:2000]}"
+                f"Full content:\n```\n{healed}\n```\n\n"
+                f"Return ONLY the corrected full content, no explanations."
             )
 
             try:
                 fix = client.generate(
                     prompt=prompt,
-                    system_prompt="You are a surgical code fixer. Fix ONLY the specific error. Output ONLY the corrected lines.",
+                    system_prompt="You are a surgical code fixer. Return the complete corrected file content. No markdown fences, no explanations.",
                     temperature=0.1,
-                    max_tokens=512,
+                    max_tokens=4096,
                 )
                 if isinstance(fix, str) and len(fix) > 10:
-                    # Try to apply the fix (simple string replacement)
-                    # This is a best-effort approach
-                    pass
-            except Exception:
+                    # Strip markdown fences if present
+                    cleaned = fix.strip()
+                    if cleaned.startswith("```"):
+                        lines = cleaned.split("\n")
+                        lines = lines[1:]  # remove opening fence
+                        if lines and lines[-1].strip() == "```":
+                            lines = lines[:-1]
+                        cleaned = "\n".join(lines)
+
+                    # Safety: only accept if the fix preserves most content
+                    ratio = len(cleaned) / len(healed) if healed else 0
+                    if 0.7 < ratio < 1.5:
+                        healed = cleaned
+                        logger.info(f"[HEAL-13] Surgical fix applied for: {error[:60]}")
+                    else:
+                        logger.warning(f"[HEAL-13] Surgical fix rejected (size ratio {ratio:.2f}): {error[:60]}")
+            except Exception as e:
+                logger.debug(f"[HEAL-13] Surgical fix failed for error: {e}")
                 continue
 
         return healed
@@ -333,7 +346,39 @@ def _surgical_heal(content: str, errors: List[str]) -> str:
 
 def _guided_heal(content: str, errors: List[str]) -> str:
     """Guided rewrite with strict size and quality constraints."""
-    return content  # Fallback: return original if guided heal not available
+    try:
+        from llm_orchestrator.factory import get_llm_client
+        client = get_llm_client()
+
+        error_list = "\n".join(f"  - {e}" for e in errors[:10])
+        prompt = (
+            f"The following content has {len(errors)} errors:\n{error_list}\n\n"
+            f"Rewrite the content to fix ALL errors while preserving structure and meaning.\n"
+            f"Content:\n```\n{content}\n```\n\n"
+            f"Return ONLY the corrected full content, no explanations."
+        )
+
+        fix = client.generate(
+            prompt=prompt,
+            system_prompt="You are a code repair system. Return the complete corrected content. No markdown fences, no explanations.",
+            temperature=0.1,
+            max_tokens=8192,
+        )
+        if isinstance(fix, str) and len(fix) > 10:
+            cleaned = fix.strip()
+            if cleaned.startswith("```"):
+                lines = cleaned.split("\n")
+                lines = lines[1:]
+                if lines and lines[-1].strip() == "```":
+                    lines = lines[:-1]
+                cleaned = "\n".join(lines)
+            ratio = len(cleaned) / len(content) if content else 0
+            if 0.5 < ratio < 2.0:
+                return cleaned
+            logger.warning(f"[HEAL-13] Guided heal rejected (size ratio {ratio:.2f})")
+    except Exception as e:
+        logger.warning(f"[HEAL-13] Guided heal failed: {e}")
+    return content
 
 
 def _log_incident(result: Dict[str, Any]):
