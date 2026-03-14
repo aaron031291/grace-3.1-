@@ -27,7 +27,7 @@ class OODAState:
     orientation: Dict[str, Any] = field(default_factory=dict)
     decision: Optional[Dict[str, Any]] = None
     action_result: Optional[Any] = None
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = None
 
 
