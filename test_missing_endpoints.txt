@@ -1,0 +1,951 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 76 items
+
+backend\tests\test_api_genesis.py FFFFF..FF..F.FFFF                      [ 22%]
+backend\tests\test_api_governance.py FFFFF..F..FFFFFFFF                  [ 46%]
+backend\tests\test_api_librarian.py FFFF...FF..FFFF...F..F.FF            [ 78%]
+backend\tests\test_api_ml_intelligence.py FFFFFFFFFFFFFFFF               [100%]
+
+================================== FAILURES ===================================
+________________ TestGenesisKeysStatus.test_get_genesis_status ________________
+backend\tests\test_api_genesis.py:18: in test_get_genesis_status
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/stats - Total: 0.002s | Setup: 0.001s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create user profile: 'NoneType' object is not callable
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:210 Failed to create user profile: 'NoneType' object is not callable
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+INFO     ml_intelligence.kpi_tracker:kpi_tracker.py:224 [KPI-TRACKER] Initialized
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:236 [KPI-TRACKER] Registered component: genesis_tracker
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 1)
+-------------------------- Captured stderr teardown ---------------------------
+WARNING: [GENESIS ALERT] error_spike: 3 errors in 60s (threshold: 3)
+---------------------------- Captured log teardown ----------------------------
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 4)
+________________ TestGenesisKeysStatus.test_get_genesis_stats _________________
+backend\tests\test_api_genesis.py:26: in test_get_genesis_stats
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/stats - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 5)\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 6)
+_______________ TestGenesisKeyCreation.test_create_genesis_key ________________
+backend\tests\test_api_genesis.py:43: in test_create_genesis_key
+    assert response.status_code in [200, 201, 422, 500]
+E   assert 404 in [200, 201, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/keys - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 7)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 8)
+________ TestGenesisKeyCreation.test_create_genesis_key_missing_fields ________
+backend\tests\test_api_genesis.py:51: in test_create_genesis_key_missing_fields
+    assert response.status_code in [422, 400, 500]
+E   assert 404 in [422, 400, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/keys - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 9)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 10)
+_________ TestGenesisKeyCreation.test_create_genesis_key_invalid_type _________
+backend\tests\test_api_genesis.py:62: in test_create_genesis_key_invalid_type
+    assert response.status_code in [200, 201, 400, 422, 500]
+E   assert 404 in [200, 201, 400, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/keys - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 11)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 12)
+_______________ TestGenesisKeyRetrieval.test_list_genesis_keys ________________
+backend\tests\test_api_genesis.py:85: in test_list_genesis_keys
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/keys - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 17)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 18)
+_________ TestGenesisKeyRetrieval.test_list_genesis_keys_with_filters _________
+backend\tests\test_api_genesis.py:90: in test_list_genesis_keys_with_filters
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/keys - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 19)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 20)
+_________________ TestGenesisKeyHistory.test_get_key_history __________________
+backend\tests\test_api_genesis.py:116: in test_get_key_history
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/archives - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 25)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 26)
+_________________ TestGenesisKeyOrganizer.test_organize_keys __________________
+backend\tests\test_api_genesis.py:131: in test_organize_keys
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/archive/trigger - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 29)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 30)
+_______________ TestGenesisKeyOrganizer.test_get_daily_summary ________________
+backend\tests\test_api_genesis.py:136: in test_get_daily_summary
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/stats - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 31)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 32)
+___________________ TestGenesisKeyCICD.test_get_cicd_status ___________________
+backend\tests\test_api_genesis.py:147: in test_get_cicd_status
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /api/cicd/genesis-keys - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 33)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 34)
+_________________ TestGenesisKeyCICD.test_trigger_cicd_check __________________
+backend\tests\test_api_genesis.py:155: in test_trigger_cicd_check
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /genesis/analyze-code - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 35)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 36)
+_______________ TestGovernanceStatus.test_get_governance_status _______________
+backend\tests\test_api_governance.py:18: in test_get_governance_status
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/stats - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 37)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 38)
+______________ TestGovernanceStatus.test_get_governance_overview ______________
+backend\tests\test_api_governance.py:26: in test_get_governance_overview
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/stats - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 39)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 40)
+_____________________ TestGovernanceRules.test_get_rules ______________________
+backend\tests\test_api_governance.py:36: in test_get_rules
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/rules - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 41)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 42)
+____________________ TestGovernanceRules.test_create_rule _____________________
+backend\tests\test_api_governance.py:52: in test_create_rule
+    assert response.status_code in [200, 201, 422, 500]
+E   assert 404 in [200, 201, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/rules/new - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 43)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 44)
+___________________ TestGovernanceRules.test_get_rule_by_id ___________________
+backend\tests\test_api_governance.py:58: in test_get_rule_by_id
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/rules - Total: 0.001s | Setup: 0.000s | ReqKey: 0.001s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 45)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 46)
+_____________ TestGovernanceApprovals.test_get_pending_approvals ______________
+backend\tests\test_api_governance.py:83: in test_get_pending_approvals
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/decisions/pending - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 51)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 52)
+______________ TestGovernanceApprovals.test_get_approval_history ______________
+backend\tests\test_api_governance.py:107: in test_get_approval_history
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/decisions/history - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 57)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 58)
+___________________ TestGovernancePillars.test_get_pillars ____________________
+backend\tests\test_api_governance.py:117: in test_get_pillars
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/pillars - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 59)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 60)
+________________ TestGovernancePillars.test_get_pillar_status _________________
+backend\tests\test_api_governance.py:125: in test_get_pillar_status
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/pillars - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 61)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 62)
+___________________ TestGovernanceAudit.test_get_audit_log ____________________
+backend\tests\test_api_governance.py:136: in test_get_audit_log
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/decisions/history - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 63)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 64)
+_______________ TestGovernanceAudit.test_get_audit_log_filtered _______________
+backend\tests\test_api_governance.py:141: in test_get_audit_log_filtered
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/decisions/history - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 65)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 66)
+___________ TestGovernanceDocuments.test_upload_governance_document ___________
+backend\tests\test_api_governance.py:156: in test_upload_governance_document
+    assert response.status_code in [200, 201, 422, 500]
+E   assert 404 in [200, 201, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/documents/upload - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 67)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 68)
+____________ TestGovernanceDocuments.test_get_governance_documents ____________
+backend\tests\test_api_governance.py:161: in test_get_governance_documents
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/documents - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 69)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 70)
+_______________ TestGovernanceDocuments.test_get_document_by_id _______________
+backend\tests\test_api_governance.py:167: in test_get_document_by_id
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /governance/documents - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 71)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 72)
+________________ TestLibrarianStatus.test_get_librarian_status ________________
+backend\tests\test_api_librarian.py:18: in test_get_librarian_status
+    assert response.status_code in [200, 500, 503]
+E   assert 404 in [200, 500, 503]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/health - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 73)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 74)
+________________ TestLibrarianStatus.test_get_librarian_stats _________________
+backend\tests\test_api_librarian.py:27: in test_get_librarian_stats
+    assert response.status_code in [200, 500, 503]
+E   assert 404 in [200, 500, 503]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/statistics - Total: 0.002s | Setup: 0.000s | ReqKey: 0.001s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 75)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 76)
+______________________ TestLibrarianRules.test_get_rules ______________________
+backend\tests\test_api_librarian.py:40: in test_get_rules
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/rules - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 77)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 78)
+_____________________ TestLibrarianRules.test_create_rule _____________________
+backend\tests\test_api_librarian.py:55: in test_create_rule
+    assert response.status_code in [200, 201, 500]
+E   assert 404 in [200, 201, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/rules - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 79)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 80)
+_____________________ TestLibrarianTags.test_get_all_tags _____________________
+backend\tests\test_api_librarian.py:84: in test_get_all_tags
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/tags - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 87)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 88)
+______________________ TestLibrarianTags.test_create_tag ______________________
+backend\tests\test_api_librarian.py:96: in test_create_tag
+    assert response.status_code in [200, 201, 500]
+E   assert 404 in [200, 201, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/tags - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 89)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 90)
+_________________ TestLibrarianTags.test_get_documents_by_tag _________________
+backend\tests\test_api_librarian.py:122: in test_get_documents_by_tag
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/search/tags - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 95)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 96)
+_________________ TestLibrarianCategories.test_get_categories _________________
+backend\tests\test_api_librarian.py:133: in test_get_categories
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/tags/statistics - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 97)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 98)
+________________ TestLibrarianCategories.test_create_category _________________
+backend\tests\test_api_librarian.py:146: in test_create_category
+    assert response.status_code in [200, 201, 500]
+E   assert 404 in [200, 201, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/tags - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 99)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 100)
+________________ TestLibrarianCategories.test_assign_category _________________
+backend\tests\test_api_librarian.py:151: in test_assign_category
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/tags - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 101)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 102)
+________________ TestLibrarianActions.test_get_pending_actions ________________
+backend\tests\test_api_librarian.py:189: in test_get_pending_actions
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/actions/pending - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 109)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 110)
+________________ TestLibrarianActions.test_get_action_history _________________
+backend\tests\test_api_librarian.py:214: in test_get_action_history
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/actions/audit - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 115)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 116)
+______________________ TestLibrarianAI.test_suggest_tags ______________________
+backend\tests\test_api_librarian.py:231: in test_suggest_tags
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/tags/popular - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 119)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 120)
+____________________ TestLibrarianAI.test_suggest_category ____________________
+backend\tests\test_api_librarian.py:237: in test_suggest_category
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /librarian/rules/statistics - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 121)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 122)
+_________________ TestMLIntelligenceStatus.test_get_ml_status _________________
+backend\tests\test_api_ml_intelligence.py:17: in test_get_ml_status
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/status - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 123)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 124)
+_________________ TestMLIntelligenceStatus.test_get_ml_health _________________
+backend\tests\test_api_ml_intelligence.py:26: in test_get_ml_health
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/status - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 125)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 126)
+___________________ TestNeuralTrustScorer.test_score_trust ____________________
+backend\tests\test_api_ml_intelligence.py:41: in test_score_trust
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/trust-score - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 127)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 128)
+_________________ TestNeuralTrustScorer.test_get_trust_stats __________________
+backend\tests\test_api_ml_intelligence.py:47: in test_get_trust_stats
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/bandit/stats - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 129)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 130)
+________________ TestNeuralTrustScorer.test_batch_trust_scores ________________
+backend\tests\test_api_ml_intelligence.py:56: in test_batch_trust_scores
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/trust-score - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 131)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 132)
+____________________ TestMultiArmedBandit.test_select_arm _____________________
+backend\tests\test_api_ml_intelligence.py:69: in test_select_arm
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/bandit/select - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 133)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 134)
+___________________ TestMultiArmedBandit.test_update_reward ___________________
+backend\tests\test_api_ml_intelligence.py:79: in test_update_reward
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/bandit/feedback - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 135)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 136)
+_________________ TestMultiArmedBandit.test_get_bandit_stats __________________
+backend\tests\test_api_ml_intelligence.py:84: in test_get_bandit_stats
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/bandit/stats - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 137)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 138)
+___________ TestUncertaintyQuantification.test_quantify_uncertainty ___________
+backend\tests\test_api_ml_intelligence.py:102: in test_quantify_uncertainty
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/uncertainty/estimate - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 139)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 140)
+__________ TestUncertaintyQuantification.test_get_uncertainty_stats ___________
+backend\tests\test_api_ml_intelligence.py:107: in test_get_uncertainty_stats
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/uncertainty/stats - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 141)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 142)
+______________________ TestMetaLearning.test_meta_learn _______________________
+backend\tests\test_api_ml_intelligence.py:130: in test_meta_learn
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/meta-learning/recommend - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 143)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 144)
+____________________ TestMetaLearning.test_get_meta_stats _____________________
+backend\tests\test_api_ml_intelligence.py:136: in test_get_meta_stats
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/status - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 145)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 146)
+___________________ TestActiveLearning.test_select_samples ____________________
+backend\tests\test_api_ml_intelligence.py:151: in test_select_samples
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/active-learning/select - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 147)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 148)
+____________________ TestActiveLearning.test_update_model _____________________
+backend\tests\test_api_ml_intelligence.py:157: in test_update_model
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/enable - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 149)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 150)
+___________________ TestNeuroSymbolicReasoning.test_reason ____________________
+backend\tests\test_api_ml_intelligence.py:168: in test_reason
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/status - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 151)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 152)
+____________ TestNeuroSymbolicReasoning.test_get_reasoning_history ____________
+backend\tests\test_api_ml_intelligence.py:174: in test_get_reasoning_history
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /ml-intelligence/status - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 153)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 154)
+============================== warnings summary ===============================
+tests/test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+  C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\api\core\brain_controller.py:23: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class BrainPayload(BaseModel):
+
+tests/test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+  <string>:14: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+  C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread zmq-event-bridge
+  
+  Traceback (most recent call last):
+    File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\cognitive\event_bus.py", line 116, in _zmq_bridge_loop
+      _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
+      ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+    File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\zmq\sugar\socket.py", line 320, in bind
+      super().bind(addr)
+      ~~~~~~~~~~~~^^^^^^
+    File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+      _check_rc(rc)
+      
+    File "zmq/backend/cython/_zmq.py", line 190, in zmq.backend.cython._zmq._check_rc
+      raise ZMQError(errno)
+      
+  zmq.error.ZMQError: Address in use (addr='tcp://127.0.0.1:5520')
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_status
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeysStatus::test_get_genesis_stats
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyCreation::test_create_genesis_key
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyCreation::test_create_genesis_key_missing_fields
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyCreation::test_create_genesis_key_invalid_type
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyRetrieval::test_list_genesis_keys
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyRetrieval::test_list_genesis_keys_with_filters
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyHistory::test_get_key_history
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyOrganizer::test_organize_keys
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyOrganizer::test_get_daily_summary
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyCICD::test_get_cicd_status
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyCICD::test_trigger_cicd_check
+FAILED backend\tests\test_api_governance.py::TestGovernanceStatus::test_get_governance_status
+FAILED backend\tests\test_api_governance.py::TestGovernanceStatus::test_get_governance_overview
+FAILED backend\tests\test_api_governance.py::TestGovernanceRules::test_get_rules
+FAILED backend\tests\test_api_governance.py::TestGovernanceRules::test_create_rule
+FAILED backend\tests\test_api_governance.py::TestGovernanceRules::test_get_rule_by_id
+FAILED backend\tests\test_api_governance.py::TestGovernanceApprovals::test_get_pending_approvals
+FAILED backend\tests\test_api_governance.py::TestGovernanceApprovals::test_get_approval_history
+FAILED backend\tests\test_api_governance.py::TestGovernancePillars::test_get_pillars
+FAILED backend\tests\test_api_governance.py::TestGovernancePillars::test_get_pillar_status
+FAILED backend\tests\test_api_governance.py::TestGovernanceAudit::test_get_audit_log
+FAILED backend\tests\test_api_governance.py::TestGovernanceAudit::test_get_audit_log_filtered
+FAILED backend\tests\test_api_governance.py::TestGovernanceDocuments::test_upload_governance_document
+FAILED backend\tests\test_api_governance.py::TestGovernanceDocuments::test_get_governance_documents
+FAILED backend\tests\test_api_governance.py::TestGovernanceDocuments::test_get_document_by_id
+FAILED backend\tests\test_api_librarian.py::TestLibrarianStatus::test_get_librarian_status
+FAILED backend\tests\test_api_librarian.py::TestLibrarianStatus::test_get_librarian_stats
+FAILED backend\tests\test_api_librarian.py::TestLibrarianRules::test_get_rules
+FAILED backend\tests\test_api_librarian.py::TestLibrarianRules::test_create_rule
+FAILED backend\tests\test_api_librarian.py::TestLibrarianTags::test_get_all_tags
+FAILED backend\tests\test_api_librarian.py::TestLibrarianTags::test_create_tag
+FAILED backend\tests\test_api_librarian.py::TestLibrarianTags::test_get_documents_by_tag
+FAILED backend\tests\test_api_librarian.py::TestLibrarianCategories::test_get_categories
+FAILED backend\tests\test_api_librarian.py::TestLibrarianCategories::test_create_category
+FAILED backend\tests\test_api_librarian.py::TestLibrarianCategories::test_assign_category
+FAILED backend\tests\test_api_librarian.py::TestLibrarianActions::test_get_pending_actions
+FAILED backend\tests\test_api_librarian.py::TestLibrarianActions::test_get_action_history
+FAILED backend\tests\test_api_librarian.py::TestLibrarianAI::test_suggest_tags
+FAILED backend\tests\test_api_librarian.py::TestLibrarianAI::test_suggest_category
+FAILED backend\tests\test_api_ml_intelligence.py::TestMLIntelligenceStatus::test_get_ml_status
+FAILED backend\tests\test_api_ml_intelligence.py::TestMLIntelligenceStatus::test_get_ml_health
+FAILED backend\tests\test_api_ml_intelligence.py::TestNeuralTrustScorer::test_score_trust
+FAILED backend\tests\test_api_ml_intelligence.py::TestNeuralTrustScorer::test_get_trust_stats
+FAILED backend\tests\test_api_ml_intelligence.py::TestNeuralTrustScorer::test_batch_trust_scores
+FAILED backend\tests\test_api_ml_intelligence.py::TestMultiArmedBandit::test_select_arm
+FAILED backend\tests\test_api_ml_intelligence.py::TestMultiArmedBandit::test_update_reward
+FAILED backend\tests\test_api_ml_intelligence.py::TestMultiArmedBandit::test_get_bandit_stats
+FAILED backend\tests\test_api_ml_intelligence.py::TestUncertaintyQuantification::test_quantify_uncertainty
+FAILED backend\tests\test_api_ml_intelligence.py::TestUncertaintyQuantification::test_get_uncertainty_stats
+FAILED backend\tests\test_api_ml_intelligence.py::TestMetaLearning::test_meta_learn
+FAILED backend\tests\test_api_ml_intelligence.py::TestMetaLearning::test_get_meta_stats
+FAILED backend\tests\test_api_ml_intelligence.py::TestActiveLearning::test_select_samples
+FAILED backend\tests\test_api_ml_intelligence.py::TestActiveLearning::test_update_model
+FAILED backend\tests\test_api_ml_intelligence.py::TestNeuroSymbolicReasoning::test_reason
+FAILED backend\tests\test_api_ml_intelligence.py::TestNeuroSymbolicReasoning::test_get_reasoning_history
+================== 56 failed, 20 passed, 6 warnings in 7.44s ==================

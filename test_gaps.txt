@@ -1,0 +1,33 @@
+....................................FF...FF....F..................FF.... [ 60%]
+.......F..........F......F...................F..                         [100%]
+============================== warnings summary ===============================
+tests/test_api_layer1.py::TestLayer1UserInput::test_process_user_input_success
+  C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\api\core\brain_controller.py:23: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class BrainPayload(BaseModel):
+
+tests/test_api_layer1.py::TestLayer1UserInput::test_process_user_input_success
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_layer1.py::TestLayer1UserInput::test_process_user_input_success
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_layer1.py::TestLayer1UserInput::test_process_user_input_success
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_layer1.py::TestLayer1UserInput::test_process_user_input_success
+  <string>:14: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_api_codebase.py::TestCodebaseSearch::test_search_code
+FAILED backend\tests\test_api_codebase.py::TestCodebaseSearch::test_search_code_regex
+FAILED backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_analyze_codebase
+FAILED backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_get_code_metrics
+FAILED backend\tests\test_api_genesis.py::TestGenesisKeyCreation::test_create_genesis_key_missing_fields
+FAILED backend\tests\test_api_governance.py::TestGovernanceRules::test_update_rule
+FAILED backend\tests\test_api_governance.py::TestGovernanceRules::test_delete_rule
+FAILED backend\tests\test_api_librarian.py::TestLibrarianStatus::test_get_librarian_status
+FAILED backend\tests\test_api_librarian.py::TestLibrarianTags::test_get_documents_by_tag
+FAILED backend\tests\test_api_librarian.py::TestLibrarianActions::test_get_pending_actions
+FAILED backend\tests\test_api_ml_intelligence.py::TestActiveLearning::test_update_model
+11 failed, 109 passed, 5 warnings in 11.94s

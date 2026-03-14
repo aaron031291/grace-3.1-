@@ -1,0 +1,70 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 13 items
+
+backend\tests\test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status PASSED [  7%]
+backend\tests\test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_health PASSED [ 15%]
+backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_process_cognitive_query PASSED [ 23%]
+backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_cognitive_observe PASSED [ 30%]
+backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_cognitive_orient PASSED [ 38%]
+backend\tests\test_api_cognitive.py::TestMemoryMesh::test_get_memory_status PASSED [ 46%]
+backend\tests\test_api_cognitive.py::TestMemoryMesh::test_store_memory PASSED [ 53%]
+backend\tests\test_api_cognitive.py::TestMemoryMesh::test_retrieve_memories PASSED [ 61%]
+backend\tests\test_api_cognitive.py::TestContradictionDetection::test_detect_contradictions PASSED [ 69%]
+backend\tests\test_api_cognitive.py::TestContradictionDetection::test_get_contradiction_history PASSED [ 76%]
+backend\tests\test_api_cognitive.py::TestLearningSubagents::test_get_subagent_status PASSED [ 84%]
+backend\tests\test_api_cognitive.py::TestLearningSubagents::test_create_learning_task PASSED [ 92%]
+backend\tests\test_api_cognitive.py::TestLearningSubagents::test_get_learning_progress PASSED [100%]
+
+============================== warnings summary ===============================
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\api\core\brain_controller.py:23: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class BrainPayload(BaseModel):
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:14: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread zmq-event-bridge
+  
+  Traceback (most recent call last):
+    File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\cognitive\event_bus.py", line 116, in _zmq_bridge_loop
+      _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
+      ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+    File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\zmq\sugar\socket.py", line 320, in bind
+      super().bind(addr)
+      ~~~~~~~~~~~~^^^^^^
+    File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+      _check_rc(rc)
+      
+    File "zmq/backend/cython/_zmq.py", line 190, in zmq.backend.cython._zmq._check_rc
+      raise ZMQError(errno)
+      
+  zmq.error.ZMQError: Address in use (addr='tcp://127.0.0.1:5520')
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 13 passed, 6 warnings in 8.79s ========================

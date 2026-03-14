@@ -1,0 +1,184 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 14 items
+
+backend\tests\test_api_codebase.py::TestCodebaseRepositories::test_list_repositories FAILED [  7%]
+backend\tests\test_api_codebase.py::TestCodebaseRepositories::test_get_repository_info FAILED [ 14%]
+backend\tests\test_api_codebase.py::TestCodebaseRepositories::test_add_repository FAILED [ 21%]
+backend\tests\test_api_codebase.py::TestCodebaseFiles::test_list_files PASSED [ 28%]
+backend\tests\test_api_codebase.py::TestCodebaseFiles::test_get_file_content PASSED [ 35%]
+backend\tests\test_api_codebase.py::TestCodebaseFiles::test_get_file_with_line_range PASSED [ 42%]
+backend\tests\test_api_codebase.py::TestCodebaseSearch::test_search_code FAILED [ 50%]
+backend\tests\test_api_codebase.py::TestCodebaseSearch::test_search_code_regex FAILED [ 57%]
+backend\tests\test_api_codebase.py::TestCodebaseCommits::test_get_commits PASSED [ 64%]
+backend\tests\test_api_codebase.py::TestCodebaseCommits::test_get_commits_with_limit PASSED [ 71%]
+backend\tests\test_api_codebase.py::TestCodebaseCommits::test_get_commit_details PASSED [ 78%]
+backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_analyze_codebase FAILED [ 85%]
+backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_get_code_metrics FAILED [ 92%]
+backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_analyze_file PASSED [100%]
+
+================================== FAILURES ===================================
+_______________ TestCodebaseRepositories.test_list_repositories _______________
+backend\tests\test_api_codebase.py:17: in test_list_repositories
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/repositories - Total: 0.002s | Setup: 0.001s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create user profile: 'NoneType' object is not callable
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:210 Failed to create user profile: 'NoneType' object is not callable
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+INFO     ml_intelligence.kpi_tracker:kpi_tracker.py:224 [KPI-TRACKER] Initialized
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:236 [KPI-TRACKER] Registered component: genesis_tracker
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 1)
+-------------------------- Captured stderr teardown ---------------------------
+WARNING: [GENESIS ALERT] error_spike: 3 errors in 60s (threshold: 3)
+---------------------------- Captured log teardown ----------------------------
+WARNING  genesis.realtime:realtime.py:195 [GENESIS ALERT] error_spike: 3 errors in 60s (threshold: 3)
+______________ TestCodebaseRepositories.test_get_repository_info ______________
+backend\tests\test_api_codebase.py:26: in test_get_repository_info
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/repositories - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 5)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 6)
+________________ TestCodebaseRepositories.test_add_repository _________________
+backend\tests\test_api_codebase.py:32: in test_add_repository
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/repositories - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 7)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 8)
+_____________________ TestCodebaseSearch.test_search_code _____________________
+backend\tests\test_api_codebase.py:63: in test_search_code
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/search - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 15)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 16)
+__________________ TestCodebaseSearch.test_search_code_regex __________________
+backend\tests\test_api_codebase.py:68: in test_search_code_regex
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/search - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 17)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 18)
+_________________ TestCodebaseAnalysis.test_analyze_codebase __________________
+backend\tests\test_api_codebase.py:101: in test_analyze_codebase
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/analysis - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 25)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 26)
+_________________ TestCodebaseAnalysis.test_get_code_metrics __________________
+backend\tests\test_api_codebase.py:106: in test_get_code_metrics
+    assert response.status_code in [200, 422, 500]
+E   assert 404 in [200, 422, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /codebase/analysis - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 27)
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 28)
+============================== warnings summary ===============================
+tests/test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+  C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\api\core\brain_controller.py:23: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class BrainPayload(BaseModel):
+
+tests/test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+  <string>:14: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+  C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread zmq-event-bridge
+  
+  Traceback (most recent call last):
+    File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+      self._context.run(self.run)
+      ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Python314\Lib\threading.py", line 1024, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\cognitive\event_bus.py", line 116, in _zmq_bridge_loop
+      _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
+      ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+    File "C:\Users\aaron\AppData\Roaming\Python\Python314\site-packages\zmq\sugar\socket.py", line 320, in bind
+      super().bind(addr)
+      ~~~~~~~~~~~~^^^^^^
+    File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+      _check_rc(rc)
+      
+    File "zmq/backend/cython/_zmq.py", line 190, in zmq.backend.cython._zmq._check_rc
+      raise ZMQError(errno)
+      
+  zmq.error.ZMQError: Address in use (addr='tcp://127.0.0.1:5520')
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_api_codebase.py::TestCodebaseRepositories::test_list_repositories
+FAILED backend\tests\test_api_codebase.py::TestCodebaseRepositories::test_get_repository_info
+FAILED backend\tests\test_api_codebase.py::TestCodebaseRepositories::test_add_repository
+FAILED backend\tests\test_api_codebase.py::TestCodebaseSearch::test_search_code
+FAILED backend\tests\test_api_codebase.py::TestCodebaseSearch::test_search_code_regex
+FAILED backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_analyze_codebase
+FAILED backend\tests\test_api_codebase.py::TestCodebaseAnalysis::test_get_code_metrics
+=================== 7 failed, 7 passed, 6 warnings in 9.58s ===================
