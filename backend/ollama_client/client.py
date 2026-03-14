@@ -48,6 +48,10 @@ class Model:
 class OllamaClient:
     """Client for interacting with Ollama service."""
     
+    _model_cache: Optional[List] = None
+    _model_cache_ts: float = 0
+    _MODEL_CACHE_TTL: float = 60  # seconds
+    
     def __init__(self, base_url: str = None):
         """
         Initialize Ollama client.
@@ -82,9 +86,10 @@ class OllamaClient:
         except Exception:
             return False
     
-    def get_all_models(self) -> List[Model]:
+    def get_all_models(self, use_cache: bool = True) -> List[Model]:
         """
         Get all available models from Ollama.
+        Results are cached for 60s to avoid hitting Ollama on every LLM call.
         
         Returns:
             List[Model]: List of all installed models
@@ -93,6 +98,11 @@ class OllamaClient:
             ConnectionError: If unable to connect to Ollama service
             requests.RequestException: If API request fails
         """
+        import time as _time
+        now = _time.time()
+        if use_cache and OllamaClient._model_cache is not None and (now - OllamaClient._model_cache_ts) < OllamaClient._MODEL_CACHE_TTL:
+            return list(OllamaClient._model_cache)
+
         try:
             response = requests.get(self.api_list_url, timeout=10)
             response.raise_for_status()
@@ -110,6 +120,8 @@ class OllamaClient:
                     )
                     models.append(model)
             
+            OllamaClient._model_cache = models
+            OllamaClient._model_cache_ts = now
             return models
         except requests.ConnectionError:
             raise ConnectionError(f"Failed to connect to Ollama service at {self.base_url}")
@@ -239,9 +251,6 @@ class OllamaClient:
             ConnectionError: If unable to connect to Ollama service
             requests.RequestException: If API request fails
         """
-        if not self.model_exists(model):
-            raise ValueError(f"Model '{model}' not found. Available models: {self.get_all_models()}")
-        
         payload = {
             "model": model,
             "prompt": prompt,
@@ -451,9 +460,6 @@ class OllamaClient:
             ConnectionError: If unable to connect to Ollama service
             requests.RequestException: If API request fails
         """
-        if not self.model_exists(model):
-            raise ValueError(f"Model '{model}' not found. Available models: {self.get_all_models()}")
-        
         payload = {
             "model": model,
             "messages": messages,

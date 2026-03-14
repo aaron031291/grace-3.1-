@@ -26,7 +26,14 @@ def build_rag_prompt(user_query: str, context: Optional[str] = None) -> str:
         ghost_ctx = ghost.get_context(max_tokens=400)
         if ghost_ctx:
             ghost_context = ghost_ctx
-        # 2. Playbook patterns (cross-session continuity from .json reflections)
+        # 2. GM-Query: targeted retrieval by user query subject
+        gm_results = ghost.gm_query(user_query, time_window_hours=48, epsilon=0.4)
+        if gm_results:
+            gm_lines = []
+            for entry in gm_results[:5]:
+                gm_lines.append(f"[ghost:{entry.get('type','?')}] {entry.get('content','')[:150]}")
+            ghost_context += ("\n" if ghost_context else "") + "\n".join(gm_lines)
+        # 3. Playbook patterns (cross-session continuity from .json reflections)
         if PLAYBOOK_DIR.exists():
             import json
             playbook_lines = []

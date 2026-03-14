@@ -2087,10 +2087,12 @@ def _stress_test_start(p):
 
 def _stress_test_status():
     from api.system_audit_api import _stress_test_status as status
-    return status
+    return dict(status)
 
 def _stress_test_stop():
-    return {"message": "Stop requested."}
+    from api.system_audit_api import _stress_test_status as status
+    status["is_running"] = False
+    return {"message": "Stop requested.", "is_running": False}
 
 
 

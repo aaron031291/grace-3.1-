@@ -182,6 +182,110 @@ class GhostMemory:
         except Exception:
             pass
 
+    def gm_query(self, subject: str, time_window_hours: float = 24.0,
+                 epsilon: float = 0.3) -> List[Dict]:
+        """
+        GM-Query(subj, t, ε) — retrieve ghost events matching a subject.
+
+        Searches both live RAM cache and persisted playbook reflections.
+        Args:
+            subject: search term (case-insensitive substring match)
+            time_window_hours: how far back to look
+            epsilon: fuzzy match threshold (0=exact, 1=everything)
+        """
+        from datetime import datetime, timezone, timedelta
+        results = []
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=time_window_hours)
+        subj_lower = subject.lower()
+
+        # 1. Search live RAM cache
+        for entry in reversed(self._cache):
+            content = entry.get("content", "").lower()
+            event_type = entry.get("type", "").lower()
+            # Substring match or type match
+            if subj_lower in content or subj_lower in event_type:
+                ts_str = entry.get("ts", "")
+                if ts_str:
+                    try:
+                        entry_time = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                        if entry_time < cutoff:
+                            continue
+                    except Exception:
+                        pass
+                results.append(entry)
+            elif epsilon > 0:
+                # Fuzzy: check if any word in subject appears in content
+                words = subj_lower.split()
+                match_ratio = sum(1 for w in words if w in content) / max(len(words), 1)
+                if match_ratio >= (1.0 - epsilon):
+                    results.append(entry)
+
+        # 2. Search persisted playbook reflections
+        if PLAYBOOK_DIR.exists():
+            for f in sorted(PLAYBOOK_DIR.glob("*.json"),
+                            key=lambda p: p.stat().st_mtime, reverse=True)[:20]:
+                try:
+                    data = json.loads(f.read_text())
+                    task = data.get("task", "").lower()
+                    pattern = data.get("pattern_name", "").lower()
+                    if subj_lower in task or subj_lower in pattern:
+                        ts_str = data.get("timestamp", "")
+                        if ts_str:
+                            try:
+                                entry_time = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                                if entry_time < cutoff:
+                                    continue
+                            except Exception:
+                                pass
+                        results.append({
+                            "type": "playbook_reflection",
+                            "content": data.get("task", "")[:500],
+                            "metadata": {
+                                "pattern": data.get("pattern_name"),
+                                "confidence": data.get("confidence", 0),
+                                "errors": data.get("errors_encountered", 0),
+                            },
+                            "ts": data.get("timestamp", ""),
+                            "turn": -1,
+                        })
+                except Exception:
+                    pass
+
+        return results[:50]  # bounded
+
+    def replay_reboot_deltas(self) -> int:
+        """
+        Replay recent playbook reflections into RAM cache on reboot.
+        Restores continuity of self across restarts.
+        Returns number of entries replayed.
+        """
+        if not PLAYBOOK_DIR.exists():
+            return 0
+
+        replayed = 0
+        # Load the 5 most recent reflections
+        recent = sorted(PLAYBOOK_DIR.glob("*.json"),
+                        key=lambda p: p.stat().st_mtime, reverse=True)[:5]
+        for f in reversed(recent):  # oldest first
+            try:
+                data = json.loads(f.read_text())
+                self.append(
+                    "reboot_replay",
+                    f"[prior session] {data.get('pattern_name', '?')}: {data.get('task', '')[:200]}",
+                    metadata={
+                        "replayed_from": f.name,
+                        "original_confidence": data.get("confidence", 0),
+                        "original_duration": data.get("duration_s", 0),
+                    },
+                )
+                replayed += 1
+            except Exception:
+                pass
+
+        if replayed:
+            logger.info(f"[GHOST] Replayed {replayed} reboot deltas for continuity")
+        return replayed
+
     def get_stats(self) -> Dict[str, Any]:
         return {
             "active_task": bool(self._task_id),

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { API_BASE_URL } from "../config/api";
+import { brainCall } from '../api/brain-client';
 
 const C = {
   bg: '#0a0a1a', bgAlt: '#0d0d22', bgDark: '#08081a',
@@ -134,17 +135,31 @@ function PlanArena({ setActivePillar }) {
     { id: 9, name: "Deploy & Commit", status: "pending", desc: "Waiting for input..." }
   ]);
 
-  const send = () => {
-    if (!input.trim()) return;
-    setMessages(p => [...p, { role: 'user', content: input }]);
+  const [sending, setSending] = useState(false);
+
+  const send = async () => {
+    if (!input.trim() || sending) return;
+    const userMsg = input;
+    setMessages(p => [...p, { role: 'user', content: userMsg }]);
     setInput('');
-    setTimeout(() => {
-      setMessages(p => [...p,
-      { role: 'assistant', provider: 'Qwen', content: 'I suggest we start by defining the Technical Specs in Layer 3.' },
-      { role: 'assistant', provider: 'DeepSeek', content: 'Agreed. For the specs, we need to map the database schema before proposing code (Layer 4).' }
-      ]);
-      setLayers(l => l.map(layer => layer.id === 3 ? { ...layer, status: 'active', desc: 'Defining DB Schema and API Interface.' } : layer));
-    }, 1000);
+    setSending(true);
+    try {
+      let result = await brainCall('ai', 'consensus_chat', { message: userMsg });
+      if (!result.ok) {
+        result = await brainCall('chat', 'send', { message: userMsg });
+      }
+      if (result.ok && result.data) {
+        const content = typeof result.data === 'string' ? result.data
+          : result.data.response || result.data.message || result.data.content || JSON.stringify(result.data);
+        setMessages(p => [...p, { role: 'assistant', provider: result.data.provider || 'Grace', content }]);
+      } else {
+        setMessages(p => [...p, { role: 'assistant', provider: 'System', content: `⚠️ ${result.error || 'No response from backend.'}` }]);
+      }
+    } catch (err) {
+      setMessages(p => [...p, { role: 'assistant', provider: 'System', content: `⚠️ Error: ${err.message}` }]);
+    } finally {
+      setSending(false);
+    }
   };
 
   const deploySubAgents = () => {
@@ -181,7 +196,7 @@ function PlanArena({ setActivePillar }) {
             placeholder={isRecording ? "Listening... Speak your idea clearly." : "Describe your idea (e.g., 'We need a robust caching layer for the Dev Lab')..."}
             style={{ flex: 1, padding: '10px 14px', background: C.bg, border: `1px solid ${isRecording ? C.error : C.border}`, borderRadius: 6, color: C.text, outline: 'none' }}
           />
-          <button onClick={send} style={{ padding: '0 20px', height: 40, background: C.accent, color: '#fff', border: 'none', borderRadius: 6, fontWeight: 600, cursor: 'pointer' }}>Send</button>
+          <button onClick={send} disabled={sending} style={{ padding: '0 20px', height: 40, background: sending ? C.dim : C.accent, color: '#fff', border: 'none', borderRadius: 6, fontWeight: 600, cursor: sending ? 'wait' : 'pointer' }}>{sending ? '...' : 'Send'}</button>
         </div>
       </div>
 
@@ -368,7 +383,24 @@ function BuildArena({ onOpenTaskManager }) {
 }
 
 function DiagnoseArena() {
-  const [diagStatus, setDiagStatus] = useState("idle"); // idle, running, success
+  const [diagStatus, setDiagStatus] = useState("idle"); // idle, running, success, error
+  const [healthData, setHealthData] = useState(null);
+  const [diagError, setDiagError] = useState(null);
+
+  const runDiagnostic = async () => {
+    setDiagStatus('running');
+    setDiagError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/system-health/dashboard`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setHealthData(data);
+      setDiagStatus('success');
+    } catch (err) {
+      setDiagError(err.message);
+      setDiagStatus('error');
+    }
+  };
 
   return (
     <div style={{ padding: 24, height: '100%', overflowY: 'auto' }}>
@@ -378,31 +410,57 @@ function DiagnoseArena() {
           Grace will run the full suite: Dependency checks, network probes, trigger invariant evaluation, and test suite execution. It will identify root causes and propose playbook fixes.
         </div>
         <button
-          onClick={() => { setDiagStatus('running'); setTimeout(() => setDiagStatus('success'), 1500); }}
-          style={{ marginTop: 16, padding: "10px 24px", background: C.warn, border: "none", borderRadius: 6, color: "#000", fontSize: 13, fontWeight: 800, cursor: "pointer" }}
+          onClick={runDiagnostic} disabled={diagStatus === 'running'}
+          style={{ marginTop: 16, padding: "10px 24px", background: C.warn, border: "none", borderRadius: 6, color: "#000", fontSize: 13, fontWeight: 800, cursor: diagStatus === 'running' ? 'wait' : 'pointer' }}
         >
           {diagStatus === 'running' ? 'Running Diagnostics...' : 'Run Full Diagnostic Spin'}
         </button>
       </div>
 
-      {/* ── Continuous Refinement Ecosystem ── */}
-      {diagStatus === 'success' && (
-        <div style={{ marginTop: 40, borderTop: `1px solid ${C.border}`, paddingTop: 24, animation: 'fadeIn 0.5s ease' }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: C.accentAlt, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>✨ Stage 1 Build Passed</div>
-          <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 12 }}>Continuous Refinement Ecosystem</div>
-          <div style={{ fontSize: 13, color: C.muted, marginBottom: 20 }}>Your code is functionally correct. Would you like to spawn a sub-agent loop to elevate it to a Platinum Standard?</div>
+      {diagStatus === 'error' && (
+        <div style={{ padding: 16, background: '#ef444422', border: `1px solid ${C.error}`, borderRadius: 8, color: C.error, fontSize: 13 }}>
+          ⚠️ Diagnostic failed: {diagError}
+        </div>
+      )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-            {['Optimize for Speed', 'Enterprise Readability', 'Security Hardening'].map(std => (
-              <div key={std} style={{ padding: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, transition: 'all 0.2s ease' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = C.accentAlt}
-                onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
-              >
-                <div style={{ fontSize: 24 }}>{std === 'Optimize for Speed' ? '⚡' : std === 'Enterprise Readability' ? '📖' : '🛡️'}</div>
-                <div style={{ fontSize: 13, fontWeight: 600, textAlign: 'center' }}>{std}</div>
-                <button style={{ width: '100%', padding: '8px', background: 'transparent', border: `1px solid ${C.accentAlt}`, color: C.accentAlt, borderRadius: 4, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Iterate & Elevate</button>
-              </div>
-            ))}
+      {/* ── Health Results ── */}
+      {diagStatus === 'success' && healthData && (
+        <div style={{ marginTop: 20, animation: 'fadeIn 0.5s ease' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: C.accentAlt, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>✨ Diagnostic Results</div>
+          <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 12 }}>
+            Overall: <span style={{ color: healthData.overall_status === 'healthy' ? C.success : C.warn }}>{healthData.overall_status || 'Unknown'}</span>
+          </div>
+          {healthData.services && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+              {Object.entries(healthData.services).map(([name, info]) => (
+                <div key={name} style={{ padding: 12, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{name}</div>
+                  <div style={{ fontSize: 13, color: (info.status || info) === 'healthy' ? C.success : C.warn }}>{info.status || String(info)}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {!healthData.services && (
+            <pre style={{ padding: 12, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 11, color: C.muted, overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              {JSON.stringify(healthData, null, 2)}
+            </pre>
+          )}
+
+          <div style={{ marginTop: 24, borderTop: `1px solid ${C.border}`, paddingTop: 24 }}>
+            <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 12 }}>Continuous Refinement Ecosystem</div>
+            <div style={{ fontSize: 13, color: C.muted, marginBottom: 20 }}>Your code is functionally correct. Would you like to spawn a sub-agent loop to elevate it to a Platinum Standard?</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+              {['Optimize for Speed', 'Enterprise Readability', 'Security Hardening'].map(std => (
+                <div key={std} style={{ padding: 16, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, transition: 'all 0.2s ease' }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = C.accentAlt}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = C.border}
+                >
+                  <div style={{ fontSize: 24 }}>{std === 'Optimize for Speed' ? '⚡' : std === 'Enterprise Readability' ? '📖' : '🛡️'}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, textAlign: 'center' }}>{std}</div>
+                  <button style={{ width: '100%', padding: '8px', background: 'transparent', border: `1px solid ${C.accentAlt}`, color: C.accentAlt, borderRadius: 4, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Iterate & Elevate</button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -411,24 +469,90 @@ function DiagnoseArena() {
 }
 
 function ObserveArena() {
+  const [health, setHealth] = useState(null);
+  const [components, setComponents] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [healthRes, compRes] = await Promise.allSettled([
+          fetch(`${API_BASE_URL}/api/system-health/dashboard`),
+          fetch(`${API_BASE_URL}/api/component-health/status`),
+        ]);
+        if (active && healthRes.status === 'fulfilled' && healthRes.value.ok) {
+          setHealth(await healthRes.value.json());
+        }
+        if (active && compRes.status === 'fulfilled' && compRes.value.ok) {
+          setComponents(await compRes.value.json());
+        }
+        if (active && healthRes.status === 'rejected' && compRes.status === 'rejected') {
+          setError('Could not reach backend health endpoints.');
+        }
+      } catch (err) {
+        if (active) setError(err.message);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    fetchData();
+    return () => { active = false; };
+  }, []);
+
+  const statusColor = (s) => {
+    if (!s) return C.muted;
+    const sl = String(s).toLowerCase();
+    if (sl === 'healthy' || sl === 'running' || sl === 'ok' || sl === 'up') return C.success;
+    if (sl === 'degraded' || sl === 'idle' || sl === 'warning') return C.warn;
+    return C.error;
+  };
+
   return (
     <div style={{ padding: 24, height: '100%', overflowY: 'auto' }}>
       <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 24 }}>System Observability Dashboard</div>
+
+      {loading && <div style={{ fontSize: 13, color: C.muted }}>Loading system health...</div>}
+      {error && <div style={{ fontSize: 13, color: C.error, marginBottom: 16 }}>⚠️ {error}</div>}
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={{ padding: 20, background: C.bgAlt, borderRadius: 8, border: `1px solid ${C.border}` }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, textTransform: 'uppercase', marginBottom: 16 }}>Ouroboros Loop Status</div>
-          <div style={{ fontSize: 24, fontWeight: 800, color: C.success }}>RUNNING</div>
-          <div style={{ fontSize: 12, color: C.muted, marginTop: 8 }}>Cycles: 1,402 | Uptime: 4d 12h</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, textTransform: 'uppercase', marginBottom: 16 }}>Overall System Status</div>
+          <div style={{ fontSize: 24, fontWeight: 800, color: statusColor(health?.overall_status) }}>
+            {health?.overall_status?.toUpperCase() || (loading ? '...' : 'UNKNOWN')}
+          </div>
+          {health?.uptime && <div style={{ fontSize: 12, color: C.muted, marginTop: 8 }}>Uptime: {health.uptime}</div>}
         </div>
         <div style={{ padding: 20, background: C.bgAlt, borderRadius: 8, border: `1px solid ${C.border}` }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, textTransform: 'uppercase', marginBottom: 16 }}>Core Infrastructure</div>
           <div style={{ fontSize: 13, lineHeight: 1.8 }}>
-            <div>Vector DB (Qdrant): <span style={{ color: C.success }}>Healthy</span></div>
-            <div>Relational DB (Postgres): <span style={{ color: C.success }}>Healthy</span></div>
-            <div>Local LLM (Ollama): <span style={{ color: C.warn }}>Idle</span></div>
+            {health?.services ? (
+              Object.entries(health.services).map(([name, info]) => (
+                <div key={name}>{name}: <span style={{ color: statusColor(info.status || info) }}>{info.status || String(info)}</span></div>
+              ))
+            ) : (
+              <div style={{ color: C.muted }}>{loading ? 'Loading...' : 'No service data'}</div>
+            )}
           </div>
         </div>
       </div>
+
+      {components && (
+        <div style={{ marginTop: 20 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>Component Health</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+            {(Array.isArray(components) ? components : Object.entries(components).map(([k, v]) => ({ name: k, ...( typeof v === 'object' ? v : { status: v }) }))).map((c, i) => (
+              <div key={c.name || i} style={{ padding: 12, background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{c.name || `Component ${i}`}</div>
+                <div style={{ fontSize: 13, color: statusColor(c.status) }}>{c.status || 'unknown'}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -441,6 +565,7 @@ function GovernArena() {
         <div style={{ fontSize: 48, marginBottom: 16 }}>📥</div>
         <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>Drop Context Files Here</div>
         <div style={{ fontSize: 13, color: C.muted, maxWidth: 400, margin: '0 auto' }}>Upload project zip, schema definitions, config files, or governance rules. Grace will auto-categorize and inject them.</div>
+        <div style={{ marginTop: 16, fontSize: 12, color: C.accentAlt, fontWeight: 600 }}>💡 Upload files using the Docs tab for full ingestion</div>
       </div>
     </div>
   );
@@ -454,26 +579,65 @@ const widgetCard = { background: C.bgAlt, border: `1px solid ${C.border}`, borde
 const widgetTitle = { fontSize: 11, fontWeight: 700, color: C.text, marginBottom: 12, display: "flex", alignItems: "center", gap: 8, textTransform: 'uppercase', letterSpacing: 0.5 };
 
 function BrainsConnected() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    brainCall('system', 'runtime', {}).then(result => {
+      if (!active) return;
+      setLoading(false);
+      if (result.ok) setData(result.data);
+      else setError(result.error);
+    });
+    return () => { active = false; };
+  }, []);
+
   return (
     <div style={widgetCard}>
       <div style={widgetTitle}>🧠 Brains Connected (Synapses)</div>
-      <div style={{ fontSize: 11, color: C.muted, marginBottom: 10 }}>Active routing weights:</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, padding: "6px 10px", background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}><span style={{ color: C.text }}>code ➔ system</span><span style={{ color: C.success }}>w=0.92</span></div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, padding: "6px 10px", background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}><span style={{ color: C.text }}>govern ➔ code</span><span style={{ color: C.success }}>w=0.78</span></div>
-      </div>
+      {loading && <div style={{ fontSize: 11, color: C.muted }}>Loading...</div>}
+      {error && <div style={{ fontSize: 11, color: C.error }}>⚠️ {error}</div>}
+      {data && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {data.brains ? Object.entries(data.brains).map(([name, info]) => (
+            <div key={name} style={{ display: "flex", justifyContent: "space-between", fontSize: 11, padding: "6px 10px", background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
+              <span style={{ color: C.text }}>{name}</span>
+              <span style={{ color: info.connected || info.status === 'ok' ? C.success : C.warn }}>{info.status || (info.connected ? 'connected' : 'offline')}</span>
+            </div>
+          )) : (
+            <pre style={{ fontSize: 10, color: C.muted, whiteSpace: 'pre-wrap', margin: 0 }}>{JSON.stringify(data, null, 2)}</pre>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
 function MemoryCacheWidget() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch(`${API_BASE_URL}/api/learn-heal/dashboard`)
+      .then(r => r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`)))
+      .then(d => { if (active) { setData(d); setLoading(false); } })
+      .catch(err => { if (active) { setError(err.message); setLoading(false); } });
+    return () => { active = false; };
+  }, []);
+
   return (
     <div style={widgetCard}>
       <div style={widgetTitle}>💾 Memory Cache & Snapshots</div>
+      {loading && <div style={{ fontSize: 11, color: C.muted }}>Loading...</div>}
+      {error && <div style={{ fontSize: 11, color: C.error }}>⚠️ {error}</div>}
       <div style={{ fontSize: 12, color: C.text, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Episodic Records:</span> <span style={{ color: C.muted }}>1,204</span></div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Learning Concepts:</span> <span style={{ color: C.muted }}>85</span></div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Procedural Rules:</span> <span style={{ color: C.muted }}>12</span></div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Episodic Records:</span> <span style={{ color: C.muted }}>{data?.episodic_count ?? data?.episodic_records ?? '—'}</span></div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Learning Concepts:</span> <span style={{ color: C.muted }}>{data?.concept_count ?? data?.learning_concepts ?? '—'}</span></div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}><span>Procedural Rules:</span> <span style={{ color: C.muted }}>{data?.procedural_count ?? data?.procedural_rules ?? '—'}</span></div>
         <button style={{ marginTop: 8, padding: "6px 0", background: C.bg, border: `1px solid ${C.border}`, borderRadius: 4, color: C.accentAlt, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>Explore Memory Graph →</button>
       </div>
     </div>
@@ -513,13 +677,38 @@ function TimeSenseSelfMirror() {
 }
 
 function TrustKPIWidget() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch(`${API_BASE_URL}/kpi/dashboard`)
+      .then(r => r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`)))
+      .then(d => { if (active) { setData(d); setLoading(false); } })
+      .catch(err => { if (active) { setError(err.message); setLoading(false); } });
+    return () => { active = false; };
+  }, []);
+
+  const models = data?.models || data?.trust_scores || data?.kpis;
+
   return (
     <div style={widgetCard}>
       <div style={widgetTitle}>🛡️ Trust Progress KPIs</div>
+      {loading && <div style={{ fontSize: 11, color: C.muted }}>Loading...</div>}
+      {error && <div style={{ fontSize: 11, color: C.error }}>⚠️ {error}</div>}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <ModelTrust name="Qwen (Coding)" score={0.94} trend="up" />
-        <ModelTrust name="DeepSeek (Logic)" score={0.88} trend="up" />
-        <ModelTrust name="Kimi (Search)" score={0.91} trend="flat" />
+        {models ? (
+          (Array.isArray(models) ? models : Object.entries(models).map(([k, v]) => ({ name: k, ...(typeof v === 'object' ? v : { score: v }) }))).map((m, i) => (
+            <ModelTrust key={m.name || i} name={m.name || `Model ${i}`} score={m.score ?? m.trust ?? 0} trend={m.trend || 'flat'} />
+          ))
+        ) : (
+          <>
+            <ModelTrust name="Qwen (Coding)" score={0} trend="flat" />
+            <ModelTrust name="DeepSeek (Logic)" score={0} trend="flat" />
+            <ModelTrust name="Kimi (Search)" score={0} trend="flat" />
+          </>
+        )}
       </div>
     </div>
   );

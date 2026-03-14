@@ -386,6 +386,34 @@ async def rename_document(doc_id: int, req: DocumentRenameRequest):
         db.close()
 
 
+class DocumentContentRequest(BaseModel):
+    content: str
+
+
+@router.patch("/document/{doc_id}/content")
+async def update_document_content(doc_id: int, req: DocumentContentRequest):
+    """Update the text content of a document's chunks (inline edit)."""
+    from models.database_models import Document
+    db = _get_db()
+    try:
+        doc = db.query(Document).filter(Document.id == doc_id).first()
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+
+        if doc.chunks:
+            doc.chunks[0].text_content = req.content
+            db.commit()
+
+        return {"updated": True, "id": doc_id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
+
+
 @router.delete("/document/{doc_id}")
 async def delete_document(doc_id: int, delete_file: bool = False):
     """Delete a document from the library. Optionally remove the file from disk."""

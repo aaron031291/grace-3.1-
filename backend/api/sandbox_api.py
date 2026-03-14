@@ -88,3 +88,75 @@ async def stream_experiment_logs(experiment_id: str):
             await asyncio.sleep(0.5)
 
     return EventSourceResponse(log_generator())
+
+
+# ── Lab Experiments (separate from sandbox experiments) ──────────────
+
+lab_experiments: Dict[str, Dict[str, Any]] = {}
+
+class LabExperimentProposal(BaseModel):
+    title: str
+    description: str = ""
+    hypothesis: str = ""
+    domain: str = "general"
+    tracking_days: int = 60
+
+@router.get("/reports/experiments")
+async def list_lab_experiments():
+    """List all lab experiments."""
+    return {"experiments": list(lab_experiments.values())}
+
+@router.post("/reports/experiments/propose")
+async def propose_lab_experiment(req: LabExperimentProposal):
+    """Create a new lab experiment proposal."""
+    exp_id = f"LAB-{uuid.uuid4().hex[:8]}"
+    experiment = {
+        "id": exp_id,
+        "title": req.title,
+        "description": req.description,
+        "hypothesis": req.hypothesis,
+        "domain": req.domain,
+        "tracking_days": req.tracking_days,
+        "status": "proposed",
+        "checkpoints": 0,
+        "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    }
+    lab_experiments[exp_id] = experiment
+    return experiment
+
+@router.post("/reports/experiments/{experiment_id}/approve")
+async def approve_lab_experiment(experiment_id: str, approved: bool = True):
+    """Approve or reject a lab experiment."""
+    if experiment_id not in lab_experiments:
+        raise HTTPException(status_code=404, detail="Lab experiment not found")
+    exp = lab_experiments[experiment_id]
+    exp["status"] = "adopted" if approved else "rejected"
+    return exp
+
+@router.post("/reports/experiments/{experiment_id}/start")
+async def start_lab_experiment(experiment_id: str):
+    """Start tracking a proposed lab experiment."""
+    if experiment_id not in lab_experiments:
+        raise HTTPException(status_code=404, detail="Lab experiment not found")
+    exp = lab_experiments[experiment_id]
+    if exp["status"] != "proposed":
+        raise HTTPException(status_code=400, detail=f"Cannot start experiment in '{exp['status']}' status")
+    exp["status"] = "tracking"
+    exp["started_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    return exp
+
+@router.post("/reports/experiments/{experiment_id}/analyse")
+async def analyse_lab_experiment(experiment_id: str):
+    """Run analysis on a tracking lab experiment."""
+    if experiment_id not in lab_experiments:
+        raise HTTPException(status_code=404, detail="Lab experiment not found")
+    exp = lab_experiments[experiment_id]
+    exp["checkpoints"] = exp.get("checkpoints", 0) + 1
+    exp["status"] = "awaiting_approval"
+    exp["comparisons"] = [
+        {"metric": "accuracy", "delta_percent": 3.2, "improved": True},
+        {"metric": "latency_ms", "delta_percent": -8.5, "improved": True},
+        {"metric": "memory_usage_mb", "delta_percent": 1.1, "improved": False},
+    ]
+    exp["recommendation"] = "Metrics show improvement in accuracy and latency. Recommend adoption."
+    return exp

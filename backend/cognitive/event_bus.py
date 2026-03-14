@@ -113,6 +113,7 @@ def _zmq_bridge_loop():
 
     # Grace PUB socket (broadcasts internal events to Spindle)
     _zmq_pub_socket = _zmq_context.socket(zmq.PUB)
+    _zmq_pub_socket.setsockopt(zmq.LINGER, 0)
     try:
         _zmq_pub_socket.bind(ZMQ_PUB_ENDPOINT)
     except zmq.error.ZMQError as e:
@@ -127,6 +128,7 @@ def _zmq_bridge_loop():
 
     # Grace SUB socket (listens for events from Spindle)
     sub_socket = _zmq_context.socket(zmq.SUB)
+    sub_socket.setsockopt(zmq.LINGER, 0)
     try:
         sub_socket.bind(ZMQ_SUB_ENDPOINT)
     except zmq.error.ZMQError as e:
@@ -182,5 +184,4 @@ def start_zmq_bridge():
         except ImportError:
             logger.warning("[ZMQ-BRIDGE] pyzmq not installed. IPC bridge for Spindle will not start.")
 
-# Auto-start the bridge when the module loads
-start_zmq_bridge()
+# Bridge is started explicitly during app lifespan via _init_spindle_services()

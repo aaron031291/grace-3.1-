@@ -156,6 +156,137 @@ def _resolve_mentions(mentions: list) -> str:
     return "\n\n".join(context_parts)
 
 
+@router.post("/chat/send")
+async def stream_chat_send(request: Request):
+    """
+    Stream a full chat turn via SSE: saves user msg, streams LLM response token-by-token,
+    saves assistant msg. Uses Ollama /api/chat for multi-turn with RAG + memory context.
+
+    Body: { chat_id: int, message: str, use_rag?: bool }
+    SSE events: data: {"token":"..."} ... data: {"done":true,"chat_id":...,"message":"..."} ... data: [DONE]
+    """
+    body = await request.json()
+    chat_id = body.get("chat_id")
+    message = body.get("message", "")
+    use_rag = body.get("use_rag", True)
+
+    if not chat_id or not message.strip():
+        return StreamingResponse(
+            iter([f'data: {json.dumps({"error": "chat_id and message required"})}\n\n', "data: [DONE]\n\n"]),
+            media_type="text/event-stream",
+        )
+
+    async def generate():
+        import requests as _requests
+        from database.session import get_session_factory
+        from models.repositories import ChatRepository, ChatHistoryRepository
+        from settings import settings
+
+        factory = get_session_factory()
+        session = factory()
+        try:
+            chat_repo = ChatRepository(session)
+            history_repo = ChatHistoryRepository(session)
+            chat = chat_repo.get(chat_id)
+            if not chat:
+                yield f'data: {json.dumps({"error": "Chat not found"})}\n\n'
+                yield "data: [DONE]\n\n"
+                return
+
+            # Save user message
+            history_repo.add_message(chat_id=chat_id, role="user", content=message)
+            session.commit()
+
+            # Build messages array with RAG + memory context
+            rag_ctx = ""
+            episode_ctx = ""
+            if use_rag:
+                from core.services.chat_service import _get_rag_context, _get_episodic_recall
+                rag_ctx = _get_rag_context(message, limit=5, score_threshold=0.3)
+                episode_ctx = _get_episodic_recall(message, k=3, min_trust=0.5)
+
+            system_parts = ["You are Grace, a helpful AI assistant."]
+            if rag_ctx:
+                system_parts.append("Relevant context from the knowledge base:\n" + rag_ctx)
+            if episode_ctx:
+                system_parts.append("Relevant past experience (use when helpful):\n" + episode_ctx)
+
+            # Governance prefix
+            try:
+                from llm_orchestrator.governance_wrapper import build_governance_prefix
+                gov = build_governance_prefix()
+                if gov:
+                    system_parts.append(gov)
+            except Exception:
+                pass
+
+            system_content = "\n\n".join(system_parts)
+
+            # Recent history for multi-turn
+            recent = history_repo.get_by_chat_reverse(chat_id, skip=0, limit=10)
+            messages_list = [{"role": "system", "content": system_content}]
+            for m in reversed(recent):
+                messages_list.append({"role": m.role, "content": m.content or ""})
+
+            model = chat.model or settings.OLLAMA_LLM_DEFAULT or "qwen3:14b"
+            temperature = chat.temperature or 0.7
+
+            # Stream from Ollama /api/chat
+            url = f"{settings.OLLAMA_URL}/api/chat"
+            payload = {
+                "model": model,
+                "messages": messages_list,
+                "stream": True,
+                "options": {"temperature": temperature},
+            }
+
+            full_response = ""
+            start = time.time()
+            try:
+                with _requests.post(url, json=payload, stream=True, timeout=300) as resp:
+                    if resp.status_code != 200:
+                        yield f'data: {json.dumps({"error": f"Ollama returned {resp.status_code}"})}\n\n'
+                        yield "data: [DONE]\n\n"
+                        return
+                    for line in resp.iter_lines():
+                        if not line:
+                            continue
+                        try:
+                            chunk = json.loads(line)
+                            token = chunk.get("message", {}).get("content", "")
+                            if token:
+                                full_response += token
+                                yield f"data: {json.dumps({'token': token})}\n\n"
+                            if chunk.get("done"):
+                                break
+                        except Exception:
+                            pass
+            except _requests.ConnectionError:
+                yield f'data: {json.dumps({"error": "Cannot connect to Ollama. Is it running?"})}\n\n'
+                yield "data: [DONE]\n\n"
+                return
+
+            gen_time = round(time.time() - start, 2)
+
+            # Save assistant message
+            history_repo.add_message(chat_id=chat_id, role="assistant", content=full_response)
+            session.commit()
+
+            # Final metadata event
+            yield f'data: {json.dumps({"done": True, "chat_id": chat_id, "message": full_response, "model": model, "generation_time": gen_time, "used_rag": bool(rag_ctx), "used_memory": bool(episode_ctx)})}\n\n'
+            yield "data: [DONE]\n\n"
+
+        except Exception as e:
+            session.rollback()
+            logger.exception("stream_chat_send error")
+            yield f'data: {json.dumps({"error": str(e)[:300]})}\n\n'
+            yield "data: [DONE]\n\n"
+        finally:
+            session.close()
+
+    return StreamingResponse(generate(), media_type="text/event-stream")
+
+
 def _stream_kimi(prompt: str, settings):
     """Stream from Kimi API."""
     import requests
