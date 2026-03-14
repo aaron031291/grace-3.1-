@@ -47,16 +47,23 @@ def _get_kpi_snapshot() -> Dict[str, Any]:
         data = {}
         for comp in components:
             try:
-                trust = tracker.get_component_trust(comp)
-                data[comp] = {
-                    "trust_score": round(trust, 3) if trust is not None else None,
-                    "requests": tracker.get_kpi(comp, "requests"),
-                    "successes": tracker.get_kpi(comp, "successes"),
-                    "failures": tracker.get_kpi(comp, "failures"),
-                    "rejections": tracker.get_kpi(comp, "rejected"),
-                }
+                trust = tracker.get_component_trust_score(comp)
+                comp_kpis = tracker.get_component_kpis(comp)
+                if comp_kpis:
+                    data[comp] = {
+                        "trust_score": round(trust, 3) if trust else None,
+                        "requests": comp_kpis.get_kpi("requests").count,
+                        "successes": comp_kpis.get_kpi("successes").count,
+                        "failures": comp_kpis.get_kpi("failures").count,
+                        "rejections": comp_kpis.get_kpi("rejected").count,
+                    }
+                else:
+                    data[comp] = {
+                        "trust_score": None,
+                        "requests": 0, "successes": 0, "failures": 0, "rejections": 0,
+                    }
             except Exception:
-                data[comp] = {"error": "unavailable"}
+                data[comp] = {"trust_score": None, "requests": 0, "successes": 0, "failures": 0, "rejections": 0}
         return {"available": True, "components": data}
     except Exception as e:
         return {"available": False, "error": str(e)[:80]}

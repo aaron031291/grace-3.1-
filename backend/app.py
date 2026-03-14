@@ -449,9 +449,9 @@ async def lifespan(app: FastAPI):
             from cognitive.swe_spindle_bridge import get_swe_spindle_bridge
             swe_bridge = get_swe_spindle_bridge()
             swe_bridge.start()
-            print("[OK] SWE→Spindle bridge started (LearningExample → Braille → deterministic paths)")
+            print("[OK] SWE->Spindle bridge started (LearningExample -> Braille -> deterministic paths)")
         except Exception as e:
-            print(f"[WARN] SWE→Spindle bridge: {e}")
+            print(f"[WARN] SWE->Spindle bridge: {e}")
 
         # ── Proactive Healing (background loop) ──
         if not getattr(settings, "DISABLE_PROACTIVE_HEALING", False):
@@ -496,7 +496,7 @@ async def lifespan(app: FastAPI):
             from services.governance_projection import get_governance_projection
             gov_projection = get_governance_projection()
             gov_projection.start()
-            print("[OK] Governance projection service started (event bus → .grace/ folders)")
+            print("[OK] Governance projection service started (event bus -> .grace/ folders)")
         except Exception as e:
             print(f"[WARN] Governance projection: {e}")
 
@@ -903,11 +903,11 @@ async def lifespan(app: FastAPI):
             except Exception:
                 pass
 
-    # SWE→Spindle bridge shutdown
+    # SWE->Spindle bridge shutdown
     try:
         from cognitive.swe_spindle_bridge import get_swe_spindle_bridge
         get_swe_spindle_bridge().stop()
-        print("[OK] SWE→Spindle bridge stopped")
+        print("[OK] SWE->Spindle bridge stopped")
     except Exception:
         pass
 
