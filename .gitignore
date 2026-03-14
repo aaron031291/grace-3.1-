@@ -66,6 +66,7 @@ knowledge_base/
 # Test artifacts
 diagnostic_report.json
 **/diagnostic_report.json
+pytest*.txt
 
 # Databases and runtime/state
 *.db
