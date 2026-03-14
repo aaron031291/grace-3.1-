@@ -145,6 +145,12 @@ def track(
     This is fire-and-forget — tracking failures never break the caller.
     Also fires the real-time event engine for instant notification.
     """
+    try:
+        from ml_intelligence.kpi_tracker import get_kpi_tracker
+        get_kpi_tracker().increment_kpi("genesis_tracker", "requests", 1.0)
+    except Exception:
+        pass
+
     # Tiered storage — hot tier + sampling gate
     try:
         from core.genesis_storage import get_genesis_storage

@@ -16,7 +16,8 @@ def _load(kind):
     p = DATA_DIR / f"{kind}.json"
     if p.exists():
         try: return json.loads(p.read_text())
-        except Exception: pass
+        except Exception as e:
+            logger.warning("[DATA] Failed to load %s data from %s: %s", kind, p, e)
     return []
 
 def _save(kind, data):
@@ -59,5 +60,6 @@ def flash_cache_stats():
     try:
         from cognitive.flash_cache import get_flash_cache
         return get_flash_cache().get_stats()
-    except Exception:
+    except Exception as e:
+        logger.warning("[DATA] flash_cache_stats failed: %s", e)
         return {"entries": 0}

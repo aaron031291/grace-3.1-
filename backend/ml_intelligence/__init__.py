@@ -80,6 +80,8 @@ try:
         KPITracker,
         KPI,
         ComponentKPIs,
+        TrustSnapshot,
+        TrustHistory,
         get_kpi_tracker
     )
     ML_INTELLIGENCE_AVAILABLE = True
@@ -129,6 +131,8 @@ except ImportError as e:
     KPITracker = None
     KPI = None
     ComponentKPIs = None
+    TrustSnapshot = None
+    TrustHistory = None
     get_kpi_tracker = None
 
 __all__ = [
@@ -190,5 +194,7 @@ __all__ = [
     'KPITracker',
     'KPI',
     'ComponentKPIs',
+    'TrustSnapshot',
+    'TrustHistory',
     'get_kpi_tracker',
 ]

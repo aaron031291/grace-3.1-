@@ -10,7 +10,8 @@ def _load_scheduled():
     SCHED_PATH.parent.mkdir(parents=True, exist_ok=True)
     if SCHED_PATH.exists():
         try: return json.loads(SCHED_PATH.read_text())
-        except Exception: pass
+        except Exception as e:
+            logger.warning("[TASKS] Failed to load scheduled tasks from %s: %s", SCHED_PATH, e)
     return []
 
 def _save_scheduled(data):
@@ -29,7 +30,8 @@ def live_activity():
             ), {"c": cutoff}).fetchall()
             return {"activities": [dict(r._mapping) for r in rows],
                     "timestamp": datetime.now(timezone.utc).isoformat()}
-    except Exception:
+    except Exception as e:
+        logger.warning("[TASKS] live_activity failed: %s", e)
         return {"activities": [], "timestamp": datetime.now(timezone.utc).isoformat()}
 
 def task_history(limit=40):
@@ -43,7 +45,8 @@ def task_history(limit=40):
                 "FROM genesis_key WHERE when_timestamp >= :c ORDER BY when_timestamp DESC LIMIT :l"
             ), {"c": cutoff, "l": int(limit)}).fetchall()
             return {"history": [dict(r._mapping) for r in rows]}
-    except Exception:
+    except Exception as e:
+        logger.warning("[TASKS] task_history failed: %s", e)
         return {"history": []}
 
 def submit_task(payload):
@@ -53,7 +56,8 @@ def submit_task(payload):
                     what=f"Task: {payload.get('title', '')}",
                     who="tasks_service", tags=["task", "submitted"])
         return {"submitted": True, "genesis_key_id": gk}
-    except Exception:
+    except Exception as e:
+        logger.warning("[TASKS] submit_task genesis tracking failed: %s", e)
         return {"submitted": True}
 
 def get_scheduled():
@@ -90,5 +94,6 @@ def planner_sessions():
     try:
         from database.session import session_scope
         return {"sessions": []}
-    except Exception:
+    except Exception as e:
+        logger.warning("[TASKS] planner_sessions failed: %s", e)
         return {"sessions": []}

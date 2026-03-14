@@ -56,6 +56,7 @@ from api.component_health_api import router as component_health_router
 from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router
 from api.learning_memory_api import router as learning_memory_router
+from api.introspection_api import router as introspection_router
 from api.admin_api import router as admin_router
 from api.validation_api import router as validation_router
 from api.cognitive_events_api import router as cognitive_events_router
@@ -416,6 +417,15 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] NLP warm: {e}")
 
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Phase 3.1: Governance â†' Self-Healing Bridge Ã¢â€â‚¬Ã¢â€â‚¬
+        try:
+            from cognitive.governance_healing_bridge import get_governance_healing_bridge
+            bridge = get_governance_healing_bridge()
+            bridge.start()
+            print("[OK] Governance healing bridge started (trust < 90 + high confidence â†' auto-heal)")
+        except Exception as e:
+            print(f"[WARN] Governance healing bridge: {e}")
+
         # Ã¢â€â‚¬Ã¢â€â‚¬ Spindle parallel runtime services Ã¢â€â‚¬Ã¢â€â‚¬
         _init_spindle_services()
 
@@ -707,6 +717,14 @@ async def lifespan(app: FastAPI):
             print("[OK] Diagnostic engine session closed")
         except Exception:
             pass
+    # Governance healing bridge shutdown
+    try:
+        from cognitive.governance_healing_bridge import get_governance_healing_bridge
+        get_governance_healing_bridge().stop()
+        print("[OK] Governance healing bridge stopped")
+    except Exception:
+        pass
+
     # Ã¢â€â‚¬Ã¢â€â‚¬ Spindle shutdown Ã¢â€â‚¬Ã¢â€â‚¬
     try:
         from cognitive.spindle_event_store import get_event_store
@@ -787,6 +805,7 @@ app.include_router(learning_memory_router)           # /api/learning-memory/* (n
 app.include_router(admin_router)                     # /api/admin/* (registry, state, reload-config, trigger-diagnostics; requires ADMIN_TOKEN)
 app.include_router(validation_router)                # /api/validation/* (trust scores, KPIs, verification history Ã¢â‚¬â€ frontend dashboard)
 app.include_router(cognitive_events_router)          # /api/cognitive-events/* (WebSocket stream of self-healing logs)
+app.include_router(introspection_router)             # /api/system/* (System Introspection & Validation)
 
 from api.codebase_hub_api import router as codebase_hub_router
 from api.tasks_hub_api import router as tasks_hub_router
@@ -803,6 +822,7 @@ from api.version_control_api import router as version_control_router
 from api.hitl_dashboard import router as hitl_dashboard_router
 from api.consensus_fixer_api import router as consensus_fixer_router
 from api.agent_api import router as agent_router
+from api.governance_healing_api import router as governance_healing_router
 
 app.include_router(codebase_hub_router, prefix="/api")
 app.include_router(whitelist_hub_router, prefix="/api")
@@ -825,6 +845,7 @@ app.include_router(version_control_router)
 app.include_router(hitl_dashboard_router)
 app.include_router(consensus_fixer_router)
 app.include_router(agent_router, prefix="/api/agents")
+app.include_router(governance_healing_router)
 
 from api.docs_library_api import router as docs_library_router
 app.include_router(docs_library_router)
@@ -841,6 +862,13 @@ try:
     app.include_router(spindle_router)
 except Exception as _e:
     print(f"[WARN] Spindle API router not loaded: {_e}")
+
+# System Introspection & Deterministic Validation
+try:
+    from api.introspection_api import router as introspection_router
+    app.include_router(introspection_router)
+except Exception as _e:
+    print(f"[WARN] Introspection API router not loaded: {_e}")
 
 # Add Genesis Key middleware for automatic tracking (if not disabled)
 if not (settings and settings.DISABLE_GENESIS_TRACKING):

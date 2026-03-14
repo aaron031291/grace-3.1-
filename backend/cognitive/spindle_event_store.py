@@ -82,7 +82,7 @@ class SpindleEventStore:
             from models.spindle_event_model import SpindleEvent
             return SpindleEvent
         except ImportError:
-            from backend.models.spindle_event_model import SpindleEvent
+            from models.spindle_event_model import SpindleEvent
             return SpindleEvent
 
     def _probe_db(self) -> bool:

@@ -233,7 +233,7 @@ def record_checkpoint(exp_id: str) -> Dict[str, Any]:
     checkpoint = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "metrics": current,
-        "day": (datetime.now(timezone.utc) - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
+        "day": (as_naive_utc(datetime.now(timezone.utc)) - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
     }
 
     # Calculate deltas from baseline
@@ -292,7 +292,7 @@ def analyse_experiment(exp_id: str) -> Dict[str, Any]:
         "improvement_rate": round(improved_count / total_metrics, 3) if total_metrics else 0,
         "recommendation": "adopt" if improved_count > total_metrics / 2 else "reject",
         "checkpoints_recorded": len(exp.checkpoints),
-        "days_tracked": (datetime.now(timezone.utc) - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
+        "days_tracked": (as_naive_utc(datetime.now(timezone.utc)) - as_naive_utc(datetime.fromisoformat(exp.created_at))).days if exp.created_at else 0,
     }
 
     exp.final_report = json.dumps(analysis, indent=2)

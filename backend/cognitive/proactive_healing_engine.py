@@ -635,7 +635,10 @@ class ProactiveHealingEngine:
                         "severity": SeverityLevel.CRITICAL, "message": f"Memory at {psutil.virtual_memory().percent}%",
                         "healable": True, "heal_action": "memory_pressure"}
         except ImportError:
-            pass
+            logger.warning("Memory sensor degraded: psutil not available")
+            return {"category": ProactiveCategory.RESOURCE_TREND, "service": "memory",
+                    "severity": SeverityLevel.WARNING, "message": "Memory check degraded: psutil unavailable",
+                    "healable": False, "heal_action": "none"}
         return None
 
     # ====================================================================

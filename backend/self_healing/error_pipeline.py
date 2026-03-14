@@ -32,6 +32,13 @@ from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
+try:
+    from telemetry.decorators import track_operation
+    from models.telemetry_models import OperationType
+    _TELEMETRY_OK = True
+except ImportError:
+    _TELEMETRY_OK = False
+
 # ── Error classification patterns ────────────────────────────────────────
 _SCHEMA_PATTERNS    = ("UndefinedColumn", "UndefinedTable", "does not exist", "no such column", "no such table")
 _ATTRIBUTE_PATTERNS = ("AttributeError", "has no attribute", "object has no attribute")
@@ -202,6 +209,20 @@ class ErrorPipeline:
         exc_str = payload["exc_str"]
         location = payload["location"]
 
+        # Telemetry tracking
+        _tel_ctx = None
+        if _TELEMETRY_OK:
+            try:
+                from telemetry.telemetry_service import get_telemetry_service
+                _tel_ctx = get_telemetry_service().track_operation(
+                    operation_type=OperationType.BACKGROUND_TASK,
+                    operation_name=f"heal_{error_class}",
+                    input_data={"error_class": error_class, "location": location, "exc_type": payload.get("exc_type", "")},
+                )
+                _tel_ctx.__enter__()
+            except Exception:
+                _tel_ctx = None
+
         logger.info(
             "[ERROR-PIPELINE] 🔧 Healing %s error at %s: %s",
             error_class, location, exc_str[:120],
@@ -291,8 +312,25 @@ class ErrorPipeline:
         elapsed = time.monotonic() - t0
         record_heal_time(error_class, elapsed)
 
+        try:
+            from ml_intelligence.kpi_tracker import get_kpi_tracker
+            tracker = get_kpi_tracker()
+            tracker.increment_kpi("self_healing", "requests", 1.0)
+            if healed:
+                tracker.increment_kpi("self_healing", "successes", 1.0)
+            else:
+                tracker.increment_kpi("self_healing", "failures", 1.0)
+        except Exception:
+            logger.debug("[ERROR-PIPELINE] KPI tracking skipped")
+
         # ── Record learning event ────────────────────────────────────
         self._record_learning(payload, healed, fix_description, elapsed)
+
+        if _tel_ctx is not None:
+            try:
+                _tel_ctx.__exit__(None, None, None)
+            except Exception as e:
+                logger.debug("[ERROR-PIPELINE] telemetry context exit: %s", e)
 
     # ── Healers ─────────────────────────────────────────────────────────
 
@@ -391,8 +429,8 @@ class ErrorPipeline:
                 "location": payload.get("location", ""),
                 "error": err_str[:100],
             }, source="error_pipeline")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] network healed event publish: %s", e)
 
         success = any(
             "reconnected" in f or "reset" in f or "requested" in f
@@ -483,8 +521,8 @@ class ErrorPipeline:
                 if candidate.exists():
                     return str(candidate)
 
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] _location_to_file fallback: %s", e)
         return ""
 
 
@@ -501,8 +539,8 @@ class ErrorPipeline:
                 context_data={"tb": payload["tb"][-500:]},
                 is_error=True,
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] _queue_for_human_review genesis track: %s", e)
         return False, f"Queued for human review: {payload['exc_type']}"
 
     # ── Learning recorder ────────────────────────────────────────────────
@@ -532,8 +570,8 @@ class ErrorPipeline:
                 },
                 is_error=not healed,
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] _record_learning genesis track: %s", e)
 
         # Feed into all 3 memory layers (unified replaces raw LearningExample insert)
         try:
@@ -578,8 +616,8 @@ class ErrorPipeline:
                 source="error_pipeline",
                 metadata={"healed": healed, "error_class": payload["error_class"]},
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] _record_learning magma_bridge: %s", e)
         try:
             from cognitive.ghost_memory import get_ghost_memory
             get_ghost_memory().append(
@@ -587,8 +625,8 @@ class ErrorPipeline:
                 content=f"[{payload['error_class']}] {payload['exc_type']}: {fix_description[:100]}",
                 metadata={"healed": healed},
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] _record_learning ghost_memory: %s", e)
 
 
 _pipeline_instance = None

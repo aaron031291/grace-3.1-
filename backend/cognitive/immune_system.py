@@ -426,7 +426,8 @@ class GraceImmuneSystem:
         try:
             db = _get_db()
             if not db:
-                return (50, "unknown", {})
+                logger.warning("Ingestion sensor degraded: database session unavailable")
+                return (30, "degraded", {"reason": "database unavailable"})
             from sqlalchemy import text
             pending = db.execute(text("SELECT COUNT(*) FROM documents WHERE status = 'pending'")).scalar() or 0
             failed = db.execute(text("SELECT COUNT(*) FROM documents WHERE status = 'failed'")).scalar() or 0
@@ -439,8 +440,9 @@ class GraceImmuneSystem:
             health = max(0, 100 - fail_rate * 200)
             status = "healthy" if fail_rate < 0.05 else "stressed" if fail_rate < 0.15 else "degraded"
             return (health, status, {"pending": pending, "failed": failed, "completed": completed})
-        except Exception:
-            return (50, "unknown", {})
+        except Exception as e:
+            logger.warning("Ingestion sensor degraded: %s", e)
+            return (30, "degraded", {"reason": str(e)})
 
     def _analyze_genesis_keys(self) -> Dict[str, Any]:
         """Read genesis keys to detect error spikes and patterns."""

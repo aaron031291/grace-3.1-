@@ -1,0 +1,96 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 4 items
+
+backend\tests\cognitive\test_unified_memory_actual.py::test_singleton PASSED
+backend\tests\cognitive\test_unified_memory_actual.py::test_coerce_dict PASSED
+backend\tests\cognitive\test_unified_memory_actual.py::test_store_episode FAILED
+backend\tests\cognitive\test_unified_memory_actual.py::test_store_learning FAILED
+
+================================== FAILURES ===================================
+_____________________________ test_store_episode ______________________________
+
+mock_session = <MagicMock name='_get_session' id='1569033837872'>
+
+    @patch("backend.cognitive.unified_memory._get_session")
+    def test_store_episode(mock_session):
+        mem = UnifiedMemory()
+        db_session = MagicMock()
+        mock_session.return_value = db_session
+    
+        # Mocking EpisodicBuffer would be needed here to avoid DB operations
+        with patch("backend.cognitive.episodic_memory.EpisodicBuffer") as MockBuffer:
+            res = mem.store_episode("prob", "act", "out", 0.9, "test")
+            assert res is True
+>           MockBuffer.return_value.record_episode.assert_called_once()
+
+backend\tests\cognitive\test_unified_memory_actual.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock name='EpisodicBuffer().record_episode' id='1569292773296'>
+
+    def assert_called_once(self):
+        """assert that the mock was called only once.
+        """
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to have been called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'record_episode' to have been called once. Called 0 times.
+
+C:\Python314\Lib\unittest\mock.py:964: AssertionError
+_____________________________ test_store_learning _____________________________
+
+mock_session = <MagicMock name='_get_session' id='1569292773968'>
+
+    @patch("backend.cognitive.unified_memory._get_session")
+    def test_store_learning(mock_session):
+        mem = UnifiedMemory()
+        db_session = MagicMock()
+        mock_session.return_value = db_session
+    
+        with patch("backend.cognitive.learning_memory.LearningMemoryManager") as MockMgr:
+            res = mem.store_learning("context", "exp", "act", 0.9, "test")
+            assert res is True
+>           MockMgr.return_value.ingest_learning_data.assert_called_once()
+
+backend\tests\cognitive\test_unified_memory_actual.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock name='LearningMemoryManager().ingest_learning_data' id='1569294388928'>
+
+    def assert_called_once(self):
+        """assert that the mock was called only once.
+        """
+        if not self.call_count == 1:
+            msg = ("Expected '%s' to have been called once. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'ingest_learning_data' to have been called once. Called 0 times.
+
+C:\Python314\Lib\unittest\mock.py:964: AssertionError
+============================== warnings summary ===============================
+tests/cognitive/test_unified_memory_actual.py::test_store_learning
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/cognitive/test_unified_memory_actual.py::test_store_learning
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/cognitive/test_unified_memory_actual.py::test_store_learning
+tests/cognitive/test_unified_memory_actual.py::test_store_learning
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\cognitive\test_unified_memory_actual.py::test_store_episode
+FAILED backend\tests\cognitive\test_unified_memory_actual.py::test_store_learning
+=================== 2 failed, 2 passed, 4 warnings in 9.36s ===================

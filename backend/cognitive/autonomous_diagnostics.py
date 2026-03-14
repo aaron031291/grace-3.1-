@@ -115,8 +115,8 @@ class AutonomousDiagnostics:
                 message=error_message[:200],
                 severity=severity,
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("Notification sensor degraded: unable to fire alert: %s", e)
 
         # Try to self-fix
         fix_result = self._attempt_fix(component or error_type, error_message)
@@ -153,6 +153,17 @@ class AutonomousDiagnostics:
                     f"This problem ({error_type}) has happened {len(similar)} times. "
                     f"Grace is learning from it."
                 )
+
+        try:
+            from ml_intelligence.kpi_tracker import get_kpi_tracker
+            tracker = get_kpi_tracker()
+            tracker.increment_kpi("diagnostic_engine", "requests", 1.0)
+            if fix_result.get("fixed"):
+                tracker.increment_kpi("diagnostic_engine", "successes", 1.0)
+            else:
+                tracker.increment_kpi("diagnostic_engine", "failures", 1.0)
+        except Exception:
+            logger.debug("[DIAGNOSTICS] KPI tracking skipped")
 
         return result
 

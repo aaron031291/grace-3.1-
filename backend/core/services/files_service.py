@@ -31,7 +31,8 @@ def tree(p=None, max_depth=3):
                 if item.name.startswith("."): continue
                 if item.is_dir(): r["children"].append(_b(item, depth+1))
                 else: r["children"].append({"path": str(item.relative_to(kb)), "name": item.name, "type": "file", "size": item.stat().st_size})
-        except PermissionError: pass
+        except PermissionError:
+            logger.debug("[FILES] Permission denied reading %s", d)
         return r
     return _b(root)
 
@@ -83,7 +84,8 @@ def search(query, limit=10):
                 if query.lower() in content.lower():
                     results.append({"path": str(f.relative_to(_kb())), "name": f.name})
                     if len(results) >= limit: break
-            except Exception: pass
+            except Exception as e:
+                logger.debug("[FILES] Error reading %s during search: %s", f.name, e)
     return {"query": query, "results": results, "total": len(results)}
 
 def stats():
@@ -102,7 +104,8 @@ def docs_all():
     try:
         from api.docs_library_api import _list_all_documents
         return _list_all_documents()
-    except Exception:
+    except Exception as e:
+        logger.warning("[FILES] docs_all failed: %s", e)
         return {"documents": []}
 
 

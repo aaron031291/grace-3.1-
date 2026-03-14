@@ -29,7 +29,7 @@ class TestMalformedInput:
 
 class TestGenesisKeyIntegrity:
     def test_genesis_stats_returns_valid_data(self, client):
-        r = client.get("/genesis/stats")
+        r = client.get("/api/genesis-daily/stats")
         assert r.status_code in (200, 500)
         if r.status_code == 200:
             data = r.json()

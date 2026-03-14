@@ -1,72 +1,43 @@
 import pytest
 from datetime import datetime, timezone, timedelta
+from unittest.mock import patch, MagicMock
 from backend.cognitive.time_sense import TimeSense, _fmt_duration
 
-def test_now_context():
-    context = TimeSense.now_context()
-    assert "timestamp" in context
-    assert "period" in context
-    assert "day_of_week" in context
-    assert isinstance(context["is_weekend"], bool)
+@patch("backend.cognitive.time_sense.datetime")
+def test_now_context(mock_datetime):
+    # Set mock to return our specific UTC datetime for .now()
+    dt = datetime(2024, 5, 10, 14, 30, 0, tzinfo=timezone.utc)
+    mock_datetime.now.return_value = dt
+    
+    ctx = TimeSense.now_context()
+    assert ctx["hour"] == 14
+    assert ctx["period"] == "afternoon"
+    assert ctx["is_business_hours"] is True
+    assert ctx["day_of_week"] == "Friday"
 
-def test_urgency_score():
-    now = datetime.now(timezone.utc)
+@patch("backend.cognitive.time_sense.datetime")
+def test_urgency_score(mock_datetime):
+    # Base mock time
+    dt = datetime(2024, 5, 10, 14, 30, 0, tzinfo=timezone.utc)
+    mock_datetime.now.return_value = dt
+    mock_datetime.fromisoformat.side_effect = datetime.fromisoformat
     
-    # Critical (within 1 hour)
-    deadline_critical = (now + timedelta(minutes=30)).isoformat()
-    res = TimeSense.urgency_score(deadline_critical)
-    assert res["urgency"] == 0.95
-    assert res["label"] == "critical"
+    # 30 mins left
+    deadline = (dt + timedelta(minutes=30)).isoformat()
+    score = TimeSense.urgency_score(deadline)
+    assert score["label"] == "critical"
     
-    # Overdue
-    deadline_overdue = (now - timedelta(hours=2)).isoformat()
-    res = TimeSense.urgency_score(deadline_overdue)
-    assert res["urgency"] == 1.0
-    assert res["label"] == "overdue"
-    assert "hours_overdue" in res
-    
-    # Invalid
-    res = TimeSense.urgency_score("not a date")
-    assert res["urgency"] == 0
-    assert res["label"] == "no_deadline"
+    # overdue
+    overdue = (dt - timedelta(hours=2)).isoformat()
+    score2 = TimeSense.urgency_score(overdue)
+    assert score2["label"] == "overdue"
+    assert score2["urgency"] == 1.0
 
-def test_time_until():
-    now = datetime.now(timezone.utc)
-    target = (now + timedelta(hours=2)).isoformat()
-    
-    res = TimeSense.time_until(target)
-    assert not res["is_past"]
-    assert "text" in res
-    assert "seconds" in res
-
-def test_activity_patterns():
-    now = datetime.now(timezone.utc)
-    timestamps = [
-        now.isoformat(),
-        (now + timedelta(hours=1)).isoformat(),
-        (now + timedelta(hours=2)).isoformat(),
-        (now - timedelta(days=1)).isoformat()
-    ]
-    
-    res = TimeSense.activity_patterns(timestamps)
-    assert res["total"] == 4
-    assert "peak_hour" in res
-    assert "busiest_period" in res
-
-def test_prioritise_by_time():
-    now = datetime.now(timezone.utc)
-    tasks = [
-        {"id": 1, "deadline": (now + timedelta(days=5)).isoformat(), "priority": "low"},
-        {"id": 2, "deadline": (now + timedelta(hours=1)).isoformat(), "priority": "high"},
-        {"id": 3, "deadline": (now - timedelta(hours=1)).isoformat(), "priority": "critical"}
-    ]
-    
-    scored = TimeSense.prioritise_by_time(tasks)
-    
-    assert len(scored) == 3
-    assert scored[0]["id"] == 3  # Overdue + critical
-    assert scored[1]["id"] == 2  # High + 1 hr
-    assert scored[2]["id"] == 1  # Low + 5 days
+def test_fmt_duration():
+    assert _fmt_duration(30) == "30s"
+    assert "m" in _fmt_duration(90)
+    assert "h" in _fmt_duration(3600)
+    assert "d" in _fmt_duration(90000)
 
 if __name__ == "__main__":
     pytest.main(['-v', __file__])

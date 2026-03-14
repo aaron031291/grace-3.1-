@@ -47,15 +47,106 @@ class ComponentScore:
     component_id: str
     component_name: str
     chunks: List[ChunkScore] = field(default_factory=list)
-    trust_score: float = 50.0  # 0-100 rolling average
+    trust_score: float = 0.0  # 0-100 rolling average
     confidence_score: float = 0.0 # 0-100 based on data volume (N/300)
-    previous_trust: float = 50.0
+    previous_trust: float = 0.0
     trend: str = "stable"  # up, down, stable
     needs_verification: bool = False
     needs_remediation: bool = False
     remediation_type: Optional[str] = None  # "self_healing", "coding_agent", "human"
     last_updated: Optional[str] = None
     execution_count: int = 0
+
+
+class ConfidenceCalculator:
+    """
+    Statistical confidence layer on top of trust scores.
+
+    Confidence = how reliable is this trust score?
+    Based on:
+    - Data volume (more observations = higher confidence)
+    - Score variance (stable scores = higher confidence)
+    - Recency (fresh data = higher confidence)
+    - Trend stability (no wild swings = higher confidence)
+    """
+
+    def __init__(self):
+        self._score_history: Dict[str, list] = {}  # component_id -> list of (timestamp, score)
+        self._max_history = 300  # ~100 days at 3x/day
+
+    def record_score(self, component_id: str, score: float):
+        """Record a trust score observation."""
+        if component_id not in self._score_history:
+            self._score_history[component_id] = []
+        history = self._score_history[component_id]
+        history.append((datetime.now(timezone.utc), score))
+        if len(history) > self._max_history:
+            self._score_history[component_id] = history[-self._max_history:]
+
+    def get_confidence(self, component_id: str) -> Dict[str, Any]:
+        """
+        Calculate confidence for a component's trust score.
+
+        Returns dict with:
+        - confidence: 0-100 overall confidence
+        - volume_factor: based on observation count
+        - stability_factor: based on score variance
+        - recency_factor: based on freshness of data
+        - sample_count: number of observations
+        """
+        history = self._score_history.get(component_id, [])
+
+        if not history:
+            return {
+                "confidence": 0.0,
+                "volume_factor": 0.0,
+                "stability_factor": 0.0,
+                "recency_factor": 0.0,
+                "sample_count": 0,
+            }
+
+        scores = [s for _, s in history]
+        n = len(scores)
+
+        # Volume factor: confidence grows with sqrt(N), capped at 300 samples
+        volume_factor = min(100.0, (n / 300.0) * 100.0)
+
+        # Stability factor: low variance = high confidence
+        if n >= 2:
+            mean = sum(scores) / n
+            variance = sum((s - mean) ** 2 for s in scores) / n
+            std_dev = variance ** 0.5
+            # Normalize: std_dev of 0 = 100% stable, std_dev of 30+ = 0% stable
+            stability_factor = max(0.0, min(100.0, 100.0 - (std_dev / 30.0) * 100.0))
+        else:
+            stability_factor = 50.0  # neutral with single observation
+
+        # Recency factor: how fresh is the latest data?
+        latest_ts = history[-1][0]
+        age_hours = (datetime.now(timezone.utc) - latest_ts).total_seconds() / 3600
+        if age_hours < 1:
+            recency_factor = 100.0
+        elif age_hours < 24:
+            recency_factor = 80.0
+        elif age_hours < 168:  # 1 week
+            recency_factor = 50.0
+        else:
+            recency_factor = max(10.0, 50.0 - age_hours / 168 * 20)
+
+        # Weighted combination
+        confidence = (
+            0.35 * volume_factor
+            + 0.40 * stability_factor
+            + 0.25 * recency_factor
+        )
+
+        return {
+            "confidence": round(confidence, 1),
+            "volume_factor": round(volume_factor, 1),
+            "stability_factor": round(stability_factor, 1),
+            "recency_factor": round(recency_factor, 1),
+            "sample_count": n,
+        }
 
 
 class TrustEngine:
@@ -65,6 +156,7 @@ class TrustEngine:
 
     def __init__(self):
         self._component_scores: Dict[str, ComponentScore] = {}
+        self._confidence = ConfidenceCalculator()
 
     # ── Score an output ────────────────────────────────────────────────
 
@@ -106,15 +198,21 @@ class TrustEngine:
         # Calculate new trust from chunk scores
         if scored_chunks:
             avg_chunk_score = sum(c.score for c in scored_chunks) / len(scored_chunks)
+            # Blend KPI tracker trust if available
+            kpi_bonus = self._get_kpi_trust_bonus(component_id)
+            if kpi_bonus != 0:
+                avg_chunk_score = max(0, min(100, avg_chunk_score + kpi_bonus))
             # KPI Trust is a strict rolling average of past events
             comp.execution_count += 1
             # Current value contribution: 1/N, previous sum contribution: (N-1)/N
             # If N > 100, we cap the window at 100
             window = min(comp.execution_count, 100)
             comp.trust_score = round(((comp.previous_trust * (window - 1)) + avg_chunk_score) / window, 1)
-            
-            # Confidence score linearly scales with volume up to 300 data points
-            comp.confidence_score = min(100.0, round((comp.execution_count / 300.0) * 100.0, 1))
+
+            # Record for confidence tracking
+            self._confidence.record_score(component_id, comp.trust_score)
+            conf = self._confidence.get_confidence(component_id)
+            comp.confidence_score = conf["confidence"]
         
         comp.trend = "up" if comp.trust_score > comp.previous_trust else "down" if comp.trust_score < comp.previous_trust else "stable"
         comp.last_updated = datetime.now(timezone.utc).isoformat()
@@ -215,7 +313,7 @@ class TrustEngine:
     def get_system_trust(self) -> Dict[str, Any]:
         """Aggregate trust across all tracked components."""
         if not self._component_scores:
-            return {"system_trust": 50.0, "components": 0}
+            return {"system_trust": 0.0, "components": 0}
 
         scores = list(self._component_scores.values())
         avg = sum(c.trust_score for c in scores) / len(scores)
@@ -245,6 +343,10 @@ class TrustEngine:
 
     def get_component(self, component_id: str) -> Optional[ComponentScore]:
         return self._component_scores.get(component_id)
+
+    def get_confidence(self, component_id: str) -> Dict[str, Any]:
+        """Get detailed confidence metrics for a component."""
+        return self._confidence.get_confidence(component_id)
 
     # ── Trigger remediation ────────────────────────────────────────────
 
@@ -287,6 +389,51 @@ class TrustEngine:
 
         return result
 
+    # ── KPI integration ──────────────────────────────────────────────
+
+    def get_dashboard(self) -> Dict[str, Any]:
+        """Combined trust + KPI dashboard for governance."""
+        system_trust = self.get_system_trust()
+
+        # Merge with KPI tracker data
+        kpi_data = {}
+        try:
+            from ml_intelligence.kpi_tracker import get_kpi_tracker
+            tracker = get_kpi_tracker()
+            if tracker.components:
+                kpi_data = tracker.get_system_health()
+        except Exception as e:
+            logger.debug("KPI tracker unavailable: %s", e)
+
+        return {
+            "overall_trust": system_trust.get("system_trust", 0.0),
+            "trust_engine": system_trust,
+            "kpi_tracker": kpi_data,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+    def _get_kpi_trust_bonus(self, component_id: str) -> float:
+        """Get trust bonus/penalty from KPI tracker data (0 if no data)."""
+        try:
+            from ml_intelligence.kpi_tracker import get_kpi_tracker
+            tracker = get_kpi_tracker()
+            kpi_trust = tracker.get_component_trust_score(component_id)
+            if kpi_trust > 0:
+                # Scale KPI trust (0-1) to a -10..+10 bonus
+                return (kpi_trust - 0.5) * 20
+        except Exception:
+            pass
+        return 0.0
+
+    def record_kpi(self, component_id: str, metric: str, value: float = 1.0):
+        """Record a KPI metric for a component."""
+        try:
+            from ml_intelligence.kpi_tracker import get_kpi_tracker
+            tracker = get_kpi_tracker()
+            tracker.increment_kpi(component_id, metric, value)
+        except Exception as e:
+            logger.debug("KPI record failed: %s", e)
+
     # ── Internal helpers ───────────────────────────────────────────────
 
     def _chunk_output(self, output: str, chunk_size: int) -> List[str]:
@@ -299,56 +446,68 @@ class TrustEngine:
         return chunks or [""]
 
     def _score_chunk(self, chunk: str, source: str) -> float:
-        """Score a chunk out of 100 using deterministic 10-layer KPI rules."""
-        kpi_score = 100.0
-        issues = []
-        
-        # Layer 1: Minimum length check
-        if not chunk.strip() or len(chunk) < 10:
-            kpi_score -= 10
-            issues.append("Too short or empty")
-            
-        # Layer 2: Formatting/Syntax sanity
-        if chunk.count('(') != chunk.count(')'):
-            kpi_score -= 10
-            issues.append("Unbalanced parentheses")
-            
-        if chunk.count('[') != chunk.count(']'):
-            kpi_score -= 10
-            issues.append("Unbalanced brackets")
-            
-        if chunk.count('{') != chunk.count('}'):
-            kpi_score -= 10
-            issues.append("Unbalanced braces")
-            
-        # Layer 3: Forbidden tokens check
-        bad_tokens = ["TODO", "FIXME", "HACK", "raise NotImplementedError"]
-        if any(tok in chunk for tok in bad_tokens):
-            kpi_score -= 10
-            issues.append("Contains forbidden tokens (TODO/FIXME/etc)")
-            
-        # Layer 4: Import safety (no os.system etc if code)
-        if "import os" in chunk and "os.system" in chunk:
-            kpi_score -= 10
-            issues.append("Unsafe OS operations")
-            
-        # Layer 5: Has verifiable structure (Code detection)
-        if "def " in chunk or "class " in chunk:
-            # Code should have docstrings
-            if '"""' not in chunk and "'''" not in chunk:
-                kpi_score -= 10
-                issues.append("Missing docstrings")
-                
-        # Layer 6: Source verification
-        if source == "unknown":
-            kpi_score -= 10
-            issues.append("Unknown source")
-            
-        # Layer 7-10: Stubs for more advanced mechanical layers 
-        # (e.g. AST parsing, Sandbox execution, TF-IDF matching, Genesis Log)
-        # These would ideally hook into proper deterministic validators.
+        """Score a chunk out of 100 using weighted deterministic KPI rules.
 
-        return max(0.0, min(100.0, round(kpi_score, 1)))
+        Penalties are proportional to severity:
+          Critical (safety/correctness): -15 to -20
+          Structural (syntax/formatting): -5 per issue
+          Quality (style/docs): -3 per issue
+          Provenance (source trust): -8 to -12
+        """
+        score = 100.0
+
+        # Layer 1: Empty/trivial content — critical
+        stripped = chunk.strip()
+        if not stripped:
+            return 5.0  # almost worthless
+        if len(stripped) < 10:
+            score -= 15
+
+        # Layer 2: Balanced delimiters — structural (per delimiter type)
+        for open_c, close_c, name in [('(', ')', 'parentheses'), ('[', ']', 'brackets'), ('{', '}', 'braces')]:
+            diff = abs(chunk.count(open_c) - chunk.count(close_c))
+            if diff > 0:
+                score -= min(5 * diff, 15)  # cap at -15 per type
+
+        # Layer 3: Forbidden tokens — quality
+        bad_tokens = ["TODO", "FIXME", "HACK", "XXX"]
+        bad_count = sum(1 for tok in bad_tokens if tok in chunk)
+        if bad_count:
+            score -= 3 * bad_count
+
+        stub_markers = ["raise NotImplementedError", "pass  #", "...  #"]
+        if any(m in chunk for m in stub_markers):
+            score -= 8  # stub code is worse than TODO comments
+
+        # Layer 4: Safety — critical
+        unsafe_calls = ["os.system(", "subprocess.call(", "eval(", "exec("]
+        unsafe_count = sum(1 for c in unsafe_calls if c in chunk)
+        if unsafe_count:
+            score -= 20  # safety violations are severe
+
+        # Layer 5: Code quality — code should have docstrings
+        if "def " in chunk or "class " in chunk:
+            if '"""' not in chunk and "'''" not in chunk:
+                score -= 3
+
+        # Layer 6: Source provenance
+        source_penalties = {
+            "deterministic": 0,
+            "internal": 0,
+            "llm": -4,
+            "external": -8,
+            "unknown": -12,
+        }
+        score += source_penalties.get(source, -12)
+
+        # Layer 7: Repetition detection (low-effort content)
+        words = stripped.split()
+        if len(words) > 10:
+            unique_ratio = len(set(w.lower() for w in words)) / len(words)
+            if unique_ratio < 0.3:
+                score -= 10  # highly repetitive
+
+        return max(0.0, min(100.0, round(score, 1)))
 
     def _get_verification_level(self, trust: float) -> str:
         if trust >= 80:

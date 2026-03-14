@@ -129,7 +129,8 @@ class SelfHealer:
             import psutil
             return psutil.virtual_memory().percent < 90
         except Exception:
-            return True
+            logger.warning("Memory check degraded: unable to read memory stats")
+            return False
 
     # ── Healing ────────────────────────────────────────────────────────
 

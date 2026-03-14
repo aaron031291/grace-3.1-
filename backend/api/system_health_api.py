@@ -2,6 +2,7 @@ import psutil
 import datetime
 import os
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/system-health", tags=["System Health"])
 
