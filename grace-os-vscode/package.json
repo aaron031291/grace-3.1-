@@ -323,7 +323,7 @@
         },
         "graceOS.wsUrl": {
           "type": "string",
-          "default": "ws://localhost:8000/ws",
+          "default": "ws://localhost:8000/api/ws/grace",
           "description": "Grace WebSocket URL for real-time communication"
         },
         "graceOS.autoActivate": {

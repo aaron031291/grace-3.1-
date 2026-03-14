@@ -104,8 +104,32 @@ export class GraceChatPanel implements vscode.WebviewViewProvider {
         });
         this.updateWebview();
 
-        // Send via WebSocket for streaming
-        this.wsBridge.sendChatMessage(text, context);
+        // Send via WebSocket for streaming, with HTTP fallback
+        if (this.wsBridge.isConnected()) {
+            this.wsBridge.sendChatMessage(text, context);
+        } else {
+            // HTTP fallback
+            try {
+                const config = this.core.getConfig();
+                const axios = require('axios');
+                const response = await axios.post(`${config.backendUrl}/api/chat`, {
+                    message: text,
+                    context,
+                    session_id: this.core.getSession().id,
+                });
+                const lastMessage = this.messages[this.messages.length - 1];
+                if (lastMessage && lastMessage.role === 'assistant') {
+                    lastMessage.content = response.data?.content || response.data || 'No response';
+                    this.updateWebview();
+                }
+            } catch (err: any) {
+                const lastMessage = this.messages[this.messages.length - 1];
+                if (lastMessage && lastMessage.role === 'assistant') {
+                    lastMessage.content = `Connection error: ${err.message}. Check that Grace backend is running.`;
+                    this.updateWebview();
+                }
+            }
+        }
     }
 
     private handleStreamChunk(chunk: StreamChunk): void {

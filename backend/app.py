@@ -1155,6 +1155,9 @@ app.include_router(chunked_upload_router)
 from api.ask_grace_api import router as ask_grace_router
 app.include_router(ask_grace_router)                 # /api/ask-grace (natural language query)
 
+from api.vscode_extension_api import router as vscode_extension_router
+app.include_router(vscode_extension_router)          # /api/* (VSCode extension shim)
+
 from api.connection_api import router as connection_router
 app.include_router(connection_router)                # /api/connections (connection validation)
 

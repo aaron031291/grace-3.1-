@@ -315,36 +315,35 @@ export class GraceOSIntegration {
 
         // Cognitive provider
         this.cognitiveProvider = new CognitiveIDEProvider(this.core, this.ideBridge);
-        this.context.subscriptions.push(
-            vscode.window.registerTreeDataProvider('graceWorkbench', this.cognitiveProvider)
-        );
+        await this.cognitiveProvider.initialize();
         this.updateSystemStatus('cognitiveProvider', 'active', true);
 
-        // Memory mesh provider
+        // Memory mesh provider (matches package.json view id: graceOS.memory)
         this.memoryProvider = new MemoryMeshProvider(this.core, this.ideBridge);
         this.context.subscriptions.push(
-            vscode.window.registerTreeDataProvider('graceMemory', this.memoryProvider)
+            vscode.window.registerTreeDataProvider('graceOS.memory', this.memoryProvider)
         );
+        await this.memoryProvider.initialize();
         this.updateSystemStatus('memoryProvider', 'active', true);
 
-        // Genesis key provider
-        this.genesisProvider = new GenesisKeyProvider(this.core, this.ideBridge, this.ghostLedger);
+        // Genesis key provider (matches package.json view id: graceOS.genesis)
+        this.genesisProvider = new GenesisKeyProvider(this.core, this.ideBridge);
         this.context.subscriptions.push(
-            vscode.window.registerTreeDataProvider('graceGenesis', this.genesisProvider)
+            vscode.window.registerTreeDataProvider('graceOS.genesis', this.genesisProvider)
         );
         this.updateSystemStatus('genesisProvider', 'active', true);
 
-        // Diagnostic provider
+        // Diagnostic provider (matches package.json view id: graceOS.diagnostics)
         this.diagnosticProvider = new DiagnosticProvider(this.core, this.ideBridge);
         this.context.subscriptions.push(
-            vscode.window.registerTreeDataProvider('graceDiagnostics', this.diagnosticProvider)
+            vscode.window.registerTreeDataProvider('graceOS.diagnostics', this.diagnosticProvider)
         );
         this.updateSystemStatus('diagnosticProvider', 'active', true);
 
-        // Learning provider
+        // Learning provider (matches package.json view id: graceOS.learning)
         this.learningProvider = new LearningProvider(this.core, this.ideBridge);
         this.context.subscriptions.push(
-            vscode.window.registerTreeDataProvider('graceLearning', this.learningProvider)
+            vscode.window.registerTreeDataProvider('graceOS.learning', this.learningProvider)
         );
         this.updateSystemStatus('learningProvider', 'active', true);
 
@@ -428,16 +427,38 @@ export class GraceOSIntegration {
     }
 
     private registerCommands(): void {
-        // Main commands
+        // Register all graceOS.* commands from package.json using registerCommands helper
+        const { registerCommands } = require('./commands/registerCommands');
+        const disposables = registerCommands(
+            this.context,
+            this.core,
+            this.ideBridge,
+            this.ghostLedger,
+            this.cognitiveProvider,
+            this.memoryProvider,
+            this.genesisProvider,
+            this.diagnosticProvider,
+            this.learningProvider,
+            this.scheduler,
+        );
+        this.context.subscriptions.push(...disposables);
+
+        // Register chat webview provider for sidebar
+        const chatProvider = new GraceChatPanel(this.core, this.context, this.wsBridge);
+        this.context.subscriptions.push(
+            vscode.window.registerWebviewViewProvider('graceOS.chat', chatProvider)
+        );
+
+        // Additional system commands
         this.context.subscriptions.push(
             vscode.commands.registerCommand('grace.showDashboard', () => {
-                GraceDashboardPanel.createOrShow(this.context.extensionUri, this);
+                this.showSystemStatus();
             })
         );
 
         this.context.subscriptions.push(
             vscode.commands.registerCommand('grace.showChat', () => {
-                GraceChatPanel.createOrShow(this.context.extensionUri, this.core, this.ideBridge);
+                vscode.commands.executeCommand('graceOS.chat.focus');
             })
         );
 
