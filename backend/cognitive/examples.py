@@ -238,23 +238,23 @@ def batch_process_documents(
         # Check recursion bound (Invariant 9)
         if depth >= context.max_recursion_depth:
             context.metadata['recursion_limit_hit'] = True
-            return []
+            return {}
 
         # Check time bound (Invariant 11)
         if engine.enforce_decision_freeze(context):
             context.metadata['time_limit_hit'] = True
-            return []
+            return {}
 
         # Check iteration bound
         if context.iteration_count >= context.max_iterations:
             context.metadata['iteration_limit_hit'] = True
-            return []
+            return {}
 
         context.iteration_count += 1
         context.recursion_depth = depth
 
         # Process files (simplified)
-        results = []
+        results = {}
         # ... actual processing logic
         return results
 
