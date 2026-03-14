@@ -1,12 +1,12 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from backend.cognitive.synaptic_core import SynapticCore, get_synaptic_core
+from cognitive.synaptic_core import SynapticCore, get_synaptic_core
 
-@patch("backend.cognitive.synaptic_core.get_unified_memory")
+@patch("cognitive.synaptic_core.get_unified_memory")
 def test_dispatch(mock_memory):
     core = SynapticCore()
     
-    with patch("backend.cognitive.synaptic_core.get_llm_client") as mock_get_client:
+    with patch("cognitive.synaptic_core.get_llm_client") as mock_get_client:
         mock_client = MagicMock()
         mock_client.generate.return_value = "Response text"
         mock_get_client.return_value = mock_client
@@ -25,8 +25,8 @@ def test_dispatch(mock_memory):
         res = core.dispatch("code", "Write code")
         assert res == "Ollama response"
 
-@patch("backend.cognitive.synaptic_core.get_unified_memory")
-@patch("backend.cognitive.synaptic_core.SynapticCore.dispatch")
+@patch("cognitive.synaptic_core.get_unified_memory")
+@patch("cognitive.synaptic_core.SynapticCore.dispatch")
 def test_orchestrate_chain(mock_dispatch, mock_memory):
     core = SynapticCore()
     
@@ -44,7 +44,7 @@ def test_orchestrate_chain(mock_dispatch, mock_memory):
     assert len(res["history"]) == 2
     assert res["history"][0]["output"] == "Step 1 output"
 
-@patch("backend.cognitive.synaptic_core.get_unified_memory")
+@patch("cognitive.synaptic_core.get_unified_memory")
 def test_log_to_memory(mock_memory):
     core = SynapticCore()
     

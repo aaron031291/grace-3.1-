@@ -1,6 +1,6 @@
 import pytest
 import os
-from backend.security.validators import InputValidator, sanitize_input, validate_file_path
+from security.validators import InputValidator, sanitize_input, validate_file_path
 
 def test_validate_string():
     validator = InputValidator()

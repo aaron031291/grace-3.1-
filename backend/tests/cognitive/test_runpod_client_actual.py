@@ -1,7 +1,7 @@
 import pytest
 import os
 from unittest.mock import patch, MagicMock
-from backend.cognitive.runpod_client import RunPodvLLMClient, get_runpod_client
+from cognitive.runpod_client import RunPodvLLMClient, get_runpod_client
 
 def test_init():
     with patch.dict(os.environ, {"RUNPOD_API_KEY": "test_key", "RUNPOD_ENDPOINT_ID": "test_id"}):
@@ -10,7 +10,7 @@ def test_init():
         assert client.endpoint_id == "test_id"
         assert "test_id" in client.base_url
 
-@patch("backend.cognitive.runpod_client.requests.post")
+@patch("cognitive.runpod_client.requests.post")
 def test_chat(mock_post):
     client = RunPodvLLMClient(api_key="key", endpoint_id="id")
     

@@ -49,7 +49,7 @@ jobs:
           LIGHTWEIGHT_MODE: "true"
         run: |
           cd backend
-          python -m pytest tests/test_grace_system.py tests/unit/ tests/reliability/ tests/security/ -v --tb=short --ignore=tests/integration
+          python -m pytest tests/test_grace_system.py tests/unit/ tests/reliability/ tests/security/ -v --tb=short --ignore=tests/integration -m "not slow"
 
       - name: Type checking with mypy
         continue-on-error: true

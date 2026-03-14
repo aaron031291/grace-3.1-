@@ -3,7 +3,7 @@ import asyncio
 import yaml
 from unittest.mock import patch, MagicMock, AsyncMock
 from pathlib import Path
-from backend.genesis.internal_pipeline import InternalPipelineRunner, PipelineConfig
+from genesis.internal_pipeline import InternalPipelineRunner, PipelineConfig
 
 @pytest.fixture
 def mock_session():
@@ -14,7 +14,7 @@ def mock_session():
 
 @pytest.fixture
 def runner(mock_session):
-    with patch('backend.genesis.internal_pipeline.session_scope') as mock_scope:
+    with patch('genesis.internal_pipeline.session_scope') as mock_scope:
         mock_scope.return_value.__enter__.return_value = mock_session
         
         # Mock workspace query

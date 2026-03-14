@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 from datetime import datetime, timezone, timedelta
 from fastapi import Request, Response
-from backend.security.auth import (
+from security.auth import (
     SessionManager, 
     generate_csrf_token, 
     validate_csrf_token

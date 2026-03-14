@@ -1,8 +1,8 @@
 import os
 import pytest
 
-from backend.cognitive.physics.qwen_z3_pipeline import QwenZ3Pipeline
-from backend.cognitive.physics.z3_sandbox import Z3Sandbox
+from cognitive.physics.qwen_z3_pipeline import QwenZ3Pipeline
+from cognitive.physics.z3_sandbox import Z3Sandbox
 
 def test_z3_pipeline_and_sandbox():
     """Test generating a Z3 constraint and verifying it in the sandbox."""

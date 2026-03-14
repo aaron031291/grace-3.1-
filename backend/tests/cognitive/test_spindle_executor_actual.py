@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from backend.cognitive.spindle_executor import SpindleExecutor, get_spindle_executor
+from cognitive.spindle_executor import SpindleExecutor, get_spindle_executor
 
 def test_singleton():
     ex1 = get_spindle_executor()
@@ -8,8 +8,8 @@ def test_singleton():
     assert ex1 is ex2
 
 # We mock out circuit breaker to allow execution
-@patch("backend.cognitive.spindle_executor.enter_loop", return_value=True)
-@patch("backend.cognitive.spindle_executor.exit_loop")
+@patch("cognitive.spindle_executor.enter_loop", return_value=True)
+@patch("cognitive.spindle_executor.exit_loop")
 def test_execute_invalid_proof(mock_exit, mock_enter):
     executor = SpindleExecutor()
     mock_proof = MagicMock()
@@ -22,10 +22,10 @@ def test_execute_invalid_proof(mock_exit, mock_enter):
     assert res.action_taken == "rejected"
     assert "invalid" in res.error
 
-@patch("backend.cognitive.spindle_executor.enter_loop", return_value=True)
-@patch("backend.cognitive.spindle_executor.exit_loop")
+@patch("cognitive.spindle_executor.enter_loop", return_value=True)
+@patch("cognitive.spindle_executor.exit_loop")
 def test_execute_database_query(mock_exit, mock_enter):
-    from backend.cognitive.braille_compiler import BrailleDictionary as BD
+    from cognitive.braille_compiler import BrailleDictionary as BD
     executor = SpindleExecutor()
     mock_proof = MagicMock()
     mock_proof.is_valid = True

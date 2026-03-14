@@ -17,77 +17,99 @@ Components:
 # Track availability of ML components
 ML_INTELLIGENCE_AVAILABLE = False
 
+def _lazy_import():
+    """Import submodules on first access to avoid circular-import deadlocks."""
+    global ML_INTELLIGENCE_AVAILABLE
+    global NeuralTrustScorer, get_neural_trust_scorer
+    global OnlineLearningPipeline, IncrementalEmbeddingLearner, get_online_learning_pipeline, get_incremental_embedder
+    global MultiArmedBandit, BanditAlgorithm, BanditContext, get_bandit
+    global MetaLearningOrchestrator, HyperparameterOptimizer, TaskSimilarityDetector, get_meta_learner
+    global UncertaintyQuantifier, BayesianNeuralNetwork, MCDropoutNetwork, UncertaintyEstimate, get_uncertainty_quantifier
+    global ActiveLearningSampler, SamplingStrategy, get_active_sampler
+    global ContrastiveLearner, NTXentLoss, TripletLoss, SupervisedContrastiveLoss, get_contrastive_learner
+    global TrustAwareEmbeddingModel, TrustContext, get_trust_aware_embedding_model
+    global NeuralToSymbolicRuleGenerator, NeuralPattern, SymbolicRule, get_neural_to_symbolic_generator
+    global NeuroSymbolicReasoner, ReasoningResult, get_neuro_symbolic_reasoner
+    global RuleStorage, get_rule_storage
+    global KPITracker, KPI, ComponentKPIs, TrustSnapshot, TrustHistory, get_kpi_tracker
+
+    try:
+        from .neural_trust_scorer import NeuralTrustScorer, get_neural_trust_scorer
+        from .online_learning_pipeline import (
+            OnlineLearningPipeline,
+            IncrementalEmbeddingLearner,
+            get_online_learning_pipeline,
+            get_incremental_embedder
+        )
+        from .multi_armed_bandit import (
+            MultiArmedBandit,
+            BanditAlgorithm,
+            BanditContext,
+            get_bandit
+        )
+        from .meta_learning import (
+            MetaLearningOrchestrator,
+            HyperparameterOptimizer,
+            TaskSimilarityDetector,
+            get_meta_learner
+        )
+        from .uncertainty_quantification import (
+            UncertaintyQuantifier,
+            BayesianNeuralNetwork,
+            MCDropoutNetwork,
+            UncertaintyEstimate,
+            get_uncertainty_quantifier
+        )
+        from .active_learning_sampler import (
+            ActiveLearningSampler,
+            SamplingStrategy,
+            get_active_sampler
+        )
+        from .contrastive_learning import (
+            ContrastiveLearner,
+            NTXentLoss,
+            TripletLoss,
+            SupervisedContrastiveLoss,
+            get_contrastive_learner
+        )
+        from .trust_aware_embedding import (
+            TrustAwareEmbeddingModel,
+            TrustContext,
+            get_trust_aware_embedding_model
+        )
+        from .neural_to_symbolic_rule_generator import (
+            NeuralToSymbolicRuleGenerator,
+            NeuralPattern,
+            SymbolicRule,
+            get_neural_to_symbolic_generator
+        )
+        from .neuro_symbolic_reasoner import (
+            NeuroSymbolicReasoner,
+            ReasoningResult,
+            get_neuro_symbolic_reasoner
+        )
+        from .rule_storage import (
+            RuleStorage,
+            get_rule_storage
+        )
+        from .kpi_tracker import (
+            KPITracker,
+            KPI,
+            ComponentKPIs,
+            TrustSnapshot,
+            TrustHistory,
+            get_kpi_tracker
+        )
+        ML_INTELLIGENCE_AVAILABLE = True
+    except (ImportError, Exception) as e:
+        import logging
+        logging.getLogger(__name__).warning(f"ML Intelligence components not available: {e}")
+        raise  # propagate so outer handler sets placeholders
+
 try:
-    from .neural_trust_scorer import NeuralTrustScorer, get_neural_trust_scorer
-    from .online_learning_pipeline import (
-        OnlineLearningPipeline,
-        IncrementalEmbeddingLearner,
-        get_online_learning_pipeline,
-        get_incremental_embedder
-    )
-    from .multi_armed_bandit import (
-        MultiArmedBandit,
-        BanditAlgorithm,
-        BanditContext,
-        get_bandit
-    )
-    from .meta_learning import (
-        MetaLearningOrchestrator,
-        HyperparameterOptimizer,
-        TaskSimilarityDetector,
-        get_meta_learner
-    )
-    from .uncertainty_quantification import (
-        UncertaintyQuantifier,
-        BayesianNeuralNetwork,
-        MCDropoutNetwork,
-        UncertaintyEstimate,
-        get_uncertainty_quantifier
-    )
-    from .active_learning_sampler import (
-        ActiveLearningSampler,
-        SamplingStrategy,
-        get_active_sampler
-    )
-    from .contrastive_learning import (
-        ContrastiveLearner,
-        NTXentLoss,
-        TripletLoss,
-        SupervisedContrastiveLoss,
-        get_contrastive_learner
-    )
-    from .trust_aware_embedding import (
-        TrustAwareEmbeddingModel,
-        TrustContext,
-        get_trust_aware_embedding_model
-    )
-    from .neural_to_symbolic_rule_generator import (
-        NeuralToSymbolicRuleGenerator,
-        NeuralPattern,
-        SymbolicRule,
-        get_neural_to_symbolic_generator
-    )
-    from .neuro_symbolic_reasoner import (
-        NeuroSymbolicReasoner,
-        ReasoningResult,
-        get_neuro_symbolic_reasoner
-    )
-    from .rule_storage import (
-        RuleStorage,
-        get_rule_storage
-    )
-    from .kpi_tracker import (
-        KPITracker,
-        KPI,
-        ComponentKPIs,
-        TrustSnapshot,
-        TrustHistory,
-        get_kpi_tracker
-    )
-    ML_INTELLIGENCE_AVAILABLE = True
-except ImportError as e:
-    import logging
-    logging.getLogger(__name__).warning(f"ML Intelligence components not available: {e}")
+    _lazy_import()
+except Exception as e:
+    pass  # placeholders set below
     # Define placeholders when ML components are not available
     NeuralTrustScorer = None
     get_neural_trust_scorer = None

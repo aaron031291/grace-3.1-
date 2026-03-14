@@ -1,7 +1,7 @@
 import pytest
 import os
 from unittest.mock import patch
-from backend.security.config import SecurityConfig, get_security_config
+from security.config import SecurityConfig, get_security_config
 
 def test_config_singleton():
     c1 = get_security_config()
