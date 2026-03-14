@@ -302,7 +302,8 @@ class DeterministicHealer:
                     found.append(module_path)
                     if len(found) >= 5:
                         break
-            except Exception:
+            except Exception as e:
+                logger.debug("[DET-HEALER] import_probe scan error on %s: %s", py_file, e)
                 continue
         return found
 

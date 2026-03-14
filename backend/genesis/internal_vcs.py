@@ -326,6 +326,155 @@ class InternalVCS:
             "errors": sum(1 for r in results if r.get("status") == "error"),
         }
 
+    # ─── Merge ───
+
+    async def merge(self, source_branch: str, target_branch: str = "main",
+                    author: str = "grace", message: str = "") -> Dict[str, Any]:
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(
+            _executor, self._merge_sync,
+            source_branch, target_branch, author, message,
+        )
+
+    def _merge_sync(self, source_branch, target_branch, author, message):
+        """
+        Merge source_branch into target_branch.
+
+        Strategy: for each file on source_branch, take the latest version
+        and snapshot it onto target_branch. If the file also has changes on
+        target_branch with a different content_hash, flag a conflict.
+        """
+        import uuid as _uuid
+        with session_scope() as session:
+            ws = self._get_workspace(session)
+            src = session.query(Branch).filter_by(workspace_id=ws.id, name=source_branch).first()
+            tgt = session.query(Branch).filter_by(workspace_id=ws.id, name=target_branch).first()
+            if not src:
+                return {"error": f"Source branch '{source_branch}' not found"}
+            if not tgt:
+                return {"error": f"Target branch '{target_branch}' not found"}
+            if src.id == tgt.id:
+                return {"error": "Cannot merge a branch into itself"}
+
+            from sqlalchemy import func
+
+            # Get latest version of each file on source branch
+            src_latest = (
+                session.query(
+                    FileVersion.file_path,
+                    func.max(FileVersion.version_number).label("max_ver"),
+                )
+                .filter_by(workspace_id=ws.id, branch_id=src.id)
+                .group_by(FileVersion.file_path)
+                .all()
+            )
+
+            merged = []
+            conflicts = []
+            skipped = []
+
+            for row in src_latest:
+                fp, src_ver = row.file_path, row.max_ver
+                src_fv = (
+                    session.query(FileVersion)
+                    .filter_by(workspace_id=ws.id, branch_id=src.id,
+                               file_path=fp, version_number=src_ver)
+                    .first()
+                )
+                if not src_fv or not src_fv.full_content:
+                    skipped.append(fp)
+                    continue
+
+                # Check target branch for same file
+                tgt_fv = (
+                    session.query(FileVersion)
+                    .filter_by(workspace_id=ws.id, branch_id=tgt.id, file_path=fp)
+                    .order_by(desc(FileVersion.version_number))
+                    .first()
+                )
+
+                if tgt_fv and tgt_fv.content_hash == src_fv.content_hash:
+                    skipped.append(fp)
+                    continue
+
+                # Conflict: both branches changed the same file differently
+                if tgt_fv and tgt_fv.content_hash != src_fv.content_hash:
+                    # Check if target was modified AFTER branch was created
+                    if src.created_at and tgt_fv.created_at and tgt_fv.created_at > src.created_at:
+                        conflicts.append({
+                            "file_path": fp,
+                            "source_hash": src_fv.content_hash,
+                            "target_hash": tgt_fv.content_hash,
+                            "source_version": src_ver,
+                            "target_version": tgt_fv.version_number,
+                        })
+                        continue
+
+                # Apply: snapshot source content onto target branch
+                tgt_ver = (tgt_fv.version_number + 1) if tgt_fv else 1
+                old_content = tgt_fv.full_content if tgt_fv else ""
+                diff_text = self._compute_diff(old_content, src_fv.full_content, fp)
+
+                new_fv = FileVersion(
+                    workspace_id=ws.id, branch_id=tgt.id,
+                    file_path=fp, version_number=tgt_ver,
+                    content_hash=src_fv.content_hash,
+                    content_size=src_fv.content_size,
+                    diff_from_previous=diff_text,
+                    full_content=src_fv.full_content,
+                    operation="merge",
+                    commit_message=message or f"Merge {source_branch} → {target_branch}: {fp}",
+                    author=author,
+                    parent_version_id=tgt_fv.id if tgt_fv else None,
+                )
+                session.add(new_fv)
+                merged.append(fp)
+
+            if merged:
+                session.flush()
+                ws.total_versions = (ws.total_versions or 0) + len(merged)
+
+            # Record merge request
+            merge_id = f"MR-{_uuid.uuid4().hex[:12]}"
+            try:
+                from models.workspace_models import MergeRequest
+                mr = MergeRequest(
+                    workspace_id=ws.id, merge_id=merge_id,
+                    title=message or f"Merge {source_branch} → {target_branch}",
+                    source_branch=source_branch, target_branch=target_branch,
+                    status="conflict" if conflicts else "merged",
+                    files_changed=len(merged), conflicts=conflicts,
+                    author=author,
+                    merged_at=datetime.now(timezone.utc) if not conflicts else None,
+                    merged_by=author if not conflicts else None,
+                )
+                session.add(mr)
+            except Exception:
+                pass
+
+            additions = sum(
+                len([l for l in self._compute_diff("", src_fv.full_content or "", fp).splitlines()
+                     if l.startswith("+") and not l.startswith("+++")])
+                for fp in merged[:5]  # sample for perf
+            ) if merged else 0
+
+            logger.info(
+                "[VCS] Merge %s → %s: %d merged, %d conflicts, %d skipped",
+                source_branch, target_branch, len(merged), len(conflicts), len(skipped),
+            )
+
+            return {
+                "merge_id": merge_id,
+                "source_branch": source_branch,
+                "target_branch": target_branch,
+                "status": "conflict" if conflicts else "merged",
+                "files_merged": merged,
+                "conflicts": conflicts,
+                "skipped": len(skipped),
+                "total_merged": len(merged),
+                "total_conflicts": len(conflicts),
+            }
+
     @staticmethod
     def _compute_diff(old: str, new: str, file_path: str) -> str:
         return "".join(difflib.unified_diff(

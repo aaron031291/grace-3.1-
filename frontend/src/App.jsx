@@ -15,6 +15,7 @@ const SandboxTab = lazy(() => import("./components/SandboxTab"));
 const OracleTab = lazy(() => import("./components/OracleTab"));
 const BusinessIntelligenceTab = lazy(() => import("./components/BusinessIntelligenceTab"));
 const SystemHealthTab = lazy(() => import("./components/SystemHealthTab"));
+const KnowledgeTab = lazy(() => import("./components/KnowledgeTab"));
 const LearningHealingTab = lazy(() => import("./components/LearningHealingTab"));
 const LabTab = lazy(() => import("./components/LabTab"));
 const APIsTab = lazy(() => import("./components/APIsTab"));
@@ -33,8 +34,9 @@ const WORKSPACE = [
   { id: 'docs', icon: '📄', label: 'Docs', desc: 'Universal document library & dropzone' },
   { id: 'codebase', icon: '💻', label: 'Code Base', desc: 'Code exploration & artifact management' },
   { id: 'devlab', icon: '🧪', label: 'Dev Lab', desc: 'Advanced sub-agent tracking & verification' },
-  { id: 'whitelist', icon: '🛡️', label: 'Knowledge Base', desc: 'Deterministic Context & Knowledge Synthesis' },
-  { id: "agents", icon: "🤖", label: "Oracle", desc: "Oracle and agent training. Trust distribution, audits, and agent capabilities." },
+  { id: 'whitelist', icon: '🛡️', label: 'Whitelist', desc: 'Deterministic Context & Knowledge Synthesis' },
+  { id: 'knowledgebase', icon: '📚', label: 'Knowledge Base', desc: 'Training data connectors, document embedding, and Qdrant memory' },
+  { id: 'oracle', icon: '🔮', label: 'Oracle', desc: 'Training data, trust distribution, audits, and gap analysis' },
   { id: 'sandbox', icon: '🧬', label: 'Sandbox', desc: 'Isolated Execution & Promotion Engine' }
 ];
 
@@ -62,6 +64,8 @@ const TAB_PRELOAD = {
   sandbox: () => import("./components/SandboxTab"),
   integrations: () => import("./components/WhitelistTab"),
   agents: () => import("./components/OracleTab"),
+  knowledgebase: () => import("./components/KnowledgeTab"),
+  oracle: () => import("./components/OracleTab"),
   memory: () => import("./components/LearningHealingTab"),
   health: () => import("./components/SystemHealthTab"),
   settings: () => import("./components/BusinessIntelligenceTab"),
@@ -300,6 +304,8 @@ function App() {
               {view === "whitelist" && <WhitelistTab domain={domain} />}
               {view === "sandbox" && <SandboxTab domain={domain} />}
               {view === "governance" && <GovernanceTab domain={domain} />}
+              {view === "knowledgebase" && <KnowledgeTab />}
+              {view === "oracle" && <OracleTab />}
               {view === "agents" && <OracleTab />}
               {view === "memory" && <LearningHealingTab />}
               {view === "integrations" && <WhitelistTab />}

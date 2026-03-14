@@ -207,6 +207,19 @@ class MLIntelligenceOrchestrator:
             except Exception as e:
                 print(f"[ML Intelligence] Trust update failed: {e}")
 
+    def queue_training_example(self, pattern: Dict[str, Any]) -> None:
+        """
+        Queue a pattern from the whitelist learning pipeline for ML training.
+        Treats the pattern as a learning example and updates the trust model.
+        """
+        if not pattern:
+            return
+        try:
+            example = pattern if isinstance(pattern, dict) else {"content": str(pattern), "source": "whitelist"}
+            self.update_trust_from_outcome(example, outcome_success=True)
+        except Exception as e:
+            print(f"[ML Intelligence] queue_training_example failed: {e}")
+
     def select_next_learning_topic(
         self,
         available_topics: List[Dict],

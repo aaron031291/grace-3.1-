@@ -5,7 +5,7 @@ These are templates - modify or replace with your actual models.
 
 from sqlalchemy import Column, String, Text, Float, Boolean, ForeignKey, Index, Integer, DateTime, JSON, Enum as SQLEnum
 from sqlalchemy.orm import relationship
-from backend.database.base import BaseModel
+from database.base import BaseModel  # SQLAlchemy ORM base
 from datetime import datetime
 import enum
 

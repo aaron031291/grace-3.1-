@@ -447,12 +447,15 @@ class ProactiveLearningSubagent:
                 knowledge_base_path=self.knowledge_base_path
             )
 
-            # Practice implementation would go here
-            # For now, return placeholder
-            return {
-                "skill": task.topic,
-                "practiced": True
-            }
+            try:
+                result = learning_system.practice_skill(
+                    skill_name=task.topic,
+                    task={"description": task.learning_objectives or task.topic, "complexity": 0.5},
+                    sandbox_context={},
+                )
+                return {"skill": task.topic, "practiced": True, "outcome": result}
+            except Exception as e:
+                return {"skill": task.topic, "practiced": False, "error": str(e)[:200]}
 
         finally:
             db.close()

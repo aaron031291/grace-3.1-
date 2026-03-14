@@ -217,6 +217,21 @@ class TrustEngine:
         comp.trend = "up" if comp.trust_score > comp.previous_trust else "down" if comp.trust_score < comp.previous_trust else "stable"
         comp.last_updated = datetime.now(timezone.utc).isoformat()
 
+        # ── Wire: Trust → Event Bus (consumed by Consensus & Healing) ──
+        try:
+            from cognitive.event_bus import publish
+            publish("trust.updated", {
+                "component_id": component_id,
+                "component_name": component_name,
+                "trust_score": comp.trust_score,
+                "previous_trust": comp.previous_trust,
+                "trend": comp.trend,
+                "needs_remediation": comp.needs_remediation,
+                "remediation_type": comp.remediation_type,
+            }, source="trust_engine")
+        except Exception:
+            pass
+
         # Determine verification and remediation needs
         comp.needs_verification = comp.trust_score < 80
         if comp.trust_score < 40:

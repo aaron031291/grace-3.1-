@@ -457,12 +457,15 @@ class AutonomousEngine:
                 logger.debug(f"[Autonomous] KPI recording skipped: {e}")
 
     def _notify_mirror(self, action: AutonomousAction, result: 'ActionResult'):
-        """Notify the Mirror system of the action for self-observation."""
+        """Refresh the Mirror's view so it observes this action (via Genesis Keys) and can detect patterns."""
         if self._mirror:
             try:
-                # The mirror observes through Genesis Keys
-                # This is a placeholder for direct notification
-                logger.debug(f"[Autonomous] Mirror notified of action {action.id}")
+                observation = self._mirror.observe_recent_operations()
+                logger.debug(
+                    "[Autonomous] Mirror observed %s operations after action %s",
+                    observation.get("total_operations", 0),
+                    action.id,
+                )
             except Exception as e:
                 logger.debug(f"[Autonomous] Mirror notification skipped: {e}")
 

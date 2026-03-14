@@ -426,7 +426,103 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Governance healing bridge: {e}")
 
-        # Ã¢â€â‚¬Ã¢â€â‚¬ Spindle parallel runtime services Ã¢â€â‚¬Ã¢â€â‚¬
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Phase 3.2: External Knowledge Pull Pipeline Ã¢â€â‚¬Ã¢â€â‚¬
+        try:
+            from cognitive.external_knowledge_pipeline import get_external_knowledge_pipeline
+            ext_pipeline = get_external_knowledge_pipeline()
+            ext_pipeline.start()
+            print("[OK] External knowledge pipeline started (gap-detect â†' fetch â†' ingest every 30min)")
+        except Exception as e:
+            print(f"[WARN] External knowledge pipeline: {e}")
+
+        # ── Phase 3.4: Self-Mirroring Telemetry ──
+        try:
+            from telemetry.self_mirror import get_self_mirror
+            mirror = get_self_mirror()
+            mirror.start()
+            print("[OK] Self-mirroring telemetry started (CPU/memory/latency/governance every 60s)")
+        except Exception as e:
+            print(f"[WARN] Self-mirroring telemetry: {e}")
+
+        # ── Phase 4: SWE → Spindle Bridge ──
+        try:
+            from cognitive.swe_spindle_bridge import get_swe_spindle_bridge
+            swe_bridge = get_swe_spindle_bridge()
+            swe_bridge.start()
+            print("[OK] SWE→Spindle bridge started (LearningExample → Braille → deterministic paths)")
+        except Exception as e:
+            print(f"[WARN] SWE→Spindle bridge: {e}")
+
+        # ── Proactive Healing (background loop) ──
+        if not getattr(settings, "DISABLE_PROACTIVE_HEALING", False):
+            try:
+                from cognitive.proactive_healing_engine import start_proactive_healing
+                start_proactive_healing()
+                print("[OK] Proactive healing started (background health monitor)")
+            except Exception as e:
+                print(f"[WARN] Proactive healing: {e}")
+        else:
+            print("[SKIP] Proactive healing disabled (DISABLE_PROACTIVE_HEALING=true)")
+
+        # ── Intelligent CICD orchestrator (warm singleton for webhook/API use) ──
+        try:
+            from genesis.intelligent_cicd_orchestrator import get_intelligent_cicd_orchestrator
+            get_intelligent_cicd_orchestrator()
+            print("[OK] Intelligent CICD orchestrator ready (ML-assisted test selection, webhooks)")
+        except Exception as e:
+            print(f"[WARN] Intelligent CICD: {e}")
+
+        # ── Systems Integration Hub (central nervous system) ──
+        try:
+            from services.grace_systems_integration import GraceSystemsIntegration
+            integration_hub = GraceSystemsIntegration()
+            app.state.systems_integration = integration_hub
+            print("[OK] Grace Systems Integration hub initialized")
+        except Exception as e:
+            print(f"[WARN] Systems Integration: {e}")
+
+        # ── Autonomous Engine (sub-agent management + task scheduling) ──
+        try:
+            from services.grace_autonomous_engine import GraceAutonomousEngine
+            auto_engine = GraceAutonomousEngine()
+            app.state.autonomous_engine = auto_engine
+            print("[OK] Grace Autonomous Engine initialized")
+        except Exception as e:
+            print(f"[WARN] Autonomous Engine: {e}")
+
+        # ── Governance Projection (operational → domain folders) ──
+        try:
+            from services.governance_projection import get_governance_projection
+            gov_projection = get_governance_projection()
+            gov_projection.start()
+            print("[OK] Governance projection service started (event bus → .grace/ folders)")
+        except Exception as e:
+            print(f"[WARN] Governance projection: {e}")
+
+        # ── Memory Mesh reconciliation (periodic sync) ──
+        try:
+            from cognitive.memory_reconciler import MemoryReconciler
+            import threading as _mesh_threading
+
+            def _mesh_reconcile_loop():
+                import time as _t
+                _t.sleep(120)
+                reconciler = MemoryReconciler.get_instance()
+                while True:
+                    try:
+                        result = reconciler.reconcile()
+                        if result.get("changes", 0) > 0:
+                            logger.info(f"[MESH-SYNC] Reconciled {result['changes']} entries")
+                    except Exception as _e:
+                        logger.warning(f"[MESH-SYNC] Reconciliation error: {_e}")
+                    _t.sleep(1800)
+
+            _mesh_threading.Thread(target=_mesh_reconcile_loop, daemon=True, name="grace-mesh-sync").start()
+            print("[OK] Memory mesh reconciliation cron started (every 30min)")
+        except Exception as e:
+            print(f"[WARN] Memory mesh reconciliation: {e}")
+
+        # ── Spindle parallel runtime services ──
         _init_spindle_services()
 
     threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
@@ -656,6 +752,22 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Autonomous loop not started: {e}")
 
+    # ==================== Start Meta Loop Orchestrator ====================
+    try:
+        from cognitive.meta_loop_orchestrator import start_meta_loop
+        start_meta_loop()
+        print("[OK] Meta loop coordinator started (60s heartbeat, system_maintenance every 3 cycles)")
+    except Exception as e:
+        print(f"[WARN] Meta loop not started: {e}")
+
+    # ==================== Start Autonomous CICD Engine ====================
+    try:
+        from genesis.autonomous_cicd_engine import start_autonomous_cicd
+        await start_autonomous_cicd()
+        print("[OK] Autonomous CICD engine started (file-change -> auto tests, high-risk -> manual)")
+    except Exception as e:
+        print(f"[WARN] Autonomous CICD engine not started: {e}")
+
     # ==================== Register Auto-Probe ====================
     try:
         from core.tracing import register_auto_probe
@@ -679,6 +791,20 @@ async def lifespan(app: FastAPI):
         from api.autonomous_loop_api import _stop_event
         _stop_event.set()
         print("[OK] Autonomous loop stop signaled")
+    except Exception:
+        pass
+
+    try:
+        from cognitive.meta_loop_orchestrator import stop_meta_loop
+        stop_meta_loop()
+        print("[OK] Meta loop coordinator stopped")
+    except Exception:
+        pass
+
+    try:
+        from genesis.autonomous_cicd_engine import stop_autonomous_cicd
+        await stop_autonomous_cicd()
+        print("[OK] Autonomous CICD engine stopped")
     except Exception:
         pass
 
@@ -725,7 +851,40 @@ async def lifespan(app: FastAPI):
     except Exception:
         pass
 
-    # Ã¢â€â‚¬Ã¢â€â‚¬ Spindle shutdown Ã¢â€â‚¬Ã¢â€â‚¬
+    # External knowledge pipeline shutdown
+    try:
+        from cognitive.external_knowledge_pipeline import get_external_knowledge_pipeline
+        get_external_knowledge_pipeline().stop()
+        print("[OK] External knowledge pipeline stopped")
+    except Exception:
+        pass
+
+    # Self-mirroring telemetry shutdown
+    try:
+        from telemetry.self_mirror import get_self_mirror
+        get_self_mirror().stop()
+        print("[OK] Self-mirroring telemetry stopped")
+    except Exception:
+        pass
+
+    # SWE→Spindle bridge shutdown
+    try:
+        from cognitive.swe_spindle_bridge import get_swe_spindle_bridge
+        get_swe_spindle_bridge().stop()
+        print("[OK] SWE→Spindle bridge stopped")
+    except Exception:
+        pass
+
+    # Proactive healing shutdown
+    if not getattr(settings, "DISABLE_PROACTIVE_HEALING", False):
+        try:
+            from cognitive.proactive_healing_engine import stop_proactive_healing
+            stop_proactive_healing()
+            print("[OK] Proactive healing stopped")
+        except Exception:
+            pass
+
+    # ── Spindle shutdown ──
     try:
         from cognitive.spindle_event_store import get_event_store
         get_event_store().stop_background_flush()
@@ -743,6 +902,15 @@ async def lifespan(app: FastAPI):
 
 
 # ==================== FastAPI App ====================
+
+# Start internal bus bridging (cognitive ↔ layer1) so components can interoperate.
+try:
+    from infrastructure.bus_bridge import start_bus_bridge
+
+    start_bus_bridge()
+except Exception:
+    # Best-effort only; never block app startup.
+    pass
 
 app = FastAPI(
     title="Grace API",
@@ -807,6 +975,12 @@ app.include_router(validation_router)                # /api/validation/* (trust 
 app.include_router(cognitive_events_router)          # /api/cognitive-events/* (WebSocket stream of self-healing logs)
 app.include_router(introspection_router)             # /api/system/* (System Introspection & Validation)
 
+from api.layer1_api import router as layer1_router
+app.include_router(layer1_router)
+
+from api.cognitive_api import router as cognitive_router
+app.include_router(cognitive_router)
+
 from api.codebase_hub_api import router as codebase_hub_router
 from api.tasks_hub_api import router as tasks_hub_router
 from api.schema_evolution_api import router as schema_evolution_router
@@ -823,6 +997,7 @@ from api.hitl_dashboard import router as hitl_dashboard_router
 from api.consensus_fixer_api import router as consensus_fixer_router
 from api.agent_api import router as agent_router
 from api.governance_healing_api import router as governance_healing_router
+from api.external_knowledge_api import router as external_knowledge_router
 
 app.include_router(codebase_hub_router, prefix="/api")
 app.include_router(whitelist_hub_router, prefix="/api")
@@ -846,12 +1021,47 @@ app.include_router(hitl_dashboard_router)
 app.include_router(consensus_fixer_router)
 app.include_router(agent_router, prefix="/api/agents")
 app.include_router(governance_healing_router)
+app.include_router(external_knowledge_router)
+
+from api.swe_spindle_api import router as swe_spindle_router
+app.include_router(swe_spindle_router)
+
+from api.intelligent_cicd_api import router as intelligent_cicd_router
+app.include_router(intelligent_cicd_router)
+
+from api.sandbox_repair_api import router as sandbox_repair_router
+app.include_router(sandbox_repair_router)
+
+from api.self_mirror_api import router as self_mirror_router
+app.include_router(self_mirror_router)
 
 from api.docs_library_api import router as docs_library_router
 app.include_router(docs_library_router)
 
+try:
+    from api.federated_api import router as federated_router
+    app.include_router(federated_router)              # /api/federated/* (federated learning)
+except Exception as _e:
+    print(f"[WARN] Federated API router not loaded: {_e}")
+
 from api.chunked_upload_api import router as chunked_upload_router
 app.include_router(chunked_upload_router)
+
+# ── Orphan wiring: previously defined but never mounted ──
+from api.ask_grace_api import router as ask_grace_router
+app.include_router(ask_grace_router)                 # /api/ask-grace (natural language query)
+
+from api.connection_api import router as connection_router
+app.include_router(connection_router)                # /api/connections (connection validation)
+
+from api.workspace_api import router as workspace_router
+app.include_router(workspace_router)                 # /api/workspaces (workspace management)
+
+from api.world_model_api import router as world_model_router
+app.include_router(world_model_router)               # /api/world-model (world model queries)
+
+from api.live_console_api import router as live_console_router
+app.include_router(live_console_router)              # /api/console (live console)
 
 from api.spindle_dashboard_api import router as spindle_dashboard_router
 app.include_router(spindle_dashboard_router)              # /api/spindle/* (dashboard, events, gate, WS)

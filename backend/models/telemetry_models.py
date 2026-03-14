@@ -11,7 +11,7 @@ from sqlalchemy import (
     JSON, Text, Boolean, Index, Enum as SQLEnum
 )
 from sqlalchemy.orm import relationship
-from backend.database.base import BaseModel
+from database.base import BaseModel
 import enum
 
 
@@ -27,6 +27,13 @@ class OperationType(str, enum.Enum):
     DATABASE_QUERY = "database_query"
     API_REQUEST = "api_request"
     BACKGROUND_TASK = "background_task"
+    # Phase 3.4: Self-Mirroring telemetry types
+    HEALING = "healing"
+    DIAGNOSTIC = "diagnostic"
+    SANDBOX_REPAIR = "sandbox_repair"
+    GOVERNANCE = "governance"
+    SPINDLE_EXECUTION = "spindle_execution"
+    KNOWLEDGE_PULL = "knowledge_pull"
 
 
 class OperationStatus(str, enum.Enum):

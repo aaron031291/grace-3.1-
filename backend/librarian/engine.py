@@ -315,6 +315,10 @@ class LibrarianEngine:
                 if approved_count > 0:
                     logger.info(f"Auto-approved {approved_count} actions")
 
+                exec_result = self.approval_workflow.execute_approved_actions()
+                if exec_result["executed"] > 0:
+                    logger.info(f"Executed {exec_result['executed']} actions")
+
             result["status"] = "success"
             logger.info(f"Successfully processed document {document_id}: {result['tags_assigned']} tags, {result['relationships_detected']} relationships")
 

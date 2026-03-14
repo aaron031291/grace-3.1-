@@ -246,7 +246,7 @@ class GenesisTriggerPipeline:
                 # TRIGGER: Autonomous practice
                 task_id = self.orchestrator.submit_practice_task(
                     skill_name=skill_learned,
-                    task_description=f"Practice applying {skill_learned}",
+                    task_what_description=f"Practice applying {skill_learned}",
                     complexity=0.5  # Medium complexity
                 )
 
@@ -293,8 +293,9 @@ class GenesisTriggerPipeline:
                 key_id=f"GK-gap-{genesis_key.key_id[-8:]}",
                 key_type=GenesisKeyType.GAP_IDENTIFIED,
                 user_id=genesis_key.user_id,
-                description=f"Knowledge gap identified from failed practice: {skill_name}",
-                metadata={
+                what_description=f"Knowledge gap identified from failed practice: {skill_name}",
+                who_actor='system',
+                context_data={
                     "skill_name": skill_name,
                     "gap_reason": feedback,
                     "original_practice_key": genesis_key.key_id,
@@ -386,7 +387,7 @@ class GenesisTriggerPipeline:
                 # Queue practice retry (will execute after study completes)
                 retry_task_id = self.orchestrator.submit_practice_task(
                     skill_name=skill_name,
-                    task_description=f"Retry practice after gap-filling study",
+                    task_what_description=f"Retry practice after gap-filling study",
                     complexity=0.5
                 )
 

@@ -250,6 +250,147 @@ function AuditPanel() {
   );
 }
 
+// ── Federated Learning Sub-tab ────────────────────────────────────────
+function FederatedPanel() {
+  const [status, setStatus] = useState(null);
+  const [nodes, setNodes] = useState([]);
+  const [rounds, setRounds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [nodeName, setNodeName] = useState('');
+  const [nodeDesc, setNodeDesc] = useState('');
+  const [exporting, setExporting] = useState(false);
+  const [exportResult, setExportResult] = useState(null);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [sRes, nRes, rRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/federated/status`),
+        fetch(`${API_BASE_URL}/api/federated/nodes`),
+        fetch(`${API_BASE_URL}/api/federated/rounds`),
+      ]);
+      if (sRes.ok) setStatus(await sRes.json());
+      if (nRes.ok) { const d = await nRes.json(); setNodes(d.nodes || []); }
+      if (rRes.ok) { const d = await rRes.json(); setRounds(d.rounds || []); }
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const registerNode = async () => {
+    if (!nodeName.trim()) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/federated/nodes/register`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nodeName, description: nodeDesc }),
+      });
+      setNodeName(''); setNodeDesc('');
+      refresh();
+    } catch { /* silent */ }
+  };
+
+  const runRound = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/federated/round`, { method: 'POST' });
+      refresh();
+    } catch { /* silent */ }
+  };
+
+  const exportKnowledge = async () => {
+    setExporting(true); setExportResult(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/federated/knowledge/export`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ min_trust: 0.4 }),
+      });
+      if (res.ok) setExportResult(await res.json());
+    } catch { /* silent */ }
+    finally { setExporting(false); }
+  };
+
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: C.dim }}>Loading federation status...</div>;
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+      {/* Status cards */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+        <StatCard label="Nodes" value={status?.registered_nodes || 0} sub={`${status?.active_nodes || 0} active`} color={C.info} />
+        <StatCard label="Rounds" value={status?.total_rounds || 0} sub={`v${status?.global_model_version || 0}`} color={C.accent} />
+        <StatCard label="Privacy Budget" value={`${((status?.privacy?.budget_remaining || 10) / (status?.privacy?.epsilon_budget || 10) * 100).toFixed(0)}%`} sub={`ε ${status?.privacy?.epsilon_spent?.toFixed(2) || '0'} spent`} color={C.success} />
+        <StatCard label="Torch" value={status?.torch_available ? '✓' : '✗'} color={status?.torch_available ? C.success : C.error} />
+      </div>
+
+      {/* Register node */}
+      <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 16 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>🌐 Register Node</div>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+          <input placeholder="Node name..." value={nodeName} onChange={e => setNodeName(e.target.value)} style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }} />
+          <input placeholder="Description (optional)..." value={nodeDesc} onChange={e => setNodeDesc(e.target.value)} style={{ flex: 1, padding: '6px 10px', background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 12, outline: 'none' }} />
+          <button onClick={registerNode} style={btn(C.accentAlt)}>+ Register</button>
+        </div>
+      </div>
+
+      {/* Nodes list */}
+      {nodes.length > 0 && (
+        <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Registered Nodes ({nodes.length})</div>
+          {nodes.map((n, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', borderBottom: `1px solid ${C.border}` }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: n.active ? C.success : C.error, flexShrink: 0 }} />
+              <span style={{ fontSize: 12, fontWeight: 600, flex: 1 }}>{n.node_name}</span>
+              <span style={{ fontSize: 10, color: C.dim, fontFamily: 'monospace' }}>{n.node_id}</span>
+              <span style={{ fontSize: 11, color: C.muted }}>trust: {(n.trust_score * 100).toFixed(0)}%</span>
+              <span style={{ fontSize: 11, color: C.dim }}>v{n.model_version}</span>
+              <span style={{ fontSize: 11, color: C.dim }}>{n.update_count} updates</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+        <button onClick={runRound} style={{ ...btn(C.accent), padding: '8px 20px' }}>🔄 Run Aggregation Round</button>
+        <button onClick={exportKnowledge} disabled={exporting} style={{ ...btn(C.success), padding: '8px 20px', opacity: exporting ? 0.5 : 1 }}>
+          {exporting ? '⏳ Exporting...' : '📦 Export Knowledge Package'}
+        </button>
+        <button onClick={refresh} style={{ ...btn(C.bgDark), padding: '8px 20px' }}>↻ Refresh</button>
+      </div>
+
+      {/* Export result */}
+      {exportResult && (
+        <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px', marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>📦 Exported Package</div>
+          <div style={{ display: 'flex', gap: 16, marginBottom: 8, fontSize: 11, color: C.muted }}>
+            <span>ID: {exportResult.package_id}</span>
+            <span>Items: {exportResult.items?.length || 0}</span>
+            <span>Centroids: {exportResult.embedding_centroids?.length || 0}</span>
+          </div>
+          <pre style={{ margin: 0, padding: 10, background: '#0d1117', color: '#e6edf3', borderRadius: 4, fontSize: 10, whiteSpace: 'pre-wrap', maxHeight: 200, overflow: 'auto' }}>
+            {JSON.stringify(exportResult.pattern_frequencies || {}, null, 2)}
+          </pre>
+        </div>
+      )}
+
+      {/* Rounds history */}
+      {rounds.length > 0 && (
+        <div style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 8, padding: '14px 16px' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>Aggregation History ({rounds.length} rounds)</div>
+          {rounds.map((r, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', borderBottom: `1px solid ${C.border}`, fontSize: 11 }}>
+              <span style={{ fontWeight: 700, color: C.accent }}>R{r.round_id}</span>
+              <span style={{ color: C.muted }}>{r.participating_nodes?.length || 0} nodes</span>
+              <span style={{ color: r.poisoned_rejected ? C.error : C.dim }}>{r.poisoned_rejected || 0} rejected</span>
+              <span style={{ color: C.dim }}>v{r.global_model_version}</span>
+              <span style={{ color: C.dim, marginLeft: 'auto' }}>{r.timestamp ? new Date(r.timestamp).toLocaleString() : ''}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main OracleTab ────────────────────────────────────────────────────
 export default function OracleTab() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -269,6 +410,7 @@ export default function OracleTab() {
     { id: 'overview', label: 'Overview', icon: '📊', title: 'Oracle dashboard: examples, patterns, procedures, vectors' },
     { id: 'training', label: 'Training Data', icon: '🧠', title: 'Manage training data and fill gaps' },
     { id: 'audit', label: 'Audit & Gaps', icon: '🔍', title: 'Trust distribution, audit, and gap analysis' },
+    { id: 'federated', label: 'Federated', icon: '🌐', title: 'Federated learning: cross-instance knowledge sharing' },
   ];
 
   return (
@@ -405,6 +547,7 @@ export default function OracleTab() {
         )}
         {activeTab === 'training' && <TrainingDataPanel />}
         {activeTab === 'audit' && <AuditPanel />}
+        {activeTab === 'federated' && <FederatedPanel />}
       </div>
     </div>
   );

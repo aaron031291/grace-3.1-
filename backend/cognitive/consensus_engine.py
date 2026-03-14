@@ -927,6 +927,30 @@ def run_consensus(
         except Exception:
             pass
 
+    # ── Wire: Consensus → Executive Actuation ──
+    if source == "autonomous" and verification["passed"]:
+        try:
+            from cognitive.consensus_actuation import ConsensusActuation
+            actuator = ConsensusActuation()
+            action_keywords = {"fix", "restart", "update", "rebuild", "deploy",
+                               "install", "configure", "migrate", "patch", "reset"}
+            for line in final_output.split("\n"):
+                line_lower = line.lower().strip()
+                if any(kw in line_lower for kw in action_keywords) and len(line_lower) > 10:
+                    action_payload = {
+                        "action_type": "submit_coding_task",
+                        "params": {"description": line.strip()[:500], "source": "consensus_engine"},
+                        "rationale": f"Consensus ({len(models)} models, confidence={result.confidence:.2f})",
+                    }
+                    actuator.execute_action(action_payload, prompt[:200], result.confidence)
+                    break
+            from cognitive.event_bus import publish
+            publish("consensus.actuated", {
+                "models": models, "confidence": result.confidence, "source": source,
+            }, source="consensus_engine")
+        except Exception as e:
+            logger.warning(f"Consensus actuation failed (non-fatal): {e}")
+
     return result
 
 

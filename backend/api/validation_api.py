@@ -238,12 +238,22 @@ async def get_memory_stream(limit: int = 50):
         from cognitive.unified_memory import get_unified_memory
         um = get_unified_memory()
         stats = um.get_stats()
-        # In a real implementation this would query the backing stores ordered by timestamp.
-        # For now, return the stats and a synthesized log based on the counters.
+        cap = max(1, min(limit, 100))
+        episodes = um.recall_episodes(limit=cap)
+        learnings = um.recall_learnings(limit=cap)
+        procedures = um.recall_procedures(limit=cap)
+        recent_ingestion = []
+        for e in episodes:
+            recent_ingestion.append({"source": "episode", "created_at": e.get("created_at"), "summary": (e.get("problem") or "")[:120]})
+        for L in learnings:
+            recent_ingestion.append({"source": "learning", "summary": (L.get("input") or "")[:120], "trust": L.get("trust")})
+        for p in procedures:
+            recent_ingestion.append({"source": "procedure", "summary": (p.get("goal") or p.get("name") or "")[:120], "trust": p.get("trust")})
+        recent_ingestion = recent_ingestion[:cap]
         return {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "stats": stats,
-            "recent_ingestion": [] # Stub for actual DB query
+            "recent_ingestion": recent_ingestion,
         }
     except Exception as e:
         return {"error": str(e)}

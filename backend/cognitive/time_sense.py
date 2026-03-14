@@ -70,7 +70,10 @@ class TimeSense:
     def urgency_score(deadline_iso: str) -> Dict[str, Any]:
         """Calculate urgency based on how close the deadline is."""
         try:
-            deadline = datetime.fromisoformat(deadline_iso.replace("Z", ""))
+            deadline_str = deadline_iso.replace("Z", "+00:00")
+            deadline = datetime.fromisoformat(deadline_str)
+            if deadline.tzinfo is None:
+                deadline = deadline.replace(tzinfo=timezone.utc)
         except (ValueError, TypeError):
             return {"urgency": 0, "label": "no_deadline"}
 
@@ -97,7 +100,10 @@ class TimeSense:
     def time_until(target_iso: str) -> Dict[str, Any]:
         """Human-readable time until a target."""
         try:
-            target = datetime.fromisoformat(target_iso.replace("Z", ""))
+            target_str = target_iso.replace("Z", "+00:00")
+            target = datetime.fromisoformat(target_str)
+            if target.tzinfo is None:
+                target = target.replace(tzinfo=timezone.utc)
         except (ValueError, TypeError):
             return {"text": "unknown", "seconds": 0}
 
@@ -120,7 +126,10 @@ class TimeSense:
 
         for ts in timestamps:
             try:
-                dt = datetime.fromisoformat(ts.replace("Z", ""))
+                dt_str = ts.replace("Z", "+00:00")
+                dt = datetime.fromisoformat(dt_str)
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
                 hours[dt.hour] += 1
                 days[dt.weekday()] += 1
             except (ValueError, TypeError):

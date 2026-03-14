@@ -220,7 +220,8 @@ class ErrorPipeline:
                     input_data={"error_class": error_class, "location": location, "exc_type": payload.get("exc_type", "")},
                 )
                 _tel_ctx.__enter__()
-            except Exception:
+            except Exception as e:
+                logger.debug("[ERROR-PIPELINE] Telemetry context init skipped: %s", e)
                 _tel_ctx = None
 
         logger.info(
@@ -320,8 +321,8 @@ class ErrorPipeline:
                 tracker.increment_kpi("self_healing", "successes", 1.0)
             else:
                 tracker.increment_kpi("self_healing", "failures", 1.0)
-        except Exception:
-            logger.debug("[ERROR-PIPELINE] KPI tracking skipped")
+        except Exception as e:
+            logger.debug("[ERROR-PIPELINE] KPI tracking skipped: %s", e)
 
         # ── Record learning event ────────────────────────────────────
         self._record_learning(payload, healed, fix_description, elapsed)
@@ -410,7 +411,8 @@ class ErrorPipeline:
                     "error": err_str[:100],
                 }, source="error_pipeline")
                 fixes.append("Rate limit detected — published network.rate_limited for circuit breaker")
-            except Exception:
+            except Exception as e:
+                logger.debug("[ERROR-PIPELINE] Rate limit event publish failed: %s", e)
                 fixes.append("Rate limit: circuit breaker event publish failed")
 
         # ── SSL/TLS ───────────────────────────────────────────────────

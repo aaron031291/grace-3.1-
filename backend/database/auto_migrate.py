@@ -207,7 +207,7 @@ def _record_learning(changes: list[str]) -> None:
 
     # Also record in cognitive decision log if available
     try:
-        from backend.core.clarity_framework import ClarityFramework
+        from core.clarity_framework import ClarityFramework
         cf = ClarityFramework()
         cf.record_decision(
             what=f"Schema auto-migration: {len(changes)} column(s)/enum(s) added",

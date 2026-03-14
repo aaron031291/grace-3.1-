@@ -821,9 +821,29 @@ SUGGESTIONS: [improvements]
         }
 
     def _aggregate_review_ratings(self, reviews: List[Dict], aspects: List[str]) -> Dict[str, float]:
-        """Aggregate review ratings."""
-        # Simplified: would parse ratings from reviews
-        return {aspect: 7.5 for aspect in aspects}  # Placeholder
+        """Aggregate review ratings by parsing numeric scores from review text, with fallback."""
+        import re
+        out = {}
+        for aspect in aspects:
+            scores = []
+            for rev in reviews:
+                text = (rev.get("review") or rev.get("content") or "")
+                if not text:
+                    continue
+                # Look for "aspect: N" or "aspect N/10" or "aspect - N" or standalone "N/10"
+                pattern = rf"(?:(?:{re.escape(aspect)}|score|rating)[\s:\-]*)?(\d+(?:\.\d+)?)\s*(?:/\s*10)?"
+                for m in re.finditer(pattern, text, re.I):
+                    try:
+                        v = float(m.group(1))
+                        if 0 <= v <= 10:
+                            scores.append(v)
+                    except (ValueError, IndexError):
+                        pass
+            if scores:
+                out[aspect] = round(sum(scores) / len(scores), 1)
+            else:
+                out[aspect] = 7.0  # neutral fallback when no parseable scores
+        return out
 
     # =======================================================================
     # UTILITY METHODS

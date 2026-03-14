@@ -1,0 +1,109 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend
+configfile: pytest.ini
+plugins: anyio-4.12.1, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 13 items
+
+backend\tests\test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status FAILED [  7%]
+backend\tests\test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_health FAILED [ 15%]
+backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_process_cognitive_query PASSED [ 23%]
+backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_cognitive_observe FAILED [ 30%]
+backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_cognitive_orient PASSED [ 38%]
+backend\tests\test_api_cognitive.py::TestMemoryMesh::test_get_memory_status PASSED [ 46%]
+backend\tests\test_api_cognitive.py::TestMemoryMesh::test_store_memory PASSED [ 53%]
+backend\tests\test_api_cognitive.py::TestMemoryMesh::test_retrieve_memories PASSED [ 61%]
+backend\tests\test_api_cognitive.py::TestContradictionDetection::test_detect_contradictions PASSED [ 69%]
+backend\tests\test_api_cognitive.py::TestContradictionDetection::test_get_contradiction_history FAILED [ 76%]
+backend\tests\test_api_cognitive.py::TestLearningSubagents::test_get_subagent_status PASSED [ 84%]
+backend\tests\test_api_cognitive.py::TestLearningSubagents::test_create_learning_task PASSED [ 92%]
+backend\tests\test_api_cognitive.py::TestLearningSubagents::test_get_learning_progress PASSED [100%]
+
+================================== FAILURES ===================================
+________________ TestCognitiveStatus.test_get_cognitive_status ________________
+backend\tests\test_api_cognitive.py:18: in test_get_cognitive_status
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout setup ----------------------------
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[GENESIS] Genesis Key tracking enabled
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /cognitive/stats/summary - Total: 0.002s | Setup: 0.001s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create user profile: 'NoneType' object is not callable
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+ERROR    genesis.middleware:middleware.py:210 Failed to create user profile: 'NoneType' object is not callable
+ERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+INFO     ml_intelligence.kpi_tracker:kpi_tracker.py:224 [KPI-TRACKER] Initialized
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:236 [KPI-TRACKER] Registered component: genesis_tracker
+DEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 1)
+________________ TestCognitiveStatus.test_get_cognitive_health ________________
+backend\tests\test_api_cognitive.py:26: in test_get_cognitive_health
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /cognitive/stats/summary - Total: 0.002s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.001s
+---------------------------- Captured stderr call -----------------------------
+WARNING: [GENESIS ALERT] error_spike: 3 errors in 60s (threshold: 3)
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 3)\nWARNING  genesis.realtime:realtime.py:195 [GENESIS ALERT] error_spike: 3 errors in 60s (threshold: 3)\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 4)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+---------------------------- Captured log teardown ----------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 5)
+_________________ TestCognitiveEngine.test_cognitive_observe __________________
+backend\tests\test_api_cognitive.py:43: in test_cognitive_observe
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /cognitive/decisions/recent - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 9)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 10)
+__________ TestContradictionDetection.test_get_contradiction_history __________
+backend\tests\test_api_cognitive.py:93: in test_get_contradiction_history
+    assert response.status_code in [200, 500]
+E   assert 404 in [200, 500]
+E    +  where 404 = <Response [404 Not Found]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[LATENCY TRACE] /cognitive/stats/summary - Total: 0.001s | Setup: 0.000s | ReqKey: 0.000s | Route: 0.001s | ResKey: 0.000s
+---------------------------- Captured stderr call -----------------------------
+ERROR: Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+ERROR: Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.
+------------------------------ Captured log call ------------------------------
+DEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nDEBUG    infrastructure.bus_bridge:bus_bridge.py:133 [BUS_BRIDGE] cog\u2192l1 forward failed: Layer1MessageBus.publish() got an unexpected keyword argument 'source'\nERROR    genesis.middleware:middleware.py:88 Failed to create request Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 21)\nERROR    genesis.middleware:middleware.py:156 Failed to create response Genesis Key: Database not initialized. Call DatabaseConnection.initialize() first.\nDEBUG    ml_intelligence.kpi_tracker:kpi_tracker.py:263 [KPI-TRACKER] genesis_tracker.requests += 1.0 (total: 22)
+============================== warnings summary ===============================
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\tests\..\api\core\brain_controller.py:23: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class BrainPayload(BaseModel):
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:14: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_status
+FAILED backend\tests\test_api_cognitive.py::TestCognitiveStatus::test_get_cognitive_health
+FAILED backend\tests\test_api_cognitive.py::TestCognitiveEngine::test_cognitive_observe
+FAILED backend\tests\test_api_cognitive.py::TestContradictionDetection::test_get_contradiction_history
+================== 4 failed, 9 passed, 5 warnings in 11.60s ===================

@@ -164,7 +164,8 @@ def _network_probe_loop() -> None:
                 interval = 30    # 30s — faster detection during working hours
             else:
                 interval = _PROBE_INTERVAL_S
-        except Exception:
+        except Exception as e:
+            logger.debug("[TRIGGER-FABRIC] TimeSense context unavailable, using default interval: %s", e)
             interval = _PROBE_INTERVAL_S
 
         for host, port, service in _SERVICE_MAP:

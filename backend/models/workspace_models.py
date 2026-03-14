@@ -156,3 +156,80 @@ class PipelineRun(BaseModel):
 
     def __repr__(self):
         return f"<PipelineRun(id={self.id}, run_id='{self.run_id}', status='{self.status}')>"
+
+
+class MergeRequest(BaseModel):
+    """
+    Merge request — the pull request equivalent.
+    Tracks branch merge proposals with review status, conflicts, and audit trail.
+    """
+    __tablename__ = "merge_requests"
+
+    workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False, index=True)
+    merge_id = Column(String(255), unique=True, nullable=False, index=True)
+    title = Column(String(500), nullable=False)
+    description = Column(Text, default="")
+
+    source_branch = Column(String(255), nullable=False)
+    target_branch = Column(String(255), nullable=False, default="main")
+    status = Column(String(50), default="open", index=True)  # open, merged, closed, conflict
+
+    files_changed = Column(Integer, default=0)
+    additions = Column(Integer, default=0)
+    deletions = Column(Integer, default=0)
+    conflicts = Column(JSON, default=list)
+
+    author = Column(String(255), default="grace")
+    reviewer = Column(String(255), nullable=True)
+    review_status = Column(String(50), nullable=True)  # approved, changes_requested, pending
+    trust_score = Column(Float, nullable=True)
+
+    merged_at = Column(DateTime, nullable=True)
+    merged_by = Column(String(255), nullable=True)
+    genesis_key_id = Column(String(255), nullable=True)
+
+    workspace = relationship("Workspace")
+
+    __table_args__ = (
+        Index("idx_mr_workspace_status", "workspace_id", "status"),
+    )
+
+    def __repr__(self):
+        return f"<MergeRequest(id={self.id}, merge_id='{self.merge_id}', status='{self.status}')>"
+
+
+class WorkspaceTask(BaseModel):
+    """
+    Task/issue tracking — the GitHub Issues equivalent.
+    Scoped to workspaces, linked to genesis keys for provenance.
+    """
+    __tablename__ = "workspace_tasks"
+
+    workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False, index=True)
+    task_id = Column(String(255), unique=True, nullable=False, index=True)
+    title = Column(String(500), nullable=False)
+    description = Column(Text, default="")
+    task_type = Column(String(50), default="task")  # task, bug, feature, improvement
+
+    status = Column(String(50), default="open", index=True)  # open, in_progress, review, done, closed
+    priority = Column(String(50), default="medium")  # critical, high, medium, low
+    assignee = Column(String(255), default="grace")
+
+    labels = Column(JSON, default=list)
+    metadata = Column(JSON, default=dict)
+
+    started_at = Column(DateTime, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
+    genesis_key_id = Column(String(255), nullable=True)
+    related_files = Column(JSON, default=list)
+    related_merge_id = Column(String(255), nullable=True)
+
+    workspace = relationship("Workspace")
+
+    __table_args__ = (
+        Index("idx_wt_workspace_status", "workspace_id", "status"),
+        Index("idx_wt_assignee", "assignee"),
+    )
+
+    def __repr__(self):
+        return f"<WorkspaceTask(id={self.id}, task_id='{self.task_id}', status='{self.status}')>"

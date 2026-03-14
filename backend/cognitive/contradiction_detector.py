@@ -696,3 +696,24 @@ def reset_linter():
     """Reset linter (for testing)."""
     global _linter
     _linter = None
+
+
+def get_contradiction_detector_for_guard():
+    """
+    Return an object with detect_contradiction(content, doc, threshold) for use in
+    HallucinationGuard and other callers that need (text, text) contradiction checks.
+    Uses the cognition linter's logical contradiction logic.
+    """
+    linter = get_cognition_linter()
+
+    class _Adapter:
+        def detect_contradiction(
+            self, content: str, doc: str, threshold: float = 0.7
+        ) -> Tuple[bool, float]:
+            if not content or not doc:
+                return False, 0.0
+            if linter._are_contradictory(content.strip(), doc.strip()):
+                return True, 0.9
+            return False, 0.0
+
+    return _Adapter()
