@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatWindow.css";
 import VoiceButton from "./VoiceButton";
 import SearchInternetButton from "./SearchInternetButton";
-import { API_BASE_URL, API_V2 } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 
 export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
   const [messages, setMessages] = useState([]);
@@ -229,10 +229,10 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
     setLoading(true);
 
     try {
-      // Brain-first: use /api/v2/chat/send (RAG + unified memory) when not in agent mode
+      // Agent mode uses MCP chat, normal mode uses SSE streaming endpoint
       const endpoint = useAgent
         ? `${API_BASE_URL}/api/mcp/chat`
-        : API_V2.chat("send");
+        : `${API_BASE_URL}/api/stream/chat/send`;
       const payload = useAgent ? {
         chat_id: chatId,
         messages: [{ role: "user", content: userMessage }],
@@ -254,40 +254,6 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
         body: JSON.stringify(payload),
       });
 
-      // Handle 404 - Knowledge not found
-      if (response.status === 404) {
-        const errorData = await response.json();
-        console.log("Knowledge not found (404):", errorData.detail);
-
-        // Context-aware message based on whether this is a folder-scoped chat
-        let notFoundMessage;
-        if (folderPath) {
-          notFoundMessage = `No relevant information found in folder "${folderPath.split(/[/\\]/).pop()}". You can search the internet to add knowledge to this folder, or switch to a General Chat.`;
-          // Allow search button for folder chats so users can populate them!
-          setShowSearchInternet(true);
-        } else {
-          notFoundMessage = "I don't have any information about that in my knowledge base yet.";
-          // Show search internet button for general chats
-          setShowSearchInternet(true);
-        }
-        setLastQuery(userMessage);
-
-        // Add assistant message about scope limitation
-        const assistantMessage = {
-          id: Date.now() + Math.random(),
-          role: "assistant",
-          content: notFoundMessage,
-          tokens: null,
-          sources: [],
-          isSystemMessage: true, // Mark as system message
-          showSearchButton: true, // Show button for all chats now that we have folder scoping
-        };
-
-        setMessages((prev) => [...prev, assistantMessage]);
-        setLoading(false);
-        return; // Exit early
-      }
-
       if (!response.ok) {
         // Try to get error details
         const errorData = await response.json().catch(() => ({}));
@@ -297,114 +263,99 @@ export default function ChatWindow({ chatId, folderPath, onChatCreated }) {
 
       let finalAssistantMessage = "";
 
-      if (useAgent && payload.stream) {
-        // Read SSE stream
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let done = false;
+      // Both modes now use SSE streaming
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let done = false;
 
-        const tempAssistantId = Date.now() + Math.random();
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: tempAssistantId,
-            role: "assistant",
-            content: "",
-            tokens: null,
-            sources: [],
-            tool_calls: [],
-            is_streaming: true,
-          }
-        ]);
+      const tempAssistantId = Date.now() + Math.random();
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: tempAssistantId,
+          role: "assistant",
+          content: "",
+          tokens: null,
+          sources: [],
+          tool_calls: [],
+          is_streaming: true,
+        }
+      ]);
 
-        let assistantContent = "";
-        let toolCalls = [];
-        let sources = [];
-        let accumulatedText = "";
+      let assistantContent = "";
+      let toolCalls = [];
+      let sources = [];
+      let accumulatedText = "";
 
-        while (!done) {
-          const { value, done: readerDone } = await reader.read();
-          done = readerDone;
-          if (value) {
-            const rawChunk = decoder.decode(value, { stream: true });
-            accumulatedText += rawChunk;
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        if (value) {
+          const rawChunk = decoder.decode(value, { stream: true });
+          accumulatedText += rawChunk;
 
-            const lines = accumulatedText.split(/\r?\n/);
-            accumulatedText = lines.pop(); // keep incomplete line
+          const lines = accumulatedText.split(/\r?\n/);
+          accumulatedText = lines.pop(); // keep incomplete line
 
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const dataStr = line.slice(6);
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.slice(6);
 
-                if (dataStr === '[DONE]') {
-                  done = true;
-                  break;
+              if (dataStr === '[DONE]') {
+                done = true;
+                break;
+              }
+
+              try {
+                const data = JSON.parse(dataStr);
+
+                if (data.error) {
+                  assistantContent += `\n❌ Error: ${data.error}`;
+                } else if (data.type === 'tool_call') {
+                  toolCalls = [...toolCalls, { tool: data.name, arguments: data.args, success: null, duration_ms: null, result_preview: null }];
+                } else if (data.type === 'tool_result') {
+                  let foundIdx = -1;
+                  for (let i = toolCalls.length - 1; i >= 0; i--) {
+                    if (toolCalls[i].tool === data.name && toolCalls[i].success === null) {
+                      foundIdx = i;
+                      break;
+                    }
+                  }
+                  if (foundIdx !== -1) {
+                    const updated = [...toolCalls];
+                    updated[foundIdx] = { ...updated[foundIdx], success: data.success, duration_ms: data.duration_ms, result_preview: data.result_preview };
+                    toolCalls = updated;
+                  }
+                } else if (data.type === 'content') {
+                  assistantContent = data.content;
+                  sources = data.sources || [];
+                } else if (data.token) {
+                  // Normal streaming: token-by-token from /api/stream/chat/send
+                  assistantContent += data.token;
+                } else if (data.done) {
+                  // Final metadata from stream endpoint
+                  sources = data.sources || sources;
                 }
 
-                try {
-                  const data = JSON.parse(dataStr);
-
-                  if (data.type === 'tool_call') {
-                    toolCalls = [...toolCalls, { tool: data.name, arguments: data.args, success: null, duration_ms: null, result_preview: null }];
-                  } else if (data.type === 'tool_result') {
-                    // Find last tool call with this name that hasn't finished
-                    let foundIdx = -1;
-                    for (let i = toolCalls.length - 1; i >= 0; i--) {
-                      if (toolCalls[i].tool === data.name && toolCalls[i].success === null) {
-                        foundIdx = i;
-                        break;
-                      }
-                    }
-
-                    if (foundIdx !== -1) {
-                      const updated = [...toolCalls];
-                      updated[foundIdx] = { ...updated[foundIdx], success: data.success, duration_ms: data.duration_ms, result_preview: data.result_preview };
-                      toolCalls = updated;
-                    }
-                  } else if (data.type === 'content') {
-                    assistantContent = data.content;
-                    sources = data.sources || [];
-                  } else if (data.type === 'error') {
-                    assistantContent += `\\n❌ Error: ${data.error}`;
-                  }
-
-                  // Update UI dynamically
-                  setMessages(prev => prev.map(msg =>
-                    msg.id === tempAssistantId
-                      ? { ...msg, content: assistantContent, tool_calls: toolCalls, sources: sources }
-                      : msg
-                  ));
-                } catch { /* intentionally empty */ }
-              }
+                // Update UI dynamically
+                setMessages(prev => prev.map(msg =>
+                  msg.id === tempAssistantId
+                    ? { ...msg, content: assistantContent, tool_calls: toolCalls, sources: sources }
+                    : msg
+                ));
+              } catch { /* intentionally empty */ }
             }
           }
         }
-
-        // Final cleanup of streaming states
-        setMessages(prev => prev.map(msg =>
-          msg.id === tempAssistantId
-            ? { ...msg, is_streaming: false }
-            : msg
-        ));
-        finalAssistantMessage = assistantContent;
-
-      } else {
-        // Standard JSON response (brain v2 returns { ok, data }; legacy /chats/{id}/prompt returns flat)
-        const res = await response.json();
-        const result = res?.ok && res?.data ? res.data : res;
-
-        const assistantMessage = {
-          id: result.assistant_message_id || Date.now() + Math.random(),
-          role: "assistant",
-          content: result.message || result.content,
-          tokens: result.tokens_used || null,
-          sources: result.sources || [],
-          tool_calls: result.tool_calls_made || [],
-        };
-
-        setMessages((prev) => [...prev, assistantMessage]);
-        finalAssistantMessage = assistantMessage.content;
       }
+
+      // Final cleanup of streaming states
+      setMessages(prev => prev.map(msg =>
+        msg.id === tempAssistantId
+          ? { ...msg, is_streaming: false }
+          : msg
+      ));
+      finalAssistantMessage = assistantContent;
 
       setLastAssistantMessage(finalAssistantMessage); // Track for TTS
 

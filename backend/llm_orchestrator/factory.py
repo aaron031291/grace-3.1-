@@ -35,9 +35,82 @@ from .governance_wrapper import GovernanceAwareLLM
 from .ollama_resolver import resolve_ollama_model
 from settings import settings
 
+import logging
+import threading
+import time
+
+logger = logging.getLogger(__name__)
+
+
+class _CostTracker:
+    """Tracks API token costs and enforces back-pressure on quota exhaustion."""
+
+    _instance = None
+    _lock = threading.Lock()
+
+    def __init__(self):
+        self.total_calls = 0
+        self.total_cost_usd = 0.0
+        self.calls_this_hour = 0
+        self.hour_start = time.time()
+        # Configurable limits
+        self.max_calls_per_hour = 500
+        self.max_cost_per_hour_usd = 10.0
+        self._backpressure_until = 0.0
+
+    @classmethod
+    def get_instance(cls) -> "_CostTracker":
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
+
+    def record_call(self, provider: str, prompt_tokens: int = 0, completion_tokens: int = 0):
+        """Record a call and its estimated cost."""
+        with self._lock:
+            now = time.time()
+            if now - self.hour_start > 3600:
+                self.calls_this_hour = 0
+                self.hour_start = now
+            self.total_calls += 1
+            self.calls_this_hour += 1
+            # Estimate cost (per 1K tokens)
+            cost_per_1k = {"opus": 0.015, "kimi": 0.005, "openai": 0.01}.get(provider, 0.0)
+            call_cost = cost_per_1k * (prompt_tokens + completion_tokens) / 1000
+            self.total_cost_usd += call_cost
+
+    def check_backpressure(self) -> bool:
+        """Return True if requests should be throttled."""
+        with self._lock:
+            now = time.time()
+            if now < self._backpressure_until:
+                return True
+            if now - self.hour_start > 3600:
+                self.calls_this_hour = 0
+                self.hour_start = now
+            if self.calls_this_hour >= self.max_calls_per_hour:
+                self._backpressure_until = now + 60  # back off 60s
+                logger.warning(f"[COST] Back-pressure: {self.calls_this_hour} calls/hr exceeds limit")
+                return True
+            return False
+
+    def get_stats(self) -> dict:
+        with self._lock:
+            return {
+                "total_calls": self.total_calls,
+                "total_cost_usd": round(self.total_cost_usd, 4),
+                "calls_this_hour": self.calls_this_hour,
+                "max_calls_per_hour": self.max_calls_per_hour,
+                "backpressure_active": time.time() < self._backpressure_until,
+            }
+
+
+_cost_tracker = _CostTracker.get_instance()
+
 
 def _wrap(client: BaseLLMClient) -> BaseLLMClient:
-    """Wrap a client with governance rules + persona + hallucination guard."""
+    """Wrap a client with governance rules + persona + hallucination guard + cost tracking."""
+    if _cost_tracker.check_backpressure():
+        logger.warning("[COST] Back-pressure active — throttling LLM call")
     return GovernanceAwareLLM(client)
 
 
@@ -209,3 +282,8 @@ def get_all_available_models() -> list:
     })
 
     return models
+
+
+def get_cost_stats() -> dict:
+    """Get API token cost tracking statistics."""
+    return _cost_tracker.get_stats()

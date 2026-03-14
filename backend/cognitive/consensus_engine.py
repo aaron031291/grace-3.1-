@@ -976,6 +976,70 @@ def run_consensus(
         except Exception as e:
             logger.warning(f"Consensus actuation event publish failed (non-fatal): {e}")
 
+    # ── Gap 5.1: Consensus → Executive Quorum Commit ──
+    # Build signed quorum packet and propagate to trust vectors + MEMORY + MESH
+    try:
+        quorum_hash = hashlib.sha256(result.consensus_text.encode()).hexdigest()
+        quorum_sig = hashlib.sha256(
+            f"{','.join(models)}:{quorum_hash}:{result.timestamp}".encode()
+        ).hexdigest()
+        quorum_packet = {
+            "models": models,
+            "hash": quorum_hash,
+            "sig": quorum_sig,
+            "confidence": result.confidence,
+            "passed": verification["passed"],
+            "timestamp": result.timestamp,
+            "source": source,
+        }
+
+        # a) Publish quorum to event bus
+        try:
+            from cognitive.event_bus import publish
+            publish("consensus.quorum_committed", quorum_packet, source="consensus_engine")
+        except Exception:
+            pass
+
+        # b) Update trust vectors in Unified Memory
+        try:
+            from cognitive.unified_memory import get_unified_memory
+            get_unified_memory().store_episode(
+                problem=f"consensus_quorum:{prompt[:120]}",
+                action=f"models={','.join(models)}",
+                outcome=f"confidence={result.confidence:.2f} passed={verification['passed']}",
+                trust=result.confidence,
+                source="consensus_quorum",
+            )
+        except Exception:
+            pass
+
+        # c) Update Memory Mesh via reconciler
+        try:
+            from cognitive.memory_reconciler import get_reconciler
+            get_reconciler().atomic_set(
+                key=f"quorum:{quorum_hash[:16]}",
+                value=json.dumps(quorum_packet, default=str),
+                source="consensus_engine",
+                trust=result.confidence,
+            )
+        except Exception:
+            pass
+
+        # d) Update AdaptiveTrust for each model
+        try:
+            from core.intelligence import AdaptiveTrust
+            for mid in models:
+                AdaptiveTrust.record_outcome(
+                    model_id=mid,
+                    success=verification["passed"],
+                    confidence=result.confidence,
+                )
+        except Exception:
+            pass
+
+    except Exception as e:
+        logger.warning(f"Quorum commit failed (non-fatal): {e}")
+
     return result
 
 

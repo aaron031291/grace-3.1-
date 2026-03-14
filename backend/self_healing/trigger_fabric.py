@@ -31,6 +31,7 @@ All routes are non-blocking (fire-and-forget via event bus or thread).
 from __future__ import annotations
 
 import logging
+import os
 import socket
 import threading
 import time
@@ -40,14 +41,41 @@ logger = logging.getLogger(__name__)
 _started = False
 _started_lock = threading.Lock()
 
-# Grace's critical service map: (host, port, service_name)
-_SERVICE_MAP = [
-    ("localhost", 5432,  "PostgreSQL"),
-    ("localhost", 6333,  "Qdrant"),
-    ("localhost", 11434, "Ollama"),
-    ("localhost", 6379,  "Redis"),
-    ("localhost", 8000,  "GraceAPI"),
-]
+# Grace's critical service map: built dynamically from settings
+def _build_service_map():
+    """Build service map from actual settings, skipping services that aren't configured."""
+    services = []
+    try:
+        from settings import settings as _s
+        # Database — only probe if using PostgreSQL (not SQLite)
+        if getattr(_s, "DATABASE_TYPE", "sqlite") == "postgresql":
+            host = getattr(_s, "DATABASE_HOST", "localhost")
+            port = int(getattr(_s, "DATABASE_PORT", 5432) or 5432)
+            services.append((host, port, "PostgreSQL"))
+        # Qdrant — only if not skipped
+        if not getattr(_s, "SKIP_QDRANT_CHECK", False):
+            host = getattr(_s, "QDRANT_HOST", "localhost")
+            port = int(getattr(_s, "QDRANT_PORT", 6333))
+            services.append((host, port, "Qdrant"))
+        # Ollama — only if provider is ollama and not skipped
+        if getattr(_s, "LLM_PROVIDER", "ollama") == "ollama" and not getattr(_s, "SKIP_OLLAMA_CHECK", False):
+            url = getattr(_s, "OLLAMA_URL", "http://localhost:11434")
+            # Extract host/port from URL
+            from urllib.parse import urlparse
+            parsed = urlparse(url)
+            services.append((parsed.hostname or "localhost", parsed.port or 11434, "Ollama"))
+        # Redis is optional — only probe if REDIS_URL is explicitly set
+        redis_url = os.environ.get("REDIS_URL", "")
+        if redis_url:
+            services.append(("localhost", 6379, "Redis"))
+    except Exception:
+        # Fallback: only probe the API itself
+        pass
+    # Always probe Grace's own API
+    services.append(("localhost", 8000, "GraceAPI"))
+    return services
+
+_SERVICE_MAP = _build_service_map()
 _PROBE_INTERVAL_S = 60   # probe every 60 seconds
 _PROBE_TIMEOUT_S  = 3    # 3s per service probe
 
@@ -363,8 +391,9 @@ def _route_mirror_pattern(pattern: dict) -> None:
         logger.debug("[MIRROR-OBSERVER] Pattern routing error (%s): %s", pattern_type, e)
 
 
-def _on_rate_limited(data: Dict) -> None:
+def _on_rate_limited(event) -> None:
     """Rate limit hit — log for ops visibility, future circuit breaker."""
+    data = event.data
     service = data.get("service", "unknown")
     logger.warning(
         "[TRIGGER-FABRIC] ⏸ Rate limited on %s — backing off 60s", service
@@ -383,17 +412,18 @@ def _on_rate_limited(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] rate_limited genesis track: %s", e)
 
 
-def _on_network_healed(data: Dict) -> None:
+def _on_network_healed(event) -> None:
     """Network heal completed — log for ops."""
-    fixes = data.get("fixes", [])
+    fixes = event.data.get("fixes", [])
     logger.info("[TRIGGER-FABRIC] 🌐 Network healed: %s", " | ".join(str(f) for f in fixes))
 
 
-def _on_probe_result(data: Dict) -> None:
+def _on_probe_result(event) -> None:
     """
     Probe sweep result arrived (probe.light.result / probe.deep.result).
     Route any FAIL checks into the error pipeline for self-healing.
     """
+    data = event.data
     failed = data.get("failed", 0)
     results = data.get("results", [])
 
@@ -500,9 +530,10 @@ def _submit_code_action(problem: dict, action: dict) -> None:
 
 # ── Event handlers ────────────────────────────────────────────────────────
 
-def _on_llm_error(data: Dict) -> None:
+def _on_llm_error(event) -> None:
     """LLM call failed → report to error pipeline for healing."""
     try:
+        data = event.data
         _route_exception(
             Exception(f"LLM error from {data.get('provider', 'unknown')}: {data.get('error', '')}"),
             context=data,
@@ -513,11 +544,12 @@ def _on_llm_error(data: Dict) -> None:
         logger.warning("[TRIGGER-FABRIC] route_exception for LLM error failed: %s", e)
 
 
-def _on_hallucination(data: Dict) -> None:
+def _on_hallucination(event) -> None:
     """Hallucination detected → learning trigger: record as negative example."""
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
+        data = event.data
         flags = data.get("flags", [])
         
         get_unified_memory().store_learning(
@@ -540,10 +572,11 @@ def _on_hallucination(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] Hallucination error: %s", e)
 
 
-def _on_knowledge_gap(data: Dict) -> None:
+def _on_knowledge_gap(event) -> None:
     """Knowledge gap detected → submit coding task to generate missing knowledge."""
     try:
         from api.autonomous_loop_api import submit_coding_task
+        data = event.data
         gap = data.get("gap", data.get("topic", "unknown knowledge gap"))
         submit_coding_task(
             instructions=(
@@ -561,10 +594,11 @@ def _on_knowledge_gap(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] knowledge_gap submit_coding_task: %s", e)
 
 
-def _on_repeated_error(data: Dict) -> None:
+def _on_repeated_error(event) -> None:
     """Same error pattern repeated — escalate priority."""
     try:
         from api.autonomous_loop_api import submit_coding_task
+        data = event.data
         pattern = data.get("pattern", "unknown")
         count = data.get("count", 1)
         submit_coding_task(
@@ -582,11 +616,12 @@ def _on_repeated_error(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] repeated_error submit_coding_task: %s", e)
 
 
-def _on_fix_applied(data: Dict) -> None:
+def _on_fix_applied(event) -> None:
     """Fix successfully applied → immediately reward in learning system."""
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
+        data = event.data
         
         get_unified_memory().store_episode(
             problem=f"Fixed: {data.get('file', 'unknown')} ({data.get('task_id', '')})",
@@ -599,11 +634,12 @@ def _on_fix_applied(data: Dict) -> None:
         logger.debug("[TRIGGER-FABRIC] Fix applied error: %s", e)
 
 
-def _on_verification_rejected(data: Dict) -> None:
+def _on_verification_rejected(event) -> None:
     """Verification pass rejected code → record as training signal."""
     try:
         import json
         from cognitive.unified_memory import get_unified_memory
+        data = event.data
         
         get_unified_memory().store_learning(
             input_ctx=json.dumps({

@@ -19,7 +19,7 @@ from watchdog.events import FileSystemEventHandler
 
 try:
     from settings import settings
-except ImportError:
+except Exception:
     settings = None
 
 logger = logging.getLogger(__name__)
@@ -203,7 +203,7 @@ class GenesisFileWatcher(FileSystemEventHandler):
                 pass
 
         except Exception as e:
-            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+            if not getattr(settings, 'SUPPRESS_GENESIS_ERRORS', False):
                 logger.error(f"[FILE_WATCHER] Error tracking {file_path}: {e}", exc_info=True)
 
     def on_modified(self, event):
@@ -296,7 +296,7 @@ class GenesisFileWatcher(FileSystemEventHandler):
             logger.info(f"[FILE_WATCHER] Tracked deletion: {rel_path}")
 
         except Exception as e:
-            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+            if not getattr(settings, 'SUPPRESS_GENESIS_ERRORS', False):
                 logger.error(f"[FILE_WATCHER] Error tracking deletion {file_path}: {e}")
 
     def get_statistics(self) -> Dict[str, Any]:
@@ -365,7 +365,7 @@ class FileWatcherService:
             return True
 
         except Exception as e:
-            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+            if not getattr(settings, 'SUPPRESS_GENESIS_ERRORS', False):
                 logger.error(f"[FILE_WATCHER_SERVICE] Failed to start watching {watch_path}: {e}")
             return False
 
@@ -387,7 +387,7 @@ class FileWatcherService:
             return True
 
         except Exception as e:
-            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
+            if not getattr(settings, 'SUPPRESS_GENESIS_ERRORS', False):
                 logger.error(f"[FILE_WATCHER_SERVICE] Failed to stop watching {watch_path}: {e}")
             return False
 

@@ -21,7 +21,7 @@ export default function LabTab() {
 
   const fetchExperiments = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/reports/experiments`);
+      const res = await fetch(`${API_BASE_URL}/api/sandbox/reports/experiments`);
       if (res.ok) {
         const data = await res.json();
         setExperiments(data.experiments || []);
@@ -38,7 +38,7 @@ export default function LabTab() {
     if (!newTitle.trim()) return;
     setCreating(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/reports/experiments/propose`, {
+      const res = await fetch(`${API_BASE_URL}/api/sandbox/reports/experiments/propose`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -56,21 +56,21 @@ export default function LabTab() {
 
   const approveExperiment = async (id, approved) => {
     try {
-      await fetch(`${API_BASE_URL}/api/reports/experiments/${id}/approve?approved=${approved}`, { method: 'POST' });
+      await fetch(`${API_BASE_URL}/api/sandbox/reports/experiments/${id}/approve?approved=${approved}`, { method: 'POST' });
       fetchExperiments();
     } catch { /* skip */ }
   };
 
   const startExperiment = async (id) => {
     try {
-      await fetch(`${API_BASE_URL}/api/reports/experiments/${id}/start`, { method: 'POST' });
+      await fetch(`${API_BASE_URL}/api/sandbox/reports/experiments/${id}/start`, { method: 'POST' });
       fetchExperiments();
     } catch { /* skip */ }
   };
 
   const analyseExperiment = async (id) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/reports/experiments/${id}/analyse`, { method: 'POST' });
+      const res = await fetch(`${API_BASE_URL}/api/sandbox/reports/experiments/${id}/analyse`, { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
         setSelected(data);

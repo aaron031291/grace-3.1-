@@ -23,7 +23,7 @@ class Settings:
     
     # ==================== Ollama Configuration ====================
     OLLAMA_URL: str = os.getenv("OLLAMA_URL", "http://localhost:11434")
-    OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "qwen3.5:35b")
+    OLLAMA_LLM_DEFAULT: str = os.getenv("OLLAMA_LLM_DEFAULT", "qwen3.5:32b")
     
     # ==================== Embedding Configuration ====================
     EMBEDDING_DEFAULT: str = os.getenv("EMBEDDING_DEFAULT", "all-MiniLM-L6-v2")
@@ -86,6 +86,7 @@ class Settings:
     DISABLE_CONTINUOUS_LEARNING: bool = os.getenv("DISABLE_CONTINUOUS_LEARNING", "false").lower() == "true"
     DISABLE_PROACTIVE_HEALING: bool = os.getenv("DISABLE_PROACTIVE_HEALING", "false").lower() == "true"
     DISABLE_SPINDLE_DAEMON: bool = os.getenv("DISABLE_SPINDLE_DAEMON", "false").lower() == "true"
+    ULH_META_RULES_ENABLED: bool = os.getenv("ULH_META_RULES_ENABLED", "true").lower() == "true"
 
     # ==================== Error Handling (deduplicated) ====================
     SUPPRESS_GENESIS_ERRORS: bool = os.getenv("SUPPRESS_GENESIS_ERRORS", "false").lower() == "true"
@@ -141,10 +142,10 @@ class Settings:
     # Reason: Qwen3.5 (unified vision-language, thinking mode).
     # Fast: Qwen3.5:9b (small MoE for low-latency).
     # Document: Qwen3.5 (multimodal, vision+text).
-    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5:35b")
-    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3.5:35b")
-    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3.5:9b")
-    OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3.5:35b")
+    OLLAMA_MODEL_CODE: str = os.getenv("OLLAMA_MODEL_CODE", "qwen3.5:32b")
+    OLLAMA_MODEL_REASON: str = os.getenv("OLLAMA_MODEL_REASON", "qwen3.5:32b")
+    OLLAMA_MODEL_FAST: str = os.getenv("OLLAMA_MODEL_FAST", "qwen3.5:7b")
+    OLLAMA_MODEL_DOCUMENT: str = os.getenv("OLLAMA_MODEL_DOCUMENT", "qwen3.5:32b")
 
     # ==================== Knowledge Base Configuration ====================
     KNOWLEDGE_BASE_PATH: str = str(BACKEND_DIR / "knowledge_base")

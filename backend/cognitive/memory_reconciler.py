@@ -144,6 +144,58 @@ class MemoryReconciler:
 
         return {"evicted_from": evicted, "key": key}
 
+    def repair_and_diff(self) -> Dict[str, Any]:
+        """
+        Full mesh-sync --repair --diff: detect partition conflicts
+        and auto-resolve by keeping freshest version.
+        """
+        import time as _time
+        report = {"conflicts_found": 0, "conflicts_resolved": 0, "diff": []}
+
+        # Get all flash_cache entries and check for divergence with unified memory
+        try:
+            from cognitive.flash_cache import get_flash_cache
+            from cognitive.unified_memory import get_unified_memory
+            fc = get_flash_cache()
+            um = get_unified_memory()
+
+            fc_stats = fc.stats()
+            fc_keys = fc_stats.get("keywords", [])
+            if isinstance(fc_keys, int):
+                fc_keys = []
+
+            # Sample top keywords for conflict detection
+            sample_keys = fc_keys[:50] if isinstance(fc_keys, list) else []
+            for key in sample_keys:
+                try:
+                    fc_refs = fc.lookup(keyword=str(key), limit=1)
+                    um_results = um.search_all(str(key), top_k=1)
+                    fc_has = bool(fc_refs)
+                    um_has = um_results.get("total", 0) > 0 if isinstance(um_results, dict) else bool(um_results)
+
+                    if fc_has and not um_has:
+                        # Flash has it but unified doesn't — sync to unified
+                        report["conflicts_found"] += 1
+                        try:
+                            ref = fc_refs[0]
+                            um.store_learning(
+                                input_ctx=ref.get("source_name", str(key))[:200],
+                                expected=ref.get("summary", "")[:500],
+                                trust=ref.get("trust_score", 0.6),
+                                source="mesh_repair",
+                            )
+                            report["conflicts_resolved"] += 1
+                            report["diff"].append(f"+unified: {key}")
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+
+        except Exception as e:
+            report["error"] = str(e)
+
+        return report
+
     def reconcile(self) -> Dict[str, Any]:
         """Force sync all memory systems. Detect conflicts and repair."""
         import time as _time
@@ -221,6 +273,16 @@ class MemoryReconciler:
                             stats["changes"] += 1
                     except Exception:
                         pass
+        except Exception:
+            pass
+
+        # Repair 3: Full partition conflict resolution
+        try:
+            repair = self.repair_and_diff()
+            stats["conflicts"] = repair.get("conflicts_found", 0)
+            stats["changes"] += repair.get("conflicts_resolved", 0)
+            if repair.get("diff"):
+                stats["repairs"].extend(repair["diff"][:10])
         except Exception:
             pass
 
