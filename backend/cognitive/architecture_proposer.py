@@ -12,6 +12,7 @@ import json
 import logging
 from typing import Dict, Any
 from llm_orchestrator.factory import get_llm_client
+from cognitive.event_bus import publish
 
 logger = logging.getLogger(__name__)
 
@@ -118,6 +119,9 @@ FORMAT YOUR RESPONSE AS STRICT JSON ONLY:
             "status": "proposed"
         }
         self.proposals[proposal_id] = proposal
+        
+        publish("architecture.proposal_created", data={"proposal_id": proposal_id, "name": name, "score": proposal["score"]}, source="architecture_proposer")
+        
         return proposal
 
     def build(self, proposal_id: str) -> Dict[str, Any]:
@@ -148,6 +152,8 @@ Provide the code in a standard markdown filepath block, e.g. ```filepath: cognit
             
             proposal["status"] = "building"
             proposal["hunter_request_id"] = result.request_id
+            
+            publish("architecture.proposal_building", data={"proposal_id": proposal_id, "request_id": result.request_id}, source="architecture_proposer")
             
             return {
                 "status": "building",

@@ -215,7 +215,6 @@ class AutonomousMasterIntegration:
             return self.layer1.process_system_event(
                 event_type=input_data.get('event_type'),
                 event_data=input_data.get('data'),
-                user_id=user_id,
                 metadata=metadata
             )
 
@@ -356,7 +355,7 @@ class AutonomousMasterIntegration:
 
         # Layer 1 status
         if self.layer1:
-            status['layer1'] = self.layer1.get_statistics()
+            status['layer1'] = self.layer1.get_layer1_stats()
 
         # Trigger pipeline status
         if self.trigger_pipeline:

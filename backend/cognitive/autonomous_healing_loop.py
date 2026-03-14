@@ -33,6 +33,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from cognitive.event_bus import publish
+
 logger = logging.getLogger(__name__)
 
 MAX_WHOLESALE_REWRITE_SIZE = 15_000  # chars — beyond this, surgical only
@@ -152,6 +154,8 @@ def heal_content(
 
     result["strategy"] = strategy
     logger.info(f"[HEAL-13] Strategy: {strategy} ({reason})")
+    
+    publish("healing.autonomous_started", data={"file": file_path, "strategy": strategy, "errors_count": error_count}, source="autonomous_healing_loop")
 
     # ── Stage 3: Pre-Healing Validation ───────────────────────────────
     result["stage"] = "pre_validation"
@@ -252,7 +256,6 @@ def heal_content(
 
     # Event bus
     try:
-        from cognitive.event_bus import publish
         publish("healing.autonomous_completed", {
             "file": file_path,
             "strategy": strategy,
@@ -346,5 +349,11 @@ def _log_incident(result: Dict[str, Any]):
             output_data=result,
             tags=["healing", "incident", "loop_13"],
         )
+        
+        publish("healing.autonomous_failed", data={
+            "file": result.get("file_path", ""),
+            "stage": result.get("stage", ""),
+            "lessons": result.get("lessons", [])
+        }, source="autonomous_healing_loop")
     except Exception:
         pass

@@ -334,6 +334,16 @@ def _run_cycle() -> dict:
                 call_brain("ai", "fill_knowledge_gaps", {"max_gaps": 3, "auto_ingest": True})
                 call_brain("ai", "oracle_export", {"limit": 300})
                 call_brain("ai", "governance_training_cycle", {"export_to_oracle": False, "run_sandbox_review": True})
+                
+                # Auto-Research: Trigger proactive learning round on idle
+                if not problems:
+                    try:
+                        from cognitive.auto_research import get_auto_research
+                        engine = get_auto_research()
+                        engine.run_research_cycle("grace_cognitive", max_queries=3)
+                    except Exception as e:
+                        logger.debug("Auto-research background error: %s", e)
+
                 if problems:
                     call_brain("system", "notify", {
                         "title": f"Ouroboros: {len(problems)} issues",

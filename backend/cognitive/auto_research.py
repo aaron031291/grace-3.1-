@@ -22,6 +22,7 @@ import time
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 from datetime import datetime
+from cognitive.event_bus import publish
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +91,8 @@ class AutoResearchEngine:
                   tags=["auto_research", "analyse"])
         except Exception:
             pass
+            
+        publish("research.folder_analysed", data=analysis, source="auto_research")
 
         return analysis
 
@@ -141,6 +144,8 @@ class AutoResearchEngine:
         # Get or create analysis
         analysis = self.analyse_folder(folder_path)
         queries = analysis.get("suggested_research", [folder_path])[:max_queries]
+        
+        publish("research.cycle_started", data={"folder": folder_path, "queries_count": len(queries)}, source="auto_research")
 
         # Determine version
         existing_research = [d.name for d in folder.iterdir() if d.is_dir() and d.name.startswith("research_")]
@@ -220,6 +225,7 @@ class AutoResearchEngine:
             pass
 
         self._research_history.append(result)
+        publish("research.cycle_completed", data=result, source="auto_research")
         return result
 
     def _search_knowledge_base(self, query: str) -> str:

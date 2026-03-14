@@ -58,6 +58,7 @@ from api.retrieve import router as retrieve_router
 from api.learning_memory_api import router as learning_memory_router
 from api.admin_api import router as admin_router
 from api.validation_api import router as validation_router
+from api.cognitive_events_api import router as cognitive_events_router
 from genesis.middleware import GenesisKeyMiddleware
 from vector_db.client import get_qdrant_client
 from utils.rag_prompt import build_rag_prompt, build_rag_system_prompt
@@ -743,6 +744,7 @@ app.include_router(retrieve_router)                  # /retrieve/* (RAG search; 
 app.include_router(learning_memory_router)           # /api/learning-memory/* (neighbour search, fill gaps, expand)
 app.include_router(admin_router)                     # /api/admin/* (registry, state, reload-config, trigger-diagnostics; requires ADMIN_TOKEN)
 app.include_router(validation_router)                # /api/validation/* (trust scores, KPIs, verification history — frontend dashboard)
+app.include_router(cognitive_events_router)          # /api/cognitive-events/* (WebSocket stream of self-healing logs)
 
 from api.codebase_hub_api import router as codebase_hub_router
 from api.tasks_hub_api import router as tasks_hub_router

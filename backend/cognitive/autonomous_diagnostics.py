@@ -40,6 +40,7 @@ import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from cognitive.event_bus import publish
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +92,7 @@ class AutonomousDiagnostics:
         result["early_warnings"] = self._check_early_warnings()
 
         self._save_diagnostic(result)
+        publish("diagnostics.startup_completed", data=result, source="autonomous_diagnostics")
         return result
 
     def on_error(self, error_type: str, error_message: str,
@@ -175,6 +177,8 @@ class AutonomousDiagnostics:
         for check in smoke.get("checks", []):
             if not check["passed"]:
                 self._attempt_fix(check["name"], check["detail"])
+                
+        publish("diagnostics.hourly_completed", data=result, source="autonomous_diagnostics")
 
         return result
 
@@ -266,6 +270,8 @@ class AutonomousDiagnostics:
             )
         except Exception:
             pass
+            
+        publish("diagnostics.report_generated", data=report, source="autonomous_diagnostics")
 
         return report
 

@@ -630,22 +630,23 @@ class MirrorSelfModelingSystem:
 
     def trigger_improvement_actions(
         self,
-        learning_orchestrator=None
+        learning_orchestrator=None,
+        sandbox_lab=None
     ) -> Dict[str, Any]:
         """
         Trigger improvement actions based on self-model insights.
 
-        This closes the loop: Mirror observes → Identifies issues → Triggers learning
+        This closes the loop: Mirror observes → Identifies issues → Triggers learning/experiments
         """
         logger.info("[MIRROR] Triggering improvement actions...")
 
         actions_triggered = []
 
-        # Get top 3 priority suggestions
+        # Get top suggestions (expanding to take optimization ones for Sandbox)
         top_suggestions = [
             s for s in self.improvement_suggestions
-            if s["priority"] == "high"
-        ][:3]
+            if s["priority"] in ["high", "medium", "low"]
+        ]
 
         for suggestion in top_suggestions:
             if suggestion["action"] == "restudy_and_practice":
@@ -680,6 +681,29 @@ class MirrorSelfModelingSystem:
                         "topic": suggestion["topic"],
                         "task_id": task_id
                     })
+
+            elif suggestion["action"] in ["deepen_knowledge", "optimization"] and sandbox_lab:
+                # Propose an actual code/logic optimization experiment in the Sandbox Lab
+                try:
+                    from cognitive.autonomous_sandbox_lab import ExperimentType
+                    
+                    # Convert priority "low" to "medium" priority in sandbox, etc.
+                    exp = sandbox_lab.propose_experiment(
+                        name=f"Mirror Opt: {suggestion['topic']}",
+                        description=suggestion.get("reason", "Mirror identified efficiency gap"),
+                        experiment_type=ExperimentType.PERFORMANCE_OPTIMIZATION,
+                        motivation=f"Mirror detected {suggestion.get('evidence_count', 'multiple')} pattern occurrences.",
+                        proposed_by="mirror_agent",
+                        initial_trust_score=0.35 # Start just barely high enough to enter sandbox
+                    )
+                    
+                    actions_triggered.append({
+                        "action": "experiment_proposed",
+                        "topic": suggestion["topic"],
+                        "experiment_id": exp.experiment_id
+                    })
+                except Exception as e:
+                    logger.error(f"[MIRROR] Failed to propose sandbox experiment: {e}")
 
         logger.info(f"[MIRROR] Triggered {len(actions_triggered)} improvement actions")
 

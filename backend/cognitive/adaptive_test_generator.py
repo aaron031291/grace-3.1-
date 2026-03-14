@@ -31,6 +31,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from cognitive.event_bus import publish
+
 logger = logging.getLogger(__name__)
 
 GENERATED_TESTS_DIR = Path(__file__).parent.parent / "data" / "generated_tests"
@@ -42,6 +44,7 @@ def generate_tests_for_module(module_path: str) -> Dict[str, Any]:
     Full adaptive test generation pipeline for any module.
     Read → Reason → Determine outputs → Generate tests → Run → Register.
     """
+    publish("testing.adaptive_generation_started", data={"module": module_path}, source="adaptive_test_generator")
     start = time.time()
     path = Path(module_path)
     if not path.is_absolute():
@@ -116,6 +119,7 @@ def generate_tests_for_module(module_path: str) -> Dict[str, Any]:
     except Exception:
         pass
 
+    publish("testing.adaptive_generation_completed", data=result, source="adaptive_test_generator")
     return result
 
 
@@ -217,7 +221,7 @@ def _consensus_reason_about_module(source: str, module_path: str) -> str:
     except Exception:
         return ""
 
-
+def _generate_test_for_function(func: Dict, source: str, module_path: str,
                                 module_purpose: str = "") -> Optional[str]:
     """
     Generate a test for a specific function.
@@ -283,8 +287,7 @@ def _generate_basic_test(func: Dict, module_path: str) -> str:
     # Basic structural test — function exists and is callable
     print("PASS: {name} exists and is callable")
 """
-
-
+def _run_generated_test(test_code: str, source: str) -> Dict[str, Any]:
     """Run a generated test in the sandbox."""
     try:
         from cognitive.code_sandbox import execute_sandboxed

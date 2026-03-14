@@ -29,6 +29,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
+from cognitive.event_bus import publish
+
 logger = logging.getLogger(__name__)
 
 BACKEND_DIR = Path(__file__).parent.parent
@@ -234,6 +236,7 @@ class ArchitectureCompass:
         self._build_capability_index()
         self._built = True
         logger.info(f"[COMPASS] Built architecture map: {len(self._components)} components")
+        publish("architecture.compass_built", data={"components": len(self._components)}, source="architecture_compass")
 
     def _scan_module(self, file_path: Path, subdir: str):
         rel = f"{subdir}/{file_path.name}"

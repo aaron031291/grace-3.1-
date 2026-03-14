@@ -465,7 +465,14 @@ class AutonomousSandboxLab:
                         baseline = exp.baseline_metrics[key]
                         current = metrics[key]
                         if baseline > 0:
-                            improvement = ((current - baseline) / baseline) * 100
+                            # Support 'lower is better' metrics (latency, memory, errors)
+                            lower_is_better_keys = ['speed', 'time', 'latency', 'memory', 'error', 'fails', 'loss']
+                            
+                            if any(k in key.lower() for k in lower_is_better_keys):
+                                improvement = ((baseline - current) / baseline) * 100
+                            else:
+                                improvement = ((current - baseline) / baseline) * 100
+                                
                             improvements.append(improvement)
 
                 if improvements:

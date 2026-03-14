@@ -9,7 +9,7 @@
     "memory_mesh": 0,
     "learning_memory": 0,
     "whitelist": 0,
-    "system_events": 0
+    "system_events": 3
   },
-  "total_inputs": 0
+  "total_inputs": 3
 }

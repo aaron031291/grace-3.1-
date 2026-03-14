@@ -1,5 +1,4 @@
-if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
-    """
+"""
 Genesis Key Autonomous Trigger Pipeline
 
 Genesis Keys are the CENTRAL TRIGGER for all autonomous actions.
@@ -711,8 +710,17 @@ class GenesisTriggerPipeline:
 
                 # Trigger improvement actions if orchestrator available
                 if self.orchestrator:
-                    improvement_result = mirror.trigger_improvement_actions(self.orchestrator)
-
+                    try:
+                        from cognitive.autonomous_sandbox_lab import get_sandbox_lab
+                        sandbox = get_sandbox_lab(session=session)
+                    except Exception as e:
+                        logger.error(f"[GENESIS-TRIGGER] Could not load sandbox lab: {e}")
+                        sandbox = None
+                        
+                    improvement_result = mirror.trigger_improvement_actions(
+                        learning_orchestrator=self.orchestrator,
+                        sandbox_lab=sandbox
+                    )
                     actions.append({
                         "action": "mirror_self_modeling",
                         "trigger": "periodic_self_reflection",

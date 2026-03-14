@@ -28,6 +28,7 @@ from cognitive.learning_memory import LearningMemoryManager, TrustScorer, Learni
 from cognitive.predictive_context_loader import PredictiveContextLoader
 from retrieval.retriever import DocumentRetriever
 from database.session import get_session
+from cognitive.event_bus import publish
 
 logger = logging.getLogger(__name__)
 
@@ -151,6 +152,7 @@ class GraceActiveLearningSystem:
             Study results with extracted concepts, examples, AND prefetched contexts
         """
         logger.info(f"Grace studying topic: {topic}")
+        publish("learning.study_started", data={"topic": topic, "objectives": learning_objectives}, source="active_learning_system")
 
         # Use cognitive engine to analyze learning objectives
         context = DecisionContext(
@@ -193,7 +195,7 @@ class GraceActiveLearningSystem:
         prefetched_topics = predictive_result.get('ready_topics', [])
         prefetch_stats = predictive_result.get('statistics', {})
 
-        return {
+        result_data = {
             "topic": topic,
             "materials_studied": len(study_materials),
             "concepts_learned": len(concepts),
@@ -203,6 +205,9 @@ class GraceActiveLearningSystem:
             "prefetch_statistics": prefetch_stats,
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
+        
+        publish("learning.study_completed", data=result_data, source="active_learning_system")
+        return result_data
 
     def _find_relevant_training_materials(
         self,
@@ -502,6 +507,7 @@ class GraceActiveLearningSystem:
             Practice result with outcome and feedback
         """
         logger.info(f"Grace practicing skill: {skill_name}")
+        publish("learning.practice_started", data={"skill": skill_name, "task": task.get('description')}, source="active_learning_system")
 
         # Use cognitive engine for decision-making
         context = DecisionContext(
@@ -530,7 +536,7 @@ class GraceActiveLearningSystem:
         # Learn from the outcome
         self._learn_from_practice(skill_name, task, approach, outcome)
 
-        return {
+        result_data = {
             "skill": skill_name,
             "task": task.get('description'),
             "approach": approach,
@@ -539,6 +545,9 @@ class GraceActiveLearningSystem:
             "feedback": outcome.get('feedback', ''),
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
+        
+        publish("learning.practice_completed", data=result_data, source="active_learning_system")
+        return result_data
 
     def _analyze_practice_task(
         self,
@@ -741,10 +750,14 @@ class GraceActiveLearningSystem:
         skill.proficiency_score = skill.success_rate * (1 + (skill.tasks_completed / 100))
 
         # Level up if proficiency threshold met
+        old_level = skill.current_level
         if skill.proficiency_score > 0.8 and skill.current_level == SkillLevel.NOVICE:
             skill.current_level = SkillLevel.BEGINNER
         elif skill.proficiency_score > 1.5 and skill.current_level == SkillLevel.BEGINNER:
             skill.current_level = SkillLevel.INTERMEDIATE
+        
+        if old_level != skill.current_level:
+            publish("learning.skill_leveled_up", data={"skill": skill_name, "old_level": old_level, "new_level": skill.current_level}, source="active_learning_system")
         # etc...
 
     # ======================================================================

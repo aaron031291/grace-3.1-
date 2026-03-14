@@ -28,6 +28,8 @@ from models.genesis_key_models import GenesisKey, GenesisKeyType
 from cognitive.learning_memory import LearningExample
 from settings import settings
 
+from cognitive.event_bus import publish
+
 logger = logging.getLogger(__name__)
 
 
@@ -430,12 +432,14 @@ class AutonomousHealingSystem:
             if decision["execution_mode"] == "autonomous":
                 # Execute autonomously
                 try:
+                    publish("healing.started", data={"decision": decision}, source="autonomous_healing_system")
                     result = self._execute_action(
                         decision["healing_action"],
                         decision["anomaly"],
                         user_id
                     )
                     results["executed"].append(result)
+                    publish("healing.completed", data={"decision": decision, "result": result}, source="autonomous_healing_system")
 
                     # Learn from execution
                     if self.enable_learning:
@@ -445,10 +449,12 @@ class AutonomousHealingSystem:
                     logger.error(
                         f"[AUTONOMOUS-HEALING] Failed to execute {decision['healing_action']}: {e}"
                     )
-                    results["failed"].append({
+                    error_data = {
                         "decision": decision,
                         "error": str(e)
-                    })
+                    }
+                    results["failed"].append(error_data)
+                    publish("healing.failed", data=error_data, source="autonomous_healing_system")
 
                     # Learn from failure
                     if self.enable_learning:
@@ -456,6 +462,7 @@ class AutonomousHealingSystem:
             else:
                 # Requires manual approval
                 results["awaiting_approval"].append(decision)
+                publish("healing.pending", data={"decision": decision}, source="autonomous_healing_system")
 
         logger.info(
             f"[AUTONOMOUS-HEALING] Executed: {len(results['executed'])}, "
