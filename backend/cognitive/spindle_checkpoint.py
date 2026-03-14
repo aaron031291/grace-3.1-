@@ -148,6 +148,56 @@ class SpindleCheckpointManager:
         Path(path).write_text(content, encoding="utf-8")
         logger.info(f"[CHECKPOINT] Restored file: {path}")
 
+    @asynccontextmanager
+    async def async_checkpoint(self, component: str, proof_hash: str = ""):
+        """Async context manager version of checkpoint."""
+        cp = Checkpoint(
+            checkpoint_id=f"CP-{int(time.time()*1000)}-{proof_hash[:8]}",
+            component=component,
+        )
+
+        # Capture state in thread pool (may do I/O)
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self._capture_state, cp)
+
+        logger.info(f"[CHECKPOINT] Created {cp.checkpoint_id} for {component}")
+        self._stats["created"] += 1
+
+        try:
+            yield cp
+            logger.info(f"[CHECKPOINT] {cp.checkpoint_id} completed successfully")
+            self._stats["committed"] += 1
+        except Exception as e:
+            logger.warning(f"[CHECKPOINT] {cp.checkpoint_id} failed: {e}, initiating rollback")
+            await loop.run_in_executor(None, self._rollback, cp)
+            self._stats["rolled_back"] += 1
+            raise
+        finally:
+            with self._lock:
+                self._checkpoints.append(cp)
+                if len(self._checkpoints) > self._max_checkpoints:
+                    self._checkpoints = self._checkpoints[-self._max_checkpoints:]
+
+            try:
+                from cognitive.spindle_event_store import get_event_store
+                get_event_store().append_async(
+                    topic="spindle.checkpoint",
+                    source_type="system",
+                    payload={
+                        "checkpoint_id": cp.checkpoint_id,
+                        "component": cp.component,
+                        "rolled_back": cp.rolled_back,
+                    },
+                    proof_hash=proof_hash,
+                    result="ROLLED_BACK" if cp.rolled_back else "COMMITTED",
+                )
+            except Exception:
+                pass
+
+    @property
+    def stats(self) -> Dict[str, Any]:
+        return dict(self._stats)
+
     def get_recent(self, limit: int = 20) -> List[Dict[str, Any]]:
         """Get recent checkpoints."""
         return [

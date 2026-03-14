@@ -246,6 +246,130 @@ class SpindleEventStore:
         """Return the current (latest) sequence number."""
         return self._seq.current
 
+    # -- async / background flush -------------------------------------------
+
+    def append_async(
+        self,
+        topic: str,
+        source_type: str,
+        payload: Optional[Dict[str, Any]] = None,
+        proof_hash: Optional[str] = None,
+        spindle_mask: Optional[str] = None,
+        result: Optional[str] = None,
+        source: Optional[str] = None,
+    ) -> int:
+        """
+        Non-blocking append. Queues the event for background flush.
+        Returns the assigned sequence_id immediately.
+        """
+        seq = self._seq.next()
+        now = datetime.now(timezone.utc)
+        input_hash = self._hash_input(payload)
+
+        event_data = {
+            "sequence_id": seq,
+            "timestamp": now,
+            "source_type": source_type,
+            "topic": topic,
+            "input_hash": input_hash,
+            "spindle_mask": spindle_mask,
+            "proof_hash": proof_hash,
+            "result": result,
+            "payload": payload,
+            "source": source,
+        }
+
+        try:
+            self._write_queue.put_nowait(event_data)
+        except queue.Full:
+            logger.warning("[SpindleEventStore] Write queue full, falling back to sync append")
+            return self.append(topic, source_type, payload, proof_hash, spindle_mask, result, source)
+
+        return seq
+
+    def start_background_flush(self):
+        """Start the background thread that flushes queued events to DB."""
+        if self._flush_thread is not None and self._flush_thread.is_alive():
+            return
+        self._flush_running = True
+        self._flush_thread = threading.Thread(
+            target=self._flush_loop, daemon=True, name="spindle-event-flush"
+        )
+        self._flush_thread.start()
+        logger.info("[SpindleEventStore] Background flush thread started")
+
+    def stop_background_flush(self):
+        """Stop the background flush thread."""
+        self._flush_running = False
+        if self._flush_thread:
+            self._flush_thread.join(timeout=5)
+            self._flush_thread = None
+
+    def _flush_loop(self):
+        """Background loop: drain write queue and batch-insert to DB."""
+        while self._flush_running:
+            batch = []
+            try:
+                # Drain up to 100 events per flush cycle
+                while len(batch) < 100:
+                    try:
+                        event_data = self._write_queue.get_nowait()
+                        batch.append(event_data)
+                    except queue.Empty:
+                        break
+
+                if batch:
+                    self._flush_batch(batch)
+            except Exception as e:
+                logger.error("[SpindleEventStore] Flush error: %s", e)
+                # Store failed batch in fallback
+                with self._fallback_lock:
+                    for item in batch:
+                        item["timestamp"] = item["timestamp"].isoformat() if hasattr(item["timestamp"], "isoformat") else str(item["timestamp"])
+                        self._fallback.append(item)
+
+            time.sleep(0.5)
+
+        # Final drain on shutdown
+        self._drain_remaining()
+
+    def _flush_batch(self, batch: List[Dict[str, Any]]):
+        """Write a batch of events to DB in a single transaction."""
+        if not self._probe_db():
+            # Fallback to in-memory
+            with self._fallback_lock:
+                for item in batch:
+                    item["timestamp"] = item["timestamp"].isoformat() if hasattr(item["timestamp"], "isoformat") else str(item["timestamp"])
+                    self._fallback.append(item)
+            return
+
+        try:
+            SpindleEvent = self._get_model()
+            session_scope = self._get_session_scope()
+            with session_scope() as session:
+                for item in batch:
+                    event = SpindleEvent(**item)
+                    session.add(event)
+            logger.debug("[SpindleEventStore] Flushed %d events to DB", len(batch))
+        except Exception as e:
+            logger.error("[SpindleEventStore] Batch write failed: %s", e)
+            self._db_available = False
+            with self._fallback_lock:
+                for item in batch:
+                    item["timestamp"] = item["timestamp"].isoformat() if hasattr(item["timestamp"], "isoformat") else str(item["timestamp"])
+                    self._fallback.append(item)
+
+    def _drain_remaining(self):
+        """Drain any remaining events on shutdown."""
+        batch = []
+        while not self._write_queue.empty():
+            try:
+                batch.append(self._write_queue.get_nowait())
+            except queue.Empty:
+                break
+        if batch:
+            self._flush_batch(batch)
+
 
 # ---------------------------------------------------------------------------
 # Module-level singleton

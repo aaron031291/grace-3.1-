@@ -1,19 +1,21 @@
 """
-Spindle Gate — Multi-validator consensus for formal verification.
-Runs the base Z3 geometry check + additional constraint validators.
-Requires quorum (majority) to pass.
+Spindle Gate — Multi-validator consensus with parallel execution.
+Validators run concurrently via ThreadPoolExecutor. Quorum required to pass.
 """
 import logging
 import time
-from typing import List, Dict, Any, Optional, Callable
+import asyncio
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
+from typing import List, Dict, Any, Optional, Callable, Tuple
 from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
 
+VALIDATOR_TIMEOUT = 5.0  # seconds per validator
+
 
 @dataclass
 class ValidatorResult:
-    """Result from a single validator in the gate."""
     validator_name: str
     passed: bool
     reason: str
@@ -22,14 +24,14 @@ class ValidatorResult:
 
 @dataclass
 class GateVerdict:
-    """Aggregate verdict from all validators."""
     passed: bool
     quorum_met: bool
     votes_for: int
     votes_against: int
     total_validators: int
+    wall_time_ms: float = 0.0
     validator_results: List[ValidatorResult] = field(default_factory=list)
-    proof: Optional[Any] = None  # SpindleProof
+    proof: Optional[Any] = None
 
     @property
     def confidence(self) -> float:
@@ -39,74 +41,75 @@ class GateVerdict:
 
 
 class SpindleGate:
-    """
-    Multi-validator consensus gate for Spindle verification.
-    Validators vote SAT/UNSAT. Action passes only if quorum is met.
-    """
-
-    def __init__(self, quorum_ratio: float = 0.5):
-        self.quorum_ratio = quorum_ratio  # Fraction needed to pass (0.5 = majority)
-        self._validators: List[tuple] = []  # (name, callable)
+    def __init__(self, quorum_ratio: float = 0.5, max_workers: int = 4, timeout: float = VALIDATOR_TIMEOUT):
+        self.quorum_ratio = quorum_ratio
+        self.timeout = timeout
+        self._pool = ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="gate-validator")
+        self._validators: List[Tuple[str, Callable]] = []
         self._register_default_validators()
+        logger.info(f"[GATE] Initialized with {max_workers} parallel workers, timeout={timeout}s")
 
     def _register_default_validators(self):
-        """Register the built-in validators."""
-        # V1: Base Z3 geometry (the core physics rules)
         self._validators.append(("z3_geometry", self._validate_z3_geometry))
-        # V2: Privilege escalation check
         self._validators.append(("privilege_check", self._validate_privilege))
-        # V3: Rate limiting / duplicate action check
         self._validators.append(("rate_limiter", self._validate_rate_limit))
 
     def add_validator(self, name: str, validator: Callable):
-        """Add a custom validator to the gate."""
         self._validators.append((name, validator))
 
     def verify(self, d_val: int, i_val: int, s_val: int, c_val: int,
                context: Dict[str, Any] = None) -> GateVerdict:
-        """
-        Run all validators and return aggregate verdict.
-        """
+        """Run all validators IN PARALLEL and return aggregate verdict."""
         context = context or {}
-        results = []
+        wall_start = time.perf_counter()
+
+        results: List[ValidatorResult] = []
         votes_for = 0
         votes_against = 0
         proof = None
 
+        # Submit all validators to thread pool
+        futures = {}
         for name, validator in self._validators:
-            start = time.time()
+            future = self._pool.submit(self._run_validator, name, validator, d_val, i_val, s_val, c_val, context)
+            futures[future] = name
+
+        # Collect results with timeout
+        for future in as_completed(futures, timeout=self.timeout + 1):
+            name = futures[future]
             try:
-                passed, reason, extra = validator(d_val, i_val, s_val, c_val, context)
-                duration = (time.time() - start) * 1000
-
+                vr, extra = future.result(timeout=self.timeout)
+                results.append(vr)
                 if name == "z3_geometry" and extra:
-                    proof = extra  # Capture the SpindleProof from the primary validator
-
-                results.append(ValidatorResult(
-                    validator_name=name,
-                    passed=passed,
-                    reason=reason,
-                    duration_ms=duration,
-                ))
-
-                if passed:
+                    proof = extra
+                if vr.passed:
                     votes_for += 1
                 else:
                     votes_against += 1
-
             except Exception as e:
-                duration = (time.time() - start) * 1000
                 results.append(ValidatorResult(
                     validator_name=name,
                     passed=False,
-                    reason=f"Validator crashed: {str(e)[:100]}",
-                    duration_ms=duration,
+                    reason=f"Timeout or crash: {str(e)[:80]}",
+                    duration_ms=self.timeout * 1000,
+                ))
+                votes_against += 1
+
+        # Check for any futures that didn't complete at all
+        for future, name in futures.items():
+            if not future.done():
+                future.cancel()
+                results.append(ValidatorResult(
+                    validator_name=name, passed=False,
+                    reason="Cancelled: exceeded gate timeout",
+                    duration_ms=self.timeout * 1000,
                 ))
                 votes_against += 1
 
         total = len(self._validators)
         quorum_needed = max(1, int(total * self.quorum_ratio) + 1)
         quorum_met = votes_for >= quorum_needed
+        wall_ms = (time.perf_counter() - wall_start) * 1000
 
         verdict = GateVerdict(
             passed=quorum_met,
@@ -114,44 +117,63 @@ class SpindleGate:
             votes_for=votes_for,
             votes_against=votes_against,
             total_validators=total,
+            wall_time_ms=wall_ms,
             validator_results=results,
             proof=proof,
         )
 
-        if quorum_met:
-            logger.info(f"[GATE] PASSED {votes_for}/{total} validators (quorum={quorum_needed})")
-        else:
-            logger.warning(f"[GATE] REJECTED {votes_for}/{total} validators (quorum={quorum_needed})")
-
+        level = "info" if quorum_met else "warning"
+        getattr(logger, level)(
+            f"[GATE] {'PASSED' if quorum_met else 'REJECTED'} "
+            f"{votes_for}/{total} (quorum={quorum_needed}) in {wall_ms:.1f}ms"
+        )
         return verdict
+
+    async def verify_async(self, d_val: int, i_val: int, s_val: int, c_val: int,
+                           context: Dict[str, Any] = None) -> GateVerdict:
+        """Async wrapper — runs the parallel verify in executor to avoid blocking event loop."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self.verify, d_val, i_val, s_val, c_val, context)
+
+    @staticmethod
+    def _run_validator(name, validator, d, i, s, c, ctx) -> Tuple[ValidatorResult, Any]:
+        """Execute a single validator (runs in thread pool)."""
+        start = time.perf_counter()
+        try:
+            passed, reason, extra = validator(d, i, s, c, ctx)
+            duration = (time.perf_counter() - start) * 1000
+            return ValidatorResult(
+                validator_name=name, passed=passed, reason=reason, duration_ms=duration,
+            ), extra
+        except Exception as e:
+            duration = (time.perf_counter() - start) * 1000
+            return ValidatorResult(
+                validator_name=name, passed=False,
+                reason=f"Crashed: {str(e)[:100]}",
+                duration_ms=duration,
+            ), None
 
     # ── Default Validators ──────────────────────────────────
 
     def _validate_z3_geometry(self, d, i, s, c, ctx) -> tuple:
-        """Primary Z3 SMT verification."""
         from cognitive.physics.bitmask_geometry import HierarchicalZ3Geometry
         geom = HierarchicalZ3Geometry()
         proof = geom.verify_action(d, i, s, c)
         return proof.is_valid, proof.reason, proof
 
     def _validate_privilege(self, d, i, s, c, ctx) -> tuple:
-        """Check that privilege level is appropriate for the action."""
         PRIV_GUEST = 1 << 27
         INTENT_DELETE = 1 << 10
         INTENT_GRANT = 1 << 12
-
-        # Guests cannot delete or grant
         if (c & PRIV_GUEST) and (i & (INTENT_DELETE | INTENT_GRANT)):
             return False, "Guest privilege cannot perform destructive actions", None
         return True, "Privilege check passed", None
 
     def _validate_rate_limit(self, d, i, s, c, ctx) -> tuple:
-        """Basic rate limiting — prevent action storms."""
         try:
             from backend.cognitive.spindle_event_store import get_event_store
             store = get_event_store()
             recent = store.query(source_type="healing", limit=10)
-
             if len(recent) >= 10:
                 now = time.time()
                 oldest = recent[-1]
@@ -159,8 +181,7 @@ class SpindleGate:
                 if ts and (now - ts) < 60:
                     return False, "Rate limit: too many actions in 60s window", None
         except Exception:
-            pass  # If store unavailable, don't block
-
+            pass
         return True, "Rate limit check passed", None
 
 
