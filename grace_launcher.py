@@ -67,7 +67,10 @@ def _log(msg: str, level: str = "info"):
                      "Grace couldn't bind to its port — another process is using it.",
                      fix_action="kill_port")
     elif "error" in low and ("failed" in low or "exception" in low):
-        _add_problem("error", "Startup Error", msg[:120], fix_action=None)
+        # Skip known non-critical warnings that contain "error" + "failed"
+        skip_patterns = ["gov-projection", "write failed", "baseline", "auto-migrate", "schema sync"]
+        if not any(p in low for p in skip_patterns):
+            _add_problem("error", "Startup Error", msg[:120], fix_action=None)
 
 
 # ── Problems ──────────────────────────────────────────────────────────────────

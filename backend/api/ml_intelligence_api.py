@@ -3,6 +3,12 @@ from typing import Dict, Any
 
 router = APIRouter(prefix="/ml-intelligence", tags=["ML Intelligence"])
 
+
+def get_orchestrator():
+    """Re-export the ML Intelligence orchestrator singleton."""
+    from ml_intelligence.integration_orchestrator import get_ml_orchestrator
+    return get_ml_orchestrator()
+
 @router.get("/status")
 async def get_status(): return {"status": "ok"}
 

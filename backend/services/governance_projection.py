@@ -208,12 +208,17 @@ class GovernanceProjection:
 
     @staticmethod
     def _write_json(path: Path, data):
-        """Write JSON atomically."""
+        """Write JSON atomically (Windows-safe)."""
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
             tmp = path.with_suffix(".tmp")
             tmp.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
-            tmp.replace(path)
+            try:
+                tmp.replace(path)
+            except OSError:
+                # Windows: target file locked — fall back to direct write
+                path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
+                tmp.unlink(missing_ok=True)
         except Exception as e:
             logger.warning(f"[GOV-PROJECTION] Write failed {path}: {e}")
 
