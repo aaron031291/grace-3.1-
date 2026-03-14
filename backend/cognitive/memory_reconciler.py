@@ -145,9 +145,11 @@ class MemoryReconciler:
         return {"evicted_from": evicted, "key": key}
 
     def reconcile(self) -> Dict[str, Any]:
-        """Force sync all memory systems. Returns reconciliation report."""
-        stats = {"flash_cache": 0, "unified_memory": 0, "ghost_memory": 0, "conflicts": 0}
+        """Force sync all memory systems. Detect conflicts and repair."""
+        import time as _time
+        stats = {"flash_cache": 0, "unified_memory": 0, "ghost_memory": 0, "conflicts": 0, "changes": 0, "repairs": []}
 
+        # Count entries
         try:
             from cognitive.flash_cache import get_flash_cache
             stats["flash_cache"] = get_flash_cache().stats().get("total_entries", 0)
@@ -156,18 +158,73 @@ class MemoryReconciler:
 
         try:
             from cognitive.unified_memory import get_unified_memory
-            mem_stats = get_unified_memory().get_stats()
+            mem = get_unified_memory()
+            mem_stats = mem.get_stats()
             stats["unified_memory"] = sum(v.get("count", 0) for v in mem_stats.values() if isinstance(v, dict))
         except Exception:
             pass
 
+        ghost_entries = []
         try:
             from cognitive.ghost_memory import get_ghost_memory
-            stats["ghost_memory"] = len(get_ghost_memory()._cache)
+            ghost = get_ghost_memory()
+            ghost_entries = list(ghost._cache)
+            stats["ghost_memory"] = len(ghost_entries)
         except Exception:
             pass
 
-        stats["total"] = sum(v for v in stats.values() if isinstance(v, int))
+        # Repair 1: Evict stale ghost entries (>24h old)
+        now = _time.time()
+        stale_count = 0
+        try:
+            from cognitive.ghost_memory import get_ghost_memory
+            ghost = get_ghost_memory()
+            fresh = []
+            for entry in ghost._cache:
+                ts = entry.get("ts", "")
+                if ts:
+                    try:
+                        from datetime import datetime
+                        entry_time = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                        age_hours = (datetime.now(entry_time.tzinfo) - entry_time).total_seconds() / 3600
+                        if age_hours > 24:
+                            stale_count += 1
+                            continue
+                    except Exception:
+                        pass
+                fresh.append(entry)
+            if stale_count > 0:
+                ghost._cache = fresh
+                stats["changes"] += stale_count
+                stats["repairs"].append(f"evicted {stale_count} stale ghost entries")
+        except Exception:
+            pass
+
+        # Repair 2: Sync ghost reflections to unified memory
+        try:
+            from cognitive.ghost_memory import get_ghost_memory, PLAYBOOK_DIR
+            from cognitive.unified_memory import get_unified_memory
+            import json
+            mem = get_unified_memory()
+            if PLAYBOOK_DIR.exists():
+                for f in sorted(PLAYBOOK_DIR.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:5]:
+                    try:
+                        data = json.loads(f.read_text())
+                        pattern = data.get("pattern_name", "")
+                        if pattern:
+                            mem.store_learning(
+                                input_ctx=f"ghost_playbook:{pattern}",
+                                expected=data.get("task", "")[:500],
+                                trust=data.get("confidence", 0.6),
+                                source="mesh_reconciler",
+                            )
+                            stats["changes"] += 1
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+        stats["total"] = sum(v for v in stats.values() if isinstance(v, int) and v >= 0)
         return stats
 
 

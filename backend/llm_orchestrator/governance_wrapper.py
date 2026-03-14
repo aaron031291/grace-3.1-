@@ -88,6 +88,16 @@ def build_governance_prefix() -> str:
     except Exception:
         pass
 
+    # Inject ghost memory for cross-session continuity
+    try:
+        from cognitive.ghost_memory import get_ghost_memory
+        ghost = get_ghost_memory()
+        ghost_ctx = ghost.get_context(max_tokens=300)
+        if ghost_ctx:
+            parts.append(f"[Ghost Memory - Session Continuity]\n{ghost_ctx}")
+    except Exception:
+        pass
+
     if ctx["rules"]:
         parts.append(
             f"MANDATORY GOVERNANCE RULES ({ctx['rules_count']} documents enforced):\n"

@@ -257,6 +257,17 @@ class DiagnosticEngine:
         try:
             cycle_start = datetime.now(timezone.utc)
 
+            # Query learned patterns to improve confidence
+            try:
+                from cognitive.unified_memory import get_unified_memory
+                mem = get_unified_memory()
+                similar = mem.search_all(f"diagnostic:{trigger_source.value}")
+                past_count = similar.get("total", 0)
+                if past_count > 0:
+                    logger.info(f"[DIAG] Found {past_count} similar past patterns for {trigger_source.value}")
+            except Exception:
+                pass
+
             # Layer 1: Collect sensor data
             logger.debug("Layer 1: Collecting sensor data...")
             cycle.sensor_data = self.sensor_layer.collect_all()
@@ -322,6 +333,25 @@ class DiagnosticEngine:
                 f"action={cycle.action_decision.action_type.value}, "
                 f"duration={cycle.total_duration_ms:.1f}ms"
             )
+
+            # Store diagnostic outcome for learning
+            try:
+                from cognitive.unified_memory import get_unified_memory
+                mem = get_unified_memory()
+                verdict = cycle.judgement.health.status.value if cycle.judgement else "unknown"
+                actions_taken = (
+                    1 if cycle.action_decision and cycle.action_decision.action_type != ActionType.LOG_ONLY
+                    else 0
+                )
+                mem.store_episode(
+                    problem=f"diagnostic:{trigger_source.value}",
+                    action=f"diagnostic_cycle:{verdict}",
+                    outcome="resolved" if actions_taken > 0 else "observed",
+                    trust=0.7,
+                    source="diagnostic_engine",
+                )
+            except Exception:
+                pass
 
         except Exception as e:
             cycle.success = False
