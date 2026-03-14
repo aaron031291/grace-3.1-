@@ -571,3 +571,11 @@ def stop_continuous_learning():
     """Stop continuous learning orchestration"""
     orchestrator = get_continuous_orchestrator()
     orchestrator.stop()
+
+
+def get_continuous_learning_status() -> Dict[str, Any]:
+    """Return status of the continuous learning orchestrator."""
+    try:
+        return get_continuous_orchestrator().get_status()
+    except Exception as e:
+        return {"running": False, "error": str(e)}

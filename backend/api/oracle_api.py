@@ -40,6 +40,21 @@ def get_oracle_dashboard(session: Session = Depends(get_session)):
         total_procedures = session.query(func.count(ProceduralMemory.id)).scalar() or 0
         avg_success_procedures = session.query(func.avg(ProceduralMemory.success_rate)).scalar() or 0.0
 
+        # Federated learning status
+        federated_info = {"status": "unavailable", "nodes": 0, "rounds": 0}
+        try:
+            from ml_intelligence.federated_learning import get_federated_manager
+            fm = get_federated_manager()
+            fed_status = fm.get_federation_status()
+            federated_info = {
+                "status": "active",
+                "nodes": fed_status.get("registered_nodes", 0),
+                "rounds": fed_status.get("total_rounds", 0),
+                "global_model_version": fed_status.get("global_model_version", 0),
+            }
+        except Exception:
+            pass
+
         return {
             "learning_examples": {
                 "total": total_examples,
@@ -56,7 +71,8 @@ def get_oracle_dashboard(session: Session = Depends(get_session)):
             # Dummy counts for unhooked metrics in the UI
             "episodes": {"total": 0, "avg_trust": 0.0},
             "documents": {"total": 0, "total_chunks": 0},
-            "vector_store": {"vectors": 0}
+            "vector_store": {"vectors": 0},
+            "federated": federated_info,
         }
     except Exception as e:
         session.rollback()

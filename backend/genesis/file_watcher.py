@@ -1,5 +1,4 @@
-if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
-    """
+"""
 File System Watcher for Automatic Version Control.
 
 Watches file changes in the workspace and automatically creates

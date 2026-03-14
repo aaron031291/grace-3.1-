@@ -263,7 +263,8 @@ class SystemRegistry:
                     __import__(module_name)
                     comp.status = "green"
                     comp.health_score = 90
-                except Exception:
+                except Exception as e:
+                    logger.warning("Health sensor degraded for %s: %s", comp.module_path, e)
                     if comp.status == "green":
                         comp.status = "amber"
                         comp.health_score = 50

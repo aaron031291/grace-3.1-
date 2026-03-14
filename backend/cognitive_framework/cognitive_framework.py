@@ -6,7 +6,7 @@ from .dependency_graph import DependencyGraph
 from .escalation_manager import EscalationManager
 from .consequence_engine import ConsequenceEngine
 from .cognitive_playbook_executor import PlaybookExecutor
-from backend.core.clarity_framework import ClarityFramework
+from core.clarity_framework import ClarityFramework
 
 logger = logging.getLogger("cognitive_framework")
 

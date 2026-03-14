@@ -67,17 +67,29 @@ class HealingCoordinator:
         step3 = self._step_agree_fix(problem, step2)
         result["steps"].append(step3)
 
-        # Step 4: If code is broken → coding agent
+        # Step 4: If code is broken → coding agent → sandbox validation
         if step3.get("fix_type") == "code_fix":
             step4 = self._step_code_fix(problem, step3)
             result["steps"].append(step4)
             if step4.get("resolved"):
-                result["resolved"] = True
-                result["resolution"] = "coding_agent"
-                self._trigger_heal_and_learn_after_code_fix(problem, step4)
-                self._record_outcome(problem, result, success=True)
-                self._publish_to_spindle(problem, result)
-                return result
+                # Phase 3.3: Sandbox Repair Engine — validate patch in isolation
+                sandbox_ok = self._step_sandbox_validate(problem, step4)
+                result["steps"].append(sandbox_ok)
+                if sandbox_ok.get("sandbox_passed", True):
+                    result["resolved"] = True
+                    result["resolution"] = "coding_agent"
+                    self._trigger_heal_and_learn_after_code_fix(problem, step4)
+                    self._record_outcome(problem, result, success=True)
+                    self._publish_to_spindle(problem, result)
+                    return result
+                else:
+                    logger.warning(
+                        "[HEALING-COORD] Sandbox REJECTED patch for %s: %s",
+                        problem.get("component", "?"),
+                        sandbox_ok.get("rejection_reason", "unknown"),
+                    )
+                    step4["resolved"] = False
+                    step4["sandbox_rejected"] = True
 
         # Step 5: Can't resolve → search for context
         step5 = self._step_search_context(problem, step3)
@@ -309,6 +321,44 @@ class HealingCoordinator:
             "hallucination_verified": hallucination_verified,
         }
 
+    # ── Step 4b: Sandbox validation (Phase 3.3) ─────────────────────
+
+    def _step_sandbox_validate(self, problem: Dict, code_fix_step: Dict) -> Dict:
+        """
+        Evaluate the generated patch in an isolated sandbox before
+        allowing FixApplier to touch the live codebase.
+        """
+        result = {"step": "sandbox_validate", "sandbox_passed": True}
+        fix_code = code_fix_step.get("fix", "")
+        if not fix_code or not isinstance(fix_code, str):
+            # No code to sandbox — pass through
+            return result
+
+        target_file = problem.get("file_path", "")
+        if not target_file:
+            # No target file specified — can't sandbox, pass through
+            return result
+
+        try:
+            from cognitive.sandbox_repair_engine import get_sandbox_repair_engine
+            engine = get_sandbox_repair_engine()
+            verdict = engine.evaluate(
+                target_file=target_file,
+                patch_code=fix_code,
+                run_tests=True,
+            )
+            result["sandbox_passed"] = verdict.passed
+            result["sandbox_detail"] = verdict.to_dict()
+            if not verdict.passed:
+                result["rejection_reason"] = verdict.rejection_reason
+        except Exception as e:
+            logger.debug("[HEALING-COORD] Sandbox engine unavailable: %s", e)
+            # If sandbox engine is unavailable, don't block — pass through
+            result["sandbox_passed"] = True
+            result["sandbox_error"] = str(e)
+
+        return result
+
     # ── Step 5: Search for external context ───────────────────────────
 
     def _step_search_context(self, problem: Dict, agreement: Dict) -> Dict:
@@ -437,7 +487,25 @@ class HealingCoordinator:
     # ── Record outcome for learning ───────────────────────────────────
 
     def _record_outcome(self, problem: Dict, result: Dict, success: bool):
-        """Track via KPI + store as learning experience + Magma memory."""
+        """Track via KPI + telemetry + store as learning experience + Magma memory."""
+        # Telemetry: record healing operation for baseline/drift tracking
+        try:
+            from telemetry.telemetry_service import get_telemetry_service
+            from models.telemetry_models import OperationType
+            telemetry = get_telemetry_service()
+            with telemetry.track_operation(
+                OperationType.HEALING,
+                f"healing_{problem.get('component', 'unknown')}",
+                metadata={
+                    "success": success,
+                    "resolution": result.get("resolution", "unresolved"),
+                    "steps": len(result.get("steps", [])),
+                },
+            ):
+                pass  # operation already completed, just record it
+        except Exception:
+            pass
+
         # Store in Magma
         try:
             from cognitive.magma_bridge import store_decision, store_pattern, ingest

@@ -7,7 +7,8 @@ from typing import List, Optional
 
 def build_rag_prompt(user_query: str, context: Optional[str] = None) -> str:
     """
-    Build a RAG-augmented prompt by injecting retrieved context.
+    Build a RAG-augmented prompt by injecting retrieved context
+    and ghost memory continuity context.
     
     Args:
         user_query: The original user message/query
@@ -16,16 +17,33 @@ def build_rag_prompt(user_query: str, context: Optional[str] = None) -> str:
     Returns:
         str: Formatted prompt with context injected
     """
-    if not context or context.strip() == "":
-        # No context, return original query
+    # ── Wire: Ghost Memory → Prompt (continuity across sessions) ──
+    ghost_context = ""
+    try:
+        from cognitive.ghost_memory import get_ghost_memory
+        ghost = get_ghost_memory()
+        ghost_ctx = ghost.get_context(max_tokens=500)
+        if ghost_ctx:
+            ghost_context = ghost_ctx
+    except Exception:
+        pass
+
+    if (not context or not context.strip()) and not ghost_context:
         return user_query
-    
-    # Format prompt with context injection
+
+    parts = []
+    if context and context.strip():
+        parts.append(f"<context>\n{context}\n</context>")
+    if ghost_context:
+        parts.append(f"<ghost_memory>\n{ghost_context}\n</ghost_memory>")
+
+    if not parts:
+        return user_query
+
+    combined = "\n\n".join(parts)
     prompt = f"""Based on the following context, answer the user's question:
 
-<context>
-{context}
-</context>
+{combined}
 
 User Question: {user_query}"""
     

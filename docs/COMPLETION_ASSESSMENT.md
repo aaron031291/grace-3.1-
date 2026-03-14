@@ -153,13 +153,13 @@ Grace 3.1 is an **ambitious autonomous AI assistant system** with significant im
 | Document upload/processing | ✅ Complete |
 | Frontend UI | ✅ Complete |
 
-### 9. Librarian System — **80% Complete**
+### 9. Librarian System — **100% Complete**
 
 | Feature | Status |
 |---------|--------|
 | AI analyzer | ✅ Complete |
-| Relationship manager | ⚠️ Has `pass` stubs |
-| Approval workflow | ⚠️ Has `pass` stubs |
+| Relationship manager | ✅ Complete (similarity, version, citation, duplicate detection, knowledge graph) |
+| Approval workflow | ✅ Complete (create, approve, reject, execute, batch ops, audit trail) |
 | Rule categorizer | ✅ Complete |
 | Tag manager | ✅ Complete |
 | Genesis key curator | ✅ Complete |

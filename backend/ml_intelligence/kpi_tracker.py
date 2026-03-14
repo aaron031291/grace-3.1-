@@ -17,6 +17,7 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
+from pathlib import Path
 import json
 
 logger = logging.getLogger(__name__)
@@ -79,7 +80,7 @@ class ComponentKPIs:
             Trust score (0-1)
         """
         if not self.kpis:
-            return 0.5  # Default neutral trust
+            return 0.0
         
         if metric_weights is None:
             # Default: equal weights
@@ -87,7 +88,7 @@ class ComponentKPIs:
         
         total_weight = sum(metric_weights.values())
         if total_weight == 0:
-            return 0.5
+            return 0.0
         
         # Calculate weighted average
         weighted_sum = 0.0
@@ -136,6 +137,77 @@ class ComponentKPIs:
         }
 
 
+@dataclass
+class TrustSnapshot:
+    """A point-in-time trust score for trend analysis."""
+    timestamp: datetime
+    trust_score: float
+    kpi_count: int
+    total_actions: int
+
+
+@dataclass
+class TrustHistory:
+    """Rolling trust score history for a component (up to 100 days)."""
+    component_name: str
+    snapshots: List[TrustSnapshot] = field(default_factory=list)
+    max_days: int = 100
+
+    def record(self, trust_score: float, kpi_count: int, total_actions: int):
+        """Record a trust snapshot."""
+        self.snapshots.append(TrustSnapshot(
+            timestamp=datetime.now(timezone.utc),
+            trust_score=trust_score,
+            kpi_count=kpi_count,
+            total_actions=total_actions,
+        ))
+        # Trim to max_days
+        cutoff = datetime.now(timezone.utc) - timedelta(days=self.max_days)
+        self.snapshots = [s for s in self.snapshots if s.timestamp >= cutoff]
+
+    def get_trend(self, window_days: int = 7) -> str:
+        """Get trust trend over recent window: 'improving', 'stable', 'degrading'."""
+        cutoff = datetime.now(timezone.utc) - timedelta(days=window_days)
+        recent = [s for s in self.snapshots if s.timestamp >= cutoff]
+        if len(recent) < 2:
+            return "insufficient_data"
+        first_half = recent[:len(recent)//2]
+        second_half = recent[len(recent)//2:]
+        avg_first = sum(s.trust_score for s in first_half) / len(first_half)
+        avg_second = sum(s.trust_score for s in second_half) / len(second_half)
+        diff = avg_second - avg_first
+        if diff > 0.05:
+            return "improving"
+        elif diff < -0.05:
+            return "degrading"
+        return "stable"
+
+    def get_accumulated_trust(self) -> float:
+        """Get trust accumulated over history (weighted average favoring recent)."""
+        if not self.snapshots:
+            return 0.0
+        now = datetime.now(timezone.utc)
+        weighted_sum = 0.0
+        weight_total = 0.0
+        for snap in self.snapshots:
+            age_days = (now - snap.timestamp).total_seconds() / 86400
+            weight = max(0.01, 1.0 - (age_days / self.max_days))  # linear decay
+            weighted_sum += snap.trust_score * weight
+            weight_total += weight
+        return weighted_sum / weight_total if weight_total > 0 else 0.0
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "component_name": self.component_name,
+            "snapshot_count": len(self.snapshots),
+            "accumulated_trust": round(self.get_accumulated_trust(), 4),
+            "trend_7d": self.get_trend(7),
+            "trend_30d": self.get_trend(30),
+            "oldest_snapshot": self.snapshots[0].timestamp.isoformat() if self.snapshots else None,
+            "newest_snapshot": self.snapshots[-1].timestamp.isoformat() if self.snapshots else None,
+        }
+
+
 class KPITracker:
     """
     Tracks KPIs for all components.
@@ -147,6 +219,8 @@ class KPITracker:
         """Initialize KPI tracker."""
         self.components: Dict[str, ComponentKPIs] = {}
         self.metric_weights: Dict[str, Dict[str, float]] = {}  # Component -> Metric -> Weight
+        self.trust_history: Dict[str, TrustHistory] = {}
+        self.load_trust_history()
         logger.info("[KPI-TRACKER] Initialized")
     
     def register_component(self, component_name: str, metric_weights: Optional[Dict[str, float]] = None):
@@ -187,7 +261,67 @@ class KPITracker:
         
         self.components[component_name].increment_kpi(metric_name, value, metadata)
         logger.debug(f"[KPI-TRACKER] {component_name}.{metric_name} += {value} (total: {self.components[component_name].get_kpi(metric_name).count})")
+
+        # Record trust snapshot for history tracking
+        comp = self.components[component_name]
+        trust = comp.get_trust_score(self.metric_weights.get(component_name))
+        if component_name not in self.trust_history:
+            self.trust_history[component_name] = TrustHistory(component_name=component_name)
+        total_actions = sum(kpi.count for kpi in comp.kpis.values())
+        self.trust_history[component_name].record(trust, len(comp.kpis), total_actions)
     
+    def save_trust_history(self) -> None:
+        """Persist trust history to disk."""
+        history_dir = Path(__file__).parent.parent / "data" / "kpi_history"
+        history_dir.mkdir(parents=True, exist_ok=True)
+        data = {}
+        for name, history in self.trust_history.items():
+            data[name] = [
+                {
+                    "timestamp": s.timestamp.isoformat(),
+                    "trust_score": s.trust_score,
+                    "kpi_count": s.kpi_count,
+                    "total_actions": s.total_actions,
+                }
+                for s in history.snapshots
+            ]
+        path = history_dir / "trust_history.json"
+        path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+    def load_trust_history(self) -> None:
+        """Load trust history from disk."""
+        path = Path(__file__).parent.parent / "data" / "kpi_history" / "trust_history.json"
+        if not path.exists():
+            return
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            for name, snapshots in data.items():
+                if name not in self.trust_history:
+                    self.trust_history[name] = TrustHistory(component_name=name)
+                for s in snapshots:
+                    self.trust_history[name].snapshots.append(TrustSnapshot(
+                        timestamp=datetime.fromisoformat(s["timestamp"]),
+                        trust_score=s["trust_score"],
+                        kpi_count=s["kpi_count"],
+                        total_actions=s["total_actions"],
+                    ))
+            logger.info("[KPI-TRACKER] Loaded trust history for %d components", len(data))
+        except Exception as e:
+            logger.warning("[KPI-TRACKER] Failed to load trust history: %s", e)
+
+    def take_daily_snapshot(self) -> Dict[str, float]:
+        """Take a trust snapshot for all components. Call daily."""
+        results = {}
+        for name, comp in self.components.items():
+            trust = comp.get_trust_score(self.metric_weights.get(name))
+            total_actions = sum(kpi.count for kpi in comp.kpis.values())
+            if name not in self.trust_history:
+                self.trust_history[name] = TrustHistory(component_name=name)
+            self.trust_history[name].record(trust, len(comp.kpis), total_actions)
+            results[name] = trust
+        self.save_trust_history()
+        return results
+
     def get_component_kpis(self, component_name: str) -> Optional[ComponentKPIs]:
         """Get KPIs for a component."""
         return self.components.get(component_name)
@@ -203,7 +337,7 @@ class KPITracker:
             Trust score (0-1)
         """
         if component_name not in self.components:
-            return 0.5  # Default neutral trust
+            return 0.0
         
         component = self.components[component_name]
         weights = self.metric_weights.get(component_name)
@@ -222,7 +356,7 @@ class KPITracker:
             System-wide trust score (0-1)
         """
         if not self.components:
-            return 0.5  # Default neutral trust
+            return 0.0
         
         if component_weights is None:
             # Default: equal weights
@@ -230,7 +364,7 @@ class KPITracker:
         
         total_weight = sum(component_weights.values())
         if total_weight == 0:
-            return 0.5
+            return 0.0
         
         # Calculate weighted average of component trust scores
         weighted_sum = 0.0
@@ -284,6 +418,8 @@ class KPITracker:
             "kpi_count": len(component.kpis),
             "total_actions": sum(kpi.count for kpi in component.kpis.values()),
             "updated_at": component.updated_at.isoformat(),
+            "trust_trend": self.trust_history[component_name].get_trend() if component_name in self.trust_history else "no_history",
+            "accumulated_trust": self.trust_history[component_name].get_accumulated_trust() if component_name in self.trust_history else 0.0,
         }
     
     def get_system_health(self) -> Dict[str, Any]:
@@ -314,8 +450,26 @@ class KPITracker:
             "status": status,
             "component_count": len(self.components),
             "components": component_health,
+            "trust_history_components": len(self.trust_history),
         }
     
+    def take_daily_snapshot(self) -> Dict[str, Any]:
+        """Record a trust snapshot for every tracked component."""
+        results = {}
+        for name, comp in self.components.items():
+            trust = comp.get_trust_score()
+            total = sum(kpi.count for kpi in comp.kpis.values())
+            kpi_count = len(comp.kpis)
+            if name not in self.trust_history:
+                self.trust_history[name] = TrustHistory(component_name=name)
+            self.trust_history[name].record(trust, kpi_count, total)
+            results[name] = {
+                "trust_score": round(trust, 4),
+                "total_actions": total,
+                "kpi_count": kpi_count,
+            }
+        return results
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert tracker to dictionary."""
         return {

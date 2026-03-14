@@ -6,6 +6,18 @@ Unified conversational spine: RAG + unified memory (episodic recall) + LLM.
 from typing import Dict, Any, Optional, List
 from database.session import session_scope, get_session_factory
 
+try:
+    from telemetry.decorators import track_operation
+    from models.telemetry_models import OperationType
+except ImportError:
+    def track_operation(operation_type, operation_name=None, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+
+    class OperationType:
+        CHAT_GENERATION = "chat_generation"
+
 
 def _get_rag_context(query: str, limit: int = 5, score_threshold: float = 0.3) -> str:
     """Retrieve relevant chunks and build context string. Returns '' on failure."""
@@ -137,6 +149,7 @@ def get_history(payload: dict) -> dict:
         session.close()
 
 
+@track_operation(OperationType.CHAT_GENERATION, "send_prompt_with_rag")
 def send_prompt_with_rag(payload: dict) -> dict:
     """Send prompt with RAG context and unified memory (episodic recall). Single conversational spine."""
     from models.repositories import ChatRepository, ChatHistoryRepository
@@ -200,6 +213,13 @@ def send_prompt_with_rag(payload: dict) -> dict:
         try:
             from core.kpi_recorder import record_component_kpi
             record_component_kpi("rag", "requests", 1.0, success=True)
+        except Exception:
+            pass
+        try:
+            from ml_intelligence.kpi_tracker import get_kpi_tracker
+            tracker = get_kpi_tracker()
+            tracker.increment_kpi("coding_agent", "requests", 1.0)
+            tracker.increment_kpi("coding_agent", "successes", 1.0)
         except Exception:
             pass
         return {

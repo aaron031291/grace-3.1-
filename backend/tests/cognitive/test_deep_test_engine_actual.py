@@ -1,48 +1,54 @@
 import pytest
+from unittest.mock import MagicMock, patch
 from backend.cognitive.deep_test_engine import DeepTestEngine
 
-def test_deep_test_engine_run_logic_tests(monkeypatch):
-    engine = DeepTestEngine()
-    
-    # We mock just one test to pretend it runs
-    monkeypatch.setattr(engine, "_test_flash_cache_logic", lambda: (True, "OK"))
-    
-    # Override tests list to test only the mocked one to avoid running the whole suite
-    engine.tests = [("FlashCache Test", engine._test_flash_cache_logic)]
-    
-    # Temporarily replace to avoid sending stuff to Intelligence/EventBus which might not be set up
-    def mock_run_logic_tests(self):
-        results = {"tests": [], "passed": 0, "failed": 0, "errors": 0}
-        ok, detail = self._test_flash_cache_logic()
-        results["tests"].append({"name": "FlashCache Test", "passed": ok, "detail": detail})
-        if ok:
-            results["passed"] += 1
-        results["total"] = len(results["tests"])
-        return results
-        
-    monkeypatch.setattr(DeepTestEngine, "run_logic_tests", mock_run_logic_tests)
-    
-    res = engine.run_logic_tests()
-    assert res["passed"] == 1
-    assert res["total"] == 1
-    assert res["tests"][0]["name"] == "FlashCache Test"
+def test_singleton():
+    engine1 = DeepTestEngine.get_instance()
+    engine2 = DeepTestEngine.get_instance()
+    assert engine1 is engine2
 
-def test_deep_test_engine_stress_test(monkeypatch):
+@patch("backend.cognitive.deep_test_engine.DeepTestEngine._save_results")
+def test_run_logic_tests(mock_save):
     engine = DeepTestEngine()
-    import time
     
-    # We just test the status flags
-    assert engine.get_stress_status()["running"] is False
+    # Mocking all internal trace methods
+    for attr in dir(engine):
+        if attr.startswith("_test_") and callable(getattr(engine, attr)):
+            setattr(engine, attr, MagicMock(return_value=(True, "OK")))
+            
+    res = engine.run_logic_tests()
     
-    # Stub time.sleep to not wait
-    monkeypatch.setattr(time, "sleep", lambda x: None)
+    assert res["total"] > 0
+    assert res["failed"] == 0
+    assert res["errors"] == 0
+    assert res["status"] == "ALL PASS"
+
+@patch("cognitive.consensus_engine.run_consensus")
+def test_consensus_analyse_failures(mock_consensus):
+    engine = DeepTestEngine()
     
-    engine.start_stress_test(duration_minutes=0, interval_seconds=0)
-    # The thread will exit immediately since time is 0
-    time.sleep(0.1) # Wait thread
-    engine.stop_stress_test()
-    status = engine.get_stress_status()
-    assert status["running"] is False
+    mock_result = MagicMock()
+    mock_result.final_output = "Diagnostic information..."
+    mock_result.confidence = 0.9
+    mock_consensus.return_value = mock_result
+    
+    # Disable actual fix generation for unit testing
+    with patch("llm_orchestrator.factory.get_llm_for_task") as mock_get_llm:
+        mock_builder = MagicMock()
+        mock_builder.generate.return_value = "def fix(): pass"
+        mock_get_llm.return_value = mock_builder
+        
+        with patch("cognitive.grace_compiler.get_grace_compiler") as mock_get_compiler:
+            mock_compiler = MagicMock()
+            compile_res = MagicMock()
+            compile_res.success = True
+            mock_compiler.compile.return_value = compile_res
+            mock_get_compiler.return_value = mock_compiler
+            
+            res = engine._consensus_analyse_failures([{"name": "test_1", "detail": "failed"}])
+            
+            assert res is not None
+            assert res["diagnosis"] == "Diagnostic information..."
 
 if __name__ == "__main__":
     pytest.main(['-v', __file__])

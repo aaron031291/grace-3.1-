@@ -20,7 +20,8 @@ def _load_projects():
     PROJECTS_META.parent.mkdir(parents=True, exist_ok=True)
     if PROJECTS_META.exists():
         try: return json.loads(PROJECTS_META.read_text())
-        except Exception: pass
+        except Exception as e:
+            logger.warning("[CODE] Failed to load project metadata from %s: %s", PROJECTS_META, e)
     return []
 
 def _save_projects(data):
@@ -42,7 +43,8 @@ def project_tree(folder, max_depth=3):
                 if item.name.startswith("."): continue
                 if item.is_dir(): r["children"].append(_t(item, depth+1))
                 else: r["children"].append({"path": str(item.relative_to(kb)), "name": item.name, "type": "file", "size": item.stat().st_size})
-        except PermissionError: pass
+        except PermissionError:
+            logger.debug("[CODE] Permission denied reading %s", p)
         return r
     return _t(target)
 
@@ -60,7 +62,8 @@ def write_file(path, content):
         from api._genesis_tracker import track
         track(key_type="code_change", what=f"File written: {path}",
               who="code_service", file_path=path, tags=["code", "write"])
-    except Exception: pass
+    except Exception as e:
+        logger.debug("[CODE] Genesis tracking for file write skipped: %s", e)
     return {"path": path, "saved": True}
 
 def create_file(path, content=""):
@@ -95,8 +98,8 @@ def generate_code(prompt, project_folder="", use_pipeline=False):
                     if f.is_file() and f.suffix in (".py", ".js", ".ts", ".jsx", ".tsx"):
                         files.append(f.name)
                 context = f"Project files: {', '.join(files[:20])}"
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("[CODE] Context loading for code gen skipped: %s", e)
         full_prompt = f"{context}\n\n{prompt}" if context else prompt
         import ast
         

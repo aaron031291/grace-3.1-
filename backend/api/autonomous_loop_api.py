@@ -742,3 +742,13 @@ async def run_unified_triggers(payload: Dict[str, Any] = Body(default={})):
         "category": payload.get("category"),
     })
     return result
+
+
+@router.get("/meta-status")
+async def meta_loop_status():
+    """Get meta loop orchestrator status (all coordinated loops)."""
+    try:
+        from cognitive.meta_loop_orchestrator import get_meta_loop_status
+        return get_meta_loop_status()
+    except Exception as e:
+        return {"error": str(e), "running": False}

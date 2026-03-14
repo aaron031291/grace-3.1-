@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, TYPE_CHECKING
 from pathlib import Path
 
-from backend.core.datetime_utils import as_naive_utc
+from core.datetime_utils import as_naive_utc
 
 if TYPE_CHECKING:
     from .engine import DecisionContext

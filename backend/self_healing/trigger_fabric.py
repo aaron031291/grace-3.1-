@@ -83,7 +83,14 @@ def start(app=None) -> None:
         name="grace-mirror-observer",
     ).start()
 
-    logger.info("[TRIGGER-FABRIC] ✅ All trigger sources wired (network probe + mirror observer active)")
+    # Start MTTR pattern watcher (fires error.repeated events)
+    threading.Thread(
+        target=_watch_mttr_patterns,
+        daemon=True,
+        name="grace-mttr-watcher",
+    ).start()
+
+    logger.info("[TRIGGER-FABRIC] ✅ All trigger sources wired (network probe + mirror observer + MTTR watcher active)")
 
 
 # ── 1. Event bus subscriptions ────────────────────────────────────────────
@@ -157,7 +164,8 @@ def _network_probe_loop() -> None:
                 interval = 30    # 30s — faster detection during working hours
             else:
                 interval = _PROBE_INTERVAL_S
-        except Exception:
+        except Exception as e:
+            logger.debug("[TRIGGER-FABRIC] TimeSense context unavailable, using default interval: %s", e)
             interval = _PROBE_INTERVAL_S
 
         for host, port, service in _SERVICE_MAP:
@@ -214,6 +222,7 @@ def _mirror_observation_loop() -> None:
       SUCCESS_SEQUENCE     → episodic memory reward signal
     """
     time.sleep(30)  # wait for startup to settle
+    _consecutive_failures = 0
 
     while True:
         try:
@@ -223,6 +232,8 @@ def _mirror_observation_loop() -> None:
             with session_scope() as session:
                 mirror = MirrorSelfModelingSystem(session=session)
                 patterns = mirror.detect_behavioral_patterns()
+
+            _consecutive_failures = 0  # reset on success
 
             if not patterns:
                 logger.debug("[MIRROR-OBSERVER] No behavioral patterns detected this cycle")
@@ -235,7 +246,11 @@ def _mirror_observation_loop() -> None:
                     _route_mirror_pattern(pattern)
 
         except Exception as e:
-            logger.debug("[MIRROR-OBSERVER] Cycle error (non-fatal): %s", e)
+            _consecutive_failures += 1
+            if _consecutive_failures >= 5:
+                logger.error("[MIRROR-OBSERVER] Mirror loop failing repeatedly (%d consecutive): %s", _consecutive_failures, e)
+            else:
+                logger.warning("[MIRROR-OBSERVER] Cycle error (non-fatal, %d consecutive): %s", _consecutive_failures, e)
 
         time.sleep(_MIRROR_INTERVAL_S)
 
@@ -305,8 +320,8 @@ def _route_mirror_pattern(pattern: dict) -> None:
                     context_data=pattern,
                     is_error=True,
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("[TRIGGER-FABRIC] anomalous_behavior genesis track: %s", e)
             logger.warning("[MIRROR-OBSERVER] 🚨 Anomalous behavior escalated: %s", description[:60])
 
         elif pattern_type == "improvement_opportunity":
@@ -340,8 +355,8 @@ def _route_mirror_pattern(pattern: dict) -> None:
                         trust_score=0.9,
                         source="mirror_observer",
                     )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("[TRIGGER-FABRIC] success_sequence episodic memory: %s", e)
             logger.debug("[MIRROR-OBSERVER] ✅ Success sequence reinforced in episodic memory")
 
     except Exception as e:
@@ -364,8 +379,8 @@ def _on_rate_limited(data: Dict) -> None:
             how_method="trigger_fabric.circuit_breaker",
             context_data=data,
         )
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("[TRIGGER-FABRIC] rate_limited genesis track: %s", e)
 
 
 def _on_network_healed(data: Dict) -> None:
@@ -494,8 +509,8 @@ def _on_llm_error(data: Dict) -> None:
             module="llm_orchestrator",
             function=data.get("provider", "unknown"),
         )
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("[TRIGGER-FABRIC] route_exception for LLM error failed: %s", e)
 
 
 def _on_hallucination(data: Dict) -> None:
@@ -542,8 +557,8 @@ def _on_knowledge_gap(data: Dict) -> None:
             origin="knowledge_gap",
         )
         logger.debug("[TRIGGER-FABRIC] Knowledge gap '%s' → coding agent", gap)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("[TRIGGER-FABRIC] knowledge_gap submit_coding_task: %s", e)
 
 
 def _on_repeated_error(data: Dict) -> None:
@@ -563,8 +578,8 @@ def _on_repeated_error(data: Dict) -> None:
             origin="mttr_analysis",
         )
         logger.info("[TRIGGER-FABRIC] Repeated error x%d → high-priority coding task", count)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("[TRIGGER-FABRIC] repeated_error submit_coding_task: %s", e)
 
 
 def _on_fix_applied(data: Dict) -> None:
@@ -613,8 +628,8 @@ def _route_exception(exc, context=None, module="", function="") -> None:
     try:
         from self_healing.error_pipeline import get_error_pipeline
         get_error_pipeline().handle(exc, context=context, module=module, function=function)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("[TRIGGER-FABRIC] route_exception error pipeline handle: %s", e)
 
 
 # ── MTTR pattern watcher — fires error.repeated events ───────────────────
@@ -638,5 +653,5 @@ def _watch_mttr_patterns() -> None:
                         "count": "multiple",
                         "mttr_s": mttr,
                     })
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[MTTR-WATCHER] Cycle error (non-fatal): %s", e)

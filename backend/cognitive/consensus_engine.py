@@ -2,20 +2,22 @@
 Multi-Model Consensus Engine — Knights of the Roundtable
 
 A 4-layer deliberation protocol where multiple LLMs independently tackle the
-same problem, then converge through consensus, alignment, and verification.
+same problem, then converge through deterministic consensus and verification.
 
 Layer 1 — Independent Deliberation:
   Each selected model receives the same prompt/problem/context independently.
   No model sees another's output.
 
-Layer 2 — Consensus Formation:
-  All responses are collected, compared, and synthesised into a unified position.
-  Areas of agreement strengthen; disagreements are flagged for deeper analysis.
+Layer 2 — Consensus Formation (DETERMINISTIC):
+  Responses are compared using token-overlap / Jaccard similarity to detect
+  agreements and disagreements.  The best response is selected by a
+  deterministic scoring function (length, relevance, agreement coverage,
+  latency).  No LLM call is made in this layer.
 
-Layer 3 — Alignment:
-  The consensus is aligned to Grace's internal world, user context, and the
-  specific problem domain. If Grace initiated the query autonomously, alignment
-  is to her own needs and the system's integrity.
+Layer 3 — Alignment (DETERMINISTIC):
+  Rule-based post-processing: strip LLM meta-commentary, check prompt
+  relevance, tag actionable items for autonomous queries, prepend context
+  headers.  No LLM call is made in this layer.
 
 Layer 4 — Verification:
   The aligned output passes through the existing verification pipeline:
@@ -291,7 +293,168 @@ def layer1_deliberate(
     return responses
 
 
-# ── Layer 2: Consensus Formation ──────────────────────────────────────
+# ── Layer 2: Consensus Formation (Deterministic) ─────────────────────
+
+def _tokenize(text: str) -> List[str]:
+    """Simple word tokenizer: lowercase, strip punctuation, remove stopwords."""
+    import re
+    _STOPWORDS = {
+        "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+        "have", "has", "had", "do", "does", "did", "will", "would", "could",
+        "should", "may", "might", "shall", "can", "need", "must", "and", "or",
+        "but", "if", "then", "else", "when", "while", "for", "of", "to", "in",
+        "on", "at", "by", "with", "from", "as", "into", "about", "not", "no",
+        "so", "it", "its", "this", "that", "these", "those", "i", "you", "he",
+        "she", "we", "they", "me", "him", "her", "us", "them", "my", "your",
+        "his", "our", "their", "what", "which", "who", "whom", "how", "than",
+    }
+    words = re.findall(r"[a-z0-9]+(?:'[a-z]+)?", text.lower())
+    return [w for w in words if w not in _STOPWORDS and len(w) > 1]
+
+
+def _sentence_split(text: str) -> List[str]:
+    """Split text into sentences."""
+    import re
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    return [s.strip() for s in sentences if len(s.strip()) > 10]
+
+
+def _jaccard_similarity(tokens_a: List[str], tokens_b: List[str]) -> float:
+    """Compute Jaccard similarity between two token lists."""
+    set_a, set_b = set(tokens_a), set(tokens_b)
+    if not set_a or not set_b:
+        return 0.0
+    intersection = set_a & set_b
+    union = set_a | set_b
+    return len(intersection) / len(union) if union else 0.0
+
+
+def _extract_key_claims(text: str) -> List[str]:
+    """Extract key sentences/claims from a response for comparison."""
+    sentences = _sentence_split(text)
+    # Score sentences by information density (non-stopword ratio)
+    scored = []
+    for s in sentences:
+        tokens = _tokenize(s)
+        all_words = s.lower().split()
+        density = len(tokens) / max(len(all_words), 1)
+        scored.append((density, s))
+    scored.sort(key=lambda x: -x[0])
+    return [s for _, s in scored[:20]]
+
+
+def _find_agreements_and_disagreements(
+    responses: List[ModelResponse],
+    agreement_threshold: float = 0.35,
+    disagreement_threshold: float = 0.10,
+) -> Tuple[List[str], List[str]]:
+    """
+    Deterministic agreement/disagreement detection via token overlap.
+
+    For each key claim in each response, check if it has high token overlap
+    with claims from other responses (agreement) or very low overlap
+    (potential disagreement).
+    """
+    all_claims = {}  # model_id -> list of (sentence, tokens)
+    for r in responses:
+        claims = _extract_key_claims(r.response[:3000])
+        all_claims[r.model_id] = [(c, _tokenize(c)) for c in claims]
+
+    agreements = []
+    disagreements = []
+    seen_agree = set()
+    seen_disagree = set()
+
+    model_ids = list(all_claims.keys())
+    for i, mid_a in enumerate(model_ids):
+        for j, mid_b in enumerate(model_ids):
+            if j <= i:
+                continue
+            for claim_a, tokens_a in all_claims[mid_a]:
+                best_sim = 0.0
+                best_match = ""
+                for claim_b, tokens_b in all_claims[mid_b]:
+                    sim = _jaccard_similarity(tokens_a, tokens_b)
+                    if sim > best_sim:
+                        best_sim = sim
+                        best_match = claim_b
+
+                if best_sim >= agreement_threshold:
+                    # Use the shorter claim as the canonical agreement text
+                    canonical = claim_a if len(claim_a) <= len(best_match) else best_match
+                    key = canonical[:80].lower()
+                    if key not in seen_agree:
+                        seen_agree.add(key)
+                        agreements.append(canonical)
+                elif best_sim <= disagreement_threshold and tokens_a:
+                    key = claim_a[:80].lower()
+                    if key not in seen_disagree:
+                        seen_disagree.add(key)
+                        disagreements.append(
+                            f"{mid_a} claims: {claim_a[:150]}"
+                        )
+
+    return agreements[:15], disagreements[:10]
+
+
+def _score_response(response: ModelResponse, prompt: str,
+                    agreements: List[str]) -> float:
+    """
+    Deterministic quality score for a single response.
+
+    Factors:
+    - Length adequacy (not too short, not too long)
+    - Coverage of agreement points
+    - Latency (faster is mildly preferred, all else equal)
+    - No error
+    """
+    if not response.response or response.error:
+        return 0.0
+
+    text = response.response
+    tokens = _tokenize(text)
+    prompt_tokens = _tokenize(prompt)
+
+    # 1. Length score: prefer 100-2000 words
+    word_count = len(text.split())
+    if word_count < 20:
+        length_score = 0.2
+    elif word_count < 50:
+        length_score = 0.5
+    elif word_count <= 2000:
+        length_score = 1.0
+    else:
+        length_score = max(0.6, 1.0 - (word_count - 2000) / 5000)
+
+    # 2. Prompt relevance: token overlap with prompt
+    if prompt_tokens:
+        relevance = len(set(tokens) & set(prompt_tokens)) / max(len(set(prompt_tokens)), 1)
+    else:
+        relevance = 0.5
+
+    # 3. Agreement coverage: how many agreement points appear in this response
+    if agreements:
+        covered = 0
+        for ag in agreements:
+            ag_tokens = set(_tokenize(ag))
+            if ag_tokens and len(ag_tokens & set(tokens)) / len(ag_tokens) > 0.4:
+                covered += 1
+        coverage = covered / len(agreements)
+    else:
+        coverage = 0.5
+
+    # 4. Latency bonus (minor): faster responses get a small boost
+    latency_score = max(0.5, 1.0 - response.latency_ms / 60000)
+
+    # Weighted combination
+    score = (
+        0.25 * length_score
+        + 0.30 * relevance
+        + 0.35 * coverage
+        + 0.10 * latency_score
+    )
+    return round(min(1.0, score), 4)
+
 
 def layer2_consensus(
     prompt: str,
@@ -299,7 +462,13 @@ def layer2_consensus(
     synthesizer_model: str = "kimi",
 ) -> Tuple[str, List[str], List[str]]:
     """
-    Layer 2: Synthesise individual responses into a consensus.
+    Layer 2: Deterministic consensus formation.
+
+    Instead of calling an LLM to synthesise, this uses token-overlap
+    analysis to identify agreements/disagreements, scores each response
+    deterministically, and selects the highest-scoring response as the
+    consensus text.
+
     Returns (consensus_text, agreements, disagreements).
     """
     valid_responses = [r for r in responses if r.response and not r.error]
@@ -309,68 +478,39 @@ def layer2_consensus(
     if len(valid_responses) == 1:
         return valid_responses[0].response, ["Single model — no consensus needed"], []
 
-    response_block = ""
-    for i, r in enumerate(valid_responses, 1):
-        response_block += f"\n--- Model {i}: {r.model_name} ---\n{r.response[:3000]}\n"
+    # Step 1: Deterministic agreement/disagreement detection
+    agreements, disagreements = _find_agreements_and_disagreements(valid_responses)
 
-    synthesis_prompt = (
-        f"You are the consensus synthesiser. Multiple AI models have independently "
-        f"analyzed the same problem. Your job is to:\n\n"
-        f"1. Identify AGREEMENTS — points where models converge\n"
-        f"2. Identify DISAGREEMENTS — points of divergence\n"
-        f"3. Produce a CONSENSUS — the strongest, most reliable unified answer\n"
-        f"4. Note UNCERTAINTIES — areas where confidence is low\n\n"
-        f"Original problem:\n{prompt[:2000]}\n\n"
-        f"Model responses:{response_block}\n\n"
-        f"Produce your response in this structure:\n"
-        f"## Agreements\n- ...\n\n"
-        f"## Disagreements\n- ...\n\n"
-        f"## Consensus\n...\n\n"
-        f"## Confidence Level\nHigh/Medium/Low with reasoning"
+    # Step 2: Score each response deterministically
+    scored = [
+        (_score_response(r, prompt, agreements), r)
+        for r in valid_responses
+    ]
+    scored.sort(key=lambda x: -x[0])
+
+    best_score, best_response = scored[0]
+
+    # Step 3: Build consensus text from the best response
+    # Prepend a summary header with agreements/disagreements
+    header_parts = []
+    if agreements:
+        header_parts.append("## Agreements\n" + "\n".join(f"- {a}" for a in agreements))
+    if disagreements:
+        header_parts.append("## Disagreements\n" + "\n".join(f"- {d}" for d in disagreements))
+
+    consensus_text = best_response.response
+    if header_parts:
+        consensus_text = "\n\n".join(header_parts) + f"\n\n## Consensus\n{best_response.response}"
+
+    logger.info(
+        "Deterministic consensus: selected %s (score=%.3f), %d agreements, %d disagreements",
+        best_response.model_id, best_score, len(agreements), len(disagreements),
     )
 
-    client = _get_client(synthesizer_model)
-    if not client:
-        client = _get_client("qwen") or _get_client("reasoning")
-    if not client:
-        combined = "\n\n".join(r.response[:1500] for r in valid_responses)
-        return combined, ["Fallback: combined responses"], ["No synthesiser available"]
-
-    try:
-        result = client.generate(
-            prompt=synthesis_prompt,
-            system_prompt="You are a consensus formation engine. Synthesise multiple perspectives into one authoritative answer.",
-            temperature=0.3,
-            max_tokens=4096,
-        )
-
-        agreements = []
-        disagreements = []
-        if isinstance(result, str):
-            lines = result.split("\n")
-            section = ""
-            for line in lines:
-                stripped = line.strip()
-                if "agreement" in stripped.lower():
-                    section = "agree"
-                elif "disagreement" in stripped.lower():
-                    section = "disagree"
-                elif "consensus" in stripped.lower():
-                    section = "consensus"
-                elif stripped.startswith("- ") and section == "agree":
-                    agreements.append(stripped[2:])
-                elif stripped.startswith("- ") and section == "disagree":
-                    disagreements.append(stripped[2:])
-
-        return result if isinstance(result, str) else str(result), agreements, disagreements
-
-    except Exception as e:
-        logger.error(f"Consensus synthesis failed: {e}")
-        combined = "\n\n---\n\n".join(r.response[:2000] for r in valid_responses)
-        return combined, [], [f"Synthesis error: {e}"]
+    return consensus_text, agreements, disagreements
 
 
-# ── Layer 3: Alignment ────────────────────────────────────────────────
+# ── Layer 3: Alignment (Deterministic) ────────────────────────────────
 
 def layer3_align(
     prompt: str,
@@ -380,56 +520,67 @@ def layer3_align(
     system_context: str = "",
 ) -> str:
     """
-    Layer 3: Align the consensus to Grace/user/system needs.
+    Layer 3: Deterministic alignment of the consensus to context.
+
+    Instead of an LLM rewrite, this applies rule-based checks:
+    - Strips meta-commentary (e.g. "As an AI…") that doesn't help the user.
+    - Prepends relevant system/user context as a header if present.
+    - For autonomous queries, tags actionable items.
+    - Validates the consensus isn't empty/degenerate.
     """
+    if not consensus or not consensus.strip():
+        return f"No consensus produced for query: {prompt[:200]}"
+
+    aligned = consensus
+
+    # Rule 1: Strip common LLM meta-commentary
+    _meta_patterns = [
+        "as an ai language model",
+        "as an ai,",
+        "i'm just an ai",
+        "i don't have personal",
+        "i cannot provide",
+        "please note that i",
+    ]
+    lines = aligned.split("\n")
+    filtered_lines = []
+    for line in lines:
+        lower = line.lower().strip()
+        if any(pat in lower for pat in _meta_patterns):
+            continue
+        filtered_lines.append(line)
+    aligned = "\n".join(filtered_lines)
+
+    # Rule 2: Ensure the response references the prompt topic
+    prompt_tokens = set(_tokenize(prompt))
+    response_tokens = set(_tokenize(aligned))
+    if prompt_tokens:
+        overlap = len(prompt_tokens & response_tokens) / len(prompt_tokens)
+        if overlap < 0.05 and len(aligned) > 100:
+            aligned = f"[Alignment Note: Low relevance to query detected]\n\n{aligned}"
+
+    # Rule 3: For autonomous queries, tag actionable lines
     if source == "autonomous":
-        alignment_prompt = (
-            f"You are Grace's alignment engine. The consensus below was produced "
-            f"by a multi-model roundtable. Grace initiated this query autonomously "
-            f"because she needs a deterministic answer.\n\n"
-            f"Align this consensus to Grace's internal needs:\n"
-            f"- Is it actionable for Grace's self-improvement?\n"
-            f"- Does it align with Grace's governance rules?\n"
-            f"- What specific system actions should result from this?\n"
-            f"- How should this knowledge be stored (learning, memory, rules)?\n\n"
-        )
-    else:
-        alignment_prompt = (
-            f"You are Grace's alignment engine. The consensus below was produced "
-            f"by a multi-model roundtable for a user query.\n\n"
-            f"Align this consensus to the user's needs:\n"
-            f"- Is it directly answering what the user asked?\n"
-            f"- Is it practical and actionable?\n"
-            f"- Does it account for the user's context?\n"
-            f"- Is the language appropriate for the user?\n\n"
-        )
+        action_keywords = {"fix", "restart", "update", "rebuild", "deploy",
+                           "install", "configure", "migrate", "patch", "reset"}
+        action_lines = []
+        for line in aligned.split("\n"):
+            line_tokens = set(_tokenize(line))
+            if line_tokens & action_keywords:
+                action_lines.append(line.strip())
+        if action_lines:
+            aligned += "\n\n## Actionable Items\n" + "\n".join(f"- {a}" for a in action_lines[:10])
 
-    if user_context:
-        alignment_prompt += f"User context: {user_context}\n\n"
+    # Rule 4: Prepend context headers if provided
+    context_header = ""
     if system_context:
-        alignment_prompt += f"System context: {system_context}\n\n"
+        context_header += f"[System Context: {system_context[:300].strip()}]\n"
+    if user_context:
+        context_header += f"[User Context: {user_context[:300].strip()}]\n"
+    if context_header:
+        aligned = context_header + "\n" + aligned
 
-    alignment_prompt += (
-        f"Original query: {prompt[:1000]}\n\n"
-        f"Consensus:\n{consensus[:4000]}\n\n"
-        f"Produce the final aligned response."
-    )
-
-    client = _get_client("kimi") or _get_client("opus") or _get_client("qwen")
-    if not client:
-        return consensus
-
-    try:
-        result = client.generate(
-            prompt=alignment_prompt,
-            system_prompt="You are Grace's alignment engine. Ensure the roundtable consensus is optimally aligned to the recipient's needs.",
-            temperature=0.3,
-            max_tokens=4096,
-        )
-        return result if isinstance(result, str) else str(result)
-    except Exception as e:
-        logger.warning(f"Alignment failed, returning raw consensus: {e}")
-        return consensus
+    return aligned.strip()
 
 
 # ── Layer 4: Verification ─────────────────────────────────────────────
@@ -775,6 +926,30 @@ def run_consensus(
             )
         except Exception:
             pass
+
+    # ── Wire: Consensus → Executive Actuation ──
+    if source == "autonomous" and verification["passed"]:
+        try:
+            from cognitive.consensus_actuation import ConsensusActuation
+            actuator = ConsensusActuation()
+            action_keywords = {"fix", "restart", "update", "rebuild", "deploy",
+                               "install", "configure", "migrate", "patch", "reset"}
+            for line in final_output.split("\n"):
+                line_lower = line.lower().strip()
+                if any(kw in line_lower for kw in action_keywords) and len(line_lower) > 10:
+                    action_payload = {
+                        "action_type": "submit_coding_task",
+                        "params": {"description": line.strip()[:500], "source": "consensus_engine"},
+                        "rationale": f"Consensus ({len(models)} models, confidence={result.confidence:.2f})",
+                    }
+                    actuator.execute_action(action_payload, prompt[:200], result.confidence)
+                    break
+            from cognitive.event_bus import publish
+            publish("consensus.actuated", {
+                "models": models, "confidence": result.confidence, "source": source,
+            }, source="consensus_engine")
+        except Exception as e:
+            logger.warning(f"Consensus actuation failed (non-fatal): {e}")
 
     return result
 

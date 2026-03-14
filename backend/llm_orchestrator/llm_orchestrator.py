@@ -115,10 +115,18 @@ class LLMOrchestrator:
             embedding_model=embedding_model
         ) if embedding_model else None
 
+        contradiction_detector = None
+        try:
+            from cognitive.contradiction_detector import get_contradiction_detector_for_guard
+            contradiction_detector = get_contradiction_detector_for_guard()
+        except Exception:
+            pass
+
         self.hallucination_guard = HallucinationGuard(
             multi_llm_client=self.multi_llm,
             repo_access=self.repo_access,
-            confidence_scorer=self.confidence_scorer
+            confidence_scorer=self.confidence_scorer,
+            contradiction_detector=contradiction_detector,
         )
         self.cognitive_enforcer = CognitiveEnforcer()
 
@@ -435,26 +443,31 @@ class LLMOrchestrator:
         task_request: LLMTaskRequest,
         content: str
     ) -> Optional[str]:
-        """Assign Genesis Key to LLM interaction."""
+        """Assign Genesis Key to LLM interaction via tracker (full audit trail)."""
         logger.info(f"[GENESIS KEY] Assigning Genesis Key for task {task_request.task_id}")
 
-        if not self.cognitive_layer1:
-            return None
-
-        # Create metadata for Genesis Key
-        metadata = {
-            "task_id": task_request.task_id,
-            "task_type": task_request.task_type.value,
-            "user_id": task_request.user_id,
-            "prompt": task_request.prompt[:500],  # Truncate for storage
-            "content_length": len(content),
-            "timestamp": datetime.now().isoformat()
-        }
-
-        # Genesis Keys will be created via Layer 1 integration
-        # For now, return a placeholder
-        genesis_key_id = f"GK-LLM-{task_request.task_id}"
-        return genesis_key_id
+        try:
+            from api._genesis_tracker import track
+            genesis_key_id = track(
+                key_type="api_request",
+                what=f"llm_task/{task_request.task_type.value}/{task_request.task_id}",
+                who=task_request.user_id or "llm_orchestrator",
+                where="/llm/orchestrator",
+                why="user or system LLM request",
+                how="execute_task",
+                input_data={
+                    "task_id": task_request.task_id,
+                    "task_type": task_request.task_type.value,
+                    "prompt_len": len(task_request.prompt),
+                    "content_len": len(content),
+                },
+                output_data={"content_length": len(content)},
+                tags=["brain", "llm", task_request.task_type.value],
+            )
+            return genesis_key_id
+        except Exception as e:
+            logger.debug(f"[GENESIS KEY] Track failed, using fallback: {e}")
+            return f"GK-LLM-{task_request.task_id}"
 
     def _integrate_layer1(
         self,

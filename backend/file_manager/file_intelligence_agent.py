@@ -92,8 +92,8 @@ class FileIntelligenceAgent:
                 complexity=complexity
             )
 
-            # 5. Relationship hints (actual detection happens in RelationshipEngine)
-            relationships = []  # Placeholder for now
+            # 5. Relationship hints: use librarian RelationshipManager when this file is a known document
+            relationships = self._get_relationships_for_path(file_path)
 
             # 6. Additional metadata
             metadata = {
@@ -134,6 +134,43 @@ class FileIntelligenceAgent:
                 relationships=[],
                 metadata={'error': str(e)}
             )
+
+    def _get_relationships_for_path(self, file_path: str) -> List[Dict[str, Any]]:
+        """When the file is a librarian document, return detected relationships; otherwise []."""
+        try:
+            from database.session import session_scope
+            from models.database_models import Document
+            from embedding import get_embedding_model
+            from vector_db.client import get_qdrant_client
+            from librarian.relationship_manager import RelationshipManager
+            path_str = str(Path(file_path).resolve())
+            path_basename = Path(file_path).name
+            with session_scope() as db:
+                doc = (
+                    db.query(Document)
+                    .filter(
+                        (Document.file_path == path_str)
+                        | (Document.file_path == file_path)
+                        | (Document.file_path.endswith(path_basename))
+                    )
+                    .first()
+                )
+                if not doc:
+                    return []
+                try:
+                    emb = get_embedding_model()
+                    vdb = get_qdrant_client()
+                    rel_mgr = RelationshipManager(db, emb, vdb)
+                    raw = rel_mgr.detect_relationships(document_id=doc.id, max_candidates=10)
+                    return [
+                        {"type": r.get("type", "related"), "target_id": r.get("target_id"), "strength": r.get("strength", 0)}
+                        for r in raw[:20]
+                    ]
+                except Exception:
+                    return []
+        except Exception as e:
+            logger.debug("[FILE-INTELLIGENCE] Relationship lookup skipped: %s", e)
+            return []
 
     def _generate_summary(self, content: str, max_length: int = 200) -> str:
         """Generate AI-powered content summary."""

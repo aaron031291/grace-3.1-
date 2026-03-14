@@ -63,6 +63,31 @@ class CreateBranchRequest(BaseModel):
     from_branch: str = "main"
 
 
+class MergeRequest(BaseModel):
+    source_branch: str
+    target_branch: str = "main"
+    message: str = ""
+    author: str = "grace"
+
+
+class CreateTaskRequest(BaseModel):
+    title: str
+    description: str = ""
+    task_type: str = "task"
+    priority: str = "medium"
+    assignee: str = "grace"
+    labels: Optional[List[str]] = None
+    related_files: Optional[List[str]] = None
+
+
+class UpdateTaskRequest(BaseModel):
+    status: Optional[str] = None
+    priority: Optional[str] = None
+    assignee: Optional[str] = None
+    labels: Optional[List[str]] = None
+    description: Optional[str] = None
+
+
 class RunPipelineRequest(BaseModel):
     pipeline_name: str
     yaml_path: Optional[str] = None
@@ -200,6 +225,167 @@ async def api_vcs_list_branches(workspace_id: str):
     from genesis.internal_vcs import get_vcs
     vcs = get_vcs(workspace_id)
     return {"branches": await vcs.list_branches()}
+
+
+# ─── Merge (async) ───
+
+@router.post("/{workspace_id}/vcs/merge")
+async def api_vcs_merge(workspace_id: str, req: MergeRequest):
+    from genesis.internal_vcs import get_vcs
+    vcs = get_vcs(workspace_id)
+    result = await vcs.merge(
+        source_branch=req.source_branch, target_branch=req.target_branch,
+        author=req.author, message=req.message,
+    )
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    await _track("code_change",
+                 f"Merge {req.source_branch} → {req.target_branch}: "
+                 f"{result.get('total_merged', 0)} files, {result.get('total_conflicts', 0)} conflicts",
+                 workspace_id)
+    await _publish_vcs_event(workspace_id, "branch_merged", {
+        "source_branch": req.source_branch, "target_branch": req.target_branch,
+        "merge_id": result.get("merge_id"), "status": result.get("status"),
+    })
+    return result
+
+
+@router.get("/{workspace_id}/vcs/merges")
+async def api_vcs_list_merges(workspace_id: str, status: Optional[str] = None,
+                               limit: int = 20):
+    from database.session import session_scope
+    from models.workspace_models import MergeRequest as MergeRequestModel, Workspace
+    try:
+        with session_scope() as session:
+            ws = session.query(Workspace).filter_by(workspace_id=workspace_id).first()
+            if not ws:
+                raise HTTPException(status_code=404, detail="Workspace not found")
+            q = session.query(MergeRequestModel).filter_by(workspace_id=ws.id)
+            if status:
+                q = q.filter_by(status=status)
+            merges = q.order_by(MergeRequestModel.created_at.desc()).limit(limit).all()
+            return {"merges": [m.to_dict() for m in merges]}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Tasks / Issues (async) ───
+
+@router.post("/{workspace_id}/tasks")
+async def api_create_task(workspace_id: str, req: CreateTaskRequest):
+    import uuid
+    from database.session import session_scope
+    from models.workspace_models import WorkspaceTask, Workspace
+    try:
+        with session_scope() as session:
+            ws = session.query(Workspace).filter_by(workspace_id=workspace_id).first()
+            if not ws:
+                raise HTTPException(status_code=404, detail="Workspace not found")
+            task_id = f"TASK-{uuid.uuid4().hex[:12]}"
+            task = WorkspaceTask(
+                workspace_id=ws.id, task_id=task_id,
+                title=req.title, description=req.description,
+                task_type=req.task_type, priority=req.priority,
+                assignee=req.assignee, labels=req.labels or [],
+                related_files=req.related_files or [],
+            )
+            session.add(task)
+            session.flush()
+            await _track("task_created", f"Task: {req.title}", workspace_id)
+            await _publish_vcs_event(workspace_id, "task_created", {
+                "task_id": task_id, "title": req.title, "priority": req.priority,
+            })
+            return task.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/{workspace_id}/tasks")
+async def api_list_tasks(workspace_id: str, status: Optional[str] = None,
+                          priority: Optional[str] = None, limit: int = 50):
+    from database.session import session_scope
+    from models.workspace_models import WorkspaceTask, Workspace
+    try:
+        with session_scope() as session:
+            ws = session.query(Workspace).filter_by(workspace_id=workspace_id).first()
+            if not ws:
+                raise HTTPException(status_code=404, detail="Workspace not found")
+            q = session.query(WorkspaceTask).filter_by(workspace_id=ws.id)
+            if status:
+                q = q.filter_by(status=status)
+            if priority:
+                q = q.filter_by(priority=priority)
+            tasks = q.order_by(WorkspaceTask.created_at.desc()).limit(limit).all()
+            return {"tasks": [t.to_dict() for t in tasks], "total": len(tasks)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/{workspace_id}/tasks/{task_id}")
+async def api_get_task(workspace_id: str, task_id: str):
+    from database.session import session_scope
+    from models.workspace_models import WorkspaceTask, Workspace
+    try:
+        with session_scope() as session:
+            ws = session.query(Workspace).filter_by(workspace_id=workspace_id).first()
+            if not ws:
+                raise HTTPException(status_code=404, detail="Workspace not found")
+            task = session.query(WorkspaceTask).filter_by(
+                workspace_id=ws.id, task_id=task_id
+            ).first()
+            if not task:
+                raise HTTPException(status_code=404, detail="Task not found")
+            return task.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.patch("/{workspace_id}/tasks/{task_id}")
+async def api_update_task(workspace_id: str, task_id: str, req: UpdateTaskRequest):
+    from datetime import datetime, timezone
+    from database.session import session_scope
+    from models.workspace_models import WorkspaceTask, Workspace
+    try:
+        with session_scope() as session:
+            ws = session.query(Workspace).filter_by(workspace_id=workspace_id).first()
+            if not ws:
+                raise HTTPException(status_code=404, detail="Workspace not found")
+            task = session.query(WorkspaceTask).filter_by(
+                workspace_id=ws.id, task_id=task_id
+            ).first()
+            if not task:
+                raise HTTPException(status_code=404, detail="Task not found")
+            if req.status is not None:
+                old_status = task.status
+                task.status = req.status
+                if req.status == "in_progress" and not task.started_at:
+                    task.started_at = datetime.now(timezone.utc)
+                if req.status in ("done", "closed") and not task.completed_at:
+                    task.completed_at = datetime.now(timezone.utc)
+            if req.priority is not None:
+                task.priority = req.priority
+            if req.assignee is not None:
+                task.assignee = req.assignee
+            if req.labels is not None:
+                task.labels = req.labels
+            if req.description is not None:
+                task.description = req.description
+            task.updated_at = datetime.now(timezone.utc)
+            session.flush()
+            await _track("task_updated", f"Task {task_id}: {task.status}", workspace_id)
+            return task.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ─── Pipelines (async) ───

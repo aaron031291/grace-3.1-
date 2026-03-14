@@ -30,9 +30,9 @@ class BrainOrchestrator:
         # Analysis & review
         "analyze":  ["ai", "system", "files"],
         "review":   ["ai", "code", "govern"],
-        # Knowledge & learning Ã¢â‚¬â€ first-class brain targets
-        "learn":    ["learn", "memory", "ai"],
-        "remember": ["memory", "learn", "ai"],
+        # Knowledge & learning (wired to actual brains: ai=dl_train/fill_gaps, govern=trigger_learning, data=store)
+        "learn":    ["ai", "govern", "data"],
+        "remember": ["chat", "ai", "data"],
         "search":   ["files", "code", "data"],
         # Healing & governance
         "heal":     ["system", "ai", "govern"],
@@ -42,9 +42,9 @@ class BrainOrchestrator:
         "upload":   ["files", "data", "govern"],
         "filing":   ["files", "data"],
         "document": ["data", "files"],
-        # Memory operations
-        "recall":   ["memory", "ai"],
-        "store":    ["memory", "data"],
+        # Memory operations (chat=history, ai=consensus/recall, data=store)
+        "recall":   ["chat", "ai", "data"],
+        "store":    ["data", "chat", "govern"],
     }
 
 
@@ -119,6 +119,9 @@ class BrainOrchestrator:
         if "rule" in text or "approve" in text:
             if "govern" not in detected:
                 detected.append("govern")
+        if "deterministic" in text or "ast" in text or "syntax check" in text or "phase 0" in text:
+            if "deterministic" not in detected:
+                detected.append("deterministic")
 
         return detected[:5]
 
@@ -153,7 +156,18 @@ class BrainOrchestrator:
             ("chat", "chat"): "send",
             ("tasks", "plan"): "submit",
         }
-        return action_map.get((brain, task_type), "runtime" if brain == "system" else "fast" if brain == "ai" else "stats")
+        defaults = {
+            "system": "runtime",
+            "ai": "fast",
+            "files": "stats",
+            "data": "stats",
+            "govern": "scores",
+            "chat": "send",
+            "tasks": "submit",
+            "code": "projects",
+            "deterministic": "scan",
+        }
+        return action_map.get((brain, task_type)) or defaults.get(brain, "runtime")
 
     def _call_brain(self, brain: str, action: str, payload: dict) -> dict:
         from api.brain_api_v2 import call_brain

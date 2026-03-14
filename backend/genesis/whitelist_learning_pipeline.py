@@ -278,10 +278,10 @@ def get_learning_memory():
 
 
 def get_ml_intelligence():
-    """Get ML Intelligence system."""
+    """Get ML Intelligence system (orchestrator with queue_training_example for whitelist patterns)."""
     try:
-        from llm_orchestrator.ml_intelligence import get_ml_intelligence
-        return get_ml_intelligence()
+        from ml_intelligence.integration_orchestrator import get_ml_orchestrator
+        return get_ml_orchestrator()
     except Exception as e:
         logger.debug(f"[WL-Pipeline] ML Intelligence not available: {e}")
         return None

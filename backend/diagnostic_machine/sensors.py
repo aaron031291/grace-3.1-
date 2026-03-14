@@ -76,12 +76,12 @@ class MetricsData:
     active_connections: int = 0
     request_latency_ms: float = 0.0
     requests_per_second: float = 0.0
-    database_health: bool = True
-    vector_db_health: bool = True
-    llm_health: bool = True
-    embedding_health: bool = True
-    learning_memory_health: bool = True
-    genesis_qdrant_health: bool = True
+    database_health: bool = False
+    vector_db_health: bool = False
+    llm_health: bool = False
+    embedding_health: bool = False
+    learning_memory_health: bool = False
+    genesis_qdrant_health: bool = False
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 

@@ -365,8 +365,9 @@ All user actions, inputs, and outputs are tracked here from the first login.
             summary["key_types"][key_type] = summary["key_types"].get(key_type, 0) + 1
 
             # Track sessions
-            if key.get("session_id"):
-                summary["active_sessions"].add(key["session_id"])
+            sess_id = key.get("session_id") or (key.get("context_data") or {}).get("session_id")
+            if sess_id:
+                summary["active_sessions"].add(sess_id)
 
             # Track files
             if key.get("file_path"):

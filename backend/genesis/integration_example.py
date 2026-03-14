@@ -17,6 +17,7 @@ Every action creates a Genesis Key for complete audit trail.
 from database.session import initialize_session_factory, SessionLocal
 from genesis.comprehensive_tracker import ComprehensiveTracker
 from genesis.tracking_middleware import SessionTracker
+from models.genesis_key_models import GenesisKeyType
 
 
 # ==================== Example 1: User Upload with Full Tracking ====================
@@ -128,7 +129,7 @@ def example_ai_code_generation():
 
     # 3. Track file write
     file_key = tracker._create_genesis_key(
-        key_type="FILE_OPERATION",
+        key_type=GenesisKeyType.FILE_OPERATION,
         what_description="Created file: TagManager.jsx",
         where_location="/frontend/src/components/TagManager.jsx",
         why_reason="AI code generation",
@@ -271,8 +272,8 @@ def example_complete_user_journey():
         method="GET",
         request_data={"query": "transformer models", "sort": "recent"},
         response_data={"papers": [..., ...]},
-        status_code=200,
-        parent_key_id=query_key.key_id
+        status_code=200
+        # parent_key_id=query_key.key_id  # Not supported by track_external_api_call
     )
 
     # 5. AI generates final response

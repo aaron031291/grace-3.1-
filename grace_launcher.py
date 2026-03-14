@@ -517,7 +517,27 @@ class LauncherHandler(http.server.BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
+
+    def _proxy_to_backend(self, method="GET", body=None):
+        """Forward request to the Grace backend and relay the response."""
+        import urllib.request
+        url = f"http://localhost:{GRACE_PORT}{self.path}"
+        try:
+            req = urllib.request.Request(url, data=body, method=method)
+            req.add_header("Content-Type", "application/json")
+            resp = urllib.request.urlopen(req, timeout=15)
+            data = resp.read()
+            self.send_response(resp.status)
+            self.send_header("Content-Type", resp.headers.get("Content-Type", "application/json"))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Content-Length", len(data))
+            self.end_headers()
+            self.wfile.write(data)
+        except Exception as e:
+            self._json({"error": str(e), "proxy": True}, code=502)
 
     def do_GET(self):
         if self.path == "/":
@@ -539,6 +559,8 @@ class LauncherHandler(http.server.BaseHTTPRequestHandler):
             self._json(_run_full_diagnostics())
         elif self.path == "/network":
             self._json({"connections": _get_network_connections()})
+        elif self.path.startswith("/api/"):
+            self._proxy_to_backend("GET")
         else:
             self.send_error(404)
 
@@ -621,6 +643,10 @@ class LauncherHandler(http.server.BaseHTTPRequestHandler):
             else:
                 _run_terminal_command(f"bash \"{bat_path}\" &")
             self._json({"ok": True})
+        elif self.path.startswith("/api/"):
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length) if content_length else None
+            self._proxy_to_backend("POST", body)
         else:
             self.send_error(404)
 
@@ -922,6 +948,7 @@ window.addEventListener('unhandledrejection', function(event) {
       <div class="tab" onclick="switchTab('diag')" id="tab-diag">🔬 Diagnostics</div>
       <div class="tab" onclick="switchTab('network', loadNetwork)" id="tab-network">🌐 Network</div>
       <div class="tab" onclick="switchTab('genesis')" id="tab-genesis">🔑 Genesis Keys</div>
+      <div class="tab" onclick="switchTab('federated', loadFederated)" id="tab-federated">🌐 Federated</div>
     </div>
 
     <!-- Log -->
@@ -1015,6 +1042,13 @@ window.addEventListener('unhandledrejection', function(event) {
         <div class="no-metrics">🔑 Genesis Keys feed appears here when Grace is running</div>
       </div>
     </div>
+
+    <!-- Federated Learning -->
+    <div id="panel-federated" class="panel" style="flex:1;overflow:hidden;">
+      <div class="metrics-panel" id="federated-area">
+        <div class="no-metrics">🌐 Federated learning status appears here when Grace is running</div>
+      </div>
+    </div>
   </div>
 
   <!-- Terminal Block -->
@@ -1086,6 +1120,16 @@ function switchTab(name, callback=null) {
   document.getElementById('tab-' + name).classList.add('active');
   document.getElementById('panel-' + name).classList.add('active');
   if (callback) callback();
+  // Eagerly load data for the selected tab
+  if (phase === 'running') {
+    if (name === 'playbooks') loadPlaybooks();
+    else if (name === 'memory') loadMemory();
+    else if (name === 'patches') loadPatches();
+    else if (name === 'llm') loadLLM();
+    else if (name === 'genesis') loadGenesis();
+    else if (name === 'federated') loadFederated();
+    else if (name === 'network') loadNetwork();
+  }
 }
 
 // ── Commands / Terminal ───────────────────────────────────────────────────────
@@ -1456,6 +1500,50 @@ async function loadLLM() {
   area.innerHTML = html;
 }
 
+async function loadGenesis() {
+  if (phase !== 'running') return;
+  const d = await api('/api/validation/verifications/recent?limit=30');
+  if (!d || !d.results) return;
+  renderGenesis(d.results);
+}
+
+// ── Federated Learning ────────────────────────────────────────────────────
+async function loadFederated() {
+  if (phase !== 'running') return;
+  const d = await api('/api/federated/status');
+  if (!d) return;
+  const area = document.getElementById('federated-area');
+  const nRes = await api('/api/federated/nodes');
+  const nodes = nRes && nRes.nodes ? nRes.nodes : [];
+
+  let html = '<div class="diag-grid">';
+  html += '<div class="diag-card" style="text-align:center"><div style="font-size:22px;font-weight:700;color:var(--accent)">' + (d.registered_nodes||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Nodes</div></div>';
+  html += '<div class="diag-card" style="text-align:center"><div style="font-size:22px;font-weight:700;color:var(--green)">' + (d.active_nodes||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Active</div></div>';
+  html += '<div class="diag-card" style="text-align:center"><div style="font-size:22px;font-weight:700;color:var(--accent2)">' + (d.total_rounds||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Rounds</div></div>';
+  html += '<div class="diag-card" style="text-align:center"><div style="font-size:22px;font-weight:700;color:var(--blue)">v' + (d.global_model_version||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Model</div></div>';
+  html += '</div>';
+
+  if (d.privacy) {
+    var pct = d.privacy.epsilon_budget ? Math.round(d.privacy.budget_remaining / d.privacy.epsilon_budget * 100) : 100;
+    var pcolor = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--yellow)' : 'var(--red)';
+    html += '<div class="dash-card"><div class="dash-card-header"><span class="dash-card-title">Privacy Budget</span><span style="font-size:14px;font-weight:700;color:' + pcolor + '">' + pct + '%</span></div>';
+    html += '<div class="gauge-bar" style="height:6px"><div class="gauge-fill" style="width:' + pct + '%;background:' + pcolor + '"></div></div>';
+    html += '<div style="font-size:10px;color:var(--muted);margin-top:6px">spent: ' + (d.privacy.epsilon_spent||0).toFixed(3) + ' / ' + (d.privacy.epsilon_budget||10) + '</div></div>';
+  }
+
+  if (nodes.length) {
+    html += '<div class="dash-card"><div class="dash-card-header"><span class="dash-card-title">Registered Nodes</span></div>';
+    nodes.forEach(function(n) {
+      html += '<div class="check-item"><span class="check-icon">' + (n.active ? '🟢' : '🔴') + '</span>';
+      html += '<div><div class="check-name">' + esc(n.node_name || '') + '</div>';
+      html += '<div class="check-detail">trust: ' + Math.round((n.trust_score||0)*100) + '% | updates: ' + (n.update_count||0) + ' | v' + (n.model_version||0) + '</div></div></div>';
+    });
+    html += '</div>';
+  }
+
+  area.innerHTML = html;
+}
+
 // ── Polling ───────────────────────────────────────────────────────────────────
 async function poll() {
   const d = await api('/status');
@@ -1490,6 +1578,9 @@ async function poll() {
     else if (activeTab === 'tab-memory') loadMemory();
     else if (activeTab === 'tab-patches') loadPatches();
     else if (activeTab === 'tab-llm') loadLLM();
+    else if (activeTab === 'tab-genesis') loadGenesis();
+    else if (activeTab === 'tab-federated') loadFederated();
+    else if (activeTab === 'tab-network') loadNetwork();
   }
 }
 

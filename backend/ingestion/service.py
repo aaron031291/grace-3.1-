@@ -16,7 +16,7 @@ from backend.embedding import EmbeddingModel
 from backend.vector_db.client import get_qdrant_client
 from backend.database import session as db_session
 from backend.database.session import initialize_session_factory
-from backend.models.database_models import Document, DocumentChunk
+from models.database_models import Document, DocumentChunk
 from backend.settings import settings
 
 # Import cognitive blueprint decorators
@@ -30,6 +30,23 @@ except ImportError:
         def decorator(func):
             return func
         return decorator
+
+try:
+    from backend.telemetry.decorators import track_operation
+    from models.telemetry_models import OperationType
+except ImportError:
+    try:
+        from telemetry.decorators import track_operation
+        from models.telemetry_models import OperationType
+    except ImportError:
+        def track_operation(operation_type, operation_name=None, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
+
+        class OperationType:
+            INGESTION = "ingestion"
+            CHAT_GENERATION = "chat_generation"
 
 logger = logging.getLogger(__name__)
 
@@ -319,6 +336,7 @@ class TextIngestionService:
         impact_scope="component",  # Affects ingestion component
         requires_determinism=False  # Embedding generation has some randomness
     )
+    @track_operation(OperationType.INGESTION, "ingest_text_fast")
     def ingest_text_fast(
         self,
         text_content: str,
@@ -802,6 +820,13 @@ class TextIngestionService:
             db.commit()
             
             logger.info(f"[OK] Successfully ingested document: {document_id}")
+            try:
+                from ml_intelligence.kpi_tracker import get_kpi_tracker
+                tracker = get_kpi_tracker()
+                tracker.increment_kpi("knowledge_retrieval", "requests", 1.0)
+                tracker.increment_kpi("knowledge_retrieval", "successes", 1.0)
+            except Exception:
+                pass
             return document_id, "Document ingested successfully"
         
         except Exception as e:

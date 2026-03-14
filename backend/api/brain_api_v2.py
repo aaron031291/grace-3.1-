@@ -1,8 +1,8 @@
 """
-Brain API v2 Ã¢â‚¬â€ CLEAN version. No HTTP-to-localhost calls.
+Brain API v2 — CLEAN version. No HTTP-to-localhost calls.
 All business logic via direct Python function calls through core/services/.
 
-8 domains, 95+ actions, zero self-HTTP.
+9 brains (domains): chat, files, govern, ai, system, data, tasks, code, deterministic. 95+ actions, zero self-HTTP.
 """
 
 from fastapi import APIRouter, HTTPException, Request
@@ -697,14 +697,6 @@ def _code() -> dict:
         "assimilate":   lambda p: _hunter_assimilate(p),
         **_agentic_actions("code"),
     }
-
-def _deterministic() -> dict:
-    return {
-        "scan": lambda p: {"status": "mock"},
-        "fix": lambda p: {"status": "mock"},
-        **_agentic_actions("deterministic"),
-    }
-
 
 def _project_scoped_chat(p):
     """Chat scoped to a specific project Ã¢â‚¬â€ LLM sees project files as context."""

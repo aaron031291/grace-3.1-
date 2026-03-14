@@ -12,9 +12,10 @@ from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from datetime import datetime, timezone
+import time
 import logging
 
-from models.librarian_models import LibrarianAction
+from models.librarian_models import LibrarianAction, LibrarianAudit
 from models.database_models import Document
 
 logger = logging.getLogger(__name__)
@@ -464,3 +465,245 @@ class ApprovalWorkflow:
                 failed += 1
 
         return {"rejected": rejected, "failed": failed}
+
+    # ------------------------------------------------------------------
+    # Action Execution & Audit Trail
+    # ------------------------------------------------------------------
+
+    def execute_action(
+        self,
+        action_id: int,
+        executor: Optional[object] = None
+    ) -> Dict[str, Any]:
+        """
+        Execute a previously approved action and write an audit record.
+
+        Args:
+            action_id: Action ID to execute
+            executor: Optional object with callable methods matching action
+                      types (e.g. tag_manager, file_manager).  When *None*
+                      the action is simply marked "executed" without side
+                      effects (useful for actions already applied inline).
+
+        Returns:
+            Dict with "status" ("executed" | "error"), "action_id", etc.
+        """
+        action = self.db.query(LibrarianAction).filter(
+            LibrarianAction.id == action_id
+        ).first()
+
+        if not action:
+            return {"status": "error", "action_id": action_id,
+                    "error": "Action not found"}
+
+        if action.status not in ("approved", "pending"):
+            return {"status": "error", "action_id": action_id,
+                    "error": f"Action not executable (status: {action.status})"}
+
+        # Auto-tier pending actions can be executed directly
+        if action.status == "pending" and action.permission_tier != "auto":
+            return {"status": "error", "action_id": action_id,
+                    "error": "Action requires approval before execution"}
+
+        start = time.time()
+        error_msg = None
+
+        try:
+            if executor is not None:
+                self._dispatch_action(action, executor)
+
+            action.status = "executed"
+            action.executed_at = datetime.now(timezone.utc)
+            action.updated_at = datetime.now(timezone.utc)
+            self.db.commit()
+
+        except Exception as exc:
+            error_msg = str(exc)
+            action.status = "approved"  # revert to approved so it can retry
+            action.execution_error = error_msg
+            action.updated_at = datetime.now(timezone.utc)
+            self.db.commit()
+            logger.error(f"Action {action_id} execution failed: {exc}")
+
+        elapsed_ms = (time.time() - start) * 1000
+        status = "executed" if error_msg is None else "failed"
+
+        self._write_audit(
+            action=action,
+            status=status,
+            executed_by=action.reviewed_by or action.triggered_by or "system",
+            execution_time_ms=elapsed_ms,
+            error_message=error_msg
+        )
+
+        return {
+            "status": status,
+            "action_id": action_id,
+            "execution_time_ms": round(elapsed_ms, 2),
+            "error": error_msg
+        }
+
+    def execute_approved_actions(
+        self,
+        limit: int = 50
+    ) -> Dict[str, int]:
+        """
+        Execute all approved actions that haven't been executed yet.
+
+        Returns:
+            Dict: {"executed": count, "failed": count}
+        """
+        actions = self.db.query(LibrarianAction).filter(
+            LibrarianAction.status == "approved"
+        ).order_by(LibrarianAction.created_at).limit(limit).all()
+
+        executed = 0
+        failed = 0
+
+        for action in actions:
+            result = self.execute_action(action.id)
+            if result["status"] == "executed":
+                executed += 1
+            else:
+                failed += 1
+
+        logger.info(f"Executed {executed} approved actions ({failed} failed)")
+        return {"executed": executed, "failed": failed}
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+
+    def _dispatch_action(
+        self,
+        action: LibrarianAction,
+        executor: object
+    ) -> None:
+        """Route an action to the appropriate executor method."""
+        dispatch_map = {
+            "assign_tag":           "assign_tags",
+            "update_metadata":      "update_metadata",
+            "reindex":              "reindex_document",
+            "detect_relationship":  "detect_relationships",
+            "create_folder":        "create_folder",
+            "delete_file":          "delete_file",
+            "move_file":            "move_file",
+            "rename_file":          "rename_file",
+            "delete_folder":        "delete_folder",
+        }
+
+        method_name = dispatch_map.get(action.action_type)
+
+        if method_name and hasattr(executor, method_name):
+            method = getattr(executor, method_name)
+            params = action.action_params or {}
+            if action.document_id:
+                params["document_id"] = action.document_id
+            method(**params)
+        else:
+            logger.debug(
+                f"No executor method for '{action.action_type}', "
+                "marking executed without side effects"
+            )
+
+    def _write_audit(
+        self,
+        action: LibrarianAction,
+        status: str,
+        executed_by: str,
+        execution_time_ms: float,
+        error_message: Optional[str] = None
+    ) -> LibrarianAudit:
+        """
+        Write an audit record for an action.
+
+        Args:
+            action: The LibrarianAction that was processed
+            status: "executed", "failed", "rolled_back"
+            executed_by: Who executed it
+            execution_time_ms: Duration in milliseconds
+            error_message: Error details if failed
+
+        Returns:
+            LibrarianAudit: Created audit record
+        """
+        rollback_data = None
+        if status == "executed" and action.action_type in (
+            "delete_file", "move_file", "rename_file", "delete_folder"
+        ):
+            rollback_data = {
+                "action_type": action.action_type,
+                "original_params": action.action_params,
+                "document_id": action.document_id
+            }
+
+        audit = LibrarianAudit(
+            action_id=action.id,
+            document_id=action.document_id,
+            action_type=action.action_type,
+            action_details={
+                "params": action.action_params,
+                "permission_tier": action.permission_tier,
+                "confidence": action.confidence,
+                "triggered_by": action.triggered_by,
+                "reason": action.reason
+            },
+            status=status,
+            executed_by=executed_by,
+            execution_time_ms=execution_time_ms,
+            error_message=error_message,
+            rollback_data=rollback_data
+        )
+
+        self.db.add(audit)
+        self.db.commit()
+
+        logger.debug(f"Audit recorded: action={action.id} status={status}")
+        return audit
+
+    def get_audit_trail(
+        self,
+        document_id: Optional[int] = None,
+        action_type: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """
+        Query the audit trail.
+
+        Args:
+            document_id: Filter by document
+            action_type: Filter by action type
+            status: Filter by status (executed, failed, rolled_back)
+            limit: Maximum records
+
+        Returns:
+            List[Dict]: Audit records
+        """
+        query = self.db.query(LibrarianAudit)
+
+        if document_id is not None:
+            query = query.filter(LibrarianAudit.document_id == document_id)
+        if action_type:
+            query = query.filter(LibrarianAudit.action_type == action_type)
+        if status:
+            query = query.filter(LibrarianAudit.status == status)
+
+        records = query.order_by(LibrarianAudit.created_at.desc()).limit(limit).all()
+
+        return [
+            {
+                "id": r.id,
+                "action_id": r.action_id,
+                "document_id": r.document_id,
+                "action_type": r.action_type,
+                "action_details": r.action_details,
+                "status": r.status,
+                "executed_by": r.executed_by,
+                "execution_time_ms": r.execution_time_ms,
+                "error_message": r.error_message,
+                "rollback_data": r.rollback_data,
+                "created_at": r.created_at.isoformat() if r.created_at else None
+            }
+            for r in records
+        ]

@@ -247,8 +247,8 @@ class DeterministicHealer:
                         f"import_probe: '{import_name}' exists in '{from_module}' — module reload may fix",
                         healer="import_probe",
                     )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("[DET-HEALER] import_probe direct import failed: %s", e)
 
         # Search backend for the symbol
         candidates = self._find_symbol_in_backend(import_name)
@@ -302,7 +302,8 @@ class DeterministicHealer:
                     found.append(module_path)
                     if len(found) >= 5:
                         break
-            except Exception:
+            except Exception as e:
+                logger.debug("[DET-HEALER] import_probe scan error on %s: %s", py_file, e)
                 continue
         return found
 
@@ -482,7 +483,7 @@ class DeterministicHealer:
         location: str,
         description: str = "",
     ) -> HealResult:
-        """Validate and write patched source, with backup."""
+        """Validate and write patched source, with backup and rollback."""
         # Syntax check before writing
         try:
             ast.parse(new_source)
@@ -493,30 +494,58 @@ class DeterministicHealer:
                 healer=healer,
             )
 
-        # Backup
+        # Backup original source for rollback
+        original_source = None
+        try:
+            original_source = target.read_text(encoding="utf-8")
+        except Exception as e:
+            logger.warning("[DET-HEALER] Could not read original for backup: %s", e)
+
+        # Persist backup to disk
+        backup_path = None
         try:
             backup_dir = _BACKEND_ROOT / ".fix_backups"
             backup_dir.mkdir(exist_ok=True)
-            import time, shutil
+            import time as _time, shutil
             safe = str(target.relative_to(_BACKEND_ROOT)).replace("/", "_").replace("\\", "_")
-            shutil.copy2(target, backup_dir / f"{safe}.{int(time.time())}.bak")
-        except Exception:
-            pass
+            backup_path = backup_dir / f"{safe}.{int(_time.time())}.bak"
+            shutil.copy2(target, backup_path)
+        except Exception as e:
+            logger.warning("[DET-HEALER] Backup failed for %s: %s", target.name, e)
 
-        # Write
+        # Write patched source
         try:
             target.write_text(new_source, encoding="utf-8")
         except Exception as e:
             return HealResult(False, f"{healer}: write failed: {e}", healer=healer)
 
-        # Hot-reload
-        parts = str(target.relative_to(_BACKEND_ROOT)).replace("\\", "/")
+        # Hot-reload — if it fails, ROLLBACK
+        try:
+            parts = str(target.relative_to(_BACKEND_ROOT)).replace("\\", "/")
+        except ValueError:
+            parts = target.stem  # file outside backend — use filename only
         module_name = parts.replace("/", ".").removesuffix(".py")
         try:
             if module_name in sys.modules:
                 importlib.reload(sys.modules[module_name])
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(
+                "[DET-HEALER] Reload failed for %s after patch, rolling back: %s",
+                module_name, e,
+            )
+            # Rollback: restore original source
+            if original_source is not None:
+                try:
+                    target.write_text(original_source, encoding="utf-8")
+                    if module_name in sys.modules:
+                        importlib.reload(sys.modules[module_name])
+                except Exception as re_err:
+                    logger.error("[DET-HEALER] Rollback also failed for %s: %s", target.name, re_err)
+            return HealResult(
+                False,
+                f"{healer}: patch applied but reload failed, rolled back: {e}",
+                healer=healer,
+            )
 
         desc = description or f"{healer} patch applied to {target.name}"
         return HealResult(True, desc, patch_applied=True, healer=healer)

@@ -13,6 +13,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+try:
+    from telemetry.decorators import track_operation
+    from models.telemetry_models import OperationType
+    _TELEMETRY_OK = True
+except ImportError:
+    _TELEMETRY_OK = False
+
 
 class DocumentRetriever:
     """Retrieves relevant document chunks for query context."""

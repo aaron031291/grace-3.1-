@@ -306,6 +306,7 @@ class SessionTracker:
 
         return self.tracker
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
         """End tracking session."""
         if exc_type is not None:
             # Track error

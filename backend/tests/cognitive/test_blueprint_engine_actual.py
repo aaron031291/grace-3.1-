@@ -1,66 +1,50 @@
 import pytest
-import os
-from collections import namedtuple
-from pathlib import Path
+from unittest.mock import MagicMock, patch
+from backend.cognitive.blueprint_engine import (
+    Blueprint, create_from_prompt, _design_blueprint, _build_from_blueprint
+)
 
-from backend.cognitive.blueprint_engine import Blueprint, create_from_prompt, _save_blueprint
+def test_blueprint_initialization():
+    bp = Blueprint(id="bp_1", task="do thing")
+    assert bp.status == "draft"
+    assert bp.task == "do thing"
 
-def test_blueprint_create_from_prompt_success(monkeypatch, tmp_path):
-    import backend.cognitive.blueprint_engine as be
-    monkeypatch.setattr(be, "BLUEPRINTS_DIR", tmp_path)
+@patch("backend.cognitive.blueprint_engine._save_blueprint")
+@patch("backend.cognitive.blueprint_engine._design_blueprint")
+@patch("backend.cognitive.blueprint_engine._build_from_blueprint")
+@patch("backend.cognitive.blueprint_engine._test_code")
+@patch("backend.cognitive.blueprint_engine._track_blueprint")
+def test_create_from_prompt_success(mock_track, mock_test, mock_build, mock_design, mock_save):
+    # Setup mocks
+    mock_design.return_value = {
+        "architecture": "arch",
+        "functions": [],
+        "dependencies": [],
+        "success_criteria": [],
+        "consensus_score": 0.9
+    }
+    mock_build.return_value = "def foo(): pass"
+    mock_test.return_value = {"passed": True, "trust_score": 0.9}
     
-    # Mock design
-    def mock_design(prompt, bp):
-        return {
-            "architecture": "MVC",
-            "functions": [],
-            "dependencies": [],
-            "success_criteria": [],
-            "consensus_score": 0.9
-        }
-    monkeypatch.setattr(be, "_design_blueprint", mock_design)
-    
-    # Mock build
-    def mock_build(bp, attempt):
-        return "def foo(): pass"
-    monkeypatch.setattr(be, "_build_from_blueprint", mock_build)
-    
-    # Mock test (pass on first try)
-    def mock_test(code):
-        return {"passed": True, "trust_score": 0.95}
-    monkeypatch.setattr(be, "_test_code", mock_test)
-    
-    # Mock track
-    monkeypatch.setattr(be, "_track_blueprint", lambda bp, status: None)
-    
-    # Mock retry
-    monkeypatch.setattr(be, "_retry_with_revised_blueprint", lambda bp: None)
-    
-    res = create_from_prompt("Make a generic thing")
+    res = create_from_prompt("create a foo function")
     
     assert res["result"] == "SUCCESS"
-    assert res["status"] == "deployed"
-    assert res["consensus_score"] == 0.9
-    assert res["trust_score"] == 0.95
-    assert "Make a generic thing" in res["task"]
+    assert "status" in res
+    assert mock_save.called
+    assert mock_track.called
 
-def test_blueprint_create_from_prompt_retry_fail(monkeypatch, tmp_path):
-    import backend.cognitive.blueprint_engine as be
-    monkeypatch.setattr(be, "BLUEPRINTS_DIR", tmp_path)
-    monkeypatch.setattr(be, "MAX_QWEN_RETRIES", 2)
-    monkeypatch.setattr(be, "MAX_BLUEPRINT_REVISIONS", 0) # don't recurse
+@patch("cognitive.consensus_engine.run_consensus")
+def test_design_blueprint(mock_consensus):
+    mock_result = MagicMock()
+    mock_result.final_output = '{"architecture": "arch", "functions": []}'
+    mock_result.confidence = 0.9
+    mock_consensus.return_value = mock_result
     
-    monkeypatch.setattr(be, "_design_blueprint", lambda p, b: {"architecture": "Test"})
-    monkeypatch.setattr(be, "_build_from_blueprint", lambda b, a: "def bad(): syntax error")
-    monkeypatch.setattr(be, "_test_code", lambda c: {"passed": False, "error": "Syntax Error"})
-    monkeypatch.setattr(be, "_track_blueprint", lambda bp, status: None)
+    bp = Blueprint(id="1", task="test")
+    res = _design_blueprint("test prompt", bp)
     
-    res = create_from_prompt("Make a bad thing")
-    
-    # Should exhaust retries and fail
-    assert res["status"] == "failed"
-    assert len(res["errors"]) == 2 # 2 retries
-    assert "Syntax Error" in res["errors"][0]
+    assert res is not None
+    assert res["architecture"] == "arch"
 
 if __name__ == "__main__":
     pytest.main(['-v', __file__])

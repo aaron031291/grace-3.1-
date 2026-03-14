@@ -39,6 +39,8 @@ class MemoryMeshCache:
         """
         self.ttl_seconds = ttl_seconds
         self.cache_version = 0  # Increment to invalidate all caches
+        self._high_trust_ids_store: Dict[Tuple[float, int], Tuple[int, ...]] = {}
+        self._memory_stats_store: Dict[int, Dict[str, Any]] = {}
 
         # Cache statistics
         self.stats = {
@@ -54,10 +56,8 @@ class MemoryMeshCache:
         """Invalidate all cached data"""
         self.cache_version += 1
         self.stats['invalidations'] += 1
-
-        # Clear function-level LRU caches
-        self._get_high_trust_learning_cached.cache_clear()
-        self._get_memory_stats_cached.cache_clear()
+        self._high_trust_ids_store.clear()
+        self._memory_stats_store.clear()
         self._find_similar_examples_cached.cache_clear()
 
         logger.info(f"[MEMORY-MESH-CACHE] All caches invalidated (version={self.cache_version})")
@@ -80,19 +80,13 @@ class MemoryMeshCache:
     # HIGH-TRUST LEARNING CACHE
     # ================================================================
 
-    @lru_cache(maxsize=100)
     def _get_high_trust_learning_cached(
         self,
         min_trust: float,
         cache_version: int
-    ) -> Tuple[str, ...]:
-        """
-        Cached high-trust learning IDs.
-
-        Returns tuple of IDs for immutability (required for caching)
-        """
-        # This is just the cache key - actual query done by caller
-        return ()  # Placeholder
+    ) -> Tuple[int, ...]:
+        """Return cached high-trust learning IDs if available."""
+        return self._high_trust_ids_store.get((min_trust, cache_version), ())
 
     def get_high_trust_learning(
         self,
@@ -120,7 +114,6 @@ class MemoryMeshCache:
             cached_ids = self._get_high_trust_learning_cached(min_trust, self.cache_version)
             if cached_ids:
                 self.stats['hits'] += 1
-                # Retrieve from DB by IDs (fast with index)
                 return session.query(LearningExample).filter(
                     LearningExample.id.in_(cached_ids)
                 ).all()
@@ -135,10 +128,9 @@ class MemoryMeshCache:
             LearningExample.trust_score.desc()
         ).limit(limit).all()
 
-        # Store IDs in cache
+        # Store IDs in cache for next time
         example_ids = tuple(ex.id for ex in examples)
-        self._get_high_trust_learning_cached.cache_clear()
-        self._get_high_trust_learning_cached(min_trust, self.cache_version)
+        self._high_trust_ids_store[(min_trust, self.cache_version)] = example_ids
 
         return examples
 
@@ -146,10 +138,9 @@ class MemoryMeshCache:
     # MEMORY STATS CACHE
     # ================================================================
 
-    @lru_cache(maxsize=10)
     def _get_memory_stats_cached(self, cache_version: int) -> Dict[str, Any]:
-        """Cached memory mesh statistics"""
-        return {}  # Placeholder - actual data stored by caller
+        """Return cached memory mesh statistics if available."""
+        return self._memory_stats_store.get(cache_version, {})
 
     def get_or_compute_stats(
         self,
@@ -178,12 +169,7 @@ class MemoryMeshCache:
         # Compute fresh stats
         self.stats['misses'] += 1
         stats = compute_func()
-
-        # Store in cache
-        self._get_memory_stats_cached.cache_clear()
-        # Note: LRU cache doesn't support setting the value directly
-        # so we rely on the caller to cache the result
-
+        self._memory_stats_store[self.cache_version] = stats
         return stats
 
     # ================================================================

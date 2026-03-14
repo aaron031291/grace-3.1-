@@ -16,7 +16,8 @@ def get_persona():
     _ensure()
     if PERSONA_FILE.exists():
         try: return json.loads(PERSONA_FILE.read_text())
-        except Exception: pass
+        except Exception as e:
+            logger.warning("[GOVERN] Failed to load persona config from %s: %s", PERSONA_FILE, e)
     return {"personal": "", "professional": ""}
 
 def update_persona(personal=None, professional=None):
@@ -58,7 +59,8 @@ def dashboard():
         engine = GovernanceEngine()
         return {"timestamp": datetime.now(timezone.utc).isoformat(),
                 "pillars": {"self_governance": True, "human_oversight": True}}
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] dashboard failed: %s", e)
         return {"timestamp": datetime.now(timezone.utc).isoformat(), "status": "basic"}
 
 def get_approvals():
@@ -68,7 +70,8 @@ def get_approvals():
         with session_scope() as db:
             rows = db.execute(text("SELECT * FROM governance_decisions WHERE status='pending' ORDER BY id DESC LIMIT 20")).fetchall()
             return {"approvals": [dict(r._mapping) for r in rows]}
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] get_approvals failed: %s", e)
         return {"approvals": []}
 
 def approve_action(decision_id, action, reason=""):
@@ -87,7 +90,8 @@ def get_scores():
         from kpi.kpi_tracker import get_tracker
         tracker = get_tracker()
         return tracker.get_system_trust()
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] get_scores failed: %s", e)
         return {"trust_score": 0.5}
 
 def trigger_healing():
@@ -106,7 +110,8 @@ def trigger_learning():
         track(key_type="learning_complete", what="Manual learning trigger",
               who="govern_service", tags=["learning", "manual"])
         return {"status": "triggered"}
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] trigger_learning failed: %s", e)
         return {"status": "logged"}
 
 
@@ -133,7 +138,8 @@ def genesis_stats():
             total = s.query(func.count(GenesisKey.id)).scalar() or 0
             errors = s.query(func.count(GenesisKey.id)).filter(GenesisKey.is_error == True).scalar() or 0
             return {"total_keys": total, "total_errors": errors}
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] genesis_stats failed: %s", e)
         return {"total_keys": 0}
 
 def genesis_keys(limit=20):
@@ -145,7 +151,8 @@ def genesis_keys(limit=20):
             return {"keys": [{"key_id": k.key_id, "key_type": str(k.key_type),
                               "what": k.what_description, "when": k.when_timestamp.isoformat() if k.when_timestamp else None}
                              for k in keys]}
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] genesis_keys failed: %s", e)
         return {"keys": []}
 
 def approvals_history(limit=30):
@@ -155,7 +162,8 @@ def approvals_history(limit=30):
         with session_scope() as db:
             rows = db.execute(text(f"SELECT * FROM governance_decisions ORDER BY id DESC LIMIT {int(limit)}")).fetchall()
             return {"history": [dict(r._mapping) for r in rows]}
-    except Exception:
+    except Exception as e:
+        logger.warning("[GOVERN] approvals_history failed: %s", e)
         return {"history": []}
 
 def adaptive_overrides(limit=20):
