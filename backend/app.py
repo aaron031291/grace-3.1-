@@ -485,8 +485,9 @@ async def lifespan(app: FastAPI):
         try:
             from services.grace_autonomous_engine import GraceAutonomousEngine
             auto_engine = GraceAutonomousEngine()
+            auto_engine.start()
             app.state.autonomous_engine = auto_engine
-            print("[OK] Grace Autonomous Engine initialized")
+            print("[OK] Grace Autonomous Engine initialized and started")
         except Exception as e:
             print(f"[WARN] Autonomous Engine: {e}")
 
@@ -760,6 +761,28 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Meta loop not started: {e}")
 
+    # ==================== Start Spindle Daemon (autonomous, always-on) ====================
+    _spindle_proc = None
+    if not settings.DISABLE_SPINDLE_DAEMON:
+        try:
+            import subprocess
+            backend_dir = str(Path(__file__).parent)
+            _spindle_proc = subprocess.Popen(
+                [sys.executable, "spindle_daemon.py"],
+                cwd=backend_dir,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0,
+            )
+            app.state.spindle_daemon_process = _spindle_proc
+            print("[OK] Spindle daemon started (autonomous, tcp://127.0.0.1:5520)")
+        except Exception as e:
+            print(f"[WARN] Spindle daemon not started: {e}")
+            app.state.spindle_daemon_process = None
+    else:
+        app.state.spindle_daemon_process = None
+        print("[SKIP] Spindle daemon disabled (DISABLE_SPINDLE_DAEMON=true)")
+
     # ==================== Start Autonomous CICD Engine ====================
     try:
         from genesis.autonomous_cicd_engine import start_autonomous_cicd
@@ -866,6 +889,19 @@ async def lifespan(app: FastAPI):
         print("[OK] Self-mirroring telemetry stopped")
     except Exception:
         pass
+
+    # Spindle daemon shutdown
+    _proc = getattr(app.state, "spindle_daemon_process", None)
+    if _proc is not None and _proc.poll() is None:
+        try:
+            _proc.terminate()
+            _proc.wait(timeout=5)
+            print("[OK] Spindle daemon stopped")
+        except Exception:
+            try:
+                _proc.kill()
+            except Exception:
+                pass
 
     # SWE→Spindle bridge shutdown
     try:
@@ -981,7 +1017,31 @@ app.include_router(layer1_router)
 from api.cognitive_api import router as cognitive_router
 app.include_router(cognitive_router)
 
+from api.codebase_api import router as codebase_router
+app.include_router(codebase_router)
+
+from api.genesis_api import router as genesis_router
+app.include_router(genesis_router)
+
+from api.governance_api import router as governance_router
+app.include_router(governance_router)
+
+from api.librarian_api import router as librarian_router
+app.include_router(librarian_router)
+
+from api.ml_intelligence_api import router as ml_intelligence_router
+app.include_router(ml_intelligence_router)
+
+from api.monitoring_api import router as monitoring_router
+app.include_router(monitoring_router)
+
 from api.codebase_hub_api import router as codebase_hub_router
+app.include_router(codebase_hub_router, prefix="/api")
+
+@app.get("/api/cicd/genesis-keys")
+async def cicd_genesis_keys():
+    return {"status": "ok", "keys": []}
+
 from api.tasks_hub_api import router as tasks_hub_router
 from api.schema_evolution_api import router as schema_evolution_router
 from api.oracle_api import router as oracle_router
@@ -1072,6 +1132,13 @@ try:
     app.include_router(spindle_router)
 except Exception as _e:
     print(f"[WARN] Spindle API router not loaded: {_e}")
+
+# DevLab VVT (Validation, Verification, Test)
+try:
+    from api.test_verify_api import router as test_verify_router
+    app.include_router(test_verify_router)               # /api/test-verify/* (smoke, pytest, stress, deterministic pipeline)
+except Exception as _e:
+    print(f"[WARN] Test-Verify API router not loaded: {_e}")
 
 # System Introspection & Deterministic Validation
 try:

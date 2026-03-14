@@ -20,11 +20,27 @@ def build_rag_prompt(user_query: str, context: Optional[str] = None) -> str:
     # ── Wire: Ghost Memory → Prompt (continuity across sessions) ──
     ghost_context = ""
     try:
-        from cognitive.ghost_memory import get_ghost_memory
+        from cognitive.ghost_memory import get_ghost_memory, PLAYBOOK_DIR
         ghost = get_ghost_memory()
-        ghost_ctx = ghost.get_context(max_tokens=500)
+        # 1. Live RAM cache (current task)
+        ghost_ctx = ghost.get_context(max_tokens=400)
         if ghost_ctx:
             ghost_context = ghost_ctx
+        # 2. Playbook patterns (cross-session continuity from .json reflections)
+        if PLAYBOOK_DIR.exists():
+            import json
+            playbook_lines = []
+            for f in sorted(PLAYBOOK_DIR.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:3]:
+                try:
+                    data = json.loads(f.read_text())
+                    playbook_lines.append(
+                        f"[playbook:{data.get('pattern_name','?')}] {data.get('task','')[:120]} "
+                        f"(confidence={data.get('confidence',0):.1f})"
+                    )
+                except Exception:
+                    pass
+            if playbook_lines:
+                ghost_context += ("\n" if ghost_context else "") + "\n".join(playbook_lines)
     except Exception:
         pass
 

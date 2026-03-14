@@ -397,6 +397,22 @@ def _find_agreements_and_disagreements(
     return agreements[:15], disagreements[:10]
 
 
+def _get_model_trust(model_id: str) -> float:
+    """Get trust score (0-1) for a model from the Trust Engine.
+
+    Returns 0.5 (neutral) if the engine is unavailable or has no data.
+    """
+    try:
+        from cognitive.trust_engine import get_trust_engine
+        te = get_trust_engine()
+        comp = te.get_component(f"model.{model_id}")
+        if comp and comp.trust_score > 0:
+            return min(1.0, comp.trust_score / 100.0)
+    except Exception:
+        pass
+    return 0.5
+
+
 def _score_response(response: ModelResponse, prompt: str,
                     agreements: List[str]) -> float:
     """
@@ -406,6 +422,7 @@ def _score_response(response: ModelResponse, prompt: str,
     - Length adequacy (not too short, not too long)
     - Coverage of agreement points
     - Latency (faster is mildly preferred, all else equal)
+    - Model trust score from Trust Engine (P0 wire)
     - No error
     """
     if not response.response or response.error:
@@ -446,12 +463,16 @@ def _score_response(response: ModelResponse, prompt: str,
     # 4. Latency bonus (minor): faster responses get a small boost
     latency_score = max(0.5, 1.0 - response.latency_ms / 60000)
 
-    # Weighted combination
+    # 5. Trust Engine weight: models with higher trust get a boost
+    trust_weight = _get_model_trust(response.model_id)
+
+    # Weighted combination (trust replaces some latency weight)
     score = (
-        0.25 * length_score
-        + 0.30 * relevance
-        + 0.35 * coverage
-        + 0.10 * latency_score
+        0.20 * length_score
+        + 0.25 * relevance
+        + 0.30 * coverage
+        + 0.05 * latency_score
+        + 0.20 * trust_weight
     )
     return round(min(1.0, score), 4)
 
