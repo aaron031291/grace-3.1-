@@ -327,6 +327,27 @@ class ErrorPipeline:
         # ── Record learning event ────────────────────────────────────
         self._record_learning(payload, healed, fix_description, elapsed)
 
+        # ── If healing failed, search external knowledge to learn for next time ──
+        if not healed:
+            try:
+                from core.async_parallel import run_background
+                error_topic = f"{payload.get('exc_type', '')} {payload.get('exc_str', '')[:100]}"
+                def _fetch_knowledge():
+                    try:
+                        from cognitive.reverse_knn import fill_gaps_from_sources
+                        fill_gaps_from_sources(max_gaps=2, auto_ingest=True)
+                    except Exception:
+                        pass
+                    try:
+                        from cognitive.flash_cache import get_flash_cache
+                        fc = get_flash_cache()
+                        fc.lookup(keyword=error_topic[:80], min_trust=0.0, limit=5)
+                    except Exception:
+                        pass
+                run_background(_fetch_knowledge, "error_pipeline_knowledge_fetch")
+            except Exception:
+                pass
+
         # Dispatch to healing swarm for concurrent resolution
         try:
             from cognitive.healing_swarm import get_healing_swarm
@@ -469,11 +490,25 @@ class ErrorPipeline:
             #   → backend/cognitive/mirror_self_modeling.py
             target_file = self._location_to_file(payload["location"])
 
+            # Search flash cache + external knowledge for relevant context
+            knowledge_context = ""
+            try:
+                from cognitive.flash_cache import get_flash_cache
+                fc = get_flash_cache()
+                refs = fc.lookup(keyword=f"{payload['exc_type']} {payload['exc_str'][:60]}", min_trust=0.0, limit=3)
+                if refs:
+                    knowledge_context = "\n\nRelevant knowledge from cache:\n" + "\n".join(
+                        f"- [{r.get('source_name', '')}] {r.get('summary', '')[:200]}" for r in refs[:3]
+                    )
+            except Exception:
+                pass
+
             instructions = (
                 f"Fix the {payload['exc_type']} error in {payload['location']}.\n"
                 f"Error: {payload['exc_str']}\n"
                 f"Traceback:\n{payload['tb'][-1000:]}\n"
                 "Apply a minimal, targeted fix. Do not refactor unrelated code."
+                f"{knowledge_context}"
             )
 
             context = {
