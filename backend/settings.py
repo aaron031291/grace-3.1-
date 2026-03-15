@@ -126,7 +126,6 @@ class Settings:
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "ollama").lower()
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "")
-    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4o")
 
     # ==================== Kimi 2.5 (Moonshot AI) Configuration ====================
     KIMI_API_KEY: str = os.getenv("KIMI_API_KEY", "")

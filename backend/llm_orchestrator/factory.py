@@ -182,7 +182,7 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
         logger.warning(f"[LLM-FALLBACK] Primary provider '{provider}' failed: {e}")
     
     # Fallback chain: try other providers
-    fallback_order = ['ollama', 'kimi', 'opus', 'openai', 'qwen']
+    fallback_order = ['ollama', 'qwen', 'kimi', 'opus']
     for fb in fallback_order:
         if fb == provider:
             continue
@@ -290,18 +290,6 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
             return get_opus_client()
         return get_llm_client()
 
-    elif task == "openai_agent":
-        try:
-            from cognitive.coding_agents import get_coding_agent_pool
-            pool = get_coding_agent_pool()
-            if "openai" in pool.agents:
-                return pool.agents["openai"]._get_client()
-        except Exception:
-            pass
-        if getattr(settings, 'LLM_API_KEY', ''):
-            return get_llm_client(provider="openai")
-        return get_llm_client()
-
     return get_llm_client()
 
 
@@ -394,16 +382,6 @@ def get_all_available_models() -> list:
         "cost": "cloud",
         "location": "cloud",
     })
-    models.append({
-        "id": "openai",
-        "provider": "openai",
-        "model": getattr(settings, 'OPENAI_MODEL', '') or getattr(settings, 'LLM_MODEL', '') or "gpt-4o",
-        "description": "OpenAI — GPT-4o code generation, analysis",
-        "available": bool(settings.LLM_API_KEY),
-        "cost": "cloud",
-        "location": "cloud",
-    })
-
     # Coding agent pool models (same depth as Qwen agents)
     try:
         from cognitive.coding_agents import get_coding_agent_pool
