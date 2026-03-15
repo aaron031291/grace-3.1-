@@ -91,7 +91,10 @@ def _log(msg: str, level: str = "info"):
         source = "grace" if "grace" in msg.lower() or "backend" in msg.lower() else "spindle" if "spindle" in msg.lower() else "system"
         _add_activity(source, msg, level)
     except Exception: pass
-    print(f"[{ts}][{level.upper()}] {msg}", flush=True)
+    try:
+        print(f"[{ts}][{level.upper()}] {msg}", flush=True)
+    except UnicodeEncodeError:
+        print(f"[{ts}][{level.upper()}] {msg.encode('ascii', 'replace').decode()}", flush=True)
 
     # Auto-detect problems from log lines
     low = msg.lower()
@@ -267,6 +270,27 @@ def _kill_port(port: int) -> bool:
         _log(f"Could not kill port {port}: {e}", "error")
         return False
 
+def _load_env_var(name: str) -> str:
+    """Load an env var from os.environ, then try backend/.env file as fallback."""
+    val = os.environ.get(name, "")
+    if val:
+        return val
+    # Try reading from backend/.env or .env
+    for env_path in [BACKEND_DIR / ".env", BASE_DIR / ".env"]:
+        if env_path.exists():
+            try:
+                for line in env_path.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, _, v = line.partition("=")
+                        k = k.strip()
+                        v = v.strip().strip('"').strip("'")
+                        if k == name:
+                            return v
+            except Exception:
+                pass
+    return ""
+
 def _check_postgres() -> str:
     db_type = _load_env_var("DATABASE_TYPE").lower()
     if db_type == "sqlite":
@@ -420,57 +444,31 @@ def _start_grace():
     python = sys.executable
     phase_times = {}
 
-    # ── Phase 0: Spindle trigger (blackbox scan of codebase) ──
+    # ── Phase 0: Spindle trigger (blackbox scan — deferred to post-boot) ──
     p0 = time.time()
-    _log("[Phase 0] Triggering Spindle pre-boot scan...", "info")
-    _add_activity("spindle", "Pre-boot Spindle scan starting", "info")
-    try:
-        spindle_r = subprocess.run(
-            [python, "-c",
-             "import sys; sys.path.insert(0,'.'); "
-             "from cognitive.spindle_blackbox_scanner import get_blackbox_scanner; "
-             "s=get_blackbox_scanner(); r=s.run_scan(); "
-             "print(f'Spindle scan complete: {r.total_issues} issues, {r.critical_count} critical, {r.warning_count} warnings')"],
-            cwd=str(BACKEND_DIR), capture_output=True, text=True, timeout=120,
-        )
-        for line in (spindle_r.stdout + spindle_r.stderr).strip().splitlines():
-            if line.strip():
-                _log(f"  [SPINDLE] {line.strip()}", "info")
-        if spindle_r.returncode == 0:
-            _log("[Phase 0] Spindle scan passed", "info")
-        else:
-            _log("[Phase 0] Spindle scan had issues (non-fatal, continuing)", "warn")
-    except subprocess.TimeoutExpired:
-        _log("[Phase 0] Spindle scan timed out (continuing anyway)", "warn")
-    except Exception as e:
-        _log(f"[Phase 0] Spindle scan skipped: {e}", "warn")
+    _log("[Phase 0] Spindle scan deferred to post-boot (non-blocking)", "info")
+    phase_times['spindle'] = 0.0
 
-    phase_times['spindle'] = round(time.time() - p0, 1)
-
-    # ── Phase 1: Preflight checks (self-heal before runtime) ──
+    # ── Phase 1: Inline preflight (port check + .env verify) ──
     p1 = time.time()
-    _log("[Phase 1] Running preflight checks...", "info")
-    preflight_script = BASE_DIR / "startup_preflight.py"
-    if preflight_script.exists():
-        for chunk, desc in [(0, "Self-heal (ports, .env, deps)"), (2, "Startup knowledge (last error fixes)")]:
-            _log(f"  Preflight chunk {chunk}: {desc}", "info")
-            try:
-                pr = subprocess.run(
-                    [python, str(preflight_script), "--chunk", str(chunk)],
-                    cwd=str(BASE_DIR), capture_output=True, text=True, timeout=60,
-                )
-                for line in pr.stdout.strip().splitlines()[-5:]:
-                    if line.strip():
-                        _log(f"    {line.strip()}", "info")
-                if pr.returncode != 0:
-                    _log(f"  Preflight chunk {chunk} returned code {pr.returncode} (continuing)", "warn")
-            except subprocess.TimeoutExpired:
-                _log(f"  Preflight chunk {chunk} timed out (continuing)", "warn")
-            except Exception as e:
-                _log(f"  Preflight chunk {chunk} failed: {e}", "warn")
+    _log("[Phase 1] Quick preflight...", "info")
+    # Kill anything on port 8000
+    if _port_in_use(GRACE_PORT):
+        _log(f"  Port {GRACE_PORT} in use — clearing...", "warn")
+        _kill_port(GRACE_PORT)
+        time.sleep(1)
+    # Verify .env exists
+    env_file = BACKEND_DIR / ".env"
+    if env_file.exists():
+        _log("  .env OK", "info")
     else:
-        _log("  Preflight script not found (skipping)", "warn")
-
+        example = BACKEND_DIR / ".env.example"
+        if example.exists():
+            import shutil
+            shutil.copy(example, env_file)
+            _log("  Created .env from .env.example", "info")
+        else:
+            _log("  No .env found (backend may fail)", "warn")
     phase_times['preflight'] = round(time.time() - p1, 1)
 
     # ── Phase 2: Pre-boot port & service checks ──
@@ -501,7 +499,10 @@ def _start_grace():
         _grace_process = subprocess.Popen(
             [python, "-m", "uvicorn", "app:app",
              "--host", "0.0.0.0", "--port", str(GRACE_PORT),
-             "--reload", "--log-level", "info"],
+             "--log-level", "info",
+             "--timeout-keep-alive", "30",
+             "--limit-concurrency", "50",
+             "--timeout-graceful-shutdown", "10"],
             cwd=str(BACKEND_DIR),
             env=env,
             stdout=subprocess.PIPE,
@@ -525,34 +526,10 @@ def _start_grace():
         )
 
     def _stream_logs(proc):
-        tb_lines = []
-        in_tb = False
-        has_triggered_heal = False
         for line in proc.stdout:
             line = line.rstrip()
             if not line:
                 continue
-                
-            if "Traceback (most recent call last):" in line:
-                in_tb = True
-                tb_lines = [line]
-            elif in_tb:
-                tb_lines.append(line)
-                if not line.startswith(" ") and ("Error:" in line or "Exception:" in line):
-                    in_tb = False
-                    crash_detail = "\n".join(tb_lines)
-                    _add_problem("critical", f"Backend Crash: {line}", crash_detail, fix_action="spindle-heal")
-                    
-                    if not has_triggered_heal:
-                        has_triggered_heal = True
-                        prompt = (
-                            f"The Grace Backend crashed on boot with the following error:\n"
-                            f"{crash_detail}\n\n"
-                            f"Analyze this traceback gracefully. If the fix requires modifying python code, write the modified code to the file directly. Ensure your fix is actually executed! DO NOT just define a function in the sandbox, you MUST execute the file I/O or the sandbox modification to save the fix."
-                        )
-                        _log("Autonomously triggering Spindle Meta-Healing for backend crash...", "warn")
-                        _run_terminal_command(f"/code {prompt}")
-
             level = "error" if any(x in line.lower() for x in ["error", "exception", "critical"]) else \
                     "warn"  if "warning" in line.lower() else "info"
             _log(line, level)
@@ -590,7 +567,10 @@ def _start_grace():
                 _grace_process = subprocess.Popen(
                     [python, "-m", "uvicorn", "app:app",
                      "--host", "0.0.0.0", "--port", str(GRACE_PORT),
-                     "--reload", "--log-level", "info"],
+                     "--log-level", "info",
+                     "--timeout-keep-alive", "30",
+                     "--limit-concurrency", "50",
+                     "--timeout-graceful-shutdown", "10"],
                     cwd=str(BACKEND_DIR), env=env,
                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                     text=True, bufsize=1,
@@ -1036,7 +1016,7 @@ UI_HTML = """<!DOCTYPE html>
   --radius:12px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:grid;grid-template-rows:56px 1fr;overflow:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:grid;grid-template-rows:56px 1fr;overflow:hidden;font-size:15px;}
 
 /* Header */
 header{background:linear-gradient(90deg,#0d1530,#181040);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;}
@@ -1056,7 +1036,7 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 /* Sidebar */
 .sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
 .sidebar-section{padding:14px 14px 8px;}
-.sec-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:8px;}
+.sec-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:8px;}
 
 /* Services */
 .svc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px;margin-bottom:5px;cursor:default;transition:border-color .2s;}
@@ -1064,14 +1044,14 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 .dot-online{background:var(--green);box-shadow:0 0 6px var(--green);}
 .dot-offline{background:var(--red);}
 .dot-unknown,.dot-degraded{background:var(--yellow);}
-.svc-label{font-size:12px;font-weight:500;flex:1;}
-.svc-tag{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
+.svc-label{font-size:14px;font-weight:500;flex:1;}
+.svc-tag{font-size:11px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
 .tag-online{background:#052e16;color:var(--green);}
 .tag-offline{background:#2a0a0a;color:var(--red);}
 .tag-unknown,.tag-degraded{background:#2a1e05;color:var(--yellow);}
 
 /* Buttons */
-.btn{width:100%;padding:10px 14px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;margin-bottom:6px;}
+.btn{width:100%;padding:10px 14px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;margin-bottom:6px;}
 .btn:active{transform:scale(.97);}
 .btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 16px rgba(92,110,248,.3);}
@@ -1096,15 +1076,15 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 
 /* Tabs */
 .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);padding:0 16px;overflow-x:auto;}
-.tab{padding:12px 14px;font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .2s;position:relative;white-space:nowrap;}
+.tab{padding:12px 14px;font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .2s;position:relative;white-space:nowrap;}
 .tab:hover{color:var(--text);}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .tab-badge{background:var(--red);color:#fff;border-radius:8px;padding:1px 5px;font-size:9px;font-weight:700;margin-left:5px;}
 
 /* Log panel */
-.log-area{flex:1;overflow-y:auto;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.65;background:var(--bg);}
+.log-area{flex:1;overflow-y:auto;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.65;background:var(--bg);}
 .log-line{display:flex;gap:10px;padding:1px 0;}
-.log-ts{color:#2d3e6a;flex-shrink:0;font-size:9.5px;padding-top:1px;}
+.log-ts{color:#2d3e6a;flex-shrink:0;font-size:12px;padding-top:1px;}
 .log-info .log-msg{color:#c9d6f7;}
 .log-warn .log-msg{color:#fbbf24;}
 .log-error .log-msg{color:var(--red);}
@@ -1125,27 +1105,27 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 .sev-error{background:#2a1005;color:#f97316;}
 .sev-warning{background:#2a1e05;color:var(--yellow);}
 .sev-info{background:#0a1e3b;color:var(--blue);}
-.prob-title{font-size:13px;font-weight:600;flex:1;}
+.prob-title{font-size:15px;font-weight:600;flex:1;}
 .prob-count{font-size:10px;color:var(--muted);}
-.prob-detail{font-size:11px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+.prob-detail{font-size:13px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
 .prob-ts{font-size:10px;color:#2d3e6a;}
 .prob-fix{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
 .prob-fix:hover{background:var(--accent2);}
 
 /* Genesis Feed */
-.genesis-item { background:var(--surface2); border:1px solid #2d3e6a; padding:10px; border-radius:8px; margin-bottom:8px; font-family:'JetBrains Mono',monospace; font-size:10.5px; border-left:3px solid var(--blue); }
+.genesis-item { background:var(--surface2); border:1px solid #2d3e6a; padding:10px; border-radius:8px; margin-bottom:8px; font-family:'JetBrains Mono',monospace; font-size:13px; border-left:3px solid var(--blue); }
 .genesis-ts { color:var(--muted); font-size:9px; float:right; }
 
 /* Dashboard Cards (Playbooks, Memory, Patches, LLM) */
 .dash-card { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:10px; }
 .dash-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.dash-card-title { font-size:12px; font-weight:600; color:#fff; }
+.dash-card-title { font-size:14px; font-weight:600; color:#fff; }
 .dash-badge { padding:2px 8px; border-radius:12px; font-size:9px; font-weight:700; text-transform:uppercase; }
 .badge-active { background:#052e16; color:var(--green); border:1px solid #064e3b; }
 .badge-idle { background:#1e293b; color:var(--muted); border:1px solid #334155; }
 .dash-timeline { border-left:2px solid var(--border); margin-left:8px; padding-left:14px; position:relative; }
 .timeline-dot { position:absolute; left:-6px; top:4px; width:10px; height:10px; border-radius:50%; background:var(--surface); border:2px solid var(--accent); }
-.timeline-item { margin-bottom:12px; font-size:11px; }
+.timeline-item { margin-bottom:12px; font-size:14px; }
 .timeline-ts { font-size:9px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
 
 /* Revert Button */
@@ -1153,7 +1133,7 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 .btn-revert:hover { background:#7f1d1d; color:#fff; }
 
 /* Network Grid */
-.net-grid { display:grid; grid-template-columns: 1fr 2fr 1fr 1fr; gap:6px; font-size:11px; font-family:'JetBrains Mono',monospace; margin-bottom:10px; }
+.net-grid { display:grid; grid-template-columns: 1fr 2fr 1fr 1fr; gap:6px; font-size:14px; font-family:'JetBrains Mono',monospace; margin-bottom:10px; }
 .net-row { display:contents; }
 .net-row > div { background:var(--surface); padding:8px 12px; border-bottom:1px solid var(--border); }
 .net-header > div { font-weight:700; color:var(--muted); border-bottom:none;text-transform:uppercase;font-size:9px;background:none;}
@@ -1161,12 +1141,12 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 /* Mini-Terminal */
 .terminal-block{width:400px;border-left:1px solid var(--border);border-top:none;background:#020617;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;}
 .term-header{background:#0f172a;padding:4px 12px;font-size:10px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;border-bottom:1px solid #1e293b;}
-.term-output{flex:1;overflow-y:auto;padding:8px 12px;font-size:11px;color:#a5b4fc;}
+.term-output{flex:1;overflow-y:auto;padding:8px 12px;font-size:14px;color:#a5b4fc;}
 .term-line-sys{color:#94a3b8;}
 .term-line-user{color:#38bdf8;}
 .term-input{display:flex;border-top:1px solid #1e293b;}
 .term-input span{padding:8px 4px 8px 12px;color:var(--green);font-size:12px;font-weight:700;}
-.term-input input{flex:1;background:none;border:none;color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px;outline:none;}
+.term-input input{flex:1;background:none;border:none;color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:14px;padding:8px;outline:none;}
 
 /* Diagnostics & Metrics */
 .diag-panel{flex:1;overflow-y:auto;padding:14px 16px;background:var(--bg);}
@@ -1175,8 +1155,8 @@ main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;}
 .diag-card h4{font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
 .check-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
 .check-icon{flex-shrink:0;font-size:13px;}
-.check-name{font-size:12px;font-weight:500;}
-.check-detail{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.check-name{font-size:14px;font-weight:500;}
+.check-detail{font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
 
 .metrics-panel{flex:1;overflow-y:auto;padding:14px 16px;background:var(--bg);}
 .gauge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px;}

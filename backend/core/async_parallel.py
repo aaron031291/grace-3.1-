@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")
 
 # Shared pool for parallel and background work
-_MAX_WORKERS = int(os.getenv("GRACE_PARALLEL_WORKERS", "12"))
+_MAX_WORKERS = int(os.getenv("GRACE_PARALLEL_WORKERS", "6"))
 _pool: Optional[concurrent.futures.ThreadPoolExecutor] = None
 _pool_lock = threading.Lock()
 

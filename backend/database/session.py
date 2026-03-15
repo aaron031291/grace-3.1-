@@ -24,6 +24,16 @@ SessionLocal: Optional[sessionmaker] = None
 
 _RETRY_MAX = 3
 _RETRY_BACKOFF_S = 0.5
+_last_pool_error_log = 0.0
+
+
+def db_available() -> bool:
+    """Check if database is initialized and reachable. Safe to call anytime."""
+    try:
+        from .connection import DatabaseConnection
+        return DatabaseConnection._initialized and DatabaseConnection.get_engine() is not None
+    except Exception:
+        return False
 
 
 def _is_lock_error(exc: Exception) -> bool:
@@ -173,7 +183,16 @@ def session_scope() -> Generator[Session, None, None]:
     if SessionLocal is None:
         initialize_session_factory()
 
-    session = SessionLocal()
+    global _last_pool_error_log
+    try:
+        session = SessionLocal()
+    except Exception as pool_err:
+        now = time.time()
+        if now - _last_pool_error_log > 30:
+            _last_pool_error_log = now
+            logger.error("Database session_scope error: %s", pool_err)
+        _cb_record_failure()
+        raise
     try:
         yield session
         _commit_with_retry(session)
@@ -222,6 +241,28 @@ def session_scope() -> Generator[Session, None, None]:
         raise
     finally:
         session.close()
+
+
+@contextmanager
+def safe_session_scope() -> Generator[Optional[Session], None, None]:
+    """
+    Safe context manager -- yields None if DB is not initialized instead of crashing.
+    65 modules use database sessions; this lets them all survive DB-down gracefully.
+    
+    Usage::
+    
+        with safe_session_scope() as session:
+            if session is None:
+                return  # DB not ready, skip gracefully
+            session.query(MyModel).all()
+    """
+    if not db_available():
+        yield None
+        return
+    
+    # Delegate to full session_scope with all self-healing
+    with session_scope() as session:
+        yield session
 
 
 @contextmanager

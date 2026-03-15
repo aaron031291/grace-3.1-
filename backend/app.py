@@ -74,11 +74,42 @@ from api.whitelist_hub_api import router as whitelist_hub_router
 from api.devlab_api import router as devlab_router
 from api.sandbox_api import router as sandbox_router
 from api.tasks_hub_api import router as tasks_hub_router
+from api.grace_mind_api import router as grace_mind_router
 
 try:
     from settings import settings
 except ImportError:
     settings = None
+
+
+# ==================== Foundation: Settings Safety ====================
+# Wrap all settings access to survive settings=None
+def _setting(attr: str, default=None):
+    """Safe settings access — returns default if settings is None or attr missing."""
+    if settings is None:
+        return default
+    return getattr(settings, attr, default)
+
+
+# ==================== Foundation: Startup Health Emitter ====================
+def _emit_warn(msg: str):
+    """Print warning AND emit to event bus so Ops Console sees it."""
+    print(f"[WARN] {msg}")
+    try:
+        from cognitive.event_bus import publish
+        publish("system.warning", {"message": msg, "source": "startup", "ts": datetime.now(timezone.utc).isoformat()})
+    except Exception:
+        pass
+
+
+def _emit_ok(msg: str):
+    """Print OK AND emit to event bus."""
+    print(f"[OK] {msg}")
+    try:
+        from cognitive.event_bus import publish
+        publish("system.ok", {"message": msg, "source": "startup", "ts": datetime.now(timezone.utc).isoformat()})
+    except Exception:
+        pass
 
 
 # ==================== Pydantic Models ====================
@@ -144,8 +175,8 @@ class ChatCreateRequest(BaseModel):
     folder_path: Optional[str] = Field(None, description="Path to folder context for this chat")
 
 
-class ChatResponse(BaseModel):
-    """Response model for chat operations."""
+class ChatDetailResponse(BaseModel):
+    """Response model for chat operations (detail view)."""
     id: int = Field(..., description="Chat ID")
     title: Optional[str] = Field(None, description="Chat title")
     description: Optional[str] = Field(None, description="Chat description")
@@ -160,7 +191,7 @@ class ChatResponse(BaseModel):
 
 class ChatListResponse(BaseModel):
     """Response model for chat list."""
-    chats: List[ChatResponse] = Field(..., description="List of chats")
+    chats: List[ChatDetailResponse] = Field(..., description="List of chats")
     total: int = Field(..., description="Total number of chats")
     skip: int = Field(..., description="Skip count")
     limit: int = Field(..., description="Limit count")
@@ -223,17 +254,17 @@ async def lifespan(app: FastAPI):
 
     # Initialize database
     try:
-        db_type = DatabaseType(settings.DATABASE_TYPE) if settings else DatabaseType.POSTGRESQL
+        db_type = DatabaseType(_setting('DATABASE_TYPE', 'sqlite'))
         db_config = DatabaseConfig(
             db_type=db_type,
-            host=settings.DATABASE_HOST if settings else None,
-            port=settings.DATABASE_PORT if settings else None,
-            username=settings.DATABASE_USER if settings else None,
-            password=settings.DATABASE_PASSWORD if settings else None,
-            database=settings.DATABASE_NAME if settings else "grace",
-            database_path=settings.DATABASE_PATH if settings else None,
-            echo=settings.DATABASE_ECHO if settings else False,
-            sslmode=(getattr(settings, "DATABASE_SSLMODE", "") or "").strip() or None,
+            host=_setting('DATABASE_HOST'),
+            port=_setting('DATABASE_PORT'),
+            username=_setting('DATABASE_USER'),
+            password=_setting('DATABASE_PASSWORD'),
+            database=_setting('DATABASE_NAME', 'grace'),
+            database_path=_setting('DATABASE_PATH'),
+            echo=_setting('DATABASE_ECHO', False),
+            sslmode=(_setting('DATABASE_SSLMODE', '') or '').strip() or None,
         )
         DatabaseConnection.initialize(db_config)
         print("[OK] Database connection initialized")
@@ -273,8 +304,8 @@ async def lifespan(app: FastAPI):
             print(f"[WARN] Startup migrations: {e}")
 
     except Exception as e:
-        print(f"[WARN] Database initialization error: {e}")
-        print("[WARN] Grace will continue with limited functionality (DB features may be unavailable). Fix: check backend/.env DATABASE_PATH and run backend/database/migration if needed.")
+        _emit_warn(f"Database initialization error: {e}")
+        _emit_warn("Grace will continue with limited functionality (DB features may be unavailable). Fix: check backend/.env DATABASE_PATH and run backend/database/migration if needed.")
 
     # ==================== Lifecycle Cortex — dependency-aware boot ====================
     try:
@@ -365,8 +396,17 @@ async def lifespan(app: FastAPI):
             """Sync learning examples into the memory mesh."""
             try:
                 from cognitive.memory_mesh_integration import MemoryMeshIntegration
-                mesh = MemoryMeshIntegration()
-                mesh.sync_learning_to_mesh()
+                from database import session as db_session
+                session_factory = db_session.SessionLocal
+                if not session_factory:
+                    return
+                session = session_factory()
+                try:
+                    kb_path = Path(__file__).parent / "knowledge_base"
+                    mesh = MemoryMeshIntegration(session, kb_path)
+                    mesh.sync_learning_folders()
+                finally:
+                    session.close()
             except Exception as e:
                 logging.getLogger(__name__).warning(f"[CORTEX-JOB] learning_to_mesh: {e}")
 
@@ -395,7 +435,7 @@ async def lifespan(app: FastAPI):
         print(f"[OK] Lifecycle Cortex: {len(cortex._subsystems)} subsystems, {len(cortex._jobs)} jobs registered")
 
     except Exception as e:
-        print(f"[WARN] Lifecycle Cortex: {e}")
+        _emit_warn(f"Lifecycle Cortex: {e}")
 
     # ==================== Lazy Background Init (non-blocking) ====================
     import threading
@@ -441,26 +481,26 @@ async def lifespan(app: FastAPI):
         try:
             from self_healing.error_pipeline import get_error_pipeline
             pipe = get_error_pipeline()
-            print("[OK] Self-healing error pipeline started")
+            _emit_ok("Self-healing error pipeline started")
         except Exception as e:
-            print(f"[WARN] Error pipeline: {e}")
+            _emit_warn(f"Error pipeline: {e}")
 
         # ── 0.1 Central Orchestrator — Grace's nervous system ──
         try:
             from cognitive.central_orchestrator import get_orchestrator
             orchestrator = get_orchestrator()
             orchestrator.initialize()
-            print("[OK] Central Orchestrator initialized (event bus subscriptions active)")
+            _emit_ok("Central Orchestrator initialized (event bus subscriptions active)")
         except Exception as e:
-            print(f"[WARN] Central Orchestrator: {e}")
+            _emit_warn(f"Central Orchestrator: {e}")
 
         # ── 0.2 Feedback Bridge — decision chain correlation ──
         try:
             from core.feedback_bridge import start_feedback_bridge
             start_feedback_bridge()
-            print("[OK] Feedback bridge started (consensus → execute → learn → trust correlation)")
+            _emit_ok("Feedback bridge started")
         except Exception as e:
-            print(f"[WARN] Feedback bridge: {e}")
+            _emit_warn(f"Feedback bridge: {e}")
 
         # ── Gap 5.2: Ghost Memory reboot replay (restore continuity) ──
         try:
@@ -535,6 +575,21 @@ async def lifespan(app: FastAPI):
                         sample = list(_ROUTES)[:5]  # quick sample
                         results = [_probe_endpoint(r["path"], r["method"]) for r in sample]
                         _track_probe(results)
+                        # Feed broken probes into healing swarm
+                        broken = [r for r in results if r.get("status") == "broken"]
+                        if broken:
+                            try:
+                                from cognitive.healing_swarm import get_healing_swarm
+                                swarm = get_healing_swarm()
+                                for b in broken:
+                                    swarm.submit({
+                                        "component": b.get("path", "unknown"),
+                                        "description": f"Probe failed: {b.get('error', '')}",
+                                        "error": b.get("error", ""),
+                                        "severity": "medium",
+                                    })
+                            except Exception:
+                                pass
                     except Exception:
                         pass
                     time.sleep(600)  # 10 minutes
@@ -568,7 +623,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Diagnostic: {e}")
 
-        if not settings.SKIP_EMBEDDING_LOAD:
+        if not _setting('SKIP_EMBEDDING_LOAD', False):
             try:
                 from embedding import get_embedding_model
                 get_embedding_model()
@@ -622,7 +677,7 @@ async def lifespan(app: FastAPI):
             print(f"[WARN] SWE->Spindle bridge: {e}")
 
         # ── Proactive Healing (background loop) ──
-        if not getattr(settings, "DISABLE_PROACTIVE_HEALING", False):
+        if not _setting('DISABLE_PROACTIVE_HEALING', False):
             try:
                 from cognitive.proactive_healing_engine import start_proactive_healing
                 start_proactive_healing()
@@ -689,6 +744,22 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Executive watchdog: {e}")
 
+        # ── Watchdog auto-heartbeat (proves event loop is responsive) ──
+        def _watchdog_heartbeat():
+            import urllib.request
+            while True:
+                try:
+                    time.sleep(60)
+                    r = urllib.request.urlopen("http://localhost:8000/kpi/health", timeout=5)
+                    if r.status == 200:
+                        watchdog.heartbeat()
+                except Exception:
+                    pass  # If health check fails, no heartbeat → watchdog triggers correctly
+        try:
+            threading.Thread(target=_watchdog_heartbeat, daemon=True, name="grace-watchdog-hb").start()
+        except Exception:
+            pass
+
         # ── Spindle parallel runtime services ──
         _init_spindle_services()
 
@@ -711,23 +782,23 @@ async def lifespan(app: FastAPI):
         pass
 
     # Check LLM Provider
-    if not getattr(settings, 'SKIP_LLM_CHECK', False):
+    if not _setting('SKIP_LLM_CHECK', False):
         try:
             client = get_llm_client()
-            provider_name = settings.LLM_PROVIDER.upper()
+            provider_name = _setting('LLM_PROVIDER', 'ollama').upper()
             if client.is_running():
-                print(f"[OK] {provider_name} is running and reachable")
+                _emit_ok(f"{provider_name} is running and reachable")
             else:
-                print(f"[WARN] {provider_name} is not responding - chat features may be limited")
+                _emit_warn(f"{provider_name} is not responding - chat features may be limited")
         except Exception as e:
-            provider = settings.LLM_PROVIDER if settings else "LLM"
-            print(f"[WARN] Could not connect to LLM provider ({provider}): {e}")
+            provider = _setting('LLM_PROVIDER', 'LLM')
+            _emit_warn(f"Could not connect to LLM provider ({provider}): {e}")
     else:
         print("[SKIP] LLM check skipped")
     
     # Check Qdrant
-    if not settings.SKIP_QDRANT_CHECK:
-        qdrant_target = settings.QDRANT_URL or f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
+    if not _setting('SKIP_QDRANT_CHECK', False):
+        qdrant_target = _setting('QDRANT_URL', '') or f"{_setting('QDRANT_HOST', 'localhost')}:{_setting('QDRANT_PORT', 6333)}"
         try:
             qdrant = get_qdrant_client()
             if qdrant.is_connected():
@@ -742,7 +813,7 @@ async def lifespan(app: FastAPI):
 
     # ==================== Initialize File Watcher ====================
     # Start file system watcher for automatic version control
-    if not getattr(settings, 'DISABLE_GENESIS_TRACKING', False):
+    if not _setting('DISABLE_GENESIS_TRACKING', False):
         try:
             from genesis.file_watcher import start_watching_workspace
             import threading
@@ -835,7 +906,7 @@ async def lifespan(app: FastAPI):
                         # print(f"[AUTO-INGEST] Scan attempt {retry_count + 1} failed, retrying: {e}", flush=True)
                         time.sleep(2)
                     else:
-                        if settings.SUPPRESS_INGESTION_ERRORS:
+                        if _setting('SUPPRESS_INGESTION_ERRORS', True):
                             # print("[AUTO-INGEST] [WARN] Error suppressed (SUPPRESS_INGESTION_ERRORS=true)", flush=True)
                             results = []
                         else:
@@ -857,7 +928,7 @@ async def lifespan(app: FastAPI):
             try:
                 file_manager.watch_and_process(continuous=True)
             except Exception as e:
-                if settings.SUPPRESS_INGESTION_ERRORS:
+                if _setting('SUPPRESS_INGESTION_ERRORS', True):
                     print(f"[AUTO-INGEST] [WARN] Error in continuous monitoring (suppressed): {e}", flush=True)
                 else:
                     raise
@@ -867,7 +938,7 @@ async def lifespan(app: FastAPI):
             traceback.print_exc()
     
     # Start auto-ingestion in a daemon thread
-    if not settings.SKIP_AUTO_INGESTION:
+    if not _setting('SKIP_AUTO_INGESTION', False):
         try:
             auto_ingest_thread = threading.Thread(target=run_auto_ingestion, daemon=True)
             auto_ingest_thread.start()
@@ -878,7 +949,7 @@ async def lifespan(app: FastAPI):
 
 
     # ==================== Start Continuous Learning Orchestrator ====================
-    if not settings.DISABLE_CONTINUOUS_LEARNING:
+    if not _setting('DISABLE_CONTINUOUS_LEARNING', False):
         try:
             from cognitive.continuous_learning_orchestrator import start_continuous_learning
             orchestrator = start_continuous_learning()
@@ -940,7 +1011,7 @@ async def lifespan(app: FastAPI):
 
     # ==================== Start Spindle Daemon (autonomous, always-on) ====================
     _spindle_proc = None
-    if not settings.DISABLE_SPINDLE_DAEMON:
+    if not _setting('DISABLE_SPINDLE_DAEMON', False):
         try:
             import subprocess
             backend_dir = str(Path(__file__).parent)
@@ -1225,6 +1296,71 @@ app.add_middleware(
     max_age=security_config.CORS_MAX_AGE,
 )
 
+@app.middleware("http")
+async def connection_cleanup_middleware(request, call_next):
+    response = await call_next(request)
+    # Force connection close on API responses to prevent CLOSE_WAIT buildup
+    # WebSocket upgrades are excluded automatically (they don't hit http middleware)
+    if "upgrade" not in (request.headers.get("connection", "").lower()):
+        response.headers["Connection"] = "close"
+    return response
+
+
+# ==================== FIX 1: Global Exception Handler ====================
+# Catches ALL unhandled exceptions across 525 endpoints.
+# Prevents raw 500s, logs errors, emits to event bus for Ops Console visibility.
+from fastapi.responses import JSONResponse
+from starlette.requests import Request
+import traceback as _tb
+
+@app.exception_handler(Exception)
+async def _global_exception_handler(request: Request, exc: Exception):
+    """Catch-all for unhandled exceptions. Logs, emits, returns clean JSON."""
+    path = request.url.path
+    method = request.method
+    err_msg = str(exc)[:500]
+    tb_str = ''.join(_tb.format_exception(type(exc), exc, exc.__traceback__))[-1000:]
+    
+    logger.error(f"Unhandled {method} {path}: {err_msg}\n{tb_str}")
+    
+    # Emit to event bus → visible in Ops Console Tail Logs + Live Feed
+    try:
+        from cognitive.event_bus import publish
+        publish("system.error", {
+            "path": path,
+            "method": method,
+            "error": err_msg,
+            "traceback": tb_str[-500:],
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception:
+        pass
+    
+    # Track as Genesis key for self-healing
+    try:
+        from api._genesis_tracker import track
+        track(
+            key_type="error",
+            what=f"Unhandled API error: {method} {path} → {err_msg[:100]}",
+            who="global_exception_handler",
+            is_error=True,
+            error_type=type(exc).__name__,
+            error_message=err_msg[:300],
+            tags=["api", "unhandled", "500"],
+        )
+    except Exception:
+        pass
+    
+    return JSONResponse(
+        status_code=500,
+        content={
+            "ok": False,
+            "error": err_msg[:200],
+            "type": type(exc).__name__,
+            "path": path,
+        }
+    )
+
 # =============================================================================
 # API ROUTERS Ã¢â‚¬â€ v1 resource layer + minimal core
 # =============================================================================
@@ -1312,6 +1448,7 @@ app.include_router(whitelist_hub_router, prefix="/api")
 app.include_router(devlab_router, prefix="/api")
 app.include_router(sandbox_router, prefix="/api")
 app.include_router(tasks_hub_router, prefix="/api")
+app.include_router(grace_mind_router, prefix="/api")
 app.include_router(schema_evolution_router, prefix="/api")
 app.include_router(oracle_router)
 app.include_router(learn_heal_router)
@@ -2950,5 +3087,8 @@ if __name__ == "__main__":
         "app:app",
         host="0.0.0.0",
         port=8000,
-        reload=True
+        reload=True,
+        timeout_keep_alive=30,
+        limit_concurrency=50,
+        timeout_graceful_shutdown=10,
     )

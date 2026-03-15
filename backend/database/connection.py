@@ -112,6 +112,7 @@ class DatabaseConnection:
                 poolclass=QueuePool,
                 pool_size=config.pool_size,
                 max_overflow=config.max_overflow,
+                pool_timeout=getattr(config, 'pool_timeout', 5),
                 echo=config.echo,
             )
 
@@ -135,8 +136,9 @@ class DatabaseConnection:
                 poolclass=QueuePool,
                 pool_size=config.pool_size,
                 max_overflow=config.max_overflow,
+                pool_timeout=getattr(config, 'pool_timeout', 5),
                 pool_pre_ping=config.pool_pre_ping,
-                pool_recycle=getattr(config, 'pool_recycle', 3600),
+                pool_recycle=getattr(config, 'pool_recycle', 1800),
                 echo=config.echo,
             )
         

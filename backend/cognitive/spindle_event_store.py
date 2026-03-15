@@ -86,9 +86,15 @@ class SpindleEventStore:
             return SpindleEvent
 
     def _probe_db(self) -> bool:
-        """Check DB reachability once; cache result only on success."""
+        """Check DB reachability; cache result, retry after cooldown on failure."""
         if self._db_available is True:
             return True
+        # Cooldown: don't re-probe more than once per 30s when DB is down
+        now = time.time()
+        last_probe = getattr(self, '_last_probe_time', 0.0)
+        if self._db_available is False and (now - last_probe) < 30:
+            return False
+        self._last_probe_time = now
         try:
             session_scope = self._get_session_scope()
             with session_scope() as session:
@@ -99,7 +105,6 @@ class SpindleEventStore:
             self._sync_sequence_from_db()
             logger.info("[SpindleEventStore] DB connection established.")
         except Exception as exc:
-            # Don't cache failures — allow retry after DB init
             if not getattr(self, '_warned_db', False):
                 logger.warning(
                     "[SpindleEventStore] DB unavailable — falling back to "
@@ -422,7 +427,7 @@ def bridge_to_event_bus() -> None:
 
     def _persist(event: Event) -> None:
         try:
-            store.append(
+            store.append_async(
                 topic=event.topic,
                 source_type="system",
                 payload=event.data,
@@ -435,5 +440,6 @@ def bridge_to_event_bus() -> None:
             )
 
     subscribe("*", _persist)
+    store.start_background_flush()
     bridge_to_event_bus._registered = True  # type: ignore[attr-defined]
     logger.info("[SpindleEventStore] Bridge to cognitive event_bus registered.")

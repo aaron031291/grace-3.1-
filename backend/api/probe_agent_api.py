@@ -391,17 +391,29 @@ async def probe_and_heal():
         all_broken = broken + broken_models
         diagnoses = _consensus_diagnose(all_broken)
 
-    # 5. Auto-heal if consensus agrees
+    # 5. Auto-heal: dispatch to healing swarm + diagnostic engine
     healed = []
     for diag in diagnoses:
         if diag.get("all_agree") and diag.get("confidence", 0) > 0.6:
+            # Dispatch to healing swarm for concurrent fix
+            try:
+                from cognitive.healing_swarm import get_healing_swarm
+                swarm = get_healing_swarm()
+                swarm.submit({
+                    "component": diag.get("endpoint", "unknown"),
+                    "description": diag.get("diagnosis", "Broken endpoint"),
+                    "error": diag.get("error", ""),
+                    "severity": "high",
+                })
+            except Exception:
+                pass
             try:
                 from diagnostic_machine.diagnostic_engine import get_diagnostic_engine, TriggerSource
                 engine = get_diagnostic_engine()
                 engine.run_cycle(TriggerSource.SENSOR_FLAG)
                 healed.append({
                     "endpoint": diag["endpoint"],
-                    "action": "diagnostic_cycle_triggered",
+                    "action": "swarm_dispatched_and_diagnostic_triggered",
                     "consensus_confidence": diag["confidence"],
                 })
             except Exception as e:

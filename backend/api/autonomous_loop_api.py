@@ -25,6 +25,7 @@ All actions tracked via Genesis keys with full provenance chain.
 from fastapi import APIRouter, Body
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
+import asyncio
 import logging
 import threading
 import time
@@ -702,8 +703,8 @@ async def stop_loop():
 
 @router.post("/cycle")
 async def run_single_cycle():
-    """Run a single autonomous cycle manually."""
-    result = _run_cycle()
+    """Run a single autonomous cycle manually (offloaded to thread pool)."""
+    result = await asyncio.to_thread(_run_cycle)
     with _loop_lock:
         _loop_state["cycle_count"] += 1
         _loop_state["last_cycle"] = result["timestamp"]
@@ -734,13 +735,15 @@ async def get_unified_trigger_definitions(category: Optional[str] = None, trigge
 
 @router.post("/triggers/run")
 async def run_unified_triggers(payload: Dict[str, Any] = Body(default={})):
-    """Run unified triggers (async multi-trigger). Body: { \"trigger_ids\": [...], \"category\": \"...\" }."""
+    """Run unified triggers (offloaded to thread pool). Body: { \"trigger_ids\": [...], \"category\": \"...\" }."""
     from api.brain_api_v2 import call_brain
     payload = payload or {}
-    result = call_brain("system", "run_unified_triggers", {
-        "trigger_ids": payload.get("trigger_ids"),
-        "category": payload.get("category"),
-    })
+    def _run():
+        return call_brain("system", "run_unified_triggers", {
+            "trigger_ids": payload.get("trigger_ids"),
+            "category": payload.get("category"),
+        })
+    result = await asyncio.to_thread(_run)
     return result
 
 

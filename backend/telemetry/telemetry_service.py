@@ -21,6 +21,8 @@ from contextlib import contextmanager
 from typing import Optional, Dict, Any, Generator
 from sqlalchemy.orm import Session
 
+_DRIFT_WARN_TIMES: Dict[str, float] = {}
+
 from models.telemetry_models import (
     OperationLog, OperationType, OperationStatus,
     PerformanceBaseline, DriftAlert, SystemState
@@ -367,10 +369,16 @@ class TelemetryService:
 
             if alerts:
                 session.commit()
-                logger.warning(
-                    f"Drift detected for {operation.operation_name}: "
-                    f"{len(alerts)} alert(s) created"
-                )
+                # Rate-limit drift warnings: once per operation per 5 minutes
+                import time as _time
+                now = _time.time()
+                last = _DRIFT_WARN_TIMES.get(operation.operation_name, 0)
+                if now - last > 300:
+                    _DRIFT_WARN_TIMES[operation.operation_name] = now
+                    logger.warning(
+                        f"Drift detected for {operation.operation_name}: "
+                        f"{len(alerts)} alert(s) created"
+                    )
 
         except Exception as e:
             logger.warning(f"Drift detection failed: {e}")
