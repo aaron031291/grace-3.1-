@@ -509,7 +509,7 @@ async def lifespan(app: FastAPI):
             if replayed:
                 print(f"[OK] Ghost memory: replayed {replayed} reboot deltas for continuity")
         except Exception as e:
-            print(f"[WARN] Ghost memory replay: {e}")
+            _emit_warn(f"Ghost memory replay: {e}")
 
         # ── Gap 5.3: ULH Meta-Rule Injector (runtime CTL/LTL constraints) ──
         try:
@@ -518,7 +518,7 @@ async def lifespan(app: FastAPI):
             rules = injector.get_active_rules()
             print(f"[OK] ULH meta-rule injector ready ({len(rules)} active rules)")
         except Exception as e:
-            print(f"[WARN] ULH meta-rule injector: {e}")
+            _emit_warn(f"ULH meta-rule injector: {e}")
 
         # Ã¢â€â‚¬Ã¢â€â‚¬ 0a. Start coding agent worker Ã¢â‚¬â€ processes fix tasks from error pipeline Ã¢â€â‚¬
         try:
@@ -526,7 +526,7 @@ async def lifespan(app: FastAPI):
             start_worker()
             print("[OK] Coding agent worker started")
         except Exception as e:
-            print(f"[WARN] Coding agent worker: {e}")
+            _emit_warn(f"Coding agent worker: {e}")
 
         # Ã¢â€â‚¬Ã¢â€â‚¬ 0b. Start trigger fabric Ã¢â‚¬â€ multi-source event nervous system Ã¢â€â‚¬Ã¢â€â‚¬
         try:
@@ -534,7 +534,7 @@ async def lifespan(app: FastAPI):
             start_fabric(app=app)
             print("[OK] Multi-trigger fabric started (12 trigger sources)")
         except Exception as e:
-            print(f"[WARN] Trigger fabric: {e}")
+            _emit_warn(f"Trigger fabric: {e}")
 
         # Ã¢â€â‚¬Ã¢â€â‚¬ 0b. Startup health check Ã¢â‚¬â€ validate key tables are queryable Ã¢â€â‚¬Ã¢â€â‚¬
         try:
@@ -545,7 +545,7 @@ async def lifespan(app: FastAPI):
                 session.execute(text("SELECT COUNT(*) FROM genesis_key LIMIT 1"))
             print("[OK] Startup health: core tables queryable")
         except Exception as e:
-            print(f"[WARN] Startup health check failed: {e}")
+            _emit_warn(f"Startup health check failed: {e}")
 
         # Ã¢â€â‚¬Ã¢â€â‚¬ 0c. Autonomous Diagnostics Ã¢â‚¬â€ boot scan then maintenance pulse Ã¢â€â‚¬
         try:
@@ -560,7 +560,7 @@ async def lifespan(app: FastAPI):
             ).start()
             print("[OK] Autonomous diagnostics boot scan started")
         except Exception as e:
-            print(f"[WARN] Autonomous diagnostics: {e}")
+            _emit_warn(f"Autonomous diagnostics: {e}")
 
         # Ã¢â€â‚¬Ã¢â€â‚¬ 0d. Probe agent Ã¢â‚¬â€ periodic light + deep API sweeps Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
         try:
@@ -602,7 +602,7 @@ async def lifespan(app: FastAPI):
             threading.Thread(target=_probe_pulse, daemon=True, name="grace-probe-pulse").start()
             print("[OK] Probe agent maintenance pulse started (light every 10min)")
         except Exception as e:
-            print(f"[WARN] Probe pulse: {e}")
+            _emit_warn(f"Probe pulse: {e}")
 
 
         try:

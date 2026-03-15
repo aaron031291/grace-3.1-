@@ -13,11 +13,15 @@ Usage:
 """
 
 import hashlib
+import json as _json
 import logging
+import os
 import queue
+import sqlite3
 import threading
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -57,6 +61,8 @@ class _SequenceCounter:
 class SpindleEventStore:
     """Persistent, append-only event store backed by PostgreSQL."""
 
+    _FALLBACK_DB = Path(os.getenv("GRACE_DATA_DIR", Path(__file__).parent.parent / "data")) / "spindle_events_fallback.db"
+
     def __init__(self):
         self._seq = _SequenceCounter()
         self._fallback: List[Dict[str, Any]] = []
@@ -65,6 +71,7 @@ class SpindleEventStore:
         self._write_queue: queue.Queue = queue.Queue(maxsize=50000)
         self._flush_thread: Optional[threading.Thread] = None
         self._flush_running = False
+        self._sqlite_fallback_init()
 
     # -- helpers -------------------------------------------------------------
 
@@ -103,6 +110,7 @@ class SpindleEventStore:
                 )
             self._db_available = True
             self._sync_sequence_from_db()
+            self.drain_fallback_to_main()
             logger.info("[SpindleEventStore] DB connection established.")
         except Exception as exc:
             if not getattr(self, '_warned_db', False):
@@ -183,20 +191,22 @@ class SpindleEventStore:
                 )
                 self._db_available = False
 
-        # Fallback: keep in memory
+        # Fallback: persist to SQLite + keep in memory
+        row = {
+            "sequence_id": seq,
+            "timestamp": now.isoformat(),
+            "source_type": source_type,
+            "topic": topic,
+            "input_hash": input_hash,
+            "spindle_mask": spindle_mask,
+            "proof_hash": proof_hash,
+            "result": result,
+            "payload": payload,
+            "source": source,
+        }
+        self._sqlite_fallback_write(row)
         with self._fallback_lock:
-            self._fallback.append({
-                "sequence_id": seq,
-                "timestamp": now.isoformat(),
-                "source_type": source_type,
-                "topic": topic,
-                "input_hash": input_hash,
-                "spindle_mask": spindle_mask,
-                "proof_hash": proof_hash,
-                "result": result,
-                "payload": payload,
-                "source": source,
-            })
+            self._fallback.append(row)
         return seq
 
     def query(
@@ -375,6 +385,80 @@ class SpindleEventStore:
                 for item in batch:
                     item["timestamp"] = item["timestamp"].isoformat() if hasattr(item["timestamp"], "isoformat") else str(item["timestamp"])
                     self._fallback.append(item)
+
+    # -- SQLite fallback (survives restarts when main DB is down) ----------
+
+    def _sqlite_fallback_init(self):
+        """Create the SQLite fallback table if it doesn't exist."""
+        try:
+            self._FALLBACK_DB.parent.mkdir(parents=True, exist_ok=True)
+            conn = sqlite3.connect(str(self._FALLBACK_DB))
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS spindle_fallback (
+                    sequence_id INTEGER PRIMARY KEY,
+                    timestamp TEXT,
+                    topic TEXT,
+                    source_type TEXT,
+                    payload_json TEXT,
+                    source TEXT,
+                    drained INTEGER DEFAULT 0
+                )
+            """)
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            logger.debug("[SpindleEventStore] SQLite fallback init: %s", e)
+
+    def _sqlite_fallback_write(self, row: dict):
+        """Write a single event to the SQLite fallback DB."""
+        try:
+            conn = sqlite3.connect(str(self._FALLBACK_DB), timeout=5)
+            conn.execute(
+                "INSERT OR IGNORE INTO spindle_fallback (sequence_id, timestamp, topic, source_type, payload_json, source) VALUES (?, ?, ?, ?, ?, ?)",
+                (row.get("sequence_id"), row.get("timestamp"), row.get("topic"),
+                 row.get("source_type"), _json.dumps(row.get("payload")), row.get("source")),
+            )
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            logger.debug("[SpindleEventStore] SQLite fallback write: %s", e)
+
+    def drain_fallback_to_main(self) -> int:
+        """Replay undrained SQLite events to the main DB. Returns count drained."""
+        drained = 0
+        try:
+            conn = sqlite3.connect(str(self._FALLBACK_DB), timeout=5)
+            rows = conn.execute(
+                "SELECT sequence_id, timestamp, topic, source_type, payload_json, source FROM spindle_fallback WHERE drained=0 ORDER BY sequence_id LIMIT 500"
+            ).fetchall()
+            if not rows:
+                conn.close()
+                return 0
+            SpindleEvent = self._get_model()
+            session_scope = self._get_session_scope()
+            with session_scope() as session:
+                for seq_id, ts, topic, src_type, payload_json, source in rows:
+                    payload = _json.loads(payload_json) if payload_json else None
+                    event = SpindleEvent(
+                        sequence_id=seq_id,
+                        timestamp=datetime.fromisoformat(ts) if ts else datetime.now(timezone.utc),
+                        source_type=src_type,
+                        topic=topic,
+                        payload=payload,
+                        source=source,
+                    )
+                    session.merge(event)
+                    drained += 1
+            # Mark as drained
+            ids = [r[0] for r in rows]
+            conn.execute(f"UPDATE spindle_fallback SET drained=1 WHERE sequence_id IN ({','.join('?' * len(ids))})", ids)
+            conn.commit()
+            conn.close()
+            if drained:
+                logger.info("[SpindleEventStore] Drained %d fallback events to main DB", drained)
+        except Exception as e:
+            logger.debug("[SpindleEventStore] Drain fallback: %s", e)
+        return drained
 
     def _drain_remaining(self):
         """Drain any remaining events on shutdown."""
