@@ -1,0 +1,110 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[ROUTER] ✓ Testing & Quality API
+[ROUTER] ✓ Healing Swarm API
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Schema auto-migrate: schema is up to date
+Creating Genesis Key tables...
+✓ Genesis Key tables created successfully
+  - genesis_key
+  - fix_suggestion
+  - genesis_key_archive
+  - user_profile
+Migrating database at: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\data\grace.db
+Creating learning_examples table...
+Creating learning_patterns table...
+Creating episodes table...
+Creating procedures table...
+✓ Memory mesh tables created successfully
+============================================================
+Memory Mesh Tables Migration
+============================================================
+
+✓ Found database: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\backend\data\grace.db
+
+Creating 'episodes' table...
+  ✓ Created 'episodes' table
+
+Creating 'procedures' table...
+  ✓ Created 'procedures' table
+
+Verifying tables...
+  ✅ Both tables verified!
+
+  episodes (16 columns):
+    - problem (TEXT)
+    - action (TEXT)
+    - outcome (TEXT)
+    - predicted_outcome (TEXT)
+    - prediction_error (FLOAT)
+    ... and 11 more
+
+  procedures (16 columns):
+    - name (VARCHAR(255))
+    - goal (TEXT)
+    - procedure_type (VARCHAR(100))
+    - steps (TEXT)
+    - preconditions (JSON)
+    ... and 11 more
+
+Checking row counts...
+  episodes: 988 rows
+  procedures: 2 rows
+
+============================================================
+✅ Migration completed successfully!
+============================================================
+✓ Created scraping_jobs table
+✓ Created scraped_pages table
+✓ Web scraping tables migration completed successfully
+[OK] Startup migrations: applied 4 -> ['003_add_genesis_keys', '006_add_memory_mesh', '009_memory_mesh_tables', '012_scraping_tables']
+[CORTEX] event_bus: ready
+[CORTEX] central_orchestrator: ready
+[CORTEX] error_pipeline: ready
+[OK] Lifecycle Cortex: 7 subsystems, 2 jobs registered
+[OK] Self-healing error pipeline started[OK] Background init started (training, diagnostics, embedding)
+[OK] Central Orchestrator initialized (event bus subscriptions active)
+
+[OK] Lifecycle Cortex: background subsystems + job scheduler started
+[OK] Feedback bridge started (consensus → execute → learn → trust correlation)
+[OK] OLLAMA is running and reachable
+[OK] Qdrant (https://877286a8-e5b8-472e-aa28-22cf4790cec0.europe-west3-0.gcp.cloud.qdrant.io:6333) is running with 3 collection(s)
+[OK] File watcher started - automatic version tracking enabled
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[OK] Ghost memory: replayed 5 reboot deltas for continuity
+[OK] ULH meta-rule injector ready (3 active rules)
+[OK] Coding agent worker started
+[OK] Multi-trigger fabric started (12 trigger sources)
+[OK] Startup health: core tables queryable
+[OK] Autonomous diagnostics boot scan started
+[OK] Probe agent maintenance pulse started (light every 10min)
+[OK] Execution registry initialized
+[OK] Startup diagnostic: HEALTHY
+[INGEST] [OK] Got embedding model (singleton)
+[OK] Embedding model loaded
+[OK] NLP pipeline ready (voice/intent)
+[OK] Governance healing bridge started (trust < 90 + high confidence â†' auto-heal)
+[OK] External knowledge pipeline started (gap-detect â†' fetch â†' ingest every 30min)
+[OK] Self-mirroring telemetry started (CPU/memory/latency/governance every 60s)
+[OK] SWE->Spindle bridge started (LearningExample -> Braille -> deterministic paths)
+[OK] Proactive healing started (background health monitor)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized[OK] Intelligent CICD orchestrator ready (ML-assisted test selection, webhooks)
+[AUTO-INGEST] Git tracker initialized
+
+[AUTO-INGEST] Starting directory scan...
+[OK] Governance projection service started (event bus -> .grace/ folders)
+[OK] Memory mesh reconciliation cron started (every 30min)
+[OK] Consensus→RL reward bridge started (online weight updates)
+[OK] Executive watchdog started (SAFE_MODE failover on hang)

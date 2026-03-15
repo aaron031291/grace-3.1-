@@ -71,12 +71,25 @@ class BrainOrchestrator:
             )
             futures[future] = brain_name
 
-        for future in as_completed(futures, timeout=60):
-            brain_name = futures[future]
-            try:
-                results[brain_name] = future.result()
-            except Exception as e:
-                results[brain_name] = {"ok": False, "error": str(e)[:100]}
+        try:
+            for future in as_completed(futures, timeout=30):
+                brain_name = futures[future]
+                try:
+                    results[brain_name] = future.result(timeout=1)
+                except Exception as e:
+                    results[brain_name] = {"ok": False, "error": str(e)[:100]}
+        except TimeoutError:
+            # Collect whatever finished; mark the rest as timed out
+            for future, brain_name in futures.items():
+                if brain_name not in results:
+                    if future.done():
+                        try:
+                            results[brain_name] = future.result(timeout=0)
+                        except Exception as e:
+                            results[brain_name] = {"ok": False, "error": str(e)[:100]}
+                    else:
+                        results[brain_name] = {"ok": False, "error": "timeout (30s)"}
+                        future.cancel()
 
         latency = round((time.time() - start) * 1000, 1)
 

@@ -118,7 +118,7 @@ class BusBridge:
                 data = getattr(evt, "data", None) or {}
                 source = getattr(evt, "source", "")
 
-                if source == FORWARDED_SOURCE:
+                if source == FORWARDED_SOURCE or source == "layer1_bus":
                     return
 
                 # Best-effort fire-and-forget.

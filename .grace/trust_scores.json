@@ -4,6 +4,97 @@
     "trust_score": 100.0,
     "trend": "stable",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T11:50:25.360553+00:00"
+    "last_updated": "2026-03-15T14:47:39.807178+00:00"
+  },
+  "system": {
+    "component_name": "system",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:22:38.947024+00:00"
+  },
+  "compiler_6190fb08654d6683": {
+    "component_name": "Compiled: ['func:hello']",
+    "trust_score": 97.0,
+    "trend": "stable",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:47:57.496356+00:00"
+  },
+  "qdrant": {
+    "component_name": "qdrant",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:17:21.952342+00:00"
+  },
+  "core\\async_parallel.py": {
+    "component_name": "core\\async_parallel.py",
+    "trust_score": 5.0,
+    "trend": "stable",
+    "needs_remediation": true,
+    "last_updated": "2026-03-15T14:22:39.365716+00:00"
+  },
+  "core\\auto_router.py": {
+    "component_name": "core\\auto_router.py",
+    "trust_score": 3.3,
+    "trend": "down",
+    "needs_remediation": true,
+    "last_updated": "2026-03-15T14:22:43.476690+00:00"
+  },
+  "core\\base_component.py": {
+    "component_name": "core\\base_component.py",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:17:33.088343+00:00"
+  },
+  "brain.system": {
+    "component_name": "system",
+    "trust_score": 100.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T13:14:59.286004+00:00"
+  },
+  "brain.ai": {
+    "component_name": "ai",
+    "trust_score": 76.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T13:23:31.880429+00:00"
+  },
+  "logic_test": {
+    "component_name": "Logic Test",
+    "trust_score": 100.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:47:06.133500+00:00"
+  },
+  "brain.chat": {
+    "component_name": "chat",
+    "trust_score": 96.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T13:23:31.539204+00:00"
+  },
+  "tracking_test": {
+    "component_name": "Track Test",
+    "trust_score": 85.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:47:06.637081+00:00"
+  },
+  "compiler_e6d11ccc9a79d56b": {
+    "component_name": "Compiled: ['func:test']",
+    "trust_score": 97.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:47:43.326171+00:00"
+  },
+  "consensus_engine": {
+    "component_name": "Consensus Roundtable",
+    "trust_score": 86.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:33:42.725386+00:00"
   }
 }

@@ -42,6 +42,40 @@ import time
 logger = logging.getLogger(__name__)
 
 
+# ==================== FIX 3: Offline LLM Client (Fallback) ====================
+class OfflineLLMClient(BaseLLMClient):
+    """
+    Fallback client when ALL LLM providers are unavailable.
+    Returns clear error messages instead of crashing.
+    62 modules that call get_llm_client() now survive LLM downtime.
+    """
+    
+    def __init__(self):
+        self._model = "offline"
+    
+    def is_running(self) -> bool:
+        return False
+    
+    def generate(self, prompt: str, **kwargs) -> str:
+        return "[LLM OFFLINE] All LLM providers are currently unavailable. Request queued for retry."
+    
+    def chat(self, messages: list, **kwargs) -> dict:
+        return {
+            "message": {"role": "assistant", "content": self.generate(str(messages))},
+            "model": "offline",
+            "done": True,
+        }
+    
+    def list_models(self) -> list:
+        return []
+    
+    def get_model_name(self) -> str:
+        return "offline-fallback"
+    
+    def embed(self, text: str, **kwargs) -> list:
+        return []
+
+
 class _CostTracker:
     """Tracks API token costs and enforces back-pressure on quota exhaustion."""
 
@@ -124,25 +158,60 @@ def _ollama_with_model(model: str) -> BaseLLMClient:
 def get_llm_client(provider: str = None) -> BaseLLMClient:
     """
     Get a LLM client with governance rules enforced.
-    Providers: ollama, kimi, opus, openai
+    Tries requested provider first, then falls back through all available providers.
+    Final fallback: OfflineLLMClient (returns clear error, never crashes).
     """
-    provider = provider or settings.LLM_PROVIDER
+    provider = provider or (settings.LLM_PROVIDER if settings else 'ollama')
+    
+    # Try the requested provider first
+    try:
+        client = _create_provider_client(provider)
+        if client is not None:
+            return _wrap(client)
+    except Exception as e:
+        logger.warning(f"[LLM-FALLBACK] Primary provider '{provider}' failed: {e}")
+    
+    # Fallback chain: try other providers
+    fallback_order = ['ollama', 'kimi', 'opus', 'openai']
+    for fb in fallback_order:
+        if fb == provider:
+            continue
+        try:
+            client = _create_provider_client(fb)
+            if client is not None:
+                logger.info(f"[LLM-FALLBACK] Using fallback provider: {fb}")
+                return _wrap(client)
+        except Exception:
+            continue
+    
+    # All providers failed → return offline client
+    logger.error("[LLM-FALLBACK] ALL providers unavailable. Using OfflineLLMClient.")
+    return OfflineLLMClient()
 
+
+def _create_provider_client(provider: str) -> BaseLLMClient:
+    """Create a raw client for the given provider. Returns None if not configured."""
     if provider == "openai":
-        return _wrap(OpenAILLMClient(api_key=settings.LLM_API_KEY))
+        key = getattr(settings, 'LLM_API_KEY', '') if settings else ''
+        if not key:
+            return None
+        return OpenAILLMClient(api_key=key)
     elif provider == "kimi":
-        return _wrap(KimiLLMClient(
-            api_key=getattr(settings, 'KIMI_API_KEY', '') or settings.LLM_API_KEY,
-        ))
+        key = (getattr(settings, 'KIMI_API_KEY', '') or getattr(settings, 'LLM_API_KEY', '')) if settings else ''
+        if not key:
+            return None
+        return KimiLLMClient(api_key=key)
     elif provider == "opus":
-        return _wrap(OpusLLMClient(
-            api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
-        ))
+        key = (getattr(settings, 'OPUS_API_KEY', '') or getattr(settings, 'LLM_API_KEY', '')) if settings else ''
+        if not key:
+            return None
+        return OpusLLMClient(api_key=key)
     elif provider == "runpod":
         from cognitive.runpod_client import get_runpod_client
-        return _wrap(get_runpod_client())
-    else:
-        return _wrap(OllamaLLMClient(base_url=settings.OLLAMA_URL))
+        return get_runpod_client()
+    else:  # ollama
+        url = getattr(settings, 'OLLAMA_URL', 'http://localhost:11434') if settings else 'http://localhost:11434'
+        return OllamaLLMClient(base_url=url)
 
 
 def get_llm_for_task(task: str = "general") -> BaseLLMClient:
@@ -222,22 +291,14 @@ def get_deepseek_reasoner() -> BaseLLMClient:
 
 def get_raw_client(provider: str = None) -> BaseLLMClient:
     """Get a raw client WITHOUT governance wrapping (internal use only)."""
-    provider = provider or settings.LLM_PROVIDER
-    if provider == "openai":
-        return OpenAILLMClient(api_key=settings.LLM_API_KEY)
-    elif provider == "kimi":
-        return KimiLLMClient(
-            api_key=getattr(settings, 'KIMI_API_KEY', '') or settings.LLM_API_KEY,
-        )
-    elif provider == "opus":
-        return OpusLLMClient(
-            api_key=getattr(settings, 'OPUS_API_KEY', '') or settings.LLM_API_KEY,
-        )
-    elif provider == "runpod":
-        from cognitive.runpod_client import get_runpod_client
-        return get_runpod_client()
-    else:
-        return OllamaLLMClient(base_url=settings.OLLAMA_URL)
+    provider = provider or (settings.LLM_PROVIDER if settings else 'ollama')
+    try:
+        client = _create_provider_client(provider)
+        if client is not None:
+            return client
+    except Exception:
+        pass
+    return OfflineLLMClient()
 
 
 def get_all_available_models() -> list:

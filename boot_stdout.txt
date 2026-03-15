@@ -1,0 +1,9 @@
+[13:31:14][INFO] Grace Ops Console starting on http://localhost:8765
+[13:31:16][INFO] Auto-launching Grace (backend + frontend)...
+[13:31:16][INFO] ╔══════════════════════════════════════════════════════════╗
+[13:31:16][INFO] ║         Grace 3.1 — Enterprise Boot Sequence            ║
+[13:31:16][INFO] ╚══════════════════════════════════════════════════════════╝
+[13:31:16][INFO] [Phase 0] Triggering Spindle pre-boot scan...
+[13:33:16][WARN] [Phase 0] Spindle scan timed out (continuing anyway)
+[13:33:16][INFO] [Phase 1] Running preflight checks...
+[13:33:16][INFO]   Preflight chunk 0: Self-heal (ports, .env, deps)

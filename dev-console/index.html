@@ -63,6 +63,67 @@ button{font-family:inherit;cursor:pointer;}
 #bottom-input{flex:1;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;outline:none;font-family:inherit;}
 #bottom-send{padding:3px 12px;background:var(--blue);border:none;border-radius:4px;color:#fff;font-size:10px;font-weight:700;}
 
+/* ═══ PANEL MANAGEMENT ═══ */
+/* Fullscreen overlay for double-click maximize */
+#panel-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);padding:20px;}
+#panel-overlay.show{display:flex;flex-direction:column;}
+#panel-overlay .po-header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg-panel);border:1px solid var(--border);border-radius:8px 8px 0 0;flex-shrink:0;}
+#panel-overlay .po-header .po-title{font-size:13px;font-weight:800;flex:1;}
+#panel-overlay .po-close{background:var(--accent);border:none;color:#fff;width:28px;height:28px;border-radius:6px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#panel-overlay .po-close:hover{filter:brightness(1.3);}
+#panel-overlay .po-body{flex:1;overflow:auto;background:var(--bg);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;}
+
+/* Resize handle between panels */
+.resize-handle{width:5px;cursor:col-resize;background:transparent;transition:background 0.15s;flex-shrink:0;position:relative;z-index:10;}
+.resize-handle:hover,.resize-handle.active{background:var(--blue);}
+.resize-handle-h{height:5px;cursor:row-resize;background:transparent;transition:background 0.15s;flex-shrink:0;position:relative;z-index:10;}
+.resize-handle-h:hover,.resize-handle-h.active{background:var(--blue);}
+
+/* Draggable tab indicator */
+.tab-btn[draggable]{cursor:grab;}
+.tab-btn[draggable]:active{cursor:grabbing;}
+.tab-btn.drag-over{border-bottom-color:var(--accent)!important;background:rgba(233,69,96,0.1);}
+.tab-drop-zone{min-width:30px;height:100%;border:2px dashed transparent;transition:border-color 0.15s;}
+.tab-drop-zone.drag-over{border-color:var(--accent);}
+
+/* Genesis IDE Panel */
+.genesis-ide{display:flex;flex:1;overflow:hidden;}
+.genesis-ide .gi-left{width:240px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
+.genesis-ide .gi-center{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.genesis-ide .gi-right{width:300px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid var(--border);overflow:hidden;}
+.gi-header{padding:6px 10px;font-size:10px;font-weight:700;color:var(--muted);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;background:var(--bg-panel);text-transform:uppercase;letter-spacing:1px;flex-shrink:0;}
+.gi-header .gi-count{background:var(--blue);color:#fff;border-radius:8px;padding:0 5px;font-size:9px;min-width:16px;text-align:center;}
+.gi-body{flex:1;overflow-y:auto;}
+.gi-key{padding:8px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;}
+.gi-key:hover{background:rgba(52,152,219,0.06);}
+.gi-key.selected{background:rgba(52,152,219,0.1);border-left:3px solid var(--blue);}
+.gi-key .ki-status{font-size:9px;font-weight:700;padding:1px 5px;border-radius:6px;}
+.gi-key .ki-name{font-size:11px;font-weight:600;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gi-key .ki-file{font-size:9px;color:var(--blue);font-family:'JetBrains Mono',monospace;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gi-key .ki-ts{font-size:8px;color:var(--dim);margin-top:1px;}
+.gi-editor{flex:1;background:#020617;color:#e2e8f0;font-family:'JetBrains Mono','Fira Code',monospace;font-size:12px;line-height:1.6;padding:12px;border:none;outline:none;resize:none;tab-size:4;white-space:pre;overflow:auto;}
+.gi-toolbar{display:flex;gap:4px;padding:5px 8px;background:var(--bg-panel);border-bottom:1px solid var(--border);align-items:center;flex-shrink:0;}
+.gi-toolbar .gi-file{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gi-toolbar .gi-btn{padding:3px 8px;border:none;border-radius:4px;font-size:9px;font-weight:700;color:#fff;cursor:pointer;}
+.gi-toolbar .gi-btn:hover{filter:brightness(1.2);}
+.gi-rtabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg-panel);flex-shrink:0;}
+.gi-rtab{flex:1;padding:5px;font-size:9px;font-weight:700;background:none;border:none;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;text-align:center;font-family:inherit;}
+.gi-rtab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.gi-rpanel{flex:1;overflow-y:auto;display:none;}
+.gi-rpanel.active{display:flex;flex-direction:column;}
+.gi-feed-item{padding:5px 8px;font-size:10px;border-bottom:1px solid rgba(26,29,46,0.5);animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.gi-chat-msg{padding:6px 10px;margin:3px 6px;border-radius:8px;font-size:11px;max-width:85%;word-wrap:break-word;}
+.gi-chat-msg.user{background:rgba(52,152,219,0.15);margin-left:auto;border-bottom-right-radius:2px;}
+.gi-chat-msg.system{background:var(--bg-alt);border-bottom-left-radius:2px;}
+.gi-chat-input{display:flex;padding:5px;gap:4px;border-top:1px solid var(--border);flex-shrink:0;}
+.gi-chat-input input{flex:1;background:var(--bg-input);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-size:10px;outline:none;font-family:inherit;}
+.gi-chat-input button{padding:3px 10px;background:var(--blue);border:none;border-radius:4px;color:#fff;font-size:10px;font-weight:700;cursor:pointer;}
+.gi-version{padding:8px 10px;}
+.gi-version .commit{padding:5px 8px;font-size:10px;border-bottom:1px solid var(--border);}
+.gi-version .commit .hash{color:var(--yellow);font-family:'JetBrains Mono',monospace;font-size:9px;}
+.gi-version .commit .msg{color:var(--text);margin-left:6px;}
+
 /* SHARED */
 .card{background:var(--bg-alt);border:1px solid var(--border);border-radius:7px;padding:12px;}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
@@ -141,6 +202,15 @@ button{font-family:inherit;cursor:pointer;}
   </div>
 </div>
 
+<!-- Fullscreen Panel Overlay -->
+<div id="panel-overlay">
+  <div class="po-header">
+    <span class="po-title">Panel</span>
+    <button class="po-close" onclick="closeOverlay()">✕</button>
+  </div>
+  <div class="po-body"></div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════════════════════
 // CONFIG
@@ -164,6 +234,8 @@ const S={
   bottomTab:'feed',bottomExpanded:false,feedLogs:[],bottomMessages:[],
   // Boot
   bootLogs:[],
+  // Tail Logs
+  tailLogs:[],tailFilter:'all',tailSearch:'',tailPaused:false,
   // Spindle
   spindleData:null,spindleEvents:[],
   // Autonomous Loop
@@ -246,6 +318,7 @@ const TABS=[
   {id:'audit',label:'Audit Trail',icon:'📋'},
   {id:'testing',label:'Testing',icon:'🧪'},
   {id:'bootlog',label:'Boot Log',icon:'📜'},
+  {id:'taillogs',label:'Tail Logs',icon:'📡'},
   {id:'metrics',label:'Metrics',icon:'📊'},
   {id:'healing',label:'Self-Healing',icon:'🔧'},
   {id:'memory',label:'Memory',icon:'🧠'},
@@ -284,7 +357,7 @@ function updateBadge(){
 // ══════════════════════════════════════════════════════════════
 function renderTab(){
   const p=document.getElementById('pane-'+S.activeTab);if(!p)return;
-  const renderers={problems:renderProblems,audit:renderAudit,testing:renderTesting,bootlog:renderBootLog,metrics:renderMetrics,healing:renderHealing,memory:renderMemory,trust:renderTrust,diagnostics:renderDiagnostics,network:renderNetwork,genesis:renderGenesis,federated:renderFederated};
+  const renderers={problems:renderProblems,audit:renderAudit,testing:renderTesting,bootlog:renderBootLog,taillogs:renderTailLogs,metrics:renderMetrics,healing:renderHealing,memory:renderMemory,trust:renderTrust,diagnostics:renderDiagnostics,network:renderNetwork,genesis:renderGenesis,federated:renderFederated};
   (renderers[S.activeTab]||renderEmpty)(p);
 }
 function renderEmpty(p){p.innerHTML='<div class="empty" style="margin:20px">Coming soon</div>';}
@@ -627,6 +700,81 @@ function renderBootLog(p){
 }
 function logCls(l){if(!l)return'log-d';if(l.includes('[ERROR]')||l.includes('Exception'))return'log-e';if(l.includes('WARN'))return'log-w';if(l.includes('[OK]')||l.includes('SUCCESS'))return'log-ok';if(l.includes('API')||l.includes('HTTP'))return'log-i';return'log-d';}
 
+function logLevel(l){if(!l)return'debug';if(l.includes('[ERROR]')||l.includes('Exception')||l.includes('Traceback'))return'error';if(l.includes('WARN'))return'warn';if(l.includes('[INFO]')||l.includes('[OK]'))return'info';return'debug';}
+
+function nlpFormat(raw){
+  // Extract timestamp
+  const tsMatch=raw.match(/\[(\d{2}:\d{2}:\d{2})\]/);
+  const ts=tsMatch?tsMatch[1]:'';
+  // Strip log prefixes for clean message
+  let msg=raw.replace(/^\[[\d:]+\]\[(?:INFO|WARN|ERROR|DEBUG)\]\s*/,'').replace(/^(?:INFO|WARNING|ERROR|DEBUG):\s*/,'');
+  // NLP translations for common patterns
+  const nlp=[
+    [/^\[OK\]\s*(.+)/,'✅ $1'],
+    [/^\[WARN\]\s*(.+)/,'⚠️ $1'],
+    [/^ERROR:\s*(.+)/,'❌ $1'],
+    [/^\[ROUTER\]\s*[✓✓]\s*(.+)/,'🔌 Route registered: $1'],
+    [/^\[GENESIS\]\s*(.+)/,'🔑 Genesis: $1'],
+    [/^\[CORTEX\]\s*(.+?):\s*(.+)/,'🧠 Cortex subsystem "$1" is $2'],
+    [/^\[CORTEX-JOB\]\s*(.+?):\s*(.+)/,'⚙️ Background job "$1" — $2'],
+    [/^\[MIGRATION\]\s*[✗✗]\s*Failed:\s*(.+)/,'🔧 Migration failed: $1'],
+    [/^\[MIGRATION\]\s*[✓✓]\s*(.+)/,'✅ Migration passed: $1'],
+    [/^\[AUTO-INGEST\]\s*(.+)/,'📥 Auto-ingest: $1'],
+    [/^\[INGEST\]\s*(.+)/,'📄 Ingestion: $1'],
+    [/^\[LATENCY TRACE\]\s*(\S+)\s*-\s*Total:\s*(\S+)/,'⏱️ $1 responded in $2'],
+    [/^Drift detected for (\S+):\s*(.+)/,'📊 Performance drift on "$1" — $2'],
+    [/^\[DIAGNOSTIC-DETECTION\]\s*(.+)/,'🔬 Diagnostic detection: $1'],
+    [/^\[TRIGGER-FABRIC\]\s*(.+)/,'🔗 Trigger fabric: $1'],
+    [/^\[WATCHDOG\]\s*(.+)/,'🐕 Watchdog: $1'],
+    [/^Grace API (starting|shutting)/,'🚀 Grace API $1'],
+    [/^Traceback \(most recent/,'📋 Stack trace follows…'],
+    [/^python-dotenv could not parse statement starting at line (\d+)/,'⚠️ .env parse error on line $1'],
+    [/^Database connection (.+)/,'🗄️ Database: $1'],
+    [/^Schema auto-migrate:\s*(.+)/,'🗄️ Schema: $1'],
+    [/^Startup migrations:\s*(.+)/,'🔄 Migrations: $1'],
+    [/^Grace backend LIVE/,'🟢 Backend is live and accepting requests'],
+    [/^Frontend LIVE/,'🟢 Frontend is live and serving'],
+  ];
+  for(const [re,rep] of nlp){if(re.test(msg)){msg=msg.replace(re,rep);break;}}
+  return {ts,msg};
+}
+
+function renderTailLogs(p){
+  const filters=['all','error','warn','info','debug'];
+  let html=`<div class="toolbar">
+    <select onchange="S.tailFilter=this.value;renderTailLogs(this.closest('.pane'))">${filters.map(f=>`<option value="${f}"${S.tailFilter===f?' selected':''}>${f.toUpperCase()}</option>`).join('')}</select>
+    <input type="text" placeholder="Filter logs…" value="${S.tailSearch}" oninput="S.tailSearch=this.value;renderTailLogs(this.closest('.pane'))" style="min-width:200px">
+    <button class="btn-sm" style="background:${S.tailPaused?'var(--green)':'var(--yellow)'}" onclick="S.tailPaused=!S.tailPaused;renderTailLogs(this.closest('.pane'))">${S.tailPaused?'▶ Resume':'⏸ Pause'}</button>
+    <button class="btn-sm" style="background:var(--accent)" onclick="S.tailLogs=[];renderTailLogs(this.closest('.pane'))">🗑 Clear</button>
+    <div style="flex:1"></div>
+    <span style="font-size:10px;color:var(--muted)">${S.tailLogs.length} lines</span>
+  </div>`;
+  html+=`<div id="tail-scroll" style="flex:1;overflow:auto;background:#000;padding:8px 12px;font-size:12px;line-height:1.8">`;
+  const levelOrder={error:0,warn:1,info:2,debug:3};
+  const filterLevel=S.tailFilter==='all'?3:levelOrder[S.tailFilter]??3;
+  const search=S.tailSearch.toLowerCase();
+  let shown=0;
+  const start=Math.max(0,S.tailLogs.length-2000);
+  for(let i=start;i<S.tailLogs.length;i++){
+    const l=S.tailLogs[i];
+    const lvl=logLevel(l);
+    if(levelOrder[lvl]>filterLevel)continue;
+    if(search&&!l.toLowerCase().includes(search))continue;
+    const {ts,msg}=nlpFormat(l);
+    const color=lvl==='error'?'var(--red)':lvl==='warn'?'var(--yellow)':lvl==='info'?'#ccc':'#888';
+    html+=`<div style="display:flex;gap:10px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.03)"><span style="color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:10px;flex-shrink:0;min-width:55px">${ts}</span><span style="color:${color}">${msg.replace(/</g,'&lt;')}</span></div>`;
+    shown++;
+  }
+  if(shown===0)html+=`<div style="color:#636e72;padding:20px;text-align:center">No logs yet — waiting for stream…</div>`;
+  html+=`</div>`;
+  p.innerHTML=html;
+  if(!S.tailPaused){const el=document.getElementById('tail-scroll');if(el)el.scrollTop=el.scrollHeight;}
+}
+
+function connectTailWs(){
+  let d=1000;const c=()=>{const ws=new WebSocket(WS_BASE+'/api/autonomous/logs/stream');ws.onmessage=e=>{if(S.tailPaused)return;S.tailLogs.push(e.data);if(S.tailLogs.length>5000)S.tailLogs=S.tailLogs.slice(-4000);if(S.activeTab==='taillogs')renderTailLogs(document.getElementById('pane-taillogs'));};ws.onopen=()=>{d=1000;};ws.onclose=()=>{d=Math.min(d*2,30000);setTimeout(c,d);};ws.onerror=()=>ws.close();};c();
+}
+
 function renderMetrics(p){
   const sys=S.health.system?.resources||{};
   const m=[{l:'CPU',v:(sys.cpu_total||0).toFixed(1)+'%',c:(sys.cpu_total||0)>85?'#e74c3c':'#2ecc71',pct:sys.cpu_total||0},{l:'Memory',v:(sys.memory_percent||0).toFixed(1)+'%',s:`${sys.memory_used_gb||0}/${sys.memory_total_gb||0}GB`,c:(sys.memory_percent||0)>85?'#e74c3c':'#2ecc71',pct:sys.memory_percent||0},{l:'Disk',v:(sys.disk_percent||0).toFixed(1)+'%',s:`${sys.disk_used_gb||0}/${sys.disk_total_gb||0}GB`,c:(sys.disk_percent||0)>85?'#e74c3c':'#2ecc71',pct:sys.disk_percent||0},{l:'Cores',v:sys.cpu_cores||0,c:'#3498db'}];
@@ -899,10 +1047,247 @@ function renderNetwork(p){
   p.innerHTML=html;
 }
 
+// ── Genesis IDE State ──
+const GI = {
+  keys: [], selectedKey: null, fileContent: '', filePath: '', dirty: false,
+  rightTab: 'feed', feedItems: [], chatMsgs: [], gitLog: '',
+  feedLastId: 0,
+};
+
+async function loadGenesisKeys() {
+  const d = await GET('/api/genesis-daily/folders?days=7');
+  const stats = await GET('/api/genesis-daily/stats');
+  GI.keys = [];
+  // Load keys from recent folders
+  const folders = d?.folders || [];
+  for (const f of folders.slice(0, 3)) {
+    const fd = await GET('/api/genesis-daily/keys?date=' + (f.date || ''));
+    (fd?.keys || []).forEach(k => GI.keys.push(k));
+  }
+  if (GI.keys.length === 0) {
+    // Fallback: try the unified problems to create pseudo-keys
+    const prob = await GET('/api/problems/unified');
+    (prob?.report?.alerts || []).slice(0, 20).forEach((a, i) => {
+      const sev = a.severity === 'critical' ? 'FAIL' : a.severity === 'warning' ? 'WARN' : 'OK';
+      GI.keys.push({
+        id: i, status: sev, title: a.title,
+        file: a.file || a.component || 'unknown',
+        timestamp: a.timestamp || new Date().toISOString(),
+        description: a.description,
+        auto_healable: a.auto_healable,
+      });
+    });
+  }
+}
+
+async function giLoadFile(path) {
+  if (!path) return;
+  try {
+    const r = await fetch(API + '/api/files/read?path=' + encodeURIComponent(path));
+    if (r.ok) {
+      const d = await r.json();
+      GI.fileContent = d.content || d.data || '';
+      GI.filePath = path;
+      GI.dirty = false;
+      const ed = document.getElementById('gi-editor');
+      if (ed) { ed.value = GI.fileContent; }
+      const fp = document.getElementById('gi-filepath');
+      if (fp) fp.textContent = '📄 ' + path;
+    }
+  } catch(e) { console.warn('File load error:', e); }
+}
+
+async function giSaveFile() {
+  if (!GI.filePath) return;
+  const ed = document.getElementById('gi-editor');
+  if (!ed) return;
+  try {
+    await POST('/api/files/write', { path: GI.filePath, content: ed.value });
+    GI.dirty = false;
+    const btn = document.getElementById('gi-save-btn');
+    if (btn) { btn.textContent = '✓ Saved'; setTimeout(() => btn.textContent = '💾 Save', 1500); }
+  } catch(e) { alert('Save failed: ' + e.message); }
+}
+
+async function giAutoFix(key) {
+  const desc = key.description || key.title;
+  const file = key.file || '';
+  const payload = {
+    title: key.title, severity: key.status === 'FAIL' ? 'critical' : 'warning',
+    component: file, description: desc,
+  };
+  const r = await POST('/api/healing-swarm/submit', payload);
+  GI.chatMsgs.push({ role: 'system', text: `🔧 Auto-fix dispatched for "${key.title}". ${r ? 'Swarm processing...' : 'Failed to dispatch.'}` });
+  renderGenesisRight();
+}
+
+function giSelectKey(idx) {
+  GI.selectedKey = idx;
+  const key = GI.keys[idx];
+  if (key && key.file) giLoadFile(key.file);
+  renderGenesisLeft();
+}
+
+function renderGenesisLeft() {
+  const el = document.getElementById('gi-keys-list');
+  if (!el) return;
+  el.innerHTML = '';
+  GI.keys.forEach((k, i) => {
+    const stat = k.status || 'OK';
+    const col = stat === 'FAIL' ? '#e74c3c' : stat === 'WARN' ? '#f1c40f' : '#2ecc71';
+    const sel = GI.selectedKey === i ? 'selected' : '';
+    el.innerHTML += `<div class="gi-key ${sel}" onclick="giSelectKey(${i})" ondblclick="maximizePanel('genesis-editor','Genesis Code: ${(k.file||k.title||'').replace(/'/g,"")}')">
+      <div style="display:flex;align-items:center;gap:5px">
+        <span class="ki-status" style="background:${col}20;color:${col}">${stat}</span>
+        <span class="ki-name">${k.title || 'Key ' + i}</span>
+      </div>
+      <div class="ki-file">${k.file || ''}</div>
+      <div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+        <span class="ki-ts">${k.timestamp ? new Date(k.timestamp).toLocaleTimeString() : ''}</span>
+        ${k.auto_healable || stat !== 'OK' ? `<button class="gi-btn" style="background:var(--green);font-size:8px;padding:1px 5px" onclick="event.stopPropagation();giAutoFix(GI.keys[${i}])">⚡Fix</button>` : ''}
+      </div>
+    </div>`;
+  });
+}
+
+function renderGenesisRight() {
+  // Feed tab
+  const feedEl = document.getElementById('gi-feed');
+  if (feedEl && GI.rightTab === 'feed') {
+    feedEl.innerHTML = '';
+    if (GI.feedItems.length === 0) feedEl.innerHTML = '<div style="padding:10px;color:var(--dim);font-size:10px">⚡ Activity feed initializing...</div>';
+    GI.feedItems.slice(-50).forEach(ev => {
+      const col = ev.source === 'grace' ? 'var(--purple)' : ev.source === 'spindle' ? 'var(--orange)' : ev.source === 'user' ? 'var(--blue)' : 'var(--muted)';
+      feedEl.innerHTML += `<div class="gi-feed-item"><span style="color:${col};font-weight:700">[${(ev.source||'sys').toUpperCase()}]</span> <span style="color:var(--dim);font-size:9px">${ev.ts||''}</span> ${ev.msg||''}</div>`;
+    });
+    feedEl.scrollTop = feedEl.scrollHeight;
+  }
+  // Chat tab
+  const chatEl = document.getElementById('gi-chat');
+  if (chatEl && GI.rightTab === 'chat') {
+    chatEl.innerHTML = '';
+    if (GI.chatMsgs.length === 0) chatEl.innerHTML = '<div style="padding:10px;color:var(--dim);font-size:10px">💬 Chat with Grace & Spindle</div>';
+    GI.chatMsgs.forEach(m => {
+      chatEl.innerHTML += `<div class="gi-chat-msg ${m.role}">${m.text}</div>`;
+    });
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+  // Version tab
+  const verEl = document.getElementById('gi-version');
+  if (verEl && GI.rightTab === 'version') {
+    if (!GI.gitLog) {
+      GET('/api/git/log').then(d => {
+        GI.gitLog = d?.log || d?.data || 'No git history';
+        verEl.innerHTML = `<div class="gi-version"><pre style="font-size:10px;color:var(--muted);white-space:pre-wrap">${GI.gitLog}</pre></div>`;
+      });
+      verEl.innerHTML = '<div style="padding:10px;color:var(--dim);font-size:10px">Loading git log...</div>';
+    }
+  }
+}
+
+function switchGiTab(tab) {
+  GI.rightTab = tab;
+  document.querySelectorAll('.gi-rtab').forEach(b => b.classList.toggle('active', b.dataset.rt === tab));
+  document.querySelectorAll('.gi-rpanel').forEach(p => p.classList.toggle('active', p.dataset.rp === tab));
+  renderGenesisRight();
+}
+
+async function giSendChat() {
+  const inp = document.getElementById('gi-chat-input');
+  if (!inp) return;
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  GI.chatMsgs.push({ role: 'user', text: msg });
+  renderGenesisRight();
+  try {
+    const r = await POST('/brain/chat', { action: 'send', payload: { message: msg } });
+    const resp = r?.ok ? (typeof r.data === 'string' ? r.data : r.data?.response || r.data?.message || JSON.stringify(r.data)) : `Error: ${r?.error || 'unknown'}`;
+    GI.chatMsgs.push({ role: 'system', text: resp });
+  } catch(e) { GI.chatMsgs.push({ role: 'system', text: 'Error: ' + e.message }); }
+  renderGenesisRight();
+}
+
 function renderGenesis(p){
-  p.innerHTML=`<div style="padding:20px;overflow:auto;flex:1"><div style="font-size:16px;font-weight:700;margin-bottom:16px">Genesis Keys</div><div id="gen-summary" class="card-grid" style="margin-bottom:16px"><div class="empty">Loading stats…</div></div><div id="gen-list"><div class="empty">Loading folders…</div></div></div>`;
-  GET('/api/genesis-daily/stats').then(d=>{const g=document.getElementById('gen-summary');if(!g)return;const total=d?.total_keys||0;const today=d?.today_keys||0;g.innerHTML=[{l:'🔑 Total Keys',v:total,c:'var(--blue)'},{l:'📅 Today',v:today,c:'var(--green)'}].map(c=>`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:${c.c}">${c.v}</div></div>`).join('');});
-  GET('/api/genesis-daily/folders?days=30').then(d=>{const l=document.getElementById('gen-list');if(!l)return;const folders=d?.folders||[];if(!folders.length){l.innerHTML='<div class="empty">No genesis folders</div>';return;}l.innerHTML=folders.map(f=>{const c=f.error_count>0?'#e74c3c':'#2ecc71';return`<div class="card" style="margin-bottom:5px;padding:10px 12px;border-left:3px solid ${c};cursor:pointer"><div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:700">${f.label||f.date}</div><div style="display:flex;gap:8px;align-items:center"><span style="font-size:10px;color:var(--blue);font-weight:600">🔑 ${f.key_count} keys</span>${f.error_count?`<span style="font-size:10px;color:var(--red);font-weight:600">❌ ${f.error_count} errors</span>`:''}</div></div></div>`;}).join('');});
+  p.innerHTML = `<div class="genesis-ide">
+    <!-- LEFT: Genesis Keys -->
+    <div class="gi-left" id="gi-left-panel">
+      <div class="gi-header">🔑 Genesis Keys <span class="gi-count" id="gi-key-count">0</span></div>
+      <div class="gi-body" id="gi-keys-list"><div style="padding:10px;color:var(--dim);font-size:10px">Loading keys...</div></div>
+    </div>
+    <div class="resize-handle" data-resize="gi-left-panel" data-dir="left"></div>
+    <!-- CENTER: Code Editor -->
+    <div class="gi-center">
+      <div class="gi-toolbar" ondblclick="maximizePanel('genesis-editor','Genesis Code Editor')">
+        <span id="gi-filepath" class="gi-file">Select a Genesis Key to view its code...</span>
+        <button class="gi-btn" style="background:var(--blue)" onclick="giLoadFile(GI.filePath)">🔄</button>
+        <button class="gi-btn" id="gi-save-btn" style="background:var(--green)" onclick="giSaveFile()">💾 Save</button>
+        <button class="gi-btn" style="background:var(--purple)" onclick="if(GI.selectedKey!==null)giAutoFix(GI.keys[GI.selectedKey])">⚡ Auto-Fix</button>
+      </div>
+      <textarea class="gi-editor" id="gi-editor" spellcheck="false" placeholder="Select a key or open a file to edit..."
+        oninput="GI.dirty=true"></textarea>
+      <div style="display:flex;padding:3px 8px;background:var(--bg-panel);border-top:1px solid var(--border);font-size:9px;color:var(--dim);gap:10px">
+        <span id="gi-line-info">Ln 1, Col 1</span>
+        <span id="gi-dirty" style="color:var(--yellow)"></span>
+        <div style="flex:1"></div>
+        <span id="gi-file-size"></span>
+      </div>
+    </div>
+    <div class="resize-handle" data-resize="gi-right-panel" data-dir="right"></div>
+    <!-- RIGHT: Live Feed / Chat / Version Control -->
+    <div class="gi-right" id="gi-right-panel">
+      <div class="gi-rtabs">
+        <button class="gi-rtab active" data-rt="feed" onclick="switchGiTab('feed')" ondblclick="maximizePanel('gi-feed','Live Activity Feed')">📡 FEED</button>
+        <button class="gi-rtab" data-rt="chat" onclick="switchGiTab('chat')" ondblclick="maximizePanel('gi-chat','Chat')">💬 CHAT</button>
+        <button class="gi-rtab" data-rt="version" onclick="switchGiTab('version')" ondblclick="maximizePanel('gi-version','Version Control')">📋 GIT</button>
+      </div>
+      <div class="gi-rpanel active" data-rp="feed" id="gi-feed" style="overflow-y:auto"></div>
+      <div class="gi-rpanel" data-rp="chat" id="gi-chat" style="overflow-y:auto"></div>
+      <div class="gi-rpanel" data-rp="version" id="gi-version" style="overflow-y:auto"></div>
+      <div class="gi-chat-input" id="gi-chat-bar" style="display:none">
+        <input id="gi-chat-input" placeholder="Talk to Grace & Spindle..." onkeydown="if(event.key==='Enter')giSendChat()">
+        <button onclick="giSendChat()">→</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Show chat bar when on chat tab
+  const chatBar = document.getElementById('gi-chat-bar');
+  if (GI.rightTab === 'chat' && chatBar) chatBar.style.display = 'flex';
+
+  // Load data
+  loadGenesisKeys().then(() => {
+    const cnt = document.getElementById('gi-key-count');
+    if (cnt) cnt.textContent = GI.keys.length;
+    renderGenesisLeft();
+  });
+  renderGenesisRight();
+
+  // Editor line info
+  const editor = document.getElementById('gi-editor');
+  if (editor) {
+    editor.addEventListener('click', () => {
+      const pos = editor.selectionStart;
+      const lines = editor.value.substring(0, pos).split('\n');
+      document.getElementById('gi-line-info').textContent = `Ln ${lines.length}, Col ${lines[lines.length-1].length+1}`;
+    });
+    editor.addEventListener('keyup', () => {
+      const pos = editor.selectionStart;
+      const lines = editor.value.substring(0, pos).split('\n');
+      document.getElementById('gi-line-info').textContent = `Ln ${lines.length}, Col ${lines[lines.length-1].length+1}`;
+      document.getElementById('gi-dirty').textContent = GI.dirty ? '● Modified' : '';
+    });
+  }
+
+  // Setup resize handles
+  setupResizeHandles();
+  // Setup right tab visibility
+  document.querySelectorAll('.gi-rtab').forEach(b => {
+    b.addEventListener('click', () => {
+      const chatBar = document.getElementById('gi-chat-bar');
+      if (chatBar) chatBar.style.display = b.dataset.rt === 'chat' ? 'flex' : 'none';
+    });
+  });
 }
 
 function renderFederated(p){
@@ -1002,8 +1387,137 @@ function connectAuditLiveWs(){
 // ══════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════
-buildControls();buildTabs();renderTab();setupBottom();
-connectBootWs();connectFeedWs();connectProblemsWs();connectAuditLiveWs();connectSpindleWs();
+// ═══ PANEL MANAGEMENT SYSTEM ═══════════════════════════════
+// Fullscreen overlay for double-click maximize
+function maximizePanel(sourceId, title) {
+  const overlay = document.getElementById('panel-overlay');
+  if (!overlay) return;
+  const source = document.getElementById(sourceId);
+  if (!source) return;
+  const header = overlay.querySelector('.po-header');
+  const body = overlay.querySelector('.po-body');
+  header.querySelector('.po-title').textContent = title || 'Panel';
+  body.innerHTML = '';
+  const clone = source.cloneNode(true);
+  clone.style.width = '100%';
+  clone.style.height = '100%';
+  clone.style.display = 'flex';
+  clone.style.flexDirection = 'column';
+  body.appendChild(clone);
+  overlay.classList.add('show');
+}
+function closeOverlay() {
+  document.getElementById('panel-overlay').classList.remove('show');
+}
+// Close overlay on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
+
+// ── Resize Handles ──
+function setupResizeHandles() {
+  document.querySelectorAll('.resize-handle').forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const target = document.getElementById(handle.dataset.resize);
+      if (!target) return;
+      const dir = handle.dataset.dir;
+      const startX = e.clientX;
+      const startW = target.getBoundingClientRect().width;
+      handle.classList.add('active');
+      const onMove = ev => {
+        const delta = dir === 'right' ? startX - ev.clientX : ev.clientX - startX;
+        const newW = Math.max(150, Math.min(600, startW + delta));
+        target.style.width = newW + 'px';
+      };
+      const onUp = () => {
+        handle.classList.remove('active');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+  document.querySelectorAll('.resize-handle-h').forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const target = document.getElementById(handle.dataset.resize);
+      if (!target) return;
+      const startY = e.clientY;
+      const startH = target.getBoundingClientRect().height;
+      handle.classList.add('active');
+      const onMove = ev => {
+        const delta = ev.clientY - startY;
+        const newH = Math.max(100, Math.min(600, startH + delta));
+        target.style.height = newH + 'px';
+      };
+      const onUp = () => {
+        handle.classList.remove('active');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
+// ── Draggable Tabs ──
+function setupDraggableTabs() {
+  const bar = document.getElementById('tab-bar');
+  if (!bar) return;
+  bar.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.draggable = true;
+    btn.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', btn.dataset.tab);
+      e.dataTransfer.effectAllowed = 'move';
+      btn.style.opacity = '0.5';
+    });
+    btn.addEventListener('dragend', () => { btn.style.opacity = '1'; });
+    btn.addEventListener('dragover', e => { e.preventDefault(); btn.classList.add('drag-over'); });
+    btn.addEventListener('dragleave', () => { btn.classList.remove('drag-over'); });
+    btn.addEventListener('drop', e => {
+      e.preventDefault();
+      btn.classList.remove('drag-over');
+      const draggedId = e.dataTransfer.getData('text/plain');
+      const targetId = btn.dataset.tab;
+      if (draggedId === targetId) return;
+      // Reorder tabs
+      const dragIdx = TABS.findIndex(t => t.id === draggedId);
+      const targetIdx = TABS.findIndex(t => t.id === targetId);
+      if (dragIdx < 0 || targetIdx < 0) return;
+      const [moved] = TABS.splice(dragIdx, 1);
+      TABS.splice(targetIdx, 0, moved);
+      buildTabs();
+      setupDraggableTabs();
+      switchTab(S.activeTab);
+    });
+    // Double-click to maximize
+    btn.addEventListener('dblclick', () => {
+      const pane = document.getElementById('pane-' + btn.dataset.tab);
+      if (pane) maximizePanel('pane-' + btn.dataset.tab, btn.textContent.trim());
+    });
+  });
+}
+
+// ── Genesis Feed Polling ──
+setInterval(async () => {
+  if (S.activeTab !== 'genesis' || document.hidden) return;
+  try {
+    const d = await GET('/api/autonomous/log');
+    const entries = d?.log || d?.entries || [];
+    entries.slice(-5).forEach(e => {
+      const msg = e.action || e.msg || e.message || '';
+      if (msg && !GI.feedItems.find(f => f.msg === msg)) {
+        GI.feedItems.push({ source: e.source || 'grace', ts: new Date().toLocaleTimeString(), msg, type: e.type || 'info' });
+      }
+    });
+    if (GI.feedItems.length > 200) GI.feedItems = GI.feedItems.slice(-200);
+    renderGenesisRight();
+  } catch(e) {}
+}, 5000);
+
+buildControls();buildTabs();renderTab();setupBottom();setupDraggableTabs();
+connectBootWs();connectFeedWs();connectTailWs();connectProblemsWs();connectAuditLiveWs();connectSpindleWs();
 pollHealth();setInterval(pollHealth,10000);
 pollLiveData();setInterval(pollLiveData,15000);
 loadProblems();loadAudit();loadTestSuites();loadTestHistory();

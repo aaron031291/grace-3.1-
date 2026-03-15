@@ -141,15 +141,18 @@ def chunk0_fix_frontend() -> bool:
         log("✅", f"Fixed {fixed} component(s) missing API import")
     else:
         log("✅", "Frontend imports OK")
-    # npm install
-    try:
-        subprocess.run(
-            "npm install",
-            shell=True, cwd=FRONTEND, capture_output=True, timeout=120
-        )
-        log("✅", "npm packages ready")
-    except Exception as e:
-        log("⚠️", f"npm install: {e}")
+    # npm install (skip if node_modules already exists)
+    if not (FRONTEND / "node_modules").exists():
+        try:
+            subprocess.run(
+                "npm install",
+                shell=True, cwd=FRONTEND, capture_output=True, timeout=30
+            )
+            log("✅", "npm packages installed")
+        except Exception as e:
+            log("⚠️", f"npm install: {e}")
+    else:
+        log("✅", "npm packages ready (node_modules exists)")
     return True
 
 

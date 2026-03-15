@@ -1133,7 +1133,7 @@ class ActionRouter:
             with open(alert_file, 'a') as f:
                 f.write(json.dumps(alert_payload) + '\n')
 
-            logger.warning(f"ALERT: {decision.reason}")
+            logger.warning(f"[DIAGNOSTIC-DETECTION] {decision.reason}")
 
             # Send to external notification channels
             notification_results = []

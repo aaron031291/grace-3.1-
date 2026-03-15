@@ -1,0 +1,85 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[WARN] Testing API router not loaded: 'charmap' codec can't encode character '\u2713' in position 9: character maps to <undefined>
+[WARN] Healing Swarm API router not loaded: 'charmap' codec can't encode character '\u2713' in position 9: character maps to <undefined>
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Schema auto-migrate: schema is up to date
+Creating Genesis Key tables...
+Migrating database at: C:\Users\aaron\Desktop\grace-3.1--Aaron-new2\data\grace.db
+Creating learning_examples table...
+Creating learning_patterns table...
+Creating episodes table...
+Creating procedures table...
+============================================================
+Memory Mesh Tables Migration
+============================================================
+[OK] Query intelligence tables created successfully
+[OK] Startup migrations: applied 7 -> ['001_add_telemetry', '002_add_librarian', '004_add_file_intelligence', '007_memory_mesh_indexes', '008_learning_example_columns', '010_document_download_fields', '011_query_intelligence_tables']
+[CORTEX] event_bus: ready
+[CORTEX] central_orchestrator: ready
+[CORTEX] error_pipeline: ready
+[OK] Lifecycle Cortex: 7 subsystems, 2 jobs registered
+[OK] Self-healing error pipeline started
+[OK] Central Orchestrator initialized (event bus subscriptions active)
+[OK] Background init started (training, diagnostics, embedding)
+[OK] Lifecycle Cortex: background subsystems + job scheduler started
+[WARN] Feedback bridge: 'charmap' codec can't encode character '\u2192' in position 40: character maps to <undefined>
+[OK] OLLAMA is running and reachable
+[OK] Ghost memory: replayed 5 reboot deltas for continuity
+[OK] ULH meta-rule injector ready (3 active rules)
+[OK] Coding agent worker started
+[OK] Multi-trigger fabric started (12 trigger sources)
+[OK] Startup health: core tables queryable
+[OK] Autonomous diagnostics boot scan started
+[OK] Probe agent maintenance pulse started (light every 10min)
+[OK] Execution registry initialized
+[OK] Qdrant (https://877286a8-e5b8-472e-aa28-22cf4790cec0.europe-west3-0.gcp.cloud.qdrant.io:6333) is running with 3 collection(s)
+[OK] File watcher started - automatic version tracking enabled
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[INGEST] [OK] Got embedding model (singleton)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized
+[AUTO-INGEST] Git tracker initialized
+[AUTO-INGEST] Starting directory scan...
+[OK] Startup diagnostic: HEALTHY
+[OK] Embedding model loaded
+[OK] NLP pipeline ready (voice/intent)
+[OK] Governance healing bridge started (trust < 90 + high confidence â†' auto-heal)
+[OK] External knowledge pipeline started (gap-detect â†' fetch â†' ingest every 30min)
+[OK] Self-mirroring telemetry started (CPU/memory/latency/governance every 60s)
+[OK] SWE->Spindle bridge started (LearningExample -> Braille -> deterministic paths)
+[OK] Proactive healing started (background health monitor)
+[OK] Intelligent CICD orchestrator ready (ML-assisted test selection, webhooks)
+[OK] Governance projection service started (event bus -> .grace/ folders)
+[OK] Memory mesh reconciliation cron started (every 30min)
+[WARN] Consensus reward bridge: 'charmap' codec can't encode character '\u2192' in position 14: character maps to <undefined>
+[OK] Executive watchdog started (SAFE_MODE failover on hang)
+[OK] Continuous learning activated
+[OK] Diagnostic engine started Ã¢â‚¬â€ self-healing active (60s heartbeat)
+[OK] Autonomous loop started (first cycle in 5s, then 30s: heal->learn->verify->composite)
+[OK] Meta loop coordinator started (60s heartbeat, system_maintenance every 3 cycles)
+[OK] Spindle daemon started (autonomous, tcp://127.0.0.1:5520)
+[OK] Autonomous CICD engine started (file-change -> auto tests, high-risk -> manual)
+[OK] Auto-probe registered (triggers on code changes)
+[OK] GraceSystemsIntegration started
+[OK] GraceAutonomousEngine started
+[OK] GraceTeamManagement started
+[OK] GovernanceHealingBridge started
+
+============================================================
+  Grace Startup Summary: 4 OK, 0 degraded
+============================================================
+
+[AUTO-INGEST] Scan completed with 4012 results
+[AUTO-INGEST] Excluded 4012 files (Genesis/already ingested)

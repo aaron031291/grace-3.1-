@@ -301,8 +301,8 @@ class Layer1MessageBus:
 
             await asyncio.gather(*tasks, return_exceptions=True)
 
-        # Forward to canonical cognitive event bus
-        if self._cognitive_bridge:
+        # Forward to canonical cognitive event bus (guard against recursive re-prefixing)
+        if self._cognitive_bridge and not topic.startswith("layer1."):
             self._cognitive_bridge(f"layer1.{topic}", {
                 "from": message.from_component.value if hasattr(message.from_component, 'value') else str(message.from_component),
                 "to": message.to_component.value if message.to_component and hasattr(message.to_component, 'value') else str(message.to_component),

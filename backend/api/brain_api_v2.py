@@ -459,6 +459,7 @@ def _system() -> dict:
         "correlate":    lambda p: _correlate(p),
         "triggers":     lambda p: _trigger_scan(),
         "scan_heal":    lambda p: _scan_heal(),
+        "heal_and_learn": lambda p: _heal_and_learn(p),
         "decide_autonomous_action": lambda p: _decide_autonomous_action(p),
         "model_version_check": lambda p: _model_version_check(),
         "probe":        lambda p: _probe_sweep(),
@@ -967,36 +968,153 @@ def _decide_autonomous_action(p: dict) -> dict:
     if "cpu" in r or "ram" in r or "memory" in r:
         return {"escalate": False, "brain": "govern", "action": "heal", "payload": {}, "type": "heal"}
 
-    # Import/code errors Ã¢â€ â€™ LEARN (govern/record_gap)
-    if "import" in r or "module" in r or "dependency" in r:
+    # Code errors (NameError, KeyError, etc.) -> HEAL + LEARN (full autonomous pipeline)
+    # Critical path: detect -> fetch external knowledge -> heal code -> verify -> remember
+    code_error_patterns = [
+        "nameerror", "keyerror", "attributeerror", "importerror", "syntaxerror",
+        "typeerror", "modulenotfounderror", "indentationerror", "valueerror",
+        "import", "module", "dependency", "not defined", "has no attribute",
+        "missing required", "cannot import",
+    ]
+    if any(pat in r for pat in code_error_patterns):
         return {
             "escalate": False,
-            "brain": "govern",
-            "action": "record_gap",
+            "brain": "system",
+            "action": "heal_and_learn",
             "payload": {
-                "what": f"Code gap: {target} Ã¢â‚¬â€ {reason}",
+                "file_path": target if target.endswith(".py") else "",
+                "error": reason,
                 "target": target,
-                "tags": ["autonomous", "gap", "code-issue"],
+                "fetch_knowledge": True,
+                "tags": ["autonomous", "code-heal", "self-learning"],
             },
-            "type": "learn",
+            "type": "heal",
         }
 
-    # Test failures Ã¢â€ â€™ LEARN (govern/record_gap)
+    # Test failures -> HEAL + LEARN
     if "test" in r or "failure" in r:
         return {
             "escalate": False,
-            "brain": "govern",
-            "action": "record_gap",
+            "brain": "system",
+            "action": "heal_and_learn",
             "payload": {
-                "what": f"Test gap: {target} Ã¢â‚¬â€ {reason}",
+                "file_path": target if target.endswith(".py") else "",
+                "error": reason,
                 "target": target,
+                "fetch_knowledge": True,
                 "tags": ["autonomous", "gap", "test-failure"],
             },
-            "type": "learn",
+            "type": "heal",
         }
 
     # Default: escalate
     return {"escalate": True, "reason": reason, "type": "escalate"}
+
+
+
+def _heal_and_learn(p: dict) -> dict:
+    """
+    Full autonomous heal+learn pipeline:
+      1. Fetch external knowledge about the error
+      2. Read the broken file
+      3. Call heal_content (LLM surgical fix with snapshot + safety gates)
+      4. Record the outcome as a learning example
+    This is the missing link that connects error detection to actual code healing.
+    """
+    import logging
+    _logger = logging.getLogger("heal_and_learn")
+    file_path = p.get("file_path", "")
+    error = p.get("error", "")
+    target = p.get("target", "")
+    result = {"healed": False, "knowledge_fetched": False, "learned": False, "error": None}
+
+    # Step 1: Fetch external knowledge about this error type
+    if p.get("fetch_knowledge"):
+        try:
+            # Extract the error class for targeted search
+            error_lower = error.lower()
+            search_topic = error[:120]
+            for pattern in ["nameerror", "keyerror", "attributeerror", "importerror", "typeerror"]:
+                if pattern in error_lower:
+                    # Create a focused search query
+                    search_topic = f"python {pattern} fix {target}"
+                    break
+
+            from cognitive.external_knowledge_pipeline import ExternalKnowledgePipeline
+            pipeline = ExternalKnowledgePipeline()
+            fetch_result = pipeline._process_topic(search_topic)
+            result["knowledge_fetched"] = fetch_result.get("ingested", 0) > 0
+            result["knowledge_details"] = {
+                "topic": search_topic,
+                "fetched": fetch_result.get("fetched", 0),
+                "ingested": fetch_result.get("ingested", 0),
+            }
+            _logger.info("[HEAL+LEARN] Knowledge fetch: %s -> %d ingested", search_topic, fetch_result.get("ingested", 0))
+        except Exception as e:
+            _logger.debug("[HEAL+LEARN] Knowledge fetch failed: %s", e)
+
+    # Step 2: Attempt to heal the file if we have a file path
+    if file_path:
+        try:
+            from pathlib import Path
+            fp = Path(file_path)
+            if not fp.is_absolute():
+                # Try relative to backend
+                backend_dir = Path(__file__).parent.parent
+                fp = backend_dir / file_path
+            if fp.exists():
+                content = fp.read_text(encoding="utf-8")
+                errors = [error] if error else []
+
+                from cognitive.autonomous_healing_loop import heal_content
+                heal_result = heal_content(str(fp), content, errors)
+                result["healed"] = heal_result.get("success", False)
+                result["heal_details"] = {
+                    "strategy": heal_result.get("strategy"),
+                    "original_score": heal_result.get("original_score"),
+                    "healed_score": heal_result.get("healed_score"),
+                }
+                _logger.info("[HEAL+LEARN] Heal result: success=%s strategy=%s",
+                             result["healed"], heal_result.get("strategy"))
+            else:
+                _logger.debug("[HEAL+LEARN] File not found: %s", fp)
+        except Exception as e:
+            result["error"] = str(e)[:200]
+            _logger.warning("[HEAL+LEARN] Heal failed: %s", e)
+
+    # Step 3: Record as learning example (whether heal succeeded or not)
+    try:
+        from database.session import session_scope
+        from cognitive.learning_memory import LearningMemoryManager
+        from pathlib import Path as P
+        kb_path = P(__file__).parent.parent / "knowledge_base"
+        with session_scope() as session:
+            lm = LearningMemoryManager(session, kb_path)
+            lm.record_example(
+                example_type="autonomous_heal",
+                input_data={"file": file_path, "error": error[:500], "target": target},
+                output_data=result,
+                source="spindle_heal_and_learn",
+                tags=p.get("tags", ["autonomous"]),
+            )
+        result["learned"] = True
+        _logger.info("[HEAL+LEARN] Learning recorded for: %s", target[:60])
+    except Exception as e:
+        _logger.debug("[HEAL+LEARN] Learning record failed: %s", e)
+
+    # Step 4: Publish event for other subsystems to react
+    try:
+        from cognitive.event_bus import publish
+        publish("healing.heal_and_learn_completed", {
+            "target": target,
+            "healed": result["healed"],
+            "knowledge_fetched": result["knowledge_fetched"],
+            "learned": result["learned"],
+        }, source="heal_and_learn")
+    except Exception:
+        pass
+
+    return result
 
 
 def _model_version_check():

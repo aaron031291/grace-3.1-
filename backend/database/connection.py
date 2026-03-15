@@ -29,6 +29,7 @@ class DatabaseConnection:
     _instance: Optional["DatabaseConnection"] = None
     _engine: Optional[Engine] = None
     _config: Optional[DatabaseConfig] = None
+    _initialized: bool = False
     
     def __new__(cls):
         """Singleton pattern - only one database connection instance."""
@@ -50,6 +51,7 @@ class DatabaseConnection:
         instance = cls()
         instance._config = config
         instance._engine = instance._create_engine(config)
+        cls._initialized = True
         return instance
     
     @classmethod
@@ -152,6 +154,7 @@ class DatabaseConnection:
         if instance._engine:
             instance._engine.dispose()
             instance._engine = None
+            cls._initialized = False
             logger.info("Database connection closed")
     
     @classmethod

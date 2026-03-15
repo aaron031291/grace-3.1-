@@ -10,6 +10,8 @@ Single source of truth: create_tables() creates ALL app tables. To add a new tab
 
 import logging
 
+from sqlalchemy import inspect
+
 from .connection import DatabaseConnection
 from .base import Base
 
@@ -183,7 +185,7 @@ def get_table_columns(table_name: str) -> dict:
         columns[col["name"]] = {
             "type": str(col["type"]),
             "nullable": col["nullable"],
-            "primary_key": col["primary_key"],
+            "primary_key": col.get("primary_key", False),
         }
     
     return columns
@@ -218,7 +220,7 @@ def get_db_schema() -> dict:
             columns[col["name"]] = {
                 "type": str(col["type"]),
                 "nullable": col["nullable"],
-                "primary_key": col["primary_key"],
+                "primary_key": col.get("primary_key", False),
             }
         
         indexes = {}
