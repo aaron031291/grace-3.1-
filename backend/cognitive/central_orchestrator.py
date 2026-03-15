@@ -234,6 +234,24 @@ class CentralOrchestrator:
 
         self.state.last_sync = datetime.now(timezone.utc).isoformat()
 
+    def register_subsystem(self, name: str, module_path: str, status: str = "active", capabilities: list = None):
+        """Register a subsystem for lifecycle tracking."""
+        self.state.update(name, {
+            "status": status,
+            "module": module_path,
+            "capabilities": capabilities or [],
+            "registered_at": datetime.now(timezone.utc).isoformat(),
+        })
+        try:
+            from cognitive.event_bus import publish
+            publish("orchestrator.subsystem_registered", {
+                "name": name,
+                "module": module_path,
+                "status": status,
+            }, source="orchestrator")
+        except Exception:
+            pass
+
     def sync_state(self) -> Dict[str, Any]:
         """Force a full state sync and return the result."""
         self._sync_initial_state()
@@ -333,6 +351,41 @@ class CentralOrchestrator:
             "last_sync": self.state.last_sync,
             "initialized": self._initialized,
             "event_bus_connected": self._event_handlers_registered,
+        }
+
+    def get_state_snapshot(self) -> Dict[str, Any]:
+        """Compact state snapshot for real-time frontend push."""
+        components = self.state.get_all()
+        active = sum(1 for c in components.values() if c.get("status") == "active")
+        error = sum(1 for c in components.values() if c.get("status") == "error")
+        # Include cortex health if available
+        cortex_summary = None
+        try:
+            from core.lifecycle_cortex import get_lifecycle_cortex
+            cortex = get_lifecycle_cortex()
+            snap = cortex.get_snapshot()
+            cortex_summary = {
+                "subsystems": len(snap.get("subsystems", {})),
+                "jobs": len(snap.get("jobs", {})),
+                "incomplete_chains": snap.get("incomplete_chains", 0),
+            }
+        except Exception:
+            pass
+
+        return {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "components": {k: {
+                "status": v.get("status", "unknown"),
+                "last_updated": v.get("last_updated", ""),
+            } for k, v in components.items()},
+            "summary": {
+                "total": len(components),
+                "active": active,
+                "error": error,
+                "last_sync": self.state.last_sync,
+            },
+            "active_tasks": len(self.state.get_active_tasks()),
+            "cortex": cortex_summary,
         }
 
     def get_dashboard(self) -> Dict[str, Any]:

@@ -439,7 +439,11 @@ class AutonomousHealingSystem:
                         user_id
                     )
                     results["executed"].append(result)
-                    publish("healing.completed", data={"decision": decision, "result": result}, source="autonomous_healing_system")
+                    publish("healing.completed", data={
+                        "decision_id": decision.get("decision_id", "") if isinstance(decision, dict) else getattr(decision, "decision_id", ""),
+                        "decision": decision,
+                        "result": result,
+                    }, source="autonomous_healing_system")
 
                     # Learn from execution
                     if self.enable_learning:

@@ -22,10 +22,12 @@ const APIsTab = lazy(() => import("./components/APIsTab"));
 const AskTab = lazy(() => import("./components/AskTab"));
 const ArchitectTab = lazy(() => import("./components/ArchitectTab"));
 const KPIDashboard = lazy(() => import("./components/KPIDashboard"));
+const TestingTab = lazy(() => import("./components/TestingTab"));
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
 import ContextMenu from "./components/ContextMenu";
 import GenesisTimeline from "./components/GenesisTimeline";
+import { useOrchestrator } from "./hooks/useOrchestrator";
 
 // Sidebar sections — descriptions show as tooltips on hover
 const WORKSPACE = [
@@ -37,7 +39,8 @@ const WORKSPACE = [
   { id: 'whitelist', icon: '🛡️', label: 'Whitelist', desc: 'Deterministic Context & Knowledge Synthesis' },
   { id: 'knowledgebase', icon: '📚', label: 'Knowledge Base', desc: 'Training data connectors, document embedding, and Qdrant memory' },
   { id: 'oracle', icon: '🔮', label: 'Oracle', desc: 'Training data, trust distribution, audits, and gap analysis' },
-  { id: 'sandbox', icon: '🧬', label: 'Sandbox', desc: 'Isolated Execution & Promotion Engine' }
+  { id: 'sandbox', icon: '🧬', label: 'Sandbox', desc: 'Isolated Execution & Promotion Engine' },
+  { id: 'testing', icon: '🔬', label: 'Testing', desc: 'Test runner, scheduling, chaos engineering & Spindle verification' },
 ];
 
 const SYSTEM = [
@@ -74,10 +77,14 @@ const TAB_PRELOAD = {
   ask: () => import("./components/AskTab"),
   architect: () => import("./components/ArchitectTab"),
   kpi: () => import("./components/KPIDashboard"),
+  testing: () => import("./components/TestingTab"),
   projects: () => import("./components/TasksTab"),
 };
 
 function App() {
+  // Central Orchestrator — real-time system state via WebSocket
+  useOrchestrator();
+
   const [view, setView] = useState("home");
   const [health, setHealth] = useState(null);
   const [brains, setBrains] = useState({ connected: false, count: 0, error: null });
@@ -156,7 +163,10 @@ function App() {
       setView("dev");
     };
     window.addEventListener('DEVLAB_TASK_STARTED', handleTaskFocus);
-    return () => window.removeEventListener('DEVLAB_TASK_STARTED', handleTaskFocus);
+    // Listen for tab navigation from sub-components
+    const handleNavTab = (e) => { if (e.detail?.view) setView(e.detail.view); };
+    window.addEventListener('NAVIGATE_TAB', handleNavTab);
+    return () => { window.removeEventListener('DEVLAB_TASK_STARTED', handleTaskFocus); window.removeEventListener('NAVIGATE_TAB', handleNavTab); };
   }, []);
 
   const online = health != null && (health.status === "healthy" || health.llm_running === true || health.status === "degraded");
@@ -185,6 +195,11 @@ function App() {
             title="Open KPI & Trust dashboard"
             onClick={() => typeof setView === 'function' && setView('kpi')}
           >📊 KPIs</span>
+          <span
+            style={{ cursor: "pointer", padding: "0 4px", borderRadius: 3, background: "#12122a", fontSize: 9, color: "#e94560" }}
+            title="Open Ops Console (internal ops — port 8765)"
+            onClick={() => window.open('http://localhost:8765', '_blank')}
+          >⚡ Ops Console</span>
         </span>
       </div>
 
@@ -292,6 +307,12 @@ function App() {
           <div style={{ background: "#080814", color: "#e94560", fontSize: 11, padding: "4px 16px", borderBottom: "1px solid #1a1a2e", fontWeight: 700 }}>
             Active Scoped Domain: {domain}
           </div>
+          {health === null && (
+            <div style={{ background: '#f4433620', color: '#f44336', fontSize: 12, padding: '8px 16px', borderBottom: '1px solid #f4433640', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f44336', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+              Backend Offline — Grace backend is unreachable. Check that it's running on port 8000.
+            </div>
+          )}
           <Suspense fallback={<div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#666", fontSize: 13 }}>Loading…</div>}>
             {/* Main Workspace Area */}
             <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
@@ -317,6 +338,7 @@ function App() {
               {view === "ask" && <AskTab />}
               {view === "architect" && <ArchitectTab />}
               {view === "kpi" && <KPIDashboard />}
+              {view === "testing" && <TestingTab />}
             </div>
           </Suspense>
         </div>

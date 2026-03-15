@@ -91,6 +91,17 @@ class EventSystem:
             except Exception as e:
                 logger.error(f"[EventSystem] Wildcard subscriber error: {e}")
 
+        # Bridge to canonical cognitive event bus
+        try:
+            from cognitive.event_bus import publish_async as _cog_publish
+            _cog_publish(f"grace_os.{event_type}", {
+                "layer": layer,
+                "trace_id": trace_id,
+                "payload": payload or {},
+            }, source="grace_os_kernel")
+        except Exception:
+            pass
+
         logger.debug(
             f"[EventSystem] {event_type} | "
             f"{layer} | session={trace_id[:8]}"

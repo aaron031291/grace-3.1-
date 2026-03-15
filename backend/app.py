@@ -5,6 +5,10 @@ Grace API - FastAPI application for Ollama-based chat and embeddings.
 from fastapi import FastAPI, HTTPException, Depends, Body, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from api.tab_schemas import (
+    TabDocsFullResponse, TabChatFullResponse, TabOracleFullResponse,
+    TabLearnHealFullResponse, TabHealthFullResponse, TabBIFullResponse,
+)
 from typing import List, Optional
 import re
 import time
@@ -53,6 +57,7 @@ from api.qdrant_api import router as qdrant_router
 from api.genesis_daily_api import router as genesis_daily_router
 from api.autonomous_loop_api import router as autonomous_loop_router
 from api.component_health_api import router as component_health_router
+from api.unified_problems_api import router as unified_problems_router
 from api.ingest import router as ingest_router
 from api.retrieve import router as retrieve_router
 from api.learning_memory_api import router as learning_memory_router
@@ -255,20 +260,143 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Schema auto-migrate: {e}")
 
-        # Auto-add missing learning_examples columns (e.g. outcome_quality on PostgreSQL)
+        # ── Run all pending standalone migration scripts ──
         try:
-            from database.migrations.add_learning_example_columns import ensure_learning_examples_columns
+            from database.startup_migrations import run_pending_migrations
             engine = DatabaseConnection.get_engine()
-            n = ensure_learning_examples_columns(engine, quiet=True)
-            if n > 0:
-                print(f"[OK] Schema sync: added {n} column(s) to learning_examples")
+            applied = run_pending_migrations(engine)
+            if applied:
+                print(f"[OK] Startup migrations: applied {len(applied)} -> {applied}")
+            else:
+                print("[OK] Startup migrations: all up to date")
         except Exception as e:
-            print(f"[WARN] Learning examples schema sync: {e}")
+            print(f"[WARN] Startup migrations: {e}")
 
     except Exception as e:
         print(f"[WARN] Database initialization error: {e}")
         print("[WARN] Grace will continue with limited functionality (DB features may be unavailable). Fix: check backend/.env DATABASE_PATH and run backend/database/migration if needed.")
-    
+
+    # ==================== Lifecycle Cortex — dependency-aware boot ====================
+    try:
+        from core.lifecycle_cortex import get_lifecycle_cortex, SubsystemSpec, StartPolicy
+
+        cortex = get_lifecycle_cortex()
+
+        # ── Register core subsystems with dependency graph ──
+        cortex.register(SubsystemSpec(
+            name="event_bus",
+            factory=lambda: __import__("cognitive.event_bus", fromlist=["publish"]),
+            start_policy=StartPolicy.BLOCKING,
+            critical=True,
+        ))
+
+        cortex.register(SubsystemSpec(
+            name="central_orchestrator",
+            factory=lambda: (lambda o: (o.initialize(), o))(__import__("cognitive.central_orchestrator", fromlist=["get_orchestrator"]).get_orchestrator())[1],
+            dependencies={"event_bus"},
+            start_policy=StartPolicy.BLOCKING,
+            critical=True,
+        ))
+
+        cortex.register(SubsystemSpec(
+            name="error_pipeline",
+            factory=lambda: __import__("self_healing.error_pipeline", fromlist=["get_error_pipeline"]).get_error_pipeline(),
+            dependencies={"event_bus"},
+            start_policy=StartPolicy.BLOCKING,
+            critical=False,
+        ))
+
+        cortex.register(SubsystemSpec(
+            name="ghost_memory",
+            factory=lambda: __import__("cognitive.ghost_memory", fromlist=["get_ghost_memory"]).get_ghost_memory(),
+            start_policy=StartPolicy.BACKGROUND,
+            critical=False,
+        ))
+
+        cortex.register(SubsystemSpec(
+            name="trust_engine",
+            factory=lambda: __import__("cognitive.trust_engine", fromlist=["get_trust_engine"]).get_trust_engine(),
+            dependencies={"event_bus"},
+            start_policy=StartPolicy.BACKGROUND,
+            critical=False,
+        ))
+
+        cortex.register(SubsystemSpec(
+            name="unified_memory",
+            factory=lambda: __import__("cognitive.unified_memory", fromlist=["get_unified_memory"]).get_unified_memory(),
+            start_policy=StartPolicy.BACKGROUND,
+            critical=False,
+        ))
+
+        cortex.register(SubsystemSpec(
+            name="consensus_engine",
+            factory=lambda: __import__("cognitive.consensus_engine", fromlist=["run_consensus"]),
+            dependencies={"event_bus", "trust_engine"},
+            start_policy=StartPolicy.BACKGROUND,
+            critical=False,
+        ))
+
+        # ── Register memory consolidation jobs ──
+        def _ghost_to_unified():
+            """Consolidate ghost memory reflections into unified memory."""
+            try:
+                from cognitive.ghost_memory import get_ghost_memory, PLAYBOOK_DIR
+                from cognitive.unified_memory import get_unified_memory
+                import json
+                mem = get_unified_memory()
+                if not PLAYBOOK_DIR.exists():
+                    return
+                for f in sorted(PLAYBOOK_DIR.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:10]:
+                    try:
+                        data = json.loads(f.read_text())
+                        mem.store_episode({
+                            "type": "ghost_reflection",
+                            "pattern": data.get("pattern_name", "unknown"),
+                            "task": data.get("task", "")[:300],
+                            "confidence": data.get("confidence", 0),
+                            "source": "ghost_memory_consolidation",
+                        })
+                    except Exception:
+                        pass
+            except Exception as e:
+                logging.getLogger(__name__).warning(f"[CORTEX-JOB] ghost_to_unified: {e}")
+
+        def _learning_to_mesh():
+            """Sync learning examples into the memory mesh."""
+            try:
+                from cognitive.memory_mesh_integration import MemoryMeshIntegration
+                mesh = MemoryMeshIntegration()
+                mesh.sync_learning_to_mesh()
+            except Exception as e:
+                logging.getLogger(__name__).warning(f"[CORTEX-JOB] learning_to_mesh: {e}")
+
+        cortex.register_job(
+            name="ghost_to_unified",
+            handler=_ghost_to_unified,
+            requires={"unified_memory", "ghost_memory"},
+            interval_s=900,  # Every 15 minutes
+        )
+
+        cortex.register_job(
+            name="learning_to_mesh",
+            handler=_learning_to_mesh,
+            requires={"unified_memory"},
+            interval_s=1800,  # Every 30 minutes
+        )
+
+        # ── Boot blocking subsystems ──
+        blocking_results = cortex.start_blocking()
+        for name, status in blocking_results.items():
+            print(f"[CORTEX] {name}: {status}")
+
+        # ── Store cortex on app for shutdown access ──
+        app.state.lifecycle_cortex = cortex
+
+        print(f"[OK] Lifecycle Cortex: {len(cortex._subsystems)} subsystems, {len(cortex._jobs)} jobs registered")
+
+    except Exception as e:
+        print(f"[WARN] Lifecycle Cortex: {e}")
+
     # ==================== Lazy Background Init (non-blocking) ====================
     import threading
 
@@ -316,6 +444,23 @@ async def lifespan(app: FastAPI):
             print("[OK] Self-healing error pipeline started")
         except Exception as e:
             print(f"[WARN] Error pipeline: {e}")
+
+        # ── 0.1 Central Orchestrator — Grace's nervous system ──
+        try:
+            from cognitive.central_orchestrator import get_orchestrator
+            orchestrator = get_orchestrator()
+            orchestrator.initialize()
+            print("[OK] Central Orchestrator initialized (event bus subscriptions active)")
+        except Exception as e:
+            print(f"[WARN] Central Orchestrator: {e}")
+
+        # ── 0.2 Feedback Bridge — decision chain correlation ──
+        try:
+            from core.feedback_bridge import start_feedback_bridge
+            start_feedback_bridge()
+            print("[OK] Feedback bridge started (consensus → execute → learn → trust correlation)")
+        except Exception as e:
+            print(f"[WARN] Feedback bridge: {e}")
 
         # ── Gap 5.2: Ghost Memory reboot replay (restore continuity) ──
         try:
@@ -495,25 +640,6 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"[WARN] Intelligent CICD: {e}")
 
-        # ── Systems Integration Hub (central nervous system) ──
-        try:
-            from services.grace_systems_integration import GraceSystemsIntegration
-            integration_hub = GraceSystemsIntegration()
-            app.state.systems_integration = integration_hub
-            print("[OK] Grace Systems Integration hub initialized")
-        except Exception as e:
-            print(f"[WARN] Systems Integration: {e}")
-
-        # ── Autonomous Engine (sub-agent management + task scheduling) ──
-        try:
-            from services.grace_autonomous_engine import GraceAutonomousEngine
-            auto_engine = GraceAutonomousEngine()
-            auto_engine.start()
-            app.state.autonomous_engine = auto_engine
-            print("[OK] Grace Autonomous Engine initialized and started")
-        except Exception as e:
-            print(f"[WARN] Autonomous Engine: {e}")
-
         # ── Governance Projection (operational → domain folders) ──
         try:
             from services.governance_projection import get_governance_projection
@@ -569,6 +695,14 @@ async def lifespan(app: FastAPI):
     threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
     print("[OK] Background init started (training, diagnostics, embedding)")
 
+    # Start cortex background subsystems + job scheduler after background init thread
+    try:
+        cortex = app.state.lifecycle_cortex
+        cortex.start_background()
+        print("[OK] Lifecycle Cortex: background subsystems + job scheduler started")
+    except Exception as e:
+        print(f"[WARN] Cortex background start: {e}")
+
     # Optional: auto hot-reload when .py files are saved (HOT_RELOAD_WATCH=1)
     try:
         from core.hot_reload import start_reload_watcher
@@ -593,21 +727,22 @@ async def lifespan(app: FastAPI):
     
     # Check Qdrant
     if not settings.SKIP_QDRANT_CHECK:
+        qdrant_target = settings.QDRANT_URL or f"{settings.QDRANT_HOST}:{settings.QDRANT_PORT}"
         try:
             qdrant = get_qdrant_client()
             if qdrant.is_connected():
                 collections = qdrant.list_collections()
-                print(f"[OK] Qdrant is running with {len(collections)} collection(s)")
+                print(f"[OK] Qdrant ({qdrant_target}) is running with {len(collections)} collection(s)")
             else:
-                print("[WARN] Qdrant is not running - document ingestion will be unavailable")
+                print(f"[WARN] Qdrant ({qdrant_target}) is not running - document ingestion will be unavailable")
         except Exception as e:
-            print(f"[WARN] Could not connect to Qdrant: {e}")
+            print(f"[WARN] Could not connect to Qdrant ({qdrant_target}): {e}")
     else:
         print("[SKIP] Qdrant check skipped (SKIP_QDRANT_CHECK=true)")
 
     # ==================== Initialize File Watcher ====================
     # Start file system watcher for automatic version control
-    if not settings.DISABLE_GENESIS_TRACKING:
+    if not getattr(settings, 'DISABLE_GENESIS_TRACKING', False):
         try:
             from genesis.file_watcher import start_watching_workspace
             import threading
@@ -615,15 +750,17 @@ async def lifespan(app: FastAPI):
             def run_file_watcher():
                 """Run file watcher in background thread"""
                 try:
-                    print("[FILE-WATCHER] Starting file system monitoring...")
+                    logger.info("[FILE-WATCHER] Starting file system monitoring...")
                     start_watching_workspace()
                 except Exception as e:
+                    logger.exception(f"[FILE-WATCHER] Crashed: {e}")
                     print(f"[FILE-WATCHER] [WARN] Error: {e}")
 
-            watcher_thread = threading.Thread(target=run_file_watcher, daemon=True)
+            watcher_thread = threading.Thread(target=run_file_watcher, daemon=True, name="grace-file-watcher")
             watcher_thread.start()
             print("[OK] File watcher started - automatic version tracking enabled")
         except Exception as e:
+            logger.exception(f"[FILE-WATCHER] Failed to initialize: {e}")
             print(f"[WARN] Could not start file watcher: {e}")
     else:
         print("[SKIP] File watcher disabled (DISABLE_GENESIS_TRACKING=true)")
@@ -815,7 +952,8 @@ async def lifespan(app: FastAPI):
                 creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0,
             )
             app.state.spindle_daemon_process = _spindle_proc
-            print("[OK] Spindle daemon started (autonomous, tcp://127.0.0.1:5520)")
+            from cognitive.event_bus import ZMQ_PUB_ENDPOINT
+            print(f"[OK] Spindle daemon started (autonomous, {ZMQ_PUB_ENDPOINT})")
         except Exception as e:
             print(f"[WARN] Spindle daemon not started: {e}")
             app.state.spindle_daemon_process = None
@@ -839,16 +977,84 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Auto-probe: {e}")
 
+    # ==================== Startup Component Tracker ====================
+    _startup_components = {}
+
+    def _start_component(name: str, fn, *args, **kwargs):
+        """Start an optional component with status tracking and visible logging."""
+        try:
+            result = fn(*args, **kwargs)
+            _startup_components[name] = {"ok": True}
+            print(f"[OK] {name} started")
+            return result
+        except Exception as e:
+            _startup_components[name] = {"ok": False, "error": str(e)[:200]}
+            logger.exception(f"[STARTUP] {name} failed: {e}")
+            print(f"[WARN] {name} not started: {e}")
+            return None
+
+    # ==================== Start Grace Systems Integration ====================
+    def _init_systems_integration():
+        from services.grace_systems_integration import GraceSystemsIntegration
+        hub = GraceSystemsIntegration()
+        app.state.systems_integration = hub
+        return hub
+    _start_component("GraceSystemsIntegration", _init_systems_integration)
+
+    # ==================== Start Grace Autonomous Engine ====================
+    def _init_autonomous_engine():
+        from services.grace_autonomous_engine import GraceAutonomousEngine
+        engine = GraceAutonomousEngine()
+        engine.start()
+        app.state.autonomous_engine = engine
+        return engine
+    _start_component("GraceAutonomousEngine", _init_autonomous_engine)
+
+    # ==================== Start Grace Team Management ====================
+    def _init_team_management():
+        from services.grace_team_management import get_team_management
+        team_mgmt = get_team_management()
+        app.state.team_management = team_mgmt
+        return team_mgmt
+    _start_component("GraceTeamManagement", _init_team_management)
+
+    # ==================== Start Governance Healing Bridge ====================
+    def _init_gov_healing_bridge():
+        from cognitive.governance_healing_bridge import get_governance_healing_bridge
+        bridge = get_governance_healing_bridge()
+        bridge.start()
+        return bridge
+    _start_component("GovernanceHealingBridge", _init_gov_healing_bridge)
+
     # ==================== Runtime Management State ====================
     app.state.runtime_paused = False
     app.state.diagnostic_engine = _diag_engine
     app.state._diag_session = _diag_session
     app.state._start_time = time.time()
+    app.state.startup_components = _startup_components
+
+    # ==================== Startup Summary ====================
+    ok_count = sum(1 for v in _startup_components.values() if v.get("ok"))
+    fail_count = sum(1 for v in _startup_components.values() if not v.get("ok"))
+    failed_names = [k for k, v in _startup_components.items() if not v.get("ok")]
+    print(f"\n{'='*60}")
+    print(f"  Grace Startup Summary: {ok_count} OK, {fail_count} degraded")
+    if failed_names:
+        print(f"  Degraded: {', '.join(failed_names)}")
+    print(f"{'='*60}\n")
 
     yield
 
     # ==================== Shutdown Ã¢â‚¬â€ clean up background systems ====================
     print("Grace API shutting down...")
+
+    # Lifecycle Cortex graceful shutdown (reverse dependency order)
+    try:
+        if hasattr(app.state, 'lifecycle_cortex'):
+            app.state.lifecycle_cortex.shutdown()
+            print("[OK] Lifecycle Cortex shutdown complete")
+    except Exception as e:
+        print(f"[WARN] Cortex shutdown: {e}")
 
     try:
         from api.autonomous_loop_api import _stop_event
@@ -1043,6 +1249,7 @@ app.include_router(qdrant_router)                  # /api/qdrant/status (simple 
 app.include_router(genesis_daily_router)            # /api/genesis-daily/* (Governance tab Genesis Keys)
 app.include_router(autonomous_loop_router)           # /api/autonomous/* (loop status, start/stop; used by loop for mirror-feed)
 app.include_router(component_health_router)         # /api/component-health/* (mirror-feed for autonomous loop + health UI)
+app.include_router(unified_problems_router)              # /api/problems/* (unified single-source-of-truth problems)
 app.include_router(ingest_router)                    # /ingest/* (document ingestion; frontend + docs)
 app.include_router(retrieve_router)                  # /retrieve/* (RAG search; frontend FoldersTab, SearchInternetButton)
 app.include_router(learning_memory_router)           # /api/learning-memory/* (neighbour search, fill gaps, expand)
@@ -1136,6 +1343,12 @@ app.include_router(sandbox_repair_router)
 from api.self_mirror_api import router as self_mirror_router
 app.include_router(self_mirror_router)
 
+from api.orchestrator_ws_api import router as orchestrator_ws_router
+app.include_router(orchestrator_ws_router)
+
+from api.cortex_api import router as cortex_router
+app.include_router(cortex_router)
+
 from api.docs_library_api import router as docs_library_router
 app.include_router(docs_library_router)
 
@@ -1170,6 +1383,9 @@ app.include_router(world_model_router)               # /api/world-model (world m
 from api.live_console_api import router as live_console_router
 app.include_router(live_console_router)              # /api/console (live console)
 
+from api.probe_agent_api import router as probe_agent_router
+app.include_router(probe_agent_router)                    # /api/probe/* (sweep, sweep-and-heal, endpoint)
+
 from api.spindle_dashboard_api import router as spindle_dashboard_router
 app.include_router(spindle_dashboard_router)              # /api/spindle/* (dashboard, events, gate, WS)
 
@@ -1187,6 +1403,22 @@ try:
 except Exception as _e:
     print(f"[WARN] Test-Verify API router not loaded: {_e}")
 
+# Testing & Quality (unified test execution, scheduling, chaos engineering)
+try:
+    from api.testing_api import router as testing_router
+    app.include_router(testing_router)
+    print("[ROUTER] ✓ Testing & Quality API")
+except Exception as _e:
+    print(f"[WARN] Testing API router not loaded: {_e}")
+
+# Healing Swarm (concurrent multi-agent self-healing)
+try:
+    from api.healing_swarm_api import router as swarm_router
+    app.include_router(swarm_router)
+    print("[ROUTER] ✓ Healing Swarm API")
+except Exception as _e:
+    print(f"[WARN] Healing Swarm API router not loaded: {_e}")
+
 # System Introspection & Deterministic Validation
 try:
     from api.introspection_api import router as introspection_router
@@ -1202,38 +1434,52 @@ else:
     print("[GENESIS] Genesis Key tracking disabled (DISABLE_GENESIS_TRACKING=true)")
 
 
+# ==================== Startup Status Endpoint ====================
+@app.get("/api/startup-status", tags=["System"])
+async def startup_status():
+    """Returns the status of all optional startup components."""
+    components = getattr(app.state, "startup_components", {})
+    ok = sum(1 for v in components.values() if v.get("ok"))
+    degraded = sum(1 for v in components.values() if not v.get("ok"))
+    return {
+        "ok_count": ok,
+        "degraded_count": degraded,
+        "components": components,
+        "uptime_seconds": round(time.time() - getattr(app.state, "_start_time", time.time()), 1),
+    }
+
 # ==================== Tab Aggregation Endpoints ====================
 # Frontend tabs call /api/tabs/{tab}/full for aggregated data on mount.
 
-@app.get("/api/tabs/docs/full", tags=["Tab Aggregation"])
+@app.get("/api/tabs/docs/full", tags=["Tab Aggregation"], response_model=TabDocsFullResponse)
 async def tabs_docs_full():
     """Aggregated data for the Docs tab."""
-    return {}
+    return TabDocsFullResponse()
 
-@app.get("/api/tabs/chat/full", tags=["Tab Aggregation"])
+@app.get("/api/tabs/chat/full", tags=["Tab Aggregation"], response_model=TabChatFullResponse)
 async def tabs_chat_full():
     """Aggregated data for the Chat tab."""
-    return {}
+    return TabChatFullResponse()
 
-@app.get("/api/tabs/oracle/full", tags=["Tab Aggregation"])
+@app.get("/api/tabs/oracle/full", tags=["Tab Aggregation"], response_model=TabOracleFullResponse)
 async def tabs_oracle_full():
     """Aggregated data for the Oracle tab."""
-    return {}
+    return TabOracleFullResponse()
 
-@app.get("/api/tabs/learn-heal/full", tags=["Tab Aggregation"])
+@app.get("/api/tabs/learn-heal/full", tags=["Tab Aggregation"], response_model=TabLearnHealFullResponse)
 async def tabs_learn_heal_full():
     """Aggregated data for the Learning & Healing tab."""
-    return {}
+    return TabLearnHealFullResponse()
 
-@app.get("/api/tabs/health/full", tags=["Tab Aggregation"])
+@app.get("/api/tabs/health/full", tags=["Tab Aggregation"], response_model=TabHealthFullResponse)
 async def tabs_health_full():
     """Aggregated data for the System Health tab."""
-    return {}
+    return TabHealthFullResponse()
 
-@app.get("/api/tabs/bi/full", tags=["Tab Aggregation"])
+@app.get("/api/tabs/bi/full", tags=["Tab Aggregation"], response_model=TabBIFullResponse)
 async def tabs_bi_full():
     """Aggregated data for the Business Intelligence tab."""
-    return {}
+    return TabBIFullResponse()
 
 
 # ==================== Ingestion Dashboard Compatibility Endpoints ====================

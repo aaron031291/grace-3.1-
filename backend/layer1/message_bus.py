@@ -126,6 +126,19 @@ class Layer1MessageBus:
             "autonomous_actions_triggered": 0
         }
 
+        # Bridge to canonical cognitive event bus
+        self._bridge_to_cognitive_bus()
+
+    def _bridge_to_cognitive_bus(self):
+        """Forward Layer1 events to the canonical cognitive event bus for system-wide visibility."""
+        try:
+            from cognitive.event_bus import publish_async as _cog_publish
+            self._cognitive_bridge = _cog_publish
+            logger.info("[LAYER1-BUS] Bridged to canonical cognitive event bus")
+        except ImportError:
+            self._cognitive_bridge = None
+            logger.warning("[LAYER1-BUS] Could not bridge to cognitive event bus")
+
     # ================================================================
     # COMPONENT REGISTRATION
     # ================================================================
@@ -287,6 +300,14 @@ class Layer1MessageBus:
                 tasks.append(self._safe_call_handler(handler, message))
 
             await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Forward to canonical cognitive event bus
+        if self._cognitive_bridge:
+            self._cognitive_bridge(f"layer1.{topic}", {
+                "from": message.from_component.value if hasattr(message.from_component, 'value') else str(message.from_component),
+                "to": message.to_component.value if message.to_component and hasattr(message.to_component, 'value') else str(message.to_component),
+                "payload": payload,
+            }, source="layer1_bus")
 
     async def _safe_call_handler(self, handler: Callable, message: Message):
         """Safely call handler with error handling."""

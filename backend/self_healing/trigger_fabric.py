@@ -52,11 +52,16 @@ def _build_service_map():
             host = getattr(_s, "DATABASE_HOST", "localhost")
             port = int(getattr(_s, "DATABASE_PORT", 5432) or 5432)
             services.append((host, port, "PostgreSQL"))
-        # Qdrant — only if not skipped
+        # Qdrant — only if not skipped AND not using a cloud URL
         if not getattr(_s, "SKIP_QDRANT_CHECK", False):
-            host = getattr(_s, "QDRANT_HOST", "localhost")
-            port = int(getattr(_s, "QDRANT_PORT", 6333))
-            services.append((host, port, "Qdrant"))
+            qdrant_url = getattr(_s, "QDRANT_URL", "")
+            if qdrant_url and ("cloud.qdrant" in qdrant_url or "https://" in qdrant_url):
+                # Cloud Qdrant — skip raw TCP probe (use HTTP health instead)
+                pass
+            else:
+                host = getattr(_s, "QDRANT_HOST", "localhost")
+                port = int(getattr(_s, "QDRANT_PORT", 6333))
+                services.append((host, port, "Qdrant"))
         # Ollama — only if provider is ollama and not skipped
         if getattr(_s, "LLM_PROVIDER", "ollama") == "ollama" and not getattr(_s, "SKIP_OLLAMA_CHECK", False):
             url = getattr(_s, "OLLAMA_URL", "http://localhost:11434")
@@ -178,7 +183,14 @@ def _network_probe_loop() -> None:
     On failure, fire into error pipeline so _heal_network() acts immediately —
     BEFORE cascading request failures reach user-visible endpoints.
     """
-    time.sleep(10)  # wait for server to fully start before first probe
+    # Wait for core subsystems via Lifecycle Cortex instead of blind sleep
+    try:
+        from core.lifecycle_cortex import get_lifecycle_cortex
+        cortex = get_lifecycle_cortex()
+        cortex.wait_ready("event_bus", timeout=15)
+        cortex.wait_ready("error_pipeline", timeout=15)
+    except Exception:
+        time.sleep(10)  # fallback if cortex not available
     _failures: Dict[str, int] = {}  # track consecutive failures
 
     while True:

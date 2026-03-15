@@ -125,6 +125,39 @@ class ProactiveHealingEngine:
             f"interval={check_interval_seconds}s, kimi={enable_kimi_diagnosis}"
         )
 
+        # Subscribe to Lifecycle Cortex events for coordinated healing
+        try:
+            from cognitive.event_bus import subscribe
+            subscribe("lifecycle.failed", self._on_lifecycle_failure)
+            subscribe("lifecycle.degraded", self._on_lifecycle_degraded)
+            logger.info("[PROACTIVE-HEALING] Subscribed to lifecycle cortex events")
+        except Exception as e:
+            logger.debug(f"[PROACTIVE-HEALING] Lifecycle subscription skipped: {e}")
+
+    def _on_lifecycle_failure(self, event):
+        """React to Lifecycle Cortex reporting a subsystem failure."""
+        subsystem = event.data.get("subsystem", "unknown")
+        error = event.data.get("error", "")
+        logger.warning(f"[PROACTIVE-HEALING] Lifecycle failure: {subsystem} - {error}")
+        self._active_issues.append({
+            "source": "lifecycle_cortex",
+            "subsystem": subsystem,
+            "error": error,
+            "timestamp": event.timestamp,
+            "severity": "high",
+        })
+
+    def _on_lifecycle_degraded(self, event):
+        """React to Lifecycle Cortex reporting a subsystem degradation."""
+        subsystem = event.data.get("subsystem", "unknown")
+        logger.info(f"[PROACTIVE-HEALING] Lifecycle degraded: {subsystem}")
+        self._active_issues.append({
+            "source": "lifecycle_cortex",
+            "subsystem": subsystem,
+            "severity": "medium",
+            "timestamp": event.timestamp,
+        })
+
     # ====================================================================
     # 30 Capabilities Registry
     # ====================================================================

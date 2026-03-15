@@ -154,7 +154,13 @@ class SelfMirror:
     # ── Main Loop ─────────────────────────────────────────────────────
 
     def _mirror_loop(self):
-        time.sleep(30)  # let startup settle
+        # Wait for core subsystems via Lifecycle Cortex instead of blind sleep
+        try:
+            from core.lifecycle_cortex import get_lifecycle_cortex
+            cortex = get_lifecycle_cortex()
+            cortex.wait_ready("central_orchestrator", timeout=30)
+        except Exception:
+            time.sleep(30)  # fallback if cortex not available
         while self._running:
             try:
                 snapshot = self._capture_snapshot()

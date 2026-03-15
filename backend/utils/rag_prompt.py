@@ -4,6 +4,18 @@ RAG prompt utilities for injecting retrieved context into chat prompts.
 
 from typing import List, Optional
 
+from cognitive.event_bus import subscribe
+
+_latest_ghost_reflection = None
+
+
+def _on_ghost_reflection(event):
+    global _latest_ghost_reflection
+    _latest_ghost_reflection = event.data if hasattr(event, 'data') else event
+
+
+subscribe("ghost.reflection_captured", _on_ghost_reflection)
+
 
 def build_rag_prompt(user_query: str, context: Optional[str] = None) -> str:
     """
@@ -50,6 +62,15 @@ def build_rag_prompt(user_query: str, context: Optional[str] = None) -> str:
                 ghost_context += ("\n" if ghost_context else "") + "\n".join(playbook_lines)
     except Exception:
         pass
+
+    # Inject latest ghost reflection from event bus (real-time wire)
+    if _latest_ghost_reflection:
+        try:
+            summary = _latest_ghost_reflection.get("summary", "")
+            if summary:
+                ghost_context += ("\n" if ghost_context else "") + f"[ghost:latest_reflection] {summary[:300]}"
+        except Exception:
+            pass
 
     if (not context or not context.strip()) and not ghost_context:
         return user_query

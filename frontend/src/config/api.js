@@ -17,6 +17,7 @@ function getApiBase() {
 }
 export const API_BASE_URL = getApiBase();
 export const API_BASE = API_BASE_URL;
+export const WS_BASE_URL = API_BASE_URL.replace(/^http/, 'ws');
 
 // Brain-first unified API (single control plane for chat, system, etc.)
 export const API_V2 = {

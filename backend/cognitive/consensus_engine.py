@@ -906,13 +906,32 @@ def run_consensus(
     # Log to reporting engine
     try:
         from cognitive.event_bus import publish
+        _decision_id = f"consensus-{int(time.time()*1000)}"
         publish("consensus.completed", {
+            "decision_id": _decision_id,
             "models": models,
             "agreements": len(agreements),
             "disagreements": len(disagreements),
             "confidence": result.confidence,
             "latency_ms": result.total_latency_ms,
             "passed": verification["passed"],
+        }, source="consensus_engine")
+    except Exception:
+        pass
+
+    # ── Wire: Consensus → Execution (verdict for downstream consumers) ──
+    try:
+        from cognitive.event_bus import publish
+        # Determine best model from scored responses
+        valid = [r for r in responses if r.response and not r.error]
+        best_model = valid[0].model_id if valid else (models[0] if models else "unknown")
+        agreement_score = len(agreements) / max(len(agreements) + len(disagreements), 1)
+        publish("consensus.verdict_reached", {
+            "query": prompt[:200] if prompt else "",
+            "model_count": len(responses),
+            "agreement_score": agreement_score,
+            "winning_model": best_model,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }, source="consensus_engine")
     except Exception:
         pass
@@ -984,6 +1003,7 @@ def run_consensus(
             f"{','.join(models)}:{quorum_hash}:{result.timestamp}".encode()
         ).hexdigest()
         quorum_packet = {
+            "decision_id": f"quorum-{int(time.time()*1000)}",
             "models": models,
             "hash": quorum_hash,
             "sig": quorum_sig,
