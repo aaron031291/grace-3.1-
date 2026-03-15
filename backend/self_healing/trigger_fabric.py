@@ -97,8 +97,8 @@ def start(app=None) -> None:
 
     _wire_event_bus_triggers()
 
-    if app is not None:
-        _wire_fastapi_middleware(app)
+    # Note: FastAPI error capture is handled by global_exception_handler in app.py
+    # Cannot add middleware after app has started (Starlette restriction)
 
     _wire_ouroboros_code_action()
 
