@@ -60,6 +60,7 @@ class TriadContext:
     mirror_context: Dict[str, Any] = field(default_factory=dict)
     trust_context: Dict[str, Any] = field(default_factory=dict)
     brain_context: Dict[str, Any] = field(default_factory=dict)
+    coding_agents_context: Dict[str, Any] = field(default_factory=dict)
 
     # Model outputs
     triage: Dict[str, Any] = field(default_factory=dict)
@@ -148,12 +149,14 @@ class QwenTriadOrchestrator:
                 "governance": bool(ctx.governance_context),
                 "mirror": bool(ctx.mirror_context),
                 "trust": ctx.trust_context,
+                "coding_agents": bool(ctx.coding_agents_context),
             },
             "model_outputs": {
                 "code_model": ctx.code_output[:200] if ctx.code_output else None,
                 "reason_model": ctx.reason_output[:200] if ctx.reason_output else None,
                 "fast_model": ctx.fast_output[:200] if ctx.fast_output else None,
             },
+            "coding_agents": ctx.coding_agents_context,
             "timing": {
                 "total_ms": ctx.total_time_ms,
                 "gather_ms": ctx.gather_time_ms,
@@ -164,7 +167,7 @@ class QwenTriadOrchestrator:
     # ── Context Gathering ─────────────────────────────────────────────
 
     async def _gather_all_context(self, ctx: TriadContext):
-        """Pull context from all subsystems in parallel."""
+        """Pull context from all subsystems in parallel (11 sources)."""
         tasks = [
             self._gather_time(ctx),
             self._gather_memory(ctx),
@@ -176,6 +179,7 @@ class QwenTriadOrchestrator:
             self._gather_mirror(ctx),
             self._gather_trust(ctx),
             self._gather_brain_mesh(ctx),
+            self._gather_coding_agents(ctx),
         ]
         await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -347,7 +351,26 @@ class QwenTriadOrchestrator:
         loop = asyncio.get_event_loop()
         ctx.brain_context = await loop.run_in_executor(_executor, _sync)
 
-    # ── Triage ────────────────────────────────────────────────────────
+    async def _gather_coding_agents(self, ctx: TriadContext):
+        """Gather status from multi-LLM coding agents (Kimi+Opus+Ollama).
+        Same pattern as Qwen agent pool context gathering."""
+        def _sync():
+            try:
+                from cognitive.coding_agents import get_coding_agent_pool
+                pool = get_coding_agent_pool()
+                status = pool.get_status()
+                agents = status.get("agents", {})
+                return {
+                    "agents_available": list(agents.keys()),
+                    "agent_count": len(agents),
+                    "channel_messages": len(pool.channel.get_history(limit=10)),
+                    "group_sessions": pool.ledger.get_summary().get("total_actions", 0),
+                    "status": "active",
+                }
+            except Exception:
+                return {"status": "unavailable"}
+        loop = asyncio.get_event_loop()
+        ctx.coding_agents_context = await loop.run_in_executor(_executor, _sync)
 
     async def _triage(self, ctx: TriadContext):
         """Fast model classifies intent and urgency."""
@@ -693,6 +716,10 @@ class QwenTriadOrchestrator:
 
         if ctx.governance_context.get("autonomy_tier"):
             parts.append(f"Governance: {ctx.governance_context['autonomy_tier']}")
+
+        if ctx.coding_agents_context.get("status") == "active":
+            agents = ctx.coding_agents_context.get("agents_available", [])
+            parts.append(f"Coding agents: {', '.join(agents)} ({ctx.coding_agents_context.get('agent_count', 0)} active)")
 
         if not parts:
             return ""

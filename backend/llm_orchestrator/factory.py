@@ -220,12 +220,14 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
     Routes to the optimal model based on task requirements.
 
     Tasks:
-      code     → Qwen 2.5 Coder (local, reasoning + coding)
-      reason   → Qwen 3 (local, reasoning)
-      fast     → Qwen 3 14B (local, quick responses)
-      audit    → Opus (cloud, deep analysis)
-      document → Qwen (local, parse/read) or Kimi (cloud, 262K) if no local
-      general  → default model
+      code       -> Qwen 2.5 Coder (local, reasoning + coding)
+      reason     -> Qwen 3 (local, reasoning)
+      fast       -> Qwen 3 14B (local, quick responses)
+      audit      -> Opus (cloud, deep analysis)
+      document   -> Qwen (local, parse/read) or Kimi (cloud, 262K) if no local
+      kimi_agent -> Kimi via coding agent pool (GovernanceAwareLLM wrapped)
+      opus_agent -> Opus via coding agent pool (GovernanceAwareLLM wrapped)
+      general    -> default model
     """
     if task == "code" and settings.OLLAMA_MODEL_CODE:
         return _ollama_with_model(resolve_ollama_model("code"))
@@ -249,7 +251,34 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
             return get_kimi_client()
         return get_llm_client()
 
+    elif task == "kimi_agent":
+        # Route through coding agent pool -- same GovernanceAwareLLM wrapping as Qwen
+        try:
+            from cognitive.coding_agents import get_coding_agent_pool
+            pool = get_coding_agent_pool()
+            if "kimi" in pool.agents:
+                return pool.agents["kimi"]._get_client()
+        except Exception:
+            pass
+        if getattr(settings, 'KIMI_API_KEY', ''):
+            return get_kimi_client()
+        return get_llm_client()
+
+    elif task == "opus_agent":
+        # Route through coding agent pool -- same GovernanceAwareLLM wrapping as Qwen
+        try:
+            from cognitive.coding_agents import get_coding_agent_pool
+            pool = get_coding_agent_pool()
+            if "opus" in pool.agents:
+                return pool.agents["opus"]._get_client()
+        except Exception:
+            pass
+        if getattr(settings, 'OPUS_API_KEY', ''):
+            return get_opus_client()
+        return get_llm_client()
+
     return get_llm_client()
+
 
 
 def get_kimi_client() -> BaseLLMClient:
@@ -341,6 +370,25 @@ def get_all_available_models() -> list:
         "cost": "cloud",
         "location": "cloud",
     })
+
+    # Coding agent pool models (same depth as Qwen agents)
+    try:
+        from cognitive.coding_agents import get_coding_agent_pool
+        pool = get_coding_agent_pool()
+        pool_status = pool.get_status()
+        for agent_name, agent_info in pool_status.get("agents", {}).items():
+            models.append({
+                "id": f"{agent_name}_agent",
+                "provider": agent_name,
+                "model": agent_info.get("model", agent_name),
+                "description": f"{agent_name.capitalize()} coding agent (GovernanceAwareLLM wrapped)",
+                "available": True,
+                "cost": "cloud" if agent_name in ("kimi", "opus") else "free",
+                "location": "cloud" if agent_name in ("kimi", "opus") else "local",
+                "agent_pool": True,
+            })
+    except Exception:
+        pass
 
     return models
 

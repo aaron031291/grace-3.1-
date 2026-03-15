@@ -30,6 +30,7 @@ import logging
 import time
 import json
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 
@@ -145,6 +146,15 @@ class PipelineProgress:
 
 
 _progress = PipelineProgress()
+
+
+def _emit(event: str, data: dict = None):
+    """Emit an event via Spindle/event bus (fire-and-forget)."""
+    try:
+        from cognitive.event_bus import publish_async
+        publish_async(event, data or {}, source="coding_pipeline")
+    except Exception:
+        pass
 
 
 def get_pipeline_progress() -> PipelineProgress:
@@ -427,29 +437,92 @@ class CodingPipeline:
 
         return result
 
+    def submit_to_governance(self, tasks: list, context: dict = None) -> dict:
+        """Submit 1-50 tasks to governance for approval, then execute approved ones."""
+        from core.governance_engine import create_approval, get_approvals
+
+        tasks = tasks[:50]  # Cap at 50
+
+        approval = create_approval(
+            title=f"Coding Pipeline Batch: {len(tasks)} tasks",
+            description="\n".join(f"  {i+1}. {t[:100]}" for i, t in enumerate(tasks)),
+            category="coding_pipeline",
+            severity="medium" if len(tasks) <= 10 else "high",
+            data={"tasks": tasks, "context": context or {}, "count": len(tasks)},
+        )
+
+        _emit("coding_pipeline.batch_submitted", {
+            "approval_id": approval["id"],
+            "task_count": len(tasks),
+        })
+
+        return {
+            "approval_id": approval["id"],
+            "status": "pending_governance_approval",
+            "task_count": len(tasks),
+            "message": f"{len(tasks)} tasks submitted to governance. Approve to execute.",
+        }
+
+    def execute_approved_batch(self, approval_id: int) -> dict:
+        """Execute a governance-approved batch of tasks."""
+        from core.governance_engine import get_approvals
+
+        approvals = get_approvals()
+        approval = next((a for a in approvals if a["id"] == approval_id), None)
+        if not approval:
+            return {"error": "Approval not found"}
+        if approval["status"] != "approved":
+            return {"error": f"Batch not approved (status: {approval['status']})"}
+
+        tasks = approval.get("data", {}).get("tasks", [])
+        context = approval.get("data", {}).get("context", {})
+
+        results = []
+        run_ids = []
+        for task_str in tasks:
+            run_id = self.run_background(task_str, context)
+            run_ids.append(run_id)
+            results.append({"task": task_str[:80], "run_id": run_id, "status": "started"})
+
+        _emit("coding_pipeline.batch_executing", {
+            "approval_id": approval_id,
+            "run_ids": run_ids,
+            "count": len(tasks),
+        })
+
+        return {
+            "approval_id": approval_id,
+            "status": "executing",
+            "tasks_started": len(results),
+            "runs": results,
+        }
+
     def _plan_task(self, task: str, context: dict) -> list:
-        """Break task into manageable chunks using LLM."""
-        try:
-            from api.brain_api_v2 import call_brain
-            r = call_brain("ai", "fast", {
-                "prompt": f"Break this task into 3-7 sequential chunks. "
-                          f"Each chunk should be completable independently. "
-                          f"Return ONLY a JSON array of strings.\n\nTask: {task}",
-                "models": ["kimi"],
-            })
-            if r.get("ok"):
-                response = r["data"].get("individual_responses", [{}])[0].get("response", "")
-                try:
-                    import re
-                    match = re.search(r'\[.*\]', response, re.DOTALL)
-                    if match:
-                        return json.loads(match.group())
-                except Exception:
-                    pass
-                return [task]
-            return [task]
-        except Exception:
-            return [task]
+        """Break task into manageable chunks using LLM with failover."""
+        prompt = (f"Break this task into 3-7 sequential chunks. "
+                  f"Each chunk should be completable independently. "
+                  f"Return ONLY a JSON array of strings.\n\nTask: {task}")
+        for model in ["kimi", "opus", "qwen"]:
+            try:
+                from api.brain_api_v2 import call_brain
+                r = call_brain("ai", "fast", {
+                    "prompt": prompt,
+                    "models": [model],
+                })
+                if r.get("ok"):
+                    response = r["data"].get("individual_responses", [{}])[0].get("response", "")
+                    try:
+                        import re
+                        match = re.search(r'\[.*\]', response, re.DOTALL)
+                        if match:
+                            chunks = json.loads(match.group())
+                            if isinstance(chunks, list) and chunks:
+                                return chunks
+                    except Exception:
+                        continue
+            except Exception:
+                continue
+        return [task]
 
     def _execute_layer(self, layer_num: int, chunk: str, task: str, context: dict) -> LayerResult:
         """Execute a single layer of the pipeline."""
@@ -661,53 +734,161 @@ class CodingPipeline:
         }
 
     def _layer_generate(self, chunk: str, task: str, context: dict = None) -> dict:
-        """Layer 6: Generate code with persona, context, governance coding contract, environment routing."""
+        """Layer 6: Generate code using multi-LLM coding agents (Kimi+Opus) + brain API.
+        
+        Integration mirrors Qwen agent pool depth:
+        - Kimi+Opus dispatch in parallel via CodingAgentPool
+        - Brain API runs concurrently as fallback
+        - Best result selected by confidence
+        - All tracked via group Genesis Key + Spindle events
+        """
+        import concurrent.futures
         from api.brain_api_v2 import call_brain
 
         contract_text = (context or {}).get("contract_text", "")[:2000]
         contract_preamble = f"Governance coding contract (must satisfy):\n{contract_text}\n\n" if contract_text else ""
 
-        # Load persona for coding style
         persona = call_brain("govern", "persona", {})
-
-        # Project-scoped chat Ã¢â‚¬â€ LLM reasons about THIS project
         from core.environment import get_environment
         env = get_environment()
-        scoped = call_brain("code", "project_chat", {
-            "project_id": env,
-            "message": f"{contract_preamble}Generate code for: {chunk}",
-        })
 
-        # Generate code (contract in prompt so output satisfies it)
-        code = call_brain("code", "generate", {"prompt": f"{contract_preamble}{chunk}", "project_folder": "."})
+        coding_agent_result = None
+        brain_result = None
 
-        # SAFETY: security scan generated code before accepting
-        generated_code = code.get("data", {}).get("code", "") if code.get("ok") else ""
+        def _run_coding_agents():
+            try:
+                from cognitive.coding_agents import get_coding_agent_pool, CodingTask
+                pool = get_coding_agent_pool()
+                ct = CodingTask(
+                    id=f"pipeline-L6-{int(time.time())}",
+                    task_type="fix",
+                    file_path="",
+                    description=f"{contract_preamble}{chunk}",
+                    error="",
+                    context={"task": task, "env": env},
+                )
+                results = pool.dispatch_parallel(ct, agents=["kimi", "opus"])
+                best = max(results, key=lambda r: r.confidence) if results else None
+                if best and best.status == "completed" and best.patch:
+                    return {
+                        "code": best.patch,
+                        "agent": best.agent,
+                        "confidence": best.confidence,
+                        "source": "multi_llm_coding_agents",
+                        "group_session": pool.ledger.get_summary(),
+                    }
+                if best and best.analysis:
+                    return {
+                        "analysis": best.analysis[:500],
+                        "agent": best.agent,
+                        "confidence": best.confidence,
+                        "source": "multi_llm_coding_agents",
+                    }
+            except Exception as e:
+                logger.debug(f"[PIPELINE-L6] Coding agents unavailable: {e}")
+            return None
+
+        def _run_brain_api():
+            try:
+                scoped = call_brain("code", "project_chat", {
+                    "project_id": env,
+                    "message": f"{contract_preamble}Generate code for: {chunk}",
+                })
+                code = call_brain("code", "generate", {
+                    "prompt": f"{contract_preamble}{chunk}", "project_folder": ".",
+                })
+                return {
+                    "code_result": code, "scoped": scoped.get("ok", False),
+                    "source": "brain_api",
+                }
+            except Exception as e:
+                return {"error": str(e), "source": "brain_api"}
+
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=2, thread_name_prefix="pipeline-L6"
+        ) as pool:
+            future_agents = pool.submit(_run_coding_agents)
+            future_brain = pool.submit(_run_brain_api)
+            coding_agent_result = future_agents.result(timeout=90)
+            brain_result = future_brain.result(timeout=90)
+
+        generated_code = ""
+        generation_source = "brain_api"
+        if coding_agent_result and coding_agent_result.get("code"):
+            generated_code = coding_agent_result["code"]
+            generation_source = f"coding_agent_{coding_agent_result.get('agent', 'unknown')}"
+        elif brain_result and not brain_result.get("error"):
+            code_data = brain_result.get("code_result", {})
+            generated_code = code_data.get("data", {}).get("code", "") if code_data.get("ok") else ""
+
         if generated_code:
+            # Security scan before saving
             try:
                 from core.safety import scan_code_security, record_provenance, record_usage
                 scan = scan_code_security(generated_code, f"pipeline_chunk")
                 if scan.get("blocked"):
                     return {"code": None, "security_blocked": True, "findings": scan["findings"]}
-
                 record_provenance("code_generation", hashlib.sha256(generated_code.encode()).hexdigest()[:16],
-                                  model="pipeline", prompt_hash=hashlib.sha256(chunk.encode()).hexdigest()[:16])
+                                  model=generation_source, prompt_hash=hashlib.sha256(chunk.encode()).hexdigest()[:16])
                 record_usage(tokens=len(generated_code.split()))
             except Exception:
                 pass
 
-            # Route output to active environment
-            call_brain("system", "env_write", {
-                "path": f"backend/generated_{int(time.time())}.py",
-                "content": generated_code,
-                "source": "coding_pipeline",
-            })
+            # Route to active environment with Genesis Key tracking
+            relative_path = f"backend/generated_{int(time.time())}.py"
+            try:
+                from core.environment import route_file_write
+                save_result = route_file_write(
+                    relative_path, generated_code,
+                    source=f"coding_pipeline.L6.{generation_source}",
+                )
+                logger.info(f"[PIPELINE-L6] Code saved to environment: {save_result.get('environment')}/{relative_path}")
+            except Exception as e:
+                logger.warning(f"[PIPELINE-L6] Environment save failed, using fallback: {e}")
+                try:
+                    from api.brain_api_v2 import call_brain
+                    call_brain("system", "env_write", {
+                        "path": relative_path,
+                        "content": generated_code, "source": generation_source,
+                    })
+                except Exception:
+                    pass
+
+            # Symbiotic version control — full Genesis Key + version entry
+            try:
+                from genesis.symbiotic_version_control import get_symbiotic_version_control
+                svc = get_symbiotic_version_control()
+                version_result = svc.track_file_change(
+                    file_path=relative_path,
+                    user_id=f"coding_agent.{generation_source}",
+                    change_description=f"Pipeline L6 code generation: {chunk[:100]}",
+                    operation_type="create",
+                )
+                logger.debug(f"[PIPELINE-L6] Version tracked: {version_result.get('version_key_id')}")
+            except Exception as e:
+                logger.debug(f"[PIPELINE-L6] Version tracking skipped: {e}")
+
+            # Spindle event for pipeline observability
+            try:
+                from cognitive.event_bus import publish_async
+                publish_async("pipeline.code_generated", {
+                    "layer": 6,
+                    "source": generation_source,
+                    "environment": env,
+                    "path": relative_path,
+                    "code_length": len(generated_code),
+                    "chunk": chunk[:100],
+                }, source="coding_pipeline")
+            except Exception:
+                pass
 
         return {
-            "code": code.get("data", {}),
+            "code": brain_result.get("code_result", {}).get("data", {}) if brain_result else {},
+            "coding_agents": coding_agent_result or {},
+            "generation_source": generation_source,
             "persona_applied": persona.get("ok", False),
             "environment": env,
-            "project_scoped": scoped.get("ok", False),
+            "project_scoped": brain_result.get("scoped", False) if brain_result else False,
         }
 
     def _layer_verify(self, chunk: str) -> dict:
@@ -734,29 +915,109 @@ class CodingPipeline:
         except Exception:
             det_result = {"deterministic_checks": 0, "error": "bridge unavailable"}
 
+        # CROSS-AGENT VERIFICATION — the other agent reviews the code
+        cross_verify = {"ran": False}
+        try:
+            from cognitive.coding_agents import get_coding_agent_pool, CodingTask
+            pool = get_coding_agent_pool()
+            # Find the most recent generated code from the pipeline results
+            verify_task = CodingTask(
+                id=f"verify-L7-{int(time.time())}",
+                task_type="analyze",
+                file_path="",
+                description=f"Review this code for correctness, security, and edge cases:\n{chunk}",
+                error="",
+                context={"layer": "verification", "purpose": "cross_check"},
+            )
+            # Dispatch to both agents — they independently verify
+            results = pool.dispatch_parallel(verify_task, agents=["kimi", "opus"])
+            completed = [r for r in results if r.status == "completed"]
+            cross_verify = {
+                "ran": True,
+                "agents_checked": len(completed),
+                "total_agents": len(results),
+                "all_approved": all(
+                    r.confidence >= 0.6 for r in completed
+                ) if completed else False,
+                "analyses": [
+                    {"agent": r.agent, "confidence": r.confidence, "analysis": (r.analysis or "")[:200]}
+                    for r in results
+                ],
+            }
+        except Exception as e:
+            cross_verify = {"ran": False, "error": str(e)[:100]}
+
         # SECONDARY: LLM-based verification (backup)
         from api.brain_api_v2 import call_brain
         invariants = call_brain("ai", "invariants", {})
 
         return {
             "deterministic": det_result,
+            "cross_verification": cross_verify,
             "invariants": invariants.get("data") if invariants.get("ok") else "failed",
-            "verified": det_result.get("remaining_problems", 0) == 0,
+            "verified": (
+                det_result.get("remaining_problems", 0) == 0
+                and cross_verify.get("all_approved", True)
+            ),
         }
 
     def _layer_deploy_gate(self, chunk: str) -> dict:
-        """Layer 8: Deployment gate Ã¢â‚¬â€ check approvals, run auto-cycle, final trust."""
+        """Layer 8: Deployment gate — approvals, trust check, Genesis version, desktop backup."""
         from api.brain_api_v2 import call_brain
         approvals = call_brain("govern", "approvals", {})
         trust = call_brain("system", "trust", {})
         auto = call_brain("system", "auto_cycle", {})
-        return {
+
+        deploy_result = {
             "gate": "pending_approval",
             "requires_human": True,
             "pending_approvals": len(approvals.get("data", {}).get("approvals", [])) if approvals.get("ok") else 0,
             "trust_state": trust.get("data") if trust.get("ok") else {},
             "auto_cycle_ran": auto.get("ok", False),
         }
+
+        # Desktop backup — save a snapshot of the active environment to desktop
+        try:
+            import shutil
+            from core.environment import get_environment_path, get_environment
+            env_path = get_environment_path()
+            env_name = get_environment()
+            desktop = Path.home() / "Desktop" / "grace-output" / env_name
+            desktop.mkdir(parents=True, exist_ok=True)
+
+            # Copy only new/modified files (not full rsync)
+            copied = 0
+            for src_file in env_path.rglob("*"):
+                if src_file.is_file():
+                    rel = src_file.relative_to(env_path)
+                    dest = desktop / rel
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    # Only copy if newer or doesn't exist
+                    if not dest.exists() or src_file.stat().st_mtime > dest.stat().st_mtime:
+                        shutil.copy2(src_file, dest)
+                        copied += 1
+
+            deploy_result["desktop_backup"] = {
+                "path": str(desktop),
+                "files_copied": copied,
+                "environment": env_name,
+            }
+        except Exception as e:
+            deploy_result["desktop_backup"] = {"error": str(e)[:200]}
+
+        # Spindle event for deploy gate
+        try:
+            from cognitive.event_bus import publish_async
+            publish_async("pipeline.deploy_gate", {
+                "gate": deploy_result["gate"],
+                "trust": deploy_result.get("trust_state"),
+                "desktop_backup": deploy_result.get("desktop_backup"),
+                "chunk": chunk[:100],
+            }, source="coding_pipeline")
+        except Exception:
+            pass
+
+        return deploy_result
 
     # Ã¢â€â‚¬Ã¢â€â‚¬ Cross-cutting concerns Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 

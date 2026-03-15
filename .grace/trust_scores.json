@@ -4,49 +4,49 @@
     "trust_score": 100.0,
     "trend": "stable",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:47:39.807178+00:00"
+    "last_updated": "2026-03-15T15:19:50.801125+00:00"
   },
   "system": {
     "component_name": "system",
     "trust_score": 5.0,
     "trend": "up",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:22:38.947024+00:00"
+    "last_updated": "2026-03-15T15:08:27.325053+00:00"
   },
   "compiler_6190fb08654d6683": {
     "component_name": "Compiled: ['func:hello']",
     "trust_score": 97.0,
     "trend": "stable",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:47:57.496356+00:00"
+    "last_updated": "2026-03-15T15:20:02.168799+00:00"
   },
   "qdrant": {
     "component_name": "qdrant",
     "trust_score": 5.0,
     "trend": "up",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:17:21.952342+00:00"
+    "last_updated": "2026-03-15T15:21:36.573717+00:00"
   },
   "core\\async_parallel.py": {
     "component_name": "core\\async_parallel.py",
     "trust_score": 5.0,
-    "trend": "stable",
-    "needs_remediation": true,
-    "last_updated": "2026-03-15T14:22:39.365716+00:00"
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T15:21:36.848250+00:00"
   },
   "core\\auto_router.py": {
     "component_name": "core\\auto_router.py",
-    "trust_score": 3.3,
-    "trend": "down",
+    "trust_score": 5.0,
+    "trend": "stable",
     "needs_remediation": true,
-    "last_updated": "2026-03-15T14:22:43.476690+00:00"
+    "last_updated": "2026-03-15T15:21:37.153092+00:00"
   },
   "core\\base_component.py": {
     "component_name": "core\\base_component.py",
     "trust_score": 5.0,
     "trend": "up",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:17:33.088343+00:00"
+    "last_updated": "2026-03-15T14:57:14.643801+00:00"
   },
   "brain.system": {
     "component_name": "system",
@@ -67,7 +67,7 @@
     "trust_score": 100.0,
     "trend": "up",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:47:06.133500+00:00"
+    "last_updated": "2026-03-15T16:21:20.070838+00:00"
   },
   "brain.chat": {
     "component_name": "chat",
@@ -81,14 +81,14 @@
     "trust_score": 85.0,
     "trend": "up",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:47:06.637081+00:00"
+    "last_updated": "2026-03-15T16:06:16.883409+00:00"
   },
   "compiler_e6d11ccc9a79d56b": {
     "component_name": "Compiled: ['func:test']",
     "trust_score": 97.0,
     "trend": "up",
     "needs_remediation": false,
-    "last_updated": "2026-03-15T14:47:43.326171+00:00"
+    "last_updated": "2026-03-15T15:20:09.291822+00:00"
   },
   "consensus_engine": {
     "component_name": "Consensus Roundtable",
@@ -96,5 +96,33 @@
     "trend": "up",
     "needs_remediation": false,
     "last_updated": "2026-03-15T14:33:42.725386+00:00"
+  },
+  "healing_database": {
+    "component_name": "Healing: database",
+    "trust_score": 85.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T14:55:10.223358+00:00"
+  },
+  "core\\deterministic_e2e_validator.py": {
+    "component_name": "core\\deterministic_e2e_validator.py",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T15:21:36.259608+00:00"
+  },
+  "test_bad": {
+    "component_name": "test_bad",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T15:52:20.275739+00:00"
+  },
+  "test_good": {
+    "component_name": "test_good",
+    "trust_score": 5.0,
+    "trend": "up",
+    "needs_remediation": false,
+    "last_updated": "2026-03-15T15:52:20.518221+00:00"
   }
 }

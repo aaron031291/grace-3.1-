@@ -240,13 +240,53 @@ class ConnectionAgent(HealingAgent):
 
 
 class CodeAgent(HealingAgent):
-    """Heals code errors via the coding agent / sandbox."""
+    """Heals code errors via Kimi + Opus multi-LLM coding agents."""
 
     def __init__(self, coordinator):
         super().__init__(AgentDomain.CODE, coordinator)
 
     def _heal(self, task: HealingTask) -> HealingResult:
-        action = "coding_agent_dispatch"
+        # PRIMARY: Use multi-LLM coding agents (Kimi + Opus in parallel)
+        try:
+            from cognitive.coding_agents import get_coding_agent_pool, CodingTask as CT
+            pool = get_coding_agent_pool()
+            
+            ct = CT(
+                id=task.id,
+                task_type="fix",
+                file_path=task.file_path or task.component,
+                description=task.error or task.description,
+                error=task.error,
+                context=task.context,
+            )
+            
+            # Dispatch to Kimi + Opus in parallel — consensus-based fixing
+            results = pool.dispatch_parallel(ct, agents=["kimi", "opus"])
+            
+            # Pick the best result (highest confidence)
+            best = max(results, key=lambda r: r.confidence) if results else None
+            
+            if best and best.status == "completed" and best.confidence >= 0.5:
+                action = f"multi_llm_fix_{best.agent}"
+                return HealingResult(
+                    task_id=task.id, agent_domain=self.domain.value,
+                    component=task.component, status="healed",
+                    action_taken=action,
+                )
+            
+            # All agents failed or low confidence → escalate
+            errors = "; ".join(r.error[:50] for r in results if r.error)
+            return HealingResult(
+                task_id=task.id, agent_domain=self.domain.value,
+                component=task.component, status="escalated",
+                action_taken="multi_llm_low_confidence",
+                error=errors[:200] or "All agents returned low confidence",
+            )
+        except Exception as e:
+            logger.debug(f"[SWARM-CODE] Multi-LLM agents unavailable ({e}), falling back to brain API")
+
+        # FALLBACK: Use brain API
+        action = "brain_api_fallback"
         try:
             from api.brain_api_v2 import call_brain
             r = call_brain("ai", "fix_code", {

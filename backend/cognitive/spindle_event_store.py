@@ -182,7 +182,15 @@ class SpindleEventStore:
                         payload=payload,
                         source=source,
                     )
-                    session.add(event)
+                    try:
+                        with session.begin_nested():
+                            session.add(event)
+                    except Exception:
+                        # Duplicate sequence_id — re-sync and retry once
+                        self._sync_sequence_from_db()
+                        seq = self._seq.next()
+                        event.sequence_id = seq
+                        session.add(event)
                 return seq
             except Exception as exc:
                 logger.error(
@@ -309,8 +317,21 @@ class SpindleEventStore:
         try:
             self._write_queue.put_nowait(event_data)
         except queue.Full:
-            logger.warning("[SpindleEventStore] Write queue full, falling back to sync append")
-            return self.append(topic, source_type, payload, proof_hash, spindle_mask, result, source)
+            # Rate-limit this warning to once per 60s
+            now_ts = time.time()
+            last_warn = getattr(self, '_last_queue_full_warn', 0.0)
+            if now_ts - last_warn > 60:
+                logger.warning("[SpindleEventStore] Write queue full (%d items), dropping oldest and retrying", self._write_queue.qsize())
+                self._last_queue_full_warn = now_ts
+            # Drop oldest event to make room instead of blocking
+            try:
+                self._write_queue.get_nowait()
+            except queue.Empty:
+                pass
+            try:
+                self._write_queue.put_nowait(event_data)
+            except queue.Full:
+                pass  # Truly stuck, silently drop
 
         return seq
 
@@ -373,11 +394,18 @@ class SpindleEventStore:
         try:
             SpindleEvent = self._get_model()
             session_scope = self._get_session_scope()
+            written = 0
             with session_scope() as session:
                 for item in batch:
-                    event = SpindleEvent(**item)
-                    session.add(event)
-            logger.debug("[SpindleEventStore] Flushed %d events to DB", len(batch))
+                    try:
+                        with session.begin_nested():
+                            event = SpindleEvent(**item)
+                            session.add(event)
+                        written += 1
+                    except Exception:
+                        pass  # Skip duplicate sequence_id
+            if written:
+                logger.debug("[SpindleEventStore] Flushed %d/%d events to DB", written, len(batch))
         except Exception as e:
             logger.error("[SpindleEventStore] Batch write failed: %s", e)
             self._db_available = False

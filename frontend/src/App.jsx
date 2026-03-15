@@ -23,6 +23,7 @@ const AskTab = lazy(() => import("./components/AskTab"));
 const ArchitectTab = lazy(() => import("./components/ArchitectTab"));
 const KPIDashboard = lazy(() => import("./components/KPIDashboard"));
 const TestingTab = lazy(() => import("./components/TestingTab"));
+const CodingAgentTab = lazy(() => import("./components/CodingAgentTab"));
 import PersistentVoicePanel from "./components/PersistentVoicePanel";
 import ActivityFeed from "./components/ActivityFeed";
 import ContextMenu from "./components/ContextMenu";
@@ -41,6 +42,7 @@ const WORKSPACE = [
   { id: 'oracle', icon: '🔮', label: 'Oracle', desc: 'Training data, trust distribution, audits, and gap analysis' },
   { id: 'sandbox', icon: '🧬', label: 'Sandbox', desc: 'Isolated Execution & Promotion Engine' },
   { id: 'testing', icon: '🔬', label: 'Testing', desc: 'Test runner, scheduling, chaos engineering & Spindle verification' },
+  { id: 'codingagent', icon: '🤖', label: 'Coding Agent', desc: 'HITL governance for Kimi & Opus coding output' },
 ];
 
 const SYSTEM = [
@@ -78,6 +80,7 @@ const TAB_PRELOAD = {
   architect: () => import("./components/ArchitectTab"),
   kpi: () => import("./components/KPIDashboard"),
   testing: () => import("./components/TestingTab"),
+  codingagent: () => import("./components/CodingAgentTab"),
   projects: () => import("./components/TasksTab"),
 };
 
@@ -339,6 +342,7 @@ function App() {
               {view === "architect" && <ArchitectTab />}
               {view === "kpi" && <KPIDashboard />}
               {view === "testing" && <TestingTab />}
+              {view === "codingagent" && <CodingAgentTab />}
             </div>
           </Suspense>
         </div>

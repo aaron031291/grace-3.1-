@@ -38,10 +38,12 @@ from .judgement import JudgementResult, HealthStatus, RiskLevel, ForensicFinding
 # Grace cognitive systems (optional imports)
 try:
     from cognitive.engine import CognitiveEngine, DecisionContext
+    from cognitive.ooda import OODAPhase
     COGNITIVE_ENGINE_AVAILABLE = True
 except ImportError:
     CognitiveEngine = None
     DecisionContext = None
+    OODAPhase = None
     COGNITIVE_ENGINE_AVAILABLE = False
 
 try:
@@ -750,8 +752,16 @@ class ActionRouter:
             decision.confidence = min(decision.confidence + 0.1, 1.0)  # Boost from past success
 
         # ========== STEP 9: OODA Decide Phase ==========
-        if self.cognitive_engine:
+        if self.cognitive_engine and decision_context is not None:
             try:
+                # Ensure OODA is in DECIDE phase; reset if stuck from a failed prior step
+                ooda = getattr(self.cognitive_engine, 'ooda', None)
+                if ooda and ooda.state.current_phase != OODAPhase.DECIDE:
+                    ooda.reset()
+                    ooda.observe({"health_status": judgement.health.status.value})
+                    ooda._advance_phase(OODAPhase.ORIENT)
+                    ooda.state.orientation = {"context": {}, "constraints": {}}
+                    ooda._advance_phase(OODAPhase.DECIDE)
                 alternatives = [
                     {"action": decision.action_type, "confidence": decision.confidence}
                 ]
@@ -765,10 +775,14 @@ class ActionRouter:
             decision.results = self._execute_actions(decision, sensor_data, interpreted_data, judgement)
 
         # ========== STEP 11: OODA Act Phase ==========
-        if self.cognitive_engine:
+        if self.cognitive_engine and decision_context is not None:
             try:
-                self.cognitive_engine.act(decision_context, lambda: decision)
-                logger.debug("[LAYER4] OODA Loop: Action completed")
+                ooda = getattr(self.cognitive_engine, 'ooda', None)
+                if ooda and ooda.state.current_phase != OODAPhase.ACT:
+                    logger.debug("[LAYER4] OODA skipping Act phase (not in ACT state)")
+                else:
+                    self.cognitive_engine.act(decision_context, lambda: decision)
+                    logger.debug("[LAYER4] OODA Loop: Action completed")
             except Exception as e:
                 logger.warning(f"[LAYER4] OODA Act failed: {e}")
 

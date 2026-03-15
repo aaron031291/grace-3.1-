@@ -56,6 +56,7 @@ from api.runtime_triggers_api import router as runtime_triggers_router
 from api.qdrant_api import router as qdrant_router
 from api.genesis_daily_api import router as genesis_daily_router
 from api.autonomous_loop_api import router as autonomous_loop_router
+from api.autonomous_log_api import router as autonomous_log_router
 from api.component_health_api import router as component_health_router
 from api.unified_problems_api import router as unified_problems_router
 from api.ingest import router as ingest_router
@@ -768,8 +769,32 @@ async def lifespan(app: FastAPI):
         # ── Spindle parallel runtime services ──
         _init_spindle_services()
 
+        # ── Coding Agent Work Loop (Kimi+Opus active stabilisation) ──
+        try:
+            from cognitive.agent_work_loop import start_agent_work_loop
+            start_agent_work_loop()
+            print("[OK] Coding agent work loop started (Kimi+Opus subscribe to deploy_gate, healing, health)")
+        except Exception as e:
+            _emit_warn(f"Coding agent work loop: {e}")
+
+        # ── Initial stabilisation scan after boot (delayed 15s) ──
+        def _initial_stabilise():
+            time.sleep(15)
+            try:
+                from cognitive.agent_work_loop import run_stabilisation
+                result = run_stabilisation(max_tasks=5)
+                status = result.get("status", "unknown")
+                fixed = result.get("tasks_completed", 0)
+                patches = result.get("patches_generated", 0)
+                print(f"[OK] Initial stabilisation: {status} ({fixed} fixed, {patches} patches)")
+            except Exception as e:
+                print(f"[WARN] Initial stabilisation: {e}")
+
+        threading.Thread(target=_initial_stabilise, daemon=True, name="grace-stabilise").start()
+
     threading.Thread(target=_background_init, daemon=True, name="grace-init").start()
-    print("[OK] Background init started (training, diagnostics, embedding)")
+    print("[OK] Background init started (training, diagnostics, embedding, agent work loop)")
+
 
     # Start cortex background subsystems + job scheduler after background init thread
     try:
@@ -1419,6 +1444,7 @@ app.include_router(learning_memory_router)           # /api/learning-memory/* (n
 app.include_router(admin_router)                     # /api/admin/* (registry, state, reload-config, trigger-diagnostics; requires ADMIN_TOKEN)
 app.include_router(validation_router)                # /api/validation/* (trust scores, KPIs, verification history Ã¢â‚¬â€ frontend dashboard)
 app.include_router(cognitive_events_router)          # /api/cognitive-events/* (WebSocket stream of self-healing logs)
+app.include_router(autonomous_log_router)            # /api/autonomous/logs/stream (Live Tail), /api/autonomous/status, /api/autonomous/stabilise
 app.include_router(introspection_router)             # /api/system/* (System Introspection & Validation)
 
 from api.layer1_api import router as layer1_router
@@ -1503,6 +1529,9 @@ app.include_router(intelligent_cicd_router)
 
 from api.sandbox_repair_api import router as sandbox_repair_router
 app.include_router(sandbox_repair_router)
+
+from api.coding_agent_gov_api import router as coding_agent_gov_router
+app.include_router(coding_agent_gov_router)
 
 from api.self_mirror_api import router as self_mirror_router
 app.include_router(self_mirror_router)

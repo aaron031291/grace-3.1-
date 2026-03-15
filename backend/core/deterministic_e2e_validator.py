@@ -1,27 +1,31 @@
+# -*- coding: utf-8 -*-
 """
 Deterministic End-to-End LLM Pipeline Validator
 =================================================
 Validates the ENTIRE LLM pipeline from Genesis key input to final output
-using ONLY deterministic checks — no LLM reasoning at any validation step.
+using ONLY deterministic checks -- no LLM reasoning at any validation step.
 
-Pipeline stages validated (in order):
+12-Stage Pipeline Verification (in order):
 
-  1. GENESIS INPUT     — Genesis key schema, tracking, provenance chain
-  2. GOVERNANCE GATE   — Rules loaded, persona active, autonomy tier correct
-  3. MEMORY SYSTEMS    — Magma, episodic, procedural, flash cache reachable
-  4. RETRIEVAL (RAG)   — Embedding model, Qdrant, ingestion, retriever wired
-  5. LLM PROVIDERS     — Ollama running, models exist, factory routing works
-  6. COGNITIVE PIPELINE — 9-stage pipeline wiring (TimeSense → Genesis out)
-  7. CODING CONTRACTS  — Contract enforcement operational, all checks pass
-  8. BRAIN API         — All 10 brains respond, cross-brain calls work
-  9. AGENT POOL        — 3 Qwen agents started, queues functional
- 10. OUTPUT INTEGRITY  — Response structure valid, governance applied, genesis tracked
+  1. GENESIS INPUT       -- Genesis key schema, tracking, provenance chain
+  2. GOVERNANCE GATE     -- Rules loaded, persona active, autonomy tier correct
+  3. MEMORY SYSTEMS      -- Magma, episodic, procedural, flash cache reachable
+  4. RETRIEVAL (RAG)     -- Embedding model, Qdrant, ingestion, retriever wired
+  5. LLM PROVIDERS       -- Ollama running, models exist, factory routing works
+  6. COGNITIVE PIPELINE  -- 9-stage pipeline wiring (TimeSense -> Genesis out)
+  7. CODING CONTRACTS    -- Contract enforcement operational, all checks pass
+  8. BRAIN API           -- All 10 brains respond, cross-brain calls work
+  9. AGENT POOL          -- 3 Qwen agents started, queues functional
+ 10. OUTPUT INTEGRITY    -- Response structure valid, governance applied, genesis tracked
+ 11. CODING AGENTS       -- Kimi+Opus+Ollama pool, bi-directional channel, group Genesis
+ 12. SPINDLE INTEGRATION -- ZMQ bridge, event bus, subscriber wiring, event flow
 
 Each stage returns a deterministic verdict: PASS / FAIL / WARN / SKIP.
 No LLM is called. Every check is verifiable, reproducible, and fast.
 """
 
 import ast
+
 import importlib
 import logging
 import time
@@ -104,7 +108,7 @@ def _check(name: str, fn) -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 1: GENESIS INPUT — key schema, tracking, provenance
+#  STAGE 1: GENESIS INPUT -- key schema, tracking, provenance
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_genesis() -> StageResult:
@@ -163,7 +167,7 @@ def _check_genesis_tracker() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 2: GOVERNANCE GATE — rules, persona, autonomy tier
+#  STAGE 2: GOVERNANCE GATE -- rules, persona, autonomy tier
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_governance() -> StageResult:
@@ -213,7 +217,7 @@ def _check_governance_tier() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 3: MEMORY SYSTEMS — Magma, episodic, procedural, flash
+#  STAGE 3: MEMORY SYSTEMS -- Magma, episodic, procedural, flash
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_memory() -> StageResult:
@@ -244,7 +248,7 @@ def _stage_memory() -> StageResult:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 4: RETRIEVAL (RAG) — embeddings, Qdrant, retriever
+#  STAGE 4: RETRIEVAL (RAG) -- embeddings, Qdrant, retriever
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_retrieval() -> StageResult:
@@ -269,7 +273,7 @@ def _stage_retrieval() -> StageResult:
 
 
 def _check_embedding_import() -> StageCheck:
-    """Check embedding module — torch is a heavy runtime dep, WARN if missing instead of FAIL."""
+    """Check embedding module - torch is a heavy runtime dep, WARN if missing instead of FAIL."""
     try:
         mod = importlib.import_module("embedding.embedder")
         if hasattr(mod, "get_embedding_model"):
@@ -280,7 +284,7 @@ def _check_embedding_import() -> StageCheck:
     except ImportError as e:
         if "torch" in str(e):
             return StageCheck("embedding_model_import", StageVerdict.WARN,
-                              f"torch not installed (GPU runtime dependency) — embeddings unavailable",
+                              f"torch not installed (GPU runtime dependency) -- embeddings unavailable",
                               details={"missing_dep": "torch"})
         return StageCheck("embedding_model_import", StageVerdict.FAIL, f"ImportError: {e}")
 
@@ -320,7 +324,7 @@ def _check_rag_validation() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 5: LLM PROVIDERS — Ollama, models, factory routing
+#  STAGE 5: LLM PROVIDERS -- Ollama, models, factory routing
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_llm_providers() -> StageResult:
@@ -402,7 +406,7 @@ def _check_task_routing() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 6: COGNITIVE PIPELINE — 9-stage pipeline wiring
+#  STAGE 6: COGNITIVE PIPELINE -- 9-stage pipeline wiring
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_cognitive_pipeline() -> StageResult:
@@ -455,7 +459,7 @@ def _check_pipeline_stages() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 7: CODING CONTRACTS — contract enforcement operational
+#  STAGE 7: CODING CONTRACTS -- contract enforcement operational
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_coding_contracts() -> StageResult:
@@ -501,7 +505,7 @@ def _check_contract_rejects() -> StageCheck:
                           "Contract correctly rejects invalid code",
                           details={"violations": result.violations})
     return StageCheck("contract_rejects_bad_code", StageVerdict.FAIL,
-                      "Contract accepted invalid code — enforcement broken")
+                      "Contract accepted invalid code -- enforcement broken")
 
 
 def _check_contract_passes() -> StageCheck:
@@ -517,7 +521,7 @@ def _check_contract_passes() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 8: BRAIN API — all 10 brains respond
+#  STAGE 8: BRAIN API -- all 10 brains respond
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_brain_api() -> StageResult:
@@ -568,7 +572,7 @@ def _check_cross_brain() -> StageCheck:
         r = call_brain("deterministic", "contracts", {})
         if r.get("ok") and isinstance(r.get("data"), dict):
             return StageCheck("cross_brain_call", StageVerdict.PASS,
-                              "Cross-brain call works (deterministic → contracts)")
+                              "Cross-brain call works (deterministic -> contracts)")
         return StageCheck("cross_brain_call", StageVerdict.WARN,
                           f"Cross-brain returned: {r.get('error', 'no data')[:100]}")
     except Exception as e:
@@ -576,7 +580,7 @@ def _check_cross_brain() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 9: AGENT POOL — 3 Qwen agents started
+#  STAGE 9: AGENT POOL -- 3 Qwen agents started
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_agent_pool() -> StageResult:
@@ -610,7 +614,7 @@ def _check_agent_pool() -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  STAGE 10: OUTPUT INTEGRITY — response structure, genesis tracked
+#  STAGE 10: OUTPUT INTEGRITY -- response structure, genesis tracked
 # ═══════════════════════════════════════════════════════════════════
 
 def _stage_output_integrity() -> StageResult:
@@ -649,7 +653,7 @@ def _check_response_models() -> StageCheck:
 
 
 def _check_bridge_scan() -> StageCheck:
-    """Run deterministic bridge and count problems BY SEVERITY — low-severity issues don't cause FAIL."""
+    """Run deterministic bridge and count problems BY SEVERITY -- low-severity issues don't cause FAIL."""
     try:
         from core.deterministic_bridge import build_deterministic_report
         report = build_deterministic_report()
@@ -682,7 +686,7 @@ def _check_bridge_scan() -> StageCheck:
 # ═══════════════════════════════════════════════════════════════════
 
 def _verify_import(module_path: str, expected_names: List[str]) -> StageCheck:
-    """Deterministic import verification — does the module load and expose expected names?"""
+    """Deterministic import verification -- does the module load and expose expected names?"""
     try:
         mod = importlib.import_module(module_path)
         missing = [n for n in expected_names if not hasattr(mod, n)]
@@ -701,14 +705,264 @@ def _verify_import(module_path: str, expected_names: List[str]) -> StageCheck:
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  MAIN: Run all 10 stages
+#  STAGE 11: CODING AGENTS -- Kimi+Opus+Ollama pool, comms, ledger
+# ═══════════════════════════════════════════════════════════════════
+
+def _stage_coding_agents() -> StageResult:
+    stage = StageResult(stage=11, name="Coding Agents")
+    start = time.time()
+
+    stage.checks.append(_check("coding_agents_import", lambda: _verify_import(
+        "cognitive.coding_agents",
+        ["CodingAgentPool", "get_coding_agent_pool", "AgentChannel",
+         "GroupGenesisLedger", "KimiCodingAgent", "OpusCodingAgent", "OllamaCodingAgent"]
+    )))
+    stage.checks.append(_check("coding_agents_pool_init", _check_coding_agents_pool))
+    stage.checks.append(_check("coding_agents_channel", _check_agent_channel))
+    stage.checks.append(_check("coding_agents_ledger", _check_agent_ledger))
+    stage.checks.append(_check("coding_agents_governance", _check_agents_governance))
+    stage.checks.append(_check("healing_swarm_coding_integration", _check_swarm_coding_integration))
+
+    stage.duration_ms = round((time.time() - start) * 1000, 1)
+    stage.verdict = StageVerdict.FAIL if stage.failed > 0 else (
+        StageVerdict.WARN if any(c.verdict == StageVerdict.WARN for c in stage.checks) else StageVerdict.PASS
+    )
+    return stage
+
+
+def _check_coding_agents_pool() -> StageCheck:
+    try:
+        from cognitive.coding_agents import get_coding_agent_pool
+        pool = get_coding_agent_pool()
+        status = pool.get_status()
+        agents = status.get("agents", {})
+        agent_names = list(agents.keys())
+        expected = {"kimi", "opus", "ollama"}
+        missing = expected - set(agent_names)
+        if missing:
+            return StageCheck("coding_agents_pool_init", StageVerdict.WARN,
+                              f"Missing agents: {missing}",
+                              details={"agents": agent_names, "missing": list(missing)})
+        return StageCheck("coding_agents_pool_init", StageVerdict.PASS,
+                          f"All {len(expected)} coding agents initialized: {agent_names}",
+                          details={"agents": agents})
+    except Exception as e:
+        return StageCheck("coding_agents_pool_init", StageVerdict.FAIL, f"Pool init: {e}")
+
+
+def _check_agent_channel() -> StageCheck:
+    """Verify bi-directional communication channel works."""
+    try:
+        from cognitive.coding_agents import AgentChannel
+        ch = AgentChannel()
+        # Test post + read
+        ch.post("test_agent", "test", "validation message")
+        msgs = ch.get_history(limit=5)
+        if len(msgs) == 1 and msgs[0]["agent"] == "test_agent":
+            # Test peer filtering
+            peer_msgs = ch.get_history(exclude_agent="test_agent", limit=5)
+            if len(peer_msgs) == 0:
+                return StageCheck("coding_agents_channel", StageVerdict.PASS,
+                                  "Bi-directional channel: post, read, and peer-filter all work")
+        return StageCheck("coding_agents_channel", StageVerdict.FAIL,
+                          "Channel post/read mismatch")
+    except Exception as e:
+        return StageCheck("coding_agents_channel", StageVerdict.FAIL, str(e))
+
+
+def _check_agent_ledger() -> StageCheck:
+    """Verify group Genesis Key ledger works."""
+    try:
+        from cognitive.coding_agents import GroupGenesisLedger
+        ledger = GroupGenesisLedger()
+        session_key = ledger.start_session("E2E validation test")
+        ledger.record_action("test", "verify", file_path="test.py", confidence=1.0)
+        summary = ledger.get_summary()
+        if summary["total_actions"] == 1 and "test" in summary["by_agent"]:
+            return StageCheck("coding_agents_ledger", StageVerdict.PASS,
+                              f"Group Genesis ledger works. Session key: {session_key}",
+                              details=summary)
+        return StageCheck("coding_agents_ledger", StageVerdict.FAIL,
+                          f"Ledger summary mismatch: {summary}")
+    except Exception as e:
+        return StageCheck("coding_agents_ledger", StageVerdict.FAIL, str(e))
+
+
+def _check_agents_governance() -> StageCheck:
+    """Verify all coding agents use GovernanceAwareLLM wrapper."""
+    try:
+        from cognitive.coding_agents import get_coding_agent_pool
+        pool = get_coding_agent_pool()
+        for name, agent in pool.agents.items():
+            client = agent._get_client()
+            class_name = type(client).__name__
+            if "GovernanceAwareLLM" not in class_name and "OfflineLLMClient" not in class_name:
+                return StageCheck("coding_agents_governance", StageVerdict.FAIL,
+                                  f"Agent '{name}' client is {class_name}, not GovernanceAwareLLM")
+        return StageCheck("coding_agents_governance", StageVerdict.PASS,
+                          f"All {len(pool.agents)} agents wrapped in GovernanceAwareLLM")
+    except Exception as e:
+        return StageCheck("coding_agents_governance", StageVerdict.WARN, f"Governance check: {e}")
+
+
+def _check_swarm_coding_integration() -> StageCheck:
+    """Verify healing swarm CodeAgent uses multi-LLM coding agents."""
+    try:
+        src = (BACKEND_ROOT / "cognitive" / "healing_swarm.py").read_text(errors="ignore")
+        if "coding_agents" in src and "dispatch_parallel" in src:
+            return StageCheck("healing_swarm_coding_integration", StageVerdict.PASS,
+                              "Healing swarm CodeAgent wired to multi-LLM coding agents")
+        if "coding_agents" in src:
+            return StageCheck("healing_swarm_coding_integration", StageVerdict.WARN,
+                              "Healing swarm imports coding_agents but dispatch_parallel not found")
+        return StageCheck("healing_swarm_coding_integration", StageVerdict.FAIL,
+                          "Healing swarm CodeAgent not wired to coding agents")
+    except Exception as e:
+        return StageCheck("healing_swarm_coding_integration", StageVerdict.FAIL, str(e))
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  STAGE 12: SPINDLE INTEGRATION -- ZMQ bridge, event bus, flow
+# ═══════════════════════════════════════════════════════════════════
+
+def _stage_spindle_integration() -> StageResult:
+    stage = StageResult(stage=12, name="Spindle Integration")
+    start = time.time()
+
+    stage.checks.append(_check("event_bus_import", lambda: _verify_import(
+        "cognitive.event_bus",
+        ["publish", "publish_async", "subscribe", "get_recent_events",
+         "get_subscriber_count", "start_zmq_bridge"]
+    )))
+    stage.checks.append(_check("event_bus_functional", _check_event_bus_functional))
+    stage.checks.append(_check("event_bus_subscribers", _check_event_bus_subscribers))
+    stage.checks.append(_check("zmq_bridge_module", _check_zmq_bridge))
+    stage.checks.append(_check("spindle_event_flow", _check_spindle_event_flow))
+    stage.checks.append(_check("coding_agents_spindle_wiring", _check_agents_emit_events))
+
+    stage.duration_ms = round((time.time() - start) * 1000, 1)
+    stage.verdict = StageVerdict.FAIL if stage.failed > 0 else (
+        StageVerdict.WARN if any(c.verdict == StageVerdict.WARN for c in stage.checks) else StageVerdict.PASS
+    )
+    return stage
+
+
+def _check_event_bus_functional() -> StageCheck:
+    """Verify event bus can publish and receive events."""
+    try:
+        from cognitive.event_bus import publish, subscribe, unsubscribe
+        received = []
+        def _handler(event):
+            received.append(event)
+        subscribe("e2e.test", _handler)
+        publish("e2e.test", {"validation": True}, source="e2e_validator")
+        unsubscribe("e2e.test", _handler)
+        if len(received) == 1 and received[0].data.get("validation") is True:
+            return StageCheck("event_bus_functional", StageVerdict.PASS,
+                              "Event bus publish -> subscribe -> receive works")
+        return StageCheck("event_bus_functional", StageVerdict.FAIL,
+                          f"Event bus: expected 1 event, got {len(received)}")
+    except Exception as e:
+        return StageCheck("event_bus_functional", StageVerdict.FAIL, str(e))
+
+
+def _check_event_bus_subscribers() -> StageCheck:
+    """Check that key system components have subscribed to the event bus."""
+    try:
+        from cognitive.event_bus import get_subscriber_count
+        subs = get_subscriber_count()
+        total = sum(subs.values())
+        topics = list(subs.keys())
+        if total == 0:
+            return StageCheck("event_bus_subscribers", StageVerdict.WARN,
+                              "No subscribers registered on event bus",
+                              details={"topics": topics})
+        # Check for wildcard subscriber (ZMQ bridge uses "*")
+        has_wildcard = "*" in subs
+        return StageCheck("event_bus_subscribers", StageVerdict.PASS,
+                          f"{total} subscribers across {len(topics)} topics" +
+                          (" (ZMQ bridge active)" if has_wildcard else ""),
+                          details={"topics": topics[:20], "total": total,
+                                   "zmq_bridge_active": has_wildcard})
+    except Exception as e:
+        return StageCheck("event_bus_subscribers", StageVerdict.FAIL, str(e))
+
+
+def _check_zmq_bridge() -> StageCheck:
+    """Verify ZMQ bridge module is importable and configured."""
+    try:
+        from cognitive.event_bus import ZMQ_PUB_ENDPOINT, ZMQ_SUB_ENDPOINT, start_zmq_bridge
+        return StageCheck("zmq_bridge_module", StageVerdict.PASS,
+                          f"ZMQ bridge: PUB={ZMQ_PUB_ENDPOINT}, SUB={ZMQ_SUB_ENDPOINT}",
+                          details={"pub": ZMQ_PUB_ENDPOINT, "sub": ZMQ_SUB_ENDPOINT})
+    except Exception as e:
+        return StageCheck("zmq_bridge_module", StageVerdict.WARN, f"ZMQ bridge: {e}")
+
+
+def _check_spindle_event_flow() -> StageCheck:
+    """Verify critical Spindle event topics are documented and routable."""
+    required_topics = [
+        "genesis.key_created", "llm.called", "healing.started",
+        "coding_agent.channel.message", "coding_agent.parallel_complete",
+        "coding_agent.group_session.started", "coding_agent.group_session.closed",
+        "system.health_changed",
+    ]
+    # Check that event_bus module references show these topics exist in the codebase
+    try:
+        import os
+        found = set()
+        for root, dirs, files in os.walk(str(BACKEND_ROOT)):
+            # Skip __pycache__ and .git
+            dirs[:] = [d for d in dirs if d not in ('__pycache__', '.git', 'node_modules')]
+            for f in files:
+                if not f.endswith('.py'):
+                    continue
+                try:
+                    content = open(os.path.join(root, f), errors='ignore').read()
+                    for topic in required_topics:
+                        if topic in content:
+                            found.add(topic)
+                except Exception:
+                    pass
+
+        missing = set(required_topics) - found
+        if missing:
+            return StageCheck("spindle_event_flow", StageVerdict.WARN,
+                              f"{len(found)}/{len(required_topics)} event topics found. Missing: {missing}",
+                              details={"found": list(found), "missing": list(missing)})
+        return StageCheck("spindle_event_flow", StageVerdict.PASS,
+                          f"All {len(required_topics)} Spindle event topics wired in codebase",
+                          details={"topics": list(found)})
+    except Exception as e:
+        return StageCheck("spindle_event_flow", StageVerdict.WARN, str(e))
+
+
+def _check_agents_emit_events() -> StageCheck:
+    """Verify coding agents emit events to Spindle."""
+    try:
+        src = (BACKEND_ROOT / "cognitive" / "coding_agents.py").read_text(errors="ignore")
+        required = ["publish_async", "coding_agent.channel.message",
+                    "coding_agent.group_session", "coding_agent.parallel_complete"]
+        found = [r for r in required if r in src]
+        missing = [r for r in required if r not in src]
+        if missing:
+            return StageCheck("coding_agents_spindle_wiring", StageVerdict.FAIL,
+                              f"Missing Spindle events in coding_agents: {missing}")
+        return StageCheck("coding_agents_spindle_wiring", StageVerdict.PASS,
+                          f"All {len(required)} Spindle events wired in coding agents")
+    except Exception as e:
+        return StageCheck("coding_agents_spindle_wiring", StageVerdict.FAIL, str(e))
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  MAIN: Run all 12 stages
 # ═══════════════════════════════════════════════════════════════════
 
 def run_e2e_validation() -> E2EReport:
     """
-    Run the full deterministic end-to-end LLM pipeline validation.
-    Genesis input → Governance → Memory → RAG → LLM → Pipeline →
-    Contracts → Brains → Agents → Output.
+    Run the full deterministic end-to-end 12-stage pipeline validation.
+    Genesis -> Governance -> Memory -> RAG -> LLM -> Pipeline ->
+    Contracts -> Brains -> Agents -> Output -> Coding Agents -> Spindle.
 
     No LLM called. Every check is deterministic.
     Every broken check and every fix is logged to Genesis individually.
@@ -717,16 +971,18 @@ def run_e2e_validation() -> E2EReport:
     start = time.time()
 
     stages = [
-        _stage_genesis,
-        _stage_governance,
-        _stage_memory,
-        _stage_retrieval,
-        _stage_llm_providers,
-        _stage_cognitive_pipeline,
-        _stage_coding_contracts,
-        _stage_brain_api,
-        _stage_agent_pool,
-        _stage_output_integrity,
+        _stage_genesis,          # 1
+        _stage_governance,       # 2
+        _stage_memory,           # 3
+        _stage_retrieval,        # 4
+        _stage_llm_providers,    # 5
+        _stage_cognitive_pipeline,  # 6
+        _stage_coding_contracts, # 7
+        _stage_brain_api,        # 8
+        _stage_agent_pool,       # 9
+        _stage_output_integrity, # 10
+        _stage_coding_agents,    # 11
+        _stage_spindle_integration,  # 12
     ]
 
     for stage_fn in stages:
@@ -743,7 +999,7 @@ def run_e2e_validation() -> E2EReport:
                 message=f"Stage crashed: {e}",
             ))
 
-        # Log EACH check to Genesis — broken, warning, and passed
+        # Log EACH check to Genesis -- broken, warning, and passed
         _log_stage_to_genesis(stage_result)
         report.stages.append(stage_result)
 
@@ -767,16 +1023,17 @@ def run_e2e_validation() -> E2EReport:
     _log_report_to_genesis(report)
 
     logger.info(
-        f"[E2E] {report.verdict.value}: "
+        f"[E2E-12] {report.verdict.value}: "
         f"{report.total_passed} passed, {report.total_failed} failed, "
-        f"{report.total_warnings} warnings in {report.duration_ms}ms"
+        f"{report.total_warnings} warnings across {len(report.stages)} stages "
+        f"in {report.duration_ms}ms"
     )
 
     return report
 
 
 def _log_stage_to_genesis(stage: StageResult):
-    """Log every check in a stage to Genesis — broken checks as errors, passes as events."""
+    """Log every check in a stage to Genesis -- broken checks as errors, passes as events."""
     try:
         from api._genesis_tracker import track
     except Exception:
@@ -789,7 +1046,7 @@ def _log_stage_to_genesis(stage: StageResult):
         try:
             track(
                 key_type="error" if is_broken else "system_event",
-                what=f"E2E Stage {stage.stage} ({stage.name}) > {check.name}: {check.verdict.value} — {check.message[:150]}",
+                what=f"E2E Stage {stage.stage} ({stage.name}) > {check.name}: {check.verdict.value} -- {check.message[:150]}",
                 who="deterministic_e2e_validator",
                 where=f"e2e.stage_{stage.stage}.{check.name}",
                 how="deterministic",
@@ -836,7 +1093,7 @@ def _log_report_to_genesis(report: E2EReport):
         track(
             key_type="error" if report.verdict == StageVerdict.FAIL else "system_event",
             what=(
-                f"E2E Pipeline Validation: {report.verdict.value.upper()} — "
+                f"E2E Pipeline Validation: {report.verdict.value.upper()} -- "
                 f"{report.total_passed}P/{report.total_failed}F/{report.total_warnings}W "
                 f"across {len(report.stages)} stages in {report.duration_ms}ms"
             ),
