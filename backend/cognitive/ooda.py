@@ -96,6 +96,9 @@ class OODALoop:
         Args:
             decision: The selected decision/plan
         """
+        if self.state.current_phase == OODAPhase.COMPLETED:
+            self.reset()
+            self.state.current_phase = OODAPhase.DECIDE
         if self.state.current_phase != OODAPhase.DECIDE:
             raise ValueError(
                 f"Cannot decide in phase {self.state.current_phase}. "
@@ -115,6 +118,9 @@ class OODALoop:
         Returns:
             Result of action execution
         """
+        if self.state.current_phase == OODAPhase.COMPLETED:
+            self.reset()
+            self.state.current_phase = OODAPhase.ACT
         if self.state.current_phase != OODAPhase.ACT:
             raise ValueError(
                 f"Cannot act in phase {self.state.current_phase}. "
