@@ -11,6 +11,9 @@ venv_gpu/
 */env/
 */.venv/
 
+# Grace runtime state (large files)
+.grace/healing_log.jsonl
+
 # Logs
 logs
 *.log
