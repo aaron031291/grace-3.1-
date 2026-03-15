@@ -1301,6 +1301,28 @@ app.add_middleware(
     max_age=security_config.CORS_MAX_AGE,
 )
 
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    """Guard rail: catch ALL unhandled 500s across 525 endpoints."""
+    logging.getLogger("grace.global").error(
+        "Unhandled %s at %s: %s", type(exc).__name__, request.url.path, str(exc)[:300]
+    )
+    try:
+        from cognitive.event_bus import publish_async
+        publish_async("error.unhandled", {
+            "path": request.url.path,
+            "error": str(exc)[:300],
+            "type": type(exc).__name__,
+        }, source="global_exception_handler")
+    except Exception:
+        pass
+    return JSONResponse(
+        status_code=500,
+        content={"error": "Internal server error", "type": type(exc).__name__, "detail": str(exc)[:200]},
+    )
+
 @app.middleware("http")
 async def connection_cleanup_middleware(request, call_next):
     response = await call_next(request)

@@ -165,6 +165,8 @@ class DatabaseConnection:
         Returns:
             bool: True if connection is healthy, False otherwise
         """
+        if not cls._initialized:
+            return False
         try:
             engine = cls.get_engine()
             with engine.connect() as connection:

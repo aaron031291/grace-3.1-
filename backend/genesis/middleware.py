@@ -42,9 +42,6 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
         self.kb_integration = get_kb_integration()
 
     async def dispatch(self, request: Request, call_next):
-        import time
-        t0 = time.time()
-        
         # Generate or retrieve Genesis ID
         genesis_id = self._get_or_create_genesis_id(request)
         session_id = self._get_or_create_session_id(request)
@@ -53,110 +50,53 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
         request.state.genesis_id = genesis_id
         request.state.session_id = session_id
 
-        # Skip tracking for health checks and static files
+        # Skip tracking for health checks, high-frequency, and static paths
         if self._should_skip_tracking(request):
             return await call_next(request)
 
-        t1 = time.time()
-        # Track request start
         start_time = datetime.now(timezone.utc)
-        request_data = await self._extract_request_data(request)
 
-        # Create Genesis Key for request
-        request_key = None
-        try:
-            request_key = self.genesis_service.create_key(
-                key_type=GenesisKeyType.API_REQUEST,
-                what_description=f"API Request: {request.method} {request.url.path}",
-                who_actor=genesis_id,
-                where_location=request.url.path,
-                why_reason=f"User action via {request.method} request",
-                how_method=f"HTTP {request.method}",
-                user_id=genesis_id,
-                session_id=session_id,
-                input_data={
-                    "method": request.method,
-                    "path": request.url.path,
-                    "query_params": dict(request.query_params),
-                    "headers": dict(request.headers),
-                    "body": request_data
-                },
-                tags=["api_request", request.method.lower(), "input"]
-            )
-        except Exception as e:
-            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
-                logger.error(f"Failed to create request Genesis Key: {e}")
-
-        t2 = time.time()
-        # Process request
+        # Process request FIRST — zero blocking before response
         response = await call_next(request)
-        t3 = time.time()
-        
+
         # Set cookie if it was newly generated
         if not request.cookies.get("genesis_id"):
             response.set_cookie(key="genesis_id", value=genesis_id, max_age=31536000)
-            
-        # Capture response body for full observability (what/where/when/who/how/why + input/output)
-        body_bytes = b""
+
+        response.headers["X-Genesis-ID"] = genesis_id
+        response.headers["X-Session-ID"] = session_id
+
+        # Fire-and-forget: create genesis keys in background thread (no blocking)
         try:
-            max_capture = 50000  # 50KB max for output_data
-            async for chunk in response.body_iterator:
-                body_bytes += chunk
-                if len(body_bytes) > max_capture:
-                    body_bytes = body_bytes[:max_capture] + b" ... [truncated]"
-                    break
+            from core.async_parallel import run_background
+            duration_ms = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
+            method = request.method
+            path = request.url.path
+            status_code = response.status_code
+            _svc = self.genesis_service
+
+            def _track():
+                try:
+                    _svc.create_key(
+                        key_type=GenesisKeyType.API_REQUEST,
+                        what_description=f"API {method} {path} [{status_code}]",
+                        who_actor=genesis_id,
+                        where_location=path,
+                        why_reason=f"HTTP {method} request",
+                        how_method=f"HTTP {method}",
+                        user_id=genesis_id,
+                        session_id=session_id,
+                        output_data={"status_code": status_code, "duration_ms": round(duration_ms, 1)},
+                        tags=["api_request", method.lower()],
+                        is_error=(status_code >= 400),
+                    )
+                except Exception:
+                    pass
+
+            run_background(_track, f"genesis:{path}")
         except Exception:
             pass
-        # Rebuild response so client still receives body
-        from starlette.responses import Response as StarletteResponse
-        response = StarletteResponse(
-            content=body_bytes,
-            status_code=response.status_code,
-            headers=dict(response.headers) if hasattr(response, "headers") else {},
-            media_type=getattr(response, "media_type", None) or "application/json",
-        )
 
-        # Track response with full output for traceability
-        try:
-            duration_ms = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
-            output_payload = {
-                "status_code": response.status_code,
-                "duration_ms": duration_ms,
-                "headers": dict(response.headers),
-            }
-            if body_bytes:
-                try:
-                    import json
-                    output_payload["body"] = json.loads(body_bytes.decode("utf-8", errors="replace"))
-                except Exception:
-                    output_payload["body_preview"] = body_bytes.decode("utf-8", errors="replace")[:2000]
-
-            request_key_id = getattr(request_key, "key_id", None) if request_key else None
-            self.genesis_service.create_key(
-                key_type=GenesisKeyType.API_REQUEST,
-                what_description=f"API Response: {request.method} {request.url.path} [{response.status_code}]",
-                who_actor=genesis_id,
-                where_location=request.url.path,
-                why_reason="Response to user request",
-                how_method=f"HTTP Response {response.status_code}",
-                user_id=genesis_id,
-                session_id=session_id,
-                parent_key_id=request_key_id,
-                output_data=output_payload,
-                tags=["api_response", request.method.lower(), "output"],
-                is_error=(response.status_code >= 400),
-            )
-
-            response.headers["X-Genesis-ID"] = genesis_id
-            response.headers["X-Session-ID"] = session_id
-            if request_key_id:
-                response.headers["X-Genesis-Request-Key"] = request_key_id
-        except Exception as e:
-            if not (settings and settings.SUPPRESS_GENESIS_ERRORS):
-                logger.error(f"Failed to create response Genesis Key: {e}")
-
-        t4 = time.time()
-        print(f"[LATENCY TRACE] {request.url.path} - Total: {t4-t0:.3f}s | Setup: {t1-t0:.3f}s | ReqKey: {t2-t1:.3f}s | Route: {t3-t2:.3f}s | ResKey: {t4-t3:.3f}s")
         return response
 
     def _get_or_create_genesis_id(self, request: Request) -> str:
@@ -255,13 +195,21 @@ class GenesisKeyMiddleware(BaseHTTPMiddleware):
         """Determine if request should be skipped from tracking."""
         path = request.url.path
 
-        # Skip paths
+        # Skip high-frequency and internal paths from genesis tracking
         skip_paths = [
             "/health",
             "/docs",
             "/openapi.json",
             "/favicon.ico",
             "/static/",
+            "/kpi/",
+            "/api/probe/",
+            "/api/autonomous/status",
+            "/api/component-health/",
+            "/api/bi/",
+            "/monitoring/",
+            "/telemetry/",
+            "/brain/directory",
         ]
 
         for skip_path in skip_paths:
