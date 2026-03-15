@@ -55,13 +55,21 @@ def save_rule_content(doc_id, content):
 
 def dashboard():
     try:
-        from governance.governance_engine import GovernanceEngine
+        from security.governance import GovernanceEngine
         engine = GovernanceEngine()
-        return {"timestamp": datetime.now(timezone.utc).isoformat(),
-                "pillars": {"self_governance": True, "human_oversight": True}}
+        metrics = engine.get_metrics_dashboard()
+        return {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "pillars": {"self_governance": True, "human_oversight": True},
+            "autonomy_tier": engine._current_tier.value,
+            "trust_score": engine._trust_score,
+            "metrics": metrics,
+            "recent_decisions": engine.get_decision_log(limit=10),
+            "recent_violations": engine.get_violations(limit=10),
+        }
     except Exception as e:
         logger.warning("[GOVERN] dashboard failed: %s", e)
-        return {"timestamp": datetime.now(timezone.utc).isoformat(), "status": "basic"}
+        return {"timestamp": datetime.now(timezone.utc).isoformat(), "status": "basic", "error": str(e)[:200]}
 
 def get_approvals():
     try:
@@ -87,9 +95,9 @@ def approve_action(decision_id, action, reason=""):
 
 def get_scores():
     try:
-        from kpi.kpi_tracker import get_tracker
-        tracker = get_tracker()
-        return tracker.get_system_trust()
+        from ml_intelligence.kpi_tracker import get_kpi_tracker
+        tracker = get_kpi_tracker()
+        return {"trust_score": tracker.get_system_trust_score()}
     except Exception as e:
         logger.warning("[GOVERN] get_scores failed: %s", e)
         return {"trust_score": 0.5}

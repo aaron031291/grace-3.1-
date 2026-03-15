@@ -86,28 +86,6 @@ jobs:
           cd frontend
           npm run build
 
-  vscode-extension-build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install extension dependencies
-        run: |
-          cd grace-os-vscode
-          npm install
-
-      - name: Compile extension
-        run: |
-          cd grace-os-vscode
-          npm run compile
-
   mcp-servers-build:
     runs-on: ubuntu-latest
 

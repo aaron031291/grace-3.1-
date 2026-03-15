@@ -12,11 +12,13 @@ const TerminalLogViewer = ({ onClose }) => {
         // Convert http/https to ws/wss
         const wsUrl = API_BASE_URL.replace(/^http/, 'ws') + '/api/autonomous/logs/stream';
 
+        let reconnectDelay = 1000;
         const connect = () => {
             wsRef.current = new WebSocket(wsUrl);
 
             wsRef.current.onopen = () => {
                 setIsConnected(true);
+                reconnectDelay = 1000;
                 setLogs(prev => [...prev, '\x1b[32m[SYSTEM] Connected to Grace Autonomous Core log stream...\x1b[0m']);
             };
 
@@ -33,7 +35,8 @@ const TerminalLogViewer = ({ onClose }) => {
             wsRef.current.onclose = () => {
                 setIsConnected(false);
                 setLogs(prev => [...prev, '\x1b[31m[SYSTEM] Disconnected from log stream. Reconnecting...\x1b[0m']);
-                setTimeout(connect, 3000);
+                reconnectDelay = Math.min(reconnectDelay * 2, 30000);
+                setTimeout(connect, reconnectDelay);
             };
 
             wsRef.current.onerror = (error) => {

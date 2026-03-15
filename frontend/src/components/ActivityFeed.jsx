@@ -86,7 +86,7 @@ export default function ActivityFeed({ docked = false }) {
       } catch { /* polling, skip errors */ }
     };
     fetchEvents();
-    intervalRef.current = setInterval(fetchEvents, 5000);
+    intervalRef.current = setInterval(fetchEvents, 15000);
     return () => clearInterval(intervalRef.current);
   }, []);
 

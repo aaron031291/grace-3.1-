@@ -1,5 +1,6 @@
 import BackendPanel from './BackendPanel';
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
+import { useTabData, BI_DASHBOARD_SCHEMA, BI_TRENDS_SCHEMA } from '../hooks/useTabData';
 import { API_BASE_URL } from '../config/api';
 
 const C = { bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460', accent: '#e94560', accentAlt: '#533483', text: '#eee', muted: '#aaa', dim: '#666', border: '#333', success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3' };
@@ -25,29 +26,11 @@ function Bar({ value, max, color = C.accent }) {
 }
 
 export default function BusinessIntelligenceTab() {
-  const [dashboard, setDashboard] = useState(null);
-  const [trends, setTrends] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [fullData, setFullData] = useState(null);
+  const { data: dashboard, loading, error: dashErr, refresh } = useTabData('/api/bi/dashboard', BI_DASHBOARD_SCHEMA);
+  const { data: trends } = useTabData('/api/bi/trends', BI_TRENDS_SCHEMA);
+  const { data: fullData } = useTabData('/api/tabs/bi/full');
 
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/bi/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
-  }, []);
-
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    const [dRes, tRes] = await Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/bi/dashboard`).then(r => r.ok ? r.json() : null),
-      fetch(`${API_BASE_URL}/api/bi/trends`).then(r => r.ok ? r.json() : null),
-    ]);
-    if (dRes.status === 'fulfilled') setDashboard(dRes.value);
-    if (tRes.status === 'fulfilled') setTrends(tRes.value);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { queueMicrotask(refresh); }, [refresh]);
-
-  if (loading && !dashboard) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: C.dim, background: C.bg }}>Loading Business Intelligence...</div>;
+  if (loading && !dashboard) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: C.dim, background: C.bg }}>{dashErr ? `⚠️ ${dashErr}` : 'Loading Business Intelligence...'}</div>;
   const d = dashboard || {};
 
   const maxTrend = trends?.days ? Math.max(...trends.days.map(t => t.genesis_keys || 0), 1) : 1;
@@ -190,7 +173,7 @@ function CognitiveLiveFeed() {
 
   useEffect(() => {
     fetchDecisions();
-    const intv = setInterval(fetchDecisions, 10000);
+    const intv = setInterval(fetchDecisions, 30000);
     return () => clearInterval(intv);
   }, [fetchDecisions]);
 

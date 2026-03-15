@@ -67,7 +67,10 @@ echo    Ghost runs in background; if backend does not respond in 90s, next start
 echo.
 
 echo ===============================================================================
-echo    GRACE is starting. Backend: http://localhost:8000  Frontend: http://localhost:5173
+echo    GRACE is starting.
+echo    Backend:     http://localhost:8000
+echo    Frontend:    http://localhost:5173
+echo    Ops Console: http://localhost:8765
 echo ===============================================================================
 echo.
 echo   Look for two CMD windows: "GRACE Backend" and "GRACE Frontend".

@@ -237,7 +237,8 @@ class TelemetryService:
                 session.add(baseline)
 
             # Get recent operations for rolling window calculation
-            window_start = datetime.now(timezone.utc) - timedelta(days=baseline.baseline_window_days)
+            window_days = baseline.baseline_window_days if baseline.baseline_window_days is not None else 7
+            window_start = datetime.now(timezone.utc) - timedelta(days=window_days)
             recent_ops = session.query(OperationLog).filter(
                 OperationLog.operation_type == operation.operation_type,
                 OperationLog.operation_name == operation.operation_name,

@@ -254,7 +254,7 @@ export const captureBase = async (captureURL: string, event: string, properties?
 
 export const capture_call_tool = async (event: string, properties?: any) => {
     const GA_MEASUREMENT_ID = 'G-8L163XZ1CE'; // Replace with your GA4 Measurement ID
-    const GA_API_SECRET = 'hNxh4TK2TnSy4oLZn4RwTA'; // Replace with your GA4 API Secret
+    const GA_API_SECRET = process.env.GA_API_SECRET_CALL_TOOL || '';
     const GA_BASE_URL = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`;
     const GA_DEBUG_BASE_URL = `https://www.google-analytics.com/debug/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`;
     return await captureBase(GA_BASE_URL, event, properties);
@@ -262,7 +262,7 @@ export const capture_call_tool = async (event: string, properties?: any) => {
 
 export const capture = async (event: string, properties?: any) => {
     const GA_MEASUREMENT_ID = 'G-F3GK01G39Y'; // Replace with your GA4 Measurement ID
-    const GA_API_SECRET = 'SqdcIAweSQS1RQErURMdEA'; // Replace with your GA4 API Secret
+    const GA_API_SECRET = process.env.GA_API_SECRET_CAPTURE || '';
     const GA_BASE_URL = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`;
     const GA_DEBUG_BASE_URL = `https://www.google-analytics.com/debug/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`;
 
@@ -271,7 +271,7 @@ export const capture = async (event: string, properties?: any) => {
 
 export const capture_ui_event = async (event: string, properties?: any) => {
     const GA_MEASUREMENT_ID = 'G-MPFSWEGQ0T';
-    const GA_API_SECRET = 'BeK3uyAOQ6-TK6wnaDG2Ww';
+    const GA_API_SECRET = process.env.GA_API_SECRET_UI || '';
     const GA_BASE_URL = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`;
     return await captureBase(GA_BASE_URL, event, properties);
 }

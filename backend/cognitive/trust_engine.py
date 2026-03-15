@@ -232,6 +232,18 @@ class TrustEngine:
         except Exception:
             pass
 
+        # ── Wire: Trust → Consensus (score change for downstream consumers) ──
+        try:
+            from cognitive.event_bus import publish
+            publish("trust.score_updated", {
+                "component": component_name,
+                "trust_score": comp.trust_score,
+                "previous_score": comp.previous_trust,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }, source="trust_engine")
+        except Exception:
+            pass
+
         # Determine verification and remediation needs
         comp.needs_verification = comp.trust_score < 80
         if comp.trust_score < 40:

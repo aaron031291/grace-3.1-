@@ -36,7 +36,8 @@ try:
             "limit": 1000,
             "with_payload": True,
             "score_threshold": -1.0  # Return all
-        }
+        },
+        timeout=10,
     )
     
     if response.status_code == 200:
@@ -48,7 +49,8 @@ try:
             # Delete these vectors
             delete_response = requests.post(
                 f"{qdrant_url}/collections/documents/points/delete",
-                json={"point_ids": doc3_ids}
+                json={"point_ids": doc3_ids},
+                timeout=10,
             )
             if delete_response.status_code == 200:
                 print(f"   ✓ Deleted {len(doc3_ids)} vectors from Qdrant")

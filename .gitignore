@@ -122,3 +122,12 @@ backend/.fix_backups/
 
 
 learning memory-ai reaseach/
+
+# Large video/media files
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Removed VSCode extension
+grace-os-vscode/

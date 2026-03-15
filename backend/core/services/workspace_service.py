@@ -38,8 +38,8 @@ def _track(key_type: str, what: str, workspace_id: str, **kw):
         track(key_type=key_type, what=what,
               who=f"workspace.{workspace_id}",
               tags=["workspace", workspace_id], **kw)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("[WORKSPACE] non-critical: %s", e)
 
 
 # Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Workspace CRUD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬

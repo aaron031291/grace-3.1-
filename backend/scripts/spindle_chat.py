@@ -46,7 +46,7 @@ def resolve_handoff(handoff_id: str, decision: str, notes: str, fix_code: str = 
         "fix_code": fix_code
     }
     try:
-        res = requests.post(f"{SPINDLE_BASE}/{handoff_id}/resolve", json=payload)
+        res = requests.post(f"{SPINDLE_BASE}/{handoff_id}/resolve", json=payload, timeout=10)
         if res.status_code == 200:
             print(f"\n[OK] Resolution ingested for {handoff_id}")
             print(f"[OK] Added to Event Store and Procedural Memory.")
@@ -60,7 +60,7 @@ def chat_with_consensus(prompt: str) -> str:
     print("  [Consulting consensus engine...]")
     try:
         # Use brain v2 router
-        res = requests.post(f"{API_BASE}/v2/ai/consensus", json={"prompt": prompt})
+        res = requests.post(f"{API_BASE}/v2/ai/consensus", json={"prompt": prompt}, timeout=10)
         if res.status_code == 200:
             data = res.json()
             out = data.get("data", {}).get("final_output", "No response from consensus")

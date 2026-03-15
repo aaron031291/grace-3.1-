@@ -86,6 +86,26 @@ class SelfHealer:
         except Exception:
             pass
 
+        # Publish healing results to event bus for live integration
+        try:
+            from cognitive.event_bus import publish
+            for component in results["healed"]:
+                publish("healing.action_taken", {
+                    "action": "auto_heal",
+                    "component": component,
+                    "result": "healed",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }, source="self_healing")
+            for component in results["failed"]:
+                publish("healing.action_taken", {
+                    "action": "auto_heal",
+                    "component": component,
+                    "result": "failed",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }, source="self_healing")
+        except Exception:
+            pass
+
         self._healing_log.append(results)
         return results
 

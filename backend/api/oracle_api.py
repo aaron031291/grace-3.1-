@@ -11,11 +11,12 @@ from sqlalchemy import func
 from pydantic import BaseModel
 
 from database.session import get_session
+from api.tab_schemas import OracleDashboardResponse, TrustDistributionResponse, TrainingDataResponse
 
 router = APIRouter(prefix="/api/oracle", tags=["Oracle & Agents"])
 
 
-@router.get("/dashboard", response_model=dict)
+@router.get("/dashboard", response_model=OracleDashboardResponse)
 def get_oracle_dashboard(session: Session = Depends(get_session)):
     """
     Summary stats for the Oracle Tab Overview.
@@ -79,7 +80,7 @@ def get_oracle_dashboard(session: Session = Depends(get_session)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/trust-distribution", response_model=dict)
+@router.get("/trust-distribution", response_model=TrustDistributionResponse)
 def get_trust_distribution(session: Session = Depends(get_session)):
     """
     Returns a histogram of trust scores for the Oracle Audit panel.
@@ -119,7 +120,7 @@ def get_trust_distribution(session: Session = Depends(get_session)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/training-data", response_model=dict)
+@router.get("/training-data", response_model=TrainingDataResponse)
 def get_training_data(
     sort: str = Query("newest", description="Sort order: newest, oldest, trust"),
     example_type: str = Query(None, description="Filter by example type"),

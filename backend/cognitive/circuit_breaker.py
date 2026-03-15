@@ -199,7 +199,7 @@ NAMED_LOOPS: Dict[str, NamedLoop] = {
         components=["immune_system", "central_orchestrator", "event_bus"],
         status="healthy",
         description="Emergency severity assessment → response protocol → resource mobilization → coordinated response → status monitoring. Rollback: system shutdown with data preservation. Fallback: complete isolation.",
-        max_depth=1,
+        max_depth=4,
     ),
 
     # Verification Loops

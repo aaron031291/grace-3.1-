@@ -47,11 +47,14 @@ def _get_kpi_snapshot() -> Dict[str, Any]:
         data = {}
         for comp in components:
             try:
+                # Auto-register component if not yet tracked
+                if not tracker.get_component_kpis(comp):
+                    tracker.register_component(comp)
                 trust = tracker.get_component_trust_score(comp)
                 comp_kpis = tracker.get_component_kpis(comp)
                 if comp_kpis:
                     data[comp] = {
-                        "trust_score": round(trust, 3) if trust else None,
+                        "trust_score": round(trust, 3) if trust is not None else 0.0,
                         "requests": comp_kpis.get_kpi("requests").count,
                         "successes": comp_kpis.get_kpi("successes").count,
                         "failures": comp_kpis.get_kpi("failures").count,
@@ -59,11 +62,11 @@ def _get_kpi_snapshot() -> Dict[str, Any]:
                     }
                 else:
                     data[comp] = {
-                        "trust_score": None,
+                        "trust_score": 0.0,
                         "requests": 0, "successes": 0, "failures": 0, "rejections": 0,
                     }
             except Exception:
-                data[comp] = {"trust_score": None, "requests": 0, "successes": 0, "failures": 0, "rejections": 0}
+                data[comp] = {"trust_score": 0.0, "requests": 0, "successes": 0, "failures": 0, "rejections": 0}
         return {"available": True, "components": data}
     except Exception as e:
         return {"available": False, "error": str(e)[:80]}

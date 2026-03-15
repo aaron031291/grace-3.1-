@@ -327,6 +327,20 @@ class ErrorPipeline:
         # ── Record learning event ────────────────────────────────────
         self._record_learning(payload, healed, fix_description, elapsed)
 
+        # Dispatch to healing swarm for concurrent resolution
+        try:
+            from cognitive.healing_swarm import get_healing_swarm
+            swarm = get_healing_swarm()
+            swarm.submit({
+                "component": payload.get("module", payload.get("location", "unknown")),
+                "description": payload.get("exc_str", ""),
+                "error": payload.get("exc_str", ""),
+                "severity": "high" if payload.get("error_class") in ("schema", "network") else "medium",
+                "file_path": payload.get("context", {}).get("file_path", ""),
+            })
+        except Exception:
+            pass  # swarm is best-effort
+
         if _tel_ctx is not None:
             try:
                 _tel_ctx.__exit__(None, None, None)

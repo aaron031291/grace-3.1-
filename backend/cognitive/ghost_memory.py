@@ -118,6 +118,19 @@ class GhostMemory:
         except Exception:
             pass
 
+        # ── Wire: Ghost Memory → Prompt Builder (reflection for RAG injection) ──
+        try:
+            from cognitive.event_bus import publish
+            lessons = [e for e in self._cache if e["type"] in ("success", "pass", "code_generated", "error", "failure")]
+            publish("ghost.reflection_captured", {
+                "reflection_id": reflection.get("task_id", ""),
+                "summary": reflection.get("task", "")[:500],
+                "lessons_count": len(lessons),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }, source="ghost_memory")
+        except Exception:
+            pass
+
         # Reset
         result = {"reflection": reflection, "turns": self._total_turns,
                   "duration_s": round(time.time() - self._task_start, 1)}

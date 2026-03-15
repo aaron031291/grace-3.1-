@@ -1,38 +1,91 @@
 import BackendPanel from './BackendPanel';
-import { useState, useEffect, useCallback } from 'react';
+import ProblemsPanel from './ProblemsPanel';
+import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config/api';
+import { useTabData, LEARN_HEAL_DASHBOARD_SCHEMA, SKILLS_SCHEMA } from '../hooks/useTabData';
 
 const C = { bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460', accent: '#e94560', accentAlt: '#533483', text: '#eee', muted: '#aaa', dim: '#666', border: '#333', success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3' };
 const btn = (bg = C.accentAlt) => ({ padding: '6px 14px', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#fff', background: bg });
 
+function SwarmStatus() {
+  const [status, setStatus] = useState(null);
+  const [healing, setHealing] = useState(false);
+
+  useEffect(() => {
+    const load = () => fetch(`${API_BASE_URL}/api/healing-swarm/status`).then(r => r.ok ? r.json() : null).then(setStatus).catch(() => {});
+    load();
+    const i = setInterval(load, 30000);
+    return () => clearInterval(i);
+  }, []);
+
+  const healAll = async () => {
+    setHealing(true);
+    try {
+      await fetch(`${API_BASE_URL}/api/healing-swarm/heal-all`, { method: 'POST' });
+      setTimeout(() => fetch(`${API_BASE_URL}/api/healing-swarm/status`).then(r => r.ok ? r.json() : null).then(setStatus).catch(() => {}), 2000);
+    } catch { /* silent */ }
+    finally { setHealing(false); }
+  };
+
+  if (!status?.ok) return null;
+  const agents = status.agents || {};
+  const domainIcons = { connection: '🔌', code: '💻', memory: '🧠', trust: '🛡️', config: '⚙️', service: '🔧' };
+  const statusColors = { idle: '#4caf50', healing: '#ff9800', cooldown: '#2196f3', error: '#f44336' };
+
+  return (
+    <div style={{ marginTop: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+        <div style={{ fontSize: 14, fontWeight: 700 }}>🐝 Healing Swarm ({status.active_tasks || 0} active)</div>
+        <button onClick={healAll} disabled={healing}
+          style={{ padding: '6px 14px', border: 'none', borderRadius: 4, cursor: healing ? 'wait' : 'pointer', fontSize: 12, fontWeight: 600, color: '#fff', background: healing ? '#666' : '#e94560' }}>
+          {healing ? '⏳ Healing...' : '🚀 Heal All Now'}
+        </button>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
+        {Object.entries(agents).map(([domain, a]) => (
+          <div key={domain} style={{ background: '#16213e', border: '1px solid #333', borderRadius: 8, padding: '10px 14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <span>{domainIcons[domain] || '🔧'}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, flex: 1, textTransform: 'capitalize' }}>{domain}</span>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: statusColors[a.status] || '#666' }} />
+            </div>
+            <div style={{ fontSize: 10, color: '#aaa', display: 'flex', gap: 8 }}>
+              <span>✅ {a.completed}</span>
+              <span>❌ {a.failed}</span>
+              <span>{a.success_rate}%</span>
+              <span>{a.avg_mttr}s avg</span>
+            </div>
+            {a.current_task && <div style={{ fontSize: 9, color: '#ff9800', marginTop: 4 }}>🔄 {a.current_task}</div>}
+          </div>
+        ))}
+      </div>
+      {(status.recent_results || []).length > 0 && (
+        <div style={{ marginTop: 12, maxHeight: 150, overflowY: 'auto' }}>
+          {status.recent_results.slice(-5).reverse().map((r, i) => (
+            <div key={i} style={{ display: 'flex', gap: 8, fontSize: 10, padding: '3px 0', borderBottom: '1px solid #33333344' }}>
+              <span>{r.status === 'healed' ? '✅' : r.status === 'failed' ? '❌' : '⚠️'}</span>
+              <span style={{ flex: 1 }}>{r.component}</span>
+              <span style={{ color: '#666' }}>{r.action_taken}</span>
+              <span style={{ color: '#666' }}>{r.duration_seconds?.toFixed(1)}s</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function LearningHealingTab() {
-  const [dashboard, setDashboard] = useState(null);
-  const [skills, setSkills] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: dashboard, loading, refresh } = useTabData('/api/learn-heal/dashboard', LEARN_HEAL_DASHBOARD_SCHEMA);
+  const { data: skillsData } = useTabData('/api/learn-heal/skills', SKILLS_SCHEMA);
+  const skills = skillsData?.skills || [];
+  const { data: fullData } = useTabData('/api/tabs/learn-heal/full');
   const [learnTopic, setLearnTopic] = useState('');
   const [learnResult, setLearnResult] = useState(null);
   const [learning, setLearning] = useState(false);
   const [healingAction, setHealingAction] = useState(null);
   const [notification, setNotification] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [fullData, setFullData] = useState(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/learn-heal/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
-  }, []);
-
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    const [dRes, sRes] = await Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/learn-heal/dashboard`).then(r => r.ok ? r.json() : null),
-      fetch(`${API_BASE_URL}/api/learn-heal/skills`).then(r => r.ok ? r.json() : null),
-    ]);
-    if (dRes.status === 'fulfilled') setDashboard(dRes.value);
-    if (sRes.status === 'fulfilled') setSkills(sRes.value?.skills || []);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { queueMicrotask(refresh); }, [refresh]);
 
   const triggerLearn = async () => {
     if (!learnTopic.trim()) return;
@@ -68,6 +121,7 @@ export default function LearningHealingTab() {
     { id: 'learn', label: 'Learn', icon: '🧠', title: 'Trigger self-learning on a topic' },
     { id: 'heal', label: 'Heal', icon: '🔧', title: 'Trigger self-healing actions' },
     { id: 'skills', label: 'Skills', icon: '🎯', title: 'View and manage learned skills' },
+    { id: 'problems', label: 'Problems', icon: '🚨', title: 'Blackbox alerts, autonomous actions, and tail logs' },
   ];
 
   return (
@@ -219,14 +273,18 @@ export default function LearningHealingTab() {
             )}
 
             {activeTab === 'heal' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                {(d.healing?.available_actions || []).map(a => (
-                  <button key={a.id} onClick={() => triggerHeal(a.id)} disabled={healingAction === a.id}
-                    style={{ ...btn(C.bgDark), padding: '16px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 6, opacity: healingAction === a.id ? 0.5 : 1, borderRadius: 8, border: `1px solid ${C.border}` }}>
-                    <span style={{ fontSize: 14, fontWeight: 700 }}>{a.name}</span>
-                    <span style={{ fontSize: 11, color: C.dim, fontWeight: 400 }}>Severity: {a.severity}</span>
-                  </button>
-                ))}
+              <div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  {(d.healing?.available_actions || []).map(a => (
+                    <button key={a.id} onClick={() => triggerHeal(a.id)} disabled={healingAction === a.id}
+                      style={{ ...btn(C.bgDark), padding: '16px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 6, opacity: healingAction === a.id ? 0.5 : 1, borderRadius: 8, border: `1px solid ${C.border}` }}>
+                      <span style={{ fontSize: 14, fontWeight: 700 }}>{a.name}</span>
+                      <span style={{ fontSize: 11, color: C.dim, fontWeight: 400 }}>Severity: {a.severity}</span>
+                    </button>
+                  ))}
+                </div>
+                {/* Swarm Status */}
+                <SwarmStatus />
               </div>
             )}
 
@@ -248,6 +306,8 @@ export default function LearningHealingTab() {
                 <BackendPanel prefixes={['/training', '/autonomous-learning', '/learning-memory', '/learning-efficiency', '/proactive-learning', '/ml-intelligence', '/sandbox-lab', '/api/learn-heal']} label="Learning & ML" />
               </div>
             )}
+
+            {activeTab === 'problems' && <ProblemsPanel />}
           </>
         )}
       </div>

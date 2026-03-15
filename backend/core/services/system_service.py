@@ -2,6 +2,9 @@
 
 import time as _time
 import gc
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_runtime_status() -> dict:
@@ -13,7 +16,8 @@ def get_runtime_status() -> dict:
             "self_healing": True,
             "uptime_seconds": _time.time() - getattr(app.state, "_start_time", _time.time()),
         }
-    except Exception:
+    except Exception as e:
+        logger.warning("[SYSTEM] non-critical: %s", e)
         return {"paused": False, "diagnostic_engine": "unknown"}
 
 
@@ -52,8 +56,8 @@ def pause_runtime() -> dict:
         diag = getattr(app.state, "diagnostic_engine", None)
         if diag:
             diag.pause()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("[SYSTEM] non-critical: %s", e)
     return {"status": "paused"}
 
 
@@ -64,8 +68,8 @@ def resume_runtime() -> dict:
         diag = getattr(app.state, "diagnostic_engine", None)
         if diag:
             diag.resume()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("[SYSTEM] non-critical: %s", e)
     return {"status": "resumed"}
 
 
@@ -82,7 +86,8 @@ def get_bi_dashboard() -> dict:
     try:
         from llm_orchestrator.governance_wrapper import get_llm_usage_stats
         return get_llm_usage_stats()
-    except Exception:
+    except Exception as e:
+        logger.warning("[SYSTEM] non-critical: %s", e)
         return {"total_calls": 0}
 
 
@@ -90,7 +95,8 @@ def get_diagnostics_status() -> dict:
     try:
         from cognitive.autonomous_diagnostics import get_diagnostics
         return get_diagnostics().get_status() if hasattr(get_diagnostics(), 'get_status') else {"status": "running"}
-    except Exception:
+    except Exception as e:
+        logger.warning("[SYSTEM] non-critical: %s", e)
         return {"status": "unavailable"}
 
 

@@ -14,7 +14,7 @@ export default function SpindleHitlChat() {
 
   useEffect(() => {
     fetchActiveHandoffs();
-    const interval = setInterval(fetchActiveHandoffs, 10000); // Poll every 10s
+    const interval = setInterval(fetchActiveHandoffs, 30000); // Poll every 30s
     return () => clearInterval(interval);
   }, []);
 

@@ -32,7 +32,9 @@ def migrate():
     logger.info("Starting telemetry tables migration...")
 
     # Initialize database connection
-    DatabaseConnection.initialize()
+    from database.config import DatabaseConfig
+    config = DatabaseConfig.from_env()
+    DatabaseConnection.initialize(config)
     engine = DatabaseConnection.get_engine()
 
     # Get inspector to check existing tables

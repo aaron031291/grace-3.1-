@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grace 3.1 Ops Console</title>
+<style>
+:root {
+  --bg:#0a0b14;--bg-alt:#111420;--bg-panel:#0d0e18;--bg-input:#0c0d16;
+  --green:#2ecc71;--red:#e74c3c;--yellow:#f1c40f;--blue:#3498db;
+  --purple:#8e44ad;--orange:#e67e22;--accent:#e94560;
+  --text:#fff;--muted:#636e72;--dim:#3d4450;--border:#1a1d2e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px;}
+
+/* HEADER */
+#header{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);background:var(--bg-panel);flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo .title{font-size:15px;font-weight:800;}
+.logo .sub{font-size:11px;color:var(--muted);}
+#status-pill{padding:3px 12px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:1px;}
+.pill-on{background:rgba(46,204,113,0.15);color:var(--green);border:1px solid rgba(46,204,113,0.25);}
+.pill-off{background:rgba(231,76,60,0.15);color:var(--red);border:1px solid rgba(231,76,60,0.25);}
+
+/* BODY */
+#body{flex:1;display:flex;overflow:hidden;}
+
+/* SIDEBAR */
+#sidebar{width:172px;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg-panel);flex-shrink:0;overflow-y:auto;}
+.sec-lbl{padding:10px 12px 4px;font-size:8px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.svc-list{padding:0 8px 10px;display:flex;flex-direction:column;gap:5px;}
+.svc-row{display:flex;align-items:center;justify-content:space-between;padding:5px 7px;border-radius:5px;background:var(--bg-alt);}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.svc-name{font-size:11px;font-weight:600;margin-left:6px;}
+.svc-pill{font-size:8px;font-weight:700;padding:1px 5px;border-radius:6px;}
+.ctrl-list{padding:0 8px 10px;display:flex;flex-direction:column;gap:3px;}
+.ctrl-btn{width:100%;padding:6px 8px;border:none;border-radius:5px;font-size:10px;font-weight:600;text-align:left;color:var(--text);}
+.ctrl-btn:hover{filter:brightness(1.2);}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;min-width:0;}
+#tab-bar{display:flex;align-items:center;border-bottom:1px solid var(--border);background:var(--bg-panel);overflow-x:auto;flex-shrink:0;}
+.tab-btn{display:flex;align-items:center;gap:5px;padding:9px 14px;border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:500;border-bottom:2px solid transparent;white-space:nowrap;font-family:inherit;}
+.tab-btn.active{color:var(--blue);font-weight:700;border-bottom-color:var(--blue);}
+.badge{min-width:16px;height:16px;border-radius:8px;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;}
+#tab-content{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.pane{display:none;flex:1;overflow:hidden;flex-direction:column;}
+.pane.active{display:flex;}
+
+/* BOTTOM BAR */
+#bottom-bar{border-top:1px solid var(--border);background:var(--bg-panel);flex-shrink:0;transition:height 0.2s;overflow:hidden;}
+#bottom-tabs{height:32px;display:flex;align-items:center;padding:0 10px;gap:4px;flex-shrink:0;}
+.bt-btn{padding:3px 10px;border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;border-bottom:2px solid transparent;font-family:inherit;}
+.bt-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+#bottom-content{flex:1;overflow:auto;padding:6px 14px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:11px;line-height:1.4;}
+#bottom-input-row{display:none;padding:5px 10px;border-top:1px solid var(--border);gap:6px;align-items:center;}
+#bottom-input-row.show{display:flex;}
+#bottom-input{flex:1;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;outline:none;font-family:inherit;}
+#bottom-send{padding:3px 12px;background:var(--blue);border:none;border-radius:4px;color:#fff;font-size:10px;font-weight:700;}
+
+/* SHARED */
+.card{background:var(--bg-alt);border:1px solid var(--border);border-radius:7px;padding:12px;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.mono{font-family:'JetBrains Mono','Fira Code',monospace;}
+.log-e{color:var(--red)}.log-w{color:var(--yellow)}.log-ok{color:var(--green)}.log-i{color:var(--blue)}.log-d{color:#aaa;}
+.empty{padding:30px;text-align:center;color:var(--muted);background:var(--bg-alt);border-radius:7px;border:1px solid var(--border);}
+.toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;background:var(--bg-panel);}
+.toolbar select,.toolbar input[type=text]{background:var(--bg-input);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:10px;outline:none;font-family:inherit;}
+.toolbar input[type=text]{min-width:160px;}
+.btn-sm{padding:4px 10px;border:none;border-radius:4px;font-size:10px;font-weight:700;color:#fff;}
+.btn-sm:hover{filter:brightness(1.15);}
+.confirm-bar{display:none;padding:8px 12px;background:rgba(233,69,96,0.15);border-bottom:1px solid var(--accent);align-items:center;gap:8px;font-size:11px;flex-shrink:0;}
+.confirm-bar.show{display:flex;}
+
+/* PROBLEMS */
+.alert-row{padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:flex-start;gap:8px;transition:background 0.1s;}
+.alert-row:hover{background:rgba(52,152,219,0.06);}
+.alert-row.selected{background:rgba(52,152,219,0.1);border-left:3px solid var(--blue);}
+.sev-badge{font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;text-transform:uppercase;flex-shrink:0;}
+.src-badge{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;}
+.alert-detail{padding:16px;overflow-y:auto;border-left:1px solid var(--border);background:var(--bg-panel);}
+.fix-btn{padding:3px 8px;border:none;border-radius:3px;font-size:9px;font-weight:700;color:#fff;background:var(--green);flex-shrink:0;}
+.fix-btn:hover{filter:brightness(1.2);}
+.fix-btn.danger{background:var(--accent);}
+
+/* AUDIT */
+.timeline-entry{display:flex;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:11px;}
+.timeline-entry .ts{color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:10px;flex-shrink:0;width:70px;}
+.timeline-entry .dot-col{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:20px;}
+.timeline-entry .evt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.timeline-entry .body{flex:1;min-width:0;}
+.timeline-entry .evt-type{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:uppercase;}
+
+/* TESTING */
+.test-console{flex:1;overflow:auto;background:#000;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;white-space:pre-wrap;}
+.suite-card{padding:10px;background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.suite-card:hover{border-color:var(--blue);}
+.sub-tabs{display:flex;gap:2px;padding:6px 12px;border-bottom:1px solid var(--border);background:var(--bg-panel);flex-shrink:0;}
+.sub-tab{padding:5px 12px;border:none;background:transparent;color:var(--muted);font-size:11px;font-weight:600;border-bottom:2px solid transparent;font-family:inherit;}
+.sub-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div class="logo"><span style="font-size:16px">⚡</span><span class="title">Grace 3.1</span><span class="sub">Ops Console</span></div>
+  <div id="status-pill" class="pill-off">CHECKING…</div>
+</div>
+
+<div id="body">
+  <div id="sidebar">
+    <div class="sec-lbl">System Health</div>
+    <div class="svc-list" id="svc-list"></div>
+    <div class="sec-lbl">Controls</div>
+    <div class="ctrl-list" id="ctrl-list"></div>
+  </div>
+  <div id="main">
+    <div id="tab-bar"></div>
+    <div id="tab-content"></div>
+  </div>
+</div>
+
+<div id="bottom-bar" style="height:32px">
+  <div id="bottom-tabs">
+    <button class="bt-btn active" data-bt="feed">📡 LIVE FEED</button>
+    <button class="bt-btn" data-bt="chat">💬 CHAT</button>
+    <button class="bt-btn" data-bt="shell">>_ SHELL</button>
+    <div style="flex:1"></div>
+    <button id="bottom-toggle" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px">▲</button>
+  </div>
+  <div id="bottom-content"></div>
+  <div id="bottom-input-row">
+    <span id="bottom-prompt" style="color:var(--muted);font-size:12px">💬</span>
+    <input id="bottom-input" placeholder="Talk to Grace…" />
+    <button id="bottom-send">→</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════════
+const API='http://localhost:8000';
+const WS_BASE=API.replace(/^http/,'ws');
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+const S={
+  health:{},graceRunning:false,problemCount:0,activeTab:'problems',
+  // Problems
+  report:null,alerts:[],filteredAlerts:[],selectedIds:new Set(),activeAlert:null,
+  pSearch:'',pSev:'all',pSrc:'all',pCat:'all',pHealable:false,
+  // Audit
+  auditEntries:[],auditLoading:false,auditSubTab:'timeline',auditLiveLogs:[],auditLiveConnected:false,localLedger:JSON.parse(localStorage.getItem('ops_ledger')||'[]'),
+  // Testing
+  testSuites:[],testActiveRun:null,testStreamLines:[],testHistory:[],testSubTab:'run',
+  // Bottom
+  bottomTab:'feed',bottomExpanded:false,feedLogs:[],bottomMessages:[],
+  // Boot
+  bootLogs:[],
+  // Spindle
+  spindleData:null,spindleEvents:[],
+  // Autonomous Loop
+  ouroboros:null,
+  // Component Health
+  componentMap:null,
+  // Self-Mirror
+  mirrorSnapshot:null,
+  // BI
+  biData:null,
+  // KPI
+  kpiData:null,
+  // Monitoring
+  organs:null,
+  // World Model
+  worldState:null,
+  // Probe
+  probeResult:null,
+  // Introspection
+  introValidation:null,
+  // Stress
+  stressStatus:null,
+};
+
+function saveLedger(){localStorage.setItem('ops_ledger',JSON.stringify(S.localLedger.slice(-500)));}
+function addLedger(type,title,detail,outcome){
+  const e={id:Date.now(),ts:new Date().toISOString(),type,title,detail:detail||'',outcome:outcome||'pending',source:'operator'};
+  S.localLedger.push(e);saveLedger();return e;
+}
+function updateLedger(id,outcome,detail){
+  const e=S.localLedger.find(x=>x.id===id);
+  if(e){e.outcome=outcome;if(detail)e.detail=detail;saveLedger();}
+}
+
+// ══════════════════════════════════════════════════════════════
+// API HELPERS
+// ══════════════════════════════════════════════════════════════
+async function GET(p){try{const r=await fetch(API+p);return r.ok?await r.json():null;}catch{return null;}}
+async function POST(p,b){try{const r=await fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});return r.ok?await r.json():null;}catch{return null;}}
+
+const sevColor={critical:'#f44336',warning:'#ff9800',info:'#2196f3'};
+const sevIcon={critical:'🔴',warning:'🟡',info:'🔵'};
+const srcColor={blackbox:'#9c27b0',component_health:'#ff5722',diagnostic:'#2196f3',validation:'#ff9800',cognitive:'#e91e63'};
+const srcLabel={blackbox:'Scanner',component_health:'Components',diagnostic:'Diagnostic',validation:'Trust/KPI',cognitive:'Cognitive'};
+const evtColors={problem_detected:'#f44336',heal_requested:'#e67e22',heal_completed:'#2ecc71',heal_failed:'#e74c3c',verification_passed:'#2ecc71',verification_failed:'#f44336',cognitive_event:'#e91e63',genesis_record:'#f1c40f',test_run:'#3498db',test_result:'#8e44ad',operator_action:'#636e72'};
+
+// ══════════════════════════════════════════════════════════════
+// SERVICES & SIDEBAR
+// ══════════════════════════════════════════════════════════════
+const SVCS=[{key:'database',name:'PostgreSQL'},{key:'qdrant',name:'Qdrant'},{key:'ollama',name:'Ollama'},{key:'grace_api',name:'Grace API'},{key:'frontend',name:'Frontend'}];
+const CTRLS=[
+  {l:'⚡ Launch Grace',bg:'#8e44ad',fn:()=>POST('/api/admin/start')},
+  {l:'■ Stop Grace',bg:'#111420',c:'#e74c3c',fn:()=>POST('/api/admin/stop')},
+  {l:'🩺 Spindle Healer',bg:'#e94560',fn:()=>POST('/api/immune/scan')},
+  {l:'🔄 Restart',bg:'#e67e22',fn:()=>POST('/api/admin/restart')},
+  {l:'🌐 Frontend',bg:'#111420',c:'#3498db',fn:()=>window.open('http://localhost:5173','_blank')},
+  {l:'📄 API Docs',bg:'#111420',fn:()=>window.open(API+'/docs','_blank')},
+  {l:'🔍 Diagnostics',bg:'#111420',fn:()=>GET('/api/diagnostic/forensics')},
+];
+
+function renderSidebar(){
+  const list=document.getElementById('svc-list');list.innerHTML='';
+  SVCS.forEach(s=>{const on=S.health[s.key];
+    list.innerHTML+=`<div class="svc-row"><div style="display:flex;align-items:center"><div class="dot" style="background:${on?'#2ecc71':'#e74c3c'}"></div><span class="svc-name">${s.name}</span></div><span class="svc-pill" style="background:${on?'rgba(46,204,113,.12)':'rgba(231,76,60,.12)'};color:${on?'#2ecc71':'#e74c3c'}">${on?'ON':'OFF'}</span></div>`;
+  });
+  const pill=document.getElementById('status-pill');
+  pill.textContent=S.graceRunning?'RUNNING':'STOPPED';
+  pill.className=S.graceRunning?'pill-on':'pill-off';
+}
+function buildControls(){
+  const list=document.getElementById('ctrl-list');
+  CTRLS.forEach(c=>{const b=document.createElement('button');b.className='ctrl-btn';b.style.background=c.bg||'#111420';b.style.color=c.c||'#fff';b.textContent=c.l;b.onclick=c.fn;list.appendChild(b);});
+}
+
+// ══════════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════════
+const TABS=[
+  {id:'problems',label:'Problems',icon:'⚠️',badge:true},
+  {id:'audit',label:'Audit Trail',icon:'📋'},
+  {id:'testing',label:'Testing',icon:'🧪'},
+  {id:'bootlog',label:'Boot Log',icon:'📜'},
+  {id:'metrics',label:'Metrics',icon:'📊'},
+  {id:'healing',label:'Self-Healing',icon:'🔧'},
+  {id:'memory',label:'Memory',icon:'🧠'},
+  {id:'trust',label:'Trust',icon:'🤖'},
+  {id:'diagnostics',label:'Diagnostics',icon:'🔬'},
+  {id:'network',label:'Network',icon:'🌐'},
+  {id:'genesis',label:'Genesis Keys',icon:'🔑'},
+  {id:'federated',label:'Federated',icon:'🌍'},
+];
+
+function buildTabs(){
+  const bar=document.getElementById('tab-bar'),content=document.getElementById('tab-content');
+  bar.innerHTML='';content.innerHTML='';
+  TABS.forEach(t=>{
+    const btn=document.createElement('button');btn.className='tab-btn'+(S.activeTab===t.id?' active':'');btn.dataset.tab=t.id;
+    btn.innerHTML=`<span style="font-size:13px">${t.icon}</span>${t.label}`;
+    if(t.badge&&S.problemCount>0)btn.innerHTML+=` <span class="badge">${S.problemCount}</span>`;
+    btn.onclick=()=>switchTab(t.id);bar.appendChild(btn);
+    const pane=document.createElement('div');pane.className='pane'+(S.activeTab===t.id?' active':'');pane.id='pane-'+t.id;content.appendChild(pane);
+  });
+}
+function switchTab(id){
+  S.activeTab=id;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('active',p.id==='pane-'+id));
+  renderTab();
+}
+function updateBadge(){
+  const btn=document.querySelector('.tab-btn[data-tab="problems"]');if(!btn)return;
+  const b=btn.querySelector('.badge');if(b)b.remove();
+  if(S.problemCount>0){const sp=document.createElement('span');sp.className='badge';sp.textContent=S.problemCount;btn.appendChild(sp);}
+}
+
+// ══════════════════════════════════════════════════════════════
+// RENDER DISPATCHER
+// ══════════════════════════════════════════════════════════════
+function renderTab(){
+  const p=document.getElementById('pane-'+S.activeTab);if(!p)return;
+  const renderers={problems:renderProblems,audit:renderAudit,testing:renderTesting,bootlog:renderBootLog,metrics:renderMetrics,healing:renderHealing,memory:renderMemory,trust:renderTrust,diagnostics:renderDiagnostics,network:renderNetwork,genesis:renderGenesis,federated:renderFederated};
+  (renderers[S.activeTab]||renderEmpty)(p);
+}
+function renderEmpty(p){p.innerHTML='<div class="empty" style="margin:20px">Coming soon</div>';}
+
+// ══════════════════════════════════════════════════════════════
+// PROBLEMS TAB — Command Center
+// ══════════════════════════════════════════════════════════════
+function filterAlerts(){
+  let a=S.alerts||[];
+  if(S.pSearch){const q=S.pSearch.toLowerCase();a=a.filter(x=>(x.title+' '+x.description+' '+(x.component||'')+' '+(x.category||'')).toLowerCase().includes(q));}
+  if(S.pSev!=='all')a=a.filter(x=>x.severity===S.pSev);
+  if(S.pSrc!=='all')a=a.filter(x=>x.source===S.pSrc);
+  if(S.pCat!=='all')a=a.filter(x=>x.category===S.pCat);
+  if(S.pHealable)a=a.filter(x=>x.auto_healable);
+  S.filteredAlerts=a;
+}
+
+async function loadProblems(){
+  const d=await GET('/api/problems/unified');
+  if(!d?.ok||!d.report)return;
+  S.report=d.report;S.alerts=d.report.alerts||[];
+  S.problemCount=(d.report.critical_count||0)+(d.report.warning_count||0);
+  filterAlerts();updateBadge();
+  if(S.activeTab==='problems')renderProblems(document.getElementById('pane-problems'));
+}
+
+async function fixAlert(alert){
+  const ledgerId=addLedger('heal_requested','Fix: '+alert.title,alert.component||alert.source).id;
+  const target=alert.component||alert.title;
+  const r=await POST('/api/healing-swarm/submit',{title:alert.title,severity:alert.severity,component:alert.component||'unknown',description:alert.description||alert.title});
+  updateLedger(ledgerId,r?'completed':'failed',r?JSON.stringify(r).slice(0,200):'Request failed');
+  await loadProblems();if(S.activeTab==='problems')renderProblems(document.getElementById('pane-problems'));
+}
+
+async function fixAllConsensus(){
+  if(!confirm('Run Consensus Fix All? This will scan and auto-fix everything.'))return;
+  const ledgerId=addLedger('heal_requested','Consensus Fix All','Batch').id;
+  const r=await POST('/api/consensus-fix/fix-all');
+  updateLedger(ledgerId,r?'completed':'failed');
+  await loadProblems();
+}
+async function swarmHealAll(){
+  if(!confirm('Dispatch Swarm Heal All?'))return;
+  const ledgerId=addLedger('heal_requested','Swarm Heal All','Batch').id;
+  const r=await POST('/api/healing-swarm/heal-all');
+  updateLedger(ledgerId,r?'completed':'failed');
+  await loadProblems();
+}
+async function scanAndHeal(){
+  if(!confirm('Run Scan + Auto-Heal pipeline?'))return;
+  const ledgerId=addLedger('heal_requested','Scan & Heal','Triggers pipeline').id;
+  const r=await POST('/api/triggers/scan-and-heal');
+  updateLedger(ledgerId,r?'completed':'failed');
+  await loadProblems();
+}
+
+function renderProblems(p){
+  filterAlerts();
+  const r=S.report;
+  const cats=[...new Set(S.alerts.map(a=>a.category))].sort();
+  const sources=[...new Set(S.alerts.map(a=>a.source))].sort();
+
+  let html=`
+  <div class="toolbar">
+    <input type="text" placeholder="🔍 Search alerts…" value="${S.pSearch}" oninput="S.pSearch=this.value;renderProblems(this.closest('.pane'))">
+    <select onchange="S.pSev=this.value;renderProblems(this.closest('.pane'))">
+      <option value="all"${S.pSev==='all'?' selected':''}>All Severity</option>
+      <option value="critical"${S.pSev==='critical'?' selected':''}>Critical</option>
+      <option value="warning"${S.pSev==='warning'?' selected':''}>Warning</option>
+      <option value="info"${S.pSev==='info'?' selected':''}>Info</option>
+    </select>
+    <select onchange="S.pSrc=this.value;renderProblems(this.closest('.pane'))">
+      <option value="all">All Sources</option>
+      ${sources.map(s=>`<option value="${s}"${S.pSrc===s?' selected':''}>${srcLabel[s]||s}</option>`).join('')}
+    </select>
+    <select onchange="S.pCat=this.value;renderProblems(this.closest('.pane'))">
+      <option value="all">All Categories</option>
+      ${cats.map(c=>`<option value="${c}"${S.pCat===c?' selected':''}>${c.replace(/_/g,' ')}</option>`).join('')}
+    </select>
+    <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer"><input type="checkbox" ${S.pHealable?'checked':''} onchange="S.pHealable=this.checked;renderProblems(this.closest('.pane'))">Fixable only</label>
+    <div style="flex:1"></div>
+    <button class="btn-sm" style="background:var(--purple)" onclick="POST('/api/problems/scan').then(()=>loadProblems())">🔍 Scan</button>
+    <button class="btn-sm" style="background:var(--green)" onclick="fixAllConsensus()">🧠 Fix All</button>
+    <button class="btn-sm" style="background:var(--orange)" onclick="swarmHealAll()">🐝 Swarm Heal</button>
+    <button class="btn-sm" style="background:var(--accent)" onclick="scanAndHeal()">⚡ Scan+Heal</button>
+  </div>`;
+
+  // Summary cards
+  if(r){
+    html+=`<div style="display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;flex-shrink:0">`;
+    [{l:'Total',v:r.total_issues,c:'#fff',i:'📋'},{l:'Critical',v:r.critical_count,c:'#f44336',i:'🔴'},{l:'Warning',v:r.warning_count,c:'#ff9800',i:'🟡'},{l:'Info',v:r.info_count,c:'#2196f3',i:'🔵'},{l:'Fixable',v:S.alerts.filter(a=>a.auto_healable).length,c:'#2ecc71',i:'🔧'}].forEach(s=>{
+      html+=`<div class="card" style="flex:1 1 90px;min-width:80px;padding:8px 10px"><div style="font-size:9px;color:var(--muted);margin-bottom:3px">${s.i} ${s.l}</div><div style="font-size:20px;font-weight:800;color:${s.c}">${s.v||0}</div></div>`;
+    });
+    html+=`</div>`;
+    // Source strip
+    html+=`<div style="display:flex;gap:5px;padding:0 12px 8px;flex-wrap:wrap;flex-shrink:0">`;
+    ['blackbox','component_health','diagnostic','validation','cognitive'].forEach(src=>{
+      const q=(r.sources_queried||[]).includes(src);const f=(r.sources_failed||[]).includes(src);
+      const col=f?'#f44336':q?'#2ecc71':'var(--dim)';
+      html+=`<div style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:3px;font-size:9px"><div class="dot" style="background:${col}"></div><span style="color:var(--muted)">${srcLabel[src]||src}</span>${f?'<span style="color:#f44336;font-weight:700">✗</span>':''}</div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // Split: alert list + detail
+  html+=`<div style="flex:1;display:flex;overflow:hidden">`;
+
+  // Alert list
+  html+=`<div style="flex:1;overflow-y:auto;min-width:0" id="alert-list">`;
+  html+=`<div style="padding:4px 12px;font-size:11px;font-weight:700;color:var(--muted);border-bottom:1px solid var(--border)">${S.filteredAlerts.length} Alert${S.filteredAlerts.length!==1?'s':''}</div>`;
+  if(S.filteredAlerts.length===0){
+    html+=`<div class="empty" style="margin:12px">${r?'✅ No issues match filters':'Loading…'}</div>`;
+  } else {
+    S.filteredAlerts.forEach((a,i)=>{
+      const sel=S.activeAlert===i?'selected':'';
+      html+=`<div class="alert-row ${sel}" onclick="S.activeAlert=${i};renderProblems(this.closest('.pane'))">
+        <span class="sev-badge" style="background:${(sevColor[a.severity]||'#3d4450')}25;color:${sevColor[a.severity]||'#3d4450'}">${sevIcon[a.severity]||'⚪'} ${a.severity}</span>
+        <span class="src-badge" style="background:${(srcColor[a.source]||'#3d4450')}20;color:${srcColor[a.source]||'#aaa'}">${srcLabel[a.source]||a.source}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.title}</div>
+          ${a.component?`<span style="font-size:9px;color:var(--blue)">⚙ ${a.component}</span>`:''}
+        </div>
+        ${a.auto_healable?'<span style="font-size:9px;color:var(--green)">🔧</span>':''}
+        ${a.occurrences>1?`<span style="font-size:9px;color:var(--yellow)">×${a.occurrences}</span>`:''}
+        <button class="fix-btn" onclick="event.stopPropagation();fixAlert(S.filteredAlerts[${i}])">Fix</button>
+      </div>`;
+    });
+  }
+  html+=`</div>`;
+
+  // Detail drawer
+  html+=`<div style="width:320px;flex-shrink:0;overflow-y:auto" class="alert-detail">`;
+  if(S.activeAlert!==null&&S.filteredAlerts[S.activeAlert]){
+    const a=S.filteredAlerts[S.activeAlert];
+    html+=`<div style="font-size:13px;font-weight:700;margin-bottom:10px">${a.title}</div>`;
+    html+=`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px"><span class="sev-badge" style="background:${(sevColor[a.severity]||'#3d4450')}25;color:${sevColor[a.severity]||'#3d4450'}">${a.severity}</span><span class="src-badge" style="background:${(srcColor[a.source]||'#3d4450')}20;color:${srcColor[a.source]||'#aaa'}">${srcLabel[a.source]||a.source}</span>${a.category?`<span style="font-size:9px;padding:1px 5px;background:var(--bg-alt);border-radius:3px;color:var(--muted)">${a.category.replace(/_/g,' ')}</span>`:''}</div>`;
+    if(a.description&&a.description!==a.title)html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:10px">${a.description}</div>`;
+    if(a.component)html+=`<div style="font-size:10px;margin-bottom:6px"><span style="color:var(--dim)">Component:</span> <span style="color:var(--blue)">${a.component}</span></div>`;
+    if(a.file)html+=`<div style="font-size:10px;margin-bottom:6px;font-family:monospace;color:var(--dim)">${a.file}${a.line?':'+a.line:''}</div>`;
+    if(a.fix_suggestion)html+=`<div style="font-size:10px;color:var(--green);background:rgba(46,204,113,.1);padding:6px 8px;border-radius:4px;margin-bottom:10px">💡 ${a.fix_suggestion}</div>`;
+    html+=`<div style="display:flex;flex-direction:column;gap:4px;margin-top:12px">
+      <button class="fix-btn" style="width:100%;padding:6px;font-size:10px" onclick="fixAlert(S.filteredAlerts[${S.activeAlert}])">🔧 Fix via Swarm</button>
+      <button class="fix-btn" style="width:100%;padding:6px;font-size:10px;background:var(--purple)" onclick="POST('/api/consensus-fix/fix-one',{target:'${(a.component||a.title).replace(/'/g,"\\'")}',context:{title:'${a.title.replace(/'/g,"\\'")}',severity:'${a.severity}'}}).then(()=>loadProblems())">🧠 Consensus Fix</button>
+      <button class="fix-btn" style="width:100%;padding:6px;font-size:10px;background:var(--blue)" onclick="POST('/api/learn-heal/heal',{action:'restart_component',component:'${(a.component||'').replace(/'/g,"\\'")}',reason:'${a.title.replace(/'/g,"\\'")}'}).then(()=>loadProblems())">📘 Playbook Heal</button>
+    </div>`;
+    html+=`<details style="margin-top:12px"><summary style="font-size:10px;color:var(--dim);cursor:pointer">Raw JSON</summary><pre style="font-size:9px;color:var(--muted);white-space:pre-wrap;margin-top:6px">${JSON.stringify(a,null,2)}</pre></details>`;
+  } else {
+    html+=`<div style="color:var(--dim);font-size:11px;text-align:center;padding:30px">Click an alert to see details</div>`;
+  }
+  html+=`</div></div>`;
+
+  p.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════════════
+// AUDIT TAB — Unified Timeline
+// ══════════════════════════════════════════════════════════════
+async function loadAudit(){
+  S.auditLoading=true;
+  const entries=[];
+  // Fetch from all history sources in parallel
+  const [autoLog,verifications,healHistory,cogEvents,genesisFolders]=await Promise.all([
+    GET('/api/autonomous/log'),GET('/api/validation/verifications/recent'),
+    GET('/governance/healing/history'),GET('/api/cognitive-events/recent'),
+    GET('/api/genesis-daily/folders?days=30'),
+  ]);
+  // Normalize autonomous log
+  (autoLog?.log||autoLog?.entries||[]).forEach(e=>{entries.push({ts:e.timestamp||e.ts||'',type:'operator_action',title:e.action||e.msg||e.message||'Loop event',detail:e.detail||JSON.stringify(e).slice(0,200),source:'ouroboros',color:evtColors.operator_action});});
+  // Verifications
+  (verifications?.verifications||verifications?.data||[]).forEach(e=>{const passed=e.passed||e.status==='passed';entries.push({ts:e.timestamp||e.created_at||'',type:passed?'verification_passed':'verification_failed',title:e.title||e.action||'Verification',detail:e.detail||e.result||'',source:'validation',color:evtColors[passed?'verification_passed':'verification_failed']});});
+  // Healing history
+  (healHistory?.history||healHistory?.data||[]).forEach(e=>{entries.push({ts:e.timestamp||e.ts||'',type:e.result==='success'?'heal_completed':'heal_failed',title:e.action||e.title||'Healing action',detail:e.detail||e.component||'',source:'governance',color:evtColors[e.result==='success'?'heal_completed':'heal_failed']});});
+  // Cognitive events
+  (cogEvents?.events||cogEvents?.data||[]).forEach(e=>{entries.push({ts:e.timestamp||e.ts||'',type:'cognitive_event',title:e.topic||e.title||'Cognitive event',detail:typeof e.data==='object'?JSON.stringify(e.data).slice(0,200):(e.data||''),source:'cognitive',color:evtColors.cognitive_event});});
+  // Genesis daily folders
+  (genesisFolders?.folders||[]).forEach(e=>{entries.push({ts:e.date+'T00:00:00Z',type:'genesis_record',title:`${e.label||e.date}: ${e.key_count} keys${e.error_count?' ('+e.error_count+' errors)':''}`,detail:`${e.key_count} genesis keys recorded`,source:'genesis',color:e.error_count>0?evtColors.genesis_record:'#2ecc71'});});
+  // Local operator ledger
+  S.localLedger.forEach(e=>{entries.push({ts:e.ts,type:e.type,title:e.title,detail:e.detail,source:'operator',outcome:e.outcome,color:evtColors[e.type]||evtColors.operator_action});});
+  // Sort newest first
+  entries.sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
+  S.auditEntries=entries;S.auditLoading=false;
+}
+
+function renderAudit(p){
+  let html=`<div class="sub-tabs">
+    <button class="sub-tab${S.auditSubTab==='timeline'?' active':''}" onclick="S.auditSubTab='timeline';renderAudit(this.closest('.pane'))">📋 Timeline</button>
+    <button class="sub-tab${S.auditSubTab==='live'?' active':''}" onclick="S.auditSubTab='live';renderAudit(this.closest('.pane'))">📡 Live Tail</button>
+  </div>`;
+
+  if(S.auditSubTab==='timeline'){
+    html+=`<div class="toolbar">
+      <span style="font-size:12px;font-weight:700">📋 Audit Trail</span>
+      <div style="flex:1"></div>
+      <button class="btn-sm" style="background:var(--blue)" onclick="loadAudit().then(()=>renderAudit(document.getElementById('pane-audit')))">↻ Refresh</button>
+      <button class="btn-sm" style="background:var(--dim)" onclick="S.localLedger=[];saveLedger();loadAudit().then(()=>renderAudit(document.getElementById('pane-audit')))">🗑 Clear Local</button>
+    </div>`;
+    html+=`<div style="flex:1;overflow-y:auto">`;
+    if(S.auditLoading){html+=`<div class="empty">Loading audit trail…</div>`;}
+    else if(S.auditEntries.length===0){html+=`<div class="empty">No audit entries yet. Fix a problem or run a test to start recording.</div>`;}
+    else{
+      S.auditEntries.slice(0,200).forEach(e=>{
+        const time=e.ts?new Date(e.ts).toLocaleTimeString():'—';
+        const outcomeHtml=e.outcome?`<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:${e.outcome==='completed'?'rgba(46,204,113,.15)':e.outcome==='failed'?'rgba(231,76,60,.15)':'rgba(100,100,100,.15)'};color:${e.outcome==='completed'?'#2ecc71':e.outcome==='failed'?'#e74c3c':'#aaa'};font-weight:700">${e.outcome}</span>`:'';
+        html+=`<div class="timeline-entry">
+          <div class="ts">${time}</div>
+          <div class="dot-col"><div class="evt-dot" style="background:${e.color||'#636e72'}"></div></div>
+          <div class="body">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span class="evt-type" style="background:${(e.color||'#636e72')}20;color:${e.color||'#636e72'}">${(e.type||'event').replace(/_/g,' ')}</span>
+              <span style="font-size:9px;color:var(--dim)">${e.source||''}</span>
+              ${outcomeHtml}
+            </div>
+            <div style="font-size:11px;font-weight:600">${e.title||''}</div>
+            ${e.detail?`<div style="font-size:10px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.detail}</div>`:''}
+          </div>
+        </div>`;
+      });
+    }
+    html+=`</div>`;
+  }
+
+  if(S.auditSubTab==='live'){
+    html+=`<div class="toolbar">
+      <span style="font-size:12px;font-weight:700">📡 Live Tail</span>
+      <div id="audit-live-dot" style="width:8px;height:8px;border-radius:50%;background:${S.auditLiveConnected?'var(--green)':'var(--red)'}"></div>
+      <span style="font-size:10px;color:var(--muted)">${S.auditLiveConnected?'Connected':'Disconnected'}</span>
+      <div style="flex:1"></div>
+      <button class="btn-sm" style="background:var(--dim)" onclick="S.auditLiveLogs=[];renderAudit(this.closest('.pane'))">🗑 Clear</button>
+    </div>`;
+    html+=`<div id="audit-live-console" style="flex:1;overflow-y:auto;background:#000;padding:10px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:11px;line-height:1.5;white-space:pre-wrap">`;
+    if(S.auditLiveLogs.length===0){html+=`<span style="color:#636e72">Waiting for log events…</span>`;}
+    else{S.auditLiveLogs.forEach(l=>{html+=`<div class="${logCls(l)}">${l}</div>`;});}
+    html+=`</div>`;
+  }
+
+  p.innerHTML=html;
+  if(S.auditSubTab==='live'){const c=document.getElementById('audit-live-console');if(c)c.scrollTop=c.scrollHeight;}
+}
+
+// ══════════════════════════════════════════════════════════════
+// TESTING TAB
+// ══════════════════════════════════════════════════════════════
+async function loadTestSuites(){S.testSuites=(await GET('/api/testing/discover'))?.suites||[];}
+async function loadTestHistory(){S.testHistory=(await GET('/api/testing/history'))?.runs||(await GET('/api/testing/history'))?.data||[];}
+
+async function runTest(suite,markers){
+  const ledgerId=addLedger('test_run','pytest: '+(suite||'all'),markers||'').id;
+  S.testStreamLines=[];S.testActiveRun={status:'running',suite};
+  renderTesting(document.getElementById('pane-testing'));
+  const r=await POST('/api/testing/run',{suite:suite||'',markers:markers||'',verbose:true});
+  if(!r||!r.task_id){S.testActiveRun={status:'failed',suite};updateLedger(ledgerId,'failed','No task_id');renderTesting(document.getElementById('pane-testing'));return;}
+  const taskId=r.task_id;
+  // SSE stream
+  const evtSrc=new EventSource(API+'/api/testing/stream/'+taskId);
+  evtSrc.onmessage=(e)=>{
+    S.testStreamLines.push(e.data);
+    if(S.testStreamLines.length>2000)S.testStreamLines=S.testStreamLines.slice(-2000);
+    const con=document.getElementById('test-console');
+    if(con){con.textContent=S.testStreamLines.join('\n');con.scrollTop=con.scrollHeight;}
+  };
+  evtSrc.onerror=()=>{
+    evtSrc.close();
+    S.testActiveRun={status:'completed',suite};
+    updateLedger(ledgerId,'completed','Finished');
+    loadTestHistory();
+    renderTesting(document.getElementById('pane-testing'));
+  };
+}
+
+async function runChaos(){
+  if(!confirm('Run Chaos Experiment?'))return;
+  addLedger('test_run','Chaos experiment','chaos');
+  await POST('/api/testing/chaos/run',{type:'latency'});
+}
+async function runGauntlet(){
+  if(!confirm('Run 12-layer VVT Gauntlet?'))return;
+  addLedger('test_run','VVT Gauntlet','deterministic');
+  await POST('/api/test-verify/deterministic',{});
+}
+
+function renderTesting(p){
+  let html=`<div class="sub-tabs">
+    ${['run','history','chaos','gauntlet'].map(t=>`<button class="sub-tab${S.testSubTab===t?' active':''}" onclick="S.testSubTab='${t}';renderTesting(this.closest('.pane'))">${{run:'▶ Run Tests',history:'📜 History',chaos:'💥 Chaos',gauntlet:'🛡️ Gauntlet'}[t]}</button>`).join('')}
+  </div>`;
+
+  if(S.testSubTab==='run'){
+    html+=`<div class="toolbar">
+      <select id="suite-select"><option value="">All suites</option>${S.testSuites.map(s=>`<option value="${s.path||s.name||s}">${s.name||s.path||s}</option>`).join('')}</select>
+      <input type="text" id="markers-input" placeholder="markers (optional)">
+      <button class="btn-sm" style="background:var(--green)" onclick="runTest(document.getElementById('suite-select').value,document.getElementById('markers-input').value)">▶ Run</button>
+      ${S.testActiveRun?`<span style="font-size:10px;color:${S.testActiveRun.status==='running'?'var(--yellow)':'var(--green)'}">● ${S.testActiveRun.status}</span>`:''}
+    </div>`;
+    html+=`<div id="test-console" class="test-console">${S.testStreamLines.join('\n')||'Select a suite and click Run to start pytest…'}</div>`;
+  }
+
+  if(S.testSubTab==='history'){
+    html+=`<div class="toolbar"><span style="font-size:11px;font-weight:700">Test History</span><div style="flex:1"></div><button class="btn-sm" style="background:var(--blue)" onclick="loadTestHistory().then(()=>renderTesting(this.closest('.pane')))">↻</button></div>`;
+    html+=`<div style="flex:1;overflow-y:auto;padding:10px">`;
+    if(S.testHistory.length===0){html+=`<div class="empty">No test history yet</div>`;}
+    S.testHistory.forEach(r=>{
+      const color=r.status==='passed'?'var(--green)':r.status==='failed'?'var(--red)':'var(--muted)';
+      html+=`<div class="card" style="margin-bottom:6px;display:flex;align-items:center;gap:10px">
+        <div class="dot" style="background:${color}"></div>
+        <div style="flex:1"><div style="font-size:11px;font-weight:600">${r.suite||r.name||'Test run'}</div><div style="font-size:9px;color:var(--dim)">${r.markers||''} · ${r.duration||''}s</div></div>
+        <span style="font-size:10px;font-weight:700;color:${color}">${(r.status||'').toUpperCase()}</span>
+        <span style="font-size:9px;color:var(--dim)">${r.finished_at?new Date(r.finished_at).toLocaleTimeString():''}</span>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
+  if(S.testSubTab==='chaos'){
+    html+=`<div style="padding:20px"><div style="font-size:16px;font-weight:700;margin-bottom:12px">💥 Chaos Engineering</div>
+      <div class="card" style="max-width:400px"><div style="font-size:12px;font-weight:600;margin-bottom:8px">Simulate Failures</div><div style="font-size:11px;color:var(--muted);margin-bottom:12px">Inject latency, CPU spikes, or service failures to test Grace's self-healing.</div>
+      <button class="btn-sm" style="background:var(--accent)" onclick="runChaos()">🔥 Run Chaos Experiment</button></div></div>`;
+  }
+
+  if(S.testSubTab==='gauntlet'){
+    html+=`<div style="padding:20px"><div style="font-size:16px;font-weight:700;margin-bottom:12px">🛡️ 12-Layer VVT Gauntlet</div>
+      <div class="card" style="max-width:400px;margin-bottom:16px"><div style="font-size:12px;font-weight:600;margin-bottom:8px">Deterministic Verification</div><div style="font-size:11px;color:var(--muted);margin-bottom:12px">Runs the full Validation, Verification & Test pipeline across all system layers.</div>
+      <button class="btn-sm" style="background:var(--purple)" onclick="runGauntlet()">⚡ Run Gauntlet</button></div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:12px">🔥 Stress Testing</div>
+      <div class="card" style="max-width:400px"><div style="font-size:12px;font-weight:600;margin-bottom:8px">Deep Stress Engine</div><div style="font-size:11px;color:var(--muted);margin-bottom:12px">Run async logic stress tests across all system layers. Results update live.</div>
+      <div style="display:flex;gap:6px;margin-bottom:10px"><button class="btn-sm" style="background:var(--accent)" onclick="POST('/api/test/stress/start').then(()=>{setInterval(()=>GET('/api/test/stress/status').then(d=>{if(d){S.stressStatus=d;const el=document.getElementById('stress-out');if(el)el.textContent=JSON.stringify(d,null,2)}}),3000)})">🚀 Start Stress Test</button><button class="btn-sm" style="background:var(--blue)" onclick="GET('/api/test/stress/status').then(d=>{if(d){S.stressStatus=d;const el=document.getElementById('stress-out');if(el)el.textContent=JSON.stringify(d,null,2)}})">📊 Check Status</button></div>
+      <pre id="stress-out" class="mono" style="background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:10px;color:var(--muted);white-space:pre-wrap;max-height:200px;overflow:auto">${S.stressStatus?JSON.stringify(S.stressStatus,null,2):'No stress test running'}</pre></div></div>`;
+  }
+
+  p.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SYSTEM TABS (carried forward)
+// ══════════════════════════════════════════════════════════════
+function renderBootLog(p){
+  p.innerHTML='';
+  const w=document.createElement('div');w.style.cssText='flex:1;overflow:auto;padding:12px;background:#000;font-family:monospace;font-size:11px;line-height:1.5';
+  if(S.bootLogs.length===0)w.innerHTML='<div style="color:#636e72">Waiting for boot log…</div>';
+  else S.bootLogs.forEach(l=>{const d=document.createElement('div');d.className=logCls(l);d.textContent=l;w.appendChild(d);});
+  p.appendChild(w);w.scrollTop=w.scrollHeight;
+}
+function logCls(l){if(!l)return'log-d';if(l.includes('[ERROR]')||l.includes('Exception'))return'log-e';if(l.includes('WARN'))return'log-w';if(l.includes('[OK]')||l.includes('SUCCESS'))return'log-ok';if(l.includes('API')||l.includes('HTTP'))return'log-i';return'log-d';}
+
+function renderMetrics(p){
+  const sys=S.health.system?.resources||{};
+  const m=[{l:'CPU',v:(sys.cpu_total||0).toFixed(1)+'%',c:(sys.cpu_total||0)>85?'#e74c3c':'#2ecc71',pct:sys.cpu_total||0},{l:'Memory',v:(sys.memory_percent||0).toFixed(1)+'%',s:`${sys.memory_used_gb||0}/${sys.memory_total_gb||0}GB`,c:(sys.memory_percent||0)>85?'#e74c3c':'#2ecc71',pct:sys.memory_percent||0},{l:'Disk',v:(sys.disk_percent||0).toFixed(1)+'%',s:`${sys.disk_used_gb||0}/${sys.disk_total_gb||0}GB`,c:(sys.disk_percent||0)>85?'#e74c3c':'#2ecc71',pct:sys.disk_percent||0},{l:'Cores',v:sys.cpu_cores||0,c:'#3498db'}];
+  let html=`<div style="padding:20px;overflow:auto;flex:1">
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px">Core Resources</div>
+    <div class="card-grid">${m.map(x=>`<div class="card"><div style="font-size:10px;color:var(--muted);margin-bottom:6px">${x.l}</div><div style="font-size:26px;font-weight:800;color:${x.c}">${x.v}</div>${x.s?`<div style="font-size:10px;color:var(--dim);margin-top:3px">${x.s}</div>`:''}${x.pct!==undefined?`<div style="height:5px;background:var(--dim);border-radius:3px;margin-top:8px;overflow:hidden"><div style="width:${x.pct}%;height:100%;background:${x.c};border-radius:3px"></div></div>`:''}</div>`).join('')}</div>`;
+
+  // BI Growth Trends
+  const bi=S.biData;
+  if(bi){
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">📈 Growth Trends</div><div class="card-grid">`;
+    [{l:'📝 Genesis Keys',v:bi.genesis_keys?.total||bi.total_genesis_keys||0,s:bi.genesis_keys?.today?`+${bi.genesis_keys.today} today`:''},{l:'📄 Documents',v:bi.documents?.total||bi.total_documents||0,s:bi.documents?.chunks?`${bi.documents.chunks} chunks`:''},{l:'🧠 Decisions',v:bi.decisions?.total||bi.decision_buffer||0},{l:'📊 Vectors',v:bi.vectors?.total||bi.vector_count||0}].forEach(c=>{
+      html+=`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:var(--blue)">${c.v}</div>${c.s?`<div style="font-size:9px;color:var(--dim);margin-top:3px">${c.s}</div>`:''}</div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // Self-Mirror snapshot
+  const mir=S.mirrorSnapshot;
+  if(mir){
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">🪞 Self-Mirror</div><div class="card" style="padding:12px">`;
+    const ts=mir.timestamp||mir.ts;
+    if(ts)html+=`<div style="font-size:9px;color:var(--dim);margin-bottom:8px">Snapshot: ${new Date(ts).toLocaleString()}</div>`;
+    const anomalies=mir.anomalies||mir.alerts||[];
+    if(anomalies.length>0){
+      html+=`<div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:4px">⚠️ ${anomalies.length} anomalies detected</div>`;
+      anomalies.slice(0,5).forEach(a=>{html+=`<div style="font-size:10px;color:var(--yellow);margin-left:8px">• ${a.message||a.title||a}</div>`;});
+    } else {
+      html+=`<div style="font-size:11px;color:var(--green)">✅ System self-image is coherent</div>`;
+    }
+    const drift=mir.drift_score??mir.drift;
+    if(drift!==undefined)html+=`<div style="font-size:10px;color:var(--muted);margin-top:6px">Drift score: <span style="color:${drift>0.3?'var(--red)':drift>0.1?'var(--yellow)':'var(--green)'};font-weight:700">${(drift*100).toFixed(1)}%</span></div>`;
+    html+=`</div>`;
+  }
+
+  // Monitoring Organs
+  const org=S.organs;
+  if(org){
+    const list=org.organs||org.data||org;
+    if(Array.isArray(list)&&list.length>0){
+      html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">🫀 System Organs</div><div class="card-grid">`;
+      list.forEach(o=>{const on=o.status==='healthy'||o.status==='active'||o.status==='live';html+=`<div class="card" style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:${on?'var(--green)':'var(--red)'}"></div><span style="font-size:11px;font-weight:600;flex:1">${o.name||o.organ||o.id||'Unknown'}</span><span style="font-size:9px;font-weight:700;color:${on?'var(--green)':'var(--red)'}">${(o.status||'unknown').toUpperCase()}</span></div>`;});
+      html+=`</div>`;
+    } else if(typeof list==='object'&&!Array.isArray(list)){
+      html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">🫀 System Organs</div><div class="card-grid">`;
+      Object.entries(list).forEach(([k,v])=>{const on=v==='healthy'||v==='active'||v?.status==='healthy';html+=`<div class="card" style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:${on?'var(--green)':'var(--red)'}"></div><span style="font-size:11px;font-weight:600;flex:1">${k.replace(/_/g,' ')}</span><span style="font-size:9px;font-weight:700;color:${on?'var(--green)':'var(--red)'}">${typeof v==='string'?v.toUpperCase():(v?.status||'?').toUpperCase()}</span></div>`;});
+      html+=`</div>`;
+    }
+  }
+
+  html+=`</div>`;
+  p.innerHTML=html;
+}
+
+function renderHealing(p){
+  let html=`<div style="padding:20px;overflow:auto;flex:1">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-size:16px;font-weight:700">Self-Healing</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-sm" style="background:var(--blue)" onclick="POST('/api/probe/sweep').then(d=>{S.probeResult=d;renderHealing(this.closest('.pane'))})">🔍 Probe Sweep</button>
+        <button class="btn-sm" style="background:var(--orange)" onclick="POST('/api/autonomous/cycle')">🔄 Ouroboros Cycle</button>
+        <button class="btn-sm" style="background:var(--accent)" onclick="POST('/api/healing-swarm/heal-all')">🚀 Heal All</button>
+      </div>
+    </div>`;
+
+  // Ouroboros Loop Status
+  const ou=S.ouroboros;
+  if(ou){
+    const st=ou.status||ou.state||'unknown';const running=st==='running'||st==='active';
+    html+=`<div style="font-size:14px;font-weight:700;margin-bottom:10px">🐍 Ouroboros Loop</div><div class="card-grid" style="margin-bottom:20px">`;
+    html+=`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">Status</div><div style="font-size:16px;font-weight:800;color:${running?'var(--green)':'var(--muted)'}">${st.toUpperCase()}</div></div>`;
+    [{l:'🩺 Heal',v:ou.heal_count||ou.cycles?.heal||0},{l:'📚 Learn',v:ou.learn_count||ou.cycles?.learn||0},{l:'💻 Code',v:ou.code_count||ou.cycles?.code||0},{l:'🔄 Total',v:ou.total_cycles||ou.cycles?.total||0}].forEach(c=>{
+      html+=`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:var(--blue)">${c.v}</div></div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // Healing Swarm Agents
+  html+=`<div style="font-size:14px;font-weight:700;margin-bottom:10px">🐝 Healing Swarm</div><div class="card-grid" id="heal-grid"><div class="empty">Loading…</div></div>`;
+
+  // Component Health Map
+  const cm=S.componentMap;
+  if(cm){
+    const comps=cm.components||cm.map||cm.data||cm;
+    const entries=Array.isArray(comps)?comps:Object.entries(comps).map(([k,v])=>({name:k,...(typeof v==='object'?v:{status:v})}));
+    if(entries.length>0){
+      html+=`<div style="font-size:14px;font-weight:700;margin-top:20px;margin-bottom:10px">🗺️ Component Health Map</div>`;
+      html+=`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">`;
+      entries.forEach(c=>{
+        const name=c.name||c.component||c.id||'?';
+        const st=c.status||c.health||'unknown';
+        const col=st==='healthy'||st==='green'?'var(--green)':st==='degraded'||st==='yellow'?'var(--yellow)':'var(--red)';
+        html+=`<div style="padding:6px 10px;background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;border-left:3px solid ${col};font-size:10px;font-weight:600;display:flex;align-items:center;gap:5px"><div class="dot" style="background:${col}"></div>${name}</div>`;
+      });
+      html+=`</div>`;
+    }
+  }
+
+  // Probe Sweep Results
+  const pr=S.probeResult;
+  if(pr){
+    const routes=pr.results||pr.routes||pr.data||[];
+    const failures=Array.isArray(routes)?routes.filter(r=>r.status>=400||r.error):[];
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:20px;margin-bottom:10px">🔍 Probe Sweep</div>`;
+    if(failures.length>0){
+      html+=`<div style="font-size:11px;color:var(--red);margin-bottom:8px">❌ ${failures.length} failing routes</div>`;
+      failures.slice(0,15).forEach(r=>{html+=`<div class="card" style="margin-bottom:4px;padding:6px 10px;border-left:3px solid var(--red)"><span class="mono" style="font-size:10px;color:var(--red);font-weight:700">${r.status||'ERR'}</span> <span class="mono" style="font-size:10px;color:var(--muted)">${r.method||'GET'} ${r.path||r.url||''}</span></div>`;});
+    } else if(Array.isArray(routes)&&routes.length>0){
+      html+=`<div style="font-size:11px;color:var(--green)">✅ All ${routes.length} routes healthy</div>`;
+    } else {
+      html+=`<div style="font-size:11px;color:var(--muted)">Click "Probe Sweep" to scan all routes</div>`;
+    }
+  }
+
+  html+=`</div>`;
+  p.innerHTML=html;
+
+  // Async load swarm agents
+  GET('/api/healing-swarm/status').then(d=>{const g=document.getElementById('heal-grid');if(!g)return;const ag=d?.agents||{};if(!Object.keys(ag).length){g.innerHTML='<div class="empty" style="grid-column:1/-1">Swarm not active</div>';return;}const ic={connection:'🔌',code:'💻',memory:'🧠',trust:'🛡️',config:'⚙️',service:'🔧'};const sc={idle:'#2ecc71',healing:'#e67e22',cooldown:'#3498db',error:'#e74c3c'};g.innerHTML=Object.entries(ag).map(([k,a])=>`<div class="card"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span>${ic[k]||'🔧'}</span><span style="font-size:12px;font-weight:700;flex:1;text-transform:capitalize">${k}</span><div class="dot" style="background:${sc[a.status]||'var(--dim)'}"></div></div><div style="font-size:10px;color:var(--muted)">✅${a.completed} ❌${a.failed} ${a.success_rate}%</div></div>`).join('');});
+}
+
+function renderMemory(p){
+  p.innerHTML=`<div style="padding:20px;overflow:auto;flex:1"><div style="font-size:16px;font-weight:700;margin-bottom:16px">Memory & Learning</div><div class="card-grid" id="mem-grid"><div class="empty">Loading…</div></div></div>`;
+  GET('/api/learn-heal/dashboard').then(d=>{const g=document.getElementById('mem-grid');if(!g)return;const l=d?.learning||{};g.innerHTML=[{l:'🧠 Examples',v:l.examples?.total||0,s:`${((l.examples?.avg_trust||0)*100).toFixed(0)}% trust`},{l:'📐 Patterns',v:l.patterns?.total||0},{l:'📖 Episodes',v:l.episodes||0},{l:'🎯 Procedures',v:l.procedures?.total||0},{l:'⏰ Last 24h',v:l.last_24h||0}].map(c=>`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:var(--blue)">${c.v}</div>${c.s?`<div style="font-size:9px;color:var(--dim);margin-top:3px">${c.s}</div>`:''}</div>`).join('');});
+}
+
+function renderTrust(p){
+  let html=`<div style="padding:20px;overflow:auto;flex:1"><div style="font-size:16px;font-weight:700;margin-bottom:16px">Trust Engine</div><div class="card-grid" id="trust-grid"><div class="empty">Loading…</div></div>`;
+
+  // KPI Governance
+  const kpi=S.kpiData;
+  if(kpi){
+    const overall=kpi.overall_trust??kpi.trust_score??kpi.health;
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">📊 KPI Governance</div>`;
+    if(overall!==undefined){
+      const pct=(overall*100).toFixed(0);const col=overall>=.8?'var(--green)':overall>=.5?'var(--yellow)':'var(--red)';
+      html+=`<div class="card" style="margin-bottom:12px;display:flex;align-items:center;gap:12px"><span style="font-size:11px;font-weight:600">Overall Trust</span><span style="font-size:22px;font-weight:800;color:${col}">${pct}%</span><div style="flex:1;height:6px;background:var(--dim);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div></div></div>`;
+    }
+    const gov=kpi.governance||kpi.governance_summary||{};
+    if(Object.keys(gov).length>0){
+      html+=`<div class="card-grid">`;
+      [{l:'✅ Passed',v:gov.passed||gov.pass_count||0,c:'var(--green)'},{l:'❌ Failed',v:gov.failed||gov.fail_count||0,c:'var(--red)'},{l:'📋 Total Checks',v:gov.total||gov.total_checks||0,c:'var(--blue)'},{l:'📈 Pass Rate',v:gov.pass_rate!==undefined?(gov.pass_rate*100).toFixed(0)+'%':gov.total?(((gov.passed||0)/(gov.total)*100).toFixed(0)+'%'):'—',c:'var(--green)'}].forEach(c=>{
+        html+=`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:${c.c}">${c.v}</div></div>`;
+      });
+      html+=`</div>`;
+    }
+    const comps=kpi.components||kpi.confidence||{};
+    if(Object.keys(comps).length>0){
+      html+=`<div style="font-size:12px;font-weight:700;margin-top:16px;margin-bottom:8px">Per-Component Confidence</div>`;
+      Object.entries(comps).forEach(([n,v])=>{
+        const t=typeof v==='object'?(v.confidence??v.trust??v.score??0):v;
+        const pct=(t*100).toFixed(0);const col=t>=.8?'var(--green)':t>=.5?'var(--yellow)':'var(--red)';
+        html+=`<div class="card" style="margin-bottom:4px;padding:8px 12px;display:flex;align-items:center;gap:8px"><span style="font-size:10px;font-weight:600;flex:1">${n.replace(/_/g,' ')}</span><span style="font-size:13px;font-weight:800;color:${col}">${pct}%</span><div style="width:60px;height:4px;background:var(--dim);border-radius:2px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col};border-radius:2px"></div></div></div>`;
+      });
+    }
+  }
+
+  // Spindle Gate/Quorum (lives naturally in Trust)
+  const sp=S.spindleData;
+  if(sp){
+    const gate=sp.gate||sp.quorum||{};
+    if(Object.keys(gate).length>0){
+      html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">⚡ Spindle Gate</div><div class="card-grid">`;
+      Object.entries(gate).forEach(([k,v])=>{
+        const val=typeof v==='object'?(v.passed?'PASS':'FAIL'):v;
+        const col=val==='PASS'||v===true?'var(--green)':'var(--red)';
+        html+=`<div class="card" style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:${col}"></div><span style="font-size:10px;font-weight:600;flex:1">${k.replace(/_/g,' ')}</span><span style="font-size:10px;font-weight:800;color:${col}">${val}</span></div>`;
+      });
+      html+=`</div>`;
+    }
+  }
+
+  html+=`</div>`;
+  p.innerHTML=html;
+
+  // Async load validation trust scores
+  GET('/api/validation/status').then(d=>{const g=document.getElementById('trust-grid');if(!g)return;const c=d?.components||d?.kpis||{};if(!Object.keys(c).length){g.innerHTML='<div class="empty" style="grid-column:1/-1">No trust data</div>';return;}g.innerHTML=Object.entries(c).map(([n,i])=>{const t=typeof i==='object'?(i.trust_score??i.trust??0):i;const pct=(t*100).toFixed(0);const col=t>=.8?'#2ecc71':t>=.5?'#f1c40f':'#e74c3c';return`<div class="card" style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:600">${n.replace(/_/g,' ')}</span><span style="font-size:15px;font-weight:800;color:${col}">${pct}%</span></div>`;}).join('');});
+}
+
+function renderDiagnostics(p){
+  let html=`<div style="padding:20px;overflow:auto;flex:1">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-size:16px;font-weight:700">Diagnostics</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-sm" style="background:var(--blue)" onclick="this.textContent='⏳…';GET('/api/diagnostic/forensics').then(d=>{document.getElementById('diag-out').textContent=JSON.stringify(d,null,2);this.textContent='🔍 Forensics'})">🔍 Forensics</button>
+        <button class="btn-sm" style="background:var(--purple)" onclick="this.textContent='⏳…';GET('/api/system/validate').then(d=>{S.introValidation=d;renderDiagnostics(this.closest('.pane'))})">🔎 Validate Wiring</button>
+        <button class="btn-sm" style="background:var(--orange)" onclick="this.textContent='⏳…';GET('/api/world-model/state').then(d=>{S.worldState=d;renderDiagnostics(this.closest('.pane'))})">🌐 World Model</button>
+        <button class="btn-sm" style="background:var(--green)" onclick="this.textContent='⏳…';POST('/api/console/diagnose').then(d=>{document.getElementById('diag-out').textContent=JSON.stringify(d,null,2)})">🤖 AI Diagnose</button>
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:6px">Sensor Data</div>
+    <pre id="diag-out" style="background:var(--bg-alt);border:1px solid var(--border);border-radius:7px;padding:14px;font-size:11px;color:var(--text);overflow:auto;white-space:pre-wrap;margin:0;max-height:250px">Loading…</pre>`;
+
+  // System Introspection / Validation results
+  const iv=S.introValidation;
+  if(iv){
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">🔎 Wiring Validation</div>`;
+    const issues=iv.issues||iv.broken_imports||iv.silent_failures||iv.errors||[];
+    const warnings=iv.warnings||[];
+    if(Array.isArray(issues)&&issues.length>0){
+      html+=`<div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:8px">❌ ${issues.length} issues found</div>`;
+      issues.slice(0,20).forEach(i=>{html+=`<div class="card" style="margin-bottom:4px;padding:6px 10px;border-left:3px solid var(--red)"><div style="font-size:10px;font-weight:600">${i.message||i.title||i.description||i}</div>${i.file?`<div class="mono" style="font-size:9px;color:var(--dim)">${i.file}${i.line?':'+i.line:''}</div>`:''}</div>`;});
+    } else {
+      html+=`<div style="font-size:11px;color:var(--green)">✅ No wiring issues detected</div>`;
+    }
+    if(warnings.length>0){
+      html+=`<div style="font-size:11px;color:var(--yellow);font-weight:700;margin-top:10px">⚠️ ${warnings.length} warnings</div>`;
+      warnings.slice(0,10).forEach(w=>{html+=`<div style="font-size:10px;color:var(--yellow);margin-left:8px">• ${w.message||w}</div>`;});
+    }
+  }
+
+  // World Model State
+  const ws=S.worldState;
+  if(ws){
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">🌐 World Model State</div>`;
+    const sections=['database','knowledge_base','workers','services','cognitive','memory'];
+    sections.forEach(sec=>{
+      const data=ws[sec];
+      if(!data)return;
+      const status=data.status||data.state;
+      const col=status==='healthy'||status==='active'||status==='live'?'var(--green)':status==='degraded'?'var(--yellow)':'var(--muted)';
+      html+=`<div class="card" style="margin-bottom:4px;padding:8px 12px;display:flex;align-items:center;gap:8px"><div class="dot" style="background:${col}"></div><span style="font-size:11px;font-weight:700;width:120px;text-transform:capitalize">${sec.replace(/_/g,' ')}</span>`;
+      if(status)html+=`<span style="font-size:9px;font-weight:700;color:${col}">${status.toUpperCase()}</span>`;
+      const detail=data.count??data.total??data.connections??data.size;
+      if(detail!==undefined)html+=`<span style="font-size:9px;color:var(--muted);margin-left:auto">${detail} items</span>`;
+      html+=`</div>`;
+    });
+    // Show raw if no sections matched
+    if(!sections.some(s=>ws[s])){
+      html+=`<pre style="background:var(--bg-alt);border:1px solid var(--border);border-radius:7px;padding:10px;font-size:10px;color:var(--muted);overflow:auto;white-space:pre-wrap;max-height:200px">${JSON.stringify(ws,null,2)}</pre>`;
+    }
+  }
+
+  // Spindle verdicts/events
+  if(S.spindleEvents.length>0){
+    html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">⚡ Spindle Events <span style="font-size:10px;color:var(--muted);font-weight:400">(live)</span></div>`;
+    S.spindleEvents.slice(0,15).forEach(e=>{
+      const color=e.verdict==='pass'||e.type==='proof_accepted'?'var(--green)':e.verdict==='fail'||e.type==='proof_rejected'?'var(--red)':'var(--blue)';
+      html+=`<div class="card" style="margin-bottom:4px;padding:6px 10px;border-left:3px solid ${color};display:flex;align-items:center;gap:8px"><span style="font-size:10px;font-weight:700;color:${color}">${(e.type||e.verdict||'event').replace(/_/g,' ').toUpperCase()}</span><span style="font-size:10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.title||e.action||e.component||JSON.stringify(e.data||'').slice(0,80)}</span><span style="font-size:9px;color:var(--dim)">${e.timestamp?new Date(e.timestamp).toLocaleTimeString():''}</span></div>`;
+    });
+  }
+
+  html+=`</div>`;
+  p.innerHTML=html;
+  GET('/api/diagnostic/sensors').then(d=>{const o=document.getElementById('diag-out');if(o&&d)o.textContent=JSON.stringify(d,null,2);});
+}
+
+function renderNetwork(p){
+  const svcs=[{n:'Grace API',u:'localhost:8000',k:'grace_api'},{n:'PostgreSQL',u:'localhost:5432',k:'database'},{n:'Qdrant',u:'cloud.qdrant.io',k:'qdrant'},{n:'Ollama',u:'localhost:11434',k:'ollama'},{n:'Frontend',u:'localhost:5173',k:'frontend'},{n:'Ops Console',u:'localhost:9000',k:'frontend'}];
+  let html=`<div style="padding:20px;overflow:auto;flex:1"><div style="font-size:16px;font-weight:700;margin-bottom:16px">Network Services</div>${svcs.map(s=>{const on=s.k==='frontend'&&s.u.includes('9000')?true:S.health[s.k];return`<div class="card" style="display:flex;align-items:center;gap:14px;padding:12px;margin-bottom:6px"><div class="dot" style="background:${on?'#2ecc71':'#e74c3c'}"></div><span style="font-size:12px;font-weight:700;width:120px">${s.n}</span><span class="mono" style="font-size:11px;color:var(--muted)">${s.u}</span><div style="flex:1"></div><span style="font-size:10px;font-weight:700;color:${on?'#2ecc71':'#e74c3c'}">${on?'CONNECTED':'UNREACHABLE'}</span></div>`;}).join('')}`;
+
+  // Monitoring Organs as service-level view
+  const org=S.organs;
+  if(org){
+    const list=org.organs||org.data||org;
+    const entries=Array.isArray(list)?list:typeof list==='object'?Object.entries(list).map(([k,v])=>({name:k,...(typeof v==='object'?v:{status:v})})):[];
+    if(entries.length>0){
+      html+=`<div style="font-size:14px;font-weight:700;margin-top:24px;margin-bottom:10px">🫀 Internal Subsystems</div>`;
+      entries.forEach(o=>{
+        const name=o.name||o.organ||o.id||'?';
+        const st=o.status||o.state||'unknown';
+        const on=st==='healthy'||st==='active'||st==='live';
+        const latency=o.latency_ms||o.response_time;
+        html+=`<div class="card" style="display:flex;align-items:center;gap:14px;padding:12px;margin-bottom:6px"><div class="dot" style="background:${on?'#2ecc71':'#e74c3c'}"></div><span style="font-size:12px;font-weight:700;width:140px">${name.replace(/_/g,' ')}</span><span style="font-size:10px;font-weight:700;color:${on?'#2ecc71':'#e74c3c'}">${st.toUpperCase()}</span>${latency?`<span style="font-size:9px;color:var(--muted);margin-left:auto">${latency}ms</span>`:''}</div>`;
+      });
+    }
+  }
+
+  html+=`</div>`;
+  p.innerHTML=html;
+}
+
+function renderGenesis(p){
+  p.innerHTML=`<div style="padding:20px;overflow:auto;flex:1"><div style="font-size:16px;font-weight:700;margin-bottom:16px">Genesis Keys</div><div id="gen-summary" class="card-grid" style="margin-bottom:16px"><div class="empty">Loading stats…</div></div><div id="gen-list"><div class="empty">Loading folders…</div></div></div>`;
+  GET('/api/genesis-daily/stats').then(d=>{const g=document.getElementById('gen-summary');if(!g)return;const total=d?.total_keys||0;const today=d?.today_keys||0;g.innerHTML=[{l:'🔑 Total Keys',v:total,c:'var(--blue)'},{l:'📅 Today',v:today,c:'var(--green)'}].map(c=>`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:${c.c}">${c.v}</div></div>`).join('');});
+  GET('/api/genesis-daily/folders?days=30').then(d=>{const l=document.getElementById('gen-list');if(!l)return;const folders=d?.folders||[];if(!folders.length){l.innerHTML='<div class="empty">No genesis folders</div>';return;}l.innerHTML=folders.map(f=>{const c=f.error_count>0?'#e74c3c':'#2ecc71';return`<div class="card" style="margin-bottom:5px;padding:10px 12px;border-left:3px solid ${c};cursor:pointer"><div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:700">${f.label||f.date}</div><div style="display:flex;gap:8px;align-items:center"><span style="font-size:10px;color:var(--blue);font-weight:600">🔑 ${f.key_count} keys</span>${f.error_count?`<span style="font-size:10px;color:var(--red);font-weight:600">❌ ${f.error_count} errors</span>`:''}</div></div></div>`;}).join('');});
+}
+
+function renderFederated(p){
+  p.innerHTML=`<div style="padding:20px;overflow:auto;flex:1"><div style="font-size:16px;font-weight:700;margin-bottom:16px">Federated Learning</div><div class="card-grid" id="fed-grid"><div class="empty">Loading…</div></div><div id="fed-oracle" style="margin-top:20px"></div></div>`;
+  GET('/api/oracle/dashboard').then(d=>{
+    const g=document.getElementById('fed-grid');if(!g)return;
+    const f=d?.federated||{};
+    g.innerHTML=`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">🌍 Status</div><div style="font-size:16px;font-weight:800;color:${f.status==='active'?'#2ecc71':'var(--muted)'}">${(f.status||'unavailable').toUpperCase()}</div></div><div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">🖥️ Nodes</div><div style="font-size:22px;font-weight:800;color:var(--blue)">${f.nodes||0}</div></div><div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">🔄 Rounds</div><div style="font-size:22px;font-weight:800;color:var(--purple)">${f.rounds||0}</div></div>${f.global_model_version?`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">📦 Model Version</div><div style="font-size:22px;font-weight:800;color:var(--green)">${f.global_model_version}</div></div>`:''}`;
+    // Oracle learning stats
+    const o=document.getElementById('fed-oracle');if(!o||!d)return;
+    let html=`<div style="font-size:14px;font-weight:700;margin-bottom:10px">🧠 Oracle Learning Stats</div><div class="card-grid">`;
+    const ex=d.learning_examples||{};const pat=d.learning_patterns||{};const proc=d.procedures||{};const ep=d.episodes||{};
+    [{l:'📚 Examples',v:ex.total||0,s:ex.avg_trust?`${(ex.avg_trust*100).toFixed(0)}% trust`:''},{l:'📐 Patterns',v:pat.total||0,s:pat.avg_success_rate?`${(pat.avg_success_rate*100).toFixed(0)}% success`:''},{l:'🎯 Procedures',v:proc.total||0,s:proc.avg_success_rate?`${(proc.avg_success_rate*100).toFixed(0)}% success`:''},{l:'📖 Episodes',v:ep.total||0}].forEach(c=>{
+      html+=`<div class="card"><div style="font-size:9px;color:var(--muted);margin-bottom:4px">${c.l}</div><div style="font-size:22px;font-weight:800;color:var(--blue)">${c.v}</div>${c.s?`<div style="font-size:9px;color:var(--dim);margin-top:3px">${c.s}</div>`:''}</div>`;
+    });
+    html+=`</div>`;
+    o.innerHTML=html;
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// HEALTH POLLING + LIVE DATA
+// ══════════════════════════════════════════════════════════════
+async function pollHealth(){
+  const svc={};
+  try{const r=await fetch(API+'/health');svc.grace_api=r.ok;S.graceRunning=r.ok;}catch{svc.grace_api=false;S.graceRunning=false;}
+  try{const r=await fetch(API+'/api/system-health/dashboard');if(r.ok){const d=await r.json();svc.system=d;svc.database=d.services?.database?.status==='live';svc.qdrant=d.services?.qdrant?.status==='live';svc.ollama=d.services?.ollama?.status==='live'||d.services?.ollama?.status==='configured';svc.frontend=true;}}catch{}
+  S.health=svc;renderSidebar();
+}
+async function pollLiveData(){
+  const [spindle,ouro,compMap,mirror,bi,kpi,organs]=await Promise.all([
+    GET('/api/spindle/dashboard'),GET('/api/autonomous/status'),
+    GET('/api/component-health/map'),GET('/telemetry/mirror/latest'),
+    GET('/api/bi/dashboard'),GET('/kpi/health'),GET('/monitoring/organs'),
+  ]);
+  if(spindle)S.spindleData=spindle;
+  if(ouro)S.ouroboros=ouro;
+  if(compMap)S.componentMap=compMap;
+  if(mirror)S.mirrorSnapshot=mirror;
+  if(bi)S.biData=bi;
+  if(kpi)S.kpiData=kpi;
+  if(organs)S.organs=organs;
+  if(S.activeTab)renderTab();
+}
+
+// ══════════════════════════════════════════════════════════════
+// WEBSOCKETS
+// ══════════════════════════════════════════════════════════════
+function connectBootWs(){
+  let d=1000;const c=()=>{const ws=new WebSocket(WS_BASE+'/api/autonomous/logs/stream');ws.onmessage=e=>{S.bootLogs.push(e.data);if(S.bootLogs.length>1000)S.bootLogs=S.bootLogs.slice(-1000);if(S.activeTab==='bootlog')renderBootLog(document.getElementById('pane-bootlog'));};ws.onopen=()=>{d=1000;};ws.onclose=()=>{d=Math.min(d*2,30000);setTimeout(c,d);};ws.onerror=()=>ws.close();};c();
+}
+function connectFeedWs(){
+  let d=1000;const c=()=>{const ws=new WebSocket(WS_BASE+'/api/autonomous/logs/stream');ws.onmessage=e=>{S.feedLogs.push(e.data);if(S.feedLogs.length>500)S.feedLogs=S.feedLogs.slice(-500);if(S.bottomExpanded&&S.bottomTab==='feed')renderBottom();};ws.onopen=()=>{d=1000;};ws.onclose=()=>{d=Math.min(d*2,30000);setTimeout(c,d);};ws.onerror=()=>ws.close();};c();
+}
+function connectProblemsWs(){
+  let d=1000;const c=()=>{const ws=new WebSocket(WS_BASE+'/api/problems/ws');ws.onmessage=()=>{setTimeout(loadProblems,500);};ws.onopen=()=>{d=1000;};ws.onclose=()=>{d=Math.min(d*2,30000);setTimeout(c,d);};ws.onerror=()=>ws.close();};c();
+}
+
+// ══════════════════════════════════════════════════════════════
+// BOTTOM BAR
+// ══════════════════════════════════════════════════════════════
+function setupBottom(){
+  document.getElementById('bottom-toggle').onclick=()=>{
+    S.bottomExpanded=!S.bottomExpanded;
+    document.getElementById('bottom-bar').style.height=S.bottomExpanded?'240px':'32px';
+    document.getElementById('bottom-toggle').textContent=S.bottomExpanded?'▼':'▲';
+    renderBottom();
+  };
+  document.querySelectorAll('.bt-btn').forEach(b=>{b.onclick=()=>{
+    S.bottomTab=b.dataset.bt;document.querySelectorAll('.bt-btn').forEach(x=>x.classList.toggle('active',x.dataset.bt===S.bottomTab));
+    if(!S.bottomExpanded){S.bottomExpanded=true;document.getElementById('bottom-bar').style.height='240px';document.getElementById('bottom-toggle').textContent='▼';}
+    renderBottom();
+  };});
+  document.getElementById('bottom-send').onclick=sendBottom;
+  document.getElementById('bottom-input').onkeydown=e=>{if(e.key==='Enter')sendBottom();};
+}
+function renderBottom(){
+  if(!S.bottomExpanded)return;
+  const con=document.getElementById('bottom-content'),ir=document.getElementById('bottom-input-row'),pr=document.getElementById('bottom-prompt');
+  if(S.bottomTab==='feed'){ir.classList.remove('show');con.innerHTML='';S.feedLogs.forEach(l=>{const d=document.createElement('div');d.className=logCls(l);d.textContent=l;con.appendChild(d);});con.scrollTop=con.scrollHeight;}
+  else{ir.classList.add('show');pr.textContent=S.bottomTab==='shell'?'>_':'💬';document.getElementById('bottom-input').placeholder=S.bottomTab==='shell'?'Enter command…':'Talk to Grace…';con.innerHTML='';S.bottomMessages.forEach(m=>{const c=m.role==='user'?'#3498db':m.role==='assistant'?'#2ecc71':'#f1c40f';const l=m.role==='user'?(S.bottomTab==='shell'?'$ ':'You: '):'Grace: ';con.innerHTML+=`<div style="margin-bottom:4px"><span style="color:${c};font-weight:700">${l}</span><span>${m.text}</span></div>`;});con.scrollTop=con.scrollHeight;}
+}
+async function sendBottom(){
+  const inp=document.getElementById('bottom-input'),cmd=inp.value.trim();if(!cmd)return;inp.value='';
+  S.bottomMessages.push({role:'user',text:cmd});renderBottom();
+  try{let r;if(S.bottomTab==='shell'){r=await POST('/brain/system',{action:'execute',payload:{command:cmd}});S.bottomMessages.push({role:'system',text:r?.ok?(r.data?.output||r.data?.message||JSON.stringify(r.data)):`Error: ${r?.error||'unknown'}`});}else{r=await POST('/brain/chat',{action:'send',payload:{message:cmd}});S.bottomMessages.push({role:'assistant',text:r?.ok?(typeof r.data==='string'?r.data:r.data?.response||r.data?.message||JSON.stringify(r.data)):`Error: ${r?.error||'unknown'}`});}}catch(e){S.bottomMessages.push({role:'system',text:'Error: '+e.message});}
+  renderBottom();
+}
+
+function connectSpindleWs(){
+  let d=1000;const c=()=>{const ws=new WebSocket(WS_BASE+'/api/spindle/ws');ws.onmessage=e=>{try{const msg=JSON.parse(e.data);S.spindleEvents.unshift(msg);if(S.spindleEvents.length>200)S.spindleEvents=S.spindleEvents.slice(0,200);}catch{}};ws.onopen=()=>{d=1000;};ws.onclose=()=>{d=Math.min(d*2,30000);setTimeout(c,d);};ws.onerror=()=>ws.close();};c();
+}
+function connectAuditLiveWs(){
+  let d=1000;const c=()=>{const ws=new WebSocket(WS_BASE+'/api/autonomous/logs/stream');ws.onmessage=e=>{S.auditLiveLogs.push(e.data);if(S.auditLiveLogs.length>1000)S.auditLiveLogs=S.auditLiveLogs.slice(-1000);if(S.activeTab==='audit'&&S.auditSubTab==='live'){const con=document.getElementById('audit-live-console');if(con){const div=document.createElement('div');div.className=logCls(e.data);div.textContent=e.data;con.appendChild(div);con.scrollTop=con.scrollHeight;}}};ws.onopen=()=>{d=1000;S.auditLiveConnected=true;const dot=document.getElementById('audit-live-dot');if(dot)dot.style.background='var(--green)';};ws.onclose=()=>{S.auditLiveConnected=false;d=Math.min(d*2,30000);setTimeout(c,d);};ws.onerror=()=>ws.close();};c();
+}
+
+// ══════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════
+buildControls();buildTabs();renderTab();setupBottom();
+connectBootWs();connectFeedWs();connectProblemsWs();connectAuditLiveWs();connectSpindleWs();
+pollHealth();setInterval(pollHealth,10000);
+pollLiveData();setInterval(pollLiveData,15000);
+loadProblems();loadAudit();loadTestSuites();loadTestHistory();
+</script>
+</body>
+</html>

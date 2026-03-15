@@ -1,6 +1,7 @@
 import BackendPanel from './BackendPanel';
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL, API_V2 } from '../config/api';
+import { useTabData, SYSTEM_HEALTH_SCHEMA } from '../hooks/useTabData';
 
 const C = { bg: '#1a1a2e', bgAlt: '#16213e', bgDark: '#0f3460', accent: '#e94560', accentAlt: '#533483', text: '#eee', muted: '#aaa', dim: '#666', border: '#333', success: '#4caf50', warn: '#ff9800', error: '#f44336', info: '#2196f3' };
 
@@ -24,32 +25,24 @@ function ServiceDot({ status }) {
 }
 
 export default function SystemHealthTab() {
-  const [health, setHealth] = useState(null);
-  const [procs, setProcs] = useState([]);
+  const { data: health, loading, error: healthErr, refresh: refreshHealth } = useTabData('/api/system-health/dashboard', SYSTEM_HEALTH_SCHEMA, { poll: 30000 });
+  const { data: procsData } = useTabData('/api/system-health/processes', { processes: [] }, { poll: 30000 });
+  const { data: fullData } = useTabData('/api/tabs/health/full');
+  const procs = procsData?.processes || [];
   const [graceState, setGraceState] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [fullData, setFullData] = useState(null);
 
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/health/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
+  const refreshGraceState = useCallback(async () => {
+    try {
+      const res = await fetch(API_V2.graceState(), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      if (res.ok) { const d = await res.json(); setGraceState(d?.data ?? d); }
+    } catch { /* silent */ }
   }, []);
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    const [hRes, pRes, gRes] = await Promise.allSettled([
-      fetch(`${API_BASE_URL}/api/system-health/dashboard`).then(r => r.ok ? r.json() : null),
-      fetch(`${API_BASE_URL}/api/system-health/processes`).then(r => r.ok ? r.json() : null),
-      fetch(API_V2.graceState(), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).then(r => r.ok ? r.json() : null).then(d => d?.data ?? d),
-    ]);
-    if (hRes.status === 'fulfilled') setHealth(hRes.value);
-    if (pRes.status === 'fulfilled') setProcs(pRes.value?.processes || []);
-    if (gRes.status === 'fulfilled') setGraceState(gRes.value);
-    setLoading(false);
-  }, []);
+  useEffect(() => { refreshGraceState(); const i = setInterval(refreshGraceState, 30000); return () => clearInterval(i); }, [refreshGraceState]);
 
-  useEffect(() => { queueMicrotask(refresh); const i = setInterval(refresh, 10000); return () => clearInterval(i); }, [refresh]);
+  const refresh = useCallback(() => { refreshHealth(); refreshGraceState(); }, [refreshHealth, refreshGraceState]);
 
-  if (loading && !health) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: C.dim, background: C.bg }}>Loading System Health...</div>;
+  if (loading && !health) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: C.dim, background: C.bg }}>{healthErr ? `⚠️ ${healthErr}` : 'Loading System Health...'}</div>;
   const h = health || {};
   const r = h.resources || {};
 

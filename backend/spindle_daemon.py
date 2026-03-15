@@ -31,8 +31,44 @@ from cognitive.deterministic_validator import verify_autonomy
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("spindle_daemon")
 
-ZMQ_PUB_ENDPOINT = "tcp://127.0.0.1:5521"
-ZMQ_SUB_ENDPOINT = "tcp://127.0.0.1:5520"
+# Topology: Main app BINDS, Spindle CONNECTS.
+# Spindle PUBs to Grace's SUB port, Spindle SUBs to Grace's PUB port.
+ZMQ_PUB_ENDPOINT = os.environ.get("GRACE_ZMQ_SUB_ENDPOINT", "tcp://127.0.0.1:5521")
+ZMQ_SUB_ENDPOINT = os.environ.get("GRACE_ZMQ_PUB_ENDPOINT", "tcp://127.0.0.1:5520")
+
+
+def _serialize_alert(alert):
+    """Serialize a BlackboxAlert to a JSON-safe dict."""
+    return {
+        "category": alert.category,
+        "severity": alert.severity,
+        "title": alert.title,
+        "description": alert.description,
+        "file": alert.file,
+        "line": alert.line,
+        "fix_suggestion": alert.fix_suggestion,
+        "first_seen": alert.first_seen.isoformat() if alert.first_seen else None,
+        "last_seen": alert.last_seen.isoformat() if alert.last_seen else None,
+        "occurrences": alert.occurrences,
+        "key": alert.key,
+    }
+
+
+def _serialize_report(report):
+    """Serialize a BlackboxReport to a JSON-safe dict."""
+    return {
+        "timestamp": report.timestamp,
+        "scan_duration_ms": report.scan_duration_ms,
+        "total_issues": report.total_issues,
+        "critical_count": report.critical_count,
+        "warning_count": report.warning_count,
+        "info_count": report.info_count,
+        "categories": report.categories,
+        "files_scanned": report.files_scanned,
+        "alerts": [_serialize_alert(a) for a in report.alerts],
+        "new_alerts": [_serialize_alert(a) for a in report.new_alerts],
+        "resolved_alerts": [_serialize_alert(a) for a in report.resolved_alerts],
+    }
 
 
 @dataclass
@@ -119,6 +155,22 @@ class SpindleDaemon:
             "z3_rejected": 0,
             "errors": 0,
         }
+        self._blackbox_stats = {
+            "scans_completed": 0,
+            "total_issues_found": 0,
+            "critical_alerts_published": 0,
+            "issues_auto_resolved": 0,
+        }
+        self._blackbox_interval = 120  # seconds, configurable
+
+        # Agentic autonomy: track what we've already attempted
+        self._autonomy_attempts: Dict[str, Dict[str, Any]] = {}
+        self._autonomy_cooldown = 300  # seconds between retry on same alert
+        self._autonomy_allowlist = {
+            "broken_import", "unwired_router", "stub", "config",
+            "silent_failure", "stale_trigger",
+            "websocket_subscriber_leak", "zmq_no_recv_timeout",
+        }
 
     async def _publish(self, topic: str, data: dict):
         msg = {"topic": topic, "data": data, "source": "spindle_isolated_daemon"}
@@ -146,6 +198,7 @@ class SpindleDaemon:
             asyncio.create_task(self._projection_updater(), name="projection-updater"),
             asyncio.create_task(self._health_heartbeat(), name="health-heartbeat"),
             asyncio.create_task(self._metrics_reporter(), name="metrics-reporter"),
+            asyncio.create_task(self._blackbox_scan_loop(), name="blackbox-scanner"),
         ]
 
         logger.info(f"[SPINDLE] {len(tasks)} background services started")
@@ -373,6 +426,162 @@ class SpindleDaemon:
                 "pool": self._pool.stats,
                 "queue_size": self._event_queue.qsize(),
             })
+
+    async def _blackbox_scan_loop(self):
+        """Background: run Spindle Blackbox Scanner every _blackbox_interval seconds."""
+        await asyncio.sleep(10)  # Initial delay — let other services settle
+        while self._running:
+            try:
+                loop = asyncio.get_event_loop()
+                report = await loop.run_in_executor(None, self._run_blackbox_scan)
+
+                if report is None:
+                    await asyncio.sleep(self._blackbox_interval)
+                    continue
+
+                self._blackbox_stats["scans_completed"] += 1
+                self._blackbox_stats["total_issues_found"] += report.total_issues
+                self._blackbox_stats["issues_auto_resolved"] += len(report.resolved_alerts)
+
+                # Publish FULL serialized report so the host projection can cache it
+                await self._publish("spindle.blackbox.report", _serialize_report(report))
+
+                # Publish individual alerts for critical/warning
+                for alert in report.alerts:
+                    if alert.severity in ("critical", "warning"):
+                        await self._publish("spindle.blackbox.alert", {
+                            "scan_id": self._blackbox_stats["scans_completed"],
+                            "severity": alert.severity,
+                            "category": alert.category,
+                            "title": alert.title,
+                            "file": alert.file,
+                            "line": alert.line,
+                            "fix_suggestion": alert.fix_suggestion,
+                        })
+
+                self._blackbox_stats["critical_alerts_published"] += report.critical_count
+
+                # Also publish to internal event bus
+                try:
+                    from cognitive.spindle_blackbox_scanner import get_blackbox_scanner
+                    get_blackbox_scanner().publish_alerts(report)
+                except Exception:
+                    pass
+
+                logger.info(
+                    f"[BLACKBOX] Scan complete: {report.total_issues} issues "
+                    f"({report.critical_count} critical, {report.warning_count} warning) "
+                    f"— {len(report.new_alerts)} new, {len(report.resolved_alerts)} resolved"
+                )
+
+                # Agentic: evaluate and auto-act on actionable alerts
+                await self._evaluate_and_act(report)
+
+            except Exception as e:
+                logger.error(f"[BLACKBOX] Scan loop error: {e}")
+
+            await asyncio.sleep(self._blackbox_interval)
+
+    def _run_blackbox_scan(self):
+        """Execute blackbox scan synchronously (runs in thread pool)."""
+        try:
+            from cognitive.spindle_blackbox_scanner import get_blackbox_scanner
+            scanner = get_blackbox_scanner()
+            return scanner.run_scan()
+        except Exception as e:
+            logger.warning(f"[BLACKBOX] Scanner unavailable: {e}")
+            return None
+
+    async def _evaluate_and_act(self, report):
+        """Agentic post-scan: decide which alerts to auto-fix based on trust policy."""
+        now = time.time()
+        candidates = []
+
+        for alert in report.new_alerts:
+            if alert.category not in self._autonomy_allowlist:
+                continue
+            key = alert.key
+            prev = self._autonomy_attempts.get(key)
+            if prev and (now - prev.get("last_attempt_at", 0)) < self._autonomy_cooldown:
+                continue  # cooldown active
+            # Simple trust score
+            trust = 0.5
+            if alert.severity == "critical":
+                trust += 0.2
+            if alert.file and alert.line:
+                trust += 0.1
+            if alert.fix_suggestion:
+                trust += 0.1
+            if alert.occurrences >= 2:
+                trust += 0.1
+            candidates.append((alert, trust))
+
+        # Also consider persistent unresolved alerts
+        for alert in report.alerts:
+            if alert.category not in self._autonomy_allowlist:
+                continue
+            if alert.occurrences < 3:
+                continue
+            key = alert.key
+            if key in [c[0].key for c in candidates]:
+                continue  # already in candidates from new_alerts
+            prev = self._autonomy_attempts.get(key)
+            if prev and (now - prev.get("last_attempt_at", 0)) < self._autonomy_cooldown:
+                continue
+            trust = 0.6
+            if alert.severity == "critical":
+                trust += 0.2
+            if alert.file and alert.line:
+                trust += 0.1
+            if alert.fix_suggestion:
+                trust += 0.1
+            candidates.append((alert, trust))
+
+        for alert, trust in candidates:
+            threshold = 0.8 if alert.severity == "critical" else 0.9
+            decision = "act" if trust >= threshold else "defer"
+
+            # Publish decision event
+            await self._publish("audit.spindle", {
+                "action": "autonomous_decision",
+                "alert_key": alert.key,
+                "category": alert.category,
+                "severity": alert.severity,
+                "title": alert.title,
+                "trust": round(trust, 2),
+                "decision": decision,
+                "reason": f"allowlisted={alert.category in self._autonomy_allowlist} trust={trust:.2f} threshold={threshold}",
+            })
+
+            if decision == "act":
+                self._autonomy_attempts[alert.key] = {
+                    "last_attempt_at": now,
+                    "status": "started",
+                }
+                serialized = _serialize_alert(alert)
+                self._pool.submit(
+                    self._handle_event_sync,
+                    f"spindle.blackbox.{alert.category}",
+                    {**serialized, "is_error": True},
+                    task_id=f"AUTO-{alert.category}-{int(now*1000) % 100000}",
+                )
+                await self._publish("audit.spindle", {
+                    "action": "autonomous_action_started",
+                    "alert_key": alert.key,
+                    "category": alert.category,
+                    "title": alert.title,
+                    "trust": round(trust, 2),
+                })
+                logger.info(f"[AGENTIC] Auto-acting on {alert.category}: {alert.title[:60]} (trust={trust:.2f})")
+            else:
+                logger.debug(f"[AGENTIC] Deferred {alert.category}: {alert.title[:60]} (trust={trust:.2f} < {threshold})")
+
+        # Cleanup old attempts
+        cutoff = now - self._autonomy_cooldown * 3
+        self._autonomy_attempts = {
+            k: v for k, v in self._autonomy_attempts.items()
+            if v.get("last_attempt_at", 0) > cutoff
+        }
 
     async def _metrics_reporter(self):
         """Background: report metrics every 30 seconds."""

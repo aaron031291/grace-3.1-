@@ -3,6 +3,7 @@ import datetime
 import os
 from fastapi import APIRouter
 from pydantic import BaseModel
+from api.tab_schemas import SystemHealthDashboardResponse, ProcessesResponse, TabHealthFullResponse
 
 router = APIRouter(prefix="/api/system-health", tags=["System Health"])
 
@@ -26,7 +27,7 @@ def get_process_info():
         
     return processes
 
-@router.get("/dashboard")
+@router.get("/dashboard", response_model=SystemHealthDashboardResponse)
 async def get_health_dashboard():
     """Return high-level RAM/CPU usage and system health status."""
     cpu_percent = psutil.cpu_percent(interval=0.1)
@@ -67,12 +68,12 @@ async def get_health_dashboard():
         ]
     }
 
-@router.get("/processes")
+@router.get("/processes", response_model=ProcessesResponse)
 async def get_processes():
     """Return top running processes."""
     return {"processes": get_process_info()}
 
-@router.get("/full")
+@router.get("/full", response_model=TabHealthFullResponse)
 async def get_full_health():
     """Aggregate diagnostic sensors for the generic 'full' config dump."""
     return {

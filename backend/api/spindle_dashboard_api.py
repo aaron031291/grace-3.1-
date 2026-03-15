@@ -4,10 +4,10 @@ Real-time streaming of Spindle events, proofs, gate verdicts, and execution resu
 """
 import asyncio
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Optional, List
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from cognitive.event_bus import subscribe
+from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
+from cognitive.event_bus import subscribe, unsubscribe
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +105,102 @@ async def verify_action(request: Dict[str, Any]):
         return {"ok": False, "error": str(e)}
 
 
+# ── Blackbox Scanner Endpoints ─────────────────────────────
+
+@router.get("/blackbox/report")
+async def get_blackbox_report():
+    """Returns the latest blackbox scan report (from projection or local scanner)."""
+    try:
+        from cognitive.spindle_problems_projection import get_problems_projection
+        projection = get_problems_projection()
+        report = projection.get_report()
+        if report is not None:
+            return {"ok": True, "report": report, "source": "projection"}
+    except Exception:
+        pass
+    # Fallback: try local scanner
+    try:
+        from cognitive.spindle_blackbox_scanner import get_blackbox_scanner
+        from dataclasses import asdict
+        scanner = get_blackbox_scanner()
+        report = scanner.get_latest_report()
+        if report is None:
+            return {"ok": True, "report": None, "status": "pending", "message": "No scan has run yet"}
+        return {"ok": True, "report": asdict(report), "source": "local"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.get("/blackbox/alerts")
+async def get_blackbox_alerts(severity: Optional[str] = Query(None, description="Filter by severity: critical, warning, info")):
+    """Returns current active alerts, optionally filtered by severity."""
+    try:
+        from cognitive.spindle_problems_projection import get_problems_projection
+        projection = get_problems_projection()
+        report = projection.get_report()
+        if report is not None:
+            alerts = report.get("alerts", [])
+            if severity:
+                alerts = [a for a in alerts if a.get("severity", "").lower() == severity.lower()]
+            return {"ok": True, "alerts": alerts, "count": len(alerts), "source": "projection"}
+    except Exception:
+        pass
+    # Fallback
+    try:
+        from cognitive.spindle_blackbox_scanner import get_blackbox_scanner
+        from dataclasses import asdict
+        scanner = get_blackbox_scanner()
+        report = scanner.get_latest_report()
+        if report is None:
+            return {"ok": True, "alerts": [], "count": 0, "message": "No scan has run yet"}
+        alerts = report.alerts
+        if severity:
+            alerts = [a for a in alerts if a.severity.lower() == severity.lower()]
+        return {"ok": True, "alerts": [asdict(a) for a in alerts], "count": len(alerts), "source": "local"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.get("/problems")
+async def get_problems():
+    """Combined problems view: blackbox report + recent autonomous actions."""
+    try:
+        from cognitive.spindle_problems_projection import get_problems_projection
+        projection = get_problems_projection()
+        return {"ok": True, **projection.get_problems_summary()}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/blackbox/scan")
+async def trigger_blackbox_scan():
+    """Triggers an immediate blackbox scan and returns the report."""
+    try:
+        import asyncio
+        from cognitive.spindle_blackbox_scanner import get_blackbox_scanner
+        from dataclasses import asdict
+        scanner = get_blackbox_scanner()
+        loop = asyncio.get_running_loop()
+        report = await loop.run_in_executor(None, scanner.run_scan)
+        scanner.publish_alerts(report)
+        return {"ok": True, "report": asdict(report)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.get("/blackbox/alerts/new")
+async def get_blackbox_new_alerts():
+    """Returns only new alerts from the latest scan (delta from previous)."""
+    try:
+        from cognitive.spindle_blackbox_scanner import get_blackbox_scanner
+        from dataclasses import asdict
+        scanner = get_blackbox_scanner()
+        new_alerts = scanner.get_alerts()
+        return {"ok": True, "alerts": [asdict(a) for a in new_alerts], "count": len(new_alerts)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
 # ── WebSocket: Real-time Spindle Events ───────────────────
 
 @router.websocket("/ws")
@@ -120,7 +216,7 @@ async def spindle_events_websocket(websocket: WebSocket):
     def _handler(event):
         topic = getattr(event, "topic", "")
         # Only forward Spindle-related events
-        if any(topic.startswith(p) for p in ("spindle.", "audit.spindle", "healing.", "deterministic.")):
+        if any(topic.startswith(p) for p in ("spindle.", "spindle.blackbox", "audit.spindle", "healing.", "deterministic.")):
             try:
                 out = {
                     "topic": topic,
@@ -143,3 +239,6 @@ async def spindle_events_websocket(websocket: WebSocket):
         logger.info("[SPINDLE-WS] Client disconnected")
     except Exception as e:
         logger.error(f"[SPINDLE-WS] Error: {e}")
+    finally:
+        unsubscribe("*", _handler)
+        logger.info("[SPINDLE-WS] Handler unsubscribed")

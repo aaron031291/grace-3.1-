@@ -4,13 +4,14 @@ from fastapi import APIRouter
 from sqlalchemy import func
 from database.session import session_scope
 from models.genesis_key_models import GenesisKey
+from api.tab_schemas import BIDashboardResponse, BITrendsResponse, TabBIFullResponse
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/bi", tags=["Business Intelligence"])
 
-@router.get("/dashboard")
+@router.get("/dashboard", response_model=BIDashboardResponse)
 async def get_bi_dashboard():
     """Return main aggregates for KPIs and intelligence stats."""
     
@@ -63,7 +64,7 @@ async def get_bi_dashboard():
         }
     }
 
-@router.get("/trends")
+@router.get("/trends", response_model=BITrendsResponse)
 async def get_bi_trends():
     """Return a 7-day activity array."""
     days = []
@@ -93,7 +94,7 @@ async def get_bi_trends():
         
     return {"days": days}
 
-@router.get("/full")
+@router.get("/full", response_model=TabBIFullResponse)
 async def get_full_bi():
     """Aggregate raw config dump for BI settings."""
     return {

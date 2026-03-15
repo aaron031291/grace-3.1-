@@ -1,12 +1,13 @@
 from fastapi import APIRouter
 from typing import Dict, Any
+from api.tab_schemas import GovernanceStatsResponse, GovernanceRulesResponse, GovernancePendingResponse, GovernanceHistoryResponse, GovernancePillarsResponse
 
 router = APIRouter(prefix="/governance", tags=["Governance"])
 
-@router.get("/stats")
+@router.get("/stats", response_model=GovernanceStatsResponse)
 async def get_stats(): return {"status": "ok"}
 
-@router.get("/rules")
+@router.get("/rules", response_model=GovernanceRulesResponse)
 async def get_rules(): return {"rules": []}
 
 @router.get("/rules/{rule_id}")
@@ -21,10 +22,10 @@ async def update_rule(rule_id: str, payload: Dict[str, Any]): return {"status": 
 @router.delete("/rules/{rule_id}")
 async def delete_rule(rule_id: str): return {"status": "ok"}
 
-@router.get("/decisions/pending")
+@router.get("/decisions/pending", response_model=GovernancePendingResponse)
 async def pending_decisions(): return {"decisions": []}
 
-@router.get("/decisions/history")
+@router.get("/decisions/history", response_model=GovernanceHistoryResponse)
 async def decision_history(): return {"history": []}
 
 @router.post("/decisions/{decision_id}/confirm")
@@ -33,7 +34,7 @@ async def confirm_decision(decision_id: str, payload: Dict[str, Any] = None): re
 @router.post("/decisions/{decision_id}/deny")
 async def deny_decision(decision_id: str, payload: Dict[str, Any] = None): return {"status": "ok"}
 
-@router.get("/pillars")
+@router.get("/pillars", response_model=GovernancePillarsResponse)
 async def get_pillars(): return {"pillars": []}
 
 @router.get("/pillars/{pillar_name}/status")

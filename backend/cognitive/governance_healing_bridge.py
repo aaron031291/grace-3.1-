@@ -253,6 +253,18 @@ class GovernanceHealingBridge:
         except Exception:
             pass
 
+        # Publish healing governance decision to event bus for live wiring
+        try:
+            from cognitive.event_bus import publish
+            publish("healing.governance_decision", {
+                "action": strategy,
+                "approved": result.get("healed", False),
+                "component": comp_id,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }, source="governance_healing_bridge")
+        except Exception:
+            pass
+
         # Record in trust engine KPI
         try:
             from cognitive.trust_engine import get_trust_engine

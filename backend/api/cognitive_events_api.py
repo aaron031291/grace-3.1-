@@ -3,7 +3,7 @@ import logging
 from typing import Dict, Any
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from cognitive.event_bus import subscribe, get_recent_events
+from cognitive.event_bus import subscribe, unsubscribe, get_recent_events
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +22,17 @@ async def cognitive_events_websocket(websocket: WebSocket):
     Streams events such as healing.started, healing.completed, and system anomalies.
     """
     await websocket.accept()
-    queue = asyncio.Queue()
+    queue: asyncio.Queue = asyncio.Queue(maxsize=500)
     
     # Capture the active event loop to safely dispatch from background threads
     loop = asyncio.get_running_loop()
+
+    def _safe_put(item):
+        """Put item in queue, silently dropping if full."""
+        try:
+            queue.put_nowait(item)
+        except asyncio.QueueFull:
+            pass  # Drop event rather than crash the event loop
 
     def _event_handler(event):
         try:
@@ -35,8 +42,7 @@ async def cognitive_events_websocket(websocket: WebSocket):
                 "source": getattr(event, "source", "system"),
                 "timestamp": getattr(event, "timestamp", None)
             }
-            # Add to asyncio queue safely from any thread
-            loop.call_soon_threadsafe(queue.put_nowait, out)
+            loop.call_soon_threadsafe(_safe_put, out)
         except Exception as e:
             logger.error(f"[COGNITIVE-WS] Error handling event: {e}")
 
@@ -53,3 +59,6 @@ async def cognitive_events_websocket(websocket: WebSocket):
         logger.info("[COGNITIVE-WS] Client disconnected.")
     except Exception as e:
         logger.error(f"[COGNITIVE-WS] Unexpected WebSocket error: {e}")
+    finally:
+        unsubscribe("*", _event_handler)
+        logger.info("[COGNITIVE-WS] Handler unsubscribed")

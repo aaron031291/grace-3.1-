@@ -80,11 +80,48 @@ jobs:
     environment: staging
 
     steps:
-      - name: Deploy to staging
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure kubeconfig
         run: |
-          echo "Deploying to staging environment..."
-          # Add deployment scripts here
-          # e.g., kubectl apply, docker-compose pull, etc.
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_STAGING }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Determine image tag
+        id: image-tag
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="${{ github.sha }}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Update deployment image tags
+        run: |
+          kubectl set image deployment/grace-backend \
+            backend=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ steps.image-tag.outputs.tag }} \
+            -n grace
+          kubectl set image deployment/grace-frontend \
+            frontend=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:${{ steps.image-tag.outputs.tag }} \
+            -n grace
+
+      - name: Apply k8s manifests
+        run: |
+          kubectl apply -f k8s/deployment.yaml -n grace
+          kubectl apply -f k8s/services.yaml -n grace
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/grace-backend -n grace --timeout=300s
+          kubectl rollout status deployment/grace-frontend -n grace --timeout=300s
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -93,7 +130,81 @@ jobs:
     environment: production
 
     steps:
-      - name: Deploy to production
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure kubeconfig
         run: |
-          echo "Deploying to production environment..."
-          # Add production deployment scripts here
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_PRODUCTION }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Determine image tag
+        id: image-tag
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="${{ github.sha }}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Record current revision for rollback
+        id: rollback-info
+        run: |
+          BACKEND_REV=$(kubectl rollout history deployment/grace-backend -n grace --revision=0 2>/dev/null | tail -1 || echo "none")
+          echo "backend_rev=${BACKEND_REV}" >> "$GITHUB_OUTPUT"
+
+      - name: Update deployment image tags
+        run: |
+          kubectl set image deployment/grace-backend \
+            backend=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ steps.image-tag.outputs.tag }} \
+            -n grace
+          kubectl set image deployment/grace-frontend \
+            frontend=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:${{ steps.image-tag.outputs.tag }} \
+            -n grace
+
+      - name: Apply k8s manifests
+        run: |
+          kubectl apply -f k8s/deployment.yaml -n grace
+          kubectl apply -f k8s/services.yaml -n grace
+
+      - name: Wait for rollout
+        id: rollout
+        run: |
+          kubectl rollout status deployment/grace-backend -n grace --timeout=300s
+          kubectl rollout status deployment/grace-frontend -n grace --timeout=300s
+
+      - name: Smoke test
+        id: smoke-test
+        run: |
+          BACKEND_IP=$(kubectl get svc grace-backend-service -n grace -o jsonpath='{.spec.clusterIP}')
+          RETRIES=5
+          for i in $(seq 1 $RETRIES); do
+            STATUS=$(kubectl run smoke-test-${{ github.run_id }}-${i} --rm -i --restart=Never \
+              --image=curlimages/curl:latest -n grace -- \
+              curl -s -o /dev/null -w "%{http_code}" http://${BACKEND_IP}:8000/health 2>/dev/null || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "Smoke test passed"
+              exit 0
+            fi
+            echo "Attempt ${i}/${RETRIES}: got status ${STATUS}, retrying in 10s..."
+            sleep 10
+          done
+          echo "Smoke test failed after ${RETRIES} attempts"
+          exit 1
+
+      - name: Rollback on failure
+        if: failure() && (steps.rollout.outcome == 'failure' || steps.smoke-test.outcome == 'failure')
+        run: |
+          echo "Deployment failed — rolling back..."
+          kubectl rollout undo deployment/grace-backend -n grace
+          kubectl rollout undo deployment/grace-frontend -n grace
+          kubectl rollout status deployment/grace-backend -n grace --timeout=300s
+          kubectl rollout status deployment/grace-frontend -n grace --timeout=300s
+          echo "Rollback complete"

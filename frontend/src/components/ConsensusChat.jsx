@@ -73,7 +73,7 @@ export default function ConsensusChat() {
       } catch { /* skip */ }
     };
 
-    pollRef.current = setInterval(poll, 10000);
+    pollRef.current = setInterval(poll, 30000);
     return () => clearInterval(pollRef.current);
   }, [autoMode, messages]);
 

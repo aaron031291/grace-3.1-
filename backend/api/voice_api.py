@@ -668,3 +668,10 @@ async def websocket_continuous_voice(websocket: WebSocket):
             })
         except Exception:
             pass  # Client may have disconnected
+    finally:
+        if session.active:
+            try:
+                await session.stop()
+            except Exception:
+                pass
+        logger.info("Voice WebSocket session cleaned up")

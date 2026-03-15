@@ -95,3 +95,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .npm
+
+# Large video/media files
+*.mp4
+*.avi
+*.mov
+*.mkv

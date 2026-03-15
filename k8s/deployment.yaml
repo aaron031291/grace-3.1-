@@ -41,6 +41,16 @@ data:
 ---
 # =============================================================================
 # Secret - Sensitive Configuration
+#
+# DO NOT commit real secrets to version control.
+# Create this secret manually or use sealed-secrets / external-secrets:
+#
+#   kubectl create secret generic grace-secrets \
+#     --namespace grace \
+#     --from-literal=DATABASE_URL="postgresql://user:pass@postgres-service:5432/grace" \
+#     --from-literal=JWT_SECRET="$(openssl rand -base64 32)" \
+#     --from-literal=API_KEY="$(openssl rand -base64 32)"
+#
 # =============================================================================
 apiVersion: v1
 kind: Secret
@@ -52,9 +62,9 @@ metadata:
     app.kubernetes.io/component: secrets
 type: Opaque
 stringData:
-  DATABASE_URL: "postgresql://grace:grace@postgres-service:5432/grace"
-  JWT_SECRET: "change-this-in-production-use-strong-secret"
-  API_KEY: "change-this-api-key"
+  DATABASE_URL: "REPLACE_ME_VIA_KUBECTL_CREATE_SECRET"
+  JWT_SECRET: "REPLACE_ME_VIA_KUBECTL_CREATE_SECRET"
+  API_KEY: "REPLACE_ME_VIA_KUBECTL_CREATE_SECRET"
 
 ---
 # =============================================================================

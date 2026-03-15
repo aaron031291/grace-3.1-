@@ -23,9 +23,11 @@ class SecurityConfig:
         "http://localhost:3000",      # React dev server
         "http://localhost:5173",      # Vite dev server
         "http://localhost:8000",      # FastAPI itself
+        "http://localhost:8765",      # Ops Console (grace_launcher)
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:8000",
+        "http://127.0.0.1:8765",
     ])
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOWED_METHODS: List[str] = field(default_factory=lambda: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"])

@@ -86,9 +86,9 @@ class SpindleEventStore:
             return SpindleEvent
 
     def _probe_db(self) -> bool:
-        """Check DB reachability once; cache result."""
-        if self._db_available is not None:
-            return self._db_available
+        """Check DB reachability once; cache result only on success."""
+        if self._db_available is True:
+            return True
         try:
             session_scope = self._get_session_scope()
             with session_scope() as session:
@@ -97,11 +97,15 @@ class SpindleEventStore:
                 )
             self._db_available = True
             self._sync_sequence_from_db()
+            logger.info("[SpindleEventStore] DB connection established.")
         except Exception as exc:
-            logger.warning(
-                "[SpindleEventStore] DB unavailable — falling back to "
-                "in-memory log: %s", exc,
-            )
+            # Don't cache failures — allow retry after DB init
+            if not getattr(self, '_warned_db', False):
+                logger.warning(
+                    "[SpindleEventStore] DB unavailable — falling back to "
+                    "in-memory log: %s", exc,
+                )
+                self._warned_db = True
             self._db_available = False
         return self._db_available
 

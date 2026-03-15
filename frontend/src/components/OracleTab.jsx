@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../config/api';
+import { useTabData, ORACLE_DASHBOARD_SCHEMA } from '../hooks/useTabData';
 import BackendPanel from './BackendPanel';
 
 const C = {
@@ -394,17 +395,8 @@ function FederatedPanel() {
 // ── Main OracleTab ────────────────────────────────────────────────────
 export default function OracleTab() {
   const [activeTab, setActiveTab] = useState('overview');
-  const [dashboard, setDashboard] = useState(null);
-  const [fullData, setFullData] = useState(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/oracle/dashboard`)
-      .then(r => r.ok ? r.json() : null).then(setDashboard).catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tabs/oracle/full`).then(r => r.ok ? r.json() : null).then(setFullData).catch(() => {});
-  }, []);
+  const { data: dashboard } = useTabData('/api/oracle/dashboard', ORACLE_DASHBOARD_SCHEMA);
+  const { data: fullData } = useTabData('/api/tabs/oracle/full');
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊', title: 'Oracle dashboard: examples, patterns, procedures, vectors' },

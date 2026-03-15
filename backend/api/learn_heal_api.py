@@ -11,11 +11,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from database.session import get_session
+from api.tab_schemas import LearnHealDashboardResponse, SkillsResponse
 
 router = APIRouter(prefix="/api/learn-heal", tags=["Learning & Healing"])
 
 
-@router.get("/dashboard", response_model=dict)
+@router.get("/dashboard", response_model=LearnHealDashboardResponse)
 def get_learn_heal_dashboard(session: Session = Depends(get_session)):
     """
     Returns the aggregated learning and system health dashboard.
@@ -77,7 +78,7 @@ def get_learn_heal_dashboard(session: Session = Depends(get_session)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/skills", response_model=dict)
+@router.get("/skills", response_model=SkillsResponse)
 def get_skills(session: Session = Depends(get_session)):
     """
     Returns the list of acquired skills (Procedural Memory routines).

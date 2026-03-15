@@ -105,6 +105,35 @@ export default function PersistentVoicePanel({
     }
   };
 
+  // Handle final transcript
+  const handleFinalTranscript = useCallback(async (text) => {
+    const trimmedText = text.trim().toLowerCase();
+
+    // Check wake word if enabled
+    if (settings.useWakeWord) {
+      if (!trimmedText.includes(settings.wakeWord.toLowerCase())) {
+        return; // Ignore if wake word not detected
+      }
+      // Remove wake word from text
+      text = text.replace(new RegExp(settings.wakeWord, "gi"), "").trim();
+    }
+
+    if (!text) return;
+
+    // Add to conversation log
+    setConversationLog((prev) => [
+      ...prev,
+      { role: "user", text, timestamp: new Date().toISOString() },
+    ]);
+
+    setCurrentTranscript("");
+
+    // Send to chat
+    if (onSendMessage) {
+      onSendMessage(text);
+    }
+  }, [settings.useWakeWord, settings.wakeWord, onSendMessage]);
+
   // Initialize speech recognition
   const initRecognition = useCallback(() => {
     const SpeechRecognition =
@@ -154,35 +183,6 @@ export default function PersistentVoicePanel({
     // Note: We handle onend in startListening/stopListening to avoid circular dependencies
     return recognition;
   }, [settings.continuousListen, handleFinalTranscript]);
-
-  // Handle final transcript
-  const handleFinalTranscript = useCallback(async (text) => {
-    const trimmedText = text.trim().toLowerCase();
-
-    // Check wake word if enabled
-    if (settings.useWakeWord) {
-      if (!trimmedText.includes(settings.wakeWord.toLowerCase())) {
-        return; // Ignore if wake word not detected
-      }
-      // Remove wake word from text
-      text = text.replace(new RegExp(settings.wakeWord, "gi"), "").trim();
-    }
-
-    if (!text) return;
-
-    // Add to conversation log
-    setConversationLog((prev) => [
-      ...prev,
-      { role: "user", text, timestamp: new Date().toISOString() },
-    ]);
-
-    setCurrentTranscript("");
-
-    // Send to chat
-    if (onSendMessage) {
-      onSendMessage(text);
-    }
-  }, [settings.useWakeWord, settings.wakeWord, onSendMessage]);
 
   // Start listening
   const startListening = useCallback(() => {
@@ -234,6 +234,27 @@ export default function PersistentVoicePanel({
     }
   };
 
+  // Browser fallback TTS
+  const fallbackSpeak = useCallback((text) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 1.0;
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        if (isEnabled && settings.continuousListen) {
+          startListening();
+        }
+      };
+      utterance.onerror = () => setIsSpeaking(false);
+
+      stopListening();
+      window.speechSynthesis.speak(utterance);
+    } else {
+      setIsSpeaking(false);
+    }
+  }, [isEnabled, settings.continuousListen, startListening, stopListening]);
+
   // Text-to-Speech
   const speak = useCallback(async (text) => {
     if (!text || isSpeaking || !settings.autoSpeak) return;
@@ -281,27 +302,6 @@ export default function PersistentVoicePanel({
       fallbackSpeak(text);
     }
   }, [isSpeaking, settings, isEnabled, startListening, stopListening, fallbackSpeak]);
-
-  // Browser fallback TTS
-  const fallbackSpeak = useCallback((text) => {
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "en-US";
-      utterance.rate = 1.0;
-      utterance.onend = () => {
-        setIsSpeaking(false);
-        if (isEnabled && settings.continuousListen) {
-          startListening();
-        }
-      };
-      utterance.onerror = () => setIsSpeaking(false);
-
-      stopListening();
-      window.speechSynthesis.speak(utterance);
-    } else {
-      setIsSpeaking(false);
-    }
-  }, [isEnabled, settings.continuousListen, startListening, stopListening]);
 
   // Stop speaking
   const stopSpeaking = () => {
