@@ -571,10 +571,15 @@ async def lifespan(app: FastAPI):
                 while True:
                     try:
                         # Light sweep every 10 minutes (internal, non-blocking)
-                        from api.probe_agent_api import _probe_endpoint, _track_probe, _ROUTES
+                        from api.probe_agent_api import _probe_endpoint, _track_probe, _ROUTES, _check_component_vitals
                         sample = list(_ROUTES)[:5]  # quick sample
                         results = [_probe_endpoint(r["path"], r["method"]) for r in sample]
                         _track_probe(results)
+                        # Component vitals: throughput, latency, degradation
+                        try:
+                            _check_component_vitals()
+                        except Exception:
+                            pass
                         # Feed broken probes into healing swarm
                         broken = [r for r in results if r.get("status") == "broken"]
                         if broken:

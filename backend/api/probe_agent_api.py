@@ -451,3 +451,222 @@ async def probe_single(path: str):
     """Probe a single endpoint."""
     result = _probe_endpoint(path)
     return result
+
+
+# ── Component Alive Checker — throughput, telemetry, degradation ─────────
+
+_vitals_history: Dict[str, List[dict]] = {}
+_vitals_lock = threading.Lock()
+_VITALS_MAX = 60  # keep last 60 readings per component
+
+
+def _check_component_vitals() -> List[dict]:
+    """
+    Deep alive check: probe every core component for throughput,
+    latency, error rate, and classify as alive / degraded / dead.
+    """
+    vitals = []
+
+    # 1. Database — pool usage + query latency
+    try:
+        from database.connection import DatabaseConnection
+        from sqlalchemy import text
+        engine = DatabaseConnection.get_engine()
+        pool = engine.pool
+        start = time.time()
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        latency = round((time.time() - start) * 1000, 1)
+        pool_size = pool.size() if callable(pool.size) else getattr(pool, '_pool', None) and pool._pool.qsize() or 0
+        checked_out = pool.checkedout() if hasattr(pool, 'checkedout') else 0
+        overflow = pool.overflow() if hasattr(pool, 'overflow') else 0
+        status = "alive"
+        if latency > 500:
+            status = "degraded"
+        if latency > 2000 or checked_out > 40:
+            status = "critical"
+        vitals.append({
+            "component": "database",
+            "status": status,
+            "latency_ms": latency,
+            "pool_checked_out": checked_out,
+            "pool_overflow": overflow,
+            "detail": f"query={latency}ms, conns={checked_out}+{overflow}",
+        })
+    except Exception as e:
+        vitals.append({"component": "database", "status": "dead", "error": str(e)[:200]})
+
+    # 2. Qdrant — collection count + query latency
+    try:
+        from vector_db.client import get_qdrant_client
+        start = time.time()
+        client = get_qdrant_client()
+        collections = client.get_collections()
+        latency = round((time.time() - start) * 1000, 1)
+        count = len(collections.collections) if hasattr(collections, 'collections') else 0
+        status = "alive" if latency < 1000 else "degraded"
+        vitals.append({
+            "component": "qdrant",
+            "status": status,
+            "latency_ms": latency,
+            "collections": count,
+            "detail": f"query={latency}ms, {count} collections",
+        })
+    except Exception as e:
+        vitals.append({"component": "qdrant", "status": "dead", "error": str(e)[:200]})
+
+    # 3. LLM / Ollama — tags endpoint latency
+    try:
+        start = time.time()
+        req = urllib.request.Request("http://localhost:11434/api/tags")
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read())
+        latency = round((time.time() - start) * 1000, 1)
+        model_count = len(data.get("models", []))
+        status = "alive" if latency < 2000 else "degraded"
+        vitals.append({
+            "component": "ollama",
+            "status": status,
+            "latency_ms": latency,
+            "models_loaded": model_count,
+            "detail": f"query={latency}ms, {model_count} models",
+        })
+    except Exception as e:
+        vitals.append({"component": "ollama", "status": "dead", "error": str(e)[:200]})
+
+    # 4. Brain domains — KPI throughput
+    try:
+        from api.kpi_api import get_kpi_tracker
+        tracker = get_kpi_tracker()
+        health = tracker.get_system_health() if hasattr(tracker, 'get_system_health') else {}
+        for name, info in health.get("components", {}).items():
+            trust = info.get("trust_score", 0)
+            calls = info.get("total_calls", 0)
+            errors = info.get("error_count", 0)
+            error_rate = (errors / calls * 100) if calls > 0 else 0
+            if trust < 0.3 or error_rate > 50:
+                status = "critical"
+            elif trust < 0.6 or error_rate > 20:
+                status = "degraded"
+            else:
+                status = "alive"
+            vitals.append({
+                "component": f"brain:{name}",
+                "status": status,
+                "trust_score": round(trust, 3),
+                "total_calls": calls,
+                "error_rate_pct": round(error_rate, 1),
+                "detail": f"trust={trust:.2f}, calls={calls}, err={error_rate:.1f}%",
+            })
+    except Exception:
+        pass
+
+    # 5. Event bus — throughput
+    try:
+        from cognitive.event_bus import get_stats
+        stats = get_stats()
+        published = stats.get("total_published", 0)
+        dropped = stats.get("total_dropped", 0)
+        drop_rate = (dropped / published * 100) if published > 0 else 0
+        status = "alive" if drop_rate < 5 else "degraded" if drop_rate < 20 else "critical"
+        vitals.append({
+            "component": "event_bus",
+            "status": status,
+            "total_published": published,
+            "drop_rate_pct": round(drop_rate, 1),
+            "detail": f"published={published}, dropped={dropped}",
+        })
+    except Exception:
+        pass
+
+    # 6. Memory — system RAM
+    try:
+        import psutil
+        mem = psutil.virtual_memory()
+        cpu = psutil.cpu_percent(interval=0.1)
+        status = "alive"
+        if mem.percent > 85 or cpu > 80:
+            status = "degraded"
+        if mem.percent > 95 or cpu > 95:
+            status = "critical"
+        vitals.append({
+            "component": "system_resources",
+            "status": status,
+            "memory_pct": mem.percent,
+            "cpu_pct": cpu,
+            "detail": f"RAM={mem.percent}%, CPU={cpu}%",
+        })
+    except Exception:
+        pass
+
+    # Store history for trend detection
+    now = datetime.now(timezone.utc).isoformat()
+    with _vitals_lock:
+        for v in vitals:
+            comp = v["component"]
+            if comp not in _vitals_history:
+                _vitals_history[comp] = []
+            _vitals_history[comp].append({"ts": now, **v})
+            if len(_vitals_history[comp]) > _VITALS_MAX:
+                _vitals_history[comp] = _vitals_history[comp][-_VITALS_MAX:]
+
+    # Detect degradation trends (was alive, now degraded/dead)
+    with _vitals_lock:
+        for v in vitals:
+            history = _vitals_history.get(v["component"], [])
+            if len(history) >= 3:
+                recent = [h["status"] for h in history[-3:]]
+                if recent[0] == "alive" and recent[-1] in ("degraded", "critical", "dead"):
+                    v["trend"] = "degrading"
+                elif recent[0] in ("degraded", "critical") and recent[-1] == "alive":
+                    v["trend"] = "recovering"
+                else:
+                    v["trend"] = "stable"
+
+    # Dispatch degraded/dead to healing swarm
+    problems = [v for v in vitals if v.get("status") in ("degraded", "critical", "dead")]
+    if problems:
+        try:
+            from cognitive.healing_swarm import get_healing_swarm
+            swarm = get_healing_swarm()
+            for p in problems:
+                swarm.submit({
+                    "component": p["component"],
+                    "description": f"Component {p['status']}: {p.get('detail', p.get('error', ''))}",
+                    "error": p.get("error", ""),
+                    "severity": "critical" if p["status"] in ("dead", "critical") else "medium",
+                })
+        except Exception:
+            pass
+
+    return vitals
+
+
+@router.get("/vitals")
+async def get_component_vitals():
+    """Deep alive check: throughput, latency, error rate for every core component."""
+    import asyncio
+    vitals = await asyncio.to_thread(_check_component_vitals)
+    alive = sum(1 for v in vitals if v.get("status") == "alive")
+    degraded = sum(1 for v in vitals if v.get("status") == "degraded")
+    critical = sum(1 for v in vitals if v.get("status") == "critical")
+    dead = sum(1 for v in vitals if v.get("status") == "dead")
+    return {
+        "vitals": vitals,
+        "summary": {
+            "total": len(vitals),
+            "alive": alive,
+            "degraded": degraded,
+            "critical": critical,
+            "dead": dead,
+        },
+    }
+
+
+@router.get("/vitals/history")
+async def get_vitals_history(component: Optional[str] = None):
+    """Get vitals trend history for a component or all components."""
+    with _vitals_lock:
+        if component:
+            return {"component": component, "history": _vitals_history.get(component, [])}
+        return {"components": {k: v[-10:] for k, v in _vitals_history.items()}}
