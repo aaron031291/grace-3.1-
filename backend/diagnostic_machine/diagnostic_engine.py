@@ -307,14 +307,17 @@ class DiagnosticEngine:
                 if cycle.action_decision.action_type == ActionType.ALERT_HUMAN:
                     self._stats.total_alerts += 1
                     self._fire_alert_callbacks(cycle)
+                    self._dispatch_to_swarm(cycle)
                 elif cycle.action_decision.action_type == ActionType.TRIGGER_HEALING:
                     self._stats.total_healing_actions += 1
                     self._fire_heal_callbacks(cycle)
+                    self._dispatch_to_swarm(cycle)
                     # Run deterministic auto-fix (code/config) and hot-reload on any fix
                     self._run_deterministic_fix_and_reload(cycle)
                 elif cycle.action_decision.action_type == ActionType.FREEZE_SYSTEM:
                     self._stats.total_freeze_events += 1
                     self._fire_freeze_callbacks(cycle)
+                    self._dispatch_to_swarm(cycle)
 
             # Store recent cycle
             self._recent_cycles.append(cycle)
@@ -596,6 +599,56 @@ class DiagnosticEngine:
                 )
             except Exception as e:
                 logger.warning("[DIAGNOSTIC] Hot reload after fix failed: %s", e)
+
+    def _dispatch_to_swarm(self, cycle: DiagnosticCycle):
+        """Dispatch diagnostic findings to healing swarm + trigger probe sweep."""
+        try:
+            from cognitive.healing_swarm import get_healing_swarm
+            swarm = get_healing_swarm()
+            action = cycle.action_decision
+            severity_map = {
+                ActionType.ALERT_HUMAN: "high",
+                ActionType.TRIGGER_HEALING: "high",
+                ActionType.FREEZE_SYSTEM: "critical",
+            }
+            swarm.submit({
+                "component": f"diagnostic:{cycle.cycle_id}",
+                "description": action.description if action else "Diagnostic alert",
+                "error": cycle.error_message or "",
+                "severity": severity_map.get(action.action_type, "medium") if action else "medium",
+                "context": {
+                    "cycle_id": cycle.cycle_id,
+                    "trigger": cycle.trigger_source.value if cycle.trigger_source else "unknown",
+                    "action_type": action.action_type.value if action else "unknown",
+                },
+            })
+        except Exception as e:
+            logger.debug("[DIAGNOSTIC] Swarm dispatch skipped: %s", e)
+        # Trigger a background probe sweep so probe agent re-checks affected endpoints
+        try:
+            from core.async_parallel import run_background
+            def _probe():
+                try:
+                    from api.probe_agent_api import _probe_endpoint, _track_probe, _ROUTES
+                    sample = list(_ROUTES)[:10]
+                    results = [_probe_endpoint(r["path"], r["method"]) for r in sample]
+                    _track_probe(results)
+                    broken = [r for r in results if r.get("status") == "broken"]
+                    if broken:
+                        from cognitive.healing_swarm import get_healing_swarm
+                        sw = get_healing_swarm()
+                        for b in broken:
+                            sw.submit({
+                                "component": b.get("path", "unknown"),
+                                "description": f"Post-diagnostic probe failed: {b.get('error', '')}",
+                                "error": b.get("error", ""),
+                                "severity": "high",
+                            })
+                except Exception:
+                    pass
+            run_background(_probe, "diagnostic_probe_sweep")
+        except Exception:
+            pass
 
     def _fire_freeze_callbacks(self, cycle: DiagnosticCycle):
         """Fire freeze callbacks."""
