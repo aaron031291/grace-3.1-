@@ -59,7 +59,7 @@ class OpenAILLMClient(BaseLLMClient):
         url = f"{self.base_url}/chat/completions"
         
         payload = {
-            "model": model or settings.LLM_MODEL or "gpt-4o",
+            "model": model or getattr(settings, 'OPENAI_MODEL', '') or "gpt-4o",
             "messages": messages,
             "temperature": temperature if temperature is not None else 0.7,
             "stream": stream

@@ -667,6 +667,17 @@ class QwenCodingAgent(LLMCodingAgent):
     def __init__(self):
         super().__init__(provider="qwen", name="qwen")
 
+    def _get_client(self):
+        """Use the dedicated Qwen coder model path."""
+        from llm_orchestrator.factory import get_qwen_coder
+        return get_qwen_coder()
+
+
+class OpenAICodingAgent(LLMCodingAgent):
+    """OpenAI — GPT-4o for code generation, analysis, complex reasoning."""
+    def __init__(self):
+        super().__init__(provider="openai", name="openai")
+
 
 # ══════════════════════════════════════════════════════════════════════════
 # Coding Agent Pool — manages all LLM coding agents
@@ -709,6 +720,7 @@ class CodingAgentPool:
         self.agents["opus"] = OpusCodingAgent()
         self.agents["ollama"] = OllamaCodingAgent()
         self.agents["qwen"] = QwenCodingAgent()
+        self.agents["openai"] = OpenAICodingAgent()
         # Wire bi-directional channel + ledger into every agent
         for agent in self.agents.values():
             agent.channel = self.channel
@@ -855,7 +867,7 @@ class CodingAgentPool:
 
         # Complex tasks → Opus (deep reasoning)
         if any(k in desc for k in ("refactor", "architect", "redesign", "complex", "migration")):
-            return self.agents.get("opus") or self.agents.get("kimi")
+            return self.agents.get("opus") or self.agents.get("openai") or self.agents.get("kimi")
 
         # Import/wiring/quick fixes → Kimi (fast)
         if any(k in desc for k in ("import", "wire", "connect", "missing", "typo", "quick")):
@@ -866,7 +878,7 @@ class CodingAgentPool:
             return self.agents.get("qwen") or self.agents.get("kimi")
 
         # Default: Kimi for speed, fallback chain
-        return self.agents.get("kimi") or self.agents.get("qwen") or self.agents.get("opus") or self.agents.get("ollama")
+        return self.agents.get("kimi") or self.agents.get("qwen") or self.agents.get("openai") or self.agents.get("opus") or self.agents.get("ollama")
 
     def get_status(self) -> Dict[str, Any]:
         """Full pool status for frontend/Ops Console."""

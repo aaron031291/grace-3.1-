@@ -317,13 +317,13 @@ class SpindleEventStore:
         try:
             self._write_queue.put_nowait(event_data)
         except queue.Full:
-            # Rate-limit this warning to once per 60s
+            # Rate-limit warning to once per 5 minutes (not 60s — prevents log flood)
             now_ts = time.time()
             last_warn = getattr(self, '_last_queue_full_warn', 0.0)
-            if now_ts - last_warn > 60:
-                logger.warning("[SpindleEventStore] Write queue full (%d items), dropping oldest and retrying", self._write_queue.qsize())
+            if now_ts - last_warn > 300:
+                logger.warning("[SpindleEventStore] Write queue full (%d items), dropping oldest", self._write_queue.qsize())
                 self._last_queue_full_warn = now_ts
-            # Drop oldest event to make room instead of blocking
+            # Drop oldest to make room
             try:
                 self._write_queue.get_nowait()
             except queue.Empty:
@@ -331,7 +331,7 @@ class SpindleEventStore:
             try:
                 self._write_queue.put_nowait(event_data)
             except queue.Full:
-                pass  # Truly stuck, silently drop
+                pass
 
         return seq
 
@@ -358,8 +358,8 @@ class SpindleEventStore:
         while self._flush_running:
             batch = []
             try:
-                # Drain up to 100 events per flush cycle
-                while len(batch) < 100:
+                # Drain up to 500 events per flush cycle (was 100 — too slow)
+                while len(batch) < 500:
                     try:
                         event_data = self._write_queue.get_nowait()
                         batch.append(event_data)
@@ -370,13 +370,14 @@ class SpindleEventStore:
                     self._flush_batch(batch)
             except Exception as e:
                 logger.error("[SpindleEventStore] Flush error: %s", e)
-                # Store failed batch in fallback
                 with self._fallback_lock:
                     for item in batch:
                         item["timestamp"] = item["timestamp"].isoformat() if hasattr(item["timestamp"], "isoformat") else str(item["timestamp"])
                         self._fallback.append(item)
 
-            time.sleep(0.5)
+            # Sleep less when queue is large, more when idle
+            qsize = self._write_queue.qsize()
+            time.sleep(0.1 if qsize > 1000 else 0.5)
 
         # Final drain on shutdown
         self._drain_remaining()
@@ -537,8 +538,20 @@ def bridge_to_event_bus() -> None:
 
     store = get_event_store()
 
+    # Throttle: skip low-value events during boot storm
+    _bridge_skip_topics = {"heartbeat", "probe", "poll", "timer.tick"}
+    _bridge_event_count = [0]  # mutable counter in closure
+
     def _persist(event: Event) -> None:
         try:
+            # Skip noisy low-value events
+            if any(s in (event.topic or "") for s in _bridge_skip_topics):
+                return
+            # During first 10k events, only persist 1-in-10 low-priority events
+            _bridge_event_count[0] += 1
+            if _bridge_event_count[0] < 10000 and "status" in (event.topic or ""):
+                if _bridge_event_count[0] % 10 != 0:
+                    return
             store.append_async(
                 topic=event.topic,
                 source_type="system",
@@ -546,7 +559,7 @@ def bridge_to_event_bus() -> None:
                 source=event.source,
             )
         except Exception as exc:
-            logger.warning(
+            logger.debug(
                 "[SpindleEventStore] bridge persist failed for %s: %s",
                 event.topic, exc,
             )

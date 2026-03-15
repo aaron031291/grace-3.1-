@@ -155,6 +155,14 @@ def _ollama_with_model(model: str) -> BaseLLMClient:
     return _wrap(client)
 
 
+def _is_usable(client) -> bool:
+    """Quick health check — does this client actually respond?"""
+    try:
+        return client is not None and client.is_running()
+    except Exception:
+        return False
+
+
 def get_llm_client(provider: str = None) -> BaseLLMClient:
     """
     Get a LLM client with governance rules enforced.
@@ -166,19 +174,21 @@ def get_llm_client(provider: str = None) -> BaseLLMClient:
     # Try the requested provider first
     try:
         client = _create_provider_client(provider)
-        if client is not None:
+        if client is not None and _is_usable(client):
             return _wrap(client)
+        elif client is not None:
+            logger.warning(f"[LLM-FALLBACK] Provider '{provider}' created but not running")
     except Exception as e:
         logger.warning(f"[LLM-FALLBACK] Primary provider '{provider}' failed: {e}")
     
     # Fallback chain: try other providers
-    fallback_order = ['ollama', 'kimi', 'opus', 'openai']
+    fallback_order = ['ollama', 'kimi', 'opus', 'openai', 'qwen']
     for fb in fallback_order:
         if fb == provider:
             continue
         try:
             client = _create_provider_client(fb)
-            if client is not None:
+            if client is not None and _is_usable(client):
                 logger.info(f"[LLM-FALLBACK] Using fallback provider: {fb}")
                 return _wrap(client)
         except Exception:
@@ -206,6 +216,9 @@ def _create_provider_client(provider: str) -> BaseLLMClient:
         if not key:
             return None
         return OpusLLMClient(api_key=key)
+    elif provider == "qwen":
+        from .qwen_client import QwenLLMClient
+        return QwenLLMClient()
     elif provider == "runpod":
         from cognitive.runpod_client import get_runpod_client
         return get_runpod_client()
@@ -277,8 +290,19 @@ def get_llm_for_task(task: str = "general") -> BaseLLMClient:
             return get_opus_client()
         return get_llm_client()
 
-    return get_llm_client()
+    elif task == "openai_agent":
+        try:
+            from cognitive.coding_agents import get_coding_agent_pool
+            pool = get_coding_agent_pool()
+            if "openai" in pool.agents:
+                return pool.agents["openai"]._get_client()
+        except Exception:
+            pass
+        if getattr(settings, 'LLM_API_KEY', ''):
+            return get_llm_client(provider="openai")
+        return get_llm_client()
 
+    return get_llm_client()
 
 
 def get_kimi_client() -> BaseLLMClient:
@@ -367,6 +391,15 @@ def get_all_available_models() -> list:
         "model": settings.OPUS_MODEL,
         "description": "Opus 4.6 (Claude) — deep reasoning, architecture, audit",
         "available": bool(settings.OPUS_API_KEY),
+        "cost": "cloud",
+        "location": "cloud",
+    })
+    models.append({
+        "id": "openai",
+        "provider": "openai",
+        "model": getattr(settings, 'OPENAI_MODEL', '') or getattr(settings, 'LLM_MODEL', '') or "gpt-4o",
+        "description": "OpenAI — GPT-4o code generation, analysis",
+        "available": bool(settings.LLM_API_KEY),
         "cost": "cloud",
         "location": "cloud",
     })

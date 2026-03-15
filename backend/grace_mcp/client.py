@@ -13,6 +13,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import yaml
+
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
@@ -74,6 +76,38 @@ class MCPClient:
         self._read = None
         self._write = None
         self._cm = None  # context manager for stdio_client
+
+        # Layer permission enforcement
+        self._permissions_path = Path(__file__).parent.parent / "grace_os" / "config" / "layer_permissions.yaml"
+        self._layer_permissions = self._load_layer_permissions()
+
+    def _load_layer_permissions(self) -> Dict[str, List[str]]:
+        """Load layer->tool permission map from YAML."""
+        try:
+            with open(self._permissions_path, "r", encoding="utf-8") as f:
+                raw = yaml.safe_load(f) or {}
+            perms = {}
+            for layer_name, cfg in raw.items():
+                if isinstance(cfg, dict):
+                    perms[layer_name] = cfg.get("allowed_tools", [])
+            return perms
+        except Exception as e:
+            logger.error(f"[MCP] Failed to load layer permissions: {e}")
+            return {}
+
+    def _is_tool_allowed(self, calling_layer: str, tool_name: str) -> bool:
+        """Check if calling_layer is permitted to use tool_name."""
+        # "user" and unknown callers bypass layer enforcement
+        if calling_layer in ("user", "system", "admin"):
+            return True
+        allowed = self._layer_permissions.get(calling_layer, None)
+        if allowed is None:
+            return True  # Unknown layer — not a Grace OS layer, allow
+        # Normalize: YAML uses file_read, MCP uses read_file — check both forms
+        tool_normalized = tool_name.replace("-", "_")
+        parts = tool_normalized.split("_", 1)
+        tool_flipped = f"{parts[1]}_{parts[0]}" if len(parts) == 2 else tool_normalized
+        return tool_normalized in allowed or tool_flipped in allowed or tool_name in allowed
 
     @property
     def is_connected(self) -> bool:
@@ -230,6 +264,22 @@ class MCPClient:
                 "success": False,
                 "error": "MCP client not connected"
             }
+
+        # Layer permission enforcement
+        if not self._is_tool_allowed(calling_layer, tool_name):
+            error_msg = f"DENIED: Tool '{tool_name}' not permitted for layer '{calling_layer}'"
+            logger.warning(f"[MCP] {error_msg}")
+            self.audit_logger.log_tool_call(
+                tool_name=tool_name,
+                arguments=arguments,
+                result=None,
+                duration_ms=0,
+                calling_layer=calling_layer,
+                session_id=session_id,
+                success=False,
+                error=error_msg
+            )
+            return {"content": "", "success": False, "error": error_msg, "duration_ms": 0}
 
         start_time = time.time()
         

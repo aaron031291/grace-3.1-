@@ -1,0 +1,13 @@
+from fastapi import APIRouter
+from typing import Dict, Any
+import logging
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/vault", tags=["API Vault"])
+
+
+@router.get("/status")
+async def get_vault_status() -> Dict[str, Any]:
+    """Return API vault status."""
+    return {"active": True, "keys_stored": 0}

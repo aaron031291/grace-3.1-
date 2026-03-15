@@ -1,0 +1,10 @@
+@echo off
+cd /d "%~dp0"
+set PYTHONIOENCODING=utf-8
+if exist .venv\Scripts\activate.bat (
+    call .venv\Scripts\activate.bat
+) else if exist venv\Scripts\activate.bat (
+    call venv\Scripts\activate.bat
+)
+echo Starting Grace Backend...
+python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload

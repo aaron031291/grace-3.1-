@@ -3,7 +3,9 @@ Spindle Checkpoint — Snapshot & rollback for autonomous executions.
 Takes a state snapshot before execution and reverts on failure.
 """
 import asyncio
+import hashlib
 import logging
+import shutil
 import threading
 import time
 import json
@@ -15,6 +17,8 @@ from typing import Any, Dict, List, Optional, Callable
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+_CHECKPOINT_DIR = Path(__file__).parent.parent / ".grace" / "checkpoints"
 
 
 @dataclass
@@ -41,6 +45,55 @@ class SpindleCheckpointManager:
     def register_rollback(self, component: str, handler: Callable):
         """Register a custom rollback handler for a component type."""
         self._rollback_handlers[component] = handler
+
+    def watch_file(self, cp: Checkpoint, path: str) -> None:
+        """
+        Capture the current content of a file before it gets modified.
+        Call this BEFORE writing to the file. The content is stored both
+        in-memory (for fast rollback) and on disk (survives restart).
+        """
+        file_path = Path(path)
+        if not file_path.exists():
+            # Mark as "did not exist" so rollback can delete it
+            cp.file_backups[path] = "__CHECKPOINT_FILE_DID_NOT_EXIST__"
+            return
+
+        try:
+            content = file_path.read_text(encoding="utf-8")
+            cp.file_backups[path] = content
+
+            # Also persist to disk for crash recovery
+            backup_dir = _CHECKPOINT_DIR / cp.checkpoint_id
+            backup_dir.mkdir(parents=True, exist_ok=True)
+
+            # Use relative-safe name
+            safe_name = path.replace("/", "_").replace("\\", "_").replace(":", "_")
+            disk_backup = backup_dir / safe_name
+            shutil.copy2(file_path, disk_backup)
+
+            # Write manifest entry
+            manifest_path = backup_dir / "manifest.json"
+            manifest = {}
+            if manifest_path.exists():
+                try:
+                    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
+            manifest[path] = {
+                "backup_file": safe_name,
+                "existed": True,
+                "original_hash": hashlib.sha256(content.encode()).hexdigest(),
+            }
+            manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+            logger.debug(f"[CHECKPOINT] Watching file: {path}")
+        except Exception as e:
+            logger.warning(f"[CHECKPOINT] Could not watch file {path}: {e}")
+
+    def watch_files(self, cp: Checkpoint, paths: list) -> None:
+        """Watch multiple files before modification."""
+        for p in paths:
+            self.watch_file(cp, p)
 
     @contextmanager
     def checkpoint(self, component: str, proof_hash: str = ""):
@@ -128,18 +181,24 @@ class SpindleCheckpointManager:
             except Exception as e:
                 logger.error(f"[CHECKPOINT] Custom rollback failed: {e}")
 
-        # Restore file backups in parallel
+        # Restore file backups
         if cp.file_backups:
-            with ThreadPoolExecutor(max_workers=4) as pool:
-                futures = {
-                    pool.submit(self._restore_file, path, content): path
-                    for path, content in cp.file_backups.items()
-                }
-                for future in futures:
-                    try:
-                        future.result(timeout=5)
-                    except Exception as e:
-                        logger.error(f"[CHECKPOINT] Failed to restore {futures[future]}: {e}")
+            restored = 0
+            for path, content in cp.file_backups.items():
+                try:
+                    if content == "__CHECKPOINT_FILE_DID_NOT_EXIST__":
+                        # File was created during checkpoint — delete it
+                        p = Path(path)
+                        if p.exists():
+                            p.unlink()
+                            logger.info(f"[CHECKPOINT] Deleted new file: {path}")
+                            restored += 1
+                    else:
+                        self._restore_file(path, content)
+                        restored += 1
+                except Exception as e:
+                    logger.error(f"[CHECKPOINT] Failed to restore {path}: {e}")
+            logger.info(f"[CHECKPOINT] Restored {restored}/{len(cp.file_backups)} files")
 
         logger.info(f"[CHECKPOINT] Rollback completed for {cp.checkpoint_id}")
 
@@ -191,6 +250,55 @@ class SpindleCheckpointManager:
                     proof_hash=proof_hash,
                     result="ROLLED_BACK" if cp.rolled_back else "COMMITTED",
                 )
+            except Exception:
+                pass
+
+    def recover_from_disk(self, checkpoint_id: str) -> bool:
+        """
+        Recover files from a disk-persisted checkpoint (crash recovery).
+        Use when the process restarted and in-memory checkpoints are lost.
+        """
+        backup_dir = _CHECKPOINT_DIR / checkpoint_id
+        manifest_path = backup_dir / "manifest.json"
+        if not manifest_path.exists():
+            logger.warning(f"[CHECKPOINT] No manifest found for {checkpoint_id}")
+            return False
+
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            restored = 0
+            for original_path, info in manifest.items():
+                backup_file = backup_dir / info["backup_file"]
+                if info.get("existed") and backup_file.exists():
+                    shutil.copy2(backup_file, original_path)
+                    logger.info(f"[CHECKPOINT] Crash-recovered: {original_path}")
+                    restored += 1
+            logger.info(f"[CHECKPOINT] Crash recovery: restored {restored} files from {checkpoint_id}")
+            return True
+        except Exception as e:
+            logger.error(f"[CHECKPOINT] Crash recovery failed: {e}")
+            return False
+
+    def list_disk_checkpoints(self) -> List[str]:
+        """List checkpoint IDs that have disk-persisted backups."""
+        if not _CHECKPOINT_DIR.exists():
+            return []
+        return sorted([
+            d.name for d in _CHECKPOINT_DIR.iterdir()
+            if d.is_dir() and (d / "manifest.json").exists()
+        ])
+
+    def cleanup_old_checkpoints(self, keep: int = 50):
+        """Remove old disk checkpoints, keeping the most recent N."""
+        if not _CHECKPOINT_DIR.exists():
+            return
+        dirs = sorted(
+            [d for d in _CHECKPOINT_DIR.iterdir() if d.is_dir()],
+            key=lambda d: d.stat().st_mtime
+        )
+        for old_dir in dirs[:-keep]:
+            try:
+                shutil.rmtree(old_dir)
             except Exception:
                 pass
 

@@ -68,15 +68,22 @@ class VerificationLayer(GraceLayer):
             system_prompt=system_prompt
         )
 
+        parse_failed = False
         try:
             verification = json.loads(llm_response) if llm_response else {}
+            if not llm_response:
+                parse_failed = True
         except (json.JSONDecodeError, Exception) as e:
-            logger.warning(f"[L8] Parse failed, using conservative defaults: {e}")
+            logger.warning(f"[L8] Parse failed, failing closed: {e}")
             verification = {}
+            parse_failed = True
 
-        verified = verification.get("verified", True)
+        verified = verification.get("verified", False)
         security_flags = verification.get("security_flags", [])
-        overall_trust = verification.get("overall_trust", 75)
+        overall_trust = verification.get("overall_trust", 25 if parse_failed else 75)
+
+        if parse_failed:
+            verified = False
 
         # If there are security flags, drop trust significantly
         if security_flags:
@@ -126,8 +133,9 @@ class VerificationLayer(GraceLayer):
 
         try:
             result = json.loads(llm_response) if llm_response else {}
-        except Exception:
-            result = {"accurate": True, "corrections": [], "confidence": 60}
+        except Exception as e:
+            logger.warning(f"[L8] Fact-check parse failed, failing closed: {e}")
+            result = {"accurate": False, "corrections": ["Verification response unparseable"], "confidence": 0}
 
         return self.build_response(
             message, "success", result,

@@ -131,3 +131,7 @@ learning memory-ai reaseach/
 
 # Removed VSCode extension
 grace-os-vscode/
+
+# Grace internal state
+.grace/
+provenance_last_known_good.json

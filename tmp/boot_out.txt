@@ -1,0 +1,94 @@
+[OK] Genesis log handler: WARNING+ -> Genesis keys
+[OK] Logging configured: Console(WARN+), File(DEBUG+), Structured(INFO+), Audit(WARN+) -> logs/
+[ROUTER] ✓ Testing & Quality API
+[ROUTER] ✓ Healing Swarm API
+[GENESIS] Genesis Key tracking enabled
+Grace API starting up...
+[OK] Database connection initialized
+[OK] Database session factory initialized
+[OK] Database tables created/verified
+[OK] Schema auto-migrate: schema is up to date
+[OK] Startup migrations: all up to date
+[CORTEX] event_bus: ready
+[CORTEX] central_orchestrator: ready
+[CORTEX] error_pipeline: ready
+[OK] Lifecycle Cortex: 7 subsystems, 2 jobs registered
+[OK] Self-healing error pipeline started
+[OK] Background init started (training, diagnostics, embedding, agent work loop)
+[OK] Lifecycle Cortex: background subsystems + job scheduler started
+[OK] Central Orchestrator initialized (event bus subscriptions active)
+[OK] OLLAMA is running and reachable
+[OK] Feedback bridge started
+[OK] Ghost memory: replayed 5 reboot deltas for continuity
+[OK] ULH meta-rule injector ready (3 active rules)
+[OK] Coding agent worker started
+[OK] Multi-trigger fabric started (12 trigger sources)
+[OK] Startup health: core tables queryable
+[OK] Autonomous diagnostics boot scan started
+[OK] Probe agent maintenance pulse started (light every 10min)
+[OK] Execution registry initialized
+[OK] Qdrant (https://877286a8-e5b8-472e-aa28-22cf4790cec0.europe-west3-0.gcp.cloud.qdrant.io:6333) is running with 3 collection(s)
+[OK] File watcher started - automatic version tracking enabled
+[OK] ML Intelligence initialized with features: ['neural_trust_scoring', 'bandit_exploration', 'meta_learning', 'uncertainty_estimation', 'active_learning']
+
+[AUTO-INGEST] Verifying database connection...
+[AUTO-INGEST] [OK] Database engine verified
+[AUTO-INGEST] Initializing session factory...
+[AUTO-INGEST] [OK] Session factory initialized
+[AUTO-INGEST] Starting auto-ingestion monitor...
+[INGEST] Initializing ingestion service...
+[INGEST] [OK] Got embedding model (singleton)
+[INGEST] [OK] Ingestion service created successfully
+[AUTO-INGEST] File manager initialized
+[AUTO-INGEST] Git tracker initialized
+[AUTO-INGEST] Starting directory scan...
+[OK] Continuous learning activated
+[OK] Diagnostic engine started Ã¢â‚¬â€ self-healing active (60s heartbeat)
+[OK] Autonomous loop started (first cycle in 5s, then 30s: heal->learn->verify->composite)
+[OK] Meta loop coordinator started (60s heartbeat, system_maintenance every 3 cycles)
+[OK] Spindle daemon started (autonomous, tcp://127.0.0.1:5520)
+[OK] Autonomous CICD engine started (file-change -> auto tests, high-risk -> manual)
+[OK] Auto-probe registered (triggers on code changes)
+[OK] GraceSystemsIntegration started
+[OK] GraceAutonomousEngine started
+[OK] GraceTeamManagement started
+[OK] GovernanceHealingBridge started
+
+============================================================
+  Grace Startup Summary: 4 OK, 0 degraded
+============================================================
+
+Grace API shutting down...
+[OK] Lifecycle Cortex shutdown complete
+[OK] Autonomous loop stop signaled
+[OK] Meta loop coordinator stopped
+[OK] Autonomous CICD engine stopped
+[OK] Startup diagnostic: HEALTHY
+[OK] Embedding model loaded
+[OK] NLP pipeline ready (voice/intent)
+[OK] Governance healing bridge started (trust < 90 + high confidence â†' auto-heal)
+[OK] External knowledge pipeline started (gap-detect â†' fetch â†' ingest every 30min)
+[OK] Self-mirroring telemetry started (CPU/memory/latency/governance every 60s)
+[OK] SWE->Spindle bridge started (LearningExample -> Braille -> deterministic paths)
+[OK] Proactive healing started (background health monitor)
+[OK] Intelligent CICD orchestrator ready (ML-assisted test selection, webhooks)
+[OK] Governance projection service started (event bus -> .grace/ folders)
+[OK] Memory mesh reconciliation cron started (every 30min)
+[OK] Consensus→RL reward bridge started (online weight updates)
+[OK] Executive watchdog started (SAFE_MODE failover on hang)
+[OK] Coding agent work loop started (Kimi+Opus subscribe to deploy_gate, healing, health)
+[AUTO-INGEST] Scan completed with 4176 results
+[AUTO-INGEST] Excluded 4176 files (Genesis/already ingested)
+[OK] Continuous learning stopped
+[OK] File watcher stopped
+[OK] Hot-reload watcher stopped
+[OK] Diagnostic engine stopped
+[OK] Diagnostic engine session closed
+[OK] Governance healing bridge stopped
+[OK] External knowledge pipeline stopped
+[OK] Self-mirroring telemetry stopped
+[OK] Spindle daemon stopped
+[OK] SWE->Spindle bridge stopped
+[OK] Proactive healing stopped
+[OK] Spindle services stopped
+[OK] Database connection closed

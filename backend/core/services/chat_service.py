@@ -3,8 +3,11 @@
 Unified conversational spine: RAG + unified memory (episodic recall) + LLM.
 """
 
+import logging
 from typing import Dict, Any, Optional, List
 from database.session import session_scope, get_session_factory
+
+logger = logging.getLogger(__name__)
 
 try:
     from telemetry.decorators import track_operation
@@ -35,7 +38,8 @@ def _get_rag_context(query: str, limit: int = 5, score_threshold: float = 0.3) -
         if not chunks:
             return ""
         return retriever.build_context(chunks, max_length=6000, include_sources=True)
-    except Exception:
+    except Exception as e:
+        logger.warning("[CHAT] RAG context retrieval failed: %s", e)
         return ""
 
 
@@ -55,7 +59,8 @@ def _get_episodic_recall(problem: str, k: int = 3, min_trust: float = 0.5) -> st
                 elif isinstance(ep, dict):
                     parts.append(f"[Past {i}] {str(ep)[:300]}")
             return "\n".join(parts) if parts else ""
-    except Exception:
+    except Exception as e:
+        logger.warning("[CHAT] Episodic memory recall failed: %s", e)
         return ""
 
 
